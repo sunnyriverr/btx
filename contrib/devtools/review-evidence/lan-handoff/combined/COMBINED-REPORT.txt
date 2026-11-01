@@ -1,0 +1,85 @@
+Combined LAN scope fix + Windows include correction
+==================================================
+Completed 2026-11-01T06:12:25.417485+00:00. AI-assisted, local evidence only; NO PUBLICATION.
+
+Result
+------
+Applied the one-line Windows include correction to an isolated combined candidate.
+It contains exactly three product files: native_discovery.cpp/.h from the tested
+LAN candidate plus posix_extra.h with mswsock.h loaded before macro removal.
+Shared source, original binaries, unrelated dirty work and old published evidence
+are preserved. combined-lan.patch dry-runs against the review source.
+
+Mac build and execution
+-----------------------
+Recompiled discovery and the unchanged helper body with recorded CMake flags,
+then relinked against all18 hash-verified unchanged common inputs. This is a
+focused object rebuild/relink, NOT a clean full-tree build. The final Mac helper
+SHA256 is22bdcb303bd64b4bb76bbf0d3d506de769931b44e639d5ac6b8e62a3b5f89916,
+identical to the prior indexed LAN candidate: the new shim line is Windows-only.
+
+Reran unchanged native regression.py (SHA5935d886fd1643e28a30c6dae5373509806d5ddd872a612974cffb9c69e78731):
+- Valid multicast: kernel metadata confirms en0 and multicast destination; TTL0
+  own-host beacon triggers automatic TCP and1325-byte TLSClientHello in4.053s.
+- Off-scope private-source beacon through loopback: hint0 and no TCP for the
+  six-second check. Wrong-network/malformed/no-beacon controls also reject.
+- Discovery disabled: no hint or dial.
+- All three helpers remain RPC responsive and exit0; no forced cleanup.
+- Storage0, automatic spend0, authenticated peers0, acquired models0.
+
+One new final combined-candidate native invocation. Baseline NOT rerun: the
+previous exact same harness and recorded original binary fail the off-scope
+oracle; old final-before evidence is referenced rather than relabelled as fresh.
+This test proves the same Mac receive/dial behaviour with the combined source,
+not completed authentication or model transfer. Positive unicast is covered by
+the focused synthetic case, not a physical multi-host socket test.
+
+All15 focused synthetic policy cases pass against the exact combined source:
+selected multicast/unicast positives, wrong interface/subnet/destination,
+missing/truncated metadata/datagram, removed/down/loopback interface,
+noncontiguous mask and moved/duplicated address. Existing targeted guard-mutation
+evidence is unchanged; mutations were not repeated because LAN product files
+are byte-identical. See combined-policy.json.
+
+Windows-target verification on this Mac
+--------------------------------------
+Derived the exact header-prelude/macro-removal slice from the actual combined
+posix_extra.h and appended the candidate's later mswsock.h include. Mac Clang17,
+Windows x86_64 target, genuine pinned MinGW headers: syntax exit0. The original
+late-include fixture fails unknown VOID; control without new header passes.
+See combined-header-result.json and offline-confirmation.json. One common unused-
+expression warning in MinGW combaseapi.h remains; not a warning-clean build.
+This is header-slice compilation, NOT full Windows TU/link/native execution.
+No Microsoft SDK/MSVC compilation was performed.
+
+What still requires native Linux and Windows
+--------------------------------------------
+1. Compile/link actual discovery component using real project flags, headers and
+   shim. Windows must include the correction; Linux needs real glibc/musl headers.
+2. Native real-socket Open/join/receive: selected-interface multicast/unicast;
+   wrong-interface/off-subnet source; malformed/oversized then valid packet;
+   nonblocking idle and interface changes. Observe actual metadata, not a mock.
+3. Real helper positive/negative automatic-dial integration with OS-appropriate
+   local isolation; existing Mac sandbox/ifconfig/ancillary harness is not portable.
+4. Broader integration/platform qualification where maintainers require it.
+Neither this run nor the previous Mac run qualifies Linux/Windows, physical LAN,
+VPN/routed topology, full suites, production deployment or a release. Linux source
+API review found no definite mismatch; it is still uncompiled/unexecuted here.
+Conditional Windows provider-extension failure diagnostic remains untested and
+unmodified. Current upstream overlap review is in overlap.json; no equivalent
+public fix/qualification found across79unchanged heads, private work unknown.
+
+Integrity, setup and scope
+--------------------------
+combined-identities.json, combined-common-inputs.json and combined-integrity.json
+record source/patch/binary/shared-input identities and apply check. Combined patch
+SHA256:3d4af5aae107df0049bb44598ea96a70c1f1b955bf5fbc07e26d3e1c6d8f7c3e.
+A first setup build accidentally retained baseline discovery files because of
+nested git-apply behaviour. Hash verification caught it BEFORE runtime; excluded
+records are preserved, and final build asserts exact source equality before
+compilation. Do not cite excluded-setup files as a tested LAN result.
+
+No new PR/comment/upload/message, no native environment install/rental, no
+production wallet/node/miner activity. All owned runtime helpers have exited.
+Stop: combined local checks complete. Await relevant native qualification or
+substantive review; do not repeat unchanged Mac tests for another update.

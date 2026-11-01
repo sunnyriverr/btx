@@ -1,0 +1,18 @@
+{
+  "scope": "Mac Clang Windows-target syntax-only against fetched genuine MinGW headers; exact SDK-prelude/undef slice of BTX shim. Not full shim/TU/link or native execution.",
+  "command": [
+    "clang++",
+    "--target=x86_64-w64-windows-gnu",
+    "-std=c++20",
+    "-D_WIN32_WINNT=0x0A00",
+    "-DNOMINMAX",
+    "-fsyntax-only",
+    "-Wno-pragma-pack",
+    "-Wno-ignored-attributes",
+    "-I<WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers",
+    "<WORKSPACE>/Playground/work/btx-review-tools/lan-portability/combined-header-probe.cpp"
+  ],
+  "exit": 0,
+  "stderr": "In file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/combined-header-probe.cpp:10:\nIn file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/aclapi.h:12:\nIn file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/accctrl.h:10:\nIn file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/wtypes.h:13:\nIn file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/ole2.h:17:\nIn file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/objbase.h:14:\n<WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/combaseapi.h:79:5: warning: expression result unused [-Wunused-value]\n   79 |     static_cast<IUnknown *> (*pp);\n      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n1 warning generated.\n",
+  "source_sha256": "4bf9daae1092b68b3222b6eb7dbec9aa007e7fc549b7e4ddc412e92c6cdb0b1e"
+}

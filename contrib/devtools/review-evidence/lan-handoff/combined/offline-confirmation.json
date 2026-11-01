@@ -1,0 +1,53 @@
+[
+  {
+    "case": "late_header",
+    "exit": 1,
+    "command": [
+      "clang++",
+      "--target=x86_64-w64-windows-gnu",
+      "-std=c++20",
+      "-D_WIN32_WINNT=0x0A00",
+      "-DNOMINMAX",
+      "-fsyntax-only",
+      "-Wno-pragma-pack",
+      "-Wno-ignored-attributes",
+      "-I<WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers",
+      "<WORKSPACE>/Playground/work/btx-review-tools/lan-portability/probe.cpp"
+    ],
+    "stderr": "In file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/probe.cpp:10:\nIn file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/aclapi.h:12:\nIn file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/accctrl.h:10:\nIn file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/wtypes.h:13:\nIn file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/ole2.h:17:\nIn file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/objbase.h:14:\n<WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/combaseapi.h:79:5: warning: expression result unused [-Wunused-value]\n   79 |     static_cast<IUnknown *> (*pp);\n      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nIn file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/probe.cpp:71:\n<WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/mswsock.h:70:3: error: unknown type name 'VOID'; did you mean 'PVOID'?\n   70 |   VOID WINAPI GetAcceptExSockaddrs(PVOID lpOutputBuffer,DWORD dwReceiveDataLength,DWORD dwLocalAddressLength,DWORD dwRemoteAddressLength,struct sockaddr **LocalSockaddr,LPINT LocalSockaddrLength,struct sockaddr **RemoteSockaddr,LPINT RemoteSockaddrLength);\n      |   ^~~~\n      |   PVOID\n<WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/winnt.h:282:17: note: 'PVOID' declared here\n  282 |   typedef void *PVOID;\n      |                 ^\nIn file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/probe.cpp:71:\n<WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/mswsock.h:81:11: error: unknown type name 'VOID'; did you mean 'PVOID'?\n   81 |   typedef VOID (WINAPI *LPFN_GETACCEPTEXSOCKADDRS)(PVOID lpOutputBuffer,DWORD dwReceiveDataLength,DWORD dwLocalAddressLength,DWORD dwRemoteAddressLength,struct sockaddr **LocalSockaddr,LPINT LocalSockaddrLength,struct sockaddr **RemoteSockaddr,LPINT RemoteSockaddrLength);\n      |           ^~~~\n      |           PVOID\n<WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/winnt.h:282:17: note: 'PVOID' declared here\n  282 |   typedef void *PVOID;\n      |                 ^\n1 warning and 2 errors generated.\n"
+  },
+  {
+    "case": "no_new_header",
+    "exit": 0,
+    "command": [
+      "clang++",
+      "--target=x86_64-w64-windows-gnu",
+      "-std=c++20",
+      "-D_WIN32_WINNT=0x0A00",
+      "-DNOMINMAX",
+      "-fsyntax-only",
+      "-Wno-pragma-pack",
+      "-Wno-ignored-attributes",
+      "-I<WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers",
+      "<WORKSPACE>/Playground/work/btx-review-tools/lan-portability/no_new_header.cpp"
+    ],
+    "stderr": "In file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/no_new_header.cpp:10:\nIn file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/aclapi.h:12:\nIn file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/accctrl.h:10:\nIn file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/wtypes.h:13:\nIn file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/ole2.h:17:\nIn file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/objbase.h:14:\n<WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/combaseapi.h:79:5: warning: expression result unused [-Wunused-value]\n   79 |     static_cast<IUnknown *> (*pp);\n      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n1 warning generated.\n"
+  },
+  {
+    "case": "early_header",
+    "exit": 0,
+    "command": [
+      "clang++",
+      "--target=x86_64-w64-windows-gnu",
+      "-std=c++20",
+      "-D_WIN32_WINNT=0x0A00",
+      "-DNOMINMAX",
+      "-fsyntax-only",
+      "-Wno-pragma-pack",
+      "-Wno-ignored-attributes",
+      "-I<WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers",
+      "<WORKSPACE>/Playground/work/btx-review-tools/lan-portability/early_header.cpp"
+    ],
+    "stderr": "In file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/early_header.cpp:10:\nIn file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/aclapi.h:12:\nIn file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/accctrl.h:10:\nIn file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/wtypes.h:13:\nIn file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/ole2.h:17:\nIn file included from <WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/objbase.h:14:\n<WORKSPACE>/Playground/work/btx-review-tools/lan-portability/mingw-headers/combaseapi.h:79:5: warning: expression result unused [-Wunused-value]\n   79 |     static_cast<IUnknown *> (*pp);\n      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n1 warning generated.\n"
+  }
+]

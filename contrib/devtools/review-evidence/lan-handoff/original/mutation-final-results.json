@@ -1,0 +1,33 @@
+[
+  {
+    "mutant": "without-receive-index-checks",
+    "exit": 1,
+    "failed_oracles": [
+      "wrong_receive_interface FAIL",
+      "address_moved_to_unjoined_interface FAIL",
+      "address_duplicated_on_unjoined_interface FAIL"
+    ]
+  },
+  {
+    "mutant": "without-joined-index-check",
+    "exit": 1,
+    "failed_oracles": [
+      "address_moved_to_unjoined_interface FAIL",
+      "address_duplicated_on_unjoined_interface FAIL"
+    ]
+  },
+  {
+    "mutant": "without-subnet-check",
+    "exit": 1,
+    "failed_oracles": [
+      "off_subnet_private_source FAIL"
+    ]
+  },
+  {
+    "mutant": "without-destination-check",
+    "exit": 1,
+    "failed_oracles": [
+      "wrong_destination FAIL"
+    ]
+  }
+]

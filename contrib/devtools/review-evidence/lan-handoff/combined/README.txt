@@ -1,0 +1,9 @@
+Corrected combined LAN candidate for #338, base cbf65894. Apply combined-lan.patch instead of the earlier two-file patch; do not apply both. The patch changes three files, including the Windows shim preinclude. SHA256 of combined-lan.patch:3d4af5aae107df0049bb44598ea96a70c1f1b955bf5fbc07e26d3e1c6d8f7c3e.
+
+COMBINED-REPORT.txt states all scope limits and the excluded setup attempt. Historical LOCAL/NO PUBLICATION markers describe prepublication state; the user subsequently authorised this sanitized publication only. Paths in logs are replaced by <WORKSPACE>.
+
+The native Mac regression is byte-identical to the tested original. Run python3 mac-regression.py --binary /absolute/path/to/btx-modeld --output /absolute/path/to/results on macOS with a free UDP29448 and eligible private interface. It uses own-host network isolation and disposable zero-storage helper processes. It is not portable to Linux/Windows.
+
+Windows target probes use actual MinGW headers at the revision and file hashes in downloaded-headers.json. probe.cpp is the exact original forced-header SDK prelude/macro-removal slice plus late mswsock; early_header.cpp adds mswsock before macro removal. Compile with the command in header-probe-results.json after substituting local paths. Combined actual-shim probe is recorded in combined-header-result.json. header_probe.py is retained as the original acquisition procedure and assumes the documented working-directory layout; the sources, pinned URLs and commands are the portable minimum evidence. No full Windows TU/link/native execution was performed.
+
+No binaries, credentials, generated identities, wallet/model data or native Linux/Windows qualification included. Prior exact-harness baseline failure is in the original #338 evidence; it was not rerun for this correction.

@@ -1,0 +1,20 @@
+{
+  "status": "complete_local_combined_candidate_tested",
+  "completed_utc": "2026-11-01T06:12:25.417485+00:00",
+  "report": "lan-portability/COMBINED-REPORT.txt",
+  "patch": "lan-portability/combined-lan.patch",
+  "patch_sha256": "3d4af5aae107df0049bb44598ea96a70c1f1b955bf5fbc07e26d3e1c6d8f7c3e",
+  "source_files": [
+    "src/modelnet/native_discovery.cpp",
+    "src/modelnet/native_discovery.h",
+    "src/compat/mingw/posix_extra.h"
+  ],
+  "result": "Windows-target genuine-header probe passes; Mac focused object rebuild/relink matches prior LAN binary; same native harness passes valid multicast/offscope rejection and controls,15synthetic cases pass.",
+  "mac_binary_sha256": "22bdcb303bd64b4bb76bbf0d3d506de769931b44e639d5ac6b8e62a3b5f89916",
+  "native_runtime_result": "lan-portability/combined-native/helper-dial-result.json",
+  "baseline_comparison": "Prior identical-harness original-binary failure retained, not rerun or presented as fresh.",
+  "limits": "No full clean build, complete Windows TU/link, nativeLinuxWindows, physicalLAN, completed auth/modeltransfer, fullsuite or release qualification.",
+  "next_action": "Native Linux/Windows component compilation and real receive/interface metadata/socket tests, followed by helper integration where feasible. Do not repeat complete Mac case absent change.",
+  "publication": "LOCAL ONLY; no posting/upload/send/newPR authorised",
+  "shared_source_and_public_artifacts_preserved": true
+}

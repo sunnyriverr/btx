@@ -1,0 +1,53 @@
+{
+  "utc": "2026-11-01T05:33:59.451065+00:00",
+  "harness_sha256": "5935d886fd1643e28a30c6dae5373509806d5ddd872a612974cffb9c69e78731",
+  "baseline_sha256": "ec92facce2c381daa59c4ddabafc9d3f7a7d69d2b44279c3014df50712acf200",
+  "candidate_sha256": "22bdcb303bd64b4bb76bbf0d3d506de769931b44e639d5ac6b8e62a3b5f89916",
+  "same_final_harness_fail_before_pass_after": true,
+  "baseline_failure": "Off-scope beacon triggers TCP/TLSClientHello; safety oracle fails, valid multicast still works.",
+  "candidate_success": "No off-scope hint/TCP; valid selected-interface multicast still triggers TCP/TLSClientHello.",
+  "final_native_runs": "One final baseline comparison plus one final indexed-candidate comparison. Earlier address-only candidate is a disclosed pilot, not the final fix.",
+  "focused_policy_tests": true,
+  "sensitive_mutations": [
+    {
+      "mutant": "without-receive-index-checks",
+      "exit": 1,
+      "failed_oracles": [
+        "wrong_receive_interface FAIL",
+        "address_moved_to_unjoined_interface FAIL",
+        "address_duplicated_on_unjoined_interface FAIL"
+      ]
+    },
+    {
+      "mutant": "without-joined-index-check",
+      "exit": 1,
+      "failed_oracles": [
+        "address_moved_to_unjoined_interface FAIL",
+        "address_duplicated_on_unjoined_interface FAIL"
+      ]
+    },
+    {
+      "mutant": "without-subnet-check",
+      "exit": 1,
+      "failed_oracles": [
+        "off_subnet_private_source FAIL"
+      ]
+    },
+    {
+      "mutant": "without-destination-check",
+      "exit": 1,
+      "failed_oracles": [
+        "wrong_destination FAIL"
+      ]
+    }
+  ],
+  "current_shared_source_apply_check": true,
+  "pr348_dry_run_apply": true,
+  "common_link_inputs_hash_unchanged": true,
+  "all_original_source_dirty_work_and_binaries_unchanged": true,
+  "new_product_files": [
+    "src/modelnet/native_discovery.cpp",
+    "src/modelnet/native_discovery.h"
+  ],
+  "helper_body_unchanged_recompiled_for_private_vector_type": true
+}

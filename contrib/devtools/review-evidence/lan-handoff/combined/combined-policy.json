@@ -1,0 +1,19 @@
+{
+  "compile": [
+    "clang++",
+    "-std=c++20",
+    "-O2",
+    "-I<WORKSPACE>/Playground/work/btx-review-tools/lan-portability/combined/src",
+    "-DDISCOVERY_IMPLEMENTATION=\"<WORKSPACE>/Playground/work/btx-review-tools/lan-portability/combined/src/modelnet/native_discovery.cpp\"",
+    "<WORKSPACE>/Playground/work/btx-review-tools/lan-scope-fix/policy_checks.cpp",
+    "-o",
+    "<WORKSPACE>/Playground/work/btx-review-tools/lan-portability/combined/policy-checks"
+  ],
+  "compile_exit": 0,
+  "compile_stderr": "",
+  "run_exit": 0,
+  "stdout": "selected_group PASS\nselected_unicast PASS\nwrong_receive_interface PASS\noff_subnet_private_source PASS\nwrong_destination PASS\nmissing_receive_interface PASS\nmissing_destination PASS\ntruncated_ancillary PASS\ntruncated_datagram PASS\ninterface_removed PASS\ninterface_down PASS\nloopback_ineligible PASS\nnoncontiguous_mask PASS\naddress_moved_to_unjoined_interface PASS\naddress_duplicated_on_unjoined_interface PASS\ncases=15 failures=0\n",
+  "stderr": "",
+  "scope": "15 synthetic Mac policy cases against exact combined overlay, not Linux/Windows runtime",
+  "source_sha256": "418bcab259af71de3e9e9ff6ff02bbeaa5bdbf9ad9b813d92085e3c35876f7dd"
+}
