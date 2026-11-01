@@ -1,0 +1,19 @@
+diff --git a/src/kernel/chainparams.cpp b/src/kernel/chainparams.cpp
+index 18ca6fe1..aadd3adb 100644
+--- a/src/kernel/chainparams.cpp
++++ b/src/kernel/chainparams.cpp
+@@ -2605,6 +2605,14 @@ public:
+                     .m_chain_tx_count = 300,
+                     .blockhash = consteval_ctor(uint256{"7202d1341554184806cfb25c74ee0aa41f680c42ea9fdb965685962b8e8e148b"}),
+                 },
++                {
++                    // Local-only exact snapshot fixture:1024 historical RC bodies.
++                    .height = 1124,
++                    .hash_serialized = AssumeutxoHash{uint256{"1d7f802a722cd5fa9dc5ad1191d0ba33dd465943a79821a41f3070bf6018c47b"}},
++                    .m_chain_tx_count = 1125,
++                    .blockhash = consteval_ctor(uint256{"7c52a35fdde44917072c7e20e228fe1c64c0b037e59d1b353ff8f2479dc94626"}),
++                    .shielded_state_commitment = uint256{"e802781d9b88ba12d8c0f41777405bc015755603d6fcbaa9fc089eae53011d5e"},
++                },
+                 {
+                     // Post-shielded-activation regtest snapshot for btx-p2p
+                     // fast-start testing. IsMockableChain() allows height-only

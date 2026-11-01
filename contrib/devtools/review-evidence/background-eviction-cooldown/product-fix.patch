@@ -1,0 +1,50 @@
+--- a/src/net_processing.cpp
++++ b/src/net_processing.cpp
+@@ -7808,6 +7808,23 @@
+                          pindex->GetBlockHash().ToString(), pindex->nHeight);
+             }
+ 
++            // Eviction tombstones outlive the smaller bounded budget-marker
++            // table. Historical download pacing must not depend on that table
++            // still containing the hash. A previously evicted body may become
++            // the next background root, which must remain fetchable.
++            const bool background_hole{
++                m_chainman.GetMatMulValidationMode() ==
++                    kernel::MatMulValidationMode::CONSENSUS &&
++                IsUncoveredBackgroundChainstateHole(m_chainman, pindex)};
++            const bool background_root{
++                background_hole &&
++                pindex->pprev == m_chainman.GetBackgroundSyncTip()};
++            if (background_hole && !background_root &&
++                m_matmul_block_lifecycle.WasEvictedRecently(
++                    pindex->GetBlockHash(), MATMUL_BUDGET_DEFER_COOLDOWN)) {
++                continue;
++            }
++
+             // Deferred for MatMul verification budget: wait for the window to
+             // refill rather than re-requesting into a discard/re-request loop.
+             if (IsMatMulBudgetDeferred(pindex->GetBlockHash(),
+@@ -7826,11 +7843,9 @@
+                 if (m_matmul_block_lifecycle.HasRetainedBody(deferred_hash)) {
+                     continue;
+                 }
+-                // A body evicted moments ago under capacity pressure is not
+-                // missing. Asking for it again makes the store evict another
+-                // one to take it. The progress body is never evicted, so it
+-                // is never held back here.
+-                if (m_matmul_block_lifecycle.WasEvictedRecently(
++                // Keep existing pacing for other download roles. Background
++                // holes were checked above, with a next-root progress exception.
++                if (!background_hole && m_matmul_block_lifecycle.WasEvictedRecently(
+                         deferred_hash, MATMUL_BUDGET_DEFER_COOLDOWN)) {
+                     continue;
+                 }
+@@ -7848,7 +7863,7 @@
+                 const bool tip_chain_needed{
+                     tip != nullptr &&
+                     pindex->GetAncestor(tip->nHeight) == tip};
+-                if (!mapBlocksInFlight.empty() && !tip_chain_needed) {
++                if (!mapBlocksInFlight.empty() && !tip_chain_needed && !background_root) {
+                     return;
+                 }
+                 if (mapBlocksInFlight.empty()) {

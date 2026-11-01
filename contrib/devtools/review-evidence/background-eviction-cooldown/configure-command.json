@@ -1,0 +1,19 @@
+[
+  "<homebrew>/bin/cmake",
+  "-S",
+  "<workspace>/work/btx-review-tools/pr340-fold-rerun/source",
+  "-B",
+  "<workspace>/work/btx-review-tools/pr340-fold-rerun/build",
+  "-DCMAKE_BUILD_TYPE=Release",
+  "-DBTX_BUILD_RC_PROVER_PROTOTYPE=OFF",
+  "-DBTX_ENABLE_METAL=ON",
+  "-DBTX_MATMUL_METAL_PRECOMPILE_KERNELS=OFF",
+  "-DBTX_ENABLE_CUDA_EXPERIMENTAL=OFF",
+  "-DBUILD_GUI=OFF",
+  "-DBUILD_TESTS=OFF",
+  "-DBUILD_BENCH=OFF",
+  "-DENABLE_WALLET=ON",
+  "-DBUILD_ZMQ=OFF",
+  "-DCMAKE_PREFIX_PATH=<homebrew>/opt/boost@1.85;<homebrew>/opt/libevent;<homebrew>/opt/openssl@3;<homebrew>/opt/libomp",
+  "-DPython3_EXECUTABLE=<home>/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3"
+]

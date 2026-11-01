@@ -1,0 +1,439 @@
+{
+  "summary": {
+    "utc": "2026-11-01T14:34:21.495983+00:00",
+    "status": "focused_before_after_complete_native_in_progress",
+    "base": "3c1e9b4ab4ea93ca642df079e238ac56179a9166",
+    "platform": "macOS/M4 Clang Release",
+    "pressure_baseline_failed": 3,
+    "pressure_candidate_passed": 3,
+    "root_progress_baseline_failed": 3,
+    "root_progress_candidate_passed": 3,
+    "fresh_download_control_passed_each_build": 3,
+    "candidate_adjacent_controls_passed": 8,
+    "candidate_existing_tombstone_primitive_passed": 3,
+    "identical_final_test_source_sha256": "5bfffcbc7d3feb980d98a12cba499fe89096227821f75c4409ad0eecc3290f69",
+    "product_patch_sha256": "fae12c8338087d751cf6546a1f263175c2b841b645b33e63fef08db5bef86b76",
+    "test_patch_sha256": "44460d5901e93c2fde8fe26e4c4ee8a36010b9e5e52a6e8d1fb5e23e03cbecc4",
+    "scope": "Focused normal-CMake-linked message-level peerman/lifecycle tests; mock verification worker and null socket message serialization, not full test_btx, real GPU, mainnet or release qualification. Separate native run pending.",
+    "native_status": "in_progress",
+    "published": false,
+    "pilots": "Initial root test left other real requests unanswered and exhausted background quota after height16 on the candidate; revised only the source responder to serve all actual GETDATA. Final baseline/candidate both rebuilt and rerun3/3 with identical final test-only patch. Product patch unchanged."
+  },
+  "runs": [
+    {
+      "stage": "baseline",
+      "case": "peerman_tests/snapshot_eviction_cooldown_survives_budget_marker_pressure",
+      "rep": 0,
+      "exit_code": 201,
+      "elapsed_s": 5.8716018750000005,
+      "errors": [
+        "test/peerman_tests.cpp:16113: error: in \"peerman_tests/snapshot_eviction_cooldown_survives_budget_marker_pressure\": fresh lifecycle eviction tombstone must suppress GETDATA even after budget marker eviction"
+      ],
+      "messages": [
+        "delivered=280 retained=15 recent_evicted_marker_present=242 recent_evicted_marker_absent=22",
+        "getdata=15 lost_marker_requested=15 marked_evicted_requested=0 fresh_uncached_requested=0",
+        "released worker: background=1"
+      ],
+      "binary_sha256": "12c1427369694d739ceb8c43954e00c4203543d0790d7090e4b6de66f07b99a9"
+    },
+    {
+      "stage": "baseline",
+      "case": "peerman_tests/snapshot_eviction_cooldown_survives_budget_marker_pressure",
+      "rep": 1,
+      "exit_code": 201,
+      "elapsed_s": 5.168208375,
+      "errors": [
+        "test/peerman_tests.cpp:16113: error: in \"peerman_tests/snapshot_eviction_cooldown_survives_budget_marker_pressure\": fresh lifecycle eviction tombstone must suppress GETDATA even after budget marker eviction"
+      ],
+      "messages": [
+        "delivered=280 retained=15 recent_evicted_marker_present=241 recent_evicted_marker_absent=23",
+        "getdata=15 lost_marker_requested=15 marked_evicted_requested=0 fresh_uncached_requested=0",
+        "released worker: background=1"
+      ],
+      "binary_sha256": "12c1427369694d739ceb8c43954e00c4203543d0790d7090e4b6de66f07b99a9"
+    },
+    {
+      "stage": "baseline",
+      "case": "peerman_tests/snapshot_eviction_cooldown_survives_budget_marker_pressure",
+      "rep": 2,
+      "exit_code": 201,
+      "elapsed_s": 5.162462207999999,
+      "errors": [
+        "test/peerman_tests.cpp:16113: error: in \"peerman_tests/snapshot_eviction_cooldown_survives_budget_marker_pressure\": fresh lifecycle eviction tombstone must suppress GETDATA even after budget marker eviction"
+      ],
+      "messages": [
+        "delivered=280 retained=15 recent_evicted_marker_present=241 recent_evicted_marker_absent=23",
+        "getdata=15 lost_marker_requested=15 marked_evicted_requested=0 fresh_uncached_requested=0",
+        "released worker: background=1"
+      ],
+      "binary_sha256": "12c1427369694d739ceb8c43954e00c4203543d0790d7090e4b6de66f07b99a9"
+    },
+    {
+      "stage": "baseline",
+      "case": "peerman_tests/snapshot_eviction_present_marker_allows_fresh_download_and_progress",
+      "rep": 0,
+      "exit_code": 0,
+      "elapsed_s": 1.022388958,
+      "errors": [],
+      "messages": [
+        "delivered=24 retained=15 recent_evicted_marker_present=8 recent_evicted_marker_absent=0",
+        "getdata=15 lost_marker_requested=0 marked_evicted_requested=0 fresh_uncached_requested=15",
+        "released worker: background=1"
+      ],
+      "binary_sha256": "12c1427369694d739ceb8c43954e00c4203543d0790d7090e4b6de66f07b99a9"
+    },
+    {
+      "stage": "baseline",
+      "case": "peerman_tests/snapshot_eviction_present_marker_allows_fresh_download_and_progress",
+      "rep": 1,
+      "exit_code": 0,
+      "elapsed_s": 0.9909914169999998,
+      "errors": [],
+      "messages": [
+        "delivered=24 retained=15 recent_evicted_marker_present=8 recent_evicted_marker_absent=0",
+        "getdata=15 lost_marker_requested=0 marked_evicted_requested=0 fresh_uncached_requested=15",
+        "released worker: background=1"
+      ],
+      "binary_sha256": "12c1427369694d739ceb8c43954e00c4203543d0790d7090e4b6de66f07b99a9"
+    },
+    {
+      "stage": "baseline",
+      "case": "peerman_tests/snapshot_eviction_present_marker_allows_fresh_download_and_progress",
+      "rep": 2,
+      "exit_code": 0,
+      "elapsed_s": 1.048652958,
+      "errors": [],
+      "messages": [
+        "delivered=24 retained=15 recent_evicted_marker_present=8 recent_evicted_marker_absent=0",
+        "getdata=15 lost_marker_requested=0 marked_evicted_requested=0 fresh_uncached_requested=15",
+        "released worker: background=1"
+      ],
+      "binary_sha256": "12c1427369694d739ceb8c43954e00c4203543d0790d7090e4b6de66f07b99a9"
+    },
+    {
+      "stage": "baseline",
+      "case": "peerman_tests/snapshot_evicted_body_becomes_background_root",
+      "rep": 0,
+      "exit_code": 201,
+      "elapsed_s": 1.1021195,
+      "errors": [
+        "test/peerman_tests.cpp:16230: fatal error: in \"peerman_tests/snapshot_evicted_body_becomes_background_root\": next background root height16 must be requested despite its fresh eviction tombstone"
+      ],
+      "messages": [
+        "evicted height16 is now next root; fresh tombstone and active marker remain"
+      ],
+      "binary_sha256": "12c1427369694d739ceb8c43954e00c4203543d0790d7090e4b6de66f07b99a9"
+    },
+    {
+      "stage": "baseline",
+      "case": "peerman_tests/snapshot_evicted_body_becomes_background_root",
+      "rep": 1,
+      "exit_code": 201,
+      "elapsed_s": 1.0948208330000002,
+      "errors": [
+        "test/peerman_tests.cpp:16230: fatal error: in \"peerman_tests/snapshot_evicted_body_becomes_background_root\": next background root height16 must be requested despite its fresh eviction tombstone"
+      ],
+      "messages": [
+        "evicted height16 is now next root; fresh tombstone and active marker remain"
+      ],
+      "binary_sha256": "12c1427369694d739ceb8c43954e00c4203543d0790d7090e4b6de66f07b99a9"
+    },
+    {
+      "stage": "baseline",
+      "case": "peerman_tests/snapshot_evicted_body_becomes_background_root",
+      "rep": 2,
+      "exit_code": 201,
+      "elapsed_s": 1.0928225829999998,
+      "errors": [
+        "test/peerman_tests.cpp:16230: fatal error: in \"peerman_tests/snapshot_evicted_body_becomes_background_root\": next background root height16 must be requested despite its fresh eviction tombstone"
+      ],
+      "messages": [
+        "evicted height16 is now next root; fresh tombstone and active marker remain"
+      ],
+      "binary_sha256": "12c1427369694d739ceb8c43954e00c4203543d0790d7090e4b6de66f07b99a9"
+    },
+    {
+      "stage": "candidate",
+      "case": "peerman_tests/snapshot_eviction_cooldown_survives_budget_marker_pressure",
+      "rep": 0,
+      "exit_code": 0,
+      "elapsed_s": 5.9971454170000005,
+      "errors": [],
+      "messages": [
+        "delivered=280 retained=15 recent_evicted_marker_present=242 recent_evicted_marker_absent=22",
+        "getdata=15 lost_marker_requested=0 marked_evicted_requested=0 fresh_uncached_requested=15",
+        "released worker: background=1"
+      ],
+      "binary_sha256": "122fe7a933342e7efd44e5aa1af9f49692614c85cbb7b1b5f6bcee699777d578"
+    },
+    {
+      "stage": "candidate",
+      "case": "peerman_tests/snapshot_eviction_cooldown_survives_budget_marker_pressure",
+      "rep": 1,
+      "exit_code": 0,
+      "elapsed_s": 5.2698318749999995,
+      "errors": [],
+      "messages": [
+        "delivered=280 retained=15 recent_evicted_marker_present=243 recent_evicted_marker_absent=21",
+        "getdata=15 lost_marker_requested=0 marked_evicted_requested=0 fresh_uncached_requested=15",
+        "released worker: background=1"
+      ],
+      "binary_sha256": "122fe7a933342e7efd44e5aa1af9f49692614c85cbb7b1b5f6bcee699777d578"
+    },
+    {
+      "stage": "candidate",
+      "case": "peerman_tests/snapshot_eviction_cooldown_survives_budget_marker_pressure",
+      "rep": 2,
+      "exit_code": 0,
+      "elapsed_s": 5.2724086670000005,
+      "errors": [],
+      "messages": [
+        "delivered=280 retained=15 recent_evicted_marker_present=241 recent_evicted_marker_absent=23",
+        "getdata=15 lost_marker_requested=0 marked_evicted_requested=0 fresh_uncached_requested=15",
+        "released worker: background=1"
+      ],
+      "binary_sha256": "122fe7a933342e7efd44e5aa1af9f49692614c85cbb7b1b5f6bcee699777d578"
+    },
+    {
+      "stage": "candidate",
+      "case": "peerman_tests/snapshot_eviction_present_marker_allows_fresh_download_and_progress",
+      "rep": 0,
+      "exit_code": 0,
+      "elapsed_s": 1.092282749999999,
+      "errors": [],
+      "messages": [
+        "delivered=24 retained=15 recent_evicted_marker_present=8 recent_evicted_marker_absent=0",
+        "getdata=15 lost_marker_requested=0 marked_evicted_requested=0 fresh_uncached_requested=15",
+        "released worker: background=1"
+      ],
+      "binary_sha256": "122fe7a933342e7efd44e5aa1af9f49692614c85cbb7b1b5f6bcee699777d578"
+    },
+    {
+      "stage": "candidate",
+      "case": "peerman_tests/snapshot_eviction_present_marker_allows_fresh_download_and_progress",
+      "rep": 1,
+      "exit_code": 0,
+      "elapsed_s": 1.0441547090000007,
+      "errors": [],
+      "messages": [
+        "delivered=24 retained=15 recent_evicted_marker_present=8 recent_evicted_marker_absent=0",
+        "getdata=15 lost_marker_requested=0 marked_evicted_requested=0 fresh_uncached_requested=15",
+        "released worker: background=1"
+      ],
+      "binary_sha256": "122fe7a933342e7efd44e5aa1af9f49692614c85cbb7b1b5f6bcee699777d578"
+    },
+    {
+      "stage": "candidate",
+      "case": "peerman_tests/snapshot_eviction_present_marker_allows_fresh_download_and_progress",
+      "rep": 2,
+      "exit_code": 0,
+      "elapsed_s": 1.0027029170000006,
+      "errors": [],
+      "messages": [
+        "delivered=24 retained=15 recent_evicted_marker_present=8 recent_evicted_marker_absent=0",
+        "getdata=15 lost_marker_requested=0 marked_evicted_requested=0 fresh_uncached_requested=15",
+        "released worker: background=1"
+      ],
+      "binary_sha256": "122fe7a933342e7efd44e5aa1af9f49692614c85cbb7b1b5f6bcee699777d578"
+    },
+    {
+      "stage": "candidate",
+      "case": "peerman_tests/snapshot_evicted_body_becomes_background_root",
+      "rep": 0,
+      "exit_code": 0,
+      "elapsed_s": 1.1527258339999982,
+      "errors": [],
+      "messages": [
+        "evicted height16 is now next root; fresh tombstone and active marker remain",
+        "background caught up to40; snapshot validated; all40 local replay flags; source connected"
+      ],
+      "binary_sha256": "122fe7a933342e7efd44e5aa1af9f49692614c85cbb7b1b5f6bcee699777d578"
+    },
+    {
+      "stage": "candidate",
+      "case": "peerman_tests/snapshot_evicted_body_becomes_background_root",
+      "rep": 1,
+      "exit_code": 0,
+      "elapsed_s": 1.2146464590000008,
+      "errors": [],
+      "messages": [
+        "evicted height16 is now next root; fresh tombstone and active marker remain",
+        "background caught up to40; snapshot validated; all40 local replay flags; source connected"
+      ],
+      "binary_sha256": "122fe7a933342e7efd44e5aa1af9f49692614c85cbb7b1b5f6bcee699777d578"
+    },
+    {
+      "stage": "candidate",
+      "case": "peerman_tests/snapshot_evicted_body_becomes_background_root",
+      "rep": 2,
+      "exit_code": 0,
+      "elapsed_s": 1.1520564580000006,
+      "errors": [],
+      "messages": [
+        "evicted height16 is now next root; fresh tombstone and active marker remain",
+        "background caught up to40; snapshot validated; all40 local replay flags; source connected"
+      ],
+      "binary_sha256": "122fe7a933342e7efd44e5aa1af9f49692614c85cbb7b1b5f6bcee699777d578"
+    },
+    {
+      "stage": "candidate",
+      "case": "matmul_block_lifecycle_tests/per_source_eviction_leaves_a_recent_tombstone",
+      "rep": 0,
+      "exit_code": 0,
+      "elapsed_s": 0.12846800000000158,
+      "errors": [],
+      "messages": [],
+      "binary_sha256": "122fe7a933342e7efd44e5aa1af9f49692614c85cbb7b1b5f6bcee699777d578"
+    },
+    {
+      "stage": "candidate",
+      "case": "matmul_block_lifecycle_tests/per_source_eviction_leaves_a_recent_tombstone",
+      "rep": 1,
+      "exit_code": 0,
+      "elapsed_s": 0.1298520000000032,
+      "errors": [],
+      "messages": [],
+      "binary_sha256": "122fe7a933342e7efd44e5aa1af9f49692614c85cbb7b1b5f6bcee699777d578"
+    },
+    {
+      "stage": "candidate",
+      "case": "matmul_block_lifecycle_tests/per_source_eviction_leaves_a_recent_tombstone",
+      "rep": 2,
+      "exit_code": 0,
+      "elapsed_s": 0.13095625000000055,
+      "errors": [],
+      "messages": [],
+      "binary_sha256": "122fe7a933342e7efd44e5aa1af9f49692614c85cbb7b1b5f6bcee699777d578"
+    }
+  ],
+  "controls": [
+    {
+      "case": "snapshot_body_burst_16_keeps_source",
+      "exit_code": 0,
+      "elapsed_s": 0.7213462079999999,
+      "timeout": null,
+      "command": [
+        "<workspace>/work/btx-review-tools/pr340-churn-fix/candidate/focused-test-btx",
+        "--run_test=peerman_tests/snapshot_body_burst_16_keeps_source",
+        "--log_level=message",
+        "--report_level=detailed",
+        "--color_output=no",
+        "--",
+        "-testdatadir=<workspace>/work/btx-review-tools/pr340-churn-fix/candidate/controls/snapshot_body_burst_16_keeps_source/data"
+      ],
+      "binary_sha256": "122fe7a933342e7efd44e5aa1af9f49692614c85cbb7b1b5f6bcee699777d578"
+    },
+    {
+      "case": "snapshot_body_burst_17_keeps_source",
+      "exit_code": 0,
+      "elapsed_s": 0.710738041,
+      "timeout": null,
+      "command": [
+        "<workspace>/work/btx-review-tools/pr340-churn-fix/candidate/focused-test-btx",
+        "--run_test=peerman_tests/snapshot_body_burst_17_keeps_source",
+        "--log_level=message",
+        "--report_level=detailed",
+        "--color_output=no",
+        "--",
+        "-testdatadir=<workspace>/work/btx-review-tools/pr340-churn-fix/candidate/controls/snapshot_body_burst_17_keeps_source/data"
+      ],
+      "binary_sha256": "122fe7a933342e7efd44e5aa1af9f49692614c85cbb7b1b5f6bcee699777d578"
+    },
+    {
+      "case": "snapshot_body_burst_17_single_slot_keeps_source",
+      "exit_code": 0,
+      "elapsed_s": 0.6663515420000001,
+      "timeout": null,
+      "command": [
+        "<workspace>/work/btx-review-tools/pr340-churn-fix/candidate/focused-test-btx",
+        "--run_test=peerman_tests/snapshot_body_burst_17_single_slot_keeps_source",
+        "--log_level=message",
+        "--report_level=detailed",
+        "--color_output=no",
+        "--",
+        "-testdatadir=<workspace>/work/btx-review-tools/pr340-churn-fix/candidate/controls/snapshot_body_burst_17_single_slot_keeps_source/data"
+      ],
+      "binary_sha256": "122fe7a933342e7efd44e5aa1af9f49692614c85cbb7b1b5f6bcee699777d578"
+    },
+    {
+      "case": "snapshot_body_capacity_wait_does_not_fetch_descendants",
+      "exit_code": 0,
+      "elapsed_s": 0.93167,
+      "timeout": null,
+      "command": [
+        "<workspace>/work/btx-review-tools/pr340-churn-fix/candidate/focused-test-btx",
+        "--run_test=peerman_tests/snapshot_body_capacity_wait_does_not_fetch_descendants",
+        "--log_level=message",
+        "--report_level=detailed",
+        "--color_output=no",
+        "--",
+        "-testdatadir=<workspace>/work/btx-review-tools/pr340-churn-fix/candidate/controls/snapshot_body_capacity_wait_does_not_fetch_descendants/data"
+      ],
+      "binary_sha256": "122fe7a933342e7efd44e5aa1af9f49692614c85cbb7b1b5f6bcee699777d578"
+    },
+    {
+      "case": "signer_free_consensus_getdata_followed_child_despite_header_only_skip",
+      "exit_code": 0,
+      "elapsed_s": 0.29099112500000013,
+      "timeout": null,
+      "command": [
+        "<workspace>/work/btx-review-tools/pr340-churn-fix/candidate/focused-test-btx",
+        "--run_test=peerman_tests/signer_free_consensus_getdata_followed_child_despite_header_only_skip",
+        "--log_level=message",
+        "--report_level=detailed",
+        "--color_output=no",
+        "--",
+        "-testdatadir=<workspace>/work/btx-review-tools/pr340-churn-fix/candidate/controls/signer_free_consensus_getdata_followed_child_despite_header_only_skip/data"
+      ],
+      "binary_sha256": "122fe7a933342e7efd44e5aa1af9f49692614c85cbb7b1b5f6bcee699777d578"
+    },
+    {
+      "case": "acquisition_frontier_does_not_wait_for_background_holes",
+      "exit_code": 0,
+      "elapsed_s": 2.931181167,
+      "timeout": null,
+      "command": [
+        "<workspace>/work/btx-review-tools/pr340-churn-fix/candidate/focused-test-btx",
+        "--run_test=peerman_tests/acquisition_frontier_does_not_wait_for_background_holes",
+        "--log_level=message",
+        "--report_level=detailed",
+        "--color_output=no",
+        "--",
+        "-testdatadir=<workspace>/work/btx-review-tools/pr340-churn-fix/candidate/controls/acquisition_frontier_does_not_wait_for_background_holes/data"
+      ],
+      "binary_sha256": "122fe7a933342e7efd44e5aa1af9f49692614c85cbb7b1b5f6bcee699777d578"
+    },
+    {
+      "case": "background_hole_failing_exactreplay_is_not_connected",
+      "exit_code": 0,
+      "elapsed_s": 0.5128542500000002,
+      "timeout": null,
+      "command": [
+        "<workspace>/work/btx-review-tools/pr340-churn-fix/candidate/focused-test-btx",
+        "--run_test=peerman_tests/background_hole_failing_exactreplay_is_not_connected",
+        "--log_level=message",
+        "--report_level=detailed",
+        "--color_output=no",
+        "--",
+        "-testdatadir=<workspace>/work/btx-review-tools/pr340-churn-fix/candidate/controls/background_hole_failing_exactreplay_is_not_connected/data"
+      ],
+      "binary_sha256": "122fe7a933342e7efd44e5aa1af9f49692614c85cbb7b1b5f6bcee699777d578"
+    },
+    {
+      "case": "unrequested_background_hole_does_not_take_the_device",
+      "exit_code": 0,
+      "elapsed_s": 0.507120166,
+      "timeout": null,
+      "command": [
+        "<workspace>/work/btx-review-tools/pr340-churn-fix/candidate/focused-test-btx",
+        "--run_test=peerman_tests/unrequested_background_hole_does_not_take_the_device",
+        "--log_level=message",
+        "--report_level=detailed",
+        "--color_output=no",
+        "--",
+        "-testdatadir=<workspace>/work/btx-review-tools/pr340-churn-fix/candidate/controls/unrequested_background_hole_does_not_take_the_device/data"
+      ],
+      "binary_sha256": "122fe7a933342e7efd44e5aa1af9f49692614c85cbb7b1b5f6bcee699777d578"
+    }
+  ]
+}

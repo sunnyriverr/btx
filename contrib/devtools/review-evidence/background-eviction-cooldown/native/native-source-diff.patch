@@ -1,0 +1,71 @@
+diff --git a/src/kernel/chainparams.cpp b/src/kernel/chainparams.cpp
+index 18ca6fe1..aadd3adb 100644
+--- a/src/kernel/chainparams.cpp
++++ b/src/kernel/chainparams.cpp
+@@ -2605,6 +2605,14 @@ public:
+                     .m_chain_tx_count = 300,
+                     .blockhash = consteval_ctor(uint256{"7202d1341554184806cfb25c74ee0aa41f680c42ea9fdb965685962b8e8e148b"}),
+                 },
++                {
++                    // Local-only exact snapshot fixture:1024 historical RC bodies.
++                    .height = 1124,
++                    .hash_serialized = AssumeutxoHash{uint256{"1d7f802a722cd5fa9dc5ad1191d0ba33dd465943a79821a41f3070bf6018c47b"}},
++                    .m_chain_tx_count = 1125,
++                    .blockhash = consteval_ctor(uint256{"7c52a35fdde44917072c7e20e228fe1c64c0b037e59d1b353ff8f2479dc94626"}),
++                    .shielded_state_commitment = uint256{"e802781d9b88ba12d8c0f41777405bc015755603d6fcbaa9fc089eae53011d5e"},
++                },
+                 {
+                     // Post-shielded-activation regtest snapshot for btx-p2p
+                     // fast-start testing. IsMockableChain() allows height-only
+diff --git a/src/net_processing.cpp b/src/net_processing.cpp
+index 555adceb..ef82d3a7 100644
+--- a/src/net_processing.cpp
++++ b/src/net_processing.cpp
+@@ -7808,6 +7808,23 @@ void PeerManagerImpl::FindNextBlocks(std::vector<const CBlockIndex*>& vBlocks, c
+                          pindex->GetBlockHash().ToString(), pindex->nHeight);
+             }
+ 
++            // Eviction tombstones outlive the smaller bounded budget-marker
++            // table. Historical download pacing must not depend on that table
++            // still containing the hash. A previously evicted body may become
++            // the next background root, which must remain fetchable.
++            const bool background_hole{
++                m_chainman.GetMatMulValidationMode() ==
++                    kernel::MatMulValidationMode::CONSENSUS &&
++                IsUncoveredBackgroundChainstateHole(m_chainman, pindex)};
++            const bool background_root{
++                background_hole &&
++                pindex->pprev == m_chainman.GetBackgroundSyncTip()};
++            if (background_hole && !background_root &&
++                m_matmul_block_lifecycle.WasEvictedRecently(
++                    pindex->GetBlockHash(), MATMUL_BUDGET_DEFER_COOLDOWN)) {
++                continue;
++            }
++
+             // Deferred for MatMul verification budget: wait for the window to
+             // refill rather than re-requesting into a discard/re-request loop.
+             if (IsMatMulBudgetDeferred(pindex->GetBlockHash(),
+@@ -7826,11 +7843,9 @@ void PeerManagerImpl::FindNextBlocks(std::vector<const CBlockIndex*>& vBlocks, c
+                 if (m_matmul_block_lifecycle.HasRetainedBody(deferred_hash)) {
+                     continue;
+                 }
+-                // A body evicted moments ago under capacity pressure is not
+-                // missing. Asking for it again makes the store evict another
+-                // one to take it. The progress body is never evicted, so it
+-                // is never held back here.
+-                if (m_matmul_block_lifecycle.WasEvictedRecently(
++                // Keep existing pacing for other download roles. Background
++                // holes were checked above, with a next-root progress exception.
++                if (!background_hole && m_matmul_block_lifecycle.WasEvictedRecently(
+                         deferred_hash, MATMUL_BUDGET_DEFER_COOLDOWN)) {
+                     continue;
+                 }
+@@ -7848,7 +7863,7 @@ void PeerManagerImpl::FindNextBlocks(std::vector<const CBlockIndex*>& vBlocks, c
+                 const bool tip_chain_needed{
+                     tip != nullptr &&
+                     pindex->GetAncestor(tip->nHeight) == tip};
+-                if (!mapBlocksInFlight.empty() && !tip_chain_needed) {
++                if (!mapBlocksInFlight.empty() && !tip_chain_needed && !background_root) {
+                     return;
+                 }
+                 if (mapBlocksInFlight.empty()) {
