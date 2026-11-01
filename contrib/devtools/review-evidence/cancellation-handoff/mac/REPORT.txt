@@ -1,0 +1,80 @@
+Cancellation candidate: socket error-channel correction
+======================================================
+Completed 2026-11-01T06:32:00.077306+00:00. AI-assisted; local only, no publication.
+
+Correction
+----------
+The new supervisor nonblocking write loop now captures WSAGetLastError()
+immediately after a failed send and compares WSAEINTR/WSAEAGAIN/WSAEWOULDBLOCK.
+The project compat header maps those calls/codes to errno on POSIX. This repairs
+the Windows/POSIX error-channel mismatch without globally altering btx_send,
+changing ordinary non-supervisor writes or shortening reply deadlines.
+Only the added supervisor write loop changed relative to the posted cancellation
+candidate. Incremental patch SHA256 9478b15705b85e91ffe7e0bcaef591f754f07688132c52c0f007bfca4cc9fa9a.
+Full three-file replacement candidate SHA256 b81ba75ab981f7ac39a8f4310e068210f3cbfbe38d0a28d7f86b668ffd607553.
+Native Windows still needs qualification; this is not an assertion that all
+existing Windows Unix-socket and helper limitations are fixed.
+
+Same sensitive contract test before / after
+------------------------------------------
+Exact product loops are extracted into the same test fixture with injected API
+errors. Actual existing btx_send shim behaviour is retained. Mac-compiled models
+of Windows and POSIX semantics; NOT nativeWindows socket/backpressure execution.
+- Windows error semantics: before4of9cases fail, after9of9pass.
+- POSIX error semantics: before9of9pass, after9of9pass.
+Cases: normal/partial send; would-block then success; interrupted then success;
+fatal error with stale retryable errno (must NOT retry); zero-byte write;
+cancellation on retry; readiness timeout; expired write deadline.
+This extends the original audit's injected would-block failure with controls
+that catch both failure-to-retry and incorrectly retrying permanent errors.
+See contract-results.json and before/after-send-contract.cpp. This is one
+compiled final comparison per semantics, not nine independent native OS runs.
+
+Native Mac compatibility
+------------------------
+Unchanged original regression.py hash 732edacb54dfa44a9c77c1ce5da0576c457f276ab9ad2747f32b7fa65f29cb6a.
+One revised-candidate run: all6shutdown/compatibility cases pass, including
+healthy,partial,silent,stubborn owned helper,partial external and full acceptqueue.
+Owned clean stop ~0.24-0.35s; stubborn grace/escalation5.29s. External stop~0.18s;
+external helpers remain alive/serving and are reused across node restart.
+All cases preserve exact tip and accept fresh blocks through23. Same recorded
+strict-Metal toy-regtest parameters and synthetic helper fixtures as original.
+Normal silent getmodel reply succeeds after123.005s;
+application refusal still propagates. Ordinary long-call branch is unchanged.
+No original unpatched cancellation baseline daemon run was repeated: original
+before evidence remains historical, and the new error-specific contract test
+supplies the fresh fail-before/pass-after distinction.
+
+Build and identity
+------------------
+Recompiled helper.cpp and supervisor.cpp from an isolated candidate/header copy,
+using recorded CMake compile commands; overlaid those objects before unchanged
+archives in the recorded node link.29link input hashes recorded. A focused
+object rebuild/relink, NOT a clean full-tree build.
+Original cached inputs relink to the exact previously tested cancellation binary
+4de9ddeedeba9dba2d319b1200d292ffeae218e934df467280fbff2a9c7bc185
+when the output basename is kept btxd. First check used cache-identity-btxd and
+had a different MachO filename-dependent identity; that mismatch was caught,
+retained and resolved by the same-basename control (cache-same-name.json).
+The three core validation/chainparams/net-processing objects match original
+recorded identities. No shared source or cache object/library was overwritten.
+Corrected executed binary SHA256 cb64e94996a56c732b3bf8d0ec861113e0ed8bbde50c9f89b915ddf30657b327.
+
+Limits and next dependency
+--------------------------
+No native Linux/Windows build/runtime, real Windows backpressure or readiness
+race, Microsoft SDK/MSVC qualification, real model inference, mainnet/fullsuite,
+sanitizers or release qualification. No new direct Windows socket proof from the
+injected contract model. Actual Windows component and IPC/backpressure tests
+remain required; Linux should compile/run native with its libc/socket behaviour.
+The unchanged wider connect/receive wrappers and pre-existing Windows socket-
+handle assumptions are not qualified by this send-loop correction.
+
+State
+-----
+Combined patch dry-runs against the review source. Original posted patch and
+publication remain untouched. Source still has exactly the two prior unrelated
+dirty files; owned test fixture cleanup completed. No production wallet/node/
+miner work, installation, spending, new PR, comment or external message.
+Stop here: local correction and scoped regression complete, await native
+qualification or explicit publication direction. Do not repeat unchanged tests.

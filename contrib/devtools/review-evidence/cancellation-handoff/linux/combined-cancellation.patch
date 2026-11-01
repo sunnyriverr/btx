@@ -1,0 +1,242 @@
+--- a/src/modelnet/helper.cpp
++++ b/src/modelnet/helper.cpp
+@@ -64,6 +64,7 @@
+ #include <logging.h>
+ #include <netaddress.h>
+ #include <util/fs.h>
++#include <util/sock.h>
+ #include <util/strencodings.h>
+ 
+ #include <openssl/bn.h>
+@@ -11237,11 +11238,21 @@
+     return !code.empty();
+ }
+ 
+-bool CallUnixRpc(const fs::path& socket_path, const std::string& method, const UniValue& params, UniValue& result, std::string& err)
+-{
++bool CallUnixRpc(const fs::path& socket_path, const std::string& method, const UniValue& params,
++                 UniValue& result, std::string& err, std::atomic<bool>* stop, bool check_peer)
++{
++    if (stop && stop->load()) {
++        err = "stopped";
++        return false;
++    }
+     const int fd = ::socket(AF_UNIX, SOCK_STREAM, 0);
+     if (fd < 0) {
+         err = "unix socket";
++        return false;
++    }
++    const Sock connection{static_cast<SOCKET>(fd)};
++    if (stop && !connection.SetNonBlocking()) {
++        err = "unix nonblocking";
+         return false;
+     }
+     sockaddr_un addr{};
+@@ -11249,29 +11260,82 @@
+     const std::string p = fs::PathToString(UnixRpcListenPath(socket_path));
+     if (p.size() >= sizeof(addr.sun_path)) {
+         err = "unix path too long";
+-        close(fd);
+         return false;
+     }
+     std::strncpy(addr.sun_path, p.c_str(), sizeof(addr.sun_path) - 1);
+-    if (connect(fd, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) != 0) {
+-        err = "helper unix connect failed (btx-modeld not running)";
+-        close(fd);
+-        return false;
+-    }
++    const int timeout_ms{UnixRpcReplyTimeoutMs(method)};
++    const auto connect_deadline = std::chrono::steady_clock::now() + std::chrono::milliseconds(timeout_ms);
++    while (connect(fd, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) != 0) {
++        const int connect_error{errno};
++        if (stop && stop->load()) {
++            err = "stopped";
++            return false;
++        }
++        if (connect_error == EISCONN) break;
++        if (!stop || (connect_error != EINPROGRESS && connect_error != EALREADY &&
++                      connect_error != EAGAIN && connect_error != EWOULDBLOCK && connect_error != EINTR)) {
++            err = "helper unix connect failed (btx-modeld not running)";
++            return false;
++        }
++        const auto left = std::chrono::duration_cast<std::chrono::milliseconds>(
++            connect_deadline - std::chrono::steady_clock::now()).count();
++        if (left <= 0) {
++            err = "unix connect timeout";
++            return false;
++        }
++        // AF_UNIX may refuse a full accept queue with EAGAIN, rather than
++        // starting an asynchronous connection. Retry without busy-spinning.
++        if (connect_error == EAGAIN || connect_error == EWOULDBLOCK || connect_error == EINTR) {
++            std::this_thread::sleep_for(std::chrono::milliseconds(std::min<int64_t>(left, 25)));
++            continue;
++        }
++        if (!WaitFd(fd, true, static_cast<int>(left), stop, err)) return false;
++        int socket_error{0};
++        socklen_t len{sizeof(socket_error)};
++        if (getsockopt(fd, SOL_SOCKET, SO_ERROR, &socket_error, &len) != 0 || socket_error != 0) {
++            err = "helper unix connect failed (btx-modeld not running)";
++            return false;
++        }
++        break;
++    }
++    if (check_peer && !UnixConnectedPeerIsSelf(fd, err)) return false;
+     UniValue req(UniValue::VOBJ);
+     req.pushKV("jsonrpc", "1.0");
+     req.pushKV("id", "model");
+     req.pushKV("method", method);
+     req.pushKV("params", params);
+     const std::string wire = req.write() + "\n";
+-    if (::send(fd, wire.data(), wire.size(), 0) < 0) {
++    if (stop) {
++        const auto write_deadline = std::chrono::steady_clock::now() + std::chrono::milliseconds(timeout_ms);
++        size_t sent{0};
++        while (sent < wire.size()) {
++            const auto left = std::chrono::duration_cast<std::chrono::milliseconds>(
++                write_deadline - std::chrono::steady_clock::now()).count();
++            if (left <= 0) {
++                err = "unix write timeout";
++                return false;
++            }
++            if (!WaitFd(fd, true, static_cast<int>(left), stop, err)) return false;
++            const ssize_t n = ::send(fd, wire.data() + sent, wire.size() - sent, 0);
++            const int send_error{n < 0 ? WSAGetLastError() : 0};
++            if (n > 0) sent += static_cast<size_t>(n);
++            else if (n < 0 && (send_error == WSAEINTR || send_error == WSAEAGAIN ||
++                               send_error == WSAEWOULDBLOCK)) continue;
++            else {
++                err = "unix write";
++                return false;
++            }
++        }
++    } else if (::send(fd, wire.data(), wire.size(), 0) < 0) {
+         err = "unix write";
+-        close(fd);
+         return false;
+     }
+     ::shutdown(fd, SHUT_WR);
+-    const std::string raw = RecvUntil(fd, MAX_RPC_BODY, nullptr, UnixRpcReplyTimeoutMs(method));
+-    close(fd);
++    const std::string raw = RecvUntil(fd, MAX_RPC_BODY, stop, timeout_ms);
++    if (stop && stop->load()) {
++        err = "stopped";
++        return false;
++    }
+     UniValue reply;
+     if (!reply.read(raw) || !reply.isObject()) {
+         err = "helper reply json";
+--- a/src/modelnet/helper.h
++++ b/src/modelnet/helper.h
+@@ -141,7 +141,11 @@
+ /** SO_PEERCRED uid matches this process. Platforms without SO_PEERCRED return true. */
+ bool UnixConnectedPeerIsSelf(int fd, std::string& err);
+ 
+-bool CallUnixRpc(const fs::path& socket_path, const std::string& method, const UniValue& params, UniValue& result, std::string& err);
++/** A supervisor stop token makes transport I/O cancellable. Ordinary callers
++ * retain their existing reply budgets. check_peer preserves readiness's uid check. */
++bool CallUnixRpc(const fs::path& socket_path, const std::string& method, const UniValue& params,
++                 UniValue& result, std::string& err, std::atomic<bool>* stop = nullptr,
++                 bool check_peer = false);
+ 
+ /** True when `err` is a helper application refusal (`{"code","message"}`).
+  *  Transport failures (connect, write, non-JSON reply) return false. */
+--- a/src/modelnet/supervisor.cpp
++++ b/src/modelnet/supervisor.cpp
+@@ -61,37 +61,13 @@
+     return {};
+ }
+ 
+-bool SocketReady(const fs::path& sock, std::string& err)
++bool SocketReady(const fs::path& sock, std::string& err, std::atomic<bool>* stop)
+ {
+     const fs::path path = UnixRpcListenPath(sock);
+     if (!UnixSocketSafeToAdopt(path, err)) return false;
+-#ifndef WIN32
+-    const int fd = ::socket(AF_UNIX, SOCK_STREAM, 0);
+-    if (fd < 0) {
+-        err = "unix socket";
+-        return false;
+-    }
+-    sockaddr_un addr{};
+-    addr.sun_family = AF_UNIX;
+-    const std::string p = fs::PathToString(path);
+-    if (p.size() >= sizeof(addr.sun_path)) {
+-        err = "unix path too long";
+-        ::close(fd);
+-        return false;
+-    }
+-    std::strncpy(addr.sun_path, p.c_str(), sizeof(addr.sun_path) - 1);
+-    if (::connect(fd, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) != 0) {
+-        err = "helper unix connect failed";
+-        ::close(fd);
+-        return false;
+-    }
+-    const bool self = UnixConnectedPeerIsSelf(fd, err);
+-    ::close(fd);
+-    if (!self) return false;
+-#endif
+     UniValue result;
+     UniValue params(UniValue::VARR);
+-    return CallUnixRpc(path, "getmodelnetworkinfo", params, result, err);
++    return CallUnixRpc(path, "getmodelnetworkinfo", params, result, err, stop, /*check_peer=*/true);
+ }
+ 
+ } // namespace
+@@ -289,7 +265,7 @@
+     std::string err;
+     UniValue params(UniValue::VARR);
+     HelperStatus info;
+-    const bool ok = CallUnixRpc(m_cfg.rpc_socket, "getmodelnetworkinfo", params, result, err);
++    const bool ok = CallUnixRpc(m_cfg.rpc_socket, "getmodelnetworkinfo", params, result, err, &m_stop);
+     if (ok) ApplyHelperNetworkInfo(info, result);
+     {
+         std::lock_guard<std::mutex> lock(m_mu);
+@@ -312,7 +288,7 @@
+             err = "stopped";
+             return false;
+         }
+-        if (SocketReady(m_cfg.rpc_socket, err)) return true;
++        if (SocketReady(m_cfg.rpc_socket, err, &m_stop)) return true;
+         std::this_thread::sleep_for(std::chrono::milliseconds(step));
+     }
+     if (err.empty()) err = "helper unix RPC not ready";
+@@ -339,7 +315,7 @@
+     }
+ #endif
+     std::string sock_err;
+-    if (!SocketReady(m_cfg.rpc_socket, sock_err)) {
++    if (!SocketReady(m_cfg.rpc_socket, sock_err, &m_stop)) {
+         std::error_code rec;
+         std::filesystem::remove(m_cfg.rpc_socket, rec);
+     } else {
+@@ -407,10 +383,8 @@
+         pid = m_pid;
+     }
+     if (pid <= 0) return;
+-    UniValue ignore;
+-    std::string err;
+-    UniValue params(UniValue::VARR);
+-    (void)CallUnixRpc(m_cfg.rpc_socket, "stop", params, ignore, err);
++    // modeld's SIGTERM handler requests the same graceful stop as its RPC.
++    // Do not wait on helper IPC before reaching this bounded escalation path.
+     if (kill(pid, SIGTERM) != 0 && errno != ESRCH) {
+         LogPrintf("model helper: SIGTERM pid=%d failed (%s)\n", static_cast<int>(pid), std::strerror(errno));
+     }
+@@ -450,7 +424,7 @@
+             std::string err;
+             UniValue result;
+             UniValue params(UniValue::VARR);
+-            const bool ok = CallUnixRpc(m_cfg.rpc_socket, "getmodelnetworkinfo", params, result, err);
++            const bool ok = CallUnixRpc(m_cfg.rpc_socket, "getmodelnetworkinfo", params, result, err, &m_stop);
+             HelperStatus info;
+             if (ok) ApplyHelperNetworkInfo(info, result);
+             {
+@@ -517,7 +491,7 @@
+             SetNodeModelHostAdvertised(false);
+         } else if (need_spawn && !m_stop.load()) {
+             std::string sock_err;
+-            if (SocketReady(m_cfg.rpc_socket, sock_err)) {
++            if (SocketReady(m_cfg.rpc_socket, sock_err, &m_stop)) {
+                 // START-15: a live socket means an already-running helper. Do not
+                 // spawn a duplicate. Do not SIGTERM it on our shutdown (unmanaged).
+                 {

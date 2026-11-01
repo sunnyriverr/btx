@@ -1,0 +1,71 @@
+{
+  "before": {
+    "helper_full_sha256": "008b611b67985804407f955637e03f7cfa49b9855e5996e72014492e071cff2e",
+    "supervisor_full_sha256": "5f1b90aa30f790d149667f5a5cee3f84ba5e91f8de580a456e3a582744bd7687",
+    "extracted_functions": [
+      "bool StickyWorldWritableDir(const fs::path& dir)",
+      "bool LooksLikeTmpFallbackSock(const fs::path& sock)",
+      "bool UnixSocketSafeToAdopt(const fs::path& sock, std::string& err)",
+      "bool UnixConnectedPeerIsSelf(int fd, std::string& err)",
+      "std::string RecvUntil(int fd, size_t cap, std::atomic<bool>* stop, int timeout_ms = PQ1_IDLE_MS)",
+      "int UnixRpcReplyTimeoutMs(const std::string& method)",
+      "bool CallUnixRpc(const fs::path& socket_path, const std::string& method, const UniValue& params, UniValue& result, std::string& err)"
+    ]
+  },
+  "after": {
+    "helper_full_sha256": "fb8f75ebde5b75e6bd49a679378afa146bcb2e4c6c707bca23d9873e9bbd7ae7",
+    "supervisor_full_sha256": "69ff861e9c1bd9878162dff7abb1dcaf812bb68b90a867a0599d45d0612415b3",
+    "extracted_functions": [
+      "bool StickyWorldWritableDir(const fs::path& dir)",
+      "bool LooksLikeTmpFallbackSock(const fs::path& sock)",
+      "bool UnixSocketSafeToAdopt(const fs::path& sock, std::string& err)",
+      "bool UnixConnectedPeerIsSelf(int fd, std::string& err)",
+      "std::string RecvUntil(int fd, size_t cap, std::atomic<bool>* stop, int timeout_ms = PQ1_IDLE_MS)",
+      "int UnixRpcReplyTimeoutMs(const std::string& method)",
+      "bool CallUnixRpc(const fs::path& socket_path, const std::string& method, const UniValue& params,\n                 UniValue& result, std::string& err, std::atomic<bool>* stop, bool check_peer)"
+    ]
+  },
+  "inputs": {
+    "regression.py": "282bb9981f89403fc079ca05409773986c281806467fdb9343994b60425703f3",
+    "build.sh": "76aa7ffd084918b7089cefdae24d67a6b88fb2b1ffffb7dccd6238d3e13f3a63",
+    "driver.cpp": "fcf38120ce4728d7523abda98ccd6b877f593995e069fc6da53562233fede293",
+    "fixture_helper.py": "fa26ab7246d1b6e5f07965aac20aa1b68def65adc2579e49f6fb1b6a50b1af89",
+    "include/tinyformat.h": "670b65ed40fc74b2e33ff2bdc7fba5b76ec06b24cd8c1acf7ce2fc0364481c92",
+    "include/attributes.h": "a84dd4bf004ffbf73deb770f75a2afa337ef4137a2f2cdb93e028aa7b3893879",
+    "include/logging.h": "83b5d3fc73ce2530d99080797b86dcfd29e31364b1c5dff6fce113fd4da75873",
+    "include/span.h": "9b8b5ed5ae78aa1700f0934c6e51e47a701807224f38d7f866ddb2398278b74b",
+    "include/compat/compat.h": "c0b4f3749039f55084651f95824c4ba2532fc2f332114ab211f709ba475f3a32",
+    "include/util/sock.h": "50d1e9b4d29c411ff19039bffef773d3c2c9270ac0553f040883ad761aaf694f",
+    "include/util/strencodings.h": "e7af4d1fbc2d2e1a09e21f1a423a8f43c6d34aa75434b9935818af1ed1312a84",
+    "include/util/fs.h": "2c390bae69aaf81293d6355749cf41bad04141114428e7cebfd06f97ae35e78b",
+    "include/util/string.h": "504270e2d439a594335acceb7e2ae1153e1391ddaa55027bc7f3fc1b2721b3a4",
+    "include/modelnet/profile.h": "7c8212e94ed7dea963bd24223d5bff8a004e305d775e1bf2aaf9e1395886f3e8",
+    "include/modelnet/supervisor.h": "462366b65e348c094ee3b607a7390891a9439a55817cbeca4b63ca00bc99f8eb",
+    "include/modelnet/types.h": "b26cf521affab56c3e6da47169802fb0f37190e2a6aafd1199d8d0ac5614589f",
+    "before/transport.cpp": "3f7bb233a43c0d2aadafd487c01c3070215f3ff025d5f2cad1f9e4ef8244c2e1",
+    "before/supervisor.cpp": "5f1b90aa30f790d149667f5a5cee3f84ba5e91f8de580a456e3a582744bd7687",
+    "before/include/modelnet/helper.h": "6ea9fd61b65316a1314ed8ec7e7439f8b0a35d50fe872949716bdd83d3c8dc15",
+    "after/transport.cpp": "f80e696b7604338a309a8271b505451736ace4a1bc285c68cf818df2ead5c067",
+    "after/supervisor.cpp": "69ff861e9c1bd9878162dff7abb1dcaf812bb68b90a867a0599d45d0612415b3",
+    "after/include/modelnet/helper.h": "02541d1d122c7fe161b133b96e3763d967e55a36ecfd47f0fff9609f9ac56e6d",
+    "univalue/test/object.cpp": "bf07dda94a1fda92ee26bc4c3cfd9d76f3e0a494f5eb12d3ef9a7e60c603143b",
+    "univalue/test/test_json.cpp": "91cbf46f11caf8ea23cf15f38f83861b48cf42f68628ccb5a2161362b2279cec",
+    "univalue/test/unitester.cpp": "f15011bc0f7ea729f25381afeb7c2ff185ce8d7248af565d596fbc0675c817d3",
+    "univalue/include/univalue_utffilter.h": "1a105117f2d754d20be74d47fe1de66818c85b6e9eab8643147198f2fbabd53b",
+    "univalue/include/univalue.h": "ccf88ee034078aa1e25ce5591a5260c4a3761cc832c284aa238112593fb6e8fa",
+    "univalue/include/univalue_escapes.h": "5c40c1791c42708dfd4d5a378f92f38c0df4c4e650f4ea3e4f37471e36a6d03b",
+    "univalue/lib/univalue_read.cpp": "2ff671ecf30d20d4abf7ab480de22ee975c05736d285bbcbe0901ab9d0730706",
+    "univalue/lib/univalue.cpp": "1458b30698cdd2610fc6a39f9ccbcbccd30a3ee2da0232030f25ab015ec2250c",
+    "univalue/lib/univalue_get.cpp": "93e0b974aded7aea7244545e287ce53cd260a8c559040414e07cbe2139f47783",
+    "univalue/lib/univalue_write.cpp": "5ba836604311eab356d194c51016f6510e9b223d7f97a610be1e69d27f153d3a"
+  },
+  "harness_sha256": "282bb9981f89403fc079ca05409773986c281806467fdb9343994b60425703f3",
+  "scope_adapters": [
+    "Minimal Sock declaration/RAII and original Linux SetNonBlocking body",
+    "LogPrintf no-op",
+    "ASCII ToLower",
+    "SetNodeModelHostAdvertised no-op",
+    "Short-private UnixRpcListenPath pass-through; no fallback paths",
+    "Scoped helper.h declarations; no full helper TU/CMake dependency build"
+  ]
+}

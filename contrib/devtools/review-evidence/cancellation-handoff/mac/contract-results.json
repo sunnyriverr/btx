@@ -1,0 +1,37 @@
+{
+  "scope": "Exact production loop, injected OS API errors and readiness. Executed on Mac; not nativeWindows or nativePOSIX socket backpressure. Same test cases before/after, only extracted product loop changes.",
+  "results": [
+    {
+      "revision": "before",
+      "simulated_windows": false,
+      "exit": 0,
+      "stdout": "normal PASS calls=1 err=\npartial PASS calls=2 err=\nwould_block PASS calls=2 err=\ninterrupted PASS calls=2 err=\nfatal_with_stale_retry_errno PASS calls=1 err=unix write\nzero_write PASS calls=1 err=unix write\ncancel_on_retry PASS calls=1 err=stopped\nwait_timeout PASS calls=0 err=timeout\nexpired_deadline PASS calls=0 err=unix write timeout\n",
+      "loop_sha256": "51765fe3223e46c50fed9dec241b06901739b3e9864fe1967e45217f29e35b30",
+      "fixture_sha256": "6c758efd9a6c191bd12a6f158ec630ee2ce5314a75738eb0f477d7157c3429c0"
+    },
+    {
+      "revision": "before",
+      "simulated_windows": true,
+      "exit": 1,
+      "stdout": "normal PASS calls=1 err=\npartial PASS calls=2 err=\nwould_block FAIL calls=1 err=unix write\ninterrupted FAIL calls=1 err=unix write\nfatal_with_stale_retry_errno FAIL calls=2 err=\nzero_write PASS calls=1 err=unix write\ncancel_on_retry FAIL calls=1 err=unix write\nwait_timeout PASS calls=0 err=timeout\nexpired_deadline PASS calls=0 err=unix write timeout\n",
+      "loop_sha256": "51765fe3223e46c50fed9dec241b06901739b3e9864fe1967e45217f29e35b30",
+      "fixture_sha256": "6c758efd9a6c191bd12a6f158ec630ee2ce5314a75738eb0f477d7157c3429c0"
+    },
+    {
+      "revision": "after",
+      "simulated_windows": false,
+      "exit": 0,
+      "stdout": "normal PASS calls=1 err=\npartial PASS calls=2 err=\nwould_block PASS calls=2 err=\ninterrupted PASS calls=2 err=\nfatal_with_stale_retry_errno PASS calls=1 err=unix write\nzero_write PASS calls=1 err=unix write\ncancel_on_retry PASS calls=1 err=stopped\nwait_timeout PASS calls=0 err=timeout\nexpired_deadline PASS calls=0 err=unix write timeout\n",
+      "loop_sha256": "04bff8d748a01b5141375cacb32a2ce6aefd7ad3ecb776114e266243db4172a2",
+      "fixture_sha256": "ce15e7ace1c08ed9cd5a6efa3eb86f235b475097b0ad5855209e80f9da1dad93"
+    },
+    {
+      "revision": "after",
+      "simulated_windows": true,
+      "exit": 0,
+      "stdout": "normal PASS calls=1 err=\npartial PASS calls=2 err=\nwould_block PASS calls=2 err=\ninterrupted PASS calls=2 err=\nfatal_with_stale_retry_errno PASS calls=1 err=unix write\nzero_write PASS calls=1 err=unix write\ncancel_on_retry PASS calls=1 err=stopped\nwait_timeout PASS calls=0 err=timeout\nexpired_deadline PASS calls=0 err=unix write timeout\n",
+      "loop_sha256": "04bff8d748a01b5141375cacb32a2ce6aefd7ad3ecb776114e266243db4172a2",
+      "fixture_sha256": "ce15e7ace1c08ed9cd5a6efa3eb86f235b475097b0ad5855209e80f9da1dad93"
+    }
+  ]
+}

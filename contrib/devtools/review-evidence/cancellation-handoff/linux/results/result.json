@@ -1,0 +1,241 @@
+{
+  "scope": "Full original supervisor TU + exact transport slices; synthetic helper; Linux aarch64 musl; NOT full daemon/GPU",
+  "cases": {
+    "before-healthy_owned": {
+      "pass": true,
+      "stop_observation_seconds": 0.1712076569999681,
+      "limit": 1.5,
+      "initial_status": "STATUS READY 1 2605",
+      "helper_pid": 2605,
+      "owned_helper_gone": true,
+      "driver_lines": [
+        "START 1",
+        "STATUS STARTING 1 2605",
+        "STATUS STARTING 1 2605",
+        "STATUS STARTING 1 2605",
+        "STATUS STARTING 1 2605",
+        "STATUS READY 1 2605",
+        "STOPPED"
+      ]
+    },
+    "before-partial_owned": {
+      "pass": false,
+      "stop_observation_seconds": 1.5005876689999695,
+      "limit": 1.5,
+      "initial_status": "STATUS READY 1 2613",
+      "helper_pid": 2613,
+      "owned_helper_gone": true,
+      "driver_lines": [
+        "START 1",
+        "STATUS STARTING 1 2613",
+        "STATUS STARTING 1 2613",
+        "STATUS STARTING 1 2613",
+        "STATUS STARTING 1 2613",
+        "STATUS READY 1 2613",
+        "STOPPED"
+      ]
+    },
+    "before-silent_owned": {
+      "pass": false,
+      "stop_observation_seconds": 1.5020085240000185,
+      "limit": 1.5,
+      "initial_status": "STATUS READY 1 2625",
+      "helper_pid": 2625,
+      "owned_helper_gone": true,
+      "driver_lines": [
+        "START 1",
+        "STATUS STARTING 1 2625",
+        "STATUS STARTING 1 2625",
+        "STATUS STARTING 1 2625",
+        "STATUS STARTING 1 2625",
+        "STATUS READY 1 2625",
+        "STOPPED"
+      ]
+    },
+    "before-stubborn_owned": {
+      "pass": true,
+      "stop_observation_seconds": 5.155411947999994,
+      "limit": 7,
+      "initial_status": "STATUS READY 1 2637",
+      "helper_pid": 2637,
+      "owned_helper_gone": true,
+      "driver_lines": [
+        "START 1",
+        "STATUS STARTING 1 2637",
+        "STATUS STARTING 1 2637",
+        "STATUS STARTING 1 2637",
+        "STATUS STARTING 1 2637",
+        "STATUS READY 1 2637",
+        "STOPPED"
+      ]
+    },
+    "before-external_partial": {
+      "pass": false,
+      "stop_observation_seconds": 1.501900687999978,
+      "limit": 1.5,
+      "initial_status": "STATUS READY 0 -1",
+      "helper_pid": 2647,
+      "restart_status": "STATUS READY 0 -1",
+      "external_same_pid_after_restart": true,
+      "driver_lines": [
+        "START 1",
+        "STATUS STARTING 0 -1",
+        "STATUS READY 0 -1",
+        "STOPPED"
+      ]
+    },
+    "before-external_backlog": {
+      "pass": false,
+      "stop_observation_seconds": 1.5040738470000292,
+      "limit": 1.5,
+      "initial_status": "STATUS READY 0 -1",
+      "helper_pid": 2663,
+      "restart_status": "STATUS READY 0 -1",
+      "external_same_pid_after_restart": true,
+      "driver_lines": [
+        "START 1",
+        "STATUS STARTING 0 -1",
+        "STATUS READY 0 -1",
+        "STOPPED"
+      ]
+    },
+    "after-healthy_owned": {
+      "pass": true,
+      "stop_observation_seconds": 0.17603827200002797,
+      "limit": 1.5,
+      "initial_status": "STATUS READY 1 2700",
+      "helper_pid": 2700,
+      "owned_helper_gone": true,
+      "driver_lines": [
+        "START 1",
+        "STATUS STARTING 1 2700",
+        "STATUS STARTING 1 2700",
+        "STATUS STARTING 1 2700",
+        "STATUS STARTING 1 2700",
+        "STATUS READY 1 2700",
+        "STOPPED"
+      ]
+    },
+    "after-partial_owned": {
+      "pass": true,
+      "stop_observation_seconds": 0.21438110799999777,
+      "limit": 1.5,
+      "initial_status": "STATUS READY 1 2706",
+      "helper_pid": 2706,
+      "owned_helper_gone": true,
+      "driver_lines": [
+        "START 1",
+        "STATUS STARTING 1 2706",
+        "STATUS STARTING 1 2706",
+        "STATUS STARTING 1 2706",
+        "STATUS STARTING 1 2706",
+        "STATUS READY 1 2706",
+        "STOPPED"
+      ]
+    },
+    "after-silent_owned": {
+      "pass": true,
+      "stop_observation_seconds": 0.21608092499997156,
+      "limit": 1.5,
+      "initial_status": "STATUS READY 1 2715",
+      "helper_pid": 2715,
+      "owned_helper_gone": true,
+      "driver_lines": [
+        "START 1",
+        "STATUS STARTING 1 2715",
+        "STATUS STARTING 1 2715",
+        "STATUS STARTING 1 2715",
+        "STATUS STARTING 1 2715",
+        "STATUS READY 1 2715",
+        "STOPPED"
+      ]
+    },
+    "after-stubborn_owned": {
+      "pass": true,
+      "stop_observation_seconds": 5.1735508500000265,
+      "limit": 7,
+      "initial_status": "STATUS READY 1 2723",
+      "helper_pid": 2723,
+      "owned_helper_gone": true,
+      "driver_lines": [
+        "START 1",
+        "STATUS STARTING 1 2723",
+        "STATUS STARTING 1 2723",
+        "STATUS STARTING 1 2723",
+        "STATUS STARTING 1 2723",
+        "STATUS READY 1 2723",
+        "STOPPED"
+      ]
+    },
+    "after-external_partial": {
+      "pass": true,
+      "stop_observation_seconds": 0.05505379900000662,
+      "limit": 1.5,
+      "initial_status": "STATUS READY 0 -1",
+      "helper_pid": 2731,
+      "restart_status": "STATUS READY 0 -1",
+      "external_same_pid_after_restart": true,
+      "driver_lines": [
+        "START 1",
+        "STATUS STARTING 0 -1",
+        "STATUS READY 0 -1",
+        "STOPPED"
+      ]
+    },
+    "after-external_backlog": {
+      "pass": true,
+      "stop_observation_seconds": 0.026688616000001275,
+      "limit": 1.5,
+      "initial_status": "STATUS READY 0 -1",
+      "helper_pid": 2746,
+      "restart_status": "STATUS READY 0 -1",
+      "external_same_pid_after_restart": true,
+      "driver_lines": [
+        "START 1",
+        "STATUS STARTING 0 -1",
+        "STATUS READY 0 -1",
+        "STOPPED"
+      ]
+    }
+  },
+  "long": {
+    "before": {
+      "pass": true,
+      "seconds": 123.01284152,
+      "reply": {
+        "ok": true,
+        "error": "",
+        "result": {
+          "fixture_long_reply": true,
+          "automatic_spend_atoms": 0
+        }
+      },
+      "external_helper_survives_supervisor_stop": true,
+      "refusal": {
+        "ok": false,
+        "error": "{\"code\":\"INVALID_PARAMETER\",\"message\":\"fixture refusal\"}",
+        "result": null
+      }
+    },
+    "after": {
+      "pass": true,
+      "seconds": 123.013848607,
+      "reply": {
+        "ok": true,
+        "error": "",
+        "result": {
+          "fixture_long_reply": true,
+          "automatic_spend_atoms": 0
+        }
+      },
+      "external_helper_survives_supervisor_stop": true,
+      "refusal": {
+        "ok": false,
+        "error": "{\"code\":\"INVALID_PARAMETER\",\"message\":\"fixture refusal\"}",
+        "result": null
+      }
+    }
+  },
+  "harness_sha256": "282bb9981f89403fc079ca05409773986c281806467fdb9343994b60425703f3",
+  "final": "PASS"
+}
