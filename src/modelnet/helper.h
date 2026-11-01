@@ -141,7 +141,11 @@ bool UnixSocketSafeToAdopt(const fs::path& sock, std::string& err);
 /** SO_PEERCRED uid matches this process. Platforms without SO_PEERCRED return true. */
 bool UnixConnectedPeerIsSelf(int fd, std::string& err);
 
-bool CallUnixRpc(const fs::path& socket_path, const std::string& method, const UniValue& params, UniValue& result, std::string& err);
+/** A supervisor stop token makes transport I/O cancellable. Ordinary callers
+ * retain their existing reply budgets. check_peer preserves readiness's uid check. */
+bool CallUnixRpc(const fs::path& socket_path, const std::string& method, const UniValue& params,
+                 UniValue& result, std::string& err, std::atomic<bool>* stop = nullptr,
+                 bool check_peer = false);
 
 /** True when `err` is a helper application refusal (`{"code","message"}`).
  *  Transport failures (connect, write, non-JSON reply) return false. */

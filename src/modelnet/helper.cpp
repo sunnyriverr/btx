@@ -64,6 +64,7 @@
 #include <logging.h>
 #include <netaddress.h>
 #include <util/fs.h>
+#include <util/sock.h>
 #include <util/strencodings.h>
 
 #include <openssl/bn.h>
@@ -11237,11 +11238,21 @@ bool HelperRefusalFromError(const std::string& err, std::string& code, std::stri
     return !code.empty();
 }
 
-bool CallUnixRpc(const fs::path& socket_path, const std::string& method, const UniValue& params, UniValue& result, std::string& err)
+bool CallUnixRpc(const fs::path& socket_path, const std::string& method, const UniValue& params,
+                 UniValue& result, std::string& err, std::atomic<bool>* stop, bool check_peer)
 {
+    if (stop && stop->load()) {
+        err = "stopped";
+        return false;
+    }
     const int fd = ::socket(AF_UNIX, SOCK_STREAM, 0);
     if (fd < 0) {
         err = "unix socket";
+        return false;
+    }
+    const Sock connection{static_cast<SOCKET>(fd)};
+    if (stop && !connection.SetNonBlocking()) {
+        err = "unix nonblocking";
         return false;
     }
     sockaddr_un addr{};
@@ -11249,29 +11260,82 @@ bool CallUnixRpc(const fs::path& socket_path, const std::string& method, const U
     const std::string p = fs::PathToString(UnixRpcListenPath(socket_path));
     if (p.size() >= sizeof(addr.sun_path)) {
         err = "unix path too long";
-        close(fd);
         return false;
     }
     std::strncpy(addr.sun_path, p.c_str(), sizeof(addr.sun_path) - 1);
-    if (connect(fd, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) != 0) {
-        err = "helper unix connect failed (btx-modeld not running)";
-        close(fd);
-        return false;
+    const int timeout_ms{UnixRpcReplyTimeoutMs(method)};
+    const auto connect_deadline = std::chrono::steady_clock::now() + std::chrono::milliseconds(timeout_ms);
+    while (connect(fd, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) != 0) {
+        const int connect_error{errno};
+        if (stop && stop->load()) {
+            err = "stopped";
+            return false;
+        }
+        if (connect_error == EISCONN) break;
+        if (!stop || (connect_error != EINPROGRESS && connect_error != EALREADY &&
+                      connect_error != EAGAIN && connect_error != EWOULDBLOCK && connect_error != EINTR)) {
+            err = "helper unix connect failed (btx-modeld not running)";
+            return false;
+        }
+        const auto left = std::chrono::duration_cast<std::chrono::milliseconds>(
+            connect_deadline - std::chrono::steady_clock::now()).count();
+        if (left <= 0) {
+            err = "unix connect timeout";
+            return false;
+        }
+        // AF_UNIX may refuse a full accept queue with EAGAIN, rather than
+        // starting an asynchronous connection. Retry without busy-spinning.
+        if (connect_error == EAGAIN || connect_error == EWOULDBLOCK || connect_error == EINTR) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(std::min<int64_t>(left, 25)));
+            continue;
+        }
+        if (!WaitFd(fd, true, static_cast<int>(left), stop, err)) return false;
+        int socket_error{0};
+        socklen_t len{sizeof(socket_error)};
+        if (getsockopt(fd, SOL_SOCKET, SO_ERROR, &socket_error, &len) != 0 || socket_error != 0) {
+            err = "helper unix connect failed (btx-modeld not running)";
+            return false;
+        }
+        break;
     }
+    if (check_peer && !UnixConnectedPeerIsSelf(fd, err)) return false;
     UniValue req(UniValue::VOBJ);
     req.pushKV("jsonrpc", "1.0");
     req.pushKV("id", "model");
     req.pushKV("method", method);
     req.pushKV("params", params);
     const std::string wire = req.write() + "\n";
-    if (::send(fd, wire.data(), wire.size(), 0) < 0) {
+    if (stop) {
+        const auto write_deadline = std::chrono::steady_clock::now() + std::chrono::milliseconds(timeout_ms);
+        size_t sent{0};
+        while (sent < wire.size()) {
+            const auto left = std::chrono::duration_cast<std::chrono::milliseconds>(
+                write_deadline - std::chrono::steady_clock::now()).count();
+            if (left <= 0) {
+                err = "unix write timeout";
+                return false;
+            }
+            if (!WaitFd(fd, true, static_cast<int>(left), stop, err)) return false;
+            const ssize_t n = ::send(fd, wire.data() + sent, wire.size() - sent, 0);
+            const int send_error{n < 0 ? WSAGetLastError() : 0};
+            if (n > 0) sent += static_cast<size_t>(n);
+            else if (n < 0 && (send_error == WSAEINTR || send_error == WSAEAGAIN ||
+                               send_error == WSAEWOULDBLOCK)) continue;
+            else {
+                err = "unix write";
+                return false;
+            }
+        }
+    } else if (::send(fd, wire.data(), wire.size(), 0) < 0) {
         err = "unix write";
-        close(fd);
         return false;
     }
     ::shutdown(fd, SHUT_WR);
-    const std::string raw = RecvUntil(fd, MAX_RPC_BODY, nullptr, UnixRpcReplyTimeoutMs(method));
-    close(fd);
+    const std::string raw = RecvUntil(fd, MAX_RPC_BODY, stop, timeout_ms);
+    if (stop && stop->load()) {
+        err = "stopped";
+        return false;
+    }
     UniValue reply;
     if (!reply.read(raw) || !reply.isObject()) {
         err = "helper reply json";

@@ -61,37 +61,13 @@ fs::path SelfExeDir()
     return {};
 }
 
-bool SocketReady(const fs::path& sock, std::string& err)
+bool SocketReady(const fs::path& sock, std::string& err, std::atomic<bool>* stop)
 {
     const fs::path path = UnixRpcListenPath(sock);
     if (!UnixSocketSafeToAdopt(path, err)) return false;
-#ifndef WIN32
-    const int fd = ::socket(AF_UNIX, SOCK_STREAM, 0);
-    if (fd < 0) {
-        err = "unix socket";
-        return false;
-    }
-    sockaddr_un addr{};
-    addr.sun_family = AF_UNIX;
-    const std::string p = fs::PathToString(path);
-    if (p.size() >= sizeof(addr.sun_path)) {
-        err = "unix path too long";
-        ::close(fd);
-        return false;
-    }
-    std::strncpy(addr.sun_path, p.c_str(), sizeof(addr.sun_path) - 1);
-    if (::connect(fd, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) != 0) {
-        err = "helper unix connect failed";
-        ::close(fd);
-        return false;
-    }
-    const bool self = UnixConnectedPeerIsSelf(fd, err);
-    ::close(fd);
-    if (!self) return false;
-#endif
     UniValue result;
     UniValue params(UniValue::VARR);
-    return CallUnixRpc(path, "getmodelnetworkinfo", params, result, err);
+    return CallUnixRpc(path, "getmodelnetworkinfo", params, result, err, stop, /*check_peer=*/true);
 }
 
 } // namespace
@@ -289,7 +265,7 @@ void HelperSupervisor::PollAndSyncHostBit()
     std::string err;
     UniValue params(UniValue::VARR);
     HelperStatus info;
-    const bool ok = CallUnixRpc(m_cfg.rpc_socket, "getmodelnetworkinfo", params, result, err);
+    const bool ok = CallUnixRpc(m_cfg.rpc_socket, "getmodelnetworkinfo", params, result, err, &m_stop);
     if (ok) ApplyHelperNetworkInfo(info, result);
     {
         std::lock_guard<std::mutex> lock(m_mu);
@@ -312,7 +288,7 @@ bool HelperSupervisor::WaitReady(int timeout_ms, std::string& err)
             err = "stopped";
             return false;
         }
-        if (SocketReady(m_cfg.rpc_socket, err)) return true;
+        if (SocketReady(m_cfg.rpc_socket, err, &m_stop)) return true;
         std::this_thread::sleep_for(std::chrono::milliseconds(step));
     }
     if (err.empty()) err = "helper unix RPC not ready";
@@ -339,7 +315,7 @@ bool HelperSupervisor::SpawnLocked(std::string& err)
     }
 #endif
     std::string sock_err;
-    if (!SocketReady(m_cfg.rpc_socket, sock_err)) {
+    if (!SocketReady(m_cfg.rpc_socket, sock_err, &m_stop)) {
         std::error_code rec;
         std::filesystem::remove(m_cfg.rpc_socket, rec);
     } else {
@@ -407,10 +383,8 @@ void HelperSupervisor::RequestStopOwned()
         pid = m_pid;
     }
     if (pid <= 0) return;
-    UniValue ignore;
-    std::string err;
-    UniValue params(UniValue::VARR);
-    (void)CallUnixRpc(m_cfg.rpc_socket, "stop", params, ignore, err);
+    // modeld's SIGTERM handler requests the same graceful stop as its RPC.
+    // Do not wait on helper IPC before reaching this bounded escalation path.
     if (kill(pid, SIGTERM) != 0 && errno != ESRCH) {
         LogPrintf("model helper: SIGTERM pid=%d failed (%s)\n", static_cast<int>(pid), std::strerror(errno));
     }
@@ -450,7 +424,7 @@ void HelperSupervisor::Loop()
             std::string err;
             UniValue result;
             UniValue params(UniValue::VARR);
-            const bool ok = CallUnixRpc(m_cfg.rpc_socket, "getmodelnetworkinfo", params, result, err);
+            const bool ok = CallUnixRpc(m_cfg.rpc_socket, "getmodelnetworkinfo", params, result, err, &m_stop);
             HelperStatus info;
             if (ok) ApplyHelperNetworkInfo(info, result);
             {
@@ -517,7 +491,7 @@ void HelperSupervisor::Loop()
             SetNodeModelHostAdvertised(false);
         } else if (need_spawn && !m_stop.load()) {
             std::string sock_err;
-            if (SocketReady(m_cfg.rpc_socket, sock_err)) {
+            if (SocketReady(m_cfg.rpc_socket, sock_err, &m_stop)) {
                 // START-15: a live socket means an already-running helper. Do not
                 // spawn a duplicate. Do not SIGTERM it on our shutdown (unmanaged).
                 {
