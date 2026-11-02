@@ -1,0 +1,37 @@
+{
+  "utc": "2026-11-02T01:10:52.520876+00:00",
+  "base": "b37742560c62ecffce5ea29ca233c23036c9bbd2",
+  "product_changes": "none",
+  "test": "extended existing snapshot_evicted_body_becomes_background_root",
+  "corrected_pass": 3,
+  "remove_only_inflight_root_exception_fail": 3,
+  "failure": "required GETDATA for height16 is absent",
+  "adjacent_controls": [
+    {
+      "case": "snapshot_eviction_cooldown_survives_budget_marker_pressure",
+      "exit_code": 0
+    },
+    {
+      "case": "snapshot_eviction_present_marker_allows_fresh_download_and_progress",
+      "exit_code": 0
+    },
+    {
+      "case": "snapshot_body_capacity_wait_does_not_fetch_descendants",
+      "exit_code": 0
+    },
+    {
+      "case": "acquisition_frontier_does_not_wait_for_background_holes",
+      "exit_code": 0
+    }
+  ],
+  "final_test_source_sha256": "f736e536ff07c8211709d3d8dedb1f3268c99e8695cd52bd651ca595973b05a9",
+  "test_patch_sha256": "586a2e5dea961191931b3385257b682ec33b8df4e86b3a38ac8f01dfa188c942",
+  "candidate_binary_sha256": "328402ef3be25d060ae40395345e0ad1dd8755a1b02e5f5380a842e2064b22fb",
+  "mutant_binary_sha256": "dd763f8598b7f0ee10c6675b02239b472f097d67b74068e02e7c9294f958f5fe",
+  "scope": "macOS M4 Release focused normal-CMake three-object unit link; mock verifier/null-socket P2P fixture, not full test_btx, GPU, native Linux/Windows or mainnet; existing regtest1124 metadata retained identically in both builds",
+  "publication": "published evidence for existing PR370 follow-up",
+  "pilots": "pilot-note.txt",
+  "local_branch": "codex/background-eviction-inflight-test",
+  "test_commit": "5deb327871efbca832e1a4e420f76dad74ff6b41",
+  "restoration": "restoration.json"
+}
