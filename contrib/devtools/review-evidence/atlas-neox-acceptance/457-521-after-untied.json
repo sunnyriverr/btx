@@ -1,0 +1,15 @@
+{
+  "profile": "after",
+  "fixture": "521-untied",
+  "versions": {
+    "torch": "2.14.1",
+    "transformers": "4.57.6",
+    "safetensors": "0.8.0",
+    "tokenizers": "0.22.2",
+    "numpy": "2.4.6",
+    "huggingface-hub": "0.36.2"
+  },
+  "source_models_sha384": "f3dbb4214ce1d83512c11c625e776484e260d79ac0cff1affe7cdde0b35a5d722ae281ec74b4420d9deeeaa986618d74",
+  "status": "ERROR",
+  "error": "Traceback (most recent call last):\n  File \"<workspace>/work/btx-review-tools/atlas-neox-acceptance/check_model.py\", line 27, in <module>\n    model,tokenizer,adapter,binding=load_local(root,device='cpu')\n                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<workspace>/work/btx-review-tools/atlas-neox-acceptance/after/contrib/atlas/neuronlab/btx_neuronlab/models.py\", line 323, in load_local\n    tokenizer = transformers.AutoTokenizer.from_pretrained(str(root), local_files_only=True, trust_remote_code=False)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<workspace>/work/btx-review-tools/atlas-neox-acceptance/deps457/transformers/models/auto/tokenization_auto.py\", line 1153, in from_pretrained\n    raise ValueError(\nValueError: Tokenizer class TokenizersBackend does not exist or is not currently imported.\n"
+}

@@ -1,0 +1,23 @@
+{
+  "utc": "2026-11-02T08:37:31.338242+00:00",
+  "status": "requested_actual_transformers_acceptance_passed_private",
+  "head": "acbf7efb20b1b82da06affdae2ead08068cf743c",
+  "before": "6d0fbf6ba492b16bdef64ade30d85ea8dffd287a",
+  "platform": "ProductName:\t\tmacOS\nProductVersion:\t\t26.5.1\nBuildVersion:\t\t25F80\n",
+  "architecture": "arm64 Apple M4",
+  "device": "CPU, one torch thread",
+  "torch": "2.14.1 (JPP original used2.10.0)",
+  "transformers": [
+    "4.57.6",
+    "5.21.1"
+  ],
+  "requested_cases": "5.21.1 loads untied checkpoints saved unmodified by each version: beforeWEIGHTS2/2, afterPASS2/2",
+  "controls": "4.57.6 same-version load PASSboth;5.21.1tiedPASSboth;extra/secondmissing/headmissingWEIGHTSboth",
+  "weights_logits": "all successful loads match plain transformers loaded same fixture; exact state tensors and max logit delta0",
+  "reverse_version_limit": "5.21.1-save\u21924.57.6load fails both at AutoTokenizer TokenizersBackend, before changed weight code",
+  "runs_per_case": 1,
+  "network": "packages installed from package index into isolated targets; no model/config/tokenizer downloaded; checkpoint tests offline",
+  "source_modified": false,
+  "next": "one scoped item5 evidence handoff on273whenauthorized; no product patch/newPR/extra matrix",
+  "published": "authorized evidence handoff; receipt recorded separately"
+}
