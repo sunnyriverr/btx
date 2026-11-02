@@ -1,6 +1,6 @@
 # Reproduce the focused local helper comparison
 
-No node, wallet, public peer, model execution or GPU is required. Native macOS comparison here used existing CMake helper libraries. build.py records the local cache paths and compiler flags and compiles only helper.cpp for each variant; its cache is not a portable clean build recipe. On another system, build btx-modeld from baseline swarm cbf65894 and from that same base plus candidate.patch using the repository's normal Modelnet build, then copy those binaries into baseline/btx-modeld and candidate/btx-modeld here. Verify their identities before interpreting results.
+No node, wallet, public peer, model execution or GPU is required. Native macOS comparison here used existing CMake helper libraries. build.py records the local cache paths and compiler flags and compiles only helper.cpp for each variant; its cache is not a portable clean build recipe. On another system, build btx-modeld from baseline swarm cbf65894 and from that same base plus candidate.patch using the repository's normal Modelnet build, then copy those binaries into baseline/btx-modeld and candidate/btx-modeld here. Verify their identities before interpreting results. binary-identities.json pins the two tested Mac binaries; for your own build, record your actual binary hashes there and retain exact source/build provenance.
 
 ```
 python3 reproduce.py baseline
