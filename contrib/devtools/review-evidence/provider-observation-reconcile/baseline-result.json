@@ -1,0 +1,178 @@
+{
+  "profile": "baseline",
+  "binary_sha256": "03744430f40442f3b7525959b2020c23a0649b0b4e94f29a7e46cfa6b7a614d6",
+  "checks": [
+    {
+      "label": "seeded A visible",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "label": "seeded B visible",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "label": "unhost A immediately clears local",
+      "actual": 0,
+      "expected": 0,
+      "pass": true
+    },
+    {
+      "label": "unhost A preserves B",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "label": "reseed A visible",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "label": "unseed A immediately clears local",
+      "actual": 0,
+      "expected": 0,
+      "pass": true
+    },
+    {
+      "label": "refresh does not restore unseeded A",
+      "actual": 0,
+      "expected": 0,
+      "pass": true
+    },
+    {
+      "label": "second reseed A visible",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "label": "remove A immediately clears local",
+      "actual": 0,
+      "expected": 0,
+      "pass": true
+    },
+    {
+      "label": "refresh does not restore removed A",
+      "actual": 0,
+      "expected": 0,
+      "pass": true
+    },
+    {
+      "label": "remove A preserves B",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "label": "catalog contains only B",
+      "actual": [
+        "f809222b33436ecfd206938079eccdda0c5e4bdcb934ee7048d30c6d3dff146a340342071b8baf9fc3b60f3a4c5780b2"
+      ],
+      "expected": [
+        "f809222b33436ecfd206938079eccdda0c5e4bdcb934ee7048d30c6d3dff146a340342071b8baf9fc3b60f3a4c5780b2"
+      ],
+      "pass": true
+    },
+    {
+      "label": "unknown ID returns empty",
+      "actual": [],
+      "expected": [],
+      "pass": true
+    },
+    {
+      "label": "availability remains UNKNOWN",
+      "actual": "UNKNOWN",
+      "expected": "UNKNOWN",
+      "pass": true
+    },
+    {
+      "label": "not reconstructable_known",
+      "actual": false,
+      "expected": false,
+      "pass": true
+    },
+    {
+      "label": "safety model starts complete",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "label": "safety report unseeds catalog",
+      "actual": false,
+      "expected": false,
+      "pass": true
+    },
+    {
+      "label": "safety report immediately clears local",
+      "actual": 1,
+      "expected": 0,
+      "pass": false
+    },
+    {
+      "label": "safety report availability count",
+      "actual": 1,
+      "expected": 0,
+      "pass": false
+    },
+    {
+      "label": "safety report peer count",
+      "actual": 1,
+      "expected": 0,
+      "pass": false
+    },
+    {
+      "label": "refresh does not restore safety blocked model",
+      "actual": 1,
+      "expected": 0,
+      "pass": false
+    },
+    {
+      "label": "getmodeldirectoryentry no stale local complete count",
+      "actual": 1,
+      "expected": 0,
+      "pass": false
+    },
+    {
+      "label": "getmodeleconomyentry no stale local complete count",
+      "actual": 0,
+      "expected": 0,
+      "pass": true
+    },
+    {
+      "label": "unrelated seeded model survives safety block",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "label": "restart A absent",
+      "actual": 0,
+      "expected": 0,
+      "pass": true
+    },
+    {
+      "label": "restart seeded B visible",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "label": "restart safety model absent",
+      "actual": 0,
+      "expected": 0,
+      "pass": true
+    }
+  ],
+  "complete": true,
+  "verdict": "FAIL",
+  "cleanup": {
+    "helper_stopped": true,
+    "scratch_removed": true
+  }
+}
