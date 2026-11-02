@@ -1,0 +1,63 @@
+{
+  "cwd": "reproducer",
+  "command": [
+    "python3",
+    "reproduce.py",
+    "--source",
+    "../source",
+    "--crypto",
+    "../dependencies/crypto.a",
+    "--json",
+    "../dependencies/json.a",
+    "--work",
+    "../work"
+  ],
+  "exit": 0,
+  "timeout": false,
+  "seconds": 31.477431475999992
+}
+-- The C compiler identification is GNU 14.2.0
+-- The CXX compiler identification is GNU 14.2.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found SQLite3: /usr/include (found version "3.49.2")
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE
+-- Configuring done (0.3s)
+-- Generating done (0.0s)
+-- Build files have been written to: /tmp/btx-pr381-cap-proof/work/build
+[  5%] Building CXX object CMakeFiles/core.dir/src/modelnet/security_v2/artifacts.cpp.o
+[ 11%] Building CXX object CMakeFiles/core.dir/src/modelnet/security_v2/broker.cpp.o
+[ 16%] Building CXX object CMakeFiles/core.dir/src/modelnet/security_v2/common.cpp.o
+[ 22%] Building CXX object CMakeFiles/core.dir/src/modelnet/security_v2/database.cpp.o
+[ 27%] Building CXX object CMakeFiles/core.dir/src/modelnet/security_v2/evaluation.cpp.o
+[ 33%] Building CXX object CMakeFiles/core.dir/src/modelnet/security_v2/lifecycle.cpp.o
+[ 38%] Building CXX object CMakeFiles/core.dir/src/modelnet/security_v2/mesh.cpp.o
+[ 44%] Building CXX object CMakeFiles/core.dir/src/modelnet/security_v2/peer.cpp.o
+[ 50%] Building CXX object CMakeFiles/core.dir/src/modelnet/security_v2/sandbox.cpp.o
+[ 55%] Building CXX object CMakeFiles/core.dir/src/modelnet/security_v2/trust.cpp.o
+[ 61%] Building CXX object CMakeFiles/core.dir/src/modelnet/security_v2/work.cpp.o
+[ 61%] Built target core
+[ 66%] Building CXX object CMakeFiles/harness.dir/test/util/model_security/security_tests.cpp.o
+[ 66%] Built target harness
+[ 72%] Building CXX object CMakeFiles/cap2.dir/src/modelnet/security_v2/service.cpp.o
+[ 77%] Linking CXX executable cap2
+[ 77%] Built target cap2
+[ 83%] Building CXX object CMakeFiles/cap99.dir/cap99-service.cpp.o
+[ 88%] Linking CXX executable cap99
+[ 88%] Built target cap99
+[ 94%] Building C object CMakeFiles/security-probe.dir/tmp/btx-pr381-cap-proof/source/test/util/model_security/sandbox_probe.c.o
+[100%] Linking C executable security-probe
+[100%] Built target security-probe
+{"cap": 2, "exit": 0, "seconds": 6.175486845000009, "passed": 1, "failed": 0, "tests": [{"name": "scheduler-valid-work-and-two-per-tick", "status": "PASS"}], "observations": ["CAP_OBSERVATION marker=1793661483213 cursor=1821d04061ef93214e81527497fe5f4bdf8da50237db2e62a8474dce050729071b3d929207518f711eb32d62e85ff6be expected_second=1821d04061ef93214e81527497fe5f4bdf8da50237db2e62a8474dce050729071b3d929207518f711eb32d62e85ff6be elapsed_us=6894"], "signed_endpoints": 7}
+{"cap": 99, "exit": 1, "seconds": 0.21770800100000542, "passed": 0, "failed": 1, "tests": [{"error": "first completed maintenance pass exceeded two accepted evaluation submissions", "name": "scheduler-valid-work-and-two-per-tick", "status": "FAIL"}], "observations": ["CAP_OBSERVATION marker=1793661489392 cursor= expected_second=0bbbe0a0bb07a9570ec91623c1fec23779d9fad1b474a366999357a1f2e903c4e7b938987c1110fb23590631b3d2df20 elapsed_us=12556"], "signed_endpoints": 7}
+

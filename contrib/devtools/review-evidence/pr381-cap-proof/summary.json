@@ -1,0 +1,95 @@
+{
+  "verdict": "cap2PASS/cap99budget-onlyFAIL; all7nativePASSendpointsbothbeforecapassert",
+  "local_test_commit": "3655ce1a9e6f9f41f9b4a37906701f045a2c46fd",
+  "test_sha256": "5333ef047469e7c628ff1c76b4b4aecc249b5575e01510b21a81e4f42a1f9bc1",
+  "cases": [
+    {
+      "cap": 2,
+      "test_passed": 1,
+      "test_failed": 0,
+      "snapshot": {
+        "marker": "1793661483213",
+        "cursor": "1821d04061ef93214e81527497fe5f4bdf8da50237db2e62a8474dce050729071b3d929207518f711eb32d62e85ff6be",
+        "expected_second": "1821d04061ef93214e81527497fe5f4bdf8da50237db2e62a8474dce050729071b3d929207518f711eb32d62e85ff6be",
+        "elapsed_us": "6894"
+      },
+      "all7nativePASS_before_budget_assert": true,
+      "signed_endpoint_pairs": 7,
+      "fixture_observation_miss": false
+    },
+    {
+      "cap": 99,
+      "test_passed": 0,
+      "test_failed": 1,
+      "snapshot": {
+        "marker": "1793661489392",
+        "cursor": "",
+        "expected_second": "0bbbe0a0bb07a9570ec91623c1fec23779d9fad1b474a366999357a1f2e903c4e7b938987c1110fb23590631b3d2df20",
+        "elapsed_us": "12556"
+      },
+      "all7nativePASS_before_budget_assert": true,
+      "signed_endpoint_pairs": 7,
+      "fixture_observation_miss": false
+    }
+  ],
+  "entrypoint": {
+    "cwd": "reproducer",
+    "command": [
+      "python3",
+      "reproduce.py",
+      "--source",
+      "../source",
+      "--crypto",
+      "../dependencies/crypto.a",
+      "--json",
+      "../dependencies/json.a",
+      "--work",
+      "../work"
+    ],
+    "exit": 0,
+    "timeout": false,
+    "seconds": 31.477431475999992
+  },
+  "mutation": "only submitted==2 versus submitted==99",
+  "common_prerequisite": "unchanged#384timingrepair identicalboth",
+  "dependency_scope": "identifiedreusednativearchives; dependencybuildinstructiondocnotexecutedthisrun",
+  "limits": "cursororacle underknownfixturepremises, not genericsubmissioncounter orstress/fullnode/defaultstack/otherplatform proof",
+  "attempts": 1,
+  "fixture_observation_misses": 0,
+  "product_api_or_observer_changes": false,
+  "additional_matrix_runs": false,
+  "cleanup": {
+    "owned_guest_directory_removed": true,
+    "tested_identity_checks": {
+      "src/modelnet/security_v2/service.cpp": true,
+      "cap99-service.cpp": true,
+      "test/util/model_security/security_tests.cpp": true,
+      "build/cap2": true,
+      "build/cap99": true,
+      "build/security-probe": true,
+      "build/CMakeFiles/harness.dir/test/util/model_security/security_tests.cpp.o": true
+    },
+    "cached_source_files_unchanged": 646,
+    "cached_source_changes": [],
+    "cached_static_library_hashes": {
+      "build/lib/libbitcoinpqc.a": "c97e6f5389bfa3a0305f9f9691917d51e71b6aafcf27ce6414ce8c3b31675ad9",
+      "build/lib/libbitcoin_crypto.a": "574fb153b7cac38aa2e14a630a72eb0703c0a55a876f4fe32970ba4140226629",
+      "build/src/univalue/libunivalue.a": "9898c1b37c85902907aec86c3d0a1870d3dd90901118efaa77a286829b40c5da"
+    },
+    "owned_runtime_build_processes": [],
+    "remaining_fixture_directories": [],
+    "guest_size_before_cleanup": "11699\t/tmp/btx-pr381-cap-proof\n",
+    "guest_free_bytes": 618405888,
+    "new_packages_installed": false
+  },
+  "vm_final_state": {
+    "name": "btx-cancel",
+    "status": "Stopped",
+    "arch": "aarch64",
+    "cpus": 2,
+    "memory": 1073741824,
+    "disk": 2147483648
+  },
+  "host_free_bytes": 2719555584,
+  "closed_utc": "2026-11-02T23:22:21.588736+00:00"
+}
