@@ -1,0 +1,96 @@
+{
+  "verdict": "PASS: exactsealed READMEentrypoint executedendtoend firstattempt",
+  "sealed_commit": "d7dd7974da01d39154911ba66fac91037784393d",
+  "clean_source_revision": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+  "command": [
+    "python3",
+    "reproduce.py",
+    "--source",
+    "../source",
+    "--work",
+    "../work"
+  ],
+  "command_cwd": "package",
+  "elapsed_seconds": 48.163637830000006,
+  "entrypoint_exit": 0,
+  "attempts": 1,
+  "recipe_product_oracle_changes": false,
+  "assembly_validated_base_inputs": 681,
+  "reconstructed_recorded_sources": 72,
+  "actual_compiled_inputs": 79,
+  "all_actual_compiled_inputs_match": true,
+  "all_five_b2e_product_files_match": true,
+  "dependency_build": "fresh official upstream crypto/PQC/JSON source targets; no reused binaryarchives or mutablecachedsource substitution",
+  "baseline": "3PASS/4FAIL",
+  "candidate": "7PASS/0FAIL",
+  "combined": "affected seven-valid-job case PASS; seven genuine nativePASS/dispatched receipts; no workererrors",
+  "native_probe_sha256": "f4ec4bf05befc4ffe60475c475e46dbbba7b8355304412d6ecc76454b78f9110",
+  "actual_binary_archive_harness_identities": {
+    "work/build/time-baseline": {
+      "sha256": "b28791d6c5a7f8568509262ef3ccd1993b15b61a8e09583a7d00a89cf3232ca2",
+      "bytes": 1286824
+    },
+    "work/build/time-candidate": {
+      "sha256": "cb5cc7e6c10ee6fa2d0dbcb1223bd2a7dc6e6e292bd661643fca278bd32f9c20",
+      "bytes": 1354008
+    },
+    "work/build/time-combined": {
+      "sha256": "600f32ad12464a39796fa677b9f66d1b34881794355f71bb3c9a7a3275b71c3c",
+      "bytes": 1354008
+    },
+    "work/build/security-probe": {
+      "sha256": "f4ec4bf05befc4ffe60475c475e46dbbba7b8355304412d6ecc76454b78f9110",
+      "bytes": 211744
+    },
+    "work/build/upstream/libbtx_security_crypto.a": {
+      "sha256": "9ffd1f34d9645eaa0fe2a097592fed8f0b999e2cf17b53de856a5f50ba19fc6b",
+      "bytes": 103200
+    },
+    "work/build/upstream/libbtx_security_json.a": {
+      "sha256": "588eb4e5fedf47598db9cd548441dab629888ad8f1514e59cce6b2f4d6c2c439",
+      "bytes": 147158
+    },
+    "work/build/CMakeFiles/harness.dir/harness/security_tests.cpp.o": {
+      "sha256": "fba04f9e4fa3701cb179201dbcd44316037b564b7d2969dd45bf64bf3f303084",
+      "bytes": 882032
+    }
+  },
+  "package_hashes_unchanged": true,
+  "clean_source_inputs_unchanged": true,
+  "guard_causes": "semantic-audit.json; intended rollback/expiry/pause/revocation/localpermission reasons checked, notwrapperexit alone",
+  "limits": "configuredAlpineLinuxaarch64 component8MiBELF; no cap2qualification/defaultstack/fullnode/otherplatform/releaseclaim; originalhistoricaleventcause remainsunproved",
+  "cleanup": {
+    "owned_guest_directory_removed": true,
+    "all_tested_binary_harness_checks": {
+      "build/time-baseline": true,
+      "build/time-candidate": true,
+      "build/time-combined": true,
+      "build/security-probe": true,
+      "build/CMakeFiles/harness.dir/harness/security_tests.cpp.o": true
+    },
+    "cached_source_files_unchanged": 646,
+    "cached_source_changes": [],
+    "cached_static_libraries": {
+      "build/lib/libbitcoinpqc.a": "c97e6f5389bfa3a0305f9f9691917d51e71b6aafcf27ce6414ce8c3b31675ad9",
+      "build/lib/libbitcoin_crypto.a": "574fb153b7cac38aa2e14a630a72eb0703c0a55a876f4fe32970ba4140226629",
+      "build/src/univalue/libunivalue.a": "9898c1b37c85902907aec86c3d0a1870d3dd90901118efaa77a286829b40c5da"
+    },
+    "owned_runtime_build_processes": [],
+    "remaining_fixture_directories": [],
+    "guest_size_before_cleanup": "18313\t/tmp/btx-security-time-packaged-validation\n",
+    "guest_free_bytes": 618601472,
+    "new_packages_installed": false
+  },
+  "vm_final_state": {
+    "name": "btx-cancel",
+    "status": "Stopped",
+    "arch": "aarch64",
+    "cpus": 2,
+    "memory": 1073741824,
+    "disk": 2147483648
+  },
+  "host_free_bytes": 2970931200,
+  "publication_owner": "coordinator only; executor no Gitwrites/push/post",
+  "model": "inherited; exact setting unverified",
+  "closed_utc": "2026-11-02T22:56:02.197633+00:00"
+}

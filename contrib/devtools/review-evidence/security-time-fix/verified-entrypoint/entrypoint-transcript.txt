@@ -1,0 +1,58 @@
+{
+  "cwd": "package",
+  "command": [
+    "python3",
+    "reproduce.py",
+    "--source",
+    "../source",
+    "--work",
+    "../work"
+  ],
+  "started_utc": "2026-11-02T22:51:58.007993+00:00",
+  "finished_utc": "2026-11-02T22:52:46.171616+00:00",
+  "elapsed_seconds": 48.163637830000006,
+  "exit": 0,
+  "timeout": false,
+  "package_mutated": false
+}
+/source/src/libbitcoinpqc/dilithium/ref/polyvec.c.o
+[ 59%] Building C object upstream/CMakeFiles/btx_security_crypto.dir/tmp/btx-security-time-packaged-validation/source/src/libbitcoinpqc/dilithium/ref/poly.c.o
+[ 61%] Building C object upstream/CMakeFiles/btx_security_crypto.dir/tmp/btx-security-time-packaged-validation/source/src/libbitcoinpqc/dilithium/ref/ntt.c.o
+[ 63%] Building C object upstream/CMakeFiles/btx_security_crypto.dir/tmp/btx-security-time-packaged-validation/source/src/libbitcoinpqc/dilithium/ref/reduce.c.o
+[ 65%] Building C object upstream/CMakeFiles/btx_security_crypto.dir/tmp/btx-security-time-packaged-validation/source/src/libbitcoinpqc/dilithium/ref/rounding.c.o
+[ 68%] Building C object upstream/CMakeFiles/btx_security_crypto.dir/tmp/btx-security-time-packaged-validation/source/src/libbitcoinpqc/dilithium/ref/fips202.c.o
+[ 70%] Building C object upstream/CMakeFiles/btx_security_crypto.dir/tmp/btx-security-time-packaged-validation/source/src/libbitcoinpqc/dilithium/ref/symmetric-shake.c.o
+[ 72%] Building C object upstream/CMakeFiles/btx_security_crypto.dir/tmp/btx-security-time-packaged-validation/source/src/libbitcoinpqc/dilithium/ref/randombytes_custom.c.o
+[ 75%] Linking CXX static library libbtx_security_crypto.a
+[ 75%] Built target btx_security_crypto
+[ 77%] Building CXX object upstream/CMakeFiles/btx_security_json.dir/tmp/btx-security-time-packaged-validation/source/src/univalue/lib/univalue.cpp.o
+[ 79%] Building CXX object upstream/CMakeFiles/btx_security_json.dir/tmp/btx-security-time-packaged-validation/source/src/univalue/lib/univalue_get.cpp.o
+[ 81%] Building CXX object upstream/CMakeFiles/btx_security_json.dir/tmp/btx-security-time-packaged-validation/source/src/univalue/lib/univalue_read.cpp.o
+[ 84%] Building CXX object upstream/CMakeFiles/btx_security_json.dir/tmp/btx-security-time-packaged-validation/source/src/univalue/lib/univalue_write.cpp.o
+[ 86%] Linking CXX static library libbtx_security_json.a
+[ 86%] Built target btx_security_json
+[ 88%] Building CXX object CMakeFiles/time-baseline.dir/test-source/baseline/service.cpp.o
+[ 90%] Linking CXX executable time-baseline
+[ 90%] Built target time-baseline
+[ 93%] Building CXX object CMakeFiles/time-candidate.dir/test-source/candidate/service.cpp.o
+[ 95%] Linking CXX executable time-candidate
+[ 95%] Built target time-candidate
+[ 97%] Building CXX object CMakeFiles/time-combined.dir/test-source/combined/service.cpp.o
+[100%] Linking CXX executable time-combined
+[100%] Built target time-combined
+{"variant": "baseline", "mode": "controlled", "exit": 1, "passed": 0, "failed": 1, "errors": ["SEC_CLOCK_ROLLBACK"], "tests": [{"error": "first ordered valid job lost its report", "name": "time-fix-ordered-valid-work", "status": "FAIL"}]}
+{"variant": "baseline", "mode": "rollback", "exit": 0, "passed": 1, "failed": 0, "errors": ["SEC_CLOCK_ROLLBACK"], "tests": [{"name": "time-fix-rollback-contract", "status": "PASS"}]}
+{"variant": "baseline", "mode": "challenge-expiry", "exit": 1, "passed": 0, "failed": 1, "errors": [], "tests": [{"error": "held invalid authority/expiry released a report", "name": "time-fix-held-challenge-expiry", "status": "FAIL"}]}
+{"variant": "baseline", "mode": "pause", "exit": 0, "passed": 1, "failed": 0, "errors": ["SEC_CLOCK_ROLLBACK"], "tests": [{"name": "time-fix-held-pause", "status": "PASS"}]}
+{"variant": "baseline", "mode": "revoke", "exit": 0, "passed": 1, "failed": 0, "errors": ["SEC_SIGNER_REVOKED"], "tests": [{"name": "time-fix-held-worker-revocation", "status": "PASS"}]}
+{"variant": "baseline", "mode": "local-deny", "exit": 1, "passed": 0, "failed": 1, "errors": [], "tests": [{"error": "held invalid authority/expiry released a report", "name": "time-fix-held-local-permission", "status": "FAIL"}]}
+{"variant": "baseline", "mode": "record-expiry", "exit": 1, "passed": 0, "failed": 1, "errors": [], "tests": [{"error": "held invalid authority/expiry released a report", "name": "time-fix-held-record-expiry", "status": "FAIL"}]}
+{"variant": "candidate", "mode": "controlled", "exit": 0, "passed": 1, "failed": 0, "errors": [], "tests": [{"name": "time-fix-ordered-valid-work", "status": "PASS"}]}
+{"variant": "candidate", "mode": "rollback", "exit": 0, "passed": 1, "failed": 0, "errors": ["SEC_CLOCK_ROLLBACK"], "tests": [{"name": "time-fix-rollback-contract", "status": "PASS"}]}
+{"variant": "candidate", "mode": "challenge-expiry", "exit": 0, "passed": 1, "failed": 0, "errors": ["SEC_EVIDENCE_RELEASE_REVOKED"], "tests": [{"name": "time-fix-held-challenge-expiry", "status": "PASS"}]}
+{"variant": "candidate", "mode": "pause", "exit": 0, "passed": 1, "failed": 0, "errors": ["SEC_EVIDENCE_RELEASE_REVOKED"], "tests": [{"name": "time-fix-held-pause", "status": "PASS"}]}
+{"variant": "candidate", "mode": "revoke", "exit": 0, "passed": 1, "failed": 0, "errors": ["SEC_SIGNER_REVOKED"], "tests": [{"name": "time-fix-held-worker-revocation", "status": "PASS"}]}
+{"variant": "candidate", "mode": "local-deny", "exit": 0, "passed": 1, "failed": 0, "errors": ["SEC_EVIDENCE_RELEASE_REVOKED"], "tests": [{"name": "time-fix-held-local-permission", "status": "PASS"}]}
+{"variant": "candidate", "mode": "record-expiry", "exit": 0, "passed": 1, "failed": 0, "errors": ["SEC_EXPIRED_OR_FUTURE"], "tests": [{"name": "time-fix-held-record-expiry", "status": "PASS"}]}
+{"variant": "combined", "mode": "natural", "exit": 0, "passed": 1, "failed": 0, "errors": [], "tests": [{"name": "scheduler-valid-work-and-two-per-tick", "status": "PASS"}]}
+
