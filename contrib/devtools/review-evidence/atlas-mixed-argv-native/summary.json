@@ -1,0 +1,22 @@
+{
+  "target": "acbf7efb20b1b82da06affdae2ead08068cf743c",
+  "platform": "macOS M4",
+  "executor": "BTX test 1 via native app UI and actual second process argv",
+  "runs": 1,
+  "mixed": "PASS: both distinct previews once, sequentially closed, three later advancing footer observations without duplicate",
+  "sole_file": "PASS",
+  "sole_uri": "FAIL: absent through 52.8 seconds and three advancing footer observations; later valid file arrives",
+  "no_args": "PASS: no preview after 25 seconds",
+  "proposed_fix_already_exists": "PR286 commit89a8c8e9; not built or runtime tested here",
+  "publication": "private",
+  "app_sha256": "df4f93614300fcd240169c930eb6835c201f3435a4395ae9bd45010ef8296e5c",
+  "backend_sha256": "03a3fb602e0a0dea77583f774ecf516f5875137829c2a9f6c03637f925300fc6",
+  "limits": [
+    "one macOS sequence",
+    "HTML preview dialogs inside native Tauri app",
+    "direct second-process command-line delivery, not OS URL/file registration",
+    "older backend only supplies connection and periodic reads",
+    "no parsing/payment execution or Windows/Linux qualification",
+    "bounded observation is not proof against all future duplicates"
+  ]
+}
