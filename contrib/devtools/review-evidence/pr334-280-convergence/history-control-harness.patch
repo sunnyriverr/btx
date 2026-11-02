@@ -1,0 +1,17 @@
+--- a/test/functional/feature_matmul_trusted_mirror_convergence.py
++++ b/test/functional/feature_matmul_trusted_mirror_convergence.py
+@@ -505,6 +505,14 @@
+             and relay.getbestblockhash() == tip_hash,
+             timeout=300,
+         )
++        if extensions > TRUST_ADJUSTED_WORK_ALLOWANCE:
++            # Diagnostic input control only: age the earlier cases' signed
++            # twins beyond the six-block competing-candidate window.
++            self.generate(authority, PARK_DEPTH + 1, sync_fun=self.no_op)
++            tip_hash = authority.getbestblockhash()
++            self.wait_until(lambda: all(n.getbestblockhash() == tip_hash
++                                       for n in [mirror, loser, relay]), timeout=300)
++            self.log.info("HISTORY CONTROL: seven shared blocks before the large-gap race")
+         self._disconnect_all()
+ 
+         fork_hash = tip_hash

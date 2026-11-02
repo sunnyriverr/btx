@@ -1,0 +1,81 @@
+2026-11-02T01:22:09.211000Z TestFramework (INFO): PRNG seed is: 8235568821714334290
+2026-11-02T01:22:09.212000Z TestFramework (INFO): Initializing test directory <workspace>/work/btx-review-tools/pr334-280-convergence/combined/run-diagnostic-final/nodes
+2026-11-02T01:22:10.269000Z TestFramework (INFO): Bring up shared tip through Profile-1 activation
+2026-11-02T01:22:13.212000Z TestFramework (INFO): Partition: authority mines winning sibling; loser mines losing sibling
+2026-11-02T01:22:13.381000Z TestFramework (WARNING): disconnect_nodes: 1 and 2 were not connected
+2026-11-02T01:22:13.382000Z TestFramework (WARNING): disconnect_nodes: 1 and 3 were not connected
+2026-11-02T01:22:13.382000Z TestFramework (WARNING): disconnect_nodes: 2 and 3 were not connected
+2026-11-02T01:22:13.575000Z TestFramework (INFO): Authority extends the winning branch past hysteresis; mirror stays at the fork
+2026-11-02T01:22:14.090000Z TestFramework (INFO): Reconnect mirror→authority only; must follow-forward without invalidateblock/restart
+2026-11-02T01:22:17.240000Z TestFramework (INFO): PARK-depth losing fork, >10-header authenticated divergence, and higher bodies already present: root-first must request the holes and recover without operator action
+2026-11-02T01:22:17.297000Z TestFramework (WARNING): disconnect_nodes: 0 and 2 were not connected
+2026-11-02T01:22:17.298000Z TestFramework (WARNING): disconnect_nodes: 0 and 3 were not connected
+2026-11-02T01:22:17.298000Z TestFramework (WARNING): disconnect_nodes: 1 and 2 were not connected
+2026-11-02T01:22:17.298000Z TestFramework (WARNING): disconnect_nodes: 1 and 3 were not connected
+2026-11-02T01:22:17.298000Z TestFramework (WARNING): disconnect_nodes: 2 and 3 were not connected
+2026-11-02T01:22:21.413000Z TestFramework (WARNING): disconnect_nodes: 1 and 2 were not connected
+2026-11-02T01:22:21.414000Z TestFramework (WARNING): disconnect_nodes: 1 and 3 were not connected
+2026-11-02T01:22:21.414000Z TestFramework (WARNING): disconnect_nodes: 2 and 3 were not connected
+2026-11-02T01:22:31.035000Z TestFramework (WARNING): disconnect_nodes: 0 and 1 were not connected
+2026-11-02T01:22:31.035000Z TestFramework (WARNING): disconnect_nodes: 0 and 2 were not connected
+2026-11-02T01:22:31.036000Z TestFramework (WARNING): disconnect_nodes: 0 and 3 were not connected
+2026-11-02T01:22:31.036000Z TestFramework (WARNING): disconnect_nodes: 1 and 2 were not connected
+2026-11-02T01:22:31.092000Z TestFramework (WARNING): disconnect_nodes: 2 and 3 were not connected
+2026-11-02T01:22:31.092000Z TestFramework (INFO): Non-authority relay must serve followed-branch bodies (1-block divergent tip, hysteresis-clearing gap)
+2026-11-02T01:22:31.093000Z TestFramework (WARNING): disconnect_nodes: 0 and 1 were not connected
+2026-11-02T01:22:31.093000Z TestFramework (WARNING): disconnect_nodes: 0 and 2 were not connected
+2026-11-02T01:22:31.094000Z TestFramework (WARNING): disconnect_nodes: 0 and 3 were not connected
+2026-11-02T01:22:31.095000Z TestFramework (WARNING): disconnect_nodes: 1 and 2 were not connected
+2026-11-02T01:22:31.095000Z TestFramework (WARNING): disconnect_nodes: 1 and 3 were not connected
+2026-11-02T01:22:31.096000Z TestFramework (WARNING): disconnect_nodes: 2 and 3 were not connected
+2026-11-02T01:22:42.511000Z TestFramework (WARNING): disconnect_nodes: 1 and 2 were not connected
+2026-11-02T01:22:42.512000Z TestFramework (WARNING): disconnect_nodes: 1 and 3 were not connected
+2026-11-02T01:22:42.512000Z TestFramework (WARNING): disconnect_nodes: 2 and 3 were not connected
+2026-11-02T01:22:43.633000Z TestFramework (WARNING): disconnect_nodes: 0 and 1 were not connected
+2026-11-02T01:22:43.634000Z TestFramework (WARNING): disconnect_nodes: 0 and 2 were not connected
+2026-11-02T01:22:43.634000Z TestFramework (WARNING): disconnect_nodes: 0 and 3 were not connected
+2026-11-02T01:22:43.635000Z TestFramework (WARNING): disconnect_nodes: 1 and 2 were not connected
+2026-11-02T01:22:43.688000Z TestFramework (WARNING): disconnect_nodes: 2 and 3 were not connected
+2026-11-02T01:22:43.688000Z TestFramework (INFO): Non-authority relay must serve followed-branch bodies (gap>6 past fork — claimed-work download)
+2026-11-02T01:22:43.688000Z TestFramework (WARNING): disconnect_nodes: 0 and 1 were not connected
+2026-11-02T01:22:43.689000Z TestFramework (WARNING): disconnect_nodes: 0 and 2 were not connected
+2026-11-02T01:22:43.689000Z TestFramework (WARNING): disconnect_nodes: 0 and 3 were not connected
+2026-11-02T01:22:43.689000Z TestFramework (WARNING): disconnect_nodes: 1 and 2 were not connected
+2026-11-02T01:22:43.689000Z TestFramework (WARNING): disconnect_nodes: 1 and 3 were not connected
+2026-11-02T01:22:43.689000Z TestFramework (WARNING): disconnect_nodes: 2 and 3 were not connected
+2026-11-02T01:22:44.148000Z TestFramework (WARNING): disconnect_nodes: 1 and 2 were not connected
+2026-11-02T01:22:44.149000Z TestFramework (WARNING): disconnect_nodes: 1 and 3 were not connected
+2026-11-02T01:22:44.149000Z TestFramework (WARNING): disconnect_nodes: 2 and 3 were not connected
+2026-11-02T01:22:46.943000Z TestFramework (INFO): DIAGNOSTIC intermediate mirror height=33 expected=36; keep final convergence assertions
+2026-11-02T01:27:47.070000Z TestFramework.utils (ERROR): wait_until() failed. Predicate: ''''
+            lambda: mirror.getbestblockhash() == authority_tip,
+'''
+2026-11-02T01:27:47.072000Z TestFramework (ERROR): Unexpected exception
+Traceback (most recent call last):
+  File "<workspace>/work/btx-review-tools/pr340-fold-rerun/source/test/functional/test_framework/test_framework.py", line 142, in main
+    self.run_test()
+  File "<workspace>/work/btx-review-tools/pr334-280-convergence/diagnostic-convergence.py", line 394, in run_test
+    self._test_bodies_from_non_authority_relay(
+  File "<workspace>/work/btx-review-tools/pr334-280-convergence/diagnostic-convergence.py", line 575, in _test_bodies_from_non_authority_relay
+    self.wait_until(
+  File "<workspace>/work/btx-review-tools/pr340-fold-rerun/source/test/functional/test_framework/test_framework.py", line 829, in wait_until
+    return wait_until_helper_internal(test_function, timeout=timeout, timeout_factor=self.options.timeout_factor, check_interval=check_interval)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<workspace>/work/btx-review-tools/pr340-fold-rerun/source/test/functional/test_framework/util.py", line 329, in wait_until_helper_internal
+    raise AssertionError("Predicate {} not true after {} seconds".format(predicate_source, timeout))
+AssertionError: Predicate ''''
+            lambda: mirror.getbestblockhash() == authority_tip,
+''' not true after 300.0 seconds
+2026-11-02T01:27:47.132000Z TestFramework (INFO): Not stopping nodes as test failed. The dangling processes will be cleaned up later.
+2026-11-02T01:27:47.132000Z TestFramework (WARNING): Not cleaning up dir <workspace>/work/btx-review-tools/pr334-280-convergence/combined/run-diagnostic-final/nodes
+2026-11-02T01:27:47.132000Z TestFramework (ERROR): Test failed. Test logging available at <workspace>/work/btx-review-tools/pr334-280-convergence/combined/run-diagnostic-final/nodes/test_framework.log
+2026-11-02T01:27:47.133000Z TestFramework (ERROR): 
+2026-11-02T01:27:47.133000Z TestFramework (ERROR): Hint: Call <workspace>/work/btx-review-tools/pr340-fold-rerun/source/test/functional/combine_logs.py '<workspace>/work/btx-review-tools/pr334-280-convergence/combined/run-diagnostic-final/nodes' to consolidate all logs
+2026-11-02T01:27:47.133000Z TestFramework (ERROR): 
+2026-11-02T01:27:47.133000Z TestFramework (ERROR): If this failure happened unexpectedly or intermittently, please file a bug and provide a link or upload of the combined log.
+2026-11-02T01:27:47.133000Z TestFramework (ERROR): https://github.com/btxchain/btx/issues
+2026-11-02T01:27:47.133000Z TestFramework (ERROR): 
+[node 3] Cleaning up leftover process
+[node 2] Cleaning up leftover process
+[node 1] Cleaning up leftover process
+[node 0] Cleaning up leftover process

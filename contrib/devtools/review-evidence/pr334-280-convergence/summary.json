@@ -1,0 +1,69 @@
+{
+  "utc": "2026-11-02T01:30:05.185935+00:00",
+  "status": "published_scoped_diagnosis_no_product_fix",
+  "classification": "Real bounded convergence failure in the existing threshold1 multi-race fixture; combined280+334 does not resolve it. Recent incomparable signed history triggers deliberate fail-closed selection. Not merely an intermediate assertion failure and not demonstrated as a new334 regression.",
+  "source": {
+    "base": "cbf65894e6d61084527cd93e913a00c6794418dd",
+    "280": "da16864051e3f6a53bda6fc866293a5230965daf",
+    "334": "68a27f85ed64d05eed617eaf7ee72518afa9e99c",
+    "production_tree": "bd1011fd010d1efed71b86d336017df409c71e70",
+    "source_sha256": {
+      "src/validation.cpp": "918a0a30600a2d4f4fc4f4d5baa4ef989fdf2a90c8bec7d6697c50fb62574b37",
+      "src/validation.h": "58920db30a419070e2f04b2d812b2fd4db8e2d386daf54ac980939d5159be7d8",
+      "src/net_processing.cpp": "70eac7aff51c31f5b0cfbb482b97abb04c887a9e90b7c596c4971bbd91506e9f",
+      "src/net_processing.h": "f17596080ed7fb0f278fb00332564c408da35e2bff93f0f335fe0f2c667f4d4a",
+      "src/kernel/chainparams.cpp": "35dd02fe5714b95120f4e8fb772d436700f7fbfd9e5b9c18f3d0182f77ae52b9"
+    },
+    "other340_node_changes_removed": true,
+    "private1124_metadata_removed": true,
+    "unchanged_functional_sha256": "296ab8ca594b597a7b59feca2ee8f3f93e72a048f6a232c9c14d3517c03a729b"
+  },
+  "binary_sha256": "ecffe5b18f6962dcc77c3e10ffd0885db0ddb258e9475b2dc5296b59afae1fb0",
+  "platform": {
+    "system": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "runs": {
+    "unchanged": {
+      "exit_code": 1,
+      "elapsed_s": 39.128735625000004,
+      "stop_reason": null
+    },
+    "diagnostic": {
+      "exit_code": 1,
+      "elapsed_s": 338.234788708,
+      "stop_reason": null
+    },
+    "history_control": {
+      "exit_code": 1,
+      "elapsed_s": 43.179134000000005,
+      "stop_reason": null
+    }
+  },
+  "unchanged_failure": "line550 blocks33 != stranded36, no crash",
+  "diagnostic_change": "Only skip two intermediate stranded-tip assertions for the large-gap case; final convergence timeout remains300s",
+  "diagnostic_failure": "final exact-authority-tip predicate still false after300s; last mirror tip36/headers48, root36..38 bodies and1attestation each available",
+  "ambiguity_log_count": 184,
+  "history_control_change": "Insert7 shared blocks before large-gap race; retain every original assertion",
+  "history_control_scoped_result": "All large-gap convergence/body-source checks pass, exact authority/mirror tip55 match",
+  "history_control_tip": {
+    "0": {
+      "hash": "1057883bbd58dbefac9fcac517ac52d71c8046c07789019c2fcf5220438c1c04",
+      "height": 55
+    },
+    "1": {
+      "hash": "1057883bbd58dbefac9fcac517ac52d71c8046c07789019c2fcf5220438c1c04",
+      "height": 55
+    }
+  },
+  "history_control_full_test_result": "FAIL later at separate deep-reorg refusal: mirror changes branch while expected to hold. Not diagnosed as334 regression; not counted as full PASS.",
+  "limitations": [
+    "One run per distinct scenario/control, not repeated-run statistical qualification",
+    "Real4node local toy-regtest, actual signed attestations, threshold1, legacy reorg policy andcheckblockindex1",
+    "No nativeLinux/Windows, mainnet, production2of3, restart, full-suite or device admission/strict-Metal qualification",
+    "Only production deltas280da168640 +33468a27f85 oncbf65894; not full PR test trees/fold;285/331 not run",
+    "Source inspection:285fetch suppression does not resolve already-held attested roots;331pending-before-header repair does not remove threshold1 ambiguity, but no execution claim for those combinations",
+    "Diagnostic logger Decimal serialization pilot corrected withdefault=str; recorded separately"
+  ],
+  "next_decision": "JPP: split independent download scenarios/avoid accidental shared-history authority conflicts, or explicitly require recovery from conflicting threshold1 signed history. Do not relax fail-closed or alter fork choice merely to satisfy the test."
+}

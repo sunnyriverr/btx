@@ -10073,6 +10073,7 @@ CBlockIndex* Chainstate::FindMostWorkChain()
                 }
                 if ((c->nStatus & BLOCK_HAVE_DATA) == 0 ||
                     !m_chainman.IndexHasTrustedMatMulAuthority(c)) {
+                    m_trusted_mirror_gate_refused.insert(c);
                     it = setBlockIndexCandidates.erase(it);
                     continue;
                 }
@@ -10491,6 +10492,27 @@ void Chainstate::EraseParkedBlockIndexCandidates()
         } else {
             ++it;
         }
+    }
+}
+
+void Chainstate::ReofferTrustedMirrorGateRefusals()
+{
+    AssertLockHeld(::cs_main);
+    const CBlockIndex* const tip{m_chain.Tip()};
+    if (m_trusted_mirror_gate_refused.empty() || tip == nullptr) return;
+    std::set<CBlockIndex*> refused;
+    refused.swap(m_trusted_mirror_gate_refused);
+    for (CBlockIndex* pindex : refused) {
+        // Failed or less-work blocks leave, as they leave the candidate set.
+        // Parked branches are offered by UnparkReorgBranchContainingBlock,
+        // as in ResetBlockFailureFlags. TryAddBlockIndexCandidate records a
+        // block the gate still refuses.
+        if ((pindex->nStatus & BLOCK_FAILED_MASK) != 0 ||
+            setBlockIndexCandidates.value_comp()(pindex, tip) ||
+            m_chainman.IsOnParkedReorgBranch(pindex)) {
+            continue;
+        }
+        TryAddBlockIndexCandidate(pindex);
     }
 }
 
@@ -10937,6 +10959,28 @@ bool Chainstate::ActivateBestChainStep(BlockValidationState& state, CBlockIndex*
         MaybeUpdateMempoolForReorg(disconnectpool, true);
     }
     if (m_mempool) m_mempool->check(this->CoinsTip(), NextBlockHeightOrLimit(this->m_chain.Height()));
+
+    // Trusted-mirror refusals were judged against the old tip. One may
+    // extend the new tip: the mirror moved onto the parent of a block it
+    // refused while on a signed twin, or connected a signed block whose
+    // unsigned child it refused while that child was two above the tip.
+    if (m_chain.Tip() != pindexOldTip) ReofferTrustedMirrorGateRefusals();
+    // A trusted mirror can leave a heavier unattested tip for a less-work
+    // attested one. Blocks that the old tip outranked were never offered;
+    // offer them now, as InvalidateBlock does after it lowers the tip.
+    // Trusted mirrors only, so other nodes do not pay for the scan.
+    if (pindexOldTip != nullptr && m_chain.Tip() != nullptr &&
+        m_chain.Tip()->nChainWork < pindexOldTip->nChainWork &&
+        node::matmul_trusted::IsTrustedMirror()) {
+        for (auto& [_, block_index] : m_blockman.m_block_index) {
+            if (block_index.IsValid(BLOCK_VALID_TRANSACTIONS) &&
+                block_index.HaveNumChainTxs() &&
+                !setBlockIndexCandidates.value_comp()(&block_index, m_chain.Tip()) &&
+                !m_chainman.IsOnParkedReorgBranch(&block_index)) {
+                TryAddBlockIndexCandidate(&block_index);
+            }
+        }
+    }
 
     CheckForkWarningConditions();
 
@@ -11693,6 +11737,7 @@ void Chainstate::TryAddBlockIndexCandidate(CBlockIndex* pindex)
 
     const bool consider{TrustedMirrorShouldConsiderMostWorkCandidate(m_chainman, tip, pindex)};
     if (!consider) {
+        m_trusted_mirror_gate_refused.insert(pindex);
         if (pindex != nullptr && tip != nullptr && pindex->pprev == tip) {
             static uint256 last_refused{};
             if (last_refused != pindex->GetBlockHash()) {
@@ -11705,6 +11750,7 @@ void Chainstate::TryAddBlockIndexCandidate(CBlockIndex* pindex)
         }
         return;
     }
+    m_trusted_mirror_gate_refused.erase(pindex);
 
     bool is_active_chainstate = this == &m_chainman.ActiveChainstate();
     if (is_active_chainstate) {
@@ -12998,6 +13044,16 @@ const CBlockIndex* ChainstateManager::FindUniqueCompetingAttestedIndex() const
     // every frontier hint at a height (not last-writer) so a later
     // loser MMATTEST cannot hide the winner.
     const bool tip_has_quorum{IndexHasTrustedMatMulAuthority(tip)};
+    // A trusted mirror whose tip is on the signed-frontier chain is already
+    // where the signers are. A signed block on another branch inside the
+    // short-reorg window is one they have signed past (at threshold 1 one key
+    // can sign both blocks of a race). Adopting it moves the mirror off the
+    // frontier and the next call moves it back: live 2026-10-30, threshold 1,
+    // ~90 rounds of 4-6 block reorgs at 263283 until the frontier chain was
+    // 7 past the fork. Same-height frontier races are not covered here:
+    // IndexIsOnSignedFrontierChain then names the off-chain hash.
+    const bool tip_on_signed_frontier_chain{
+        trusted_mirror && IndexIsOnSignedFrontierChain(tip)};
 
     // Lives for this call only: cs_main is held throughout and nothing below
     // modifies a CBlockIndex, so remembered walk results cannot go stale.
@@ -13095,6 +13151,10 @@ const CBlockIndex* ChainstateManager::FindUniqueCompetingAttestedIndex() const
                     attested_suffix, lca_depth, on_signed_frontier_chain)) {
                 return;
             }
+            if (tip_on_signed_frontier_chain && !attested_suffix &&
+                !on_signed_frontier_chain) {
+                return;
+            }
         }
         competing.push_back(idx);
     };
@@ -13108,6 +13168,72 @@ const CBlockIndex* ChainstateManager::FindUniqueCompetingAttestedIndex() const
     // A quorum-covered tip with no qualifying competing candidate is the
     // ordinary steady state, not evidence of a same-height twin (00ea04a6).
     if (competing.empty()) return nullptr;
+
+    // A trusted mirror follows the chain of the signed frontier. Every
+    // candidate here has authority, so (given complete frontier hints) one on
+    // the chain of no quorum hash at the highest signed height carries its own
+    // quorum at a lower height: a branch the signers have since signed past.
+    // Live 2026-10-26 (mainnet archive, 2-of-3 pins): the signers had signed
+    // one-block twins at 259358 and at the mirror's tip 259363 as well as the
+    // network chain. The 259358 twin, at depth 6, failed closed against the
+    // frontier chain on every call for 2.5 h, until invalidateblock. A mirror
+    // already on the frontier chain is pulled onto such a twin within six
+    // blocks below its tip. So drop those candidates when another is on a
+    // frontier chain, or when the tip already is. A tip on one frontier
+    // branch keeps only candidates on that branch: a candidate on a sibling
+    // branch at the same height is a race, and adopting it would flip back on
+    // the next call. Candidates on two frontier branches still fail closed
+    // below. A quorum hash there with no known header leaves nothing to
+    // compare, and nothing changes. Not at threshold 1, where one key sets the
+    // highest signed height and already has full authority: there consider()
+    // only keeps a mirror already on the signed-frontier chain from leaving
+    // it (tip_on_signed_frontier_chain), which adds no steering.
+    if (trusted_mirror && node::matmul_trusted::Threshold() >= 2) {
+        std::vector<const CBlockIndex*> frontiers;
+        if (const auto frontier_height{node::matmul_trusted::HighestAttestedHeight()}) {
+            for (const auto& hint : node::matmul_trusted::AttestedFrontierHints()) {
+                if (hint.height != *frontier_height || hint.hash.IsNull() ||
+                    !node::matmul_trusted::HasQuorumInMemory(hint.hash, hint.height)) {
+                    continue;
+                }
+                const CBlockIndex* const known{m_blockman.LookupBlockIndex(hint.hash)};
+                if (known == nullptr) {
+                    frontiers.clear();
+                    break;
+                }
+                if ((known->nStatus & BLOCK_FAILED_MASK) == 0) frontiers.push_back(known);
+            }
+        }
+        if (!frontiers.empty()) {
+            const auto on_frontier_chain = [&](const CBlockIndex* idx) {
+                return std::any_of(frontiers.begin(), frontiers.end(),
+                                   [&](const CBlockIndex* f) { return BlockIndexComparable(idx, f); });
+            };
+            std::vector<const CBlockIndex*> on_frontier;
+            for (const CBlockIndex* idx : competing) {
+                if (on_frontier_chain(idx)) on_frontier.push_back(idx);
+            }
+            if (on_frontier_chain(tip)) {
+                std::erase_if(on_frontier, [&](const CBlockIndex* idx) {
+                    return std::none_of(frontiers.begin(), frontiers.end(), [&](const CBlockIndex* f) {
+                        return BlockIndexComparable(tip, f) && BlockIndexComparable(idx, f);
+                    });
+                });
+                if (on_frontier.empty()) return nullptr;
+            } else if (frontiers.size() > 1 && tip_has_quorum) {
+                // A signed tip on none of two or more blocks at the highest
+                // signed height: which branch the signers follow is open. A
+                // header-only one adds no candidate of its own (consider()
+                // skips it or walks it down to the shared parent), so keeping
+                // only the candidates on a frontier chain would drop a lower
+                // signed twin and pick by body arrival and hash order. Stay
+                // put, as when both have a body. A tip without authority (an
+                // unsigned tower) is not held here and still rejoins.
+                return nullptr;
+            }
+            if (!on_frontier.empty()) competing = std::move(on_frontier);
+        }
+    }
 
     if (tip_has_quorum) {
         std::vector<const CBlockIndex*> suffix;
@@ -17453,6 +17579,7 @@ void Chainstate::ClearBlockIndexCandidates()
 {
     AssertLockHeld(::cs_main);
     setBlockIndexCandidates.clear();
+    m_trusted_mirror_gate_refused.clear();
 }
 
 void Chainstate::PopulateBlockIndexCandidates()
@@ -17983,9 +18110,13 @@ void ChainstateManager::CheckBlockIndex()
                         //
                         // Parked branches, armed losing-tip extensions, and
                         // trusted-mirror gate refusals are not candidates
-                        // (FindMostWorkChain / TryAddBlockIndexCandidate).
+                        // (FindMostWorkChain / TryAddBlockIndexCandidate). A
+                        // recorded refusal was judged against the tip and
+                        // attestations of its moment; it is offered again
+                        // when the tip moves, even if the gate admits it now.
                         if (!c->m_chainman.IsOnParkedReorgBranch(pindex) &&
                             !c->m_chainman.ShouldDeferLosingTipExtension(pindex) &&
+                            c->m_trusted_mirror_gate_refused.count(pindex) == 0 &&
                             TrustedMirrorShouldConsiderMostWorkCandidate(c->m_chainman, c->m_chain.Tip(), pindex) &&
                             (c == &ActiveChainstate() || snap_base->GetAncestor(pindex->nHeight) == pindex)) {
                             assert(c->setBlockIndexCandidates.count(pindex));
@@ -18036,6 +18167,7 @@ void ChainstateManager::CheckBlockIndex()
                 const bool is_active = c == &ActiveChainstate();
                 if (!CBlockIndexWorkComparator()(pindex, c->m_chain.Tip()) &&
                     c->setBlockIndexCandidates.count(pindex) == 0 &&
+                    c->m_trusted_mirror_gate_refused.count(pindex) == 0 &&
                     !c->m_chainman.IsOnParkedReorgBranch(pindex) &&
                     !c->m_chainman.ShouldDeferLosingTipExtension(pindex) &&
                     TrustedMirrorShouldConsiderMostWorkCandidate(c->m_chainman, c->m_chain.Tip(), pindex)) {

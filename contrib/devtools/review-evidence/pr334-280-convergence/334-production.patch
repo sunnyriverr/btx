@@ -1,0 +1,147 @@
+diff --git a/src/validation.cpp b/src/validation.cpp
+index f2c34a65..69a4328e 100644
+--- a/src/validation.cpp
++++ b/src/validation.cpp
+@@ -10073,6 +10073,7 @@ CBlockIndex* Chainstate::FindMostWorkChain()
+                 }
+                 if ((c->nStatus & BLOCK_HAVE_DATA) == 0 ||
+                     !m_chainman.IndexHasTrustedMatMulAuthority(c)) {
++                    m_trusted_mirror_gate_refused.insert(c);
+                     it = setBlockIndexCandidates.erase(it);
+                     continue;
+                 }
+@@ -10494,6 +10495,27 @@ void Chainstate::EraseParkedBlockIndexCandidates()
+     }
+ }
+ 
++void Chainstate::ReofferTrustedMirrorGateRefusals()
++{
++    AssertLockHeld(::cs_main);
++    const CBlockIndex* const tip{m_chain.Tip()};
++    if (m_trusted_mirror_gate_refused.empty() || tip == nullptr) return;
++    std::set<CBlockIndex*> refused;
++    refused.swap(m_trusted_mirror_gate_refused);
++    for (CBlockIndex* pindex : refused) {
++        // Failed or less-work blocks leave, as they leave the candidate set.
++        // Parked branches are offered by UnparkReorgBranchContainingBlock,
++        // as in ResetBlockFailureFlags. TryAddBlockIndexCandidate records a
++        // block the gate still refuses.
++        if ((pindex->nStatus & BLOCK_FAILED_MASK) != 0 ||
++            setBlockIndexCandidates.value_comp()(pindex, tip) ||
++            m_chainman.IsOnParkedReorgBranch(pindex)) {
++            continue;
++        }
++        TryAddBlockIndexCandidate(pindex);
++    }
++}
++
+ /** Delete all entries in setBlockIndexCandidates that are worse than the current tip. */
+ void Chainstate::PruneBlockIndexCandidates() {
+     // Note that we can't delete the current block itself, as we may need to return to it later in case a
+@@ -10938,6 +10960,28 @@ bool Chainstate::ActivateBestChainStep(BlockValidationState& state, CBlockIndex*
+     }
+     if (m_mempool) m_mempool->check(this->CoinsTip(), NextBlockHeightOrLimit(this->m_chain.Height()));
+ 
++    // Trusted-mirror refusals were judged against the old tip. One may
++    // extend the new tip: the mirror moved onto the parent of a block it
++    // refused while on a signed twin, or connected a signed block whose
++    // unsigned child it refused while that child was two above the tip.
++    if (m_chain.Tip() != pindexOldTip) ReofferTrustedMirrorGateRefusals();
++    // A trusted mirror can leave a heavier unattested tip for a less-work
++    // attested one. Blocks that the old tip outranked were never offered;
++    // offer them now, as InvalidateBlock does after it lowers the tip.
++    // Trusted mirrors only, so other nodes do not pay for the scan.
++    if (pindexOldTip != nullptr && m_chain.Tip() != nullptr &&
++        m_chain.Tip()->nChainWork < pindexOldTip->nChainWork &&
++        node::matmul_trusted::IsTrustedMirror()) {
++        for (auto& [_, block_index] : m_blockman.m_block_index) {
++            if (block_index.IsValid(BLOCK_VALID_TRANSACTIONS) &&
++                block_index.HaveNumChainTxs() &&
++                !setBlockIndexCandidates.value_comp()(&block_index, m_chain.Tip()) &&
++                !m_chainman.IsOnParkedReorgBranch(&block_index)) {
++                TryAddBlockIndexCandidate(&block_index);
++            }
++        }
++    }
++
+     CheckForkWarningConditions();
+ 
+     if (!IsRetryableMatMulActivationError(state) &&
+@@ -11693,6 +11737,7 @@ void Chainstate::TryAddBlockIndexCandidate(CBlockIndex* pindex)
+ 
+     const bool consider{TrustedMirrorShouldConsiderMostWorkCandidate(m_chainman, tip, pindex)};
+     if (!consider) {
++        m_trusted_mirror_gate_refused.insert(pindex);
+         if (pindex != nullptr && tip != nullptr && pindex->pprev == tip) {
+             static uint256 last_refused{};
+             if (last_refused != pindex->GetBlockHash()) {
+@@ -11705,6 +11750,7 @@ void Chainstate::TryAddBlockIndexCandidate(CBlockIndex* pindex)
+         }
+         return;
+     }
++    m_trusted_mirror_gate_refused.erase(pindex);
+ 
+     bool is_active_chainstate = this == &m_chainman.ActiveChainstate();
+     if (is_active_chainstate) {
+@@ -17453,6 +17499,7 @@ void Chainstate::ClearBlockIndexCandidates()
+ {
+     AssertLockHeld(::cs_main);
+     setBlockIndexCandidates.clear();
++    m_trusted_mirror_gate_refused.clear();
+ }
+ 
+ void Chainstate::PopulateBlockIndexCandidates()
+@@ -17983,9 +18030,13 @@ void ChainstateManager::CheckBlockIndex()
+                         //
+                         // Parked branches, armed losing-tip extensions, and
+                         // trusted-mirror gate refusals are not candidates
+-                        // (FindMostWorkChain / TryAddBlockIndexCandidate).
++                        // (FindMostWorkChain / TryAddBlockIndexCandidate). A
++                        // recorded refusal was judged against the tip and
++                        // attestations of its moment; it is offered again
++                        // when the tip moves, even if the gate admits it now.
+                         if (!c->m_chainman.IsOnParkedReorgBranch(pindex) &&
+                             !c->m_chainman.ShouldDeferLosingTipExtension(pindex) &&
++                            c->m_trusted_mirror_gate_refused.count(pindex) == 0 &&
+                             TrustedMirrorShouldConsiderMostWorkCandidate(c->m_chainman, c->m_chain.Tip(), pindex) &&
+                             (c == &ActiveChainstate() || snap_base->GetAncestor(pindex->nHeight) == pindex)) {
+                             assert(c->setBlockIndexCandidates.count(pindex));
+@@ -18036,6 +18087,7 @@ void ChainstateManager::CheckBlockIndex()
+                 const bool is_active = c == &ActiveChainstate();
+                 if (!CBlockIndexWorkComparator()(pindex, c->m_chain.Tip()) &&
+                     c->setBlockIndexCandidates.count(pindex) == 0 &&
++                    c->m_trusted_mirror_gate_refused.count(pindex) == 0 &&
+                     !c->m_chainman.IsOnParkedReorgBranch(pindex) &&
+                     !c->m_chainman.ShouldDeferLosingTipExtension(pindex) &&
+                     TrustedMirrorShouldConsiderMostWorkCandidate(c->m_chainman, c->m_chain.Tip(), pindex)) {
+diff --git a/src/validation.h b/src/validation.h
+index 7247c2e4..4f933483 100644
+--- a/src/validation.h
++++ b/src/validation.h
+@@ -846,6 +846,16 @@ public:
+      */
+     std::set<CBlockIndex*, node::CBlockIndexWorkComparator> setBlockIndexCandidates;
+ 
++    /**
++     * Blocks a trusted mirror kept out of setBlockIndexCandidates: refused by
++     * TrustedMirrorShouldConsiderMostWorkCandidate, or swept as unattested
++     * competing blocks by FindMostWorkChain. Both judge a block against the
++     * tip and the attestations of that moment. ActivateBestChainStep offers
++     * these again once the tip moves (ReofferTrustedMirrorGateRefusals);
++     * until then CheckBlockIndex does not require them in the set.
++     */
++    std::set<CBlockIndex*> m_trusted_mirror_gate_refused GUARDED_BY(::cs_main);
++
+     //! @returns A reference to the in-memory cache of the UTXO set.
+     CCoinsViewCache& CoinsTip() EXCLUSIVE_LOCKS_REQUIRED(::cs_main)
+     {
+@@ -993,6 +1003,9 @@ public:
+ 
+     void PruneBlockIndexCandidates();
+ 
++    /** Offer m_trusted_mirror_gate_refused again against the current tip. */
++    void ReofferTrustedMirrorGateRefusals() EXCLUSIVE_LOCKS_REQUIRED(::cs_main);
++
+     void ClearBlockIndexCandidates() EXCLUSIVE_LOCKS_REQUIRED(::cs_main);
+ 
+     /** Populate candidates after all chain tips have finished loading.
