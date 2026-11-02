@@ -1,0 +1,39 @@
+{
+  "utc": "2026-11-02T11:21:07.291870+00:00",
+  "status": "passed_native_Linux_same_final_harness",
+  "candidate_code": "af1ffda2a5394061a98a3c50fc639b6dd8299875",
+  "platform": "Alpine3.22.4aarch64/musl Linux6.12.81 GCC14.2",
+  "build": "actual CMake helper target incremental Release-O1, helper/native_discovery TUs rebuilt; identical preexisting workerdescriptor0f/helper and cstdint header prerequisite on both variants",
+  "regression": {
+    "baseline_off_scope_connects": 3,
+    "candidate_off_scope_rejected": 3,
+    "rejection_window_s": 6
+  },
+  "valid_discovery_after_invalid_packets": {
+    "baseline": 3,
+    "candidate": 3,
+    "invalid_endpoint_separate": true,
+    "wrong_network_and_malformed_guard_window_s": 6
+  },
+  "discovery_disabled": {
+    "baseline_pass": 1,
+    "candidate_pass": 1
+  },
+  "rpc_responsive_and_clean_exit": "all14finalcases",
+  "kernel_metadata": "independent same-boot recvmsg IP_PKTINFO proof: offscope loopback index1, positive eth0index2, actual packets not injected flags",
+  "harness_sha256": "e54f95f0aa20cd1e0bf40b27b49128139dd7fd89b12a723d4f15bf21f63a0d25",
+  "binary_sha256": {
+    "baseline": "c4d3991027719f24f4b01099014719ed42b888938bfd2fa625c8814047bd3943",
+    "candidate": "cffa9dcf0bcceefd091ca0bde843f7d2e98c7a6d1217855f6fdc2ce2ced75573"
+  },
+  "restoration": {
+    "source_and_binary_restored": true,
+    "cache_warning": "objects/archive retain LAN candidate; rebuild relevant targets before reuse",
+    "VM_stopped_and_1GiB_restored": true,
+    "shared_host_dirty_hashes_preserved": true
+  },
+  "limits": "one VM/own-host multicast TTL0 and loopback route; no physicalmulti-host/offsubnet sender, glibc, Windows, completedTLSauth/modeltransfer or releasequalification",
+  "pilot": "first same-endpoint/2s invalid guards passed; final separate-invalid-endpoint/6s guards remove positive-attribution ambiguity, both same binaries rerun; pilot records retained",
+  "publication": "authorized Linux evidence handoff; receipt is separate",
+  "next": "independent review; native Windows and physical multi-host acceptance remain separate"
+}
