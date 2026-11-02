@@ -1,0 +1,13 @@
+{
+  "source_base": "cbf65894e6d61084527cd93e913a00c6794418dd",
+  "cpp_standard": "c++20",
+  "build_scope": "private helper.cpp full translation unit compiled twice, linked with the same existing CMake static libraries; not clean full-project builds",
+  "platforms": {
+    "macOS": "full helper TU compile/link and real helper runtime",
+    "Linux": "source inspection only, STL/mutex/catalog APIs unchanged",
+    "Windows": "source inspection only, no platform API or preprocessor additions; no native compile/link/runtime"
+  },
+  "locking": "search mutex acquired then catalog Find; same search-to-catalog order used by IngestCatalogIntoSearch. Mutation methods return/release catalog mutex before invoking cleanup. No reverse lock nesting added. Seeded recheck prevents deleting an observation if a reseed already completed. No concurrent RPC stress claimed.",
+  "scope_limits": "explicit unhost/unseed/remove only; remote observations remain historical, no map cap/TTL, no guarantee for unrelated catalog eviction paths",
+  "preservation_test": "exact cleanup function extracted unchanged, narrow test adapters for catalog/id/observation types; native compile -std=c++20 -Wall -Wextra -Werror and execution passed, preserving remote-labelled entries/empty-map erasure/noop/seeded recheck. Not real peer ingestion."
+}

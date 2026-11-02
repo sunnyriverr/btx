@@ -1,0 +1,118 @@
+{
+  "profile": "candidate",
+  "binary_sha256": "434b205d7fc49f4b8949481495b399cffbbb79743ad8ac6424b6105b7b71b9ac",
+  "checks": [
+    {
+      "label": "seeded A visible",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "label": "seeded B visible",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "label": "unhost A immediately clears local",
+      "actual": 0,
+      "expected": 0,
+      "pass": true
+    },
+    {
+      "label": "unhost A preserves B",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "label": "reseed A visible",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "label": "unseed A immediately clears local",
+      "actual": 0,
+      "expected": 0,
+      "pass": true
+    },
+    {
+      "label": "refresh does not restore unseeded A",
+      "actual": 0,
+      "expected": 0,
+      "pass": true
+    },
+    {
+      "label": "second reseed A visible",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "label": "remove A immediately clears local",
+      "actual": 0,
+      "expected": 0,
+      "pass": true
+    },
+    {
+      "label": "refresh does not restore removed A",
+      "actual": 0,
+      "expected": 0,
+      "pass": true
+    },
+    {
+      "label": "remove A preserves B",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "label": "catalog contains only B",
+      "actual": [
+        "f809222b33436ecfd206938079eccdda0c5e4bdcb934ee7048d30c6d3dff146a340342071b8baf9fc3b60f3a4c5780b2"
+      ],
+      "expected": [
+        "f809222b33436ecfd206938079eccdda0c5e4bdcb934ee7048d30c6d3dff146a340342071b8baf9fc3b60f3a4c5780b2"
+      ],
+      "pass": true
+    },
+    {
+      "label": "unknown ID returns empty",
+      "actual": [],
+      "expected": [],
+      "pass": true
+    },
+    {
+      "label": "availability remains UNKNOWN",
+      "actual": "UNKNOWN",
+      "expected": "UNKNOWN",
+      "pass": true
+    },
+    {
+      "label": "not reconstructable_known",
+      "actual": false,
+      "expected": false,
+      "pass": true
+    },
+    {
+      "label": "restart A absent",
+      "actual": 0,
+      "expected": 0,
+      "pass": true
+    },
+    {
+      "label": "restart seeded B visible",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    }
+  ],
+  "complete": true,
+  "verdict": "PASS",
+  "cleanup": {
+    "helper_stopped": true,
+    "scratch_removed": true
+  }
+}

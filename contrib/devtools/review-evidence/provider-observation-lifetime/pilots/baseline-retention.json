@@ -1,0 +1,25 @@
+{
+  "binary_sha256": "4ee12d704798a5a1bcad0c8455311be970ac6a76e9bd663057b0553ba8942d43",
+  "query_scope": "owner-local Unix RPC, unknown valid model IDs, no peer connections",
+  "samples": [
+    {
+      "label": "warmup",
+      "time": 1793606831.047431,
+      "rss_kib": 13664,
+      "calls": 1000,
+      "elapsed_s": 0.035233582999999985
+    },
+    {
+      "label": "same_id_10000_before",
+      "time": 1793606831.437907,
+      "rss_kib": 13664,
+      "calls": 10000,
+      "elapsed_s": 0.38843479200000003
+    }
+  ],
+  "error": "Traceback (most recent call last):\n  File \"<workspace>/work/btx-review-tools/provider-observation-fix/retention.py\", line 44, in <module>\n    batch('distinct_10000_a',(mid(n) for n in range(1,10001)))\n  File \"<workspace>/work/btx-review-tools/provider-observation-fix/retention.py\", line 37, in batch\n    r=rpc('getmodelproviders',[mid]);assert r['providers']==[];n+=1\n  File \"<workspace>/work/btx-review-tools/provider-observation-fix/retention.py\", line 18, in rpc\n    def rpc(m,a=[]):return rpc_helper(sp,m,a)\n  File \"<workspace>/work/btx-review-tools/atlas-downloads-native/lab.py\", line 7, in rpc_helper\n    s.settimeout(20);s.connect(str(path));s.sendall((json.dumps({'id':1,'method':method,'params':params})+'\\n').encode());s.shutdown(socket.SHUT_WR)\nOSError: [Errno 57] Socket is not connected\n",
+  "cleanup": {
+    "helper_stopped": true,
+    "scratch_removed": true
+  }
+}
