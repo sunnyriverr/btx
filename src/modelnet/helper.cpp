@@ -65,6 +65,7 @@
 #include <netaddress.h>
 #include <util/fs.h>
 #include <util/strencodings.h>
+#include <util/subprocess.h>
 
 #include <openssl/bn.h>
 #include <openssl/evp.h>
@@ -386,6 +387,7 @@ bool RunCudaLoader(const fs::path& loader, const fs::path& dir, UniValue& out, s
         close(pipefd[0]);
         if (dup2(pipefd[1], STDOUT_FILENO) < 0) _exit(127);
         close(pipefd[1]);
+        subprocess::detail::subprocess_close_all_fds(/*except_fd=*/-1);
         const std::string loader_s = fs::PathToString(loader);
         const std::string dir_s = fs::PathToString(dir);
         if (hold_pid) {
@@ -496,6 +498,7 @@ bool MaybeRunInferCmd(const fs::path& checkout, UniValue& result, std::string& e
         close(pipefd[0]);
         if (dup2(pipefd[1], STDOUT_FILENO) < 0) _exit(127);
         close(pipefd[1]);
+        subprocess::detail::subprocess_close_all_fds(/*except_fd=*/-1);
         const std::string exe = cmd;
         const std::string dir_s = fs::PathToString(checkout);
         const char* argv[] = {exe.c_str(), dir_s.c_str(), nullptr};
@@ -576,6 +579,7 @@ bool RunGenerateAdapter(const fs::path& exe, const fs::path& dir, const std::str
         if (dup2(outpipe[1], STDOUT_FILENO) < 0) _exit(127);
         if (inpipe[0] != STDIN_FILENO) close(inpipe[0]);
         if (outpipe[1] != STDOUT_FILENO) close(outpipe[1]);
+        subprocess::detail::subprocess_close_all_fds(/*except_fd=*/-1);
         const std::string exe_s = fs::PathToString(exe);
         const std::string dir_s = fs::PathToString(dir);
         const std::string n_s = std::to_string(max_new_tokens);
@@ -803,6 +807,7 @@ bool RunLlamaGenerate(const fs::path& exe, const fs::path& gguf, const std::stri
             close(nullfd);
         }
         close(outpipe[1]);
+        subprocess::detail::subprocess_close_all_fds(/*except_fd=*/-1);
         const std::string exe_s = fs::PathToString(exe);
         const std::string m_s = fs::PathToString(gguf);
         const std::string n_s = std::to_string(max_new_tokens);
