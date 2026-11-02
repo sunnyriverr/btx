@@ -1,0 +1,65 @@
+{
+  "case": "idle-crash",
+  "binary_sha256": "133c234c1227888531093fe99a526e29139439ae05780e1c2cb45ef73a00f55d",
+  "synthetic_adapter": true,
+  "no_GPU": true,
+  "trace": [
+    {
+      "seconds": 0.1189,
+      "step": "initial-ready",
+      "pid": 79660
+    },
+    {
+      "seconds": 0.143,
+      "step": "initial-listener",
+      "evidence": {
+        "listens": true,
+        "stdout": "p79660\nf6\ntIPv4\nn127.0.0.1:51554\n",
+        "stderr": ""
+      }
+    },
+    {
+      "seconds": 0.1445,
+      "step": "owned-helper-crash",
+      "pid": 79660
+    },
+    {
+      "seconds": 0.2071,
+      "step": "replacement-ready",
+      "pid": 79666
+    },
+    {
+      "seconds": 0.2221,
+      "step": "replacement-listener",
+      "evidence": {
+        "listens": true,
+        "stdout": "p79666\nf6\ntIPv4\nn127.0.0.1:51554\n",
+        "stderr": ""
+      }
+    },
+    {
+      "seconds": 0.4216,
+      "step": "clean-stop",
+      "pid": 79666
+    }
+  ],
+  "command": [
+    "<review-root>/helper-worker-fix/baseline/btx-modeld",
+    "-modeldir=<disposable>/model",
+    "-modelrpcsocket=<disposable>/rpc.sock",
+    "-modelbind=127.0.0.1:51554",
+    "-modelstorage=8MiB",
+    "-modelseed=off",
+    "-modelfollowpeers=0",
+    "-modellandiscovery=0",
+    "-modelnatpmp=0",
+    "-pwcchain=regtest"
+  ],
+  "replacement_has_tcp_listener": true,
+  "replacement_rpc_responds": true,
+  "pass": true,
+  "regression_pass": true,
+  "owned_helpers_exited": true,
+  "port_released": true,
+  "disposable_removed": true
+}

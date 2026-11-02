@@ -1,0 +1,242 @@
+{
+  "case": "resident-crash",
+  "binary_sha256": "133c234c1227888531093fe99a526e29139439ae05780e1c2cb45ef73a00f55d",
+  "synthetic_adapter": true,
+  "no_GPU": true,
+  "trace": [
+    {
+      "seconds": 0.1186,
+      "step": "initial-ready",
+      "pid": 79577
+    },
+    {
+      "seconds": 0.1424,
+      "step": "initial-listener",
+      "evidence": {
+        "listens": true,
+        "stdout": "p79577\nf6\ntIPv4\nn127.0.0.1:51548\n",
+        "stderr": ""
+      }
+    },
+    {
+      "seconds": 0.1693,
+      "step": "worker-listener-observation",
+      "pid": 79583,
+      "evidence": {
+        "listens": true,
+        "stdout": "p79583\nf6\ntIPv4\nn127.0.0.1:51548\n",
+        "stderr": ""
+      }
+    },
+    {
+      "seconds": 0.1835,
+      "step": "owned-helper-crash",
+      "pid": 79577
+    },
+    {
+      "seconds": 0.1951,
+      "step": "worker-after-crash",
+      "evidence": {
+        "listens": true,
+        "stdout": "p79583\nf6\ntIPv4\nn127.0.0.1:51548\n",
+        "stderr": ""
+      }
+    },
+    {
+      "seconds": 4.2605,
+      "step": "replacement-ready",
+      "pid": 79593
+    },
+    {
+      "seconds": 4.2821,
+      "step": "replacement-listener",
+      "evidence": {
+        "listens": false,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    {
+      "seconds": 4.3569,
+      "step": "worker-normal-exit"
+    },
+    {
+      "seconds": 5.3765,
+      "step": "clean-stop",
+      "pid": 79593
+    },
+    {
+      "seconds": 5.4398,
+      "step": "recovered-ready",
+      "pid": 79608
+    },
+    {
+      "seconds": 5.4738,
+      "step": "recovered-listener",
+      "evidence": {
+        "listens": true,
+        "stdout": "p79608\nf6\ntIPv4\nn127.0.0.1:51548\n",
+        "stderr": ""
+      }
+    },
+    {
+      "seconds": 5.6807,
+      "step": "clean-stop",
+      "pid": 79608
+    }
+  ],
+  "command": [
+    "<review-root>/helper-worker-fix/baseline/btx-modeld",
+    "-modeldir=<disposable>/model",
+    "-modelrpcsocket=<disposable>/rpc.sock",
+    "-modelbind=127.0.0.1:51548",
+    "-modelstorage=8MiB",
+    "-modelseed=off",
+    "-modelfollowpeers=0",
+    "-modellandiscovery=0",
+    "-modelnatpmp=0",
+    "-pwcchain=regtest"
+  ],
+  "hosted": {
+    "schema_version": 2,
+    "uri": "btx://pq4z430hmjgr7705lhy3jaqf0e698gu4jml4ejkvalm6w3q3uq57n9fcawe3qcca9rwdh3ykhp98z7y57rlw2",
+    "model_id": "a8ab17df7240fde7d3f72465d025f9d14e8e565bfd732b33bfde9d104780a7a654e3aecc418c74a3736f125ae129c5e2",
+    "artifact_id": "bbf10ce200d9aa35141d562865e03a9f22d16d250d707111c69bb3ebf41a930d2e541e62699b99a37f4c28c3877a53bf",
+    "admission": "PINNED",
+    "qualification": "structure only; not usefulness, safety, or alignment",
+    "seeded": false,
+    "pinned": true,
+    "propagation": "local_only",
+    "search_published": false,
+    "signed_metadata": false,
+    "format": "safetensors",
+    "family": "",
+    "quantization": "",
+    "share": {
+      "uri": "btx://pq4z430hmjgr7705lhy3jaqf0e698gu4jml4ejkvalm6w3q3uq57n9fcawe3qcca9rwdh3ykhp98z7y57rlw2",
+      "copy_text": "btx://pq4z430hmjgr7705lhy3jaqf0e698gu4jml4ejkvalm6w3q3uq57n9fcawe3qcca9rwdh3ykhp98z7y57rlw2 format=safetensors",
+      "family": "",
+      "format": "safetensors",
+      "quantization": "",
+      "signed": false,
+      "size_bytes": 94,
+      "file_count": 1
+    },
+    "next_actions": [
+      "searchmodels {\"scope\":\"LOCAL\"}",
+      "getmodelsharecard btx://pq4z430hmjgr7705lhy3jaqf0e698gu4jml4ejkvalm6w3q3uq57n9fcawe3qcca9rwdh3ykhp98z7y57rlw2",
+      "getmodeltransfers",
+      "automatic_spend_atoms stays 0"
+    ],
+    "automatic_spend_atoms": 0,
+    "cloud_uploaded": false
+  },
+  "loaded": {
+    "schema_version": 2,
+    "model_id": "a8ab17df7240fde7d3f72465d025f9d14e8e565bfd732b33bfde9d104780a7a654e3aecc418c74a3736f125ae129c5e2",
+    "artifact_id": "bbf10ce200d9aa35141d562865e03a9f22d16d250d707111c69bb3ebf41a930d2e541e62699b99a37f4c28c3877a53bf",
+    "path": "<disposable>/model/checkout/bbf10ce200d9aa35141d562865e03a9f22d16d250d707111c69bb3ebf41a930d2e541e62699b99a37f4c28c3877a53bf",
+    "usable_runtime_root": "<disposable>/model/checkout/bbf10ce200d9aa35141d562865e03a9f22d16d250d707111c69bb3ebf41a930d2e541e62699b99a37f4c28c3877a53bf",
+    "materialized": true,
+    "tensors": [
+      {
+        "name": "weight",
+        "dtype": "F32",
+        "shape": [
+          2,
+          3
+        ],
+        "bytes": 24
+      }
+    ],
+    "tensor_count": 1,
+    "weight_bytes": 24,
+    "inference": false,
+    "remote_inference": false,
+    "runtime_started": true,
+    "runtime_exec": true,
+    "device_loaded": true,
+    "weights_resident": true,
+    "smoke_passed": false,
+    "execution_profile": 0,
+    "runtime_profile": "safetensors-cuda-resident",
+    "automatic_spend_atoms": 0,
+    "loader_pid": 79583,
+    "cuda": {
+      "ok": true,
+      "smoke_passed": false,
+      "bytes_on_device": 0,
+      "device_name": "synthetic-protocol-fixture-no-GPU"
+    },
+    "bytes_on_device": 0,
+    "device_name": "synthetic-protocol-fixture-no-GPU",
+    "next_actions": [
+      "unloadmodel",
+      "automatic_spend_atoms stays 0"
+    ],
+    "note": "Weights stay on device until unloadmodel. CUDA smoke is a kernel on loaded tensors, not a network inference server. Granite hybrid is not GGUF; llama.cpp needs conversion."
+  },
+  "worker": {
+    "pid": 79583,
+    "ppid": 79577,
+    "args": [
+      "--dir",
+      "checkout",
+      "--hold",
+      "--smoke"
+    ],
+    "sockets": [
+      {
+        "fd": 5,
+        "family": 1,
+        "listening": -1,
+        "sockopt_errno": 42,
+        "inheritable": true,
+        "sockname": "non-INET"
+      },
+      {
+        "fd": 6,
+        "family": 2,
+        "listening": -1,
+        "sockopt_errno": 42,
+        "inheritable": true,
+        "sockname": [
+          "127.0.0.1",
+          51548
+        ]
+      },
+      {
+        "fd": 7,
+        "family": 1,
+        "listening": -1,
+        "sockopt_errno": 42,
+        "inheritable": true,
+        "sockname": "non-INET"
+      }
+    ]
+  },
+  "worker_has_listener": true,
+  "worker_lsof": "COMMAND   PID     USER   FD   TYPE             DEVICE SIZE/OFF                NODE NAME\nadapter 79583 wildwood  cwd    DIR               1,17     2016             7471807 <workspace>\nadapter 79583 wildwood  txt    REG               1,17    34552            81971538 <review-root>/helper-worker-inheritance/adapter\nadapter 79583 wildwood  txt    REG               1,17  2374000 1152921500312573277 /usr/lib/dyld\nadapter 79583 wildwood    0r   CHR                3,2      0t0                 336 /dev/null\nadapter 79583 wildwood    1   PIPE  0x1307fa6cba5138e    16384                     \nadapter 79583 wildwood    2w   REG               1,17      189            81976480 <review-root>/helper-worker-fix/before/1-resident-crash/initial.log\nadapter 79583 wildwood    3r   REG               1,17     5449            81976484 <disposable>/model/tls/cert.pem\nadapter 79583 wildwood    4r   REG               1,17     3613            81976483 <disposable>/model/tls/key.pem\nadapter 79583 wildwood    5u  unix  0xdac9f53c4541717      0t0                     <disposable>/rpc.sock\nadapter 79583 wildwood    6u  IPv4  0xa989300de903e78      0t0                 TCP 127.0.0.1:51548 (LISTEN)\nadapter 79583 wildwood    7u  unix 0x10cac8f44d0b34a4      0t0                     <disposable>/rpc.sock\n",
+  "worker_alive_after_crash": "79583     1 S   \n",
+  "replacement_has_tcp_listener": false,
+  "replacement_rpc_responds": true,
+  "after_release_polls": [
+    {
+      "rpc": true,
+      "tcp_listener": false
+    },
+    {
+      "rpc": true,
+      "tcp_listener": false
+    },
+    {
+      "rpc": true,
+      "tcp_listener": false
+    }
+  ],
+  "pass": true,
+  "regression_pass": false,
+  "owned_helpers_exited": true,
+  "port_released": true,
+  "disposable_removed": true
+}
