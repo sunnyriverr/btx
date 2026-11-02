@@ -1,0 +1,1428 @@
+{
+  "review_type": "artifact/source audit only; reviewer no nativeexecution",
+  "updated_utc": "2026-11-02T22:30:52.849275+00:00",
+  "tested_identities": {
+    "build/time-baseline": "b28791d6c5a7f8568509262ef3ccd1993b15b61a8e09583a7d00a89cf3232ca2",
+    "build/time-candidate": "cb5cc7e6c10ee6fa2d0dbcb1223bd2a7dc6e6e292bd661643fca278bd32f9c20",
+    "build/time-combined": "600f32ad12464a39796fa677b9f66d1b34881794355f71bb3c9a7a3275b71c3c",
+    "build/security-probe": "f4ec4bf05befc4ffe60475c475e46dbbba7b8355304412d6ecc76454b78f9110",
+    "build/CMakeFiles/harness.dir/harness/security_tests.cpp.o": "fba04f9e4fa3701cb179201dbcd44316037b564b7d2969dd45bf64bf3f303084"
+  },
+  "available_artifact_hash_checks": {
+    "build/time-baseline": true,
+    "build/time-candidate": true,
+    "build/time-combined": true,
+    "build/security-probe": true,
+    "build/CMakeFiles/harness.dir/harness/security_tests.cpp.o": true
+  },
+  "actual_probe_sha384": "b503742715f8ecfd95468acfa35a77db3a358a71ca5e9d3cf16bff442bdef9480eba373cdaf3ff6977ddb880bcfda898",
+  "harness_sha256": "9541f0d6114ed79123a56ce971afaee77ba8970a44938176be9641099f53325f",
+  "cases": {
+    "baseline/controlled": {
+      "test_outcome": [
+        {
+          "error": "first ordered valid job lost its report",
+          "name": "time-fix-ordered-valid-work",
+          "status": "FAIL"
+        }
+      ],
+      "passed": 0,
+      "failed": 1,
+      "prestop_runtime": "1",
+      "paused": "0",
+      "local_allow": true,
+      "clock": "1793658397426",
+      "held_report_ms": 1793658397413,
+      "first_challenge": "307ba5cf881655ffd99f0ed085245ecc289c0f76e8b17fcfb631e1fab0005e4ba4add9dd9f90e6a670bd1d4a7f3c04eb",
+      "second_challenge": "4257628274b3609d173b71e881279523344f60820e83a8b709a62731587dac5c08ee4df09bf09de8c209ba8c3511b8d4",
+      "barrier_timeout": false,
+      "stops": [
+        50
+      ],
+      "worker_errors_before_first_stop": [
+        {
+          "sequence": 49,
+          "challenge": "307ba5cf881655ffd99f0ed085245ecc289c0f76e8b17fcfb631e1fab0005e4ba4add9dd9f90e6a670bd1d4a7f3c04eb",
+          "error": "SEC_CLOCK_ROLLBACK",
+          "failure_stage": "import:evaluation",
+          "failure_supplied_ms": 1793658397413,
+          "runtime_available": "1",
+          "paused": "0",
+          "wall_ms": 1793658397430,
+          "evaluation_rows": [
+            {
+              "evaluator": "8802ec0a8b80742fe78ab8a218b4071bf038561c083723d372c8ad5530906467aa8090b5e477ec1368c1c20a8f658a74",
+              "phase": "blocked",
+              "report": ""
+            }
+          ]
+        }
+      ],
+      "clock_refusals": [
+        {
+          "sequence": 46,
+          "challenge": "307ba5cf881655ffd99f0ed085245ecc289c0f76e8b17fcfb631e1fab0005e4ba4add9dd9f90e6a670bd1d4a7f3c04eb",
+          "stage": "import:evaluation",
+          "supplied_ms": 1793658397413,
+          "persisted_before_ms": 1793658397426,
+          "wall_ms": 1793658397429,
+          "accepted": false
+        }
+      ],
+      "rows": [
+        {
+          "challenge": "307ba5cf881655ffd99f0ed085245ecc289c0f76e8b17fcfb631e1fab0005e4ba4add9dd9f90e6a670bd1d4a7f3c04eb",
+          "evaluator": "8802ec0a8b80742fe78ab8a218b4071bf038561c083723d372c8ad5530906467aa8090b5e477ec1368c1c20a8f658a74",
+          "lease_until": "1793658457378",
+          "phase": "blocked",
+          "report": ""
+        },
+        {
+          "challenge": "4257628274b3609d173b71e881279523344f60820e83a8b709a62731587dac5c08ee4df09bf09de8c209ba8c3511b8d4",
+          "evaluator": "8802ec0a8b80742fe78ab8a218b4071bf038561c083723d372c8ad5530906467aa8090b5e477ec1368c1c20a8f658a74",
+          "lease_until": "1793658457378",
+          "phase": "PASS",
+          "report": "25a56c24d5b26804a2b58c2934c549ed8a65e2730ed2bf599749f173e3285964ccd5a49ccd9549c09fbb515e17619c08"
+        }
+      ],
+      "receipts": [
+        {
+          "id": "3aeae7a0637faba24fd7449e3ba1c62a097a491c5befab49937785de1919593f5dfb91c28a67ed8304821ba3b1897e13",
+          "request": "4257628274b3609d173b71e881279523344f60820e83a8b709a62731587dac5c08ee4df09bf09de8c209ba8c3511b8d4",
+          "issued_ms": 1793658397425,
+          "expires_ms": 1793658457425,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        },
+        {
+          "id": "bb187a7429ffe284f5643cf1ac1c1fadd05072cfafecffd4846caad762d47283c86e0fa4b6bd3f2c1e68922e6adc7f2a",
+          "request": "307ba5cf881655ffd99f0ed085245ecc289c0f76e8b17fcfb631e1fab0005e4ba4add9dd9f90e6a670bd1d4a7f3c04eb",
+          "issued_ms": 1793658397412,
+          "expires_ms": 1793658457412,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        }
+      ],
+      "reports": [
+        {
+          "id": "25a56c24d5b26804a2b58c2934c549ed8a65e2730ed2bf599749f173e3285964ccd5a49ccd9549c09fbb515e17619c08",
+          "challenge": "4257628274b3609d173b71e881279523344f60820e83a8b709a62731587dac5c08ee4df09bf09de8c209ba8c3511b8d4",
+          "issued_ms": 1793658397426,
+          "expires_ms": 1793658457426,
+          "outcome": "PASS",
+          "receipt_record_exists": true,
+          "challenge_binds": true,
+          "runtime_is_actual_probe": true,
+          "signed": true
+        }
+      ],
+      "first_report_time_unchanged": false,
+      "other_clock_write_after_first_report_sample": true,
+      "controlled_task_selections": 2,
+      "record_expiry_release_events": [],
+      "all_worker_errors_after_stop": [],
+      "trace_failures": false
+    },
+    "baseline/rollback": {
+      "test_outcome": [
+        {
+          "name": "time-fix-rollback-contract",
+          "status": "PASS"
+        }
+      ],
+      "passed": 1,
+      "failed": 0,
+      "prestop_runtime": "1",
+      "paused": "0",
+      "local_allow": true,
+      "clock": "1793658457513",
+      "held_report_ms": 0,
+      "first_challenge": "",
+      "second_challenge": "",
+      "barrier_timeout": false,
+      "stops": [
+        38
+      ],
+      "worker_errors_before_first_stop": [
+        {
+          "sequence": 37,
+          "challenge": "9e97a35b37ae57056a7ef0a6994a7963afcc79b71fc09f84d6491630bab89de0ceb8d73b72f7aaf5e1240bb25000e0d2",
+          "error": "SEC_CLOCK_ROLLBACK",
+          "failure_stage": "",
+          "failure_supplied_ms": 0,
+          "runtime_available": "1",
+          "paused": "0",
+          "wall_ms": 1793658397523,
+          "evaluation_rows": []
+        }
+      ],
+      "clock_refusals": [
+        {
+          "sequence": 28,
+          "challenge": "",
+          "stage": "import-committed:challenge",
+          "supplied_ms": 1793658457512,
+          "persisted_before_ms": 1793658457513,
+          "wall_ms": 1793658397513,
+          "accepted": false
+        },
+        {
+          "sequence": 30,
+          "challenge": "",
+          "stage": "import:challenge",
+          "supplied_ms": 1793658397513,
+          "persisted_before_ms": 1793658457513,
+          "wall_ms": 1793658397514,
+          "accepted": false
+        },
+        {
+          "sequence": 32,
+          "challenge": "",
+          "stage": "evaluate-entry",
+          "supplied_ms": 1793658397513,
+          "persisted_before_ms": 1793658457513,
+          "wall_ms": 1793658397516,
+          "accepted": false
+        },
+        {
+          "sequence": 36,
+          "challenge": "9e97a35b37ae57056a7ef0a6994a7963afcc79b71fc09f84d6491630bab89de0ceb8d73b72f7aaf5e1240bb25000e0d2",
+          "stage": "evaluate-entry",
+          "supplied_ms": 1793658397521,
+          "persisted_before_ms": 1793658457513,
+          "wall_ms": 1793658397523,
+          "accepted": false
+        }
+      ],
+      "rows": [
+        {
+          "challenge": "49947a664ea1294f74c26fba5274d070de09d02d07ab72fe2d33382fc61f83f03188b9f61793908db955bbe2268f7c7c",
+          "evaluator": "09f5a86176ebc5cb07d442b45fc40289208078cf78468a06fae1e2e9d591853940f29c547273b00377b6ca1c3a1efbf0",
+          "lease_until": "1793658457482",
+          "phase": "PASS",
+          "report": "4b123fc38bab8d165f253bd7ae57d098e509e97487ad4e8628ebb3a19e52d04abc73e4c3821fb52db9c472493fcf3299"
+        }
+      ],
+      "receipts": [
+        {
+          "id": "c62d4bfd90ff53470d616fbf404742bd83a76cc008d9290a187b05e50f2e121e566c4cd326ec2f7560edab651afd9a8c",
+          "request": "49947a664ea1294f74c26fba5274d070de09d02d07ab72fe2d33382fc61f83f03188b9f61793908db955bbe2268f7c7c",
+          "issued_ms": 1793658397507,
+          "expires_ms": 1793658457507,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        }
+      ],
+      "reports": [
+        {
+          "id": "4b123fc38bab8d165f253bd7ae57d098e509e97487ad4e8628ebb3a19e52d04abc73e4c3821fb52db9c472493fcf3299",
+          "challenge": "49947a664ea1294f74c26fba5274d070de09d02d07ab72fe2d33382fc61f83f03188b9f61793908db955bbe2268f7c7c",
+          "issued_ms": 1793658397509,
+          "expires_ms": 1793658457509,
+          "outcome": "PASS",
+          "receipt_record_exists": true,
+          "challenge_binds": true,
+          "runtime_is_actual_probe": true,
+          "signed": true
+        }
+      ],
+      "first_report_time_unchanged": null,
+      "other_clock_write_after_first_report_sample": null,
+      "controlled_task_selections": null,
+      "record_expiry_release_events": [],
+      "all_worker_errors_after_stop": [],
+      "trace_failures": false
+    },
+    "baseline/challenge-expiry": {
+      "test_outcome": [
+        {
+          "error": "held invalid authority/expiry released a report",
+          "name": "time-fix-held-challenge-expiry",
+          "status": "FAIL"
+        }
+      ],
+      "passed": 0,
+      "failed": 1,
+      "prestop_runtime": "1",
+      "paused": "0",
+      "local_allow": true,
+      "clock": "1793658397577",
+      "held_report_ms": 1793658397577,
+      "first_challenge": "50484800c32a1cf1911c433b7d39563797e3d45cec57465e5466aa408d26c7bfe28a967382d52bb97fab30d9acda9c60",
+      "second_challenge": "",
+      "barrier_timeout": false,
+      "stops": [
+        28
+      ],
+      "worker_errors_before_first_stop": [],
+      "clock_refusals": [],
+      "rows": [
+        {
+          "challenge": "50484800c32a1cf1911c433b7d39563797e3d45cec57465e5466aa408d26c7bfe28a967382d52bb97fab30d9acda9c60",
+          "evaluator": "b17d1d619715cd8cda9e06a740ff32aea49c0287f8100b6bfd2a36e734f194c821d2b797c771687b7c0921912a694463",
+          "lease_until": "1793658398759",
+          "phase": "PASS",
+          "report": "ece5661696a954f3fd299c13be4999efa85bf0174276c903ac6bf2662a97c33743e8be96a3b260213cc847bfedd40947"
+        }
+      ],
+      "receipts": [
+        {
+          "id": "8b2d7e78b38cf1d3d3fb55f1db5738d5ed6eab95722f6030ccc552180087f99fd05e806ab7a94e10bb9c2c55d96817dc",
+          "request": "50484800c32a1cf1911c433b7d39563797e3d45cec57465e5466aa408d26c7bfe28a967382d52bb97fab30d9acda9c60",
+          "issued_ms": 1793658397576,
+          "expires_ms": 1793658457576,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        }
+      ],
+      "reports": [
+        {
+          "id": "ece5661696a954f3fd299c13be4999efa85bf0174276c903ac6bf2662a97c33743e8be96a3b260213cc847bfedd40947",
+          "challenge": "50484800c32a1cf1911c433b7d39563797e3d45cec57465e5466aa408d26c7bfe28a967382d52bb97fab30d9acda9c60",
+          "issued_ms": 1793658397577,
+          "expires_ms": 1793658457577,
+          "outcome": "PASS",
+          "receipt_record_exists": true,
+          "challenge_binds": true,
+          "runtime_is_actual_probe": true,
+          "signed": true
+        }
+      ],
+      "first_report_time_unchanged": null,
+      "other_clock_write_after_first_report_sample": null,
+      "controlled_task_selections": null,
+      "record_expiry_release_events": [],
+      "all_worker_errors_after_stop": [],
+      "trace_failures": false
+    },
+    "baseline/pause": {
+      "test_outcome": [
+        {
+          "name": "time-fix-held-pause",
+          "status": "PASS"
+        }
+      ],
+      "passed": 1,
+      "failed": 0,
+      "prestop_runtime": "1",
+      "paused": "1",
+      "local_allow": true,
+      "clock": "1793658398879",
+      "held_report_ms": 1793658398877,
+      "first_challenge": "2ec38f1c00bea8f4686274b5ca6beaabe9cb4282df02f4ec44bd6a8fe029c72622d2ace7c76c9d311535a92b8594b880",
+      "second_challenge": "",
+      "barrier_timeout": false,
+      "stops": [
+        29
+      ],
+      "worker_errors_before_first_stop": [
+        {
+          "sequence": 28,
+          "challenge": "2ec38f1c00bea8f4686274b5ca6beaabe9cb4282df02f4ec44bd6a8fe029c72622d2ace7c76c9d311535a92b8594b880",
+          "error": "SEC_CLOCK_ROLLBACK",
+          "failure_stage": "import:evaluation",
+          "failure_supplied_ms": 1793658398877,
+          "runtime_available": "1",
+          "paused": "1",
+          "wall_ms": 1793658398880,
+          "evaluation_rows": [
+            {
+              "evaluator": "03ccc527ec686b833ff5fdc7c4d55d02e9dca3ec0cd058a16fe9190801da01e68aaaa981c2dd521748dcc611c1b64799",
+              "phase": "blocked",
+              "report": ""
+            }
+          ]
+        }
+      ],
+      "clock_refusals": [
+        {
+          "sequence": 25,
+          "challenge": "2ec38f1c00bea8f4686274b5ca6beaabe9cb4282df02f4ec44bd6a8fe029c72622d2ace7c76c9d311535a92b8594b880",
+          "stage": "import:evaluation",
+          "supplied_ms": 1793658398877,
+          "persisted_before_ms": 1793658398879,
+          "wall_ms": 1793658398880,
+          "accepted": false
+        }
+      ],
+      "rows": [
+        {
+          "challenge": "2ec38f1c00bea8f4686274b5ca6beaabe9cb4282df02f4ec44bd6a8fe029c72622d2ace7c76c9d311535a92b8594b880",
+          "evaluator": "03ccc527ec686b833ff5fdc7c4d55d02e9dca3ec0cd058a16fe9190801da01e68aaaa981c2dd521748dcc611c1b64799",
+          "lease_until": "1793658458835",
+          "phase": "blocked",
+          "report": ""
+        }
+      ],
+      "receipts": [
+        {
+          "id": "4a94ad10319c1635ced5947ac98b3a1c14e44ed3c49fe1c3a14b24d72c371d21f526365d8f4f498802236dccfceec479",
+          "request": "2ec38f1c00bea8f4686274b5ca6beaabe9cb4282df02f4ec44bd6a8fe029c72622d2ace7c76c9d311535a92b8594b880",
+          "issued_ms": 1793658398875,
+          "expires_ms": 1793658458875,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        }
+      ],
+      "reports": [],
+      "first_report_time_unchanged": null,
+      "other_clock_write_after_first_report_sample": null,
+      "controlled_task_selections": null,
+      "record_expiry_release_events": [],
+      "all_worker_errors_after_stop": [],
+      "trace_failures": false
+    },
+    "baseline/revoke": {
+      "test_outcome": [
+        {
+          "name": "time-fix-held-worker-revocation",
+          "status": "PASS"
+        }
+      ],
+      "passed": 1,
+      "failed": 0,
+      "prestop_runtime": "1",
+      "paused": "0",
+      "local_allow": true,
+      "clock": "1793658398980",
+      "held_report_ms": 1793658398976,
+      "first_challenge": "2224dae25e2c58804a1f498e26bf18f0764701f173ee2499a621ce1e4f388aff8aa89ac6c7f5e8491dc5c003308aa87b",
+      "second_challenge": "",
+      "barrier_timeout": false,
+      "stops": [
+        30
+      ],
+      "worker_errors_before_first_stop": [
+        {
+          "sequence": 29,
+          "challenge": "2224dae25e2c58804a1f498e26bf18f0764701f173ee2499a621ce1e4f388aff8aa89ac6c7f5e8491dc5c003308aa87b",
+          "error": "SEC_SIGNER_REVOKED",
+          "failure_stage": "import:evaluation",
+          "failure_supplied_ms": 1793658398976,
+          "runtime_available": "1",
+          "paused": "0",
+          "wall_ms": 1793658398982,
+          "evaluation_rows": [
+            {
+              "evaluator": "aa03dba686e8dd2b697cb3d165bc4b19fe82b87cb3333f46507a1358d1aff61a7a762fe47cb23a7010656cdc7434e9a8",
+              "phase": "blocked",
+              "report": ""
+            }
+          ]
+        }
+      ],
+      "clock_refusals": [],
+      "rows": [
+        {
+          "challenge": "2224dae25e2c58804a1f498e26bf18f0764701f173ee2499a621ce1e4f388aff8aa89ac6c7f5e8491dc5c003308aa87b",
+          "evaluator": "aa03dba686e8dd2b697cb3d165bc4b19fe82b87cb3333f46507a1358d1aff61a7a762fe47cb23a7010656cdc7434e9a8",
+          "lease_until": "1793658458942",
+          "phase": "blocked",
+          "report": ""
+        }
+      ],
+      "receipts": [
+        {
+          "id": "f8c9a1755ce17ec7ba73a117aa6c013b7fb169353b042418fcf86aaaa76f6bc2c7ecee90469372442ecc05a5d24124b2",
+          "request": "2224dae25e2c58804a1f498e26bf18f0764701f173ee2499a621ce1e4f388aff8aa89ac6c7f5e8491dc5c003308aa87b",
+          "issued_ms": 1793658398975,
+          "expires_ms": 1793658458975,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        }
+      ],
+      "reports": [],
+      "first_report_time_unchanged": null,
+      "other_clock_write_after_first_report_sample": null,
+      "controlled_task_selections": null,
+      "record_expiry_release_events": [],
+      "all_worker_errors_after_stop": [],
+      "trace_failures": false
+    },
+    "baseline/local-deny": {
+      "test_outcome": [
+        {
+          "error": "held invalid authority/expiry released a report",
+          "name": "time-fix-held-local-permission",
+          "status": "FAIL"
+        }
+      ],
+      "passed": 0,
+      "failed": 1,
+      "prestop_runtime": "1",
+      "paused": "0",
+      "local_allow": false,
+      "clock": "1793658399091",
+      "held_report_ms": 1793658399091,
+      "first_challenge": "be46eeb6e8d4e2ccb2085fa80dfcc57002c3e4ace08ff6343042b22d473d7613f322f9baa6b077bcba43b02ff6ffbfa0",
+      "second_challenge": "",
+      "barrier_timeout": false,
+      "stops": [
+        28
+      ],
+      "worker_errors_before_first_stop": [],
+      "clock_refusals": [],
+      "rows": [
+        {
+          "challenge": "be46eeb6e8d4e2ccb2085fa80dfcc57002c3e4ace08ff6343042b22d473d7613f322f9baa6b077bcba43b02ff6ffbfa0",
+          "evaluator": "2b8926a6b87410ef439cd60d8fedbd7ca488e83faffd7d3f13ff746ec989b930b321ab59e82515ec7fd1ef2e2f588213",
+          "lease_until": "1793658459056",
+          "phase": "PASS",
+          "report": "993900d5efbba8c44da99e829fe6d053a7ed0c87bd52584ecb58e4627e7946f709ad15696a886538cb99b611c7c5ab5d"
+        }
+      ],
+      "receipts": [
+        {
+          "id": "d46442eda795a88be15d16f05dffc1c23fa12a0a0922b53288675da57ab694093c78b6138e51ae13f8b82ff84cf6cffd",
+          "request": "be46eeb6e8d4e2ccb2085fa80dfcc57002c3e4ace08ff6343042b22d473d7613f322f9baa6b077bcba43b02ff6ffbfa0",
+          "issued_ms": 1793658399090,
+          "expires_ms": 1793658459090,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        }
+      ],
+      "reports": [
+        {
+          "id": "993900d5efbba8c44da99e829fe6d053a7ed0c87bd52584ecb58e4627e7946f709ad15696a886538cb99b611c7c5ab5d",
+          "challenge": "be46eeb6e8d4e2ccb2085fa80dfcc57002c3e4ace08ff6343042b22d473d7613f322f9baa6b077bcba43b02ff6ffbfa0",
+          "issued_ms": 1793658399091,
+          "expires_ms": 1793658459091,
+          "outcome": "PASS",
+          "receipt_record_exists": true,
+          "challenge_binds": true,
+          "runtime_is_actual_probe": true,
+          "signed": true
+        }
+      ],
+      "first_report_time_unchanged": null,
+      "other_clock_write_after_first_report_sample": null,
+      "controlled_task_selections": null,
+      "record_expiry_release_events": [],
+      "all_worker_errors_after_stop": [],
+      "trace_failures": false
+    },
+    "baseline/record-expiry": {
+      "test_outcome": [
+        {
+          "error": "held invalid authority/expiry released a report",
+          "name": "time-fix-held-record-expiry",
+          "status": "FAIL"
+        }
+      ],
+      "passed": 0,
+      "failed": 1,
+      "prestop_runtime": "1",
+      "paused": "0",
+      "local_allow": true,
+      "clock": "1793658399149",
+      "held_report_ms": 1793658400149,
+      "first_challenge": "08e4f9679f51671ecbbe2b86bbd13c26a678a00dfac85942e1845a8d116ae603cb6aa5a508b0ee49c356ab524bae9086",
+      "second_challenge": "",
+      "barrier_timeout": false,
+      "stops": [
+        28
+      ],
+      "worker_errors_before_first_stop": [],
+      "clock_refusals": [],
+      "rows": [
+        {
+          "challenge": "08e4f9679f51671ecbbe2b86bbd13c26a678a00dfac85942e1845a8d116ae603cb6aa5a508b0ee49c356ab524bae9086",
+          "evaluator": "ca334185c9a118b609a9d3e0658b37efde40b649c4f3d38f895509aa696759968092d5f7189c8c5912a5b440ac7c5413",
+          "lease_until": "1793658400119",
+          "phase": "PASS",
+          "report": "b38d08f3c19e8ddea624a955240982e4d74225dbd62b9e3f409c8db437970f38e79dc44702d6d2eb4ee79db083e58079"
+        }
+      ],
+      "receipts": [
+        {
+          "id": "a3d7991bb7c882df1b529a18963e4497f5eee30c60ca59f367d9ca41bdcbb3d23756a481a754f5b4285c98d64e036142",
+          "request": "08e4f9679f51671ecbbe2b86bbd13c26a678a00dfac85942e1845a8d116ae603cb6aa5a508b0ee49c356ab524bae9086",
+          "issued_ms": 1793658399148,
+          "expires_ms": 1793658400148,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        }
+      ],
+      "reports": [
+        {
+          "id": "b38d08f3c19e8ddea624a955240982e4d74225dbd62b9e3f409c8db437970f38e79dc44702d6d2eb4ee79db083e58079",
+          "challenge": "08e4f9679f51671ecbbe2b86bbd13c26a678a00dfac85942e1845a8d116ae603cb6aa5a508b0ee49c356ab524bae9086",
+          "issued_ms": 1793658399149,
+          "expires_ms": 1793658400149,
+          "outcome": "PASS",
+          "receipt_record_exists": true,
+          "challenge_binds": true,
+          "runtime_is_actual_probe": true,
+          "signed": true
+        }
+      ],
+      "first_report_time_unchanged": null,
+      "other_clock_write_after_first_report_sample": null,
+      "controlled_task_selections": null,
+      "record_expiry_release_events": [
+        {
+          "sequence": 22,
+          "stage": "record-expiry-held-after-validation",
+          "stage_supplied_ms": 1793658399149,
+          "wall_ms": 1793658399151,
+          "persisted_clock": "1793658399148",
+          "error": ""
+        },
+        {
+          "sequence": 23,
+          "stage": "record-expiry-released-before-final-sample",
+          "stage_supplied_ms": 1793658399149,
+          "wall_ms": 1793658400154,
+          "persisted_clock": "1793658399148",
+          "error": ""
+        },
+        {
+          "sequence": 24,
+          "stage": "record-expiry-released-before-final-sample",
+          "stage_supplied_ms": 1793658399149,
+          "wall_ms": 1793658400154,
+          "persisted_clock": null,
+          "error": ""
+        }
+      ],
+      "all_worker_errors_after_stop": [],
+      "trace_failures": false
+    },
+    "candidate/controlled": {
+      "test_outcome": [
+        {
+          "name": "time-fix-ordered-valid-work",
+          "status": "PASS"
+        }
+      ],
+      "passed": 1,
+      "failed": 0,
+      "prestop_runtime": "1",
+      "paused": "0",
+      "local_allow": true,
+      "clock": "1793658400261",
+      "held_report_ms": 1793658400237,
+      "first_challenge": "22aa6cd9416677c6f9fcf52defc36c067ee102285fb9b9db370c6e0b640d91f8e886666d2061bf84575b56ee6635186c",
+      "second_challenge": "e28f40027188e4b2c991c854089d458f1c63ddb64603be93d2925e1a0ed9cde7bafccac4382325e841ea71d5eba1932d",
+      "barrier_timeout": false,
+      "stops": [
+        45,
+        46
+      ],
+      "worker_errors_before_first_stop": [],
+      "clock_refusals": [],
+      "rows": [
+        {
+          "challenge": "22aa6cd9416677c6f9fcf52defc36c067ee102285fb9b9db370c6e0b640d91f8e886666d2061bf84575b56ee6635186c",
+          "evaluator": "b2a7648f4c705b7c174f0d497d2d3cea10997c8adbf625a8a3a97fe4313108425a58596f6846ee6ff706bc06a486d017",
+          "lease_until": "1793658460194",
+          "phase": "PASS",
+          "report": "95471380126d06ee9685e1b4fa6514d30d5723977fbd408146bf8a48e213efad6dcea869b20b379b663c0545b478b4ac"
+        },
+        {
+          "challenge": "e28f40027188e4b2c991c854089d458f1c63ddb64603be93d2925e1a0ed9cde7bafccac4382325e841ea71d5eba1932d",
+          "evaluator": "b2a7648f4c705b7c174f0d497d2d3cea10997c8adbf625a8a3a97fe4313108425a58596f6846ee6ff706bc06a486d017",
+          "lease_until": "1793658460194",
+          "phase": "PASS",
+          "report": "cda4450b5e46647500791b018458b0ee3aa7cbc2d40b0134436a1f94a192c7ec2079384388f5e7927cd3b75598337c69"
+        }
+      ],
+      "receipts": [
+        {
+          "id": "03f5da14cafce704f63d575d114b5e652dd2a909e2efb9261bb2f7488aa030797b861f7a2d0180ac4dfaf3b8ed3993ba",
+          "request": "e28f40027188e4b2c991c854089d458f1c63ddb64603be93d2925e1a0ed9cde7bafccac4382325e841ea71d5eba1932d",
+          "issued_ms": 1793658400250,
+          "expires_ms": 1793658460250,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        },
+        {
+          "id": "29d6ab9719737ef6f8770cf53f61ecd241065664067a0e5f8d1b7f7d6175b9fc2888b1794501af7f28ad5d72b46a373f",
+          "request": "22aa6cd9416677c6f9fcf52defc36c067ee102285fb9b9db370c6e0b640d91f8e886666d2061bf84575b56ee6635186c",
+          "issued_ms": 1793658400233,
+          "expires_ms": 1793658460233,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        }
+      ],
+      "reports": [
+        {
+          "id": "95471380126d06ee9685e1b4fa6514d30d5723977fbd408146bf8a48e213efad6dcea869b20b379b663c0545b478b4ac",
+          "challenge": "22aa6cd9416677c6f9fcf52defc36c067ee102285fb9b9db370c6e0b640d91f8e886666d2061bf84575b56ee6635186c",
+          "issued_ms": 1793658400237,
+          "expires_ms": 1793658460237,
+          "outcome": "PASS",
+          "receipt_record_exists": true,
+          "challenge_binds": true,
+          "runtime_is_actual_probe": true,
+          "signed": true
+        },
+        {
+          "id": "cda4450b5e46647500791b018458b0ee3aa7cbc2d40b0134436a1f94a192c7ec2079384388f5e7927cd3b75598337c69",
+          "challenge": "e28f40027188e4b2c991c854089d458f1c63ddb64603be93d2925e1a0ed9cde7bafccac4382325e841ea71d5eba1932d",
+          "issued_ms": 1793658400254,
+          "expires_ms": 1793658460254,
+          "outcome": "PASS",
+          "receipt_record_exists": true,
+          "challenge_binds": true,
+          "runtime_is_actual_probe": true,
+          "signed": true
+        }
+      ],
+      "first_report_time_unchanged": true,
+      "other_clock_write_after_first_report_sample": true,
+      "controlled_task_selections": 2,
+      "record_expiry_release_events": [],
+      "all_worker_errors_after_stop": [],
+      "trace_failures": false
+    },
+    "candidate/rollback": {
+      "test_outcome": [
+        {
+          "name": "time-fix-rollback-contract",
+          "status": "PASS"
+        }
+      ],
+      "passed": 1,
+      "failed": 0,
+      "prestop_runtime": "1",
+      "paused": "0",
+      "local_allow": true,
+      "clock": "1793658460335",
+      "held_report_ms": 0,
+      "first_challenge": "",
+      "second_challenge": "",
+      "barrier_timeout": false,
+      "stops": [
+        34
+      ],
+      "worker_errors_before_first_stop": [
+        {
+          "sequence": 33,
+          "challenge": "f2c768a3b915ee1cbae4fa5d6cd4c080a69fa5fb7edfb5556041b17b4b77f9d93395d895573fd4e34626a7263d1c4d06",
+          "error": "SEC_CLOCK_ROLLBACK",
+          "failure_stage": "",
+          "failure_supplied_ms": 0,
+          "runtime_available": "1",
+          "paused": "0",
+          "wall_ms": 1793658400345,
+          "evaluation_rows": []
+        }
+      ],
+      "clock_refusals": [
+        {
+          "sequence": 24,
+          "challenge": "",
+          "stage": "import:challenge",
+          "supplied_ms": 1793658460334,
+          "persisted_before_ms": 1793658460335,
+          "wall_ms": 1793658400335,
+          "accepted": false
+        },
+        {
+          "sequence": 26,
+          "challenge": "",
+          "stage": "import:challenge",
+          "supplied_ms": 1793658400335,
+          "persisted_before_ms": 1793658460335,
+          "wall_ms": 1793658400336,
+          "accepted": false
+        },
+        {
+          "sequence": 28,
+          "challenge": "",
+          "stage": "evaluate-entry",
+          "supplied_ms": 1793658400335,
+          "persisted_before_ms": 1793658460335,
+          "wall_ms": 1793658400337,
+          "accepted": false
+        },
+        {
+          "sequence": 32,
+          "challenge": "f2c768a3b915ee1cbae4fa5d6cd4c080a69fa5fb7edfb5556041b17b4b77f9d93395d895573fd4e34626a7263d1c4d06",
+          "stage": "evaluate-entry",
+          "supplied_ms": 1793658400344,
+          "persisted_before_ms": 1793658460335,
+          "wall_ms": 1793658400344,
+          "accepted": false
+        }
+      ],
+      "rows": [
+        {
+          "challenge": "e89cf974cc30a03d2a598c7a4bc0bf1991c32be6ff0ced7fcbb5cf9f7991af81aab8210d411f0b02cd16491491a10d31",
+          "evaluator": "d7b9ba65db6fd247d38bccd6e0a3c38142ba230d72779f6ea34f068205dafef4b4d87e9353f6958d5c1db530c99a00dd",
+          "lease_until": "1793658460304",
+          "phase": "PASS",
+          "report": "0887f111bdb4894d79c6c3981f3c7f6ecd5bb1c705d4bce0a01aa2a7ad940655e1e6b791ee6715cbbff7ef4118e81fff"
+        }
+      ],
+      "receipts": [
+        {
+          "id": "44c1cd9ada38ced22b50e85fd15324f9b24ac81cdd10165364830e27f7103cea2e44d4f41f074c3d033bbe3b4adde7c1",
+          "request": "e89cf974cc30a03d2a598c7a4bc0bf1991c32be6ff0ced7fcbb5cf9f7991af81aab8210d411f0b02cd16491491a10d31",
+          "issued_ms": 1793658400327,
+          "expires_ms": 1793658460327,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        }
+      ],
+      "reports": [
+        {
+          "id": "0887f111bdb4894d79c6c3981f3c7f6ecd5bb1c705d4bce0a01aa2a7ad940655e1e6b791ee6715cbbff7ef4118e81fff",
+          "challenge": "e89cf974cc30a03d2a598c7a4bc0bf1991c32be6ff0ced7fcbb5cf9f7991af81aab8210d411f0b02cd16491491a10d31",
+          "issued_ms": 1793658400330,
+          "expires_ms": 1793658460330,
+          "outcome": "PASS",
+          "receipt_record_exists": true,
+          "challenge_binds": true,
+          "runtime_is_actual_probe": true,
+          "signed": true
+        }
+      ],
+      "first_report_time_unchanged": null,
+      "other_clock_write_after_first_report_sample": null,
+      "controlled_task_selections": null,
+      "record_expiry_release_events": [],
+      "all_worker_errors_after_stop": [],
+      "trace_failures": false
+    },
+    "candidate/challenge-expiry": {
+      "test_outcome": [
+        {
+          "name": "time-fix-held-challenge-expiry",
+          "status": "PASS"
+        }
+      ],
+      "passed": 1,
+      "failed": 0,
+      "prestop_runtime": "1",
+      "paused": "0",
+      "local_allow": true,
+      "clock": "1793658400399",
+      "held_report_ms": 1793658400400,
+      "first_challenge": "393313685b2382d6eff40f9a4b2063c1ce280eb619f7ef137a5db7fd36efeb5ce96d73b0af3fe35a6dd3bf1d767a8084",
+      "second_challenge": "",
+      "barrier_timeout": false,
+      "stops": [
+        24
+      ],
+      "worker_errors_before_first_stop": [
+        {
+          "sequence": 23,
+          "challenge": "393313685b2382d6eff40f9a4b2063c1ce280eb619f7ef137a5db7fd36efeb5ce96d73b0af3fe35a6dd3bf1d767a8084",
+          "error": "SEC_EVIDENCE_RELEASE_REVOKED",
+          "failure_stage": "import:evaluation",
+          "failure_supplied_ms": 1793658401588,
+          "runtime_available": "1",
+          "paused": "0",
+          "wall_ms": 1793658401595,
+          "evaluation_rows": [
+            {
+              "evaluator": "f6c58f9957709ac5e4d1d0c4419ffa574958d7f33b421b880a437b2777cf59d488fb3af8ecdaff07460c3ffcf0e590bb",
+              "phase": "blocked",
+              "report": ""
+            }
+          ]
+        }
+      ],
+      "clock_refusals": [],
+      "rows": [
+        {
+          "challenge": "393313685b2382d6eff40f9a4b2063c1ce280eb619f7ef137a5db7fd36efeb5ce96d73b0af3fe35a6dd3bf1d767a8084",
+          "evaluator": "f6c58f9957709ac5e4d1d0c4419ffa574958d7f33b421b880a437b2777cf59d488fb3af8ecdaff07460c3ffcf0e590bb",
+          "lease_until": "1793658401580",
+          "phase": "blocked",
+          "report": ""
+        }
+      ],
+      "receipts": [
+        {
+          "id": "1fe1c627ff612c01107eb2ec0140861a83c524ceb72a0e16a8dea8d50de678cd21ba68b0bed14bdd6994612023e972f0",
+          "request": "393313685b2382d6eff40f9a4b2063c1ce280eb619f7ef137a5db7fd36efeb5ce96d73b0af3fe35a6dd3bf1d767a8084",
+          "issued_ms": 1793658400397,
+          "expires_ms": 1793658460397,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        }
+      ],
+      "reports": [],
+      "first_report_time_unchanged": null,
+      "other_clock_write_after_first_report_sample": null,
+      "controlled_task_selections": null,
+      "record_expiry_release_events": [],
+      "all_worker_errors_after_stop": [],
+      "trace_failures": false
+    },
+    "candidate/pause": {
+      "test_outcome": [
+        {
+          "name": "time-fix-held-pause",
+          "status": "PASS"
+        }
+      ],
+      "passed": 1,
+      "failed": 0,
+      "prestop_runtime": "1",
+      "paused": "1",
+      "local_allow": true,
+      "clock": "1793658401698",
+      "held_report_ms": 1793658401696,
+      "first_challenge": "e322f83d798e39a47f8c88cf5e646c8abf19d94b046517d97e82d4accd29170fdc712d9dd255aee46082115050701d69",
+      "second_challenge": "",
+      "barrier_timeout": false,
+      "stops": [
+        25
+      ],
+      "worker_errors_before_first_stop": [
+        {
+          "sequence": 24,
+          "challenge": "e322f83d798e39a47f8c88cf5e646c8abf19d94b046517d97e82d4accd29170fdc712d9dd255aee46082115050701d69",
+          "error": "SEC_EVIDENCE_RELEASE_REVOKED",
+          "failure_stage": "import:evaluation",
+          "failure_supplied_ms": 1793658401700,
+          "runtime_available": "1",
+          "paused": "1",
+          "wall_ms": 1793658401702,
+          "evaluation_rows": [
+            {
+              "evaluator": "81d7a9510e97bcea393b7f59b8d3941501d0cf1723822acd8f1bef39307e6543936596dc432450db34c392a7b10d3f64",
+              "phase": "blocked",
+              "report": ""
+            }
+          ]
+        }
+      ],
+      "clock_refusals": [],
+      "rows": [
+        {
+          "challenge": "e322f83d798e39a47f8c88cf5e646c8abf19d94b046517d97e82d4accd29170fdc712d9dd255aee46082115050701d69",
+          "evaluator": "81d7a9510e97bcea393b7f59b8d3941501d0cf1723822acd8f1bef39307e6543936596dc432450db34c392a7b10d3f64",
+          "lease_until": "1793658461652",
+          "phase": "blocked",
+          "report": ""
+        }
+      ],
+      "receipts": [
+        {
+          "id": "3e6dbdf88e8acff1e2258abae4eedcc3bc20a623a31db1dbb6d82a0cbaeb27ee86fa569e209bf670670ea4f6d5c767e9",
+          "request": "e322f83d798e39a47f8c88cf5e646c8abf19d94b046517d97e82d4accd29170fdc712d9dd255aee46082115050701d69",
+          "issued_ms": 1793658401693,
+          "expires_ms": 1793658461693,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        }
+      ],
+      "reports": [],
+      "first_report_time_unchanged": null,
+      "other_clock_write_after_first_report_sample": null,
+      "controlled_task_selections": null,
+      "record_expiry_release_events": [],
+      "all_worker_errors_after_stop": [],
+      "trace_failures": false
+    },
+    "candidate/revoke": {
+      "test_outcome": [
+        {
+          "name": "time-fix-held-worker-revocation",
+          "status": "PASS"
+        }
+      ],
+      "passed": 1,
+      "failed": 0,
+      "prestop_runtime": "1",
+      "paused": "0",
+      "local_allow": true,
+      "clock": "1793658401810",
+      "held_report_ms": 1793658401807,
+      "first_challenge": "0b9b6f59640f241519a2b12fa9561af7350d64ccb2e924753f1482b9186c51c2f1487e6da3b00cc2cc59a34cee60e829",
+      "second_challenge": "",
+      "barrier_timeout": false,
+      "stops": [
+        26
+      ],
+      "worker_errors_before_first_stop": [
+        {
+          "sequence": 25,
+          "challenge": "0b9b6f59640f241519a2b12fa9561af7350d64ccb2e924753f1482b9186c51c2f1487e6da3b00cc2cc59a34cee60e829",
+          "error": "SEC_SIGNER_REVOKED",
+          "failure_stage": "import:evaluation",
+          "failure_supplied_ms": 1793658401813,
+          "runtime_available": "1",
+          "paused": "0",
+          "wall_ms": 1793658401815,
+          "evaluation_rows": [
+            {
+              "evaluator": "6812e847aaa92161dba3ec21d366cc1629e9ff20d7351f44cf812740ef95f0d6b6534a723516dad1ce2f3befa514b9be",
+              "phase": "blocked",
+              "report": ""
+            }
+          ]
+        }
+      ],
+      "clock_refusals": [],
+      "rows": [
+        {
+          "challenge": "0b9b6f59640f241519a2b12fa9561af7350d64ccb2e924753f1482b9186c51c2f1487e6da3b00cc2cc59a34cee60e829",
+          "evaluator": "6812e847aaa92161dba3ec21d366cc1629e9ff20d7351f44cf812740ef95f0d6b6534a723516dad1ce2f3befa514b9be",
+          "lease_until": "1793658461768",
+          "phase": "blocked",
+          "report": ""
+        }
+      ],
+      "receipts": [
+        {
+          "id": "39187535e3d0f1d7952f638428ed2c9baada71878b5ed0233b37d91fc63a41bda1cb46b8549e011346d7d384440cb1ef",
+          "request": "0b9b6f59640f241519a2b12fa9561af7350d64ccb2e924753f1482b9186c51c2f1487e6da3b00cc2cc59a34cee60e829",
+          "issued_ms": 1793658401804,
+          "expires_ms": 1793658461804,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        }
+      ],
+      "reports": [],
+      "first_report_time_unchanged": null,
+      "other_clock_write_after_first_report_sample": null,
+      "controlled_task_selections": null,
+      "record_expiry_release_events": [],
+      "all_worker_errors_after_stop": [],
+      "trace_failures": false
+    },
+    "candidate/local-deny": {
+      "test_outcome": [
+        {
+          "name": "time-fix-held-local-permission",
+          "status": "PASS"
+        }
+      ],
+      "passed": 1,
+      "failed": 0,
+      "prestop_runtime": "1",
+      "paused": "0",
+      "local_allow": false,
+      "clock": "1793658401916",
+      "held_report_ms": 1793658401916,
+      "first_challenge": "1bdafa382540ce967c54532f7505542dd7d42c7290ec918516576ded8999e0e165eb7bbf9e7cb79a2b521bfae1b18a8b",
+      "second_challenge": "",
+      "barrier_timeout": false,
+      "stops": [
+        24
+      ],
+      "worker_errors_before_first_stop": [
+        {
+          "sequence": 23,
+          "challenge": "1bdafa382540ce967c54532f7505542dd7d42c7290ec918516576ded8999e0e165eb7bbf9e7cb79a2b521bfae1b18a8b",
+          "error": "SEC_EVIDENCE_RELEASE_REVOKED",
+          "failure_stage": "import:evaluation",
+          "failure_supplied_ms": 1793658401920,
+          "runtime_available": "1",
+          "paused": "0",
+          "wall_ms": 1793658401922,
+          "evaluation_rows": [
+            {
+              "evaluator": "b73fcb08341d86ae870c9f6db2affd96d2931a3fcd8bc468ab0d39c008c62bb391535b60cd69203649480ff32005dfb4",
+              "phase": "blocked",
+              "report": ""
+            }
+          ]
+        }
+      ],
+      "clock_refusals": [],
+      "rows": [
+        {
+          "challenge": "1bdafa382540ce967c54532f7505542dd7d42c7290ec918516576ded8999e0e165eb7bbf9e7cb79a2b521bfae1b18a8b",
+          "evaluator": "b73fcb08341d86ae870c9f6db2affd96d2931a3fcd8bc468ab0d39c008c62bb391535b60cd69203649480ff32005dfb4",
+          "lease_until": "1793658461882",
+          "phase": "blocked",
+          "report": ""
+        }
+      ],
+      "receipts": [
+        {
+          "id": "941beeb347b4859554423b7919656553653ca371bf984b58ecb141b62755862ec1c3c4becb7edacdc95ebd6d8cfccea8",
+          "request": "1bdafa382540ce967c54532f7505542dd7d42c7290ec918516576ded8999e0e165eb7bbf9e7cb79a2b521bfae1b18a8b",
+          "issued_ms": 1793658401913,
+          "expires_ms": 1793658461913,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        }
+      ],
+      "reports": [],
+      "first_report_time_unchanged": null,
+      "other_clock_write_after_first_report_sample": null,
+      "controlled_task_selections": null,
+      "record_expiry_release_events": [],
+      "all_worker_errors_after_stop": [],
+      "trace_failures": false
+    },
+    "candidate/record-expiry": {
+      "test_outcome": [
+        {
+          "name": "time-fix-held-record-expiry",
+          "status": "PASS"
+        }
+      ],
+      "passed": 1,
+      "failed": 0,
+      "prestop_runtime": "1",
+      "paused": "0",
+      "local_allow": true,
+      "clock": "1793658401974",
+      "held_report_ms": 1793658402975,
+      "first_challenge": "e25fa62cc27cc352cae122b734a772196a3a66826e41a22c91276e9e96a96b77ce55ddeb31d4307b85fb4cd256a43aca",
+      "second_challenge": "",
+      "barrier_timeout": false,
+      "stops": [
+        24
+      ],
+      "worker_errors_before_first_stop": [
+        {
+          "sequence": 23,
+          "challenge": "e25fa62cc27cc352cae122b734a772196a3a66826e41a22c91276e9e96a96b77ce55ddeb31d4307b85fb4cd256a43aca",
+          "error": "SEC_EXPIRED_OR_FUTURE",
+          "failure_stage": "record-expiry-released-before-final-sample",
+          "failure_supplied_ms": 1793658401978,
+          "runtime_available": "1",
+          "paused": "0",
+          "wall_ms": 1793658402989,
+          "evaluation_rows": [
+            {
+              "evaluator": "4ed1e0f7c22cad44c1842ff075448eb7bc0ac66adc8751a39a9b5fd19ee4e4e259ddb2a7c6ded7615fc17ca8cf872741",
+              "phase": "blocked",
+              "report": ""
+            }
+          ]
+        }
+      ],
+      "clock_refusals": [],
+      "rows": [
+        {
+          "challenge": "e25fa62cc27cc352cae122b734a772196a3a66826e41a22c91276e9e96a96b77ce55ddeb31d4307b85fb4cd256a43aca",
+          "evaluator": "4ed1e0f7c22cad44c1842ff075448eb7bc0ac66adc8751a39a9b5fd19ee4e4e259ddb2a7c6ded7615fc17ca8cf872741",
+          "lease_until": "1793658402944",
+          "phase": "blocked",
+          "report": ""
+        }
+      ],
+      "receipts": [
+        {
+          "id": "a7664499664d9009f503f6b698d61a292f16146075aefbc83dba2bf7a5a0ffc77ab71478813ae04b30a7592e6cff05ee",
+          "request": "e25fa62cc27cc352cae122b734a772196a3a66826e41a22c91276e9e96a96b77ce55ddeb31d4307b85fb4cd256a43aca",
+          "issued_ms": 1793658401972,
+          "expires_ms": 1793658402972,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        }
+      ],
+      "reports": [],
+      "first_report_time_unchanged": null,
+      "other_clock_write_after_first_report_sample": null,
+      "controlled_task_selections": null,
+      "record_expiry_release_events": [
+        {
+          "sequence": 19,
+          "stage": "record-expiry-held-after-validation",
+          "stage_supplied_ms": 1793658401978,
+          "wall_ms": 1793658401978,
+          "persisted_clock": "1793658401974",
+          "error": ""
+        },
+        {
+          "sequence": 20,
+          "stage": "record-expiry-released-before-final-sample",
+          "stage_supplied_ms": 1793658401978,
+          "wall_ms": 1793658402985,
+          "persisted_clock": "1793658401974",
+          "error": ""
+        }
+      ],
+      "all_worker_errors_after_stop": [],
+      "trace_failures": false
+    },
+    "combined/natural": {
+      "test_outcome": [
+        {
+          "name": "scheduler-valid-work-and-two-per-tick",
+          "status": "PASS"
+        }
+      ],
+      "passed": 1,
+      "failed": 0,
+      "prestop_runtime": "1",
+      "paused": "0",
+      "local_allow": true,
+      "clock": "1793658409189",
+      "held_report_ms": 0,
+      "first_challenge": "",
+      "second_challenge": "",
+      "barrier_timeout": false,
+      "stops": [
+        137
+      ],
+      "worker_errors_before_first_stop": [],
+      "clock_refusals": [],
+      "rows": [
+        {
+          "challenge": "5533a078475926487693f242dde6a078938cd8175de410307b9e329b0a05164088b1ce10fe4cdd13160ff4dfbaf1c617",
+          "evaluator": "bed86733fe21ca1bbd40b5dc4608dbbfc24ec1725a7001f2162386e405c21e75baa3551d31793bd33dabc12c6a042f57",
+          "lease_until": "1793658463027",
+          "phase": "PASS",
+          "report": "ec9a71f9de5a1099e4325e2c8b4e4b889109467c2e303f0016cb1425b701966c63f5a10297428f45504e2059299c4d68"
+        },
+        {
+          "challenge": "9e46a38572a30fa86efaa721294a9a19e739103f3c32cc65c5b62d67cf51393403920815dbe7a7bd0a34c86cdb57ba97",
+          "evaluator": "bed86733fe21ca1bbd40b5dc4608dbbfc24ec1725a7001f2162386e405c21e75baa3551d31793bd33dabc12c6a042f57",
+          "lease_until": "1793658463027",
+          "phase": "PASS",
+          "report": "b33c176bf69dff2079edaf940aad0a655d459b8268c5c660ab56e334680a46ea852cc5e3ec6a330436f954bacd6e7da0"
+        },
+        {
+          "challenge": "add522f8f4e09dead36dac0aad4d8ce23e403af8a915f2ff3166551a1501eb60815e96aa6e5eb7bc3326b2cd8e66d588",
+          "evaluator": "bed86733fe21ca1bbd40b5dc4608dbbfc24ec1725a7001f2162386e405c21e75baa3551d31793bd33dabc12c6a042f57",
+          "lease_until": "1793658463027",
+          "phase": "PASS",
+          "report": "81687440d4d17fabfd4b9e6ee4b3cf0792b65d551850a5b15d04f993c861d7621464bb3c26725245583564e16b2f5c5f"
+        },
+        {
+          "challenge": "b504ca20e5610681f6f857e64c84350ab3376d927923d02841f58de80381340dd903ec1531594c1401baf6a0f60a1ef9",
+          "evaluator": "bed86733fe21ca1bbd40b5dc4608dbbfc24ec1725a7001f2162386e405c21e75baa3551d31793bd33dabc12c6a042f57",
+          "lease_until": "1793658463027",
+          "phase": "PASS",
+          "report": "2f4aaa11d7b642794421a00695f36e607fb45bf49f4419e8f39e27c87d8fefb513657bb2eed0083b37df1016bf75e603"
+        },
+        {
+          "challenge": "bbc6e37e793f83f6452ea64fa68f7aa8370a2bb4f68fd235dd41959abc122c00987571b519ba52d0e254961eb3f83393",
+          "evaluator": "bed86733fe21ca1bbd40b5dc4608dbbfc24ec1725a7001f2162386e405c21e75baa3551d31793bd33dabc12c6a042f57",
+          "lease_until": "1793658463027",
+          "phase": "PASS",
+          "report": "ae394283e4261f424f2c0f1eb48e3d291c0386ee3643c57771fbb9070206389f928fdffb4052bf87912c76821011577c"
+        },
+        {
+          "challenge": "c93996299cccbfe6d9cb750a97a4036a96eb64bf97f60a22435c0cb7388061eecc25c53c2b426c73d8e6bc39e35feda9",
+          "evaluator": "bed86733fe21ca1bbd40b5dc4608dbbfc24ec1725a7001f2162386e405c21e75baa3551d31793bd33dabc12c6a042f57",
+          "lease_until": "1793658463027",
+          "phase": "PASS",
+          "report": "3257d1f8c3850b442ca94e7520012c0fdeaa70b3391ae9b74d536b8eccc4c89fffcae69493528eb6f92ea06857a057be"
+        },
+        {
+          "challenge": "d0ddc3308ad21ae050fd73afe081391d024d2c0f79214d7a93c71559caba118a590c9373808e04f91ca876be69e51e0c",
+          "evaluator": "bed86733fe21ca1bbd40b5dc4608dbbfc24ec1725a7001f2162386e405c21e75baa3551d31793bd33dabc12c6a042f57",
+          "lease_until": "1793658463027",
+          "phase": "PASS",
+          "report": "f358bd93c591e28748e2c6432aeb7fcc82daec3fd198607147338491028d400de15191d53dc6fdbc97076d589b3bd649"
+        }
+      ],
+      "receipts": [
+        {
+          "id": "0c16fcd7775261f1e112b7a3ba57fa8de989b2e73559558c0bd79b63a57d47719b92ac727accd9d69de05b603d81bd4b",
+          "request": "9e46a38572a30fa86efaa721294a9a19e739103f3c32cc65c5b62d67cf51393403920815dbe7a7bd0a34c86cdb57ba97",
+          "issued_ms": 1793658403080,
+          "expires_ms": 1793658463080,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        },
+        {
+          "id": "203e9d9431befb46f9316687d9ec972906d97654f13f2cf9133e272f904eb312ea877a5843ac60db3ad8a31243a7f2fb",
+          "request": "b504ca20e5610681f6f857e64c84350ab3376d927923d02841f58de80381340dd903ec1531594c1401baf6a0f60a1ef9",
+          "issued_ms": 1793658405172,
+          "expires_ms": 1793658465172,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        },
+        {
+          "id": "5fcb39fbe572e8368577f4fdaf825fefcfa8fc5aaa1777e2adff473b22284f4fa36902a1a51dbe2d7e5deed2b6d2ff55",
+          "request": "add522f8f4e09dead36dac0aad4d8ce23e403af8a915f2ff3166551a1501eb60815e96aa6e5eb7bc3326b2cd8e66d588",
+          "issued_ms": 1793658405161,
+          "expires_ms": 1793658465161,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        },
+        {
+          "id": "61707a7f4ba1b2da01040af183deeffcd2a5afc4345890b8a2225dcd5671f6db62158d027a6e2735535136c2eefd72a3",
+          "request": "c93996299cccbfe6d9cb750a97a4036a96eb64bf97f60a22435c0cb7388061eecc25c53c2b426c73d8e6bc39e35feda9",
+          "issued_ms": 1793658407199,
+          "expires_ms": 1793658467199,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        },
+        {
+          "id": "b218252e0a33663327b718147fa1f20ce89ed30baab2eade718589c2f2915c1b4f9dd7c95c2225d3be232afd0bc2aaef",
+          "request": "bbc6e37e793f83f6452ea64fa68f7aa8370a2bb4f68fd235dd41959abc122c00987571b519ba52d0e254961eb3f83393",
+          "issued_ms": 1793658407204,
+          "expires_ms": 1793658467204,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        },
+        {
+          "id": "b7f3fa4441b4f9ae2f59c2dc5b400a01d614c442ba792b2bb4f2e190d2a345b7a5a2ed012e39aac661547c0e0c21013b",
+          "request": "d0ddc3308ad21ae050fd73afe081391d024d2c0f79214d7a93c71559caba118a590c9373808e04f91ca876be69e51e0c",
+          "issued_ms": 1793658409181,
+          "expires_ms": 1793658469181,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        },
+        {
+          "id": "f4a7de42fdd00b8cc72404948c638c0865332e1ea00d954f01f06d81993c90e3a695155f5ceeb49615aac963eba88646",
+          "request": "5533a078475926487693f242dde6a078938cd8175de410307b9e329b0a05164088b1ce10fe4cdd13160ff4dfbaf1c617",
+          "issued_ms": 1793658403088,
+          "expires_ms": 1793658463088,
+          "PASS_dispatched": true,
+          "actual_probe_runtime": true,
+          "expected_output": true,
+          "exit_code": 0,
+          "signed": true
+        }
+      ],
+      "reports": [
+        {
+          "id": "2f4aaa11d7b642794421a00695f36e607fb45bf49f4419e8f39e27c87d8fefb513657bb2eed0083b37df1016bf75e603",
+          "challenge": "b504ca20e5610681f6f857e64c84350ab3376d927923d02841f58de80381340dd903ec1531594c1401baf6a0f60a1ef9",
+          "issued_ms": 1793658405178,
+          "expires_ms": 1793658465178,
+          "outcome": "PASS",
+          "receipt_record_exists": true,
+          "challenge_binds": true,
+          "runtime_is_actual_probe": true,
+          "signed": true
+        },
+        {
+          "id": "3257d1f8c3850b442ca94e7520012c0fdeaa70b3391ae9b74d536b8eccc4c89fffcae69493528eb6f92ea06857a057be",
+          "challenge": "c93996299cccbfe6d9cb750a97a4036a96eb64bf97f60a22435c0cb7388061eecc25c53c2b426c73d8e6bc39e35feda9",
+          "issued_ms": 1793658407206,
+          "expires_ms": 1793658467206,
+          "outcome": "PASS",
+          "receipt_record_exists": true,
+          "challenge_binds": true,
+          "runtime_is_actual_probe": true,
+          "signed": true
+        },
+        {
+          "id": "81687440d4d17fabfd4b9e6ee4b3cf0792b65d551850a5b15d04f993c861d7621464bb3c26725245583564e16b2f5c5f",
+          "challenge": "add522f8f4e09dead36dac0aad4d8ce23e403af8a915f2ff3166551a1501eb60815e96aa6e5eb7bc3326b2cd8e66d588",
+          "issued_ms": 1793658405170,
+          "expires_ms": 1793658465170,
+          "outcome": "PASS",
+          "receipt_record_exists": true,
+          "challenge_binds": true,
+          "runtime_is_actual_probe": true,
+          "signed": true
+        },
+        {
+          "id": "ae394283e4261f424f2c0f1eb48e3d291c0386ee3643c57771fbb9070206389f928fdffb4052bf87912c76821011577c",
+          "challenge": "bbc6e37e793f83f6452ea64fa68f7aa8370a2bb4f68fd235dd41959abc122c00987571b519ba52d0e254961eb3f83393",
+          "issued_ms": 1793658407211,
+          "expires_ms": 1793658467211,
+          "outcome": "PASS",
+          "receipt_record_exists": true,
+          "challenge_binds": true,
+          "runtime_is_actual_probe": true,
+          "signed": true
+        },
+        {
+          "id": "b33c176bf69dff2079edaf940aad0a655d459b8268c5c660ab56e334680a46ea852cc5e3ec6a330436f954bacd6e7da0",
+          "challenge": "9e46a38572a30fa86efaa721294a9a19e739103f3c32cc65c5b62d67cf51393403920815dbe7a7bd0a34c86cdb57ba97",
+          "issued_ms": 1793658403087,
+          "expires_ms": 1793658463087,
+          "outcome": "PASS",
+          "receipt_record_exists": true,
+          "challenge_binds": true,
+          "runtime_is_actual_probe": true,
+          "signed": true
+        },
+        {
+          "id": "ec9a71f9de5a1099e4325e2c8b4e4b889109467c2e303f0016cb1425b701966c63f5a10297428f45504e2059299c4d68",
+          "challenge": "5533a078475926487693f242dde6a078938cd8175de410307b9e329b0a05164088b1ce10fe4cdd13160ff4dfbaf1c617",
+          "issued_ms": 1793658403092,
+          "expires_ms": 1793658463092,
+          "outcome": "PASS",
+          "receipt_record_exists": true,
+          "challenge_binds": true,
+          "runtime_is_actual_probe": true,
+          "signed": true
+        },
+        {
+          "id": "f358bd93c591e28748e2c6432aeb7fcc82daec3fd198607147338491028d400de15191d53dc6fdbc97076d589b3bd649",
+          "challenge": "d0ddc3308ad21ae050fd73afe081391d024d2c0f79214d7a93c71559caba118a590c9373808e04f91ca876be69e51e0c",
+          "issued_ms": 1793658409185,
+          "expires_ms": 1793658469185,
+          "outcome": "PASS",
+          "receipt_record_exists": true,
+          "challenge_binds": true,
+          "runtime_is_actual_probe": true,
+          "signed": true
+        }
+      ],
+      "first_report_time_unchanged": null,
+      "other_clock_write_after_first_report_sample": null,
+      "controlled_task_selections": null,
+      "record_expiry_release_events": [],
+      "all_worker_errors_after_stop": [],
+      "trace_failures": false
+    }
+  }
+}

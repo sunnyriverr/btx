@@ -1,0 +1,34 @@
+--- a/service.cpp
++++ b/service.cpp
+@@ -1,5 +1,6 @@
+ // Copyright (c) 2026 The BTX developers. MIT license.
+ #include <modelnet/security_v2/service.h>
++#include <modelnet/security_v2/diagnostic.h>
+ #include <modelnet/security_v2/mesh.h>
+ #include <modelnet/security_v2/work.h>
+ #include <chrono>
+@@ -149,7 +150,9 @@
+         }
+         Json Perform(Database& db,const Json& request) {
+             const auto op=Text(request,"op",64);
++            diagnostic::BeforePerform();
+             const auto now=NowMs();
++            diagnostic::Captured(now);
+             Broker broker(db,boot);
+             if(op=="execute") {
+                 Fields(request, {
+@@ -211,12 +214,14 @@
+                     queue.pop_front();
+                     task->phase="running";
+                 }
++                diagnostic::Task(task->id,task->request["challenge"].isStr()?task->request["challenge"].get_str():std::string{});
+                 Json result;
+                 try {
+                     Database db(root);
+                     result=Perform(db,task->request);
+                 }
+                 catch(const Error& e) {
++                    diagnostic::WorkerError(root,e.code);
+                     result=Failure(e.code);
+                 }
+                 catch(...) {

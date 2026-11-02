@@ -1,0 +1,559 @@
+[
+  {
+    "variant": "baseline",
+    "mode": "controlled",
+    "test": "time-fix-ordered-valid-work",
+    "exit": 1,
+    "timeout": false,
+    "seconds": 0.1159167200000013,
+    "passed": 0,
+    "failed": 1,
+    "tests": [
+      {
+        "error": "first ordered valid job lost its report",
+        "name": "time-fix-ordered-valid-work",
+        "status": "FAIL"
+      }
+    ],
+    "worker_errors": [
+      {
+        "challenge": "307ba5cf881655ffd99f0ed085245ecc289c0f76e8b17fcfb631e1fab0005e4ba4add9dd9f90e6a670bd1d4a7f3c04eb",
+        "error": "SEC_CLOCK_ROLLBACK",
+        "evaluation_rows": [
+          {
+            "evaluator": "8802ec0a8b80742fe78ab8a218b4071bf038561c083723d372c8ad5530906467aa8090b5e477ec1368c1c20a8f658a74",
+            "phase": "blocked",
+            "report": ""
+          }
+        ],
+        "event": "stage",
+        "failure_error": "SEC_CLOCK_ROLLBACK",
+        "failure_stage": "import:evaluation",
+        "failure_supplied_ms": 1793658397413,
+        "mode": "controlled",
+        "paused": "0",
+        "perform_captured_ms": 1793658397403,
+        "persisted_clock": "1793658397426",
+        "runtime_available": "1",
+        "sequence": 49,
+        "stage": "worker-error-after:evaluation-blocked-row-committed",
+        "stage_supplied_ms": 0,
+        "steady_us": 153763224,
+        "task": "3c6d5acd7d67ef80c6084f42b99fd31676105ab503c1bb03f8573146b27de779fd39107aa6b149742d99d556ff2ac644",
+        "thread": "281472843028952",
+        "wall_ms": 1793658397430
+      }
+    ],
+    "prestop_snapshot": true,
+    "postjoin_snapshot": true
+  },
+  {
+    "variant": "baseline",
+    "mode": "rollback",
+    "test": "time-fix-rollback-contract",
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.06436170599999969,
+    "passed": 1,
+    "failed": 0,
+    "tests": [
+      {
+        "name": "time-fix-rollback-contract",
+        "status": "PASS"
+      }
+    ],
+    "worker_errors": [
+      {
+        "challenge": "9e97a35b37ae57056a7ef0a6994a7963afcc79b71fc09f84d6491630bab89de0ceb8d73b72f7aaf5e1240bb25000e0d2",
+        "error": "SEC_CLOCK_ROLLBACK",
+        "evaluation_rows": [],
+        "event": "stage",
+        "failure_error": "",
+        "failure_stage": "",
+        "failure_supplied_ms": 0,
+        "mode": "rollback",
+        "paused": "0",
+        "perform_captured_ms": 1793658397521,
+        "persisted_clock": "1793658457513",
+        "runtime_available": "1",
+        "sequence": 37,
+        "stage": "worker-error-after:evaluate-entry",
+        "stage_supplied_ms": 1793658397521,
+        "steady_us": 153856347,
+        "task": "fe64a41ef37972857acee36677dbac33dd66047c4eb59f8656b8d17c882799f536b56e6f0b2bed158253b24851284f99",
+        "thread": "281472843905496",
+        "wall_ms": 1793658397523
+      }
+    ],
+    "prestop_snapshot": true,
+    "postjoin_snapshot": true
+  },
+  {
+    "variant": "baseline",
+    "mode": "challenge-expiry",
+    "test": "time-fix-held-challenge-expiry",
+    "exit": 1,
+    "timeout": false,
+    "seconds": 1.2779781990000174,
+    "passed": 0,
+    "failed": 1,
+    "tests": [
+      {
+        "error": "held invalid authority/expiry released a report",
+        "name": "time-fix-held-challenge-expiry",
+        "status": "FAIL"
+      }
+    ],
+    "worker_errors": [],
+    "prestop_snapshot": true,
+    "postjoin_snapshot": true
+  },
+  {
+    "variant": "baseline",
+    "mode": "pause",
+    "test": "time-fix-held-pause",
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.11548613300001875,
+    "passed": 1,
+    "failed": 0,
+    "tests": [
+      {
+        "name": "time-fix-held-pause",
+        "status": "PASS"
+      }
+    ],
+    "worker_errors": [
+      {
+        "challenge": "2ec38f1c00bea8f4686274b5ca6beaabe9cb4282df02f4ec44bd6a8fe029c72622d2ace7c76c9d311535a92b8594b880",
+        "error": "SEC_CLOCK_ROLLBACK",
+        "evaluation_rows": [
+          {
+            "evaluator": "03ccc527ec686b833ff5fdc7c4d55d02e9dca3ec0cd058a16fe9190801da01e68aaaa981c2dd521748dcc611c1b64799",
+            "phase": "blocked",
+            "report": ""
+          }
+        ],
+        "event": "stage",
+        "failure_error": "SEC_CLOCK_ROLLBACK",
+        "failure_stage": "import:evaluation",
+        "failure_supplied_ms": 1793658398877,
+        "mode": "pause",
+        "paused": "1",
+        "perform_captured_ms": 1793658398864,
+        "persisted_clock": "1793658398879",
+        "runtime_available": "1",
+        "sequence": 28,
+        "stage": "worker-error-after:evaluation-blocked-row-committed",
+        "stage_supplied_ms": 0,
+        "steady_us": 155213724,
+        "task": "254731f7def28110368bdccd08c42d5067dbf4a6ccb7f568a1086b31eacc2dc3eecd398bf7cc2b0ab3fc2b681c7374be",
+        "thread": "281473004624344",
+        "wall_ms": 1793658398880
+      }
+    ],
+    "prestop_snapshot": true,
+    "postjoin_snapshot": true
+  },
+  {
+    "variant": "baseline",
+    "mode": "revoke",
+    "test": "time-fix-held-worker-revocation",
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.11567984299998102,
+    "passed": 1,
+    "failed": 0,
+    "tests": [
+      {
+        "name": "time-fix-held-worker-revocation",
+        "status": "PASS"
+      }
+    ],
+    "worker_errors": [
+      {
+        "challenge": "2224dae25e2c58804a1f498e26bf18f0764701f173ee2499a621ce1e4f388aff8aa89ac6c7f5e8491dc5c003308aa87b",
+        "error": "SEC_SIGNER_REVOKED",
+        "evaluation_rows": [
+          {
+            "evaluator": "aa03dba686e8dd2b697cb3d165bc4b19fe82b87cb3333f46507a1358d1aff61a7a762fe47cb23a7010656cdc7434e9a8",
+            "phase": "blocked",
+            "report": ""
+          }
+        ],
+        "event": "stage",
+        "failure_error": "SEC_SIGNER_REVOKED",
+        "failure_stage": "import:evaluation",
+        "failure_supplied_ms": 1793658398976,
+        "mode": "revoke",
+        "paused": "0",
+        "perform_captured_ms": 1793658398965,
+        "persisted_clock": "1793658398980",
+        "runtime_available": "1",
+        "sequence": 29,
+        "stage": "worker-error-after:evaluation-blocked-row-committed",
+        "stage_supplied_ms": 0,
+        "steady_us": 155315526,
+        "task": "12a92318a72fbd31a94963aea04a0c787a2d133216ff9abf3c2c3e74f09ffbd86e8ea0d635122a30643648f465fef065",
+        "thread": "281473221392856",
+        "wall_ms": 1793658398982
+      }
+    ],
+    "prestop_snapshot": true,
+    "postjoin_snapshot": true
+  },
+  {
+    "variant": "baseline",
+    "mode": "local-deny",
+    "test": "time-fix-held-local-permission",
+    "exit": 1,
+    "timeout": false,
+    "seconds": 0.06506146199998852,
+    "passed": 0,
+    "failed": 1,
+    "tests": [
+      {
+        "error": "held invalid authority/expiry released a report",
+        "name": "time-fix-held-local-permission",
+        "status": "FAIL"
+      }
+    ],
+    "worker_errors": [],
+    "prestop_snapshot": true,
+    "postjoin_snapshot": true
+  },
+  {
+    "variant": "baseline",
+    "mode": "record-expiry",
+    "test": "time-fix-held-record-expiry",
+    "exit": 1,
+    "timeout": false,
+    "seconds": 1.0686727239999811,
+    "passed": 0,
+    "failed": 1,
+    "tests": [
+      {
+        "error": "held invalid authority/expiry released a report",
+        "name": "time-fix-held-record-expiry",
+        "status": "FAIL"
+      }
+    ],
+    "worker_errors": [],
+    "prestop_snapshot": true,
+    "postjoin_snapshot": true
+  },
+  {
+    "variant": "candidate",
+    "mode": "controlled",
+    "test": "time-fix-ordered-valid-work",
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.11586265500000081,
+    "passed": 1,
+    "failed": 0,
+    "tests": [
+      {
+        "name": "time-fix-ordered-valid-work",
+        "status": "PASS"
+      }
+    ],
+    "worker_errors": [],
+    "prestop_snapshot": true,
+    "postjoin_snapshot": true
+  },
+  {
+    "variant": "candidate",
+    "mode": "rollback",
+    "test": "time-fix-rollback-contract",
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.06417196099999956,
+    "passed": 1,
+    "failed": 0,
+    "tests": [
+      {
+        "name": "time-fix-rollback-contract",
+        "status": "PASS"
+      }
+    ],
+    "worker_errors": [
+      {
+        "challenge": "f2c768a3b915ee1cbae4fa5d6cd4c080a69fa5fb7edfb5556041b17b4b77f9d93395d895573fd4e34626a7263d1c4d06",
+        "error": "SEC_CLOCK_ROLLBACK",
+        "evaluation_rows": [],
+        "event": "stage",
+        "failure_error": "",
+        "failure_stage": "",
+        "failure_supplied_ms": 0,
+        "mode": "rollback",
+        "paused": "0",
+        "perform_captured_ms": 1793658400343,
+        "persisted_clock": "1793658460335",
+        "runtime_available": "1",
+        "sequence": 33,
+        "stage": "worker-error-after:evaluate-entry",
+        "stage_supplied_ms": 0,
+        "steady_us": 156677954,
+        "task": "1e0a090d6ad7e54d82f45f4e8375b22709fdee315cce88a1a9b357384becad0a99c24cd9aede9787b4a35999dfbeb2a9",
+        "thread": "281473024260568",
+        "wall_ms": 1793658400345
+      }
+    ],
+    "prestop_snapshot": true,
+    "postjoin_snapshot": true
+  },
+  {
+    "variant": "candidate",
+    "mode": "challenge-expiry",
+    "test": "time-fix-held-challenge-expiry",
+    "exit": 0,
+    "timeout": false,
+    "seconds": 1.2766796239999962,
+    "passed": 1,
+    "failed": 0,
+    "tests": [
+      {
+        "name": "time-fix-held-challenge-expiry",
+        "status": "PASS"
+      }
+    ],
+    "worker_errors": [
+      {
+        "challenge": "393313685b2382d6eff40f9a4b2063c1ce280eb619f7ef137a5db7fd36efeb5ce96d73b0af3fe35a6dd3bf1d767a8084",
+        "error": "SEC_EVIDENCE_RELEASE_REVOKED",
+        "evaluation_rows": [
+          {
+            "evaluator": "f6c58f9957709ac5e4d1d0c4419ffa574958d7f33b421b880a437b2777cf59d488fb3af8ecdaff07460c3ffcf0e590bb",
+            "phase": "blocked",
+            "report": ""
+          }
+        ],
+        "event": "stage",
+        "failure_error": "SEC_EVIDENCE_RELEASE_REVOKED",
+        "failure_stage": "import:evaluation",
+        "failure_supplied_ms": 1793658401588,
+        "mode": "challenge-expiry",
+        "paused": "0",
+        "perform_captured_ms": 1793658400387,
+        "persisted_clock": "1793658400399",
+        "runtime_available": "1",
+        "sequence": 23,
+        "stage": "worker-error-after:evaluation-blocked-row-committed",
+        "stage_supplied_ms": 0,
+        "steady_us": 157928485,
+        "task": "9bbd7386eef509b9f5ecda8e306e949e68246e004d707265e9819cfeba3cd0cdc08500d470f911e512c3d2bdfd13e482",
+        "thread": "281472828348888",
+        "wall_ms": 1793658401595
+      }
+    ],
+    "prestop_snapshot": true,
+    "postjoin_snapshot": true
+  },
+  {
+    "variant": "candidate",
+    "mode": "pause",
+    "test": "time-fix-held-pause",
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.12010599399999933,
+    "passed": 1,
+    "failed": 0,
+    "tests": [
+      {
+        "name": "time-fix-held-pause",
+        "status": "PASS"
+      }
+    ],
+    "worker_errors": [
+      {
+        "challenge": "e322f83d798e39a47f8c88cf5e646c8abf19d94b046517d97e82d4accd29170fdc712d9dd255aee46082115050701d69",
+        "error": "SEC_EVIDENCE_RELEASE_REVOKED",
+        "evaluation_rows": [
+          {
+            "evaluator": "81d7a9510e97bcea393b7f59b8d3941501d0cf1723822acd8f1bef39307e6543936596dc432450db34c392a7b10d3f64",
+            "phase": "blocked",
+            "report": ""
+          }
+        ],
+        "event": "stage",
+        "failure_error": "SEC_EVIDENCE_RELEASE_REVOKED",
+        "failure_stage": "import:evaluation",
+        "failure_supplied_ms": 1793658401700,
+        "mode": "pause",
+        "paused": "1",
+        "perform_captured_ms": 1793658401678,
+        "persisted_clock": "1793658401698",
+        "runtime_available": "1",
+        "sequence": 24,
+        "stage": "worker-error-after:evaluation-blocked-row-committed",
+        "stage_supplied_ms": 0,
+        "steady_us": 158035298,
+        "task": "b6bf7b72c1809d9903015bca9cbf82e2a8f6aaec63399aea5a5553da22aed6171b100bfe32f9ac222622c95d9c8a1a1d",
+        "thread": "281473305278936",
+        "wall_ms": 1793658401702
+      }
+    ],
+    "prestop_snapshot": true,
+    "postjoin_snapshot": true
+  },
+  {
+    "variant": "candidate",
+    "mode": "revoke",
+    "test": "time-fix-held-worker-revocation",
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.11460936200001015,
+    "passed": 1,
+    "failed": 0,
+    "tests": [
+      {
+        "name": "time-fix-held-worker-revocation",
+        "status": "PASS"
+      }
+    ],
+    "worker_errors": [
+      {
+        "challenge": "0b9b6f59640f241519a2b12fa9561af7350d64ccb2e924753f1482b9186c51c2f1487e6da3b00cc2cc59a34cee60e829",
+        "error": "SEC_SIGNER_REVOKED",
+        "evaluation_rows": [
+          {
+            "evaluator": "6812e847aaa92161dba3ec21d366cc1629e9ff20d7351f44cf812740ef95f0d6b6534a723516dad1ce2f3befa514b9be",
+            "phase": "blocked",
+            "report": ""
+          }
+        ],
+        "event": "stage",
+        "failure_error": "SEC_SIGNER_REVOKED",
+        "failure_stage": "import:evaluation",
+        "failure_supplied_ms": 1793658401813,
+        "mode": "revoke",
+        "paused": "0",
+        "perform_captured_ms": 1793658401790,
+        "persisted_clock": "1793658401810",
+        "runtime_available": "1",
+        "sequence": 25,
+        "stage": "worker-error-after:evaluation-blocked-row-committed",
+        "stage_supplied_ms": 0,
+        "steady_us": 158147910,
+        "task": "15811621e3d5d3cdbe11bcdfffc4b01d0d4553a80d17fe991f2fefe5402c62a01ea51497ba920f8e9bfabcc482157bc5",
+        "thread": "281473812449752",
+        "wall_ms": 1793658401815
+      }
+    ],
+    "prestop_snapshot": true,
+    "postjoin_snapshot": true
+  },
+  {
+    "variant": "candidate",
+    "mode": "local-deny",
+    "test": "time-fix-held-local-permission",
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.06405762700001105,
+    "passed": 1,
+    "failed": 0,
+    "tests": [
+      {
+        "name": "time-fix-held-local-permission",
+        "status": "PASS"
+      }
+    ],
+    "worker_errors": [
+      {
+        "challenge": "1bdafa382540ce967c54532f7505542dd7d42c7290ec918516576ded8999e0e165eb7bbf9e7cb79a2b521bfae1b18a8b",
+        "error": "SEC_EVIDENCE_RELEASE_REVOKED",
+        "evaluation_rows": [
+          {
+            "evaluator": "b73fcb08341d86ae870c9f6db2affd96d2931a3fcd8bc468ab0d39c008c62bb391535b60cd69203649480ff32005dfb4",
+            "phase": "blocked",
+            "report": ""
+          }
+        ],
+        "event": "stage",
+        "failure_error": "SEC_EVIDENCE_RELEASE_REVOKED",
+        "failure_stage": "import:evaluation",
+        "failure_supplied_ms": 1793658401920,
+        "mode": "local-deny",
+        "paused": "0",
+        "perform_captured_ms": 1793658401902,
+        "persisted_clock": "1793658401916",
+        "runtime_available": "1",
+        "sequence": 23,
+        "stage": "worker-error-after:evaluation-blocked-row-committed",
+        "stage_supplied_ms": 0,
+        "steady_us": 158254913,
+        "task": "66b4e83b28b3443f93e16f78c85d1af3d2d890d4ce3e14eb7a6b4bec779eb4fd23232118576563f1046aea2048c54c14",
+        "thread": "281473452079576",
+        "wall_ms": 1793658401922
+      }
+    ],
+    "prestop_snapshot": true,
+    "postjoin_snapshot": true
+  },
+  {
+    "variant": "candidate",
+    "mode": "record-expiry",
+    "test": "time-fix-held-record-expiry",
+    "exit": 0,
+    "timeout": false,
+    "seconds": 1.073234934999988,
+    "passed": 1,
+    "failed": 0,
+    "tests": [
+      {
+        "name": "time-fix-held-record-expiry",
+        "status": "PASS"
+      }
+    ],
+    "worker_errors": [
+      {
+        "challenge": "e25fa62cc27cc352cae122b734a772196a3a66826e41a22c91276e9e96a96b77ce55ddeb31d4307b85fb4cd256a43aca",
+        "error": "SEC_EXPIRED_OR_FUTURE",
+        "evaluation_rows": [
+          {
+            "evaluator": "4ed1e0f7c22cad44c1842ff075448eb7bc0ac66adc8751a39a9b5fd19ee4e4e259ddb2a7c6ded7615fc17ca8cf872741",
+            "phase": "blocked",
+            "report": ""
+          }
+        ],
+        "event": "stage",
+        "failure_error": "SEC_EXPIRED_OR_FUTURE",
+        "failure_stage": "record-expiry-released-before-final-sample",
+        "failure_supplied_ms": 1793658401978,
+        "mode": "record-expiry",
+        "paused": "0",
+        "perform_captured_ms": 1793658401962,
+        "persisted_clock": "1793658401974",
+        "runtime_available": "1",
+        "sequence": 23,
+        "stage": "worker-error-after:evaluation-blocked-row-committed",
+        "stage_supplied_ms": 0,
+        "steady_us": 159322193,
+        "task": "598d2a771018f818eec53e31aa83d81eb20acd940e4af18c67b27465a1124b011f69a8c901affd5fc046a2574d90a151",
+        "thread": "281472828488152",
+        "wall_ms": 1793658402989
+      }
+    ],
+    "prestop_snapshot": true,
+    "postjoin_snapshot": true
+  },
+  {
+    "variant": "combined",
+    "mode": "natural",
+    "test": "scheduler-valid-work-and-two-per-tick",
+    "exit": 0,
+    "timeout": false,
+    "seconds": 6.200072121999995,
+    "passed": 1,
+    "failed": 0,
+    "tests": [
+      {
+        "name": "scheduler-valid-work-and-two-per-tick",
+        "status": "PASS"
+      }
+    ],
+    "worker_errors": [],
+    "prestop_snapshot": true,
+    "postjoin_snapshot": true
+  }
+]

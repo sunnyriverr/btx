@@ -1,0 +1,145 @@
+--- a/trust.cpp
++++ b/trust.cpp
+@@ -1,5 +1,6 @@
+ // Copyright (c) 2026 The BTX developers. MIT license.
+ #include <modelnet/security_v2/trust.h>
++#include <modelnet/security_v2/diagnostic.h>
+ #include <algorithm>
+ #include <array>
+ #include <cctype>
+@@ -201,6 +202,7 @@
+         Require(weights&&tokenizer&&config&&chat,"SEC_COMPOSITION_INCOMPLETE");
+     }
+     static std::string ValidateImport(Database& db,const Policy& p,const Json& e,int64_t now,bool peer) {
++        diagnostic::ImportBegin(db,Text(e,"kind"),now);
+         ValidateEnvelope(e);
+         auto kind=Text(e,"kind");
+         const auto& b=e["body"];
+@@ -426,6 +428,7 @@
+         Require(current.id==expected.id,"SEC_POLICY_CHANGED");
+         const auto id=ValidateImport(db,current,e,NowMs(),false);
+         Require(allowed(),"SEC_EVIDENCE_RELEASE_REVOKED");
++        diagnostic::BeforePersist(db,e,NowMs());
+         // Event timestamps belong to the signed record. Persistence uses fresh
+         // serialized time, including after signature/authority validation.
+         const auto commit=NowMs();
+@@ -433,6 +436,7 @@
+         Fresh(e["body"],commit,current.evidence_ttl_ms);
+         StoreImport(db,current,e,id,commit);
+         tx.Commit();
++        diagnostic::ImportCommitted(db,kind,commit);
+     }
+     Admission AdmitCapsule(Database& db,const Policy& p,const std::string& id,int64_t now) {
+         Require(!db.AncestryRevoked(id,now),"SEC_QUARANTINE");
+--- a/evaluation.cpp
++++ b/evaluation.cpp
+@@ -1,5 +1,6 @@
+ // Copyright (c) 2026 The BTX developers. MIT license.
+ #include <modelnet/security_v2/evaluation.h>
++#include <modelnet/security_v2/diagnostic.h>
+ #include <algorithm>
+ #include <optional>
+ namespace modelnet::security {
+@@ -110,6 +111,7 @@
+         if(result.reason.empty()&&result.outcome=="FAIL")result.reason="SEC_EXPECTED_OUTPUT_MISMATCH";
+         Require(allowed(),"SEC_EVIDENCE_RELEASE_REVOKED");
+         const auto finished=NowMs();
++        diagnostic::Stage(db,"receipt-time-captured",finished);
+         Json body=Object();
+         body.pushKV("realm",p.realm);
+         body.pushKV("policy_epoch",p.epoch);
+@@ -136,12 +138,14 @@
+         body.pushKV("limits",observed);
+         result.receipt=Envelope("receipt",body);
+         AddSignature(result.receipt,key);
++        diagnostic::Stage(db,"receipt-before-import",finished);
+         ImportCurrentEvidence(db,p,result.receipt,[&] {
+             return EvaluationGranted(ReadLocalConfig(db))&&allowed();
+         });
+         return result;
+     }
+     static Json Evaluate(Database& db,const std::string& challenge_id,int64_t now,bool current_time) {
++        diagnostic::Stage(db,"evaluate-entry",now);
+         Policy p;
+         KeyPair key;
+         Json e,local;
+@@ -186,6 +190,7 @@
+             });
+             db.Event("evaluation-started",challenge_id,Object());
+             tx->Commit();
++            diagnostic::Stage(db,"evaluation-running",commit);
+         }
+         const auto& ch=e["body"];
+         auto allowed=[&]() {
+@@ -217,6 +222,7 @@
+             body.pushKV("execution_receipt",RecordId(run.receipt));
+             body.pushKV("output_digest",run.receipt["body"]["output_digest"]);
+             const auto finished=NowMs();
++            diagnostic::Stage(db,"evaluation-report-time-captured",finished);
+             body.pushKV("issued_ms",finished);
+             body.pushKV("expires_ms",static_cast<uint64_t>(finished)+p.evidence_ttl_ms);
+             body.pushKV("host",Text(local,"host",128));
+@@ -228,7 +234,9 @@
+             auto report=Envelope("evaluation",body);
+             AddSignature(report,key);
+             Require(allowed(),"SEC_EVIDENCE_RELEASE_REVOKED");
++            diagnostic::BeforeReport(db,finished);
+             ImportCurrentEvidence(db,p,report,allowed);
++            diagnostic::Stage(db,"evaluation-report-import-returned",finished);
+             Database::Transaction tx(db);
+             db.Exec("UPDATE evaluation_runs SET phase=?,report=? WHERE challenge=? AND evaluator=?",
+             {
+@@ -236,9 +244,11 @@
+             });
+             db.Event("evaluation-finished",RecordId(report),Object());
+             tx.Commit();
++            diagnostic::EvaluationCommitted(db);
+             return report;
+         }
+         catch(...) {
++            diagnostic::Caught(db);
+             Database::Transaction tx(db);
+             db.Exec("UPDATE evaluation_runs SET phase='blocked' WHERE challenge=? AND evaluator=?",
+             {
+@@ -246,6 +256,7 @@
+             });
+             db.Event("evaluation-blocked",challenge_id,Object());
+             tx.Commit();
++            diagnostic::Stage(db,"evaluation-blocked-row-committed");
+             throw;
+         }
+     }
+--- a/service.cpp
++++ b/service.cpp
+@@ -1,5 +1,6 @@
+ // Copyright (c) 2026 The BTX developers. MIT license.
+ #include <modelnet/security_v2/service.h>
++#include <modelnet/security_v2/diagnostic.h>
+ #include <modelnet/security_v2/mesh.h>
+ #include <modelnet/security_v2/work.h>
+ #include <chrono>
+@@ -149,7 +150,9 @@
+         }
+         Json Perform(Database& db,const Json& request) {
+             const auto op=Text(request,"op",64);
++            diagnostic::BeforePerform();
+             const auto now=NowMs();
++            diagnostic::Captured(now);
+             Broker broker(db,boot);
+             if(op=="execute") {
+                 Fields(request, {
+@@ -211,12 +214,14 @@
+                     queue.pop_front();
+                     task->phase="running";
+                 }
++                diagnostic::Task(task->id,task->request["challenge"].isStr()?task->request["challenge"].get_str():std::string{});
+                 Json result;
+                 try {
+                     Database db(root);
+                     result=Perform(db,task->request);
+                 }
+                 catch(const Error& e) {
++                    diagnostic::WorkerError(root,e.code);
+                     result=Failure(e.code);
+                 }
+                 catch(...) {

@@ -1,0 +1,17 @@
+--- a/src/modelnet/security_v2/database.cpp
++++ b/src/modelnet/security_v2/database.cpp
+@@ -1,5 +1,6 @@
+ // Copyright (c) 2026 The BTX developers. MIT license.
+ #include <modelnet/security_v2/database.h>
++#include <modelnet/security_v2/diagnostic.h>
+ #include <charconv>
+ #include <set>
+ #ifndef _WIN32
+@@ -156,6 +157,7 @@
+     void Database::CheckClock(int64_t now) {
+         Require(now>0,"SEC_CLOCK");
+         uint64_t last=ParseUInt(Meta("clock","0"));
++        diagnostic::Clock(now,last,static_cast<uint64_t>(now)>=last);
+         Require(static_cast<uint64_t>(now)>=last,"SEC_CLOCK_ROLLBACK");
+         SetMeta("clock",std::to_string(now));
+     }
