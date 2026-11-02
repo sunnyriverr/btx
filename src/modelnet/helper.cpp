@@ -2143,6 +2143,22 @@ static SearchIndex g_search_idx;
 static SearchRuntime g_search_rt;
 static std::mutex g_search_mu;
 static std::map<std::string, std::vector<ProviderObservation>> g_search_obs;
+// Call only after a successful catalog transition has stopped local seeding.
+// Remote observations for the same model retain their existing semantics.
+void ForgetLocalProviderObservation(ModelCatalog& cat, const Digest48& id)
+{
+    std::lock_guard<std::mutex> lock(g_search_mu);
+    CatalogEntry entry;
+    if (cat.Find(id, entry) && entry.seeded) return; // A concurrent reseed wins.
+    auto it = g_search_obs.find(id.Hex());
+    if (it == g_search_obs.end()) return;
+    auto& obs = it->second;
+    obs.erase(std::remove_if(obs.begin(), obs.end(),
+                             [](const ProviderObservation& o) { return o.provider_id == "local"; }),
+              obs.end());
+    if (obs.empty()) g_search_obs.erase(it);
+}
+
 static QueryDedupe g_search_dedupe;
 static bool g_search_bound{false};
 static FeedStore g_feed;
@@ -6887,6 +6903,7 @@ bool DispatchHelperRpc(ModelCatalog& cat, const UniValue& request, UniValue& res
             err_code = "NOT_FOUND";
             return false;
         }
+        ForgetLocalProviderObservation(cat, id);
         result.pushKV("schema_version", 2);
         result.pushKV("model_id", id.Hex());
         result.pushKV("pinned", false);
@@ -6927,6 +6944,7 @@ bool DispatchHelperRpc(ModelCatalog& cat, const UniValue& request, UniValue& res
             return false;
         }
         std::error_code ec;
+        ForgetLocalProviderObservation(cat, id);
         const fs::path checkout = HelperDir(cat) / "checkout" / fs::PathFromString(artifact.Hex());
         const uintmax_t removed = fs::remove_all(checkout, ec);
         result.pushKV("schema_version", 2);
@@ -7554,7 +7572,9 @@ bool DispatchHelperRpc(ModelCatalog& cat, const UniValue& request, UniValue& res
         EnsureSearchBound();
         const Digest48 id = ResolveUserId(Arg(0).get_str(), err);
         std::lock_guard<std::mutex> lock(g_search_mu);
-        const auto obs = g_search_obs[id.Hex()];
+        const auto it = g_search_obs.find(id.Hex());
+        const std::vector<ProviderObservation> empty;
+        const auto& obs = it == g_search_obs.end() ? empty : it->second;
         const SwarmHealth h = ComputeSwarmHealth(0, 0, obs);
         if (method == "getmodelproviders") {
             UniValue arr(UniValue::VARR);
@@ -7952,6 +7972,7 @@ bool DispatchHelperRpc(ModelCatalog& cat, const UniValue& request, UniValue& res
             return false;
         }
         result.pushKV("schema_version", 2);
+        if (method == "unseedmodel") ForgetLocalProviderObservation(cat, id);
         result.pushKV("seeded", method == "seedmodel");
         AttachLocalShare(cat, id, result);
         result.pushKV("next_actions", NextActionsArray({"getmodeltransfers", "unhostmodel"}));
