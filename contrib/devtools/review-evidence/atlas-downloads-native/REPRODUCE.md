@@ -1,0 +1,12 @@
+# Reproduce the scoped native check
+
+Read PLAN.md, REPORT.md and source/backend identities first. These scripts use private paths on this Mac; adapt paths and use fresh disposable directories. Do not launch retired production node data. Use the recorded exact official Atlas head using `cargo build --offline --locked --release -p btx-atlas -j 1` (offline crate cache required; Rust 1.95), package the release binary in a separate local app with matching identifier dev.btx.atlas.downloadstest. Build uses a1.25GiB free-disk guard.
+
+1. Adapt the retained `lab.py` paths to your locally built, hash-recorded binaries and start it in a fresh evidence directory (it refuses an existing lab-state.json). It launches two loopback PQ1 helpers and wallet-disabled height-zero regtest node with all external discovery/seeds disabled.
+2. Create SafeTensors fixture: 8-byte little-endian header length, compact JSON {"weight":{"dtype":"F32","shape":[2359296],"data_offsets":[0,9437184]}} padded with spaces to8byte boundary, then9MiB zero bytes. Original received file is9,437,264bytes including header.
+3. On seed helper call importmodel(path), then seedmodel(model_id), retain original SHA384 and getmodelmanifest. Never call loadmodel/generatemodel.
+4. Open native app, choose loopback RPC endpoint and its disposable .cookie using OS picker, approve native connection. Models→Downloads, confirm empty transfer columns. Save accessibility state.
+5. SIGSTOP only the owned seed PID. Call node getmodel(uri, FREE_ONLY). Let normal UI polling display downloading with the returned job ID; save state. Do not click/navigate/refresh after Downloads selection. SIGCONT seed promptly (this run26seconds;2retries disclosed).
+6. Poll getmodeljob(job_id): actual status is response.jobs[0].status, NOT response.status. Poll getmodeltransfers. Observe native UI with read-only accessibility/screenshot until samejoblocal/100 under fresh footer. Save raw records and timestamped UI snapshots.
+7. Join buyer/store/artifacts/<artifact_id>/0/*.piece in numeric order and assert byte count + SHA384 matches original and received manifest. Checkcomplete/bytes_verified and zero spend. No inference claim.
+8. After recording completion only, select Shared; verify its own columns/actions remain after footer advances; return Downloads and retainlocal/100. Quit testapp, stop node viaRPC, SIGTERM only owned helpers. Verify PIDs gone before deleting disposable lab. Preserve evidence; no posting automatically.
