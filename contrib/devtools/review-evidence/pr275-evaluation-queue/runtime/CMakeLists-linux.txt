@@ -1,0 +1,20 @@
+cmake_minimum_required(VERSION 3.22)
+project(BTXQueueLinuxRegression LANGUAGES C CXX)
+set(BTX_SOURCE_ROOT /tmp/btx-helper-full-20261102 CACHE PATH "Read-only dependency source")
+set(BTX_SECURITY_OVERLAY "${CMAKE_CURRENT_SOURCE_DIR}/source" CACHE PATH "Exact PR275 security source with focused patch")
+set(BTX_INTEGRATED_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/no-integrated-daemon" CACHE PATH "No daemon targets")
+add_subdirectory(source/test/util/model_security components)
+add_executable(queue-baseline source/test/util/model_security/security_tests.cpp service.baseline.cpp)
+target_link_libraries(queue-baseline PRIVATE btx_model_security)
+target_compile_features(queue-baseline PRIVATE cxx_std_20)
+# musl consumes PT_GNU_STACK as the default pthread stack. Both variants use
+# the same explicit stack configuration to support the existing 1MiB file buffer.
+foreach(executable security-tests queue-baseline)
+  target_link_options(${executable} PRIVATE -Wl,-z,stack-size=8388608 "-Wl,-Map=${CMAKE_CURRENT_BINARY_DIR}/${executable}.map")
+endforeach()
+
+# Diagnostic target is separate from both recorded acceptance binaries.
+add_executable(queue-baseline-diagnostic source/test/util/model_security/security_tests.cpp diagnostic-service.cpp)
+target_link_libraries(queue-baseline-diagnostic PRIVATE btx_model_security)
+target_compile_features(queue-baseline-diagnostic PRIVATE cxx_std_20)
+target_link_options(queue-baseline-diagnostic PRIVATE -Wl,-z,stack-size=8388608 "-Wl,-Map=${CMAKE_CURRENT_BINARY_DIR}/queue-baseline-diagnostic.map")

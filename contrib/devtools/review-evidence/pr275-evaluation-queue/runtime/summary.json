@@ -1,0 +1,126 @@
+{
+  "task": "PR275 item6 bounded runnable challenge scan",
+  "owner": "BTX test 1 /root/runnable_queue_execution",
+  "model": "inherited; exact setting unverified",
+  "source_revision": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+  "candidate_commit": "6478f640e6a8a3cf464ddb33d05a54ef61e2cf3e",
+  "status": "native_configured_component_candidate_passed_with_baseline_control_anomaly",
+  "native_platform": "Linux6.12.81 aarch64 Alpine/musl1.2.5 GCC14.2.0 SQLite3.49.2",
+  "component_configuration": "clean standalone crypto/PQC/UniValue/security source build; both acceptance executables ELF PT_GNU_STACK8388608; real static sandbox probe; no admission mocks",
+  "identities": {
+    "build/components/security-tests": "3ff3737028dc657dcd8053ef2afcfc2eb41ce0e7d8d609c9e2d073dc7f58702c",
+    "build/queue-baseline": "c9f2a74006b3360955c887829ef5726788378290fb7093b57150968788a616f6",
+    "build/components/security-probe": "f4ec4bf05befc4ffe60475c475e46dbbba7b8355304412d6ecc76454b78f9110",
+    "source/test/util/model_security/security_tests.cpp": "0676fe7d9620a1565a7a4e710343a9359a1bb40ff34b33f1aae8cc5f9894b51d",
+    "source/src/modelnet/security_v2/service.cpp": "6e3318f301a9d71d43874f40aa9c28791f7b5f7bf2de02577dd96ec1ffae6f36",
+    "service.baseline.cpp": "407adf071ca18e695d2d4c2c3278866d875a56ab5fa3a5de37a02cb99a1c4901",
+    "build/components/libbtx_security_crypto.a": "9ffd1f34d9645eaa0fe2a097592fed8f0b999e2cf17b53de856a5f50ba19fc6b",
+    "build/components/libbtx_security_json.a": "588eb4e5fedf47598db9cd548441dab629888ad8f1514e59cce6b2f4d6c2c439",
+    "build/components/libbtx_model_security.a": "d502d405d15b22e64f5b3406c10407047549f7805a1a0476f28c1eff24ae4da9"
+  },
+  "runs": {
+    "baseline": {
+      "count": 1,
+      "exit": 1,
+      "passed": 1,
+      "failed": 3,
+      "tests": [
+        {
+          "error": "evaluation produced no signed report",
+          "name": "scheduler-valid-work-and-two-per-tick",
+          "status": "FAIL"
+        },
+        {
+          "error": "later valid challenge starved after service restart",
+          "name": "scheduler-missing-plan-prefix-restart-and-wrap",
+          "status": "FAIL"
+        },
+        {
+          "error": "preinsert plan failures starved later valid challenge",
+          "name": "scheduler-preinsert-plan-failures-do-not-starve",
+          "status": "FAIL"
+        },
+        {
+          "name": "scheduler-pause-and-compute-grant-gates",
+          "status": "PASS"
+        }
+      ],
+      "signed_PASS_dispatched_pairs": 4,
+      "seconds": 26.434688799
+    },
+    "candidate": {
+      "count": 1,
+      "exit": 0,
+      "passed": 4,
+      "failed": 0,
+      "tests": [
+        {
+          "name": "scheduler-valid-work-and-two-per-tick",
+          "status": "PASS"
+        },
+        {
+          "name": "scheduler-missing-plan-prefix-restart-and-wrap",
+          "status": "PASS"
+        },
+        {
+          "name": "scheduler-preinsert-plan-failures-do-not-starve",
+          "status": "PASS"
+        },
+        {
+          "name": "scheduler-pause-and-compute-grant-gates",
+          "status": "PASS"
+        }
+      ],
+      "signed_PASS_dispatched_pairs": 12,
+      "seconds": 24.728696347
+    },
+    "diagnostic": {
+      "count": 1,
+      "exit": 1,
+      "passed": 0,
+      "failed": 1,
+      "tests": [
+        {
+          "error": "first tick did not schedule valid work",
+          "name": "scheduler-valid-work-and-two-per-tick",
+          "status": "FAIL"
+        }
+      ],
+      "trace": "SEC_CLOCK_ROLLBACK in baseline Worker Error catch",
+      "limit": "Failed earlier first-tick-row-count stage; does not prove same cause as original missing-report failure; separately instrumented service, not productcandidate"
+    }
+  },
+  "pilots": {
+    "macOS": {
+      "count": 1,
+      "exit": 138,
+      "outcome": "SIGBUS stack exceeded in artifacts::Stream on native default worker; no test completed"
+    },
+    "Linux": {
+      "count": 1,
+      "exit": -6,
+      "outcome": "Final report parent0755 rejected SEC_PRIVATE_DIRECTORY; corrected0700 finalrun completed with same acceptance checks and additional signed-output retention; no partial result promoted"
+    }
+  },
+  "limits": [
+    "No all-baseline-valid-worker PASS claim: original completed run had one unexpected no-signed-report control failure",
+    "Diagnostic clock failure is an actual baseline observation but original missing-report cause remains unproved",
+    "Configured Linux component only, not default Linux/macOS/Windows/full btxd or releasequalification",
+    "32IDs per2s tick can require ~1024s for16k backlog; no25s evidence-freshness/fullcapacitycontinuous-protection guarantee",
+    "Portable independent-worktree recipe documented but not itself executed",
+    "Queuefull/running bounds source-reviewed, not stress-tested"
+  ],
+  "cleanup": "linux-cleanup.json; VM stop receipt; source/cache read-only preserved; own guest directory and fixture dirs removed; official sqlite-dev dependency retained",
+  "utc": "2026-11-02T15:36:03.185447+00:00",
+  "resources_released": true,
+  "VM_final_state": "Stopped",
+  "learning": {
+    "review_catches": [
+      "Invalid fixture gate corrected to privacy before any runtime",
+      "Exact32nd/64th cursor assertions added so restart-reset mutations cannot pass by timeout slack"
+    ],
+    "execution_cost": "Mac12-TU component build then native worker-stack blocker; fresh Linux standalone component/dependency build; one accepted candidate sequence and one baseline sequence; exactly one separate diagnostic",
+    "coordination_overhead": "Platform ownership decision and VMhandoff required; no measured delegation speedup or token-cost claim"
+  },
+  "closed_utc": "2026-11-02T15:37:40.000638+00:00"
+}

@@ -1,0 +1,18 @@
+--- baseline/service.cpp
++++ diagnostic/service.cpp
+@@ -3,6 +3,7 @@
+ #include <modelnet/security_v2/mesh.h>
+ #include <modelnet/security_v2/work.h>
+ #include <chrono>
++#include <cstdio>
+ #include <algorithm>
+ #include <map>
+ #include <set>
+@@ -217,6 +218,7 @@
+                     result=Perform(db,task->request);
+                 }
+                 catch(const Error& e) {
++                    std::fprintf(stderr,"DIAGNOSTIC worker_error=%s task=%s\n",e.code.c_str(),task->name.c_str());
+                     result=Failure(e.code);
+                 }
+                 catch(...) {
