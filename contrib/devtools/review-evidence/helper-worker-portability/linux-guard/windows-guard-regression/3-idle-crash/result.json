@@ -1,0 +1,65 @@
+{
+  "case": "idle-crash",
+  "binary_sha256": "c4d3991027719f24f4b01099014719ed42b888938bfd2fa625c8814047bd3943",
+  "synthetic_adapter": true,
+  "no_GPU": true,
+  "trace": [
+    {
+      "seconds": 0.1622,
+      "step": "initial-ready",
+      "pid": 2332
+    },
+    {
+      "seconds": 0.1821,
+      "step": "initial-listener",
+      "evidence": {
+        "listens": true,
+        "stdout": "p2332\nf6\ntIPv4\nn127.0.0.1:41891\n",
+        "stderr": "lsof: WARNING: can't stat() tracefs file system /sys/kernel/debug/tracing\n      Output information may be incomplete.\n"
+      }
+    },
+    {
+      "seconds": 0.1835,
+      "step": "owned-helper-crash",
+      "pid": 2332
+    },
+    {
+      "seconds": 0.2376,
+      "step": "replacement-ready",
+      "pid": 2348
+    },
+    {
+      "seconds": 0.247,
+      "step": "replacement-listener",
+      "evidence": {
+        "listens": true,
+        "stdout": "p2348\nf6\ntIPv4\nn127.0.0.1:41891\n",
+        "stderr": "lsof: WARNING: can't stat() tracefs file system /sys/kernel/debug/tracing\n      Output information may be incomplete.\n"
+      }
+    },
+    {
+      "seconds": 0.4776,
+      "step": "clean-stop",
+      "pid": 2348
+    }
+  ],
+  "command": [
+    "/tmp/btx-helper-runtime-20261102/candidate-windows-guard",
+    "-modeldir=<disposable>/model",
+    "-modelrpcsocket=<disposable>/rpc.sock",
+    "-modelbind=127.0.0.1:41891",
+    "-modelstorage=8MiB",
+    "-modelseed=off",
+    "-modelfollowpeers=0",
+    "-modellandiscovery=0",
+    "-modelnatpmp=0",
+    "-pwcchain=regtest"
+  ],
+  "replacement_has_tcp_listener": true,
+  "replacement_rpc_responds": true,
+  "pass": true,
+  "regression_pass": true,
+  "owned_helpers_exited": true,
+  "port_released": true,
+  "disposable_removed": true
+}

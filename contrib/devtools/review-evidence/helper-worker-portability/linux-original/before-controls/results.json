@@ -1,0 +1,325 @@
+[
+  {
+    "mode": "infer",
+    "binary_sha256": "c96eb5eee13daaec1e25cfbd776436a78e53d3ddf8555ad683a49db19d0af31b",
+    "elapsed_s": 1.0064017380000223,
+    "reply": {
+      "jsonrpc": "1.0",
+      "id": 1,
+      "result": {
+        "schema_version": 2,
+        "model_id": "30f601e6be528bd235bddc4cd0ce90b84ed143700ce2b491ed1ac42d1af9d5fbd252f678c0e21fa6da500867d82605ca",
+        "artifact_id": "9b7475196cce9539d17e9749612eb57fe611b226a480be4845e9508867b78dc6a90ddfd496f88ac440d024edfb66ea91",
+        "path": "<disposable>/model/checkout/9b7475196cce9539d17e9749612eb57fe611b226a480be4845e9508867b78dc6a90ddfd496f88ac440d024edfb66ea91",
+        "usable_runtime_root": "<disposable>/model/checkout/9b7475196cce9539d17e9749612eb57fe611b226a480be4845e9508867b78dc6a90ddfd496f88ac440d024edfb66ea91",
+        "materialized": true,
+        "tensors": [
+          {
+            "name": "weight",
+            "dtype": "F32",
+            "shape": [
+              2,
+              3
+            ],
+            "bytes": 24
+          }
+        ],
+        "tensor_count": 1,
+        "weight_bytes": 24,
+        "inference": false,
+        "remote_inference": false,
+        "runtime_started": true,
+        "runtime_exec": true,
+        "device_loaded": true,
+        "weights_resident": true,
+        "smoke_passed": false,
+        "execution_profile": 0,
+        "runtime_profile": "safetensors-cuda-resident",
+        "automatic_spend_atoms": 0,
+        "loader_pid": 4360,
+        "cuda": {
+          "ok": true,
+          "smoke_passed": false,
+          "bytes_on_device": 0,
+          "device_name": "synthetic-protocol-fixture-no-GPU"
+        },
+        "bytes_on_device": 0,
+        "device_name": "synthetic-protocol-fixture-no-GPU",
+        "infer_cmd": "/tmp/btx-helper-runtime-20261102/helper-worker-fix/control",
+        "infer_stdout": "infer-ok",
+        "infer_ok": true,
+        "generated": true,
+        "first_useful_result": true,
+        "next_actions": [
+          "unloadmodel",
+          "automatic_spend_atoms stays 0"
+        ],
+        "note": "Weights stay on device until unloadmodel. CUDA smoke is a kernel on loaded tensors, not a network inference server. Granite hybrid is not GGUF; llama.cpp needs conversion."
+      },
+      "error": null
+    },
+    "worker": {
+      "pid": 4361,
+      "ppid": 4347,
+      "args": [
+        "--dir",
+        "checkout",
+        "test",
+        "control"
+      ],
+      "sockets": [
+        {
+          "fd": 5,
+          "family": 1,
+          "listening": 1,
+          "sockopt_errno": 0,
+          "inheritable": true,
+          "sockname": "non-INET"
+        },
+        {
+          "fd": 6,
+          "family": 2,
+          "listening": 1,
+          "sockopt_errno": 0,
+          "inheritable": true,
+          "sockname": [
+            "127.0.0.1",
+            32887
+          ]
+        },
+        {
+          "fd": 7,
+          "family": 1,
+          "listening": 0,
+          "sockopt_errno": 0,
+          "inheritable": true,
+          "sockname": "non-INET"
+        }
+      ]
+    },
+    "local_rpc_during_worker": true,
+    "pass": true,
+    "helper_exited": true
+  },
+  {
+    "mode": "generate",
+    "binary_sha256": "c96eb5eee13daaec1e25cfbd776436a78e53d3ddf8555ad683a49db19d0af31b",
+    "elapsed_s": 1.0593328219999876,
+    "reply": {
+      "jsonrpc": "1.0",
+      "id": 1,
+      "result": {
+        "schema_version": 2,
+        "model_id": "30f601e6be528bd235bddc4cd0ce90b84ed143700ce2b491ed1ac42d1af9d5fbd252f678c0e21fa6da500867d82605ca",
+        "artifact_id": "9b7475196cce9539d17e9749612eb57fe611b226a480be4845e9508867b78dc6a90ddfd496f88ac440d024edfb66ea91",
+        "path": "<disposable>/model/checkout/9b7475196cce9539d17e9749612eb57fe611b226a480be4845e9508867b78dc6a90ddfd496f88ac440d024edfb66ea91",
+        "compatible": true,
+        "generated": true,
+        "local_generate": true,
+        "inference": false,
+        "remote_inference": false,
+        "network_server": false,
+        "architecture": "LlamaForCausalLM",
+        "execution_profile": 0,
+        "automatic_spend_atoms": 0,
+        "text": "echo:hello-btx",
+        "backend": "synthetic",
+        "adapter": {
+          "ok": true,
+          "generated": true,
+          "text": "echo:hello-btx",
+          "backend": "synthetic"
+        },
+        "next_actions": [
+          "generatemodel",
+          "unloadmodel",
+          "automatic_spend_atoms stays 0"
+        ],
+        "note": "Local one-shot generate. Not a network inference server. CUDA smoke is not this RPC."
+      },
+      "error": null
+    },
+    "worker": {
+      "pid": 4376,
+      "ppid": 4363,
+      "args": [
+        "--dir",
+        "checkout",
+        "test",
+        "control"
+      ],
+      "sockets": [
+        {
+          "fd": 5,
+          "family": 1,
+          "listening": 1,
+          "sockopt_errno": 0,
+          "inheritable": true,
+          "sockname": "non-INET"
+        },
+        {
+          "fd": 6,
+          "family": 2,
+          "listening": 1,
+          "sockopt_errno": 0,
+          "inheritable": true,
+          "sockname": [
+            "127.0.0.1",
+            35465
+          ]
+        },
+        {
+          "fd": 7,
+          "family": 1,
+          "listening": 0,
+          "sockopt_errno": 0,
+          "inheritable": true,
+          "sockname": "non-INET"
+        }
+      ]
+    },
+    "local_rpc_during_worker": true,
+    "pass": true,
+    "helper_exited": true
+  },
+  {
+    "mode": "llama",
+    "binary_sha256": "c96eb5eee13daaec1e25cfbd776436a78e53d3ddf8555ad683a49db19d0af31b",
+    "elapsed_s": 1.006676156000026,
+    "reply": {
+      "jsonrpc": "1.0",
+      "id": 1,
+      "result": {
+        "schema_version": 2,
+        "model_id": "688ec2cc239cfb3639c6dd7611d5558ff86abcd1755877e0ea1ae4ef9a85e693ff206d275fbfd06ccb21161dd581bd86",
+        "artifact_id": "c7fbc80cb89042caaa4c5a8a7c10d71cb099a0a58f6b14f142f5da390021b479bb6f9fa7ff5af2b87edbc7fd41a35dfc",
+        "path": "<disposable>/model/checkout/c7fbc80cb89042caaa4c5a8a7c10d71cb099a0a58f6b14f142f5da390021b479bb6f9fa7ff5af2b87edbc7fd41a35dfc",
+        "compatible": true,
+        "generated": true,
+        "local_generate": true,
+        "inference": false,
+        "remote_inference": false,
+        "network_server": false,
+        "architecture": "",
+        "execution_profile": 0,
+        "automatic_spend_atoms": 0,
+        "text": "llama:hello-btx",
+        "backend": "llama.cpp",
+        "adapter": {
+          "ok": true,
+          "generated": true,
+          "text": "llama:hello-btx",
+          "backend": "llama.cpp",
+          "format": "gguf",
+          "remote_inference": false
+        },
+        "next_actions": [
+          "generatemodel",
+          "unloadmodel",
+          "automatic_spend_atoms stays 0"
+        ],
+        "note": "Local one-shot generate. Not a network inference server. CUDA smoke is not this RPC."
+      },
+      "error": null
+    },
+    "worker": {
+      "pid": 4392,
+      "ppid": 4378,
+      "args": [
+        "--dir",
+        "checkout",
+        "test",
+        "control"
+      ],
+      "sockets": [
+        {
+          "fd": 5,
+          "family": 1,
+          "listening": 1,
+          "sockopt_errno": 0,
+          "inheritable": true,
+          "sockname": "non-INET"
+        },
+        {
+          "fd": 6,
+          "family": 2,
+          "listening": 1,
+          "sockopt_errno": 0,
+          "inheritable": true,
+          "sockname": [
+            "127.0.0.1",
+            48277
+          ]
+        },
+        {
+          "fd": 7,
+          "family": 1,
+          "listening": 0,
+          "sockopt_errno": 0,
+          "inheritable": true,
+          "sockname": "non-INET"
+        }
+      ]
+    },
+    "local_rpc_during_worker": true,
+    "pass": true,
+    "helper_exited": true
+  },
+  {
+    "mode": "generate-error",
+    "binary_sha256": "c96eb5eee13daaec1e25cfbd776436a78e53d3ddf8555ad683a49db19d0af31b",
+    "elapsed_s": 1.0055741890000718,
+    "reply": {
+      "jsonrpc": "1.0",
+      "id": 1,
+      "result": null,
+      "error": {
+        "code": "NOT_RUN",
+        "message": "generate adapter output",
+        "schema_version": 2
+      }
+    },
+    "worker": {
+      "pid": 4407,
+      "ppid": 4394,
+      "args": [
+        "--dir",
+        "checkout",
+        "test",
+        "control"
+      ],
+      "sockets": [
+        {
+          "fd": 5,
+          "family": 1,
+          "listening": 1,
+          "sockopt_errno": 0,
+          "inheritable": true,
+          "sockname": "non-INET"
+        },
+        {
+          "fd": 6,
+          "family": 2,
+          "listening": 1,
+          "sockopt_errno": 0,
+          "inheritable": true,
+          "sockname": [
+            "127.0.0.1",
+            35885
+          ]
+        },
+        {
+          "fd": 7,
+          "family": 1,
+          "listening": 0,
+          "sockopt_errno": 0,
+          "inheritable": true,
+          "sockname": "non-INET"
+        }
+      ]
+    },
+    "local_rpc_during_worker": true,
+    "pass": true,
+    "helper_exited": true
+  }
+]

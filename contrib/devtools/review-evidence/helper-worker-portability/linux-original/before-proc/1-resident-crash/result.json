@@ -1,0 +1,242 @@
+{
+  "case": "resident-crash",
+  "binary_sha256": "c96eb5eee13daaec1e25cfbd776436a78e53d3ddf8555ad683a49db19d0af31b",
+  "synthetic_adapter": true,
+  "no_GPU": true,
+  "trace": [
+    {
+      "seconds": 0.1579,
+      "step": "initial-ready",
+      "pid": 2235
+    },
+    {
+      "seconds": 0.1693,
+      "step": "initial-listener",
+      "evidence": {
+        "listens": true,
+        "stdout": "p2235\nf6\ntIPv4\nn127.0.0.1:36645\n",
+        "stderr": "lsof: WARNING: can't stat() tracefs file system /sys/kernel/debug/tracing\n      Output information may be incomplete.\n"
+      }
+    },
+    {
+      "seconds": 0.1884,
+      "step": "worker-listener-observation",
+      "pid": 2251,
+      "evidence": {
+        "listens": true,
+        "stdout": "p2251\nf6\ntIPv4\nn127.0.0.1:36645\n",
+        "stderr": "lsof: WARNING: can't stat() tracefs file system /sys/kernel/debug/tracing\n      Output information may be incomplete.\n"
+      }
+    },
+    {
+      "seconds": 0.1924,
+      "step": "owned-helper-crash",
+      "pid": 2235
+    },
+    {
+      "seconds": 0.1954,
+      "step": "worker-after-crash",
+      "evidence": {
+        "listens": true,
+        "stdout": "p2251\nf6\ntIPv4\nn127.0.0.1:36645\n",
+        "stderr": "lsof: WARNING: can't stat() tracefs file system /sys/kernel/debug/tracing\n      Output information may be incomplete.\n"
+      }
+    },
+    {
+      "seconds": 4.2598,
+      "step": "replacement-ready",
+      "pid": 2260
+    },
+    {
+      "seconds": 4.2726,
+      "step": "replacement-listener",
+      "evidence": {
+        "listens": false,
+        "stdout": "",
+        "stderr": "lsof: WARNING: can't stat() tracefs file system /sys/kernel/debug/tracing\n      Output information may be incomplete.\n"
+      }
+    },
+    {
+      "seconds": 4.3382,
+      "step": "worker-normal-exit"
+    },
+    {
+      "seconds": 5.5243,
+      "step": "clean-stop",
+      "pid": 2260
+    },
+    {
+      "seconds": 5.5849,
+      "step": "recovered-ready",
+      "pid": 2287
+    },
+    {
+      "seconds": 5.5974,
+      "step": "recovered-listener",
+      "evidence": {
+        "listens": true,
+        "stdout": "p2287\nf6\ntIPv4\nn127.0.0.1:36645\n",
+        "stderr": "lsof: WARNING: can't stat() tracefs file system /sys/kernel/debug/tracing\n      Output information may be incomplete.\n"
+      }
+    },
+    {
+      "seconds": 5.8259,
+      "step": "clean-stop",
+      "pid": 2287
+    }
+  ],
+  "command": [
+    "/tmp/btx-helper-runtime-20261102/baseline",
+    "-modeldir=<disposable>/model",
+    "-modelrpcsocket=<disposable>/rpc.sock",
+    "-modelbind=127.0.0.1:36645",
+    "-modelstorage=8MiB",
+    "-modelseed=off",
+    "-modelfollowpeers=0",
+    "-modellandiscovery=0",
+    "-modelnatpmp=0",
+    "-pwcchain=regtest"
+  ],
+  "hosted": {
+    "schema_version": 2,
+    "uri": "btx://pq4z430hmjgr7705lhy3jaqf0e698gu4jml4ejkvalm6w3q3uq57n9fcawe3qcca9rwdh3ykhp98z7y57rlw2",
+    "model_id": "a8ab17df7240fde7d3f72465d025f9d14e8e565bfd732b33bfde9d104780a7a654e3aecc418c74a3736f125ae129c5e2",
+    "artifact_id": "bbf10ce200d9aa35141d562865e03a9f22d16d250d707111c69bb3ebf41a930d2e541e62699b99a37f4c28c3877a53bf",
+    "admission": "PINNED",
+    "qualification": "structure only; not usefulness, safety, or alignment",
+    "seeded": false,
+    "pinned": true,
+    "propagation": "local_only",
+    "search_published": false,
+    "signed_metadata": false,
+    "format": "safetensors",
+    "family": "",
+    "quantization": "",
+    "share": {
+      "uri": "btx://pq4z430hmjgr7705lhy3jaqf0e698gu4jml4ejkvalm6w3q3uq57n9fcawe3qcca9rwdh3ykhp98z7y57rlw2",
+      "copy_text": "btx://pq4z430hmjgr7705lhy3jaqf0e698gu4jml4ejkvalm6w3q3uq57n9fcawe3qcca9rwdh3ykhp98z7y57rlw2 format=safetensors",
+      "family": "",
+      "format": "safetensors",
+      "quantization": "",
+      "signed": false,
+      "size_bytes": 94,
+      "file_count": 1
+    },
+    "next_actions": [
+      "searchmodels {\"scope\":\"LOCAL\"}",
+      "getmodelsharecard btx://pq4z430hmjgr7705lhy3jaqf0e698gu4jml4ejkvalm6w3q3uq57n9fcawe3qcca9rwdh3ykhp98z7y57rlw2",
+      "getmodeltransfers",
+      "automatic_spend_atoms stays 0"
+    ],
+    "automatic_spend_atoms": 0,
+    "cloud_uploaded": false
+  },
+  "loaded": {
+    "schema_version": 2,
+    "model_id": "a8ab17df7240fde7d3f72465d025f9d14e8e565bfd732b33bfde9d104780a7a654e3aecc418c74a3736f125ae129c5e2",
+    "artifact_id": "bbf10ce200d9aa35141d562865e03a9f22d16d250d707111c69bb3ebf41a930d2e541e62699b99a37f4c28c3877a53bf",
+    "path": "<disposable>/model/checkout/bbf10ce200d9aa35141d562865e03a9f22d16d250d707111c69bb3ebf41a930d2e541e62699b99a37f4c28c3877a53bf",
+    "usable_runtime_root": "<disposable>/model/checkout/bbf10ce200d9aa35141d562865e03a9f22d16d250d707111c69bb3ebf41a930d2e541e62699b99a37f4c28c3877a53bf",
+    "materialized": true,
+    "tensors": [
+      {
+        "name": "weight",
+        "dtype": "F32",
+        "shape": [
+          2,
+          3
+        ],
+        "bytes": 24
+      }
+    ],
+    "tensor_count": 1,
+    "weight_bytes": 24,
+    "inference": false,
+    "remote_inference": false,
+    "runtime_started": true,
+    "runtime_exec": true,
+    "device_loaded": true,
+    "weights_resident": true,
+    "smoke_passed": false,
+    "execution_profile": 0,
+    "runtime_profile": "safetensors-cuda-resident",
+    "automatic_spend_atoms": 0,
+    "loader_pid": 2251,
+    "cuda": {
+      "ok": true,
+      "smoke_passed": false,
+      "bytes_on_device": 0,
+      "device_name": "synthetic-protocol-fixture-no-GPU"
+    },
+    "bytes_on_device": 0,
+    "device_name": "synthetic-protocol-fixture-no-GPU",
+    "next_actions": [
+      "unloadmodel",
+      "automatic_spend_atoms stays 0"
+    ],
+    "note": "Weights stay on device until unloadmodel. CUDA smoke is a kernel on loaded tensors, not a network inference server. Granite hybrid is not GGUF; llama.cpp needs conversion."
+  },
+  "worker": {
+    "pid": 2251,
+    "ppid": 2235,
+    "args": [
+      "--dir",
+      "checkout",
+      "--hold",
+      "--smoke"
+    ],
+    "sockets": [
+      {
+        "fd": 5,
+        "family": 1,
+        "listening": 1,
+        "sockopt_errno": 0,
+        "inheritable": true,
+        "sockname": "non-INET"
+      },
+      {
+        "fd": 6,
+        "family": 2,
+        "listening": 1,
+        "sockopt_errno": 0,
+        "inheritable": true,
+        "sockname": [
+          "127.0.0.1",
+          36645
+        ]
+      },
+      {
+        "fd": 7,
+        "family": 1,
+        "listening": 0,
+        "sockopt_errno": 0,
+        "inheritable": true,
+        "sockname": "non-INET"
+      }
+    ]
+  },
+  "worker_has_listener": true,
+  "worker_lsof": "COMMAND  PID     USER  FD   TYPE             DEVICE SIZE/OFF   NODE NAME\nadapter 2251 wildwood cwd    DIR              253,2     1024  64513 /home/wildwood.guest\nadapter 2251 wildwood rtd    DIR              253,2     1024      2 /\nadapter 2251 wildwood txt    REG              253,2    73640 130843 /tmp/btx-helper-runtime-20261102/helper-worker-inheritance/adapter\nadapter 2251 wildwood mem    REG              253,2   723480   6403 /lib/ld-musl-aarch64.so.1\nadapter 2251 wildwood   0r  FIFO               0,15      0t0  14044 pipe\nadapter 2251 wildwood   1w  FIFO               0,15      0t0  15390 pipe\nadapter 2251 wildwood   2w   REG              253,2      189 131069 /tmp/btx-helper-runtime-20261102/before-proc/1-resident-crash/initial.log\nadapter 2251 wildwood   3r   REG              253,2     5449  32263 <disposable>/model/tls/cert.pem\nadapter 2251 wildwood   4r   REG              253,2     3613  32262 <disposable>/model/tls/key.pem\nadapter 2251 wildwood   5u  unix 0x00000000fb97d680      0t0  14322 <disposable>/rpc.sock type=STREAM (LISTEN)\nadapter 2251 wildwood   6u  IPv4              14323      0t0    TCP 127.0.0.1:36645 (LISTEN)\nadapter 2251 wildwood   7u  unix 0x00000000e0fcaef6      0t0  15389 <disposable>/rpc.sock type=STREAM (CONNECTED)\n",
+  "worker_alive_after_crash": "2251 (adapter) S 1 2235 2235 0 -1 4194304 68 0 0 0 0 0 0 0 20 0 1 0 6007 856064 115 18446744073709551615 187650494365696 187650494371012 281474103104368 0 0 0 0 4100 0 1 0 0 17 0 0 0 0 0 0 187650494495984 187650494496776 187651461226496 281474103106803 281474103107023 281474103107023 281474103107509 0\n",
+  "replacement_has_tcp_listener": false,
+  "replacement_rpc_responds": true,
+  "after_release_polls": [
+    {
+      "rpc": true,
+      "tcp_listener": false
+    },
+    {
+      "rpc": true,
+      "tcp_listener": false
+    },
+    {
+      "rpc": true,
+      "tcp_listener": false
+    }
+  ],
+  "pass": true,
+  "regression_pass": false,
+  "owned_helpers_exited": true,
+  "port_released": true,
+  "disposable_removed": true
+}

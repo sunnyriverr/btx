@@ -1,0 +1,77 @@
+{
+  "scope": "Clang Windows-target COFF compile of exact guarded API-declaration excerpt plus actual wrapper; not full header/TU/link/native runtime",
+  "results": [
+    {
+      "target": "x86_64-w64-windows-gnu",
+      "case": "before",
+      "command": [
+        "clang++",
+        "--target=x86_64-w64-windows-gnu",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-c",
+        "<review-root>/helper-worker-windows-guard/x86_64-w64-windows-gnu-before.cpp",
+        "-o",
+        "<review-root>/helper-worker-windows-guard/x86_64-w64-windows-gnu-before.obj"
+      ],
+      "exit": 1,
+      "diagnostics": "<review-root>/helper-worker-windows-guard/x86_64-w64-windows-gnu-before.cpp:9:44: error: no member named 'subprocess_close_all_fds' in namespace 'subprocess::detail'\n    9 | void launch_boundary(){subprocess::detail::subprocess_close_all_fds(-1);}\n      |                        ~~~~~~~~~~~~~~~~~~~~^\n1 error generated.\n"
+    },
+    {
+      "target": "x86_64-w64-windows-gnu",
+      "case": "after",
+      "command": [
+        "clang++",
+        "--target=x86_64-w64-windows-gnu",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-c",
+        "<review-root>/helper-worker-windows-guard/x86_64-w64-windows-gnu-after.cpp",
+        "-o",
+        "<review-root>/helper-worker-windows-guard/x86_64-w64-windows-gnu-after.obj"
+      ],
+      "exit": 0,
+      "diagnostics": ""
+    },
+    {
+      "target": "x86_64-pc-windows-msvc",
+      "case": "before",
+      "command": [
+        "clang++",
+        "--target=x86_64-pc-windows-msvc",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-c",
+        "<review-root>/helper-worker-windows-guard/x86_64-pc-windows-msvc-before.cpp",
+        "-o",
+        "<review-root>/helper-worker-windows-guard/x86_64-pc-windows-msvc-before.obj"
+      ],
+      "exit": 1,
+      "diagnostics": "<review-root>/helper-worker-windows-guard/x86_64-pc-windows-msvc-before.cpp:9:44: error: no member named 'subprocess_close_all_fds' in namespace 'subprocess::detail'\n    9 | void launch_boundary(){subprocess::detail::subprocess_close_all_fds(-1);}\n      |                        ~~~~~~~~~~~~~~~~~~~~^\n1 error generated.\n"
+    },
+    {
+      "target": "x86_64-pc-windows-msvc",
+      "case": "after",
+      "command": [
+        "clang++",
+        "--target=x86_64-pc-windows-msvc",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-c",
+        "<review-root>/helper-worker-windows-guard/x86_64-pc-windows-msvc-after.cpp",
+        "-o",
+        "<review-root>/helper-worker-windows-guard/x86_64-pc-windows-msvc-after.obj"
+      ],
+      "exit": 0,
+      "diagnostics": ""
+    }
+  ]
+}
