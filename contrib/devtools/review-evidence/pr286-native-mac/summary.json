@@ -1,0 +1,32 @@
+{
+  "completed_utc": "2026-11-02T14:21:23.750804+00:00",
+  "verdict": "native Mac sole-CLI-URI regression fails before and passes after; controls pass",
+  "platform": "ProductName:\t\tmacOS\nProductVersion:\t\t26.5.1\nBuildVersion:\t\t25F80",
+  "architecture": "arm64",
+  "runs_per_variant": 1,
+  "base": "acbf7efb20b1b82da06affdae2ead08068cf743c",
+  "candidate": "base plus exact main.rs from repch1c 89a8c8e98a77934a02ff77dd71d0e52cfb2bf450",
+  "before": {
+    "sole_uri": "absent through 00:13:06 refresh after launch14:12:17Z; continuously advancing samples4/6/9",
+    "mixed": "both exact distinct values observed once; drained; no recurrence through noargs00:14:16",
+    "file": "one exact preview; no recurrence00:15:16",
+    "none": "quiet"
+  },
+  "after": {
+    "sole_uri": "one exact preview; no recurrence through00:18:36",
+    "mixed": "both exact distinct values observed once; drained; no recurrence through noargs00:19:36",
+    "file": "one exact preview; no recurrence00:20:36",
+    "none": "quiet"
+  },
+  "eight_second_processes": "all exited0; original variant process survived each",
+  "observation": "native CUA AX tree observed by coordinator; structured transcription in ui-observations.json, not saved raw AX/video",
+  "limitations": [
+    "One sequence per build, native macOS M4 arm64",
+    "Direct CLI second instance; no LaunchServices URL registration/cold start",
+    "Only main.rs guard integrated on acbf, not full PR286 head",
+    "No Windows/Linux/installer/release/payment execution qualification",
+    "Older disposable wallet-disabled backend only supplies connection/polling",
+    "Finite quiet windows bound duplicate claim, not global exactly-once proof"
+  ],
+  "publication": "not authorized for current evidence; prepare focused286handoff"
+}
