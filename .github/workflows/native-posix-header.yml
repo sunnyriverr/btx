@@ -24,7 +24,7 @@ jobs:
           $json = git -C $repo show "$($env:GITHUB_SHA):contrib/devtools/windows-native-header/closure.json"
           if ($LASTEXITCODE -ne 0) { throw 'manifest read failed' }
           $manifest = $json | ConvertFrom-Json
-          $paths = @('/contrib/devtools/windows-native-header/', '/test/util/windows_posix_header_tests.cpp', '/src/compat/mingw/posix_extra.h')
+          $paths = @('/contrib/devtools/windows-native-header/', '/test/util/windows_posix_header_tests.cpp', '/src/compat/mingw/posix_extra.h', '/src/modelnet/CMakeLists.txt')
           $paths += $manifest.files.PSObject.Properties.Name | ForEach-Object { '/' + $_ }
           git -C $repo sparse-checkout set --no-cone -- $paths
           if ($LASTEXITCODE -ne 0) { throw 'sparse checkout failed' }
@@ -66,14 +66,14 @@ jobs:
           git init "$repo"
           git -C "$repo" remote add origin https://github.com/sunnyriverr/btx.git
           git -C "$repo" fetch --filter=blob:none --depth=1 origin "$GITHUB_SHA" ab1b5cbe42d5b3ceb4faafff213292efed2bba18
-          git -C "$repo" sparse-checkout set --no-cone /contrib/devtools/windows-native-header/ /test/util/windows_posix_header_tests.cpp /src/compat/mingw/posix_extra.h
+          git -C "$repo" sparse-checkout set --no-cone /contrib/devtools/windows-native-header/ /test/util/windows_posix_header_tests.cpp /src/compat/mingw/posix_extra.h /src/modelnet/CMakeLists.txt
           git -C "$repo" checkout --detach "$GITHUB_SHA"
       - name: Install cross compiler
         shell: bash
         run: |
           set -euo pipefail
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends g++-mingw-w64-x86-64-posix
+          sudo apt-get install -y --no-install-recommends g++-mingw-w64-x86-64-posix cmake ninja-build
       - name: Preserve MinGW compilation and preprocessed tokens
         shell: bash
         run: |

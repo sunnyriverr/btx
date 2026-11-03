@@ -40,6 +40,17 @@ def main():
         target = args.out / name / HEADER
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(data)
+    cmake_path = "src/modelnet/CMakeLists.txt"
+    original_cmake = subprocess.check_output(["git", "-C", str(args.repo), "show", BASE + ":" + cmake_path])
+    candidate_cmake = (args.repo / cmake_path).read_bytes()
+    assert sha(original_cmake) == manifest["baseline_cmake"]
+    assert sha(candidate_cmake) == manifest["candidate_cmake"]
+    start = "if(WIN32)\n  # POSIX shims for the model plane."
+    for version, data in [("baseline", original_cmake), ("candidate", candidate_cmake)]:
+        text = data.decode()
+        assert text.count(start) == 1
+        block = text[text.index(start):text.index('\nset(_btx_crl12_schema', text.index(start))]
+        (args.out / version / "options.cmake").write_text(block)
     cpp = args.repo / "test" / "util" / "windows_posix_header_tests.cpp"
     is_win = os.name == "nt"
     result = {"base": BASE, "platform": platform.platform(), "native_windows": is_win,
@@ -104,16 +115,6 @@ def main():
                 if not is_win:
                     r, data = run(label + "-preprocess", [compiler, *flags, "-E", "-P", cpp], True)
                     preprocess[version] = data
-                # Compile the unchanged production types TU through the full forced header.
-                obj = args.out / (label + "-types.obj")
-                source = args.out / "closure" / "src" / "modelnet" / "types.cpp"
-                if is_win:
-                    force = ["-include", str(inc / "compat" / "mingw" / "posix_extra.h")] if compiler == "clang-cl" else ["/FI" + str(inc / "compat" / "mingw" / "posix_extra.h")]
-                    run(label + "-types", [compiler, *flags, *force, "/c", source,
-                                          "/Fo:" + str(obj)], expected)
-                else:
-                    run(label + "-types", [compiler, *flags, "-include", inc / "compat" / "mingw" / "posix_extra.h",
-                                          "-c", source, "-o", obj], True)
             if not is_win:
                 same = preprocess["baseline"] == preprocess["candidate"]
                 result["preprocess"].append({"order": order, "identical": same,
@@ -121,6 +122,47 @@ def main():
                                              "candidate_sha256": sha(preprocess["candidate"])})
                 if not same:
                     result["errors"].append(order + ": MinGW preprocessed tokens differ")
+        # Use the exact production Windows compatibility CMake block. This is
+        # a component project, not a replacement claim for root configuration.
+        for version in ["baseline", "candidate"]:
+            label = compiler + "-cmake-" + version
+            project = args.out / (label + "-project")
+            project.mkdir(exist_ok=True)
+            prefix = (args.out / version).as_posix()
+            closure = (args.out / "closure" / "src").as_posix()
+            cmake = (
+                "cmake_minimum_required(VERSION 3.22)\n"
+                "project(HeaderPrerequisite LANGUAGES CXX)\n"
+                "set(CMAKE_CXX_STANDARD 20)\n"
+                "set(CMAKE_CXX_STANDARD_REQUIRED ON)\n"
+                "set(CMAKE_CXX_EXTENSIONS OFF)\n"
+                "set(CMAKE_EXPORT_COMPILE_COMMANDS ON)\n"
+                'set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")\n'
+                f'set(PROJECT_SOURCE_DIR "{prefix}")\n'
+                f'add_library(bitcoin_modelnet OBJECT "{closure}/modelnet/types.cpp")\n'
+                f'target_include_directories(bitcoin_modelnet PRIVATE "{prefix}/src" "{closure}")\n'
+                'target_compile_definitions(bitcoin_modelnet PRIVATE WIN32 _WIN32_WINNT=0x0A00 WIN32_LEAN_AND_MEAN NOMINMAX _CRT_SECURE_NO_WARNINGS)\n'
+                f'include("{prefix}/options.cmake")\n'
+                'message(STATUS "NATIVE_HEADER_COMPILER=${CMAKE_CXX_COMPILER_ID};FRONTEND=${CMAKE_CXX_COMPILER_FRONTEND_VARIANT};MSVC=${MSVC}")\n'
+            )
+            (project / "CMakeLists.txt").write_text(cmake)
+            build = args.out / (label + "-build")
+            command = ["cmake", "-S", project, "-B", build, "-G", "Ninja",
+                       "-DCMAKE_BUILD_TYPE=Release", "-DCMAKE_CXX_COMPILER=" + compiler]
+            if not is_win:
+                command += ["-DCMAKE_SYSTEM_NAME=Windows"]
+            configured, _ = run(label + "-configure", command, True)
+            if configured.returncode == 0:
+                commands = (build / "compile_commands.json").read_bytes()
+                expected_option = "/FI" if is_win and version == "candidate" else "-include"
+                if expected_option not in commands.decode():
+                    result["errors"].append(label + ": wrong generated forced-include option")
+                result.setdefault("cmake_fragments", []).append({
+                    "label": label, "compile_commands_sha256": sha(commands),
+                    "expected_forced_include": expected_option,
+                    "options_sha256": sha((args.out / version / "options.cmake").read_bytes())})
+                run(label + "-build", ["cmake", "--build", build, "--verbose", "--parallel", "1"],
+                    version == "candidate" if is_win else True)
     result["status"] = "PASS" if not result["errors"] else "FAIL"
     data = (json.dumps(result, indent=2) + "\n").encode()
     (args.out / "result.json").write_bytes(data)
