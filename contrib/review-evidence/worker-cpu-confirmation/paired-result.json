@@ -1,0 +1,87 @@
+{
+  "started": 1793689981.875381,
+  "minimum_free_bytes": 1388609536,
+  "runs": [
+    {
+      "variant": "baseline",
+      "command": [
+        "<workspace>/work/btx-review-tools/worker-cleanup-triage/repair/build/baseline/worker-tests",
+        "--run_test=matmul_verify_worker_tests/cpu_confirmation_pending*",
+        "--log_level=message",
+        "--report_level=detailed",
+        "--report_format=XML",
+        "--report_sink=<workspace>/work/btx-review-tools/worker-cleanup-triage/repair/baseline-report.xml",
+        "--",
+        "-testdatadir=<workspace>/work/btx-review-tools/worker-cleanup-triage/repair/baseline-run",
+        "-printtoconsole=1",
+        "-debug=net"
+      ],
+      "started": 1793689982.593676,
+      "minimum_free_bytes": 1388642304,
+      "binary_sha256": "521510bfe6343187b98b20490f8d61a83eeb67b815b094e9587210998e1456b8",
+      "source_sha256": "410f4f66cb5e5764f9b3eb4d25d0c714c547c68654ec8825a70de9aa3c26cb57",
+      "exit": 201,
+      "seconds": 20.135023832321167,
+      "test_cases": [
+        {
+          "name": "cpu_confirmation_pending_releases_worker_and_admission",
+          "result": "aborted",
+          "assertions_passed": "10",
+          "assertions_failed": "1",
+          "warnings_failed": "0",
+          "expected_failures": "0"
+        },
+        {
+          "name": "cpu_confirmation_pending_does_not_replace_portable_rejection",
+          "result": "passed",
+          "assertions_passed": "15",
+          "assertions_failed": "0",
+          "warnings_failed": "0",
+          "expected_failures": "0"
+        }
+      ]
+    },
+    {
+      "variant": "candidate",
+      "command": [
+        "<workspace>/work/btx-review-tools/worker-cleanup-triage/repair/build/candidate/worker-tests",
+        "--run_test=matmul_verify_worker_tests/cpu_confirmation_pending*",
+        "--log_level=message",
+        "--report_level=detailed",
+        "--report_format=XML",
+        "--report_sink=<workspace>/work/btx-review-tools/worker-cleanup-triage/repair/candidate-report.xml",
+        "--",
+        "-testdatadir=<workspace>/work/btx-review-tools/worker-cleanup-triage/repair/candidate-run",
+        "-printtoconsole=1",
+        "-debug=net"
+      ],
+      "started": 1793690003.300522,
+      "minimum_free_bytes": 1388609536,
+      "binary_sha256": "8623d6d4131814f6ebbcd5b4ff4f58803285cf066b0382a120bd320db79345ba",
+      "source_sha256": "a6753be55776e412a932db8ae76fca33bce39f6d33cec95ade00d14a144832cc",
+      "exit": 0,
+      "seconds": 0.20688772201538086,
+      "test_cases": [
+        {
+          "name": "cpu_confirmation_pending_releases_worker_and_admission",
+          "result": "passed",
+          "assertions_passed": "38",
+          "assertions_failed": "0",
+          "warnings_failed": "0",
+          "expected_failures": "0"
+        },
+        {
+          "name": "cpu_confirmation_pending_does_not_replace_portable_rejection",
+          "result": "passed",
+          "assertions_passed": "15",
+          "assertions_failed": "0",
+          "warnings_failed": "0",
+          "expected_failures": "0"
+        }
+      ]
+    }
+  ],
+  "archives_unchanged": true,
+  "complete": true,
+  "classification": "Same final maintained assertions: old AutoFallback fixture route fails, StrictDevice pending fixture passes; explicit portable rejection control passes both. No production implementation changed."
+}

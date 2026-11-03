@@ -1,0 +1,23 @@
+{
+  "verdict": "PASS scoped test-only repair",
+  "private_commit": "8dad7098b22b01d759995b69f4a8278535b1a893",
+  "source_sha256": "a6753be55776e412a932db8ae76fca33bce39f6d33cec95ade00d14a144832cc",
+  "baseline_pending": "FAIL intended cleanup assertion; aborted after20.135s",
+  "baseline_portable_control": "PASS",
+  "candidate_pending": "PASS",
+  "candidate_portable_control": "PASS",
+  "same_final_harness_except_pending_policy": [
+    "-    CpuConfirmationScope confirmation{rc::RCExactReplayExecutionPolicy::StrictDevice};",
+    "+    CpuConfirmationScope confirmation{rc::RCExactReplayExecutionPolicy::AutoFallback};"
+  ],
+  "actual_pending_return_observed_in_raw_log": true,
+  "production_worker_source_unchanged": true,
+  "full_test_translation_unit_compiled": true,
+  "registered_cases": 49,
+  "executed_cases_each_variant": 2,
+  "full_suite_qualification": false,
+  "paired_runtime_minimum_free_bytes": 1388609536,
+  "build_resource_pilot_receipt": "resource-pilot-build-result.json",
+  "no_runtime_before_reserve_recovered": true,
+  "scope": "native macOS CPU-only partial relink; cached completed genuine CPU confirmation checks subsequent dispatch, not fresh GPU replay or live P2P admission; no native Windows/Linux, full daemon or release qualification"
+}
