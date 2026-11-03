@@ -1,0 +1,53 @@
+name: Native Windows erasure storage repair
+on:
+  push:
+    branches: [codex/ci-native-erasure-storage-repair]
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: windows-2025
+    timeout-minutes: 10
+    steps:
+      - name: Fetch diagnostic only
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $repo = Join-Path $env:RUNNER_TEMP 'probe-repo'
+          git init $repo
+          if ($LASTEXITCODE -ne 0) { throw 'init failed' }
+          git -C $repo config core.autocrlf false
+          git -C $repo remote add origin https://github.com/sunnyriverr/btx.git
+          git -C $repo fetch --filter=blob:none --depth=1 origin $env:GITHUB_SHA
+          if ($LASTEXITCODE -ne 0) { throw 'fetch failed' }
+          git -C $repo sparse-checkout set --no-cone /contrib/devtools/native-erasure-storage/runner.py
+          if ($LASTEXITCODE -ne 0) { throw 'sparse failed' }
+          git -C $repo checkout --detach $env:GITHUB_SHA
+          if ($LASTEXITCODE -ne 0) { throw 'checkout failed' }
+      - name: Paired production builds and real storage controls
+        shell: cmd
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
+          if not defined BTX_VS exit /b 2
+          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+          if errorlevel 1 exit /b %errorlevel%
+          set "PATH=C:\Program Files\LLVM\bin;%PATH%"
+          set "CL="
+          set "_CL_="
+          python "%RUNNER_TEMP%\probe-repo\contrib\devtools\native-erasure-storage\runner.py" "%RUNNER_TEMP%\erasure-repair-output"
+          exit /b %errorlevel%
+      - name: Preserve diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: native-erasure-logs
+          path: ${{ runner.temp }}/erasure-repair-output/*.log
+          retention-days: 7
+      - name: Preserve result
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: native-erasure-result
+          path: ${{ runner.temp }}/erasure-repair-output/result.json
+          retention-days: 7
