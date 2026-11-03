@@ -1,0 +1,175 @@
+--- a/test/util/model_security/security_tests.cpp
++++ b/test/util/model_security/security_tests.cpp
+@@ -18,8 +18,9 @@
+ using namespace modelnet::security;
+ namespace {
+ struct Harness {
+-    size_t passed{0},failed{0};Json results=Array();
++    size_t passed{0},failed{0};Json results=Array();std::string filter;
+     template<class F> void Test(const std::string& name,F f) {
++        if(!filter.empty()&&!name.starts_with(filter))return;
+         Json row=Object();row.pushKV("name",name);
+         try{f();++passed;row.pushKV("status","PASS");std::cout<<"PASS "<<name<<'\n';}
+         catch(const std::exception& e){++failed;row.pushKV("status","FAIL");row.pushKV("error",e.what());std::cerr<<"FAIL "<<name<<": "<<e.what()<<'\n';}
+@@ -127,7 +128,7 @@
+ int main(int argc,char** argv) {
+     fs::path probe;fs::path report;
+     if(argc>1)probe=fs::absolute(argv[1]);if(argc>2)report=fs::absolute(argv[2]);
+-    Harness h;
++    Harness h;if(argc>3)h.filter=argv[3];Json completion_evidence=Array();Json scan_evidence=Array();
+     h.Test("canonical-key-order",[]{Check(Canonical(Parse("{\"b\":2,\"a\":1}"))=="{\"a\":1,\"b\":2}","order");});
+     h.Test("duplicate-json-keys-rejected",[]{Reject([]{Parse("{\"a\":1,\"a\":2}");},"SEC_JSON_DUPLICATE");});
+     h.Test("float-json-rejected",[]{Reject([]{Parse("{\"a\":1.25}");});});
+@@ -428,60 +429,97 @@
+         Reject([&]{VerifyMeshWorkQuorum(f.db,work,NowMs());},"SEC_WORK_PEER_EXPIRED");
+         } catch(const std::exception& e){throw std::runtime_error(stage+": "+e.what());}
+     });
+-    h.Test("mesh-remote-work-scan-reaches-work-behind-skipped-ids",[&]{
+-        Check(!probe.empty(),"native sandbox worker required");
+-        Fixture f(probe);
+-        const auto plan=InstallPlan(f);
+-        const Json manifest=f.local["evaluation_plans"][plan]["plan"];
+-        // Work IDs are digests: draw until one sorts inside the requested bounds.
+-        auto queue=[&](const std::string& target,const std::string& above,const std::string& below) {
+-            for(unsigned attempt=0;attempt<4096;++attempt) {
+-                Json b=Common(f.realm,1,NowMs(),50000);
+-                b.pushKV("composition",f.composition);b.pushKV("capsule",f.capsule);b.pushKV("package",plan);
+-                b.pushKV("purpose","verification");
+-                b.pushKV("input_sha384",manifest["input_sha384"]);
+-                b.pushKV("expected_output_sha384",manifest["expected_output_sha384"]);
+-                b.pushKV("target_host",target);b.pushKV("nonce",Hex(RandomBytes(32)));
+-                b.pushKV("max_output_bytes",static_cast<uint64_t>(8192));
+-                const auto work=Signed("work",b,f.owner);const auto id=RecordId(work);
+-                if((above.empty()||id>above)&&(below.empty()||id<below))return f.Import(work);
+-            }
+-            throw std::runtime_error("unable to construct sorted work fixture");
+-        };
+-        auto remote=Object();remote.pushKV("enabled",true);remote.pushKV("packages",Strings({plan}));
+-        remote.pushKV("compositions",Strings({f.composition}));
+-        f.local.pushKV("remote_work",remote);f.local.pushKV("host","host-a");f.SaveLocal();
+-        f.db.SetMeta("runtime_available","1");
++    // The same signed endpoint oracle serves direct worker and Service recovery controls.
++    auto endpoint=[&](Fixture& f,const std::string& id,const std::string& plan,const std::string& stage) {
++        const auto worker=KeyId(f.alice.public_key);
++        auto rows=f.db.Query("SELECT worker,phase,receipt,result FROM mesh_work_runs WHERE work=?",{id});
++        Check(rows.size()==1&&rows[0][0]==worker,"wrong run cardinality or worker");
++        Check(rows[0][1]=="PASS","work did not reach PASS");
++        Check(!rows[0][2].empty()&&!rows[0][3].empty(),"completed endpoint references absent");
++        auto work=f.db.Get(id),receipt=f.db.Get(rows[0][2]),result=f.db.Get(rows[0][3]);
++        Check(RecordId(work)==id&&RecordId(receipt)==rows[0][2]&&RecordId(result)==rows[0][3],"stored record ID substitution");
++        auto p=Policy::Load(f.db,NowMs());
++        for(const auto& e:{receipt,result}) {
++            auto keys=p.Check(e,"worker",f.db,NowMs());
++            Check(keys.size()==1&&keys[0]==worker,"endpoint worker signature mismatch");
++            const auto& body=e["body"];
++            Check(DigestField(body,"realm")==f.realm&&UInt(body,"policy_epoch")==p.epoch,"endpoint realm/epoch mismatch");
++            Check(UInt(body,"issued_ms")<=static_cast<uint64_t>(NowMs())&&UInt(body,"expires_ms")>static_cast<uint64_t>(NowMs()),"endpoint expired");
++            Check(Text(body,"host")=="host-a"&&Text(body,"outcome")=="PASS","endpoint host/outcome mismatch");
++            Check(DigestField(body,"package")==plan&&DigestField(body,"composition")==f.composition,"endpoint package/composition mismatch");
++            Check(UInt(body,"output_bytes")==ExpectedProbe().size(),"wrong output bytes");
++        }
++        const auto& rb=receipt["body"];const auto& out=result["body"];const auto& wb=work["body"];
++        Check(Text(receipt,"kind")=="receipt"&&Text(result,"kind")=="result","endpoint kind mismatch");
++        Check(Boolean(rb,"dispatched"),"native worker was not dispatched");
++        Check(DigestField(rb,"request")==id&&DigestField(out,"work")==id,"endpoint work/request substitution");
++        Check(DigestField(out,"receipt")==RecordId(receipt),"result references wrong receipt");
++        Check(Text(out,"purpose")==Text(wb,"purpose"),"result purpose mismatch");
++        Check(DigestField(rb,"runtime")==f.runtime&&DigestField(rb,"sandbox")==StaticSandboxDigest(),"runtime/sandbox substitution");
++        Check(DigestField(rb,"output_digest")==Hash(ExpectedProbe())&&DigestField(out,"output_sha384")==Hash(ExpectedProbe())&&DigestField(wb,"expected_output_sha384")==Hash(ExpectedProbe()),"output digest substitution");
++        Json e=Object();e.pushKV("stage",stage);e.pushKV("expected_worker",worker);e.pushKV("work",work);e.pushKV("receipt",receipt);e.pushKV("result",result);completion_evidence.push_back(e);
++    };
++    auto make_work=[&](Fixture& f,const std::string& plan,const std::string& target,const std::string& above,const std::string& below) {
++        const auto& manifest=f.local["evaluation_plans"][plan]["plan"];
++        for(unsigned attempt=0;attempt<4096;++attempt) {
++            auto b=Common(f.realm,1,NowMs(),50000);b.pushKV("composition",f.composition);b.pushKV("capsule",f.capsule);b.pushKV("package",plan);b.pushKV("purpose","verification");b.pushKV("input_sha384",manifest["input_sha384"]);b.pushKV("expected_output_sha384",manifest["expected_output_sha384"]);b.pushKV("target_host",target);b.pushKV("nonce",Hex(RandomBytes(32)));b.pushKV("max_output_bytes",static_cast<uint64_t>(8192));
++            auto work=Signed("work",b,f.owner);const auto id=RecordId(work);
++            if((above.empty()||id>above)&&(below.empty()||id<below))return f.Import(work);
++        }
++        throw std::runtime_error("unable to construct sorted work fixture");
++    };
++    auto approve=[&](Fixture& f,const std::string& plan) {
++        auto r=Object();r.pushKV("enabled",true);r.pushKV("packages",Strings({plan}));r.pushKV("compositions",Strings({f.composition}));f.local.pushKV("remote_work",r);f.SaveLocal();f.db.SetMeta("runtime_available","1");
++    };
++    h.Test("mesh-native-completion-direct-worker-and-denials",[&]{
++        Check(!probe.empty(),"native sandbox worker required");Fixture f(probe);const auto plan=InstallPlan(f);approve(f,plan);
++        const auto wrong=make_work(f,plan,"other-host","","");
++        Reject([&]{ExecuteMeshWork(f.db,wrong,NowMs());},"SEC_WORK_WRONG_HOST");
++        const auto valid=make_work(f,plan,"any","","");
++        auto r=f.local["remote_work"];r.pushKV("packages",Strings({}));f.local.pushKV("remote_work",r);f.SaveLocal();
++        Reject([&]{ExecuteMeshWork(f.db,valid,NowMs());},"SEC_WORK_UNAPPROVED_PACKAGE");
++        Check(f.db.Query("SELECT work FROM mesh_work_runs").empty(),"refused work was dispatched");
++        Check(f.db.Query("SELECT id FROM objects WHERE kind='result'").empty(),"refused work produced result");
++        approve(f,plan);ExecuteMeshWork(f.db,valid,NowMs());endpoint(f,valid,plan,"direct-valid-control");
++    });
++    h.Test("mesh-native-completion-scan-and-restart",[&]{
++        Check(!probe.empty(),"native sandbox worker required");Fixture f(probe);const auto plan=InstallPlan(f);approve(f,plan);
+         auto has_table=[&]{return !f.db.Query("SELECT name FROM sqlite_master WHERE name='mesh_work_runs'").empty();};
+-        auto wait=[&](const std::string& id,const std::string& failure) {
+-            const auto deadline=std::chrono::steady_clock::now()+std::chrono::seconds(12);
+-            std::string error;
+-            while(!has_table()||f.db.Query("SELECT work FROM mesh_work_runs WHERE work=?",{id}).empty()) {
++        auto wait=[&](const std::string& id,const std::string& stage) {
++            const auto deadline=std::chrono::steady_clock::now()+std::chrono::seconds(12);std::string error;
++            for(;;) {
++                if(has_table()) {
++                    auto rows=f.db.Query("SELECT phase FROM mesh_work_runs WHERE work=?",{id});
++                    if(!rows.empty()&&rows[0][0]!="running") {
++                        Check(rows[0][0]=="PASS",("terminal phase="+rows[0][0]+", stage="+stage).c_str());endpoint(f,id,plan,stage);return;
++                    }
++                }
+                 if(const auto e=f.db.Meta("maintenance_error");!e.empty())error=e;
+-                if(std::chrono::steady_clock::now()>=deadline)
+-                    throw std::runtime_error(failure+", last maintenance_error="+error);
++                if(std::chrono::steady_clock::now()>=deadline)throw std::runtime_error(stage+": completion timeout, last maintenance_error="+error);
+                 std::this_thread::sleep_for(std::chrono::milliseconds(20));
+             }
+         };
+-        // A fresh database has no mesh_work_runs until the first work has run.
+         Check(!has_table(),"fixture database already has mesh_work_runs");
+-        const auto first=queue("any","","1");
+-        {
+-            Service service(f.root);
+-            wait(first,"work on a fresh database did not run");
+-        }
+-        // More skipped work than one 64-ID scan, all sorting below the runnable item.
+-        // Records are imported only while no Service runs, so the import clock cannot race it.
+-        const auto later=queue("any","d","");
+-        for(unsigned i=0;i<70;++i)queue("other-host","",later);
+-        {
+-            Service service(f.root);
+-            wait(later,"work behind 70 skipped lower IDs did not run");
+-        }
+-        // Work added below the scan position is reached once the scan wraps.
+-        const auto lower=queue("any","",later);
+-        Service service(f.root);
+-        wait(lower,"work below the scan position did not run after the wrap");
++        const auto first=make_work(f,plan,"any","","1");
++        {Service service(f.root);wait(first,"fresh-database");}
++        const auto later=make_work(f,plan,"any","d","");std::vector<std::string> skipped;
++        for(unsigned i=0;i<70;++i)skipped.push_back(make_work(f,plan,"other-host","",later));
++        const auto unlisted_plan=InstallPlan(f,"privacy");
++        const auto unlisted=make_work(f,unlisted_plan,"any","",later);
++        skipped.push_back(unlisted);
++        {Service service(f.root);wait(later,"behind70-wrong-host-IDs");}
++        for(const auto& id:skipped)Check(f.db.Query("SELECT work FROM mesh_work_runs WHERE work=?",{id}).empty(),"wrong-host or unlisted-package scan work executed");
++        const auto lower=make_work(f,plan,"any","",later);
++        // Establish the persisted restart boundary deterministically while Service is stopped.
++        // Without this fixture setup a completed short batch may already have cleared the cursor.
++        const auto cursor_key="remote_work_cursor:"+KeyId(f.alice.public_key);
++        f.db.SetMeta(cursor_key,later);
++        Check(lower<later&&f.db.Meta(cursor_key)==later,"wrap fixture cursor not above lower work");
++        {Service service(f.root);wait(lower,"lower-ID-after-wrap");}
++        Json wrap=Object();wrap.pushKV("setup","stopped-Service persisted cursor fixture");wrap.pushKV("cursor_before",later);wrap.pushKV("lower_work",lower);wrap.pushKV("cursor_after",f.db.Meta(cursor_key));scan_evidence.push_back(wrap);
++        const auto resumed=make_work(f,plan,"any","","");
++        {Service service(f.root);wait(resumed,"fresh-work-after-restart");}
++        for(const auto& id:skipped)Check(f.db.Query("SELECT work FROM mesh_work_runs WHERE work=?",{id}).empty(),"restart executed wrong-host or unlisted-package work");
+     });
+     h.Test("mesh-owner-consent-and-untrusted-artifact-denial",[&]{
+         Fixture f;
+@@ -503,5 +541,5 @@
+     });
+     h.Test("private-protocol-framing-and-out-of-order-denial",[&]{Temp t;Service service(t.root/"security");GuardProtocol protocol(service);const auto id=Hex(RandomBytes(16));const auto request=std::string("{\"op\":\"status\"}");Check(protocol.Handle("SEC2 BEGIN "+id+" "+std::to_string(request.size()))=="SEC2 READY "+id,"begin");auto hex=Hex(std::span<const unsigned char>(reinterpret_cast<const unsigned char*>(request.data()),request.size()));Check(protocol.Handle("SEC2 DATA "+id+" 1 "+hex).starts_with("ERR "),"out-of-order accepted");protocol.Handle("SEC2 BEGIN "+id+" "+std::to_string(request.size()));Check(protocol.Handle("SEC2 DATA "+id+" 0 "+hex).starts_with("SEC2 STORED "),"data");Check(protocol.Handle("SEC2 COMMIT "+id).starts_with("SEC2 RESPONSE "),"commit");Check(protocol.Handle("SEC2 READ "+id+" 0").starts_with("SEC2 BYTES "),"response");});
+     h.Test("async-service-exec-and-delayed-release-fence",[&]{Fixture f;auto grant=f.Grant();Service service(f.root);auto request=Object();request.pushKV("op","prepare");request.pushKV("grant",grant);request.pushKV("context",f.Context());request.pushKV("request",f.ReadRequest());auto p=service.Handle(request);Check(Boolean(p,"ok"),p.write().c_str());request=Object();request.pushKV("op","execute");request.pushKV("secret",p["secret"]);request.pushKV("context",f.Context());request.pushKV("request",f.ReadRequest());auto submitted=service.Handle(request);Check(Boolean(submitted,"ok"),"submit");auto poll=Object();poll.pushKV("op","poll");poll.pushKV("job",submitted["job"]);Json result;for(int i=0;i<100;++i){result=service.Handle(poll);if(result["phase"].isStr()&&result["phase"].get_str()=="finished")break;std::this_thread::sleep_for(std::chrono::milliseconds(10));}Check(Text(result,"phase")=="finished","job did not finish");f.Revoke(grant);poll.pushKV("op","take");result=service.Handle(poll);Check(!Boolean(result["result"],"ok")&&!result["result"].exists("output_hex"),"revoked queued output released");});
+-    Json summary=Object();summary.pushKV("schema","BTX/ComponentSecurityTestResults/v1");summary.pushKV("passed",static_cast<uint64_t>(h.passed));summary.pushKV("failed",static_cast<uint64_t>(h.failed));summary.pushKV("physical_hosts",1);summary.pushKV("independent_organizations_verified",false);summary.pushKV("gpu_execution","NOT_RUN");summary.pushKV("whole_btxd_build","NOT_RUN");summary.pushKV("native_windows","NOT_RUN");summary.pushKV("native_macos","NOT_RUN");summary.pushKV("behavioral_backdoor_absence_proven",false);summary.pushKV("tests",h.results);if(!report.empty()){EnsurePrivateDirectory(report.parent_path());WritePrivate(report,Canonical(summary)+"\n",true);}std::cout<<"SUMMARY "<<Canonical(summary)<<'\n';return h.failed?1:0;
++    Json summary=Object();summary.pushKV("schema","BTX/ComponentSecurityTestResults/v1");summary.pushKV("passed",static_cast<uint64_t>(h.passed));summary.pushKV("failed",static_cast<uint64_t>(h.failed));summary.pushKV("physical_hosts",1);summary.pushKV("independent_organizations_verified",false);summary.pushKV("gpu_execution","NOT_RUN");summary.pushKV("whole_btxd_build","NOT_RUN");summary.pushKV("native_windows","NOT_RUN");summary.pushKV("native_macos","NOT_RUN");summary.pushKV("behavioral_backdoor_absence_proven",false);summary.pushKV("tests",h.results);summary.pushKV("completion_evidence",completion_evidence);summary.pushKV("scan_evidence",scan_evidence);if(!report.empty()){EnsurePrivateDirectory(report.parent_path());WritePrivate(report,Canonical(summary)+"\n",true);}std::cout<<"SUMMARY "<<Canonical(summary)<<'\n';return h.failed?1:0;
+ }
