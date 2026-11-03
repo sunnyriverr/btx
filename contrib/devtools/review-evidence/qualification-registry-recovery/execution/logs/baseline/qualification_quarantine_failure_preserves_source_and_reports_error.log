@@ -1,0 +1,41 @@
+Running 1 test case...
+[1;34;49mEntering test module "qualification_registry_component"
+[0;39;49m[1;34;49m<workspace>/work/btx-review-tools/registry-quarantine-triage/execution/component.cpp:34: Entering test suite "compute_profile_tests"
+[0;39;49m[1;33;49m<workspace>/work/btx-review-tools/registry-quarantine-triage/execution/component.cpp:36: Test case "compute_profile_tests/production_profile_is_deterministic_and_frozen" is skipped because disabled
+[0;39;49m[1;33;49m<workspace>/work/btx-review-tools/registry-quarantine-triage/execution/component.cpp:61: Test case "compute_profile_tests/toy_profile_is_distinct_and_hidden_on_mainnet" is skipped because disabled
+[0;39;49m[1;33;49m<workspace>/work/btx-review-tools/registry-quarantine-triage/execution/component.cpp:79: Test case "compute_profile_tests/passport_rate_and_p99" is skipped because disabled
+[0;39;49m[1;33;49m<workspace>/work/btx-review-tools/registry-quarantine-triage/execution/component.cpp:101: Test case "compute_profile_tests/qualification_header_binds_challenge_and_episode" is skipped because disabled
+[0;39;49m[1;33;49m<workspace>/work/btx-review-tools/registry-quarantine-triage/execution/component.cpp:126: Test case "compute_profile_tests/toy_qualification_solves_verifies_and_rejects_replay" is skipped because disabled
+[0;39;49m[1;33;49m<workspace>/work/btx-review-tools/registry-quarantine-triage/execution/component.cpp:163: Test case "compute_profile_tests/qualification_rejects_bounds_expiry_and_corrupt_registry" is skipped because disabled
+[0;39;49m[1;33;49m<workspace>/work/btx-review-tools/registry-quarantine-triage/execution/component.cpp:217: Test case "compute_profile_tests/qualification_quarantines_non_object_rows_and_recovers_empty" is skipped because disabled
+[0;39;49m[1;34;49m<workspace>/work/btx-review-tools/registry-quarantine-triage/execution/component.cpp:278: Entering test case "qualification_quarantine_failure_preserves_source_and_reports_error"
+[0;39;49m<workspace>/work/btx-review-tools/registry-quarantine-triage/execution/component.cpp:297: [1;31;49merror: in "compute_profile_tests/qualification_quarantine_failure_preserves_source_and_reports_error": rename failure falsely reported as successful quarantine: registry quarantined[0;39;49m
+<workspace>/work/btx-review-tools/registry-quarantine-triage/execution/component.cpp:300: [1;31;49merror: in "compute_profile_tests/qualification_quarantine_failure_preserves_source_and_reports_error": check !health.exists("quarantine_path") has failed[0;39;49m
+<workspace>/work/btx-review-tools/registry-quarantine-triage/execution/component.cpp:297: [1;31;49merror: in "compute_profile_tests/qualification_quarantine_failure_preserves_source_and_reports_error": rename failure falsely reported as successful quarantine: registry quarantined[0;39;49m
+<workspace>/work/btx-review-tools/registry-quarantine-triage/execution/component.cpp:318: [1;31;49merror: in "compute_profile_tests/qualification_quarantine_failure_preserves_source_and_reports_error": check !fs::exists(path) has failed[0;39;49m
+<workspace>/work/btx-review-tools/registry-quarantine-triage/execution/component.cpp:319: [1;31;49merror: in "compute_profile_tests/qualification_quarantine_failure_preserves_source_and_reports_error": check fs::exists(quarantine) has failed[0;39;49m
+<workspace>/work/btx-review-tools/registry-quarantine-triage/execution/component.cpp:322: [1;31;49merror: in "compute_profile_tests/qualification_quarantine_failure_preserves_source_and_reports_error": check retry_bytes == corrupt has failed [ != {"schema":1,"entries":[null]}
+][0;39;49m
+<workspace>/work/btx-review-tools/registry-quarantine-triage/execution/component.cpp:325: [4;31;49mfatal error: in "compute_profile_tests/qualification_quarantine_failure_preserves_source_and_reports_error": critical check recovered.Open(path, err) has failed[0;39;49m
+[1;34;49m<workspace>/work/btx-review-tools/registry-quarantine-triage/execution/component.cpp:278: Leaving test case "qualification_quarantine_failure_preserves_source_and_reports_error"; testing time: 1128us
+[0;39;49m[1;34;49m<workspace>/work/btx-review-tools/registry-quarantine-triage/execution/component.cpp:34: Leaving test suite "compute_profile_tests"; testing time: 1160us
+[0;39;49m[1;34;49mLeaving test module "qualification_registry_component"; testing time: 1171us
+[0;39;49m
+Test module "qualification_registry_component" has failed with:
+  1 test case out of 8 failed
+  7 test cases out of 8 skipped
+  1 test case out of 8 aborted
+  31 assertions out of 38 passed
+  7 assertions out of 38 failed
+
+  Test suite "compute_profile_tests" has failed with:
+    1 test case out of 8 failed
+    7 test cases out of 8 skipped
+    1 test case out of 8 aborted
+    31 assertions out of 38 passed
+    7 assertions out of 38 failed
+
+    Test case "compute_profile_tests/qualification_quarantine_failure_preserves_source_and_reports_error" was aborted with:
+      31 assertions out of 38 passed
+      7 assertions out of 38 failed
+
