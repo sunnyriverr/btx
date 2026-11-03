@@ -1,0 +1,42 @@
+name: Atlas Windows owner acceptance
+on:
+  push:
+    branches: [codex/ci-atlas-owner]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: windows-2025
+    timeout-minutes: 8
+    steps:
+      - name: Prepare pinned read-only checks and owned fixture harness
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $repo=Join-Path $env:RUNNER_TEMP 'atlas-owner-repo'
+          git init $repo
+          if($LASTEXITCODE -ne 0){throw 'init failed'}
+          git -C $repo remote add origin https://github.com/sunnyriverr/btx.git
+          git -C $repo fetch --filter=blob:none --depth=1 origin $env:GITHUB_SHA acbf7efb20b1b82da06affdae2ead08068cf743c afd6591970e7f8d65871412b9d7cf03b48f30b97
+          if($LASTEXITCODE -ne 0){throw 'fetch failed'}
+          git -C $repo sparse-checkout set --no-cone /contrib/devtools/atlas-owner-check/
+          if($LASTEXITCODE -ne 0){throw 'sparse setup failed'}
+          git -C $repo checkout --detach $env:GITHUB_SHA
+          if($LASTEXITCODE -ne 0){throw 'checkout failed'}
+      - name: Check normal owner, Users owner, and restoration
+        shell: pwsh
+        run: |
+          $repo=Join-Path $env:RUNNER_TEMP 'atlas-owner-repo'
+          & (Join-Path $repo 'contrib/devtools/atlas-owner-check/check_owner.ps1') -Repo $repo -Out (Join-Path $env:RUNNER_TEMP 'atlas-owner-result')
+      - name: Record results
+        if: always()
+        shell: pwsh
+        run: |
+          $out=Join-Path $env:RUNNER_TEMP 'atlas-owner-result'
+          if(Test-Path $out){
+            Get-ChildItem $out -File | Where-Object {$_.Extension -in '.json','.log'} | Sort-Object Name | ForEach-Object {
+              Write-Output "--- BEGIN $($_.Name) ---"
+              Get-Content -LiteralPath $_.FullName -Raw
+              Write-Output "--- END $($_.Name) ---"
+            }
+          }
