@@ -1,0 +1,58 @@
+{
+  "verdict": "PASS",
+  "reviewer": "BTX test 1 /root/channel_recovery_revision_review",
+  "product": "b1be792041f9337b4d8e1156f8b6aa76b8e09277",
+  "parent": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+  "test_sha256": "c50765e3b6502811c67c619de0bbc40a068aeb2cd5c7a6686d79336aba37aedb",
+  "scope": "internal source, result and artifact audit; no reviewer build/test/native reproduction",
+  "verified": {
+    "source_rows": 65,
+    "exact_git_product_rows": 64,
+    "candidate_test_rows": 1,
+    "readonly_link_inputs": 4,
+    "result_artifact_hashes_and_bytes": 8,
+    "binaries": 3,
+    "harness_object": true,
+    "knownbad_object": true,
+    "sqlite_header": true,
+    "prior_native_manifest": true,
+    "mutant_diffs": "exact single intended removal each",
+    "sha256sums_entries": 109
+  },
+  "observed_results": [
+    {
+      "case": "owner revoked active",
+      "current": "PASS 1/1",
+      "known_bad": "FAIL 1/1: repeated owner-revoked Tick revoked unrelated new permit"
+    },
+    {
+      "case": "candidate quarantine control",
+      "current": "PASS 1/1",
+      "known_bad": "FAIL 1/1: invalid active appeared recovered after candidate quarantine"
+    }
+  ],
+  "resource_report": {
+    "minimum_free_bytes": 1363595264,
+    "floor_bytes": 1342177280,
+    "floor_margin_bytes": 21417984,
+    "peak_owned_bytes": 6597619,
+    "limit_bytes": 12582912,
+    "cleanup": {
+      "fixtures_remaining": [],
+      "owned_processes_remaining": [],
+      "readonly_inputs_unchanged": true
+    }
+  },
+  "limits": [
+    "Only two current focused cases executed, not revised seven-case suite",
+    "Partial relink with identified reused native archives, not fresh clean build",
+    "Same Broker boot across actual Database close/reopen, not Service restart",
+    "Synthetic canaries and historical explicit fixture times",
+    "No native worker, Service maintenance, other OS, full daemon or production qualification",
+    "Activation and rollback acknowledgement-clear analysis source only; no exhaustive mutant qualification"
+  ],
+  "pilot": "Preserved pilot1: invalid Text(empty) accessor SEC_TEXT, independent private output-directory SEC_PRIVATE_DIRECTORY; no product result",
+  "material_review_catch": "Clean recipe relative output argument violates EnsurePrivateDirectory absolute-path precondition; requested docs-only correction; executed absolute-path recipe valid",
+  "recipe_correction": "Absolute $PWD output paths read back; clean recipe remains explicitly unexecuted",
+  "review_output_reservation": "released after final report; no runtime resources acquired"
+}
