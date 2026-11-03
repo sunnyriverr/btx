@@ -1,0 +1,41 @@
+name: Windows SDK macro cause diagnostic
+on:
+  push:
+    branches: [codex/ci-windows-sdk-cause]
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: windows-2025
+    timeout-minutes: 8
+    steps:
+      - name: Fetch pinned inputs
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $repo = Join-Path $env:RUNNER_TEMP 'sdk-cause-repo'
+          git init $repo
+          if ($LASTEXITCODE -ne 0) { throw 'git init failed' }
+          git -C $repo remote add origin https://github.com/sunnyriverr/btx.git
+          git -C $repo fetch --filter=blob:none --depth=1 origin $env:GITHUB_SHA
+          if ($LASTEXITCODE -ne 0) { throw 'fetch diagnostic failed' }
+          git -C $repo fetch --filter=blob:none --depth=1 https://github.com/btxchain/btx.git 107efc934847f57ecb16a6b1d204a94eed5d8df2
+          if ($LASTEXITCODE -ne 0) { throw 'fetch pinned source failed' }
+          git -C $repo sparse-checkout set --no-cone /contrib/devtools/windows-sdk-cause/
+          if ($LASTEXITCODE -ne 0) { throw 'sparse checkout failed' }
+          git -C $repo checkout --detach $env:GITHUB_SHA
+          if ($LASTEXITCODE -ne 0) { throw 'checkout failed' }
+      - name: Compile SDK controls and current header cases
+        shell: cmd
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
+          if not defined BTX_VS exit /b 2
+          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+          if errorlevel 1 exit /b %errorlevel%
+          set "PATH=C:\Program Files\LLVM\bin;%PATH%"
+          set "CL="
+          set "_CL_="
+          set "LINK="
+          clang-cl --version
+          python "%RUNNER_TEMP%\sdk-cause-repo\contrib\devtools\windows-sdk-cause\check_sdk.py" --repo "%RUNNER_TEMP%\sdk-cause-repo" --out "%RUNNER_TEMP%\sdk-cause-output"
+          exit /b %errorlevel%
