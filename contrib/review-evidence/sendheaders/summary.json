@@ -1,0 +1,53 @@
+{
+  "result": "PASS scoped fixture restoration",
+  "candidate_sha256": "3d7de784eb91d2bfeca9be94cf8058b07a8b6acc9c846d67118096746694d261",
+  "control_sha256": "0490afa05a69bd5484ca462aa94fc056664c7a71a2af0ab9515b61a59e17dd0f",
+  "complete_candidate_runs": 2,
+  "retained_raw_log_runs": 1,
+  "control": "same final test except omission of ordinary-path isolation; expected Part1.0 INV assertion failure",
+  "candidate": "fresh exact proactive delivery; all Parts1-5;100 recovery rounds; exact11-message flood disconnect",
+  "runtime_records": [
+    "paired-run.json",
+    "pilots/first-complete/paired-run.json"
+  ],
+  "raw_log_archives": [
+    {
+      "path": "candidate-logs/node1.log.gz",
+      "uncompressed_sha256": "1c850d4e8f40c37ac5b1598b629c9b178bc290842f7193ca6745509d3cd03ee2",
+      "uncompressed_bytes": 5611523
+    },
+    {
+      "path": "candidate-logs/framework.log.gz",
+      "uncompressed_sha256": "1cb075dd9a0f172937c2f73b73d7e00fa76cf508336c42e717f7408d32f7130c",
+      "uncompressed_bytes": 772613
+    },
+    {
+      "path": "candidate-logs/node0.log.gz",
+      "uncompressed_sha256": "459ae251220a52dc57250bf87c006ec177079d02e7a5e83d64ce36ed4865eae3",
+      "uncompressed_bytes": 14259905
+    },
+    {
+      "path": "control-logs/node1.log.gz",
+      "uncompressed_sha256": "8984d0450b1369bd734c5088a53ab4ab65bb75d7fbc170a3ac55de19253ecb91",
+      "uncompressed_bytes": 108290
+    },
+    {
+      "path": "control-logs/framework.log.gz",
+      "uncompressed_sha256": "7cc6644bf4115dd8ca06961162e672c3a0e8484170d1efaa2e17619e50f28aa8",
+      "uncompressed_bytes": 21631
+    },
+    {
+      "path": "control-logs/node0.log.gz",
+      "uncompressed_sha256": "45aa4418737e18aa63e289490bd5c6e266d30bba671afee230243851c7afd3f0",
+      "uncompressed_bytes": 153141
+    }
+  ],
+  "selected_sender_events": [
+    "2026-11-03T04:31:31.745690Z (mocktime: 2026-11-03T04:32:17Z) [msghand] [net_processing.cpp:24208] [virtual bool (anonymous namespace)::PeerManagerImpl::SendMessages(CNode *)] [net] SendMessages: 8 headers, range (4fb5cd0978df827c0f8548a4f7383edc2cacc9098448389162af7bcc43203735, 93dd3dbe77d5d46c11f44210b22e13158d166b273d2ef95a4881e8b7371aafc4), to peer=3",
+    "2026-11-03T04:31:35.097475Z (mocktime: 2026-11-03T04:32:17Z) [msghand] [net_processing.cpp:24208] [virtual bool (anonymous namespace)::PeerManagerImpl::SendMessages(CNode *)] [net] SendMessages: 8 headers, range (45d5a80fbcf7550650f51cbf35eaa43aa1b936462bf830b3c31fd0f14e1e3dff, bee783b19f16bc99993bf7d19b70771693a5240ca848012aabc4bd356172effb), to peer=3",
+    "2026-11-03T04:31:55.107726Z (mocktime: 2026-11-03T08:01:44Z) [msghand] [net_processing.cpp:11114] [void (anonymous namespace)::PeerManagerImpl::HandleUnconnectingHeaders(CNode &, Peer &, const std::vector<CBlockHeader> &)] [net] Disconnecting peer=3: 11 unconnecting headers messages (header flood / body-withhold)"
+  ],
+  "minimum_free_bytes": 1346674688,
+  "reserve_bytes": 1342177280,
+  "scope": "macOS generic-P2P legacy regtest with retained base+377/378 binary, modelnetoff/walletoff; not product relay change or full release/other-platform qualification"
+}

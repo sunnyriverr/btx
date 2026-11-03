@@ -1,0 +1,47 @@
+{
+  "runs": [
+    {
+      "name": "control",
+      "command": [
+        "python3",
+        "<workspace>/work/btx-review-tools/sendheaders-classification/repair/control-runtime.py",
+        "--configfile=<workspace>/work/btx-review-tools/sendheaders-classification/config.ini",
+        "--tmpdir=<workspace>/work/btx-review-tools/sendheaders-classification/repair/run-control",
+        "--nocleanup",
+        "--timeout-factor=1",
+        "--loglevel=DEBUG",
+        "--portseed=644"
+      ],
+      "test_sha256": "0490afa05a69bd5484ca462aa94fc056664c7a71a2af0ab9515b61a59e17dd0f",
+      "started": 1793680247.673842,
+      "minimum_free_bytes": 1380073472,
+      "peak_owned_bytes": 39057649,
+      "exit": 1,
+      "elapsed_seconds": 1.6763651371002197
+    },
+    {
+      "name": "candidate",
+      "command": [
+        "python3",
+        "<workspace>/work/btx-review-tools/sendheaders-classification/repair/candidate-runtime.py",
+        "--configfile=<workspace>/work/btx-review-tools/sendheaders-classification/config.ini",
+        "--tmpdir=<workspace>/work/btx-review-tools/sendheaders-classification/repair/run-candidate",
+        "--nocleanup",
+        "--timeout-factor=1",
+        "--loglevel=DEBUG",
+        "--portseed=644"
+      ],
+      "test_sha256": "3d7de784eb91d2bfeca9be94cf8058b07a8b6acc9c846d67118096746694d261",
+      "started": 1793680249.374641,
+      "minimum_free_bytes": 1346674688,
+      "peak_owned_bytes": 70713745,
+      "exit": 0,
+      "elapsed_seconds": 66.3131959438324
+    }
+  ],
+  "minimum_free_bytes": 1346674688,
+  "scope": "Same retained binary and final fixture, ordinary-path isolation omitted/present; not a product-code before/after.",
+  "complete": true,
+  "initial_free_bytes": 1416200192,
+  "metadata_correction": "Initial record root field was mislabeled minimum; corrected from nested sampled minima without changing run records."
+}
