@@ -1,0 +1,131 @@
+clang-cl: warning: argument unused during compilation: '/Zc:preprocessor' [-Wunused-command-line-argument]
+D:\a\_temp\sdk-repair-output\prefix-regression.cpp(10,15): error: static assertion failed due to requirement 'sizeof ("far") == 1'
+   10 | static_assert(sizeof(BTX_STRINGIFY(FAR)) == 1);
+      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\a\_temp\sdk-repair-output\prefix-regression.cpp(10,42): note: expression evaluates to '4 == 1'
+   10 | static_assert(sizeof(BTX_STRINGIFY(FAR)) == 1);
+      |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+D:\a\_temp\sdk-repair-output\prefix-regression.cpp(11,15): error: static assertion failed due to requirement 'sizeof ("near") == 1'
+   11 | static_assert(sizeof(BTX_STRINGIFY(NEAR)) == 1);
+      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\a\_temp\sdk-repair-output\prefix-regression.cpp(11,43): note: expression evaluates to '5 == 1'
+   11 | static_assert(sizeof(BTX_STRINGIFY(NEAR)) == 1);
+      |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+D:\a\_temp\sdk-repair-output\prefix-regression.cpp(12,33): error: expected '>'
+   12 | static_assert(std::is_same_v<int FAR*, int*>);
+      |                                 ^
+D:\a\_temp\sdk-repair-output\prefix-regression.cpp(12,29): note: to match this '<'
+   12 | static_assert(std::is_same_v<int FAR*, int*>);
+      |                             ^
+D:\a\_temp\sdk-repair-output\prefix-regression.cpp(13,33): error: expected '>'
+   13 | static_assert(std::is_same_v<int NEAR*, int*>);
+      |                                 ^
+D:\a\_temp\sdk-repair-output\prefix-regression.cpp(13,29): note: to match this '<'
+   13 | static_assert(std::is_same_v<int NEAR*, int*>);
+      |                             ^
+D:\a\_temp\sdk-repair-output\prefix-regression.cpp(20,5): error: expected ')'
+   20 |     FD_ZERO(&descriptors);
+      |     ^
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(173,32): note: expanded from macro 'FD_ZERO'
+  173 | #define FD_ZERO(set) (((fd_set FAR *)(set))->fd_count=0)
+      |                                ^
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\minwindef.h(150,29): note: expanded from macro 'FAR'
+  150 | #define FAR                 far
+      |                             ^
+D:\a\_temp\sdk-repair-output\prefix-regression.cpp(20,5): note: to match this '('
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(173,24): note: expanded from macro 'FD_ZERO'
+  173 | #define FD_ZERO(set) (((fd_set FAR *)(set))->fd_count=0)
+      |                        ^
+D:\a\_temp\sdk-repair-output\prefix-regression.cpp(20,5): error: no matching conversion for C-style cast from 'fd_set *' to 'fd_set'
+   20 |     FD_ZERO(&descriptors);
+      |     ^~~~~~~~~~~~~~~~~~~~~
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(173,24): note: expanded from macro 'FD_ZERO'
+  173 | #define FD_ZERO(set) (((fd_set FAR *)(set))->fd_count=0)
+      |                        ^~~~~~~~~~~~~~~~~~~
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(136,16): note: candidate constructor (the implicit copy constructor) not viable: no known conversion from 'fd_set *' to 'const fd_set' for 1st argument; dereference the argument with *
+  136 | typedef struct fd_set {
+      |                ^~~~~~
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(136,16): note: candidate constructor (the implicit move constructor) not viable: no known conversion from 'fd_set *' to 'fd_set' for 1st argument; dereference the argument with *
+  136 | typedef struct fd_set {
+      |                ^~~~~~
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(136,16): note: candidate constructor (the implicit default constructor) not viable: requires 0 arguments, but 1 was provided
+D:\a\_temp\sdk-repair-output\prefix-regression.cpp(22,5): error: expected ')'
+   22 |     FD_SET(descriptor, &descriptors);
+      |     ^
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(160,34): note: expanded from macro 'FD_SET'
+  160 |     for (__i = 0; __i < ((fd_set FAR *)(set))->fd_count; __i++) { \
+      |                                  ^
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\minwindef.h(150,29): note: expanded from macro 'FAR'
+  150 | #define FAR                 far
+      |                             ^
+D:\a\_temp\sdk-repair-output\prefix-regression.cpp(22,5): note: to match this '('
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(160,26): note: expanded from macro 'FD_SET'
+  160 |     for (__i = 0; __i < ((fd_set FAR *)(set))->fd_count; __i++) { \
+      |                          ^
+D:\a\_temp\sdk-repair-output\prefix-regression.cpp(22,5): error: no matching conversion for C-style cast from 'fd_set *' to 'fd_set'
+   22 |     FD_SET(descriptor, &descriptors);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(160,26): note: expanded from macro 'FD_SET'
+  160 |     for (__i = 0; __i < ((fd_set FAR *)(set))->fd_count; __i++) { \
+      |                          ^~~~~~~~~~~~~~~~~~~
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(136,16): note: candidate constructor (the implicit copy constructor) not viable: no known conversion from 'fd_set *' to 'const fd_set' for 1st argument; dereference the argument with *
+  136 | typedef struct fd_set {
+      |                ^~~~~~
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(136,16): note: candidate constructor (the implicit move constructor) not viable: no known conversion from 'fd_set *' to 'fd_set' for 1st argument; dereference the argument with *
+  136 | typedef struct fd_set {
+      |                ^~~~~~
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(136,16): note: candidate constructor (the implicit default constructor) not viable: requires 0 arguments, but 1 was provided
+D:\a\_temp\sdk-repair-output\prefix-regression.cpp(22,5): error: expected ')'
+   22 |     FD_SET(descriptor, &descriptors);
+      |     ^
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(161,22): note: expanded from macro 'FD_SET'
+  161 |         if (((fd_set FAR *)(set))->fd_array[__i] == (fd)) { \
+      |                      ^
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\minwindef.h(150,29): note: expanded from macro 'FAR'
+  150 | #define FAR                 far
+      |                             ^
+D:\a\_temp\sdk-repair-output\prefix-regression.cpp(22,5): note: to match this '('
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(161,14): note: expanded from macro 'FD_SET'
+  161 |         if (((fd_set FAR *)(set))->fd_array[__i] == (fd)) { \
+      |              ^
+D:\a\_temp\sdk-repair-output\prefix-regression.cpp(22,5): error: no matching conversion for C-style cast from 'fd_set *' to 'fd_set'
+   22 |     FD_SET(descriptor, &descriptors);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(161,14): note: expanded from macro 'FD_SET'
+  161 |         if (((fd_set FAR *)(set))->fd_array[__i] == (fd)) { \
+      |              ^~~~~~~~~~~~~~~~~~~
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(136,16): note: candidate constructor (the implicit copy constructor) not viable: no known conversion from 'fd_set *' to 'const fd_set' for 1st argument; dereference the argument with *
+  136 | typedef struct fd_set {
+      |                ^~~~~~
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(136,16): note: candidate constructor (the implicit move constructor) not viable: no known conversion from 'fd_set *' to 'fd_set' for 1st argument; dereference the argument with *
+  136 | typedef struct fd_set {
+      |                ^~~~~~
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(136,16): note: candidate constructor (the implicit default constructor) not viable: requires 0 arguments, but 1 was provided
+D:\a\_temp\sdk-repair-output\prefix-regression.cpp(22,5): error: expected ')'
+   22 |     FD_SET(descriptor, &descriptors);
+      |     ^
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(165,25): note: expanded from macro 'FD_SET'
+  165 |     if (__i == ((fd_set FAR *)(set))->fd_count) { \
+      |                         ^
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\minwindef.h(150,29): note: expanded from macro 'FAR'
+  150 | #define FAR                 far
+      |                             ^
+D:\a\_temp\sdk-repair-output\prefix-regression.cpp(22,5): note: to match this '('
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(165,17): note: expanded from macro 'FD_SET'
+  165 |     if (__i == ((fd_set FAR *)(set))->fd_count) { \
+      |                 ^
+D:\a\_temp\sdk-repair-output\prefix-regression.cpp(22,5): error: no matching conversion for C-style cast from 'fd_set *' to 'fd_set'
+   22 |     FD_SET(descriptor, &descriptors);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(165,17): note: expanded from macro 'FD_SET'
+  165 |     if (__i == ((fd_set FAR *)(set))->fd_count) { \
+      |                 ^~~~~~~~~~~~~~~~~~~
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(136,16): note: candidate constructor (the implicit copy constructor) not viable: no known conversion from 'fd_set *' to 'const fd_set' for 1st argument; dereference the argument with *
+  136 | typedef struct fd_set {
+      |                ^~~~~~
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(136,16): note: candidate constructor (the implicit move constructor) not viable: no known conversion from 'fd_set *' to 'fd_set' for 1st argument; dereference the argument with *
+  136 | typedef struct fd_set {
+      |                ^~~~~~
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(136,16): note: candidate constructor (the implicit default constructor) not viable: requires 0 arguments, but 1 was provided
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+13 errors generated.

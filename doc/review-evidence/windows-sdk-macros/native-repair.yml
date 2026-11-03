@@ -1,0 +1,46 @@
+name: Windows SDK macro repair verification
+on:
+  push:
+    branches: [codex/ci-windows-sdk-repair]
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: windows-2025
+    timeout-minutes: 10
+    steps:
+      - name: Fetch pinned inputs
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $repo = Join-Path $env:RUNNER_TEMP 'sdk-repair-repo'
+          git init $repo
+          if ($LASTEXITCODE -ne 0) { throw 'git init failed' }
+          git -C $repo remote add origin https://github.com/sunnyriverr/btx.git
+          git -C $repo fetch --filter=blob:none --depth=1 origin $env:GITHUB_SHA 3ddffea282cd403da7e5d2350c8fd8990220eee5
+          if ($LASTEXITCODE -ne 0) { throw 'fetch diagnostic failed' }
+          git -C $repo fetch --filter=blob:none --depth=1 https://github.com/btxchain/btx.git 107efc934847f57ecb16a6b1d204a94eed5d8df2
+          if ($LASTEXITCODE -ne 0) { throw 'fetch pinned source failed' }
+          $manifestText = git -C $repo show "$($env:GITHUB_SHA):contrib/devtools/windows-sdk-repair/closure.json"
+          if ($LASTEXITCODE -ne 0) { throw 'manifest read failed' }
+          $manifest = $manifestText | ConvertFrom-Json
+          $paths = @('/contrib/devtools/windows-sdk-repair/', '/test/util/windows_sdk_macro_tests.cpp')
+          $paths += $manifest.source_files.PSObject.Properties.Name | ForEach-Object { '/' + $_ }
+          git -C $repo sparse-checkout set --no-cone -- $paths
+          if ($LASTEXITCODE -ne 0) { throw 'sparse checkout failed' }
+          git -C $repo checkout --detach $env:GITHUB_SHA
+          if ($LASTEXITCODE -ne 0) { throw 'checkout failed' }
+      - name: Run same baseline and candidate regression plus production compiles
+        shell: cmd
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
+          if not defined BTX_VS exit /b 2
+          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+          if errorlevel 1 exit /b %errorlevel%
+          set "PATH=C:\Program Files\LLVM\bin;%PATH%"
+          set "CL="
+          set "_CL_="
+          set "LINK="
+          clang-cl --version
+          python "%RUNNER_TEMP%\sdk-repair-repo\contrib\devtools\windows-sdk-repair\check_repair.py" --repo "%RUNNER_TEMP%\sdk-repair-repo" --out "%RUNNER_TEMP%\sdk-repair-output"
+          exit /b %errorlevel%
