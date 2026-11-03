@@ -1,0 +1,1131 @@
+﻿2026-11-03T13:38:07.3392903Z Current runner version: '2.338.2'
+2026-11-03T13:38:07.3417753Z ##[group]Runner Image Provisioner
+2026-11-03T13:38:07.3418463Z Hosted Compute Agent
+2026-11-03T13:38:07.3418947Z Version: 20261021.618
+2026-11-03T13:38:07.3419434Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-11-03T13:38:07.3420012Z Build Date: 2026-10-21T00:45:21Z
+2026-11-03T13:38:07.3420546Z Worker ID: {0e1fa6bd-e795-4e4a-beb0-85c9e15827af}
+2026-11-03T13:38:07.3421110Z Region: centralus
+2026-11-03T13:38:07.3421635Z Cloud: Azure
+2026-11-03T13:38:07.3422076Z ##[endgroup]
+2026-11-03T13:38:07.3423064Z ##[group]Operating System
+2026-11-03T13:38:07.3423611Z Microsoft Windows Server 2025
+2026-11-03T13:38:07.3424047Z 10.0.26100
+2026-11-03T13:38:07.3424452Z Datacenter
+2026-11-03T13:38:07.3424847Z ##[endgroup]
+2026-11-03T13:38:07.3425247Z ##[group]Runner Image
+2026-11-03T13:38:07.3425704Z Image: windows-2025-vs2026
+2026-11-03T13:38:07.3426241Z Version: 20261030.294.1
+2026-11-03T13:38:07.3427468Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20261030.294/images/windows/Windows2025-VS2026-Readme.md
+2026-11-03T13:38:07.3428942Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20261030.294
+2026-11-03T13:38:07.3429710Z ##[endgroup]
+2026-11-03T13:38:07.3430797Z ##[group]GITHUB_TOKEN Permissions
+2026-11-03T13:38:07.3432315Z Contents: read
+2026-11-03T13:38:07.3432770Z Metadata: read
+2026-11-03T13:38:07.3433279Z ##[endgroup]
+2026-11-03T13:38:07.3434992Z Secret source: Actions
+2026-11-03T13:38:07.3435669Z Cache mode: write
+2026-11-03T13:38:07.3436201Z Prepare workflow directory
+2026-11-03T13:38:07.3742130Z Prepare all required actions
+2026-11-03T13:38:07.3825179Z Complete job name: verify
+2026-11-03T13:38:07.6937613Z ##[group]Run $ErrorActionPreference = 'Stop'
+2026-11-03T13:38:07.6938616Z [36;1m$ErrorActionPreference = 'Stop'[0m
+2026-11-03T13:38:07.6939251Z [36;1m$repo = Join-Path $env:RUNNER_TEMP 'pr393-repo'[0m
+2026-11-03T13:38:07.6939858Z [36;1mgit init $repo[0m
+2026-11-03T13:38:07.6940441Z [36;1mif ($LASTEXITCODE -ne 0) { throw 'git init failed' }[0m
+2026-11-03T13:38:07.6941205Z [36;1mgit -C $repo remote add origin https://github.com/sunnyriverr/btx.git[0m
+2026-11-03T13:38:07.6942674Z [36;1mgit -C $repo fetch --filter=blob:none --depth=1 origin $env:GITHUB_SHA cbf65894e6d61084527cd93e913a00c6794418dd d1ee21e828df480d6a3b9605a0d08a21fce8c6ef eca826d8040ff222feb5595c18c75193e336c7c4[0m
+2026-11-03T13:38:07.6944111Z [36;1mif ($LASTEXITCODE -ne 0) { throw 'Pinned fetch failed' }[0m
+2026-11-03T13:38:07.6944973Z [36;1mgit -C $repo sparse-checkout set --no-cone /contrib/devtools/pr393-native-windows/[0m
+2026-11-03T13:38:07.6945987Z [36;1mif ($LASTEXITCODE -ne 0) { throw 'Sparse setup failed' }[0m
+2026-11-03T13:38:07.6946620Z [36;1mgit -C $repo checkout --detach $env:GITHUB_SHA[0m
+2026-11-03T13:38:07.6947248Z [36;1mif ($LASTEXITCODE -ne 0) { throw 'Checkout failed' }[0m
+2026-11-03T13:38:07.8701695Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-11-03T13:38:07.8702683Z ##[endgroup]
+2026-11-03T13:38:08.8121080Z Initialized empty Git repository in D:/a/_temp/pr393-repo/.git/
+2026-11-03T13:38:10.2967055Z From https://github.com/sunnyriverr/btx
+2026-11-03T13:38:10.2968326Z  * branch            22373c44035249ad74fd5a39e718a9d3c1298aba -> FETCH_HEAD
+2026-11-03T13:38:10.2969424Z  * branch            cbf65894e6d61084527cd93e913a00c6794418dd -> FETCH_HEAD
+2026-11-03T13:38:10.2970328Z  * branch            d1ee21e828df480d6a3b9605a0d08a21fce8c6ef -> FETCH_HEAD
+2026-11-03T13:38:10.2971235Z  * branch            eca826d8040ff222feb5595c18c75193e336c7c4 -> FETCH_HEAD
+2026-11-03T13:38:11.0882260Z HEAD is now at 22373c4 ci: verify PR393 native Windows component linkage
+2026-11-03T13:38:11.1603943Z ##[group]Run for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
+2026-11-03T13:38:11.1606605Z [36;1mfor /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"[0m
+2026-11-03T13:38:11.1607401Z [36;1mif not defined BTX_VS exit /b 2[0m
+2026-11-03T13:38:11.1607748Z [36;1mcall "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64[0m
+2026-11-03T13:38:11.1608104Z [36;1mif errorlevel 1 exit /b %errorlevel%[0m
+2026-11-03T13:38:11.1608388Z [36;1mset "PATH=C:\Program Files\LLVM\bin;%PATH%"[0m
+2026-11-03T13:38:11.1608651Z [36;1mset "CL="[0m
+2026-11-03T13:38:11.1608860Z [36;1mset "_CL_="[0m
+2026-11-03T13:38:11.1609109Z [36;1mset "LINK="[0m
+2026-11-03T13:38:11.1609363Z [36;1mpython --version[0m
+2026-11-03T13:38:11.1610057Z [36;1mpython "%RUNNER_TEMP%\pr393-repo\contrib\devtools\pr393-native-windows\verify_windows_linkage.py" --repo "%RUNNER_TEMP%\pr393-repo" --out "%RUNNER_TEMP%\pr393-output"[0m
+2026-11-03T13:38:11.1610641Z [36;1mexit /b %errorlevel%[0m
+2026-11-03T13:38:11.1636073Z shell: C:\Windows\system32\cmd.EXE /D /E:ON /V:OFF /S /C "CALL "{0}""
+2026-11-03T13:38:11.1636422Z ##[endgroup]
+2026-11-03T13:38:13.7554429Z Python 3.12.10
+2026-11-03T13:39:00.5535525Z PASS: COFF component only; full node and enabled GPU builds unverified
+2026-11-03T13:39:00.5846670Z ##[group]Run $out = Join-Path $env:RUNNER_TEMP 'pr393-output'
+2026-11-03T13:39:00.5847123Z [36;1m$out = Join-Path $env:RUNNER_TEMP 'pr393-output'[0m
+2026-11-03T13:39:00.5847388Z [36;1mif (Test-Path $out) {[0m
+2026-11-03T13:39:00.5848101Z [36;1m  Get-ChildItem $out -File | Where-Object { $_.Extension -in '.json','.log' } | Sort-Object Name | ForEach-Object {[0m
+2026-11-03T13:39:00.5848536Z [36;1m    Write-Output "--- BEGIN $($_.Name) ---"[0m
+2026-11-03T13:39:00.5848826Z [36;1m    Get-Content -LiteralPath $_.FullName -Raw[0m
+2026-11-03T13:39:00.5849105Z [36;1m    Write-Output "--- END $($_.Name) ---"[0m
+2026-11-03T13:39:00.5849370Z [36;1m  }[0m
+2026-11-03T13:39:00.5849519Z [36;1m} else {[0m
+2026-11-03T13:39:00.5849777Z [36;1m  Write-Output 'No result directory; setup did not reach component runner.'[0m
+2026-11-03T13:39:00.5850072Z [36;1m}[0m
+2026-11-03T13:39:00.5908119Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-11-03T13:39:00.5908510Z ##[endgroup]
+2026-11-03T13:39:00.9176831Z --- BEGIN candidate-archive.log ---
+2026-11-03T13:39:00.9207620Z --- END candidate-archive.log ---
+2026-11-03T13:39:00.9209660Z --- BEGIN candidate-coff-0.log ---
+2026-11-03T13:39:00.9219373Z 
+2026-11-03T13:39:00.9219567Z File: D:\a\_temp\pr393-output\candidate\unit-0.obj
+2026-11-03T13:39:00.9220037Z Format: COFF-x86-64
+2026-11-03T13:39:00.9220277Z Arch: x86_64
+2026-11-03T13:39:00.9220487Z AddressSize: 64bit
+2026-11-03T13:39:00.9220703Z ImageFileHeader {
+2026-11-03T13:39:00.9220961Z   Machine: IMAGE_FILE_MACHINE_AMD64 (0x8664)
+2026-11-03T13:39:00.9221267Z   SectionCount: 21
+2026-11-03T13:39:00.9221594Z   TimeDateStamp: 2026-11-03 13:38:53 (0x6AE9E3ED)
+2026-11-03T13:39:00.9221965Z   PointerToSymbolTable: 0xA07
+2026-11-03T13:39:00.9222268Z   SymbolCount: 63
+2026-11-03T13:39:00.9222515Z   StringTableSize: 1304
+2026-11-03T13:39:00.9222778Z   OptionalHeaderSize: 0
+2026-11-03T13:39:00.9223062Z   Characteristics [ (0x0)
+2026-11-03T13:39:00.9223326Z   ]
+2026-11-03T13:39:00.9223508Z }
+2026-11-03T13:39:00.9223636Z 
+2026-11-03T13:39:00.9223789Z --- END candidate-coff-0.log ---
+2026-11-03T13:39:00.9224127Z --- BEGIN candidate-coff-1.log ---
+2026-11-03T13:39:00.9229350Z 
+2026-11-03T13:39:00.9229595Z File: D:\a\_temp\pr393-output\candidate\unit-1.obj
+2026-11-03T13:39:00.9229980Z Format: COFF-x86-64
+2026-11-03T13:39:00.9230217Z Arch: x86_64
+2026-11-03T13:39:00.9230410Z AddressSize: 64bit
+2026-11-03T13:39:00.9230663Z ImageFileHeader {
+2026-11-03T13:39:00.9230928Z   Machine: IMAGE_FILE_MACHINE_AMD64 (0x8664)
+2026-11-03T13:39:00.9231324Z   SectionCount: 21
+2026-11-03T13:39:00.9232680Z   TimeDateStamp: 2026-11-03 13:38:54 (0x6AE9E3EE)
+2026-11-03T13:39:00.9233083Z   PointerToSymbolTable: 0x9A5
+2026-11-03T13:39:00.9233360Z   SymbolCount: 63
+2026-11-03T13:39:00.9233600Z   StringTableSize: 1018
+2026-11-03T13:39:00.9233777Z   OptionalHeaderSize: 0
+2026-11-03T13:39:00.9233949Z   Characteristics [ (0x0)
+2026-11-03T13:39:00.9234367Z   ]
+2026-11-03T13:39:00.9234556Z }
+2026-11-03T13:39:00.9234627Z 
+2026-11-03T13:39:00.9234712Z --- END candidate-coff-1.log ---
+2026-11-03T13:39:00.9234915Z --- BEGIN candidate-coff-2.log ---
+2026-11-03T13:39:00.9237865Z 
+2026-11-03T13:39:00.9238106Z File: D:\a\_temp\pr393-output\candidate\unit-2.obj
+2026-11-03T13:39:00.9238506Z Format: COFF-x86-64
+2026-11-03T13:39:00.9238739Z Arch: x86_64
+2026-11-03T13:39:00.9238965Z AddressSize: 64bit
+2026-11-03T13:39:00.9239216Z ImageFileHeader {
+2026-11-03T13:39:00.9239395Z   Machine: IMAGE_FILE_MACHINE_AMD64 (0x8664)
+2026-11-03T13:39:00.9239610Z   SectionCount: 21
+2026-11-03T13:39:00.9239891Z   TimeDateStamp: 2026-11-03 13:38:55 (0x6AE9E3EF)
+2026-11-03T13:39:00.9240234Z   PointerToSymbolTable: 0x9AA
+2026-11-03T13:39:00.9240465Z   SymbolCount: 63
+2026-11-03T13:39:00.9240625Z   StringTableSize: 1255
+2026-11-03T13:39:00.9240811Z   OptionalHeaderSize: 0
+2026-11-03T13:39:00.9240985Z   Characteristics [ (0x0)
+2026-11-03T13:39:00.9241150Z   ]
+2026-11-03T13:39:00.9241530Z }
+2026-11-03T13:39:00.9243420Z 
+2026-11-03T13:39:00.9243583Z --- END candidate-coff-2.log ---
+2026-11-03T13:39:00.9243819Z --- BEGIN candidate-coff-3.log ---
+2026-11-03T13:39:00.9246450Z 
+2026-11-03T13:39:00.9246627Z File: D:\a\_temp\pr393-output\candidate\unit-3.obj
+2026-11-03T13:39:00.9246972Z Format: COFF-x86-64
+2026-11-03T13:39:00.9247134Z Arch: x86_64
+2026-11-03T13:39:00.9247286Z AddressSize: 64bit
+2026-11-03T13:39:00.9247443Z ImageFileHeader {
+2026-11-03T13:39:00.9247614Z   Machine: IMAGE_FILE_MACHINE_AMD64 (0x8664)
+2026-11-03T13:39:00.9247975Z   SectionCount: 264
+2026-11-03T13:39:00.9248171Z   TimeDateStamp: 2026-11-03 13:38:55 (0x6AE9E3EF)
+2026-11-03T13:39:00.9248497Z   PointerToSymbolTable: 0x5910
+2026-11-03T13:39:00.9248760Z   SymbolCount: 664
+2026-11-03T13:39:00.9248929Z   StringTableSize: 7143
+2026-11-03T13:39:00.9249099Z   OptionalHeaderSize: 0
+2026-11-03T13:39:00.9249279Z   Characteristics [ (0x0)
+2026-11-03T13:39:00.9249444Z   ]
+2026-11-03T13:39:00.9249657Z }
+2026-11-03T13:39:00.9249775Z 
+2026-11-03T13:39:00.9249861Z --- END candidate-coff-3.log ---
+2026-11-03T13:39:00.9250314Z --- BEGIN candidate-coff-4.log ---
+2026-11-03T13:39:00.9254137Z 
+2026-11-03T13:39:00.9254299Z File: D:\a\_temp\pr393-output\candidate\unit-4.obj
+2026-11-03T13:39:00.9254648Z Format: COFF-x86-64
+2026-11-03T13:39:00.9254867Z Arch: x86_64
+2026-11-03T13:39:00.9255082Z AddressSize: 64bit
+2026-11-03T13:39:00.9255332Z ImageFileHeader {
+2026-11-03T13:39:00.9255594Z   Machine: IMAGE_FILE_MACHINE_AMD64 (0x8664)
+2026-11-03T13:39:00.9255918Z   SectionCount: 264
+2026-11-03T13:39:00.9256151Z   TimeDateStamp: 2026-11-03 13:38:56 (0x6AE9E3F0)
+2026-11-03T13:39:00.9256397Z   PointerToSymbolTable: 0x58B2
+2026-11-03T13:39:00.9256582Z   SymbolCount: 663
+2026-11-03T13:39:00.9256794Z   StringTableSize: 7057
+2026-11-03T13:39:00.9257053Z   OptionalHeaderSize: 0
+2026-11-03T13:39:00.9257298Z   Characteristics [ (0x0)
+2026-11-03T13:39:00.9257465Z   ]
+2026-11-03T13:39:00.9257593Z }
+2026-11-03T13:39:00.9257670Z 
+2026-11-03T13:39:00.9257798Z --- END candidate-coff-4.log ---
+2026-11-03T13:39:00.9259248Z --- BEGIN candidate-coff-5.log ---
+2026-11-03T13:39:00.9263434Z 
+2026-11-03T13:39:00.9263617Z File: D:\a\_temp\pr393-output\candidate\unit-5.obj
+2026-11-03T13:39:00.9263950Z Format: COFF-x86-64
+2026-11-03T13:39:00.9264172Z Arch: x86_64
+2026-11-03T13:39:00.9264378Z AddressSize: 64bit
+2026-11-03T13:39:00.9264603Z ImageFileHeader {
+2026-11-03T13:39:00.9264857Z   Machine: IMAGE_FILE_MACHINE_AMD64 (0x8664)
+2026-11-03T13:39:00.9265180Z   SectionCount: 81
+2026-11-03T13:39:00.9265434Z   TimeDateStamp: 2026-11-03 13:38:57 (0x6AE9E3F1)
+2026-11-03T13:39:00.9266148Z   PointerToSymbolTable: 0x1C09
+2026-11-03T13:39:00.9266407Z   SymbolCount: 205
+2026-11-03T13:39:00.9266573Z   StringTableSize: 3223
+2026-11-03T13:39:00.9266745Z   OptionalHeaderSize: 0
+2026-11-03T13:39:00.9266920Z   Characteristics [ (0x0)
+2026-11-03T13:39:00.9267084Z   ]
+2026-11-03T13:39:00.9267215Z }
+2026-11-03T13:39:00.9267294Z 
+2026-11-03T13:39:00.9267375Z --- END candidate-coff-5.log ---
+2026-11-03T13:39:00.9267983Z --- BEGIN candidate-coff-6.log ---
+2026-11-03T13:39:00.9272098Z 
+2026-11-03T13:39:00.9272265Z File: D:\a\_temp\pr393-output\candidate\unit-6.obj
+2026-11-03T13:39:00.9272860Z Format: COFF-x86-64
+2026-11-03T13:39:00.9273115Z Arch: x86_64
+2026-11-03T13:39:00.9273330Z AddressSize: 64bit
+2026-11-03T13:39:00.9273566Z ImageFileHeader {
+2026-11-03T13:39:00.9273801Z   Machine: IMAGE_FILE_MACHINE_AMD64 (0x8664)
+2026-11-03T13:39:00.9274012Z   SectionCount: 81
+2026-11-03T13:39:00.9274344Z   TimeDateStamp: 2026-11-03 13:38:58 (0x6AE9E3F2)
+2026-11-03T13:39:00.9274674Z   PointerToSymbolTable: 0x1C2D
+2026-11-03T13:39:00.9274874Z   SymbolCount: 205
+2026-11-03T13:39:00.9275034Z   StringTableSize: 3400
+2026-11-03T13:39:00.9275221Z   OptionalHeaderSize: 0
+2026-11-03T13:39:00.9275396Z   Characteristics [ (0x0)
+2026-11-03T13:39:00.9275568Z   ]
+2026-11-03T13:39:00.9275699Z }
+2026-11-03T13:39:00.9275770Z 
+2026-11-03T13:39:00.9277055Z --- END candidate-coff-6.log ---
+2026-11-03T13:39:00.9277527Z --- BEGIN candidate-coff-7.log ---
+2026-11-03T13:39:00.9281076Z 
+2026-11-03T13:39:00.9281274Z File: D:\a\_temp\pr393-output\candidate\unit-7.obj
+2026-11-03T13:39:00.9281834Z Format: COFF-x86-64
+2026-11-03T13:39:00.9282069Z Arch: x86_64
+2026-11-03T13:39:00.9282247Z AddressSize: 64bit
+2026-11-03T13:39:00.9282463Z ImageFileHeader {
+2026-11-03T13:39:00.9282722Z   Machine: IMAGE_FILE_MACHINE_AMD64 (0x8664)
+2026-11-03T13:39:00.9282937Z   SectionCount: 975
+2026-11-03T13:39:00.9283189Z   TimeDateStamp: 2026-11-03 13:39:00 (0x6AE9E3F4)
+2026-11-03T13:39:00.9283521Z   PointerToSymbolTable: 0x1AF04
+2026-11-03T13:39:00.9283717Z   SymbolCount: 2434
+2026-11-03T13:39:00.9283872Z   StringTableSize: 38493
+2026-11-03T13:39:00.9284047Z   OptionalHeaderSize: 0
+2026-11-03T13:39:00.9284287Z   Characteristics [ (0x0)
+2026-11-03T13:39:00.9284515Z   ]
+2026-11-03T13:39:00.9284651Z }
+2026-11-03T13:39:00.9284721Z 
+2026-11-03T13:39:00.9284807Z --- END candidate-coff-7.log ---
+2026-11-03T13:39:00.9285124Z --- BEGIN candidate-compile-0.log ---
+2026-11-03T13:39:00.9289308Z --- END candidate-compile-0.log ---
+2026-11-03T13:39:00.9290819Z --- BEGIN candidate-compile-1.log ---
+2026-11-03T13:39:00.9294861Z --- END candidate-compile-1.log ---
+2026-11-03T13:39:00.9296490Z --- BEGIN candidate-compile-2.log ---
+2026-11-03T13:39:00.9300662Z --- END candidate-compile-2.log ---
+2026-11-03T13:39:00.9302334Z --- BEGIN candidate-compile-3.log ---
+2026-11-03T13:39:00.9476059Z --- END candidate-compile-3.log ---
+2026-11-03T13:39:00.9478393Z --- BEGIN candidate-compile-4.log ---
+2026-11-03T13:39:00.9484764Z --- END candidate-compile-4.log ---
+2026-11-03T13:39:00.9487084Z --- BEGIN candidate-compile-5.log ---
+2026-11-03T13:39:00.9492732Z --- END candidate-compile-5.log ---
+2026-11-03T13:39:00.9494896Z --- BEGIN candidate-compile-6.log ---
+2026-11-03T13:39:00.9500238Z --- END candidate-compile-6.log ---
+2026-11-03T13:39:00.9501894Z --- BEGIN candidate-compile-7.log ---
+2026-11-03T13:39:00.9506107Z --- END candidate-compile-7.log ---
+2026-11-03T13:39:00.9507828Z --- BEGIN candidate-direct-link.log ---
+2026-11-03T13:39:00.9511724Z --- END candidate-direct-link.log ---
+2026-11-03T13:39:00.9513454Z --- BEGIN candidate-direct-run.log ---
+2026-11-03T13:39:00.9517988Z PASS: all 12 dispatcher entry points, outputs and selected vendor surfaces
+2026-11-03T13:39:00.9518413Z 
+2026-11-03T13:39:00.9519903Z --- END candidate-direct-run.log ---
+2026-11-03T13:39:00.9521682Z --- BEGIN candidate-ordinary-link.log ---
+2026-11-03T13:39:00.9525459Z --- END candidate-ordinary-link.log ---
+2026-11-03T13:39:00.9527180Z --- BEGIN candidate-ordinary-run.log ---
+2026-11-03T13:39:00.9530976Z PASS: all 12 dispatcher entry points, outputs and selected vendor surfaces
+2026-11-03T13:39:00.9531365Z 
+2026-11-03T13:39:00.9532869Z --- END candidate-ordinary-run.log ---
+2026-11-03T13:39:00.9534560Z --- BEGIN candidate-whole-link.log ---
+2026-11-03T13:39:00.9538842Z --- END candidate-whole-link.log ---
+2026-11-03T13:39:00.9540542Z --- BEGIN candidate-whole-run.log ---
+2026-11-03T13:39:00.9544310Z PASS: all 12 dispatcher entry points, outputs and selected vendor surfaces
+2026-11-03T13:39:00.9544697Z 
+2026-11-03T13:39:00.9546378Z --- END candidate-whole-run.log ---
+2026-11-03T13:39:00.9548283Z --- BEGIN clang-cl-version.log ---
+2026-11-03T13:39:00.9551878Z clang version 20.1.8
+2026-11-03T13:39:00.9552182Z Target: x86_64-pc-windows-msvc
+2026-11-03T13:39:00.9552482Z Thread model: posix
+2026-11-03T13:39:00.9552761Z InstalledDir: C:\Program Files\LLVM\bin
+2026-11-03T13:39:00.9553002Z 
+2026-11-03T13:39:00.9554086Z --- END clang-cl-version.log ---
+2026-11-03T13:39:00.9556590Z --- BEGIN lld-link-version.log ---
+2026-11-03T13:39:00.9560649Z LLD 20.1.8
+2026-11-03T13:39:00.9560795Z 
+2026-11-03T13:39:00.9562677Z --- END lld-link-version.log ---
+2026-11-03T13:39:00.9564253Z --- BEGIN llvm-readobj-version.log ---
+2026-11-03T13:39:00.9568079Z LLVM (http://llvm.org/):
+2026-11-03T13:39:00.9568659Z   LLVM version 20.1.8
+2026-11-03T13:39:00.9568933Z   Optimized build.
+2026-11-03T13:39:00.9569099Z 
+2026-11-03T13:39:00.9570192Z --- END llvm-readobj-version.log ---
+2026-11-03T13:39:00.9572218Z --- BEGIN result.json ---
+2026-11-03T13:39:00.9576628Z {
+2026-11-03T13:39:00.9576867Z   "status": "PASS",
+2026-11-03T13:39:00.9577180Z   "scope": "native clang-cl/COFF component only",
+2026-11-03T13:39:00.9577680Z   "platform": "Windows-2025Server-10.0.26100-SP0",
+2026-11-03T13:39:00.9578099Z   "base": "cbf65894e6d61084527cd93e913a00c6794418dd",
+2026-11-03T13:39:00.9578513Z   "code": "d1ee21e828df480d6a3b9605a0d08a21fce8c6ef",
+2026-11-03T13:39:00.9578962Z   "evidence": "eca826d8040ff222feb5595c18c75193e336c7c4",
+2026-11-03T13:39:00.9579345Z   "tools": {
+2026-11-03T13:39:00.9579619Z     "git": "C:\\Program Files\\Git\\bin\\git.EXE",
+2026-11-03T13:39:00.9580058Z     "clang-cl": "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+2026-11-03T13:39:00.9580521Z     "lld-link": "C:\\Program Files\\LLVM\\bin\\lld-link.EXE",
+2026-11-03T13:39:00.9580981Z     "llvm-lib": "C:\\Program Files\\LLVM\\bin\\llvm-lib.EXE",
+2026-11-03T13:39:00.9581488Z     "llvm-readobj": "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE"
+2026-11-03T13:39:00.9581908Z   },
+2026-11-03T13:39:00.9582124Z   "tool_sha256": {
+2026-11-03T13:39:00.9582542Z     "git": "20d0dde30a65afb6e5810a883700a94dcd77fbf3b44b32868d45bf7c9b30137c",
+2026-11-03T13:39:00.9583461Z     "clang-cl": "57e32b1ea2456f12f97bf802453171bbff12d56b2c486b4eca0c75343c0cda2c",
+2026-11-03T13:39:00.9584312Z     "lld-link": "6590ac0122cd5e11fcd05cc9cd5b7ad01cb89961487b9b81c4330fb59abcb5d9",
+2026-11-03T13:39:00.9585143Z     "llvm-lib": "ac241b193d1954102c9282caa1fb0f2faf0331c6b3d137bc704a04b0f8763e76",
+2026-11-03T13:39:00.9585991Z     "llvm-readobj": "9c6b8adcaf1fea2889105e1d97f5b319b7d600f053069baa817ce462b611805a"
+2026-11-03T13:39:00.9586574Z   },
+2026-11-03T13:39:00.9586996Z   "driver_sha256": "dc9597fe3fc39ea0dd3711b352c2489a092352e39ef8fdba4d164810648fa92d",
+2026-11-03T13:39:00.9587715Z   "runner_sha256": "32f61177dd2891fb7468971f9c9039d046d3000f92418424e644d54ffcdf3652",
+2026-11-03T13:39:00.9588232Z   "commands": [
+2026-11-03T13:39:00.9588459Z     {
+2026-11-03T13:39:00.9588691Z       "label": "clang-cl-version",
+2026-11-03T13:39:00.9588991Z       "command": [
+2026-11-03T13:39:00.9589282Z         "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+2026-11-03T13:39:00.9589635Z         "--version"
+2026-11-03T13:39:00.9589866Z       ],
+2026-11-03T13:39:00.9590077Z       "exit": 0
+2026-11-03T13:39:00.9590319Z     },
+2026-11-03T13:39:00.9590526Z     {
+2026-11-03T13:39:00.9590754Z       "label": "lld-link-version",
+2026-11-03T13:39:00.9592113Z       "command": [
+2026-11-03T13:39:00.9592401Z         "C:\\Program Files\\LLVM\\bin\\lld-link.EXE",
+2026-11-03T13:39:00.9592747Z         "--version"
+2026-11-03T13:39:00.9592976Z       ],
+2026-11-03T13:39:00.9593186Z       "exit": 0
+2026-11-03T13:39:00.9593406Z     },
+2026-11-03T13:39:00.9593607Z     {
+2026-11-03T13:39:00.9594096Z       "label": "llvm-readobj-version",
+2026-11-03T13:39:00.9594432Z       "command": [
+2026-11-03T13:39:00.9594727Z         "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+2026-11-03T13:39:00.9595089Z         "--version"
+2026-11-03T13:39:00.9595306Z       ],
+2026-11-03T13:39:00.9595510Z       "exit": 0
+2026-11-03T13:39:00.9595726Z     },
+2026-11-03T13:39:00.9595925Z     {
+2026-11-03T13:39:00.9596149Z       "label": "source-compile-0",
+2026-11-03T13:39:00.9596454Z       "command": [
+2026-11-03T13:39:00.9596734Z         "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+2026-11-03T13:39:00.9597088Z         "/nologo",
+2026-11-03T13:39:00.9597326Z         "/std:c++20",
+2026-11-03T13:39:00.9597565Z         "/EHsc",
+2026-11-03T13:39:00.9597788Z         "/MD",
+2026-11-03T13:39:00.9598011Z         "/Od",
+2026-11-03T13:39:00.9598280Z         "/ID:\\a\\_temp\\pr393-output\\source\\src",
+2026-11-03T13:39:00.9598628Z         "/c",
+2026-11-03T13:39:00.9599161Z         "D:\\a\\_temp\\pr393-output\\source\\src\\matmul\\accel_v4_stub.cpp",
+2026-11-03T13:39:00.9599665Z         "/FoD:\\a\\_temp\\pr393-output\\source\\unit-0.obj"
+2026-11-03T13:39:00.9600021Z       ],
+2026-11-03T13:39:00.9600225Z       "exit": 0
+2026-11-03T13:39:00.9600443Z     },
+2026-11-03T13:39:00.9600654Z     {
+2026-11-03T13:39:00.9600875Z       "label": "source-coff-0",
+2026-11-03T13:39:00.9601164Z       "command": [
+2026-11-03T13:39:00.9601459Z         "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+2026-11-03T13:39:00.9601833Z         "--file-headers",
+2026-11-03T13:39:00.9602148Z         "D:\\a\\_temp\\pr393-output\\source\\unit-0.obj"
+2026-11-03T13:39:00.9602500Z       ],
+2026-11-03T13:39:00.9602712Z       "exit": 0
+2026-11-03T13:39:00.9602931Z     },
+2026-11-03T13:39:00.9603131Z     {
+2026-11-03T13:39:00.9603357Z       "label": "source-compile-1",
+2026-11-03T13:39:00.9603662Z       "command": [
+2026-11-03T13:39:00.9603948Z         "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+2026-11-03T13:39:00.9604315Z         "/nologo",
+2026-11-03T13:39:00.9604563Z         "/std:c++20",
+2026-11-03T13:39:00.9604808Z         "/EHsc",
+2026-11-03T13:39:00.9605032Z         "/MD",
+2026-11-03T13:39:00.9605251Z         "/Od",
+2026-11-03T13:39:00.9605513Z         "/ID:\\a\\_temp\\pr393-output\\source\\src",
+2026-11-03T13:39:00.9605913Z         "/c",
+2026-11-03T13:39:00.9606279Z         "D:\\a\\_temp\\pr393-output\\source\\src\\cuda\\matmul_v4_accel_stub.cpp",
+2026-11-03T13:39:00.9606801Z         "/FoD:\\a\\_temp\\pr393-output\\source\\unit-1.obj"
+2026-11-03T13:39:00.9607176Z       ],
+2026-11-03T13:39:00.9607387Z       "exit": 0
+2026-11-03T13:39:00.9607609Z     },
+2026-11-03T13:39:00.9607822Z     {
+2026-11-03T13:39:00.9608046Z       "label": "source-coff-1",
+2026-11-03T13:39:00.9608334Z       "command": [
+2026-11-03T13:39:00.9608634Z         "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+2026-11-03T13:39:00.9609015Z         "--file-headers",
+2026-11-03T13:39:00.9609329Z         "D:\\a\\_temp\\pr393-output\\source\\unit-1.obj"
+2026-11-03T13:39:00.9609680Z       ],
+2026-11-03T13:39:00.9609886Z       "exit": 0
+2026-11-03T13:39:00.9610104Z     },
+2026-11-03T13:39:00.9610313Z     {
+2026-11-03T13:39:00.9610533Z       "label": "source-compile-2",
+2026-11-03T13:39:00.9610830Z       "command": [
+2026-11-03T13:39:00.9611106Z         "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+2026-11-03T13:39:00.9611449Z         "/nologo",
+2026-11-03T13:39:00.9611675Z         "/std:c++20",
+2026-11-03T13:39:00.9611909Z         "/EHsc",
+2026-11-03T13:39:00.9612129Z         "/MD",
+2026-11-03T13:39:00.9612346Z         "/Od",
+2026-11-03T13:39:00.9612613Z         "/ID:\\a\\_temp\\pr393-output\\source\\src",
+2026-11-03T13:39:00.9613130Z         "/c",
+2026-11-03T13:39:00.9613516Z         "D:\\a\\_temp\\pr393-output\\source\\src\\cuda\\matmul_v4_bmx4_accel_stub.cpp",
+2026-11-03T13:39:00.9614266Z         "/FoD:\\a\\_temp\\pr393-output\\source\\unit-2.obj"
+2026-11-03T13:39:00.9614630Z       ],
+2026-11-03T13:39:00.9614836Z       "exit": 0
+2026-11-03T13:39:00.9615062Z     },
+2026-11-03T13:39:00.9615264Z     {
+2026-11-03T13:39:00.9615488Z       "label": "source-coff-2",
+2026-11-03T13:39:00.9615775Z       "command": [
+2026-11-03T13:39:00.9616074Z         "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+2026-11-03T13:39:00.9616451Z         "--file-headers",
+2026-11-03T13:39:00.9616763Z         "D:\\a\\_temp\\pr393-output\\source\\unit-2.obj"
+2026-11-03T13:39:00.9617118Z       ],
+2026-11-03T13:39:00.9617323Z       "exit": 0
+2026-11-03T13:39:00.9617540Z     },
+2026-11-03T13:39:00.9617740Z     {
+2026-11-03T13:39:00.9617968Z       "label": "source-compile-3",
+2026-11-03T13:39:00.9618272Z       "command": [
+2026-11-03T13:39:00.9618549Z         "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+2026-11-03T13:39:00.9618894Z         "/nologo",
+2026-11-03T13:39:00.9619122Z         "/std:c++20",
+2026-11-03T13:39:00.9619397Z         "/EHsc",
+2026-11-03T13:39:00.9619617Z         "/MD",
+2026-11-03T13:39:00.9619829Z         "/Od",
+2026-11-03T13:39:00.9620740Z         "/ID:\\a\\_temp\\pr393-output\\source\\src",
+2026-11-03T13:39:00.9621096Z         "/c",
+2026-11-03T13:39:00.9621471Z         "D:\\a\\_temp\\pr393-output\\source\\src\\metal\\matmul_v4_accel_stub.cpp",
+2026-11-03T13:39:00.9621990Z         "/FoD:\\a\\_temp\\pr393-output\\source\\unit-3.obj"
+2026-11-03T13:39:00.9622351Z       ],
+2026-11-03T13:39:00.9622557Z       "exit": 0
+2026-11-03T13:39:00.9622776Z     },
+2026-11-03T13:39:00.9622979Z     {
+2026-11-03T13:39:00.9623200Z       "label": "source-coff-3",
+2026-11-03T13:39:00.9623483Z       "command": [
+2026-11-03T13:39:00.9623771Z         "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+2026-11-03T13:39:00.9624158Z         "--file-headers",
+2026-11-03T13:39:00.9624464Z         "D:\\a\\_temp\\pr393-output\\source\\unit-3.obj"
+2026-11-03T13:39:00.9624809Z       ],
+2026-11-03T13:39:00.9625010Z       "exit": 0
+2026-11-03T13:39:00.9625226Z     },
+2026-11-03T13:39:00.9625420Z     {
+2026-11-03T13:39:00.9625645Z       "label": "source-compile-4",
+2026-11-03T13:39:00.9625951Z       "command": [
+2026-11-03T13:39:00.9626224Z         "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+2026-11-03T13:39:00.9626568Z         "/nologo",
+2026-11-03T13:39:00.9626797Z         "/std:c++20",
+2026-11-03T13:39:00.9627030Z         "/EHsc",
+2026-11-03T13:39:00.9627259Z         "/MD",
+2026-11-03T13:39:00.9627475Z         "/Od",
+2026-11-03T13:39:00.9627740Z         "/ID:\\a\\_temp\\pr393-output\\source\\src",
+2026-11-03T13:39:00.9628081Z         "/c",
+2026-11-03T13:39:00.9628468Z         "D:\\a\\_temp\\pr393-output\\source\\src\\metal\\matmul_v4_bmx4_accel_stub.cpp",
+2026-11-03T13:39:00.9629014Z         "/FoD:\\a\\_temp\\pr393-output\\source\\unit-4.obj"
+2026-11-03T13:39:00.9629380Z       ],
+2026-11-03T13:39:00.9629586Z       "exit": 0
+2026-11-03T13:39:00.9629805Z     },
+2026-11-03T13:39:00.9630006Z     {
+2026-11-03T13:39:00.9630233Z       "label": "source-coff-4",
+2026-11-03T13:39:00.9630530Z       "command": [
+2026-11-03T13:39:00.9630833Z         "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+2026-11-03T13:39:00.9631210Z         "--file-headers",
+2026-11-03T13:39:00.9631520Z         "D:\\a\\_temp\\pr393-output\\source\\unit-4.obj"
+2026-11-03T13:39:00.9631873Z       ],
+2026-11-03T13:39:00.9632080Z       "exit": 0
+2026-11-03T13:39:00.9632298Z     },
+2026-11-03T13:39:00.9632500Z     {
+2026-11-03T13:39:00.9632734Z       "label": "source-compile-5",
+2026-11-03T13:39:00.9633032Z       "command": [
+2026-11-03T13:39:00.9633307Z         "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+2026-11-03T13:39:00.9633661Z         "/nologo",
+2026-11-03T13:39:00.9633889Z         "/std:c++20",
+2026-11-03T13:39:00.9634493Z         "/EHsc",
+2026-11-03T13:39:00.9634719Z         "/MD",
+2026-11-03T13:39:00.9634935Z         "/Od",
+2026-11-03T13:39:00.9635460Z         "/ID:\\a\\_temp\\pr393-output\\source\\src",
+2026-11-03T13:39:00.9635799Z         "/c",
+2026-11-03T13:39:00.9636151Z         "D:\\a\\_temp\\pr393-output\\source\\src\\hip\\matmul_v4_accel_stub.cpp",
+2026-11-03T13:39:00.9636680Z         "/FoD:\\a\\_temp\\pr393-output\\source\\unit-5.obj"
+2026-11-03T13:39:00.9637043Z       ],
+2026-11-03T13:39:00.9637252Z       "exit": 0
+2026-11-03T13:39:00.9637480Z     },
+2026-11-03T13:39:00.9637679Z     {
+2026-11-03T13:39:00.9637901Z       "label": "source-coff-5",
+2026-11-03T13:39:00.9638183Z       "command": [
+2026-11-03T13:39:00.9638481Z         "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+2026-11-03T13:39:00.9638853Z         "--file-headers",
+2026-11-03T13:39:00.9639162Z         "D:\\a\\_temp\\pr393-output\\source\\unit-5.obj"
+2026-11-03T13:39:00.9639507Z       ],
+2026-11-03T13:39:00.9639717Z       "exit": 0
+2026-11-03T13:39:00.9639937Z     },
+2026-11-03T13:39:00.9640133Z     {
+2026-11-03T13:39:00.9640378Z       "label": "source-compile-6",
+2026-11-03T13:39:00.9640678Z       "command": [
+2026-11-03T13:39:00.9640964Z         "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+2026-11-03T13:39:00.9641317Z         "/nologo",
+2026-11-03T13:39:00.9641549Z         "/std:c++20",
+2026-11-03T13:39:00.9641932Z         "/EHsc",
+2026-11-03T13:39:00.9642159Z         "/MD",
+2026-11-03T13:39:00.9702580Z         "/Od",
+2026-11-03T13:39:00.9702979Z         "/ID:\\a\\_temp\\pr393-output\\source\\src",
+2026-11-03T13:39:00.9703407Z         "/c",
+2026-11-03T13:39:00.9703800Z         "D:\\a\\_temp\\pr393-output\\source\\src\\hip\\matmul_v4_bmx4_accel_stub.cpp",
+2026-11-03T13:39:00.9704369Z         "/FoD:\\a\\_temp\\pr393-output\\source\\unit-6.obj"
+2026-11-03T13:39:00.9704734Z       ],
+2026-11-03T13:39:00.9704942Z       "exit": 0
+2026-11-03T13:39:00.9705154Z     },
+2026-11-03T13:39:00.9705334Z     {
+2026-11-03T13:39:00.9705571Z       "label": "source-coff-6",
+2026-11-03T13:39:00.9705913Z       "command": [
+2026-11-03T13:39:00.9706208Z         "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+2026-11-03T13:39:00.9706571Z         "--file-headers",
+2026-11-03T13:39:00.9706847Z         "D:\\a\\_temp\\pr393-output\\source\\unit-6.obj"
+2026-11-03T13:39:00.9707180Z       ],
+2026-11-03T13:39:00.9707380Z       "exit": 0
+2026-11-03T13:39:00.9707594Z     },
+2026-11-03T13:39:00.9707776Z     {
+2026-11-03T13:39:00.9708003Z       "label": "source-compile-7",
+2026-11-03T13:39:00.9708287Z       "command": [
+2026-11-03T13:39:00.9708563Z         "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+2026-11-03T13:39:00.9708907Z         "/nologo",
+2026-11-03T13:39:00.9709133Z         "/std:c++20",
+2026-11-03T13:39:00.9709366Z         "/EHsc",
+2026-11-03T13:39:00.9709584Z         "/MD",
+2026-11-03T13:39:00.9709785Z         "/Od",
+2026-11-03T13:39:00.9710049Z         "/ID:\\a\\_temp\\pr393-output\\source\\src",
+2026-11-03T13:39:00.9710383Z         "/c",
+2026-11-03T13:39:00.9710628Z         "D:\\a\\_temp\\pr393-output\\driver.cpp",
+2026-11-03T13:39:00.9711048Z         "/FoD:\\a\\_temp\\pr393-output\\source\\unit-7.obj"
+2026-11-03T13:39:00.9711409Z       ],
+2026-11-03T13:39:00.9711618Z       "exit": 0
+2026-11-03T13:39:00.9711836Z     },
+2026-11-03T13:39:00.9712333Z     {
+2026-11-03T13:39:00.9712572Z       "label": "source-coff-7",
+2026-11-03T13:39:00.9715498Z       "command": [
+2026-11-03T13:39:00.9715825Z         "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+2026-11-03T13:39:00.9716224Z         "--file-headers",
+2026-11-03T13:39:00.9716632Z         "D:\\a\\_temp\\pr393-output\\source\\unit-7.obj"
+2026-11-03T13:39:00.9717019Z       ],
+2026-11-03T13:39:00.9717531Z       "exit": 0
+2026-11-03T13:39:00.9717771Z     },
+2026-11-03T13:39:00.9717964Z     {
+2026-11-03T13:39:00.9718189Z       "label": "source-archive",
+2026-11-03T13:39:00.9719932Z       "command": [
+2026-11-03T13:39:00.9720258Z         "C:\\Program Files\\LLVM\\bin\\llvm-lib.EXE",
+2026-11-03T13:39:00.9720880Z         "/nologo",
+2026-11-03T13:39:00.9721175Z         "/out:D:\\a\\_temp\\pr393-output\\source\\backends.lib",
+2026-11-03T13:39:00.9721632Z         "D:\\a\\_temp\\pr393-output\\source\\unit-0.obj",
+2026-11-03T13:39:00.9722016Z         "D:\\a\\_temp\\pr393-output\\source\\unit-1.obj",
+2026-11-03T13:39:00.9722392Z         "D:\\a\\_temp\\pr393-output\\source\\unit-2.obj",
+2026-11-03T13:39:00.9722775Z         "D:\\a\\_temp\\pr393-output\\source\\unit-3.obj",
+2026-11-03T13:39:00.9723149Z         "D:\\a\\_temp\\pr393-output\\source\\unit-4.obj",
+2026-11-03T13:39:00.9723527Z         "D:\\a\\_temp\\pr393-output\\source\\unit-5.obj",
+2026-11-03T13:39:00.9723921Z         "D:\\a\\_temp\\pr393-output\\source\\unit-6.obj"
+2026-11-03T13:39:00.9724261Z       ],
+2026-11-03T13:39:00.9724469Z       "exit": 0
+2026-11-03T13:39:00.9724696Z     },
+2026-11-03T13:39:00.9724897Z     {
+2026-11-03T13:39:00.9725120Z       "label": "source-direct-link",
+2026-11-03T13:39:00.9725452Z       "command": [
+2026-11-03T13:39:00.9725737Z         "C:\\Program Files\\LLVM\\bin\\lld-link.EXE",
+2026-11-03T13:39:00.9726090Z         "/nologo",
+2026-11-03T13:39:00.9726333Z         "/SUBSYSTEM:CONSOLE",
+2026-11-03T13:39:00.9726598Z         "/MACHINE:X64",
+2026-11-03T13:39:00.9726912Z         "/OUT:D:\\a\\_temp\\pr393-output\\source\\direct.exe",
+2026-11-03T13:39:00.9727513Z         "/INCREMENTAL:NO",
+2026-11-03T13:39:00.9727828Z         "D:\\a\\_temp\\pr393-output\\source\\unit-7.obj",
+2026-11-03T13:39:00.9728222Z         "D:\\a\\_temp\\pr393-output\\source\\unit-0.obj",
+2026-11-03T13:39:00.9728603Z         "D:\\a\\_temp\\pr393-output\\source\\unit-1.obj",
+2026-11-03T13:39:00.9729010Z         "D:\\a\\_temp\\pr393-output\\source\\unit-2.obj",
+2026-11-03T13:39:00.9729401Z         "D:\\a\\_temp\\pr393-output\\source\\unit-3.obj",
+2026-11-03T13:39:00.9729776Z         "D:\\a\\_temp\\pr393-output\\source\\unit-4.obj",
+2026-11-03T13:39:00.9730168Z         "D:\\a\\_temp\\pr393-output\\source\\unit-5.obj",
+2026-11-03T13:39:00.9730577Z         "D:\\a\\_temp\\pr393-output\\source\\unit-6.obj"
+2026-11-03T13:39:00.9730918Z       ],
+2026-11-03T13:39:00.9731125Z       "exit": 1
+2026-11-03T13:39:00.9731347Z     },
+2026-11-03T13:39:00.9731544Z     {
+2026-11-03T13:39:00.9731775Z       "label": "source-whole-link",
+2026-11-03T13:39:00.9732091Z       "command": [
+2026-11-03T13:39:00.9732382Z         "C:\\Program Files\\LLVM\\bin\\lld-link.EXE",
+2026-11-03T13:39:00.9732739Z         "/nologo",
+2026-11-03T13:39:00.9732981Z         "/SUBSYSTEM:CONSOLE",
+2026-11-03T13:39:00.9733258Z         "/MACHINE:X64",
+2026-11-03T13:39:00.9733553Z         "/OUT:D:\\a\\_temp\\pr393-output\\source\\whole.exe",
+2026-11-03T13:39:00.9733932Z         "/INCREMENTAL:NO",
+2026-11-03T13:39:00.9734248Z         "D:\\a\\_temp\\pr393-output\\source\\unit-7.obj",
+2026-11-03T13:39:00.9734670Z         "D:\\a\\_temp\\pr393-output\\source\\backends.lib",
+2026-11-03T13:39:00.9735166Z         "/WHOLEARCHIVE:D:\\a\\_temp\\pr393-output\\source\\backends.lib"
+2026-11-03T13:39:00.9735589Z       ],
+2026-11-03T13:39:00.9735822Z       "exit": 1
+2026-11-03T13:39:00.9736022Z     },
+2026-11-03T13:39:00.9736211Z     {
+2026-11-03T13:39:00.9736423Z       "label": "candidate-compile-0",
+2026-11-03T13:39:00.9736728Z       "command": [
+2026-11-03T13:39:00.9737008Z         "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+2026-11-03T13:39:00.9737924Z         "/nologo",
+2026-11-03T13:39:00.9738140Z         "/std:c++20",
+2026-11-03T13:39:00.9738368Z         "/EHsc",
+2026-11-03T13:39:00.9738518Z         "/MD",
+2026-11-03T13:39:00.9738653Z         "/Od",
+2026-11-03T13:39:00.9738827Z         "/ID:\\a\\_temp\\pr393-output\\candidate\\src",
+2026-11-03T13:39:00.9739037Z         "/c",
+2026-11-03T13:39:00.9739259Z         "D:\\a\\_temp\\pr393-output\\candidate\\src\\matmul\\accel_v4_stub.cpp",
+2026-11-03T13:39:00.9739566Z         "/FoD:\\a\\_temp\\pr393-output\\candidate\\unit-0.obj"
+2026-11-03T13:39:00.9739800Z       ],
+2026-11-03T13:39:00.9740795Z       "exit": 0
+2026-11-03T13:39:00.9740938Z     },
+2026-11-03T13:39:00.9741066Z     {
+2026-11-03T13:39:00.9741216Z       "label": "candidate-coff-0",
+2026-11-03T13:39:00.9741402Z       "command": [
+2026-11-03T13:39:00.9741593Z         "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+2026-11-03T13:39:00.9741823Z         "--file-headers",
+2026-11-03T13:39:00.9742027Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-0.obj"
+2026-11-03T13:39:00.9742248Z       ],
+2026-11-03T13:39:00.9742375Z       "exit": 0
+2026-11-03T13:39:00.9742523Z     },
+2026-11-03T13:39:00.9742650Z     {
+2026-11-03T13:39:00.9742796Z       "label": "candidate-compile-1",
+2026-11-03T13:39:00.9742989Z       "command": [
+2026-11-03T13:39:00.9743167Z         "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+2026-11-03T13:39:00.9743381Z         "/nologo",
+2026-11-03T13:39:00.9743522Z         "/std:c++20",
+2026-11-03T13:39:00.9743668Z         "/EHsc",
+2026-11-03T13:39:00.9743811Z         "/MD",
+2026-11-03T13:39:00.9743953Z         "/Od",
+2026-11-03T13:39:00.9744120Z         "/ID:\\a\\_temp\\pr393-output\\candidate\\src",
+2026-11-03T13:39:00.9744327Z         "/c",
+2026-11-03T13:39:00.9744570Z         "D:\\a\\_temp\\pr393-output\\candidate\\src\\cuda\\matmul_v4_accel_stub.cpp",
+2026-11-03T13:39:00.9744897Z         "/FoD:\\a\\_temp\\pr393-output\\candidate\\unit-1.obj"
+2026-11-03T13:39:00.9745246Z       ],
+2026-11-03T13:39:00.9745391Z       "exit": 0
+2026-11-03T13:39:00.9745537Z     },
+2026-11-03T13:39:00.9745666Z     {
+2026-11-03T13:39:00.9745812Z       "label": "candidate-coff-1",
+2026-11-03T13:39:00.9746004Z       "command": [
+2026-11-03T13:39:00.9746197Z         "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+2026-11-03T13:39:00.9746422Z         "--file-headers",
+2026-11-03T13:39:00.9746620Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-1.obj"
+2026-11-03T13:39:00.9746827Z       ],
+2026-11-03T13:39:00.9746954Z       "exit": 0
+2026-11-03T13:39:00.9747080Z     },
+2026-11-03T13:39:00.9747199Z     {
+2026-11-03T13:39:00.9747339Z       "label": "candidate-compile-2",
+2026-11-03T13:39:00.9747533Z       "command": [
+2026-11-03T13:39:00.9747700Z         "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+2026-11-03T13:39:00.9747899Z         "/nologo",
+2026-11-03T13:39:00.9748038Z         "/std:c++20",
+2026-11-03T13:39:00.9748184Z         "/EHsc",
+2026-11-03T13:39:00.9748324Z         "/MD",
+2026-11-03T13:39:00.9748450Z         "/Od",
+2026-11-03T13:39:00.9748610Z         "/ID:\\a\\_temp\\pr393-output\\candidate\\src",
+2026-11-03T13:39:00.9748809Z         "/c",
+2026-11-03T13:39:00.9749048Z         "D:\\a\\_temp\\pr393-output\\candidate\\src\\cuda\\matmul_v4_bmx4_accel_stub.cpp",
+2026-11-03T13:39:00.9749374Z         "/FoD:\\a\\_temp\\pr393-output\\candidate\\unit-2.obj"
+2026-11-03T13:39:00.9749590Z       ],
+2026-11-03T13:39:00.9749710Z       "exit": 0
+2026-11-03T13:39:00.9749839Z     },
+2026-11-03T13:39:00.9749966Z     {
+2026-11-03T13:39:00.9750102Z       "label": "candidate-coff-2",
+2026-11-03T13:39:00.9750281Z       "command": [
+2026-11-03T13:39:00.9750454Z         "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+2026-11-03T13:39:00.9750665Z         "--file-headers",
+2026-11-03T13:39:00.9750851Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-2.obj"
+2026-11-03T13:39:00.9751052Z       ],
+2026-11-03T13:39:00.9751174Z       "exit": 0
+2026-11-03T13:39:00.9751304Z     },
+2026-11-03T13:39:00.9751420Z     {
+2026-11-03T13:39:00.9751555Z       "label": "candidate-compile-3",
+2026-11-03T13:39:00.9751734Z       "command": [
+2026-11-03T13:39:00.9751905Z         "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+2026-11-03T13:39:00.9752103Z         "/nologo",
+2026-11-03T13:39:00.9752236Z         "/std:c++20",
+2026-11-03T13:39:00.9752378Z         "/EHsc",
+2026-11-03T13:39:00.9752510Z         "/MD",
+2026-11-03T13:39:00.9752634Z         "/Od",
+2026-11-03T13:39:00.9752792Z         "/ID:\\a\\_temp\\pr393-output\\candidate\\src",
+2026-11-03T13:39:00.9752994Z         "/c",
+2026-11-03T13:39:00.9753331Z         "D:\\a\\_temp\\pr393-output\\candidate\\src\\metal\\matmul_v4_accel_stub.cpp",
+2026-11-03T13:39:00.9753646Z         "/FoD:\\a\\_temp\\pr393-output\\candidate\\unit-3.obj"
+2026-11-03T13:39:00.9753861Z       ],
+2026-11-03T13:39:00.9753986Z       "exit": 0
+2026-11-03T13:39:00.9754111Z     },
+2026-11-03T13:39:00.9754231Z     {
+2026-11-03T13:39:00.9754368Z       "label": "candidate-coff-3",
+2026-11-03T13:39:00.9754539Z       "command": [
+2026-11-03T13:39:00.9754710Z         "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+2026-11-03T13:39:00.9754919Z         "--file-headers",
+2026-11-03T13:39:00.9755099Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-3.obj"
+2026-11-03T13:39:00.9755304Z       ],
+2026-11-03T13:39:00.9755429Z       "exit": 0
+2026-11-03T13:39:00.9755564Z     },
+2026-11-03T13:39:00.9755695Z     {
+2026-11-03T13:39:00.9755945Z       "label": "candidate-compile-4",
+2026-11-03T13:39:00.9756173Z       "command": [
+2026-11-03T13:39:00.9756348Z         "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+2026-11-03T13:39:00.9756553Z         "/nologo",
+2026-11-03T13:39:00.9756700Z         "/std:c++20",
+2026-11-03T13:39:00.9756845Z         "/EHsc",
+2026-11-03T13:39:00.9756987Z         "/MD",
+2026-11-03T13:39:00.9757116Z         "/Od",
+2026-11-03T13:39:00.9757276Z         "/ID:\\a\\_temp\\pr393-output\\candidate\\src",
+2026-11-03T13:39:00.9758196Z         "/c",
+2026-11-03T13:39:00.9758494Z         "D:\\a\\_temp\\pr393-output\\candidate\\src\\metal\\matmul_v4_bmx4_accel_stub.cpp",
+2026-11-03T13:39:00.9758844Z         "/FoD:\\a\\_temp\\pr393-output\\candidate\\unit-4.obj"
+2026-11-03T13:39:00.9759079Z       ],
+2026-11-03T13:39:00.9759212Z       "exit": 0
+2026-11-03T13:39:00.9759347Z     },
+2026-11-03T13:39:00.9759476Z     {
+2026-11-03T13:39:00.9759620Z       "label": "candidate-coff-4",
+2026-11-03T13:39:00.9759804Z       "command": [
+2026-11-03T13:39:00.9759994Z         "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+2026-11-03T13:39:00.9760222Z         "--file-headers",
+2026-11-03T13:39:00.9760423Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-4.obj"
+2026-11-03T13:39:00.9760641Z       ],
+2026-11-03T13:39:00.9760771Z       "exit": 0
+2026-11-03T13:39:00.9760906Z     },
+2026-11-03T13:39:00.9761041Z     {
+2026-11-03T13:39:00.9761180Z       "label": "candidate-compile-5",
+2026-11-03T13:39:00.9761373Z       "command": [
+2026-11-03T13:39:00.9761548Z         "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+2026-11-03T13:39:00.9761760Z         "/nologo",
+2026-11-03T13:39:00.9761902Z         "/std:c++20",
+2026-11-03T13:39:00.9762051Z         "/EHsc",
+2026-11-03T13:39:00.9762192Z         "/MD",
+2026-11-03T13:39:00.9762327Z         "/Od",
+2026-11-03T13:39:00.9762494Z         "/ID:\\a\\_temp\\pr393-output\\candidate\\src",
+2026-11-03T13:39:00.9762703Z         "/c",
+2026-11-03T13:39:00.9762935Z         "D:\\a\\_temp\\pr393-output\\candidate\\src\\hip\\matmul_v4_accel_stub.cpp",
+2026-11-03T13:39:00.9763243Z         "/FoD:\\a\\_temp\\pr393-output\\candidate\\unit-5.obj"
+2026-11-03T13:39:00.9763469Z       ],
+2026-11-03T13:39:00.9763602Z       "exit": 0
+2026-11-03T13:39:00.9763736Z     },
+2026-11-03T13:39:00.9763859Z     {
+2026-11-03T13:39:00.9764001Z       "label": "candidate-coff-5",
+2026-11-03T13:39:00.9764183Z       "command": [
+2026-11-03T13:39:00.9764361Z         "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+2026-11-03T13:39:00.9764581Z         "--file-headers",
+2026-11-03T13:39:00.9764776Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-5.obj"
+2026-11-03T13:39:00.9764997Z       ],
+2026-11-03T13:39:00.9765122Z       "exit": 0
+2026-11-03T13:39:00.9765255Z     },
+2026-11-03T13:39:00.9765379Z     {
+2026-11-03T13:39:00.9765524Z       "label": "candidate-compile-6",
+2026-11-03T13:39:00.9765707Z       "command": [
+2026-11-03T13:39:00.9765872Z         "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+2026-11-03T13:39:00.9766069Z         "/nologo",
+2026-11-03T13:39:00.9766210Z         "/std:c++20",
+2026-11-03T13:39:00.9766355Z         "/EHsc",
+2026-11-03T13:39:00.9766600Z         "/MD",
+2026-11-03T13:39:00.9766732Z         "/Od",
+2026-11-03T13:39:00.9766909Z         "/ID:\\a\\_temp\\pr393-output\\candidate\\src",
+2026-11-03T13:39:00.9767114Z         "/c",
+2026-11-03T13:39:00.9767350Z         "D:\\a\\_temp\\pr393-output\\candidate\\src\\hip\\matmul_v4_bmx4_accel_stub.cpp",
+2026-11-03T13:39:00.9767677Z         "/FoD:\\a\\_temp\\pr393-output\\candidate\\unit-6.obj"
+2026-11-03T13:39:00.9767892Z       ],
+2026-11-03T13:39:00.9768022Z       "exit": 0
+2026-11-03T13:39:00.9768157Z     },
+2026-11-03T13:39:00.9768283Z     {
+2026-11-03T13:39:00.9768417Z       "label": "candidate-coff-6",
+2026-11-03T13:39:00.9768595Z       "command": [
+2026-11-03T13:39:00.9768764Z         "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+2026-11-03T13:39:00.9768989Z         "--file-headers",
+2026-11-03T13:39:00.9769232Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-6.obj"
+2026-11-03T13:39:00.9769525Z       ],
+2026-11-03T13:39:00.9769693Z       "exit": 0
+2026-11-03T13:39:00.9769889Z     },
+2026-11-03T13:39:00.9770072Z     {
+2026-11-03T13:39:00.9770301Z       "label": "candidate-compile-7",
+2026-11-03T13:39:00.9770491Z       "command": [
+2026-11-03T13:39:00.9770670Z         "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+2026-11-03T13:39:00.9770880Z         "/nologo",
+2026-11-03T13:39:00.9771023Z         "/std:c++20",
+2026-11-03T13:39:00.9771294Z         "/EHsc",
+2026-11-03T13:39:00.9771440Z         "/MD",
+2026-11-03T13:39:00.9771578Z         "/Od",
+2026-11-03T13:39:00.9771746Z         "/ID:\\a\\_temp\\pr393-output\\candidate\\src",
+2026-11-03T13:39:00.9771955Z         "/c",
+2026-11-03T13:39:00.9772114Z         "D:\\a\\_temp\\pr393-output\\driver.cpp",
+2026-11-03T13:39:00.9772360Z         "/FoD:\\a\\_temp\\pr393-output\\candidate\\unit-7.obj"
+2026-11-03T13:39:00.9772581Z       ],
+2026-11-03T13:39:00.9772711Z       "exit": 0
+2026-11-03T13:39:00.9772848Z     },
+2026-11-03T13:39:00.9772975Z     {
+2026-11-03T13:39:00.9773111Z       "label": "candidate-coff-7",
+2026-11-03T13:39:00.9773304Z       "command": [
+2026-11-03T13:39:00.9773484Z         "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+2026-11-03T13:39:00.9773703Z         "--file-headers",
+2026-11-03T13:39:00.9773898Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-7.obj"
+2026-11-03T13:39:00.9774107Z       ],
+2026-11-03T13:39:00.9774230Z       "exit": 0
+2026-11-03T13:39:00.9774368Z     },
+2026-11-03T13:39:00.9774495Z     {
+2026-11-03T13:39:00.9774636Z       "label": "candidate-archive",
+2026-11-03T13:39:00.9774820Z       "command": [
+2026-11-03T13:39:00.9774987Z         "C:\\Program Files\\LLVM\\bin\\llvm-lib.EXE",
+2026-11-03T13:39:00.9775200Z         "/nologo",
+2026-11-03T13:39:00.9775498Z         "/out:D:\\a\\_temp\\pr393-output\\candidate\\backends.lib",
+2026-11-03T13:39:00.9775770Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-0.obj",
+2026-11-03T13:39:00.9776016Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-1.obj",
+2026-11-03T13:39:00.9776255Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-2.obj",
+2026-11-03T13:39:00.9776491Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-3.obj",
+2026-11-03T13:39:00.9776724Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-4.obj",
+2026-11-03T13:39:00.9776958Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-5.obj",
+2026-11-03T13:39:00.9777201Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-6.obj"
+2026-11-03T13:39:00.9777413Z       ],
+2026-11-03T13:39:00.9777543Z       "exit": 0
+2026-11-03T13:39:00.9778019Z     },
+2026-11-03T13:39:00.9778147Z     {
+2026-11-03T13:39:00.9778297Z       "label": "candidate-direct-link",
+2026-11-03T13:39:00.9778496Z       "command": [
+2026-11-03T13:39:00.9778666Z         "C:\\Program Files\\LLVM\\bin\\lld-link.EXE",
+2026-11-03T13:39:00.9778872Z         "/nologo",
+2026-11-03T13:39:00.9779024Z         "/SUBSYSTEM:CONSOLE",
+2026-11-03T13:39:00.9779192Z         "/MACHINE:X64",
+2026-11-03T13:39:00.9779392Z         "/OUT:D:\\a\\_temp\\pr393-output\\candidate\\direct.exe",
+2026-11-03T13:39:00.9779741Z         "/INCREMENTAL:NO",
+2026-11-03T13:39:00.9779932Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-7.obj",
+2026-11-03T13:39:00.9780165Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-0.obj",
+2026-11-03T13:39:00.9780399Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-1.obj",
+2026-11-03T13:39:00.9780630Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-2.obj",
+2026-11-03T13:39:00.9780855Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-3.obj",
+2026-11-03T13:39:00.9781092Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-4.obj",
+2026-11-03T13:39:00.9781326Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-5.obj",
+2026-11-03T13:39:00.9781560Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-6.obj"
+2026-11-03T13:39:00.9781761Z       ],
+2026-11-03T13:39:00.9781893Z       "exit": 0
+2026-11-03T13:39:00.9782031Z     },
+2026-11-03T13:39:00.9782151Z     {
+2026-11-03T13:39:00.9782297Z       "label": "candidate-direct-run",
+2026-11-03T13:39:00.9782482Z       "command": [
+2026-11-03T13:39:00.9782647Z         "D:\\a\\_temp\\pr393-output\\candidate\\direct.exe"
+2026-11-03T13:39:00.9782845Z       ],
+2026-11-03T13:39:00.9782963Z       "exit": 0
+2026-11-03T13:39:00.9783097Z     },
+2026-11-03T13:39:00.9783215Z     {
+2026-11-03T13:39:00.9783350Z       "label": "candidate-whole-link",
+2026-11-03T13:39:00.9783627Z       "command": [
+2026-11-03T13:39:00.9783793Z         "C:\\Program Files\\LLVM\\bin\\lld-link.EXE",
+2026-11-03T13:39:00.9783991Z         "/nologo",
+2026-11-03T13:39:00.9784133Z         "/SUBSYSTEM:CONSOLE",
+2026-11-03T13:39:00.9784292Z         "/MACHINE:X64",
+2026-11-03T13:39:00.9784480Z         "/OUT:D:\\a\\_temp\\pr393-output\\candidate\\whole.exe",
+2026-11-03T13:39:00.9784702Z         "/INCREMENTAL:NO",
+2026-11-03T13:39:00.9784890Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-7.obj",
+2026-11-03T13:39:00.9785142Z         "D:\\a\\_temp\\pr393-output\\candidate\\backends.lib",
+2026-11-03T13:39:00.9785433Z         "/WHOLEARCHIVE:D:\\a\\_temp\\pr393-output\\candidate\\backends.lib"
+2026-11-03T13:39:00.9785686Z       ],
+2026-11-03T13:39:00.9785812Z       "exit": 0
+2026-11-03T13:39:00.9785941Z     },
+2026-11-03T13:39:00.9786058Z     {
+2026-11-03T13:39:00.9786199Z       "label": "candidate-whole-run",
+2026-11-03T13:39:00.9786381Z       "command": [
+2026-11-03T13:39:00.9786548Z         "D:\\a\\_temp\\pr393-output\\candidate\\whole.exe"
+2026-11-03T13:39:00.9786755Z       ],
+2026-11-03T13:39:00.9786880Z       "exit": 0
+2026-11-03T13:39:00.9787015Z     },
+2026-11-03T13:39:00.9787132Z     {
+2026-11-03T13:39:00.9787272Z       "label": "candidate-ordinary-link",
+2026-11-03T13:39:00.9787470Z       "command": [
+2026-11-03T13:39:00.9787646Z         "C:\\Program Files\\LLVM\\bin\\lld-link.EXE",
+2026-11-03T13:39:00.9787847Z         "/nologo",
+2026-11-03T13:39:00.9788008Z         "/SUBSYSTEM:CONSOLE",
+2026-11-03T13:39:00.9788179Z         "/MACHINE:X64",
+2026-11-03T13:39:00.9788393Z         "/OUT:D:\\a\\_temp\\pr393-output\\candidate\\ordinary.exe",
+2026-11-03T13:39:00.9788632Z         "/INCREMENTAL:NO",
+2026-11-03T13:39:00.9788830Z         "D:\\a\\_temp\\pr393-output\\candidate\\unit-7.obj",
+2026-11-03T13:39:00.9789078Z         "D:\\a\\_temp\\pr393-output\\candidate\\backends.lib"
+2026-11-03T13:39:00.9789286Z       ],
+2026-11-03T13:39:00.9789410Z       "exit": 0
+2026-11-03T13:39:00.9789544Z     },
+2026-11-03T13:39:00.9789664Z     {
+2026-11-03T13:39:00.9789805Z       "label": "candidate-ordinary-run",
+2026-11-03T13:39:00.9790004Z       "command": [
+2026-11-03T13:39:00.9790179Z         "D:\\a\\_temp\\pr393-output\\candidate\\ordinary.exe"
+2026-11-03T13:39:00.9790384Z       ],
+2026-11-03T13:39:00.9790505Z       "exit": 0
+2026-11-03T13:39:00.9790637Z     }
+2026-11-03T13:39:00.9790758Z   ],
+2026-11-03T13:39:00.9790880Z   "sdk": {
+2026-11-03T13:39:00.9791028Z     "WindowsSDKVersion": "10.0.26100.0\\",
+2026-11-03T13:39:00.9791227Z     "VCToolsVersion": "14.51.36231"
+2026-11-03T13:39:00.9791398Z   },
+2026-11-03T13:39:00.9791625Z   "executables": {
+2026-11-03T13:39:00.9791880Z     "direct": "423c0b1a674dfa37d515463631c5125547384a6c911ff84fe424839cf3c71b9b",
+2026-11-03T13:39:00.9792267Z     "whole": "b631ecb3c7def4f54771d5152e72811c96c853106a99dc88668ed0c91edea04e",
+2026-11-03T13:39:00.9792653Z     "ordinary": "f22345c96c344630d9376bb8d729913f022460273bcdaedbc6927b0d34f08851"
+2026-11-03T13:39:00.9792930Z   }
+2026-11-03T13:39:00.9793055Z }
+2026-11-03T13:39:00.9793122Z 
+2026-11-03T13:39:00.9793195Z --- END result.json ---
+2026-11-03T13:39:00.9793373Z --- BEGIN source-archive.log ---
+2026-11-03T13:39:00.9793559Z --- END source-archive.log ---
+2026-11-03T13:39:00.9793739Z --- BEGIN source-coff-0.log ---
+2026-11-03T13:39:00.9793858Z 
+2026-11-03T13:39:00.9793944Z File: D:\a\_temp\pr393-output\source\unit-0.obj
+2026-11-03T13:39:00.9794173Z Format: COFF-x86-64
+2026-11-03T13:39:00.9794320Z Arch: x86_64
+2026-11-03T13:39:00.9794457Z AddressSize: 64bit
+2026-11-03T13:39:00.9794601Z ImageFileHeader {
+2026-11-03T13:39:00.9794769Z   Machine: IMAGE_FILE_MACHINE_AMD64 (0x8664)
+2026-11-03T13:39:00.9794964Z   SectionCount: 21
+2026-11-03T13:39:00.9795128Z   TimeDateStamp: 2026-11-03 13:38:41 (0x6AE9E3E1)
+2026-11-03T13:39:00.9795340Z   PointerToSymbolTable: 0xD79
+2026-11-03T13:39:00.9795505Z   SymbolCount: 72
+2026-11-03T13:39:00.9795645Z   StringTableSize: 3338
+2026-11-03T13:39:00.9795895Z   OptionalHeaderSize: 0
+2026-11-03T13:39:00.9796059Z   Characteristics [ (0x0)
+2026-11-03T13:39:00.9796217Z   ]
+2026-11-03T13:39:00.9796331Z }
+2026-11-03T13:39:00.9796398Z 
+2026-11-03T13:39:00.9796469Z --- END source-coff-0.log ---
+2026-11-03T13:39:00.9796645Z --- BEGIN source-coff-1.log ---
+2026-11-03T13:39:00.9796755Z 
+2026-11-03T13:39:00.9796846Z File: D:\a\_temp\pr393-output\source\unit-1.obj
+2026-11-03T13:39:00.9797047Z Format: COFF-x86-64
+2026-11-03T13:39:00.9797188Z Arch: x86_64
+2026-11-03T13:39:00.9797322Z AddressSize: 64bit
+2026-11-03T13:39:00.9797464Z ImageFileHeader {
+2026-11-03T13:39:00.9797618Z   Machine: IMAGE_FILE_MACHINE_AMD64 (0x8664)
+2026-11-03T13:39:00.9798058Z   SectionCount: 21
+2026-11-03T13:39:00.9798219Z   TimeDateStamp: 2026-11-03 13:38:42 (0x6AE9E3E2)
+2026-11-03T13:39:00.9798430Z   PointerToSymbolTable: 0x9A5
+2026-11-03T13:39:00.9798594Z   SymbolCount: 63
+2026-11-03T13:39:00.9798734Z   StringTableSize: 1018
+2026-11-03T13:39:00.9798888Z   OptionalHeaderSize: 0
+2026-11-03T13:39:00.9799048Z   Characteristics [ (0x0)
+2026-11-03T13:39:00.9799200Z   ]
+2026-11-03T13:39:00.9799317Z }
+2026-11-03T13:39:00.9799387Z 
+2026-11-03T13:39:00.9799447Z --- END source-coff-1.log ---
+2026-11-03T13:39:00.9799620Z --- BEGIN source-coff-2.log ---
+2026-11-03T13:39:00.9799738Z 
+2026-11-03T13:39:00.9799822Z File: D:\a\_temp\pr393-output\source\unit-2.obj
+2026-11-03T13:39:00.9800024Z Format: COFF-x86-64
+2026-11-03T13:39:00.9800159Z Arch: x86_64
+2026-11-03T13:39:00.9800291Z AddressSize: 64bit
+2026-11-03T13:39:00.9800432Z ImageFileHeader {
+2026-11-03T13:39:00.9800585Z   Machine: IMAGE_FILE_MACHINE_AMD64 (0x8664)
+2026-11-03T13:39:00.9800776Z   SectionCount: 21
+2026-11-03T13:39:00.9800996Z   TimeDateStamp: 2026-11-03 13:38:43 (0x6AE9E3E3)
+2026-11-03T13:39:00.9801212Z   PointerToSymbolTable: 0x9AA
+2026-11-03T13:39:00.9801389Z   SymbolCount: 63
+2026-11-03T13:39:00.9801536Z   StringTableSize: 1255
+2026-11-03T13:39:00.9801704Z   OptionalHeaderSize: 0
+2026-11-03T13:39:00.9801867Z   Characteristics [ (0x0)
+2026-11-03T13:39:00.9802018Z   ]
+2026-11-03T13:39:00.9802139Z }
+2026-11-03T13:39:00.9802203Z 
+2026-11-03T13:39:00.9802272Z --- END source-coff-2.log ---
+2026-11-03T13:39:00.9802448Z --- BEGIN source-coff-3.log ---
+2026-11-03T13:39:00.9802568Z 
+2026-11-03T13:39:00.9802648Z File: D:\a\_temp\pr393-output\source\unit-3.obj
+2026-11-03T13:39:00.9802850Z Format: COFF-x86-64
+2026-11-03T13:39:00.9802988Z Arch: x86_64
+2026-11-03T13:39:00.9803124Z AddressSize: 64bit
+2026-11-03T13:39:00.9803266Z ImageFileHeader {
+2026-11-03T13:39:00.9803432Z   Machine: IMAGE_FILE_MACHINE_AMD64 (0x8664)
+2026-11-03T13:39:00.9803725Z   SectionCount: 264
+2026-11-03T13:39:00.9803881Z   TimeDateStamp: 2026-11-03 13:38:44 (0x6AE9E3E4)
+2026-11-03T13:39:00.9804093Z   PointerToSymbolTable: 0x5910
+2026-11-03T13:39:00.9804267Z   SymbolCount: 664
+2026-11-03T13:39:00.9804416Z   StringTableSize: 7143
+2026-11-03T13:39:00.9804572Z   OptionalHeaderSize: 0
+2026-11-03T13:39:00.9804725Z   Characteristics [ (0x0)
+2026-11-03T13:39:00.9804879Z   ]
+2026-11-03T13:39:00.9804995Z }
+2026-11-03T13:39:00.9805067Z 
+2026-11-03T13:39:00.9805133Z --- END source-coff-3.log ---
+2026-11-03T13:39:00.9805317Z --- BEGIN source-coff-4.log ---
+2026-11-03T13:39:00.9805428Z 
+2026-11-03T13:39:00.9805512Z File: D:\a\_temp\pr393-output\source\unit-4.obj
+2026-11-03T13:39:00.9805708Z Format: COFF-x86-64
+2026-11-03T13:39:00.9805875Z Arch: x86_64
+2026-11-03T13:39:00.9806008Z AddressSize: 64bit
+2026-11-03T13:39:00.9806146Z ImageFileHeader {
+2026-11-03T13:39:00.9806303Z   Machine: IMAGE_FILE_MACHINE_AMD64 (0x8664)
+2026-11-03T13:39:00.9806492Z   SectionCount: 264
+2026-11-03T13:39:00.9806656Z   TimeDateStamp: 2026-11-03 13:38:45 (0x6AE9E3E5)
+2026-11-03T13:39:00.9806864Z   PointerToSymbolTable: 0x58B2
+2026-11-03T13:39:00.9807031Z   SymbolCount: 663
+2026-11-03T13:39:00.9807188Z   StringTableSize: 7057
+2026-11-03T13:39:00.9807344Z   OptionalHeaderSize: 0
+2026-11-03T13:39:00.9807504Z   Characteristics [ (0x0)
+2026-11-03T13:39:00.9807653Z   ]
+2026-11-03T13:39:00.9807857Z }
+2026-11-03T13:39:00.9807922Z 
+2026-11-03T13:39:00.9807992Z --- END source-coff-4.log ---
+2026-11-03T13:39:00.9808160Z --- BEGIN source-coff-5.log ---
+2026-11-03T13:39:00.9808274Z 
+2026-11-03T13:39:00.9808354Z File: D:\a\_temp\pr393-output\source\unit-5.obj
+2026-11-03T13:39:00.9808553Z Format: COFF-x86-64
+2026-11-03T13:39:00.9808693Z Arch: x86_64
+2026-11-03T13:39:00.9808822Z AddressSize: 64bit
+2026-11-03T13:39:00.9808970Z ImageFileHeader {
+2026-11-03T13:39:00.9809121Z   Machine: IMAGE_FILE_MACHINE_AMD64 (0x8664)
+2026-11-03T13:39:00.9809303Z   SectionCount: 81
+2026-11-03T13:39:00.9809463Z   TimeDateStamp: 2026-11-03 13:38:46 (0x6AE9E3E6)
+2026-11-03T13:39:00.9809671Z   PointerToSymbolTable: 0x1C09
+2026-11-03T13:39:00.9809836Z   SymbolCount: 205
+2026-11-03T13:39:00.9809980Z   StringTableSize: 3223
+2026-11-03T13:39:00.9810132Z   OptionalHeaderSize: 0
+2026-11-03T13:39:00.9810282Z   Characteristics [ (0x0)
+2026-11-03T13:39:00.9810427Z   ]
+2026-11-03T13:39:00.9810550Z }
+2026-11-03T13:39:00.9810621Z 
+2026-11-03T13:39:00.9810858Z --- END source-coff-5.log ---
+2026-11-03T13:39:00.9811030Z --- BEGIN source-coff-6.log ---
+2026-11-03T13:39:00.9811151Z 
+2026-11-03T13:39:00.9811234Z File: D:\a\_temp\pr393-output\source\unit-6.obj
+2026-11-03T13:39:00.9811438Z Format: COFF-x86-64
+2026-11-03T13:39:00.9811577Z Arch: x86_64
+2026-11-03T13:39:00.9811719Z AddressSize: 64bit
+2026-11-03T13:39:00.9811863Z ImageFileHeader {
+2026-11-03T13:39:00.9812016Z   Machine: IMAGE_FILE_MACHINE_AMD64 (0x8664)
+2026-11-03T13:39:00.9812207Z   SectionCount: 81
+2026-11-03T13:39:00.9812367Z   TimeDateStamp: 2026-11-03 13:38:46 (0x6AE9E3E6)
+2026-11-03T13:39:00.9812575Z   PointerToSymbolTable: 0x1C2D
+2026-11-03T13:39:00.9812742Z   SymbolCount: 205
+2026-11-03T13:39:00.9812891Z   StringTableSize: 3400
+2026-11-03T13:39:00.9813050Z   OptionalHeaderSize: 0
+2026-11-03T13:39:00.9813205Z   Characteristics [ (0x0)
+2026-11-03T13:39:00.9813357Z   ]
+2026-11-03T13:39:00.9813486Z }
+2026-11-03T13:39:00.9813550Z 
+2026-11-03T13:39:00.9813620Z --- END source-coff-6.log ---
+2026-11-03T13:39:00.9813790Z --- BEGIN source-coff-7.log ---
+2026-11-03T13:39:00.9813895Z 
+2026-11-03T13:39:00.9813983Z File: D:\a\_temp\pr393-output\source\unit-7.obj
+2026-11-03T13:39:00.9814181Z Format: COFF-x86-64
+2026-11-03T13:39:00.9814315Z Arch: x86_64
+2026-11-03T13:39:00.9814448Z AddressSize: 64bit
+2026-11-03T13:39:00.9814592Z ImageFileHeader {
+2026-11-03T13:39:00.9814745Z   Machine: IMAGE_FILE_MACHINE_AMD64 (0x8664)
+2026-11-03T13:39:00.9814935Z   SectionCount: 975
+2026-11-03T13:39:00.9815096Z   TimeDateStamp: 2026-11-03 13:38:48 (0x6AE9E3E8)
+2026-11-03T13:39:00.9815402Z   PointerToSymbolTable: 0x1AF04
+2026-11-03T13:39:00.9815570Z   SymbolCount: 2434
+2026-11-03T13:39:00.9815722Z   StringTableSize: 38493
+2026-11-03T13:39:00.9815892Z   OptionalHeaderSize: 0
+2026-11-03T13:39:00.9816048Z   Characteristics [ (0x0)
+2026-11-03T13:39:00.9816196Z   ]
+2026-11-03T13:39:00.9816312Z }
+2026-11-03T13:39:00.9816381Z 
+2026-11-03T13:39:00.9816445Z --- END source-coff-7.log ---
+2026-11-03T13:39:00.9816623Z --- BEGIN source-compile-0.log ---
+2026-11-03T13:39:00.9816820Z --- END source-compile-0.log ---
+2026-11-03T13:39:00.9817003Z --- BEGIN source-compile-1.log ---
+2026-11-03T13:39:00.9817193Z --- END source-compile-1.log ---
+2026-11-03T13:39:00.9817372Z --- BEGIN source-compile-2.log ---
+2026-11-03T13:39:00.9817552Z --- END source-compile-2.log ---
+2026-11-03T13:39:00.9817728Z --- BEGIN source-compile-3.log ---
+2026-11-03T13:39:00.9818150Z --- END source-compile-3.log ---
+2026-11-03T13:39:00.9818338Z --- BEGIN source-compile-4.log ---
+2026-11-03T13:39:00.9818520Z --- END source-compile-4.log ---
+2026-11-03T13:39:00.9818697Z --- BEGIN source-compile-5.log ---
+2026-11-03T13:39:00.9818877Z --- END source-compile-5.log ---
+2026-11-03T13:39:00.9819053Z --- BEGIN source-compile-6.log ---
+2026-11-03T13:39:00.9819239Z --- END source-compile-6.log ---
+2026-11-03T13:39:00.9819415Z --- BEGIN source-compile-7.log ---
+2026-11-03T13:39:00.9819698Z --- END source-compile-7.log ---
+2026-11-03T13:39:00.9819889Z --- BEGIN source-direct-link.log ---
+2026-11-03T13:39:00.9830720Z lld-link: error: duplicate symbol: bool __cdecl matmul_v4::cuda::ComputeDigestAccel(class CBlockHeader const &, unsigned int, unsigned int, class uint256 &, class std::vector<unsigned char, class std::allocator<unsigned char>> &)
+2026-11-03T13:39:00.9831512Z >>> defined at D:\a\_temp\pr393-output\source\unit-0.obj
+2026-11-03T13:39:00.9831798Z >>> defined at D:\a\_temp\pr393-output\source\unit-1.obj
+2026-11-03T13:39:00.9831962Z 
+2026-11-03T13:39:00.9833371Z lld-link: error: duplicate symbol: bool __cdecl matmul_v4::cuda::ComputeDigestsBatchedAccel(class std::vector<class CBlockHeader, class std::allocator<class CBlockHeader>> const &, unsigned int, unsigned int, class std::vector<class uint256, class std::allocator<class uint256>> &, class std::vector<class std::vector<unsigned char, class std::allocator<unsigned char>>, class std::allocator<class std::vector<unsigned char, class std::allocator<unsigned char>>>> &)
+2026-11-03T13:39:00.9834642Z >>> defined at D:\a\_temp\pr393-output\source\unit-0.obj
+2026-11-03T13:39:00.9834906Z >>> defined at D:\a\_temp\pr393-output\source\unit-1.obj
+2026-11-03T13:39:00.9835067Z 
+2026-11-03T13:39:00.9836137Z lld-link: error: duplicate symbol: bool __cdecl matmul_v4::cuda::ComputeDigestsBMX4CAccel(class std::vector<class CBlockHeader, class std::allocator<class CBlockHeader>> const &, unsigned int, unsigned int, class std::vector<class uint256, class std::allocator<class uint256>> &, class std::vector<class std::vector<unsigned char, class std::allocator<unsigned char>>, class std::allocator<class std::vector<unsigned char, class std::allocator<unsigned char>>>> &)
+2026-11-03T13:39:00.9837344Z >>> defined at D:\a\_temp\pr393-output\source\unit-0.obj
+2026-11-03T13:39:00.9837599Z >>> defined at D:\a\_temp\pr393-output\source\unit-2.obj
+2026-11-03T13:39:00.9837748Z 
+2026-11-03T13:39:00.9838635Z lld-link: error: duplicate symbol: bool __cdecl matmul_v4::metal::ComputeDigestAccel(class CBlockHeader const &, unsigned int, unsigned int, class uint256 &, class std::vector<unsigned char, class std::allocator<unsigned char>> &)
+2026-11-03T13:39:00.9839319Z >>> defined at D:\a\_temp\pr393-output\source\unit-0.obj
+2026-11-03T13:39:00.9839569Z >>> defined at D:\a\_temp\pr393-output\source\unit-3.obj
+2026-11-03T13:39:00.9839723Z 
+2026-11-03T13:39:00.9840807Z lld-link: error: duplicate symbol: bool __cdecl matmul_v4::metal::ComputeDigestsBatchedAccel(class std::vector<class CBlockHeader, class std::allocator<class CBlockHeader>> const &, unsigned int, unsigned int, class std::vector<class uint256, class std::allocator<class uint256>> &, class std::vector<class std::vector<unsigned char, class std::allocator<unsigned char>>, class std::allocator<class std::vector<unsigned char, class std::allocator<unsigned char>>>> &)
+2026-11-03T13:39:00.9842202Z >>> defined at D:\a\_temp\pr393-output\source\unit-0.obj
+2026-11-03T13:39:00.9842452Z >>> defined at D:\a\_temp\pr393-output\source\unit-3.obj
+2026-11-03T13:39:00.9842603Z 
+2026-11-03T13:39:00.9843665Z lld-link: error: duplicate symbol: bool __cdecl matmul_v4::metal::ComputeDigestsBMX4CAccel(class std::vector<class CBlockHeader, class std::allocator<class CBlockHeader>> const &, unsigned int, unsigned int, class std::vector<class uint256, class std::allocator<class uint256>> &, class std::vector<class std::vector<unsigned char, class std::allocator<unsigned char>>, class std::allocator<class std::vector<unsigned char, class std::allocator<unsigned char>>>> &)
+2026-11-03T13:39:00.9844879Z >>> defined at D:\a\_temp\pr393-output\source\unit-0.obj
+2026-11-03T13:39:00.9845124Z >>> defined at D:\a\_temp\pr393-output\source\unit-4.obj
+2026-11-03T13:39:00.9845281Z 
+2026-11-03T13:39:00.9845787Z lld-link: error: duplicate symbol: bool __cdecl matmul_v4::hip::ComputeDigestAccel(class CBlockHeader const &, unsigned int, unsigned int, class uint256 &, class std::vector<unsigned char, class std::allocator<unsigned char>> &)
+2026-11-03T13:39:00.9846518Z >>> defined at D:\a\_temp\pr393-output\source\unit-0.obj
+2026-11-03T13:39:00.9846762Z >>> defined at D:\a\_temp\pr393-output\source\unit-5.obj
+2026-11-03T13:39:00.9846916Z 
+2026-11-03T13:39:00.9847968Z lld-link: error: duplicate symbol: bool __cdecl matmul_v4::hip::ComputeDigestsBatchedAccel(class std::vector<class CBlockHeader, class std::allocator<class CBlockHeader>> const &, unsigned int, unsigned int, class std::vector<class uint256, class std::allocator<class uint256>> &, class std::vector<class std::vector<unsigned char, class std::allocator<unsigned char>>, class std::allocator<class std::vector<unsigned char, class std::allocator<unsigned char>>>> &)
+2026-11-03T13:39:00.9849167Z >>> defined at D:\a\_temp\pr393-output\source\unit-0.obj
+2026-11-03T13:39:00.9849417Z >>> defined at D:\a\_temp\pr393-output\source\unit-5.obj
+2026-11-03T13:39:00.9849566Z 
+2026-11-03T13:39:00.9850615Z lld-link: error: duplicate symbol: bool __cdecl matmul_v4::hip::ComputeDigestsBMX4CAccel(class std::vector<class CBlockHeader, class std::allocator<class CBlockHeader>> const &, unsigned int, unsigned int, class std::vector<class uint256, class std::allocator<class uint256>> &, class std::vector<class std::vector<unsigned char, class std::allocator<unsigned char>>, class std::allocator<class std::vector<unsigned char, class std::allocator<unsigned char>>>> &)
+2026-11-03T13:39:00.9851800Z >>> defined at D:\a\_temp\pr393-output\source\unit-0.obj
+2026-11-03T13:39:00.9852042Z >>> defined at D:\a\_temp\pr393-output\source\unit-6.obj
+2026-11-03T13:39:00.9852196Z 
+2026-11-03T13:39:00.9852281Z --- END source-direct-link.log ---
+2026-11-03T13:39:00.9852491Z --- BEGIN source-whole-link.log ---
+2026-11-03T13:39:00.9853140Z lld-link: error: duplicate symbol: bool __cdecl matmul_v4::cuda::ComputeDigestAccel(class CBlockHeader const &, unsigned int, unsigned int, class uint256 &, class std::vector<unsigned char, class std::allocator<unsigned char>> &)
+2026-11-03T13:39:00.9853786Z >>> defined at backends.lib(unit-1.obj)
+2026-11-03T13:39:00.9853988Z >>> defined at backends.lib(unit-0.obj)
+2026-11-03T13:39:00.9854120Z 
+2026-11-03T13:39:00.9855179Z lld-link: error: duplicate symbol: bool __cdecl matmul_v4::cuda::ComputeDigestsBatchedAccel(class std::vector<class CBlockHeader, class std::allocator<class CBlockHeader>> const &, unsigned int, unsigned int, class std::vector<class uint256, class std::allocator<class uint256>> &, class std::vector<class std::vector<unsigned char, class std::allocator<unsigned char>>, class std::allocator<class std::vector<unsigned char, class std::allocator<unsigned char>>>> &)
+2026-11-03T13:39:00.9856949Z >>> defined at backends.lib(unit-1.obj)
+2026-11-03T13:39:00.9857164Z >>> defined at backends.lib(unit-0.obj)
+2026-11-03T13:39:00.9857292Z 
+2026-11-03T13:39:00.9858624Z lld-link: error: duplicate symbol: bool __cdecl matmul_v4::cuda::ComputeDigestsBMX4CAccel(class std::vector<class CBlockHeader, class std::allocator<class CBlockHeader>> const &, unsigned int, unsigned int, class std::vector<class uint256, class std::allocator<class uint256>> &, class std::vector<class std::vector<unsigned char, class std::allocator<unsigned char>>, class std::allocator<class std::vector<unsigned char, class std::allocator<unsigned char>>>> &)
+2026-11-03T13:39:00.9859846Z >>> defined at backends.lib(unit-2.obj)
+2026-11-03T13:39:00.9860043Z >>> defined at backends.lib(unit-0.obj)
+2026-11-03T13:39:00.9860179Z 
+2026-11-03T13:39:00.9860695Z lld-link: error: duplicate symbol: bool __cdecl matmul_v4::metal::ComputeDigestAccel(class CBlockHeader const &, unsigned int, unsigned int, class uint256 &, class std::vector<unsigned char, class std::allocator<unsigned char>> &)
+2026-11-03T13:39:00.9861348Z >>> defined at backends.lib(unit-3.obj)
+2026-11-03T13:39:00.9861542Z >>> defined at backends.lib(unit-0.obj)
+2026-11-03T13:39:00.9861663Z 
+2026-11-03T13:39:00.9862819Z lld-link: error: duplicate symbol: bool __cdecl matmul_v4::metal::ComputeDigestsBatchedAccel(class std::vector<class CBlockHeader, class std::allocator<class CBlockHeader>> const &, unsigned int, unsigned int, class std::vector<class uint256, class std::allocator<class uint256>> &, class std::vector<class std::vector<unsigned char, class std::allocator<unsigned char>>, class std::allocator<class std::vector<unsigned char, class std::allocator<unsigned char>>>> &)
+2026-11-03T13:39:00.9864031Z >>> defined at backends.lib(unit-3.obj)
+2026-11-03T13:39:00.9864231Z >>> defined at backends.lib(unit-0.obj)
+2026-11-03T13:39:00.9864365Z 
+2026-11-03T13:39:00.9865428Z lld-link: error: duplicate symbol: bool __cdecl matmul_v4::metal::ComputeDigestsBMX4CAccel(class std::vector<class CBlockHeader, class std::allocator<class CBlockHeader>> const &, unsigned int, unsigned int, class std::vector<class uint256, class std::allocator<class uint256>> &, class std::vector<class std::vector<unsigned char, class std::allocator<unsigned char>>, class std::allocator<class std::vector<unsigned char, class std::allocator<unsigned char>>>> &)
+2026-11-03T13:39:00.9866628Z >>> defined at backends.lib(unit-4.obj)
+2026-11-03T13:39:00.9866829Z >>> defined at backends.lib(unit-0.obj)
+2026-11-03T13:39:00.9866956Z 
+2026-11-03T13:39:00.9867449Z lld-link: error: duplicate symbol: bool __cdecl matmul_v4::hip::ComputeDigestAccel(class CBlockHeader const &, unsigned int, unsigned int, class uint256 &, class std::vector<unsigned char, class std::allocator<unsigned char>> &)
+2026-11-03T13:39:00.9868079Z >>> defined at backends.lib(unit-5.obj)
+2026-11-03T13:39:00.9868271Z >>> defined at backends.lib(unit-0.obj)
+2026-11-03T13:39:00.9868594Z 
+2026-11-03T13:39:00.9869735Z lld-link: error: duplicate symbol: bool __cdecl matmul_v4::hip::ComputeDigestsBatchedAccel(class std::vector<class CBlockHeader, class std::allocator<class CBlockHeader>> const &, unsigned int, unsigned int, class std::vector<class uint256, class std::allocator<class uint256>> &, class std::vector<class std::vector<unsigned char, class std::allocator<unsigned char>>, class std::allocator<class std::vector<unsigned char, class std::allocator<unsigned char>>>> &)
+2026-11-03T13:39:00.9870954Z >>> defined at backends.lib(unit-5.obj)
+2026-11-03T13:39:00.9871237Z >>> defined at backends.lib(unit-0.obj)
+2026-11-03T13:39:00.9871424Z 
+2026-11-03T13:39:00.9873847Z lld-link: error: duplicate symbol: bool __cdecl matmul_v4::hip::ComputeDigestsBMX4CAccel(class std::vector<class CBlockHeader, class std::allocator<class CBlockHeader>> const &, unsigned int, unsigned int, class std::vector<class uint256, class std::allocator<class uint256>> &, class std::vector<class std::vector<unsigned char, class std::allocator<unsigned char>>, class std::allocator<class std::vector<unsigned char, class std::allocator<unsigned char>>>> &)
+2026-11-03T13:39:00.9876336Z >>> defined at backends.lib(unit-6.obj)
+2026-11-03T13:39:00.9876732Z >>> defined at backends.lib(unit-0.obj)
+2026-11-03T13:39:00.9876960Z 
+2026-11-03T13:39:00.9877094Z --- END source-whole-link.log ---
+2026-11-03T13:39:01.0213726Z Cleaning up orphan processes

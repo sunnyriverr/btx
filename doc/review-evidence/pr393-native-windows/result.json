@@ -1,0 +1,597 @@
+{
+  "status": "PASS",
+  "scope": "native clang-cl/COFF component only",
+  "platform": "Windows-2025Server-10.0.26100-SP0",
+  "base": "cbf65894e6d61084527cd93e913a00c6794418dd",
+  "code": "d1ee21e828df480d6a3b9605a0d08a21fce8c6ef",
+  "evidence": "eca826d8040ff222feb5595c18c75193e336c7c4",
+  "tools": {
+    "git": "C:\\Program Files\\Git\\bin\\git.EXE",
+    "clang-cl": "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+    "lld-link": "C:\\Program Files\\LLVM\\bin\\lld-link.EXE",
+    "llvm-lib": "C:\\Program Files\\LLVM\\bin\\llvm-lib.EXE",
+    "llvm-readobj": "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE"
+  },
+  "tool_sha256": {
+    "git": "20d0dde30a65afb6e5810a883700a94dcd77fbf3b44b32868d45bf7c9b30137c",
+    "clang-cl": "57e32b1ea2456f12f97bf802453171bbff12d56b2c486b4eca0c75343c0cda2c",
+    "lld-link": "6590ac0122cd5e11fcd05cc9cd5b7ad01cb89961487b9b81c4330fb59abcb5d9",
+    "llvm-lib": "ac241b193d1954102c9282caa1fb0f2faf0331c6b3d137bc704a04b0f8763e76",
+    "llvm-readobj": "9c6b8adcaf1fea2889105e1d97f5b319b7d600f053069baa817ce462b611805a"
+  },
+  "driver_sha256": "dc9597fe3fc39ea0dd3711b352c2489a092352e39ef8fdba4d164810648fa92d",
+  "runner_sha256": "32f61177dd2891fb7468971f9c9039d046d3000f92418424e644d54ffcdf3652",
+  "commands": [
+    {
+      "label": "clang-cl-version",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "--version"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "lld-link-version",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\lld-link.EXE",
+        "--version"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "llvm-readobj-version",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+        "--version"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "source-compile-0",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/MD",
+        "/Od",
+        "/ID:\\a\\_temp\\pr393-output\\source\\src",
+        "/c",
+        "D:\\a\\_temp\\pr393-output\\source\\src\\matmul\\accel_v4_stub.cpp",
+        "/FoD:\\a\\_temp\\pr393-output\\source\\unit-0.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "source-coff-0",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+        "--file-headers",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-0.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "source-compile-1",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/MD",
+        "/Od",
+        "/ID:\\a\\_temp\\pr393-output\\source\\src",
+        "/c",
+        "D:\\a\\_temp\\pr393-output\\source\\src\\cuda\\matmul_v4_accel_stub.cpp",
+        "/FoD:\\a\\_temp\\pr393-output\\source\\unit-1.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "source-coff-1",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+        "--file-headers",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-1.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "source-compile-2",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/MD",
+        "/Od",
+        "/ID:\\a\\_temp\\pr393-output\\source\\src",
+        "/c",
+        "D:\\a\\_temp\\pr393-output\\source\\src\\cuda\\matmul_v4_bmx4_accel_stub.cpp",
+        "/FoD:\\a\\_temp\\pr393-output\\source\\unit-2.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "source-coff-2",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+        "--file-headers",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-2.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "source-compile-3",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/MD",
+        "/Od",
+        "/ID:\\a\\_temp\\pr393-output\\source\\src",
+        "/c",
+        "D:\\a\\_temp\\pr393-output\\source\\src\\metal\\matmul_v4_accel_stub.cpp",
+        "/FoD:\\a\\_temp\\pr393-output\\source\\unit-3.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "source-coff-3",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+        "--file-headers",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-3.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "source-compile-4",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/MD",
+        "/Od",
+        "/ID:\\a\\_temp\\pr393-output\\source\\src",
+        "/c",
+        "D:\\a\\_temp\\pr393-output\\source\\src\\metal\\matmul_v4_bmx4_accel_stub.cpp",
+        "/FoD:\\a\\_temp\\pr393-output\\source\\unit-4.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "source-coff-4",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+        "--file-headers",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-4.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "source-compile-5",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/MD",
+        "/Od",
+        "/ID:\\a\\_temp\\pr393-output\\source\\src",
+        "/c",
+        "D:\\a\\_temp\\pr393-output\\source\\src\\hip\\matmul_v4_accel_stub.cpp",
+        "/FoD:\\a\\_temp\\pr393-output\\source\\unit-5.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "source-coff-5",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+        "--file-headers",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-5.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "source-compile-6",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/MD",
+        "/Od",
+        "/ID:\\a\\_temp\\pr393-output\\source\\src",
+        "/c",
+        "D:\\a\\_temp\\pr393-output\\source\\src\\hip\\matmul_v4_bmx4_accel_stub.cpp",
+        "/FoD:\\a\\_temp\\pr393-output\\source\\unit-6.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "source-coff-6",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+        "--file-headers",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-6.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "source-compile-7",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/MD",
+        "/Od",
+        "/ID:\\a\\_temp\\pr393-output\\source\\src",
+        "/c",
+        "D:\\a\\_temp\\pr393-output\\driver.cpp",
+        "/FoD:\\a\\_temp\\pr393-output\\source\\unit-7.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "source-coff-7",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+        "--file-headers",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-7.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "source-archive",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\llvm-lib.EXE",
+        "/nologo",
+        "/out:D:\\a\\_temp\\pr393-output\\source\\backends.lib",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-0.obj",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-1.obj",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-2.obj",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-3.obj",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-4.obj",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-5.obj",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-6.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "source-direct-link",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\lld-link.EXE",
+        "/nologo",
+        "/SUBSYSTEM:CONSOLE",
+        "/MACHINE:X64",
+        "/OUT:D:\\a\\_temp\\pr393-output\\source\\direct.exe",
+        "/INCREMENTAL:NO",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-7.obj",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-0.obj",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-1.obj",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-2.obj",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-3.obj",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-4.obj",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-5.obj",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-6.obj"
+      ],
+      "exit": 1
+    },
+    {
+      "label": "source-whole-link",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\lld-link.EXE",
+        "/nologo",
+        "/SUBSYSTEM:CONSOLE",
+        "/MACHINE:X64",
+        "/OUT:D:\\a\\_temp\\pr393-output\\source\\whole.exe",
+        "/INCREMENTAL:NO",
+        "D:\\a\\_temp\\pr393-output\\source\\unit-7.obj",
+        "D:\\a\\_temp\\pr393-output\\source\\backends.lib",
+        "/WHOLEARCHIVE:D:\\a\\_temp\\pr393-output\\source\\backends.lib"
+      ],
+      "exit": 1
+    },
+    {
+      "label": "candidate-compile-0",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/MD",
+        "/Od",
+        "/ID:\\a\\_temp\\pr393-output\\candidate\\src",
+        "/c",
+        "D:\\a\\_temp\\pr393-output\\candidate\\src\\matmul\\accel_v4_stub.cpp",
+        "/FoD:\\a\\_temp\\pr393-output\\candidate\\unit-0.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "candidate-coff-0",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+        "--file-headers",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-0.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "candidate-compile-1",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/MD",
+        "/Od",
+        "/ID:\\a\\_temp\\pr393-output\\candidate\\src",
+        "/c",
+        "D:\\a\\_temp\\pr393-output\\candidate\\src\\cuda\\matmul_v4_accel_stub.cpp",
+        "/FoD:\\a\\_temp\\pr393-output\\candidate\\unit-1.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "candidate-coff-1",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+        "--file-headers",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-1.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "candidate-compile-2",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/MD",
+        "/Od",
+        "/ID:\\a\\_temp\\pr393-output\\candidate\\src",
+        "/c",
+        "D:\\a\\_temp\\pr393-output\\candidate\\src\\cuda\\matmul_v4_bmx4_accel_stub.cpp",
+        "/FoD:\\a\\_temp\\pr393-output\\candidate\\unit-2.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "candidate-coff-2",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+        "--file-headers",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-2.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "candidate-compile-3",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/MD",
+        "/Od",
+        "/ID:\\a\\_temp\\pr393-output\\candidate\\src",
+        "/c",
+        "D:\\a\\_temp\\pr393-output\\candidate\\src\\metal\\matmul_v4_accel_stub.cpp",
+        "/FoD:\\a\\_temp\\pr393-output\\candidate\\unit-3.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "candidate-coff-3",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+        "--file-headers",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-3.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "candidate-compile-4",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/MD",
+        "/Od",
+        "/ID:\\a\\_temp\\pr393-output\\candidate\\src",
+        "/c",
+        "D:\\a\\_temp\\pr393-output\\candidate\\src\\metal\\matmul_v4_bmx4_accel_stub.cpp",
+        "/FoD:\\a\\_temp\\pr393-output\\candidate\\unit-4.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "candidate-coff-4",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+        "--file-headers",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-4.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "candidate-compile-5",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/MD",
+        "/Od",
+        "/ID:\\a\\_temp\\pr393-output\\candidate\\src",
+        "/c",
+        "D:\\a\\_temp\\pr393-output\\candidate\\src\\hip\\matmul_v4_accel_stub.cpp",
+        "/FoD:\\a\\_temp\\pr393-output\\candidate\\unit-5.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "candidate-coff-5",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+        "--file-headers",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-5.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "candidate-compile-6",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/MD",
+        "/Od",
+        "/ID:\\a\\_temp\\pr393-output\\candidate\\src",
+        "/c",
+        "D:\\a\\_temp\\pr393-output\\candidate\\src\\hip\\matmul_v4_bmx4_accel_stub.cpp",
+        "/FoD:\\a\\_temp\\pr393-output\\candidate\\unit-6.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "candidate-coff-6",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+        "--file-headers",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-6.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "candidate-compile-7",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/MD",
+        "/Od",
+        "/ID:\\a\\_temp\\pr393-output\\candidate\\src",
+        "/c",
+        "D:\\a\\_temp\\pr393-output\\driver.cpp",
+        "/FoD:\\a\\_temp\\pr393-output\\candidate\\unit-7.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "candidate-coff-7",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\llvm-readobj.EXE",
+        "--file-headers",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-7.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "candidate-archive",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\llvm-lib.EXE",
+        "/nologo",
+        "/out:D:\\a\\_temp\\pr393-output\\candidate\\backends.lib",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-0.obj",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-1.obj",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-2.obj",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-3.obj",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-4.obj",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-5.obj",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-6.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "candidate-direct-link",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\lld-link.EXE",
+        "/nologo",
+        "/SUBSYSTEM:CONSOLE",
+        "/MACHINE:X64",
+        "/OUT:D:\\a\\_temp\\pr393-output\\candidate\\direct.exe",
+        "/INCREMENTAL:NO",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-7.obj",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-0.obj",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-1.obj",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-2.obj",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-3.obj",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-4.obj",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-5.obj",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-6.obj"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "candidate-direct-run",
+      "command": [
+        "D:\\a\\_temp\\pr393-output\\candidate\\direct.exe"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "candidate-whole-link",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\lld-link.EXE",
+        "/nologo",
+        "/SUBSYSTEM:CONSOLE",
+        "/MACHINE:X64",
+        "/OUT:D:\\a\\_temp\\pr393-output\\candidate\\whole.exe",
+        "/INCREMENTAL:NO",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-7.obj",
+        "D:\\a\\_temp\\pr393-output\\candidate\\backends.lib",
+        "/WHOLEARCHIVE:D:\\a\\_temp\\pr393-output\\candidate\\backends.lib"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "candidate-whole-run",
+      "command": [
+        "D:\\a\\_temp\\pr393-output\\candidate\\whole.exe"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "candidate-ordinary-link",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\lld-link.EXE",
+        "/nologo",
+        "/SUBSYSTEM:CONSOLE",
+        "/MACHINE:X64",
+        "/OUT:D:\\a\\_temp\\pr393-output\\candidate\\ordinary.exe",
+        "/INCREMENTAL:NO",
+        "D:\\a\\_temp\\pr393-output\\candidate\\unit-7.obj",
+        "D:\\a\\_temp\\pr393-output\\candidate\\backends.lib"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "candidate-ordinary-run",
+      "command": [
+        "D:\\a\\_temp\\pr393-output\\candidate\\ordinary.exe"
+      ],
+      "exit": 0
+    }
+  ],
+  "sdk": {
+    "WindowsSDKVersion": "10.0.26100.0\\",
+    "VCToolsVersion": "14.51.36231"
+  },
+  "executables": {
+    "direct": "423c0b1a674dfa37d515463631c5125547384a6c911ff84fe424839cf3c71b9b",
+    "whole": "b631ecb3c7def4f54771d5152e72811c96c853106a99dc88668ed0c91edea04e",
+    "ordinary": "f22345c96c344630d9376bb8d729913f022460273bcdaedbc6927b0d34f08851"
+  }
+}
+

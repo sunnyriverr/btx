@@ -1,0 +1,56 @@
+name: PR393 native Windows component verification
+on:
+  push:
+    branches: [codex/ci-pr393-native-windows]
+permissions:
+  contents: read
+concurrency:
+  group: pr393-native-windows
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: windows-2025
+    timeout-minutes: 10
+    steps:
+      - name: Fetch only pinned component inputs
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $repo = Join-Path $env:RUNNER_TEMP 'pr393-repo'
+          git init $repo
+          if ($LASTEXITCODE -ne 0) { throw 'git init failed' }
+          git -C $repo remote add origin https://github.com/sunnyriverr/btx.git
+          git -C $repo fetch --filter=blob:none --depth=1 origin $env:GITHUB_SHA cbf65894e6d61084527cd93e913a00c6794418dd d1ee21e828df480d6a3b9605a0d08a21fce8c6ef eca826d8040ff222feb5595c18c75193e336c7c4
+          if ($LASTEXITCODE -ne 0) { throw 'Pinned fetch failed' }
+          git -C $repo sparse-checkout set --no-cone /contrib/devtools/pr393-native-windows/
+          if ($LASTEXITCODE -ne 0) { throw 'Sparse setup failed' }
+          git -C $repo checkout --detach $env:GITHUB_SHA
+          if ($LASTEXITCODE -ne 0) { throw 'Checkout failed' }
+      - name: Run same native baseline and candidate check
+        shell: cmd
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
+          if not defined BTX_VS exit /b 2
+          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+          if errorlevel 1 exit /b %errorlevel%
+          set "PATH=C:\Program Files\LLVM\bin;%PATH%"
+          set "CL="
+          set "_CL_="
+          set "LINK="
+          python --version
+          python "%RUNNER_TEMP%\pr393-repo\contrib\devtools\pr393-native-windows\verify_windows_linkage.py" --repo "%RUNNER_TEMP%\pr393-repo" --out "%RUNNER_TEMP%\pr393-output"
+          exit /b %errorlevel%
+      - name: Emit result and diagnostics
+        if: always()
+        shell: pwsh
+        run: |
+          $out = Join-Path $env:RUNNER_TEMP 'pr393-output'
+          if (Test-Path $out) {
+            Get-ChildItem $out -File | Where-Object { $_.Extension -in '.json','.log' } | Sort-Object Name | ForEach-Object {
+              Write-Output "--- BEGIN $($_.Name) ---"
+              Get-Content -LiteralPath $_.FullName -Raw
+              Write-Output "--- END $($_.Name) ---"
+            }
+          } else {
+            Write-Output 'No result directory; setup did not reach component runner.'
+          }
