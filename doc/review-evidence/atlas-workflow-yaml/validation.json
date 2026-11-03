@@ -1,0 +1,48 @@
+{
+  "before_yaml": {
+    "failed_as_expected": true,
+    "error": "mapping values are not allowed here\n  in \"<unicode string>\", line 19, column 82:\n     ... ho 'Native qualification blocked: resolve, audit and commit Carg ... \n                                         ^"
+  },
+  "after_yaml": {
+    "passed": true,
+    "semantic_equivalence": "Full object equals original with only offending scalar quoted; command plus block trailing newline"
+  },
+  "before_actionlint": {
+    "exit": 1,
+    "log": "before-actionlint.log"
+  },
+  "after_actionlint": {
+    "exit": 0,
+    "log": "after-actionlint.log"
+  },
+  "guard_syntax": "bash -n PASS",
+  "guard_absent": [
+    {
+      "variant": "original",
+      "exit": 1,
+      "stdout": "Native qualification blocked: resolve, audit and commit Cargo.lock first\n"
+    },
+    {
+      "variant": "candidate",
+      "exit": 1,
+      "stdout": "Native qualification blocked: resolve, audit and commit Cargo.lock first\n"
+    }
+  ],
+  "guard_present": [
+    {
+      "variant": "original",
+      "exit": 0,
+      "stdout": ""
+    },
+    {
+      "variant": "candidate",
+      "exit": 0,
+      "stdout": ""
+    }
+  ],
+  "identities": {
+    "before.yml": "3684428a7e861482635317ff28bfe896584a437df853bc2034d3c627a0acb5f5",
+    "after.yml": "fcd8caf97988f2836de4a455c826b6f5dcbb390ff201977352440dd07ac3c53a",
+    "validate.py": "6a180a6b73027f82141f558f91b0a454500e6beb7e81412205e740acece95bc1"
+  }
+}
