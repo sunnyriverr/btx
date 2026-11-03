@@ -1,0 +1,59 @@
+{
+  "utc": "2026-11-03T13:11:05.853065+00:00",
+  "status": "full_local_loader_passed",
+  "source": "afd6591970e7f8d65871412b9d7cf03b48f30b97",
+  "models_sha256": "c97a93395cc12d093c6e34c70e06515e160655f4454a8ec2141dbc6e8885db29",
+  "platform": "ProductName:\t\tmacOS\nProductVersion:\t\t26.5.1\nBuildVersion:\t\t25F80\n",
+  "architecture": "arm64",
+  "results": [
+    {
+      "model": "pythia-70m",
+      "versions": {
+        "torch": "2.14.1",
+        "transformers": "5.21.1",
+        "safetensors": "0.8.0",
+        "tokenizers": "0.23.3",
+        "numpy": "2.4.6",
+        "huggingface-hub": "2.4.0"
+      },
+      "elapsed_seconds": 3.0930010419979226,
+      "max_rss_bytes": 1138933760,
+      "learned_tensors_compared": 76,
+      "logits_shape": [
+        1,
+        12,
+        50304
+      ],
+      "max_logit_delta": 0.0,
+      "tokenizer_matches": true,
+      "checkpoint_files_unchanged": true
+    },
+    {
+      "model": "pythia-160m",
+      "versions": {
+        "torch": "2.14.1",
+        "transformers": "5.21.1",
+        "safetensors": "0.8.0",
+        "tokenizers": "0.23.3",
+        "numpy": "2.4.6",
+        "huggingface-hub": "2.4.0"
+      },
+      "elapsed_seconds": 3.159097458003089,
+      "max_rss_bytes": 1559969792,
+      "learned_tensors_compared": 148,
+      "logits_shape": [
+        1,
+        12,
+        50304
+      ],
+      "max_logit_delta": 0.0,
+      "tokenizer_matches": true,
+      "checkpoint_files_unchanged": true
+    }
+  ],
+  "scope": "Full load_local plus original tokenizer/model/adapter/binding and short inference; offline CPU one thread. No UI/profile admission/GPU/Windows/Linux/full suite/release qualification. Supported dependency ranges, not authoring pins.",
+  "existing_coverage": "Repchic6604161908: strict helper + logits4.57.6 and older helper failure; full load_local/tokenizer andTransformers5 explicitly unrun. That baseline was reused, not rerun.",
+  "runtime_runs_per_model": 1,
+  "model_files_retained_bytes": 545258094,
+  "provenance": "Executed with Codex assistance; internal review is source/artifact review, not another independent execution. Peer baseline attributed separately."
+}
