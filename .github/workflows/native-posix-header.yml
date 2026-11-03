@@ -28,6 +28,8 @@ jobs:
           $paths += $manifest.files.PSObject.Properties.Name | ForEach-Object { '/' + $_ }
           git -C $repo sparse-checkout set --no-cone -- $paths
           if ($LASTEXITCODE -ne 0) { throw 'sparse checkout failed' }
+          git -C $repo config core.autocrlf false
+          if ($LASTEXITCODE -ne 0) { throw 'Git line-ending configuration failed' }
           git -C $repo checkout --detach $env:GITHUB_SHA
           if ($LASTEXITCODE -ne 0) { throw 'checkout failed' }
       - name: Native same-fixture baseline and candidate checks
@@ -51,7 +53,8 @@ jobs:
           path: ${{ runner.temp }}/native-header-output
           retention-days: 7
   mingw-preservation:
-    if: github.repository == 'sunnyriverr/btx'
+    # A native-only setup correction reuses unchanged MinGW proof; later product changes run both.
+    if: github.repository == 'sunnyriverr/btx' && !contains(github.event.head_commit.message, '[native-only]')
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
