@@ -1,0 +1,43 @@
+{
+  "utc": "2026-11-03T12:03:43.793629+00:00",
+  "verdict": "PASS \u2014 scoped native Mac operation-denial and signing-warning acceptance",
+  "target": "afd6591970e7f8d65871412b9d7cf03b48f30b97",
+  "app_sha256": "2b3973619f7ee07e17fc2b8b9f938720dffe35c1bf4ebb18f92a592b06a1af6e",
+  "node_sha256": "03a3fb602e0a0dea77583f774ecf516f5875137829c2a9f6c03637f925300fc6",
+  "platform": "macOS26.5.1 arm64",
+  "denials": {
+    "exportwalletbundle": "Native UI KEY_EXPORT_DENIED, [] params, no corresponding RPC logged",
+    "dumpmasterprivkey": "Native UI KEY_EXPORT_DENIED, [] params, no corresponding RPC logged",
+    "z_exportviewingkey": "Native UI KEY_EXPORT_DENIED, [] params, no corresponding RPC logged"
+  },
+  "native_comparison": {
+    "ALL": "User screenshot: exact hash/skeleton, ALL, PSBT placeholder, no reuse warning; screenshot and subsequent AX verify cancellation",
+    "NONE|ANYONECANPAY": "User screenshot: exact hash/skeleton and explicit signature-reuse warning; subsequent AX verifies cancellation"
+  },
+  "rpc_counts": {
+    "exportwalletbundle": 0,
+    "dumpmasterprivkey": 0,
+    "z_exportviewingkey": 0,
+    "walletprocesspsbt": 1,
+    "decodepsbt": 5
+  },
+  "pilot": "Initial signing-review confirmation was not captured; request reached node and returned RPC_-18 (no wallet). Cause of modal acknowledgement not established. It is not counted as cancellation or warning evidence. Later observations are retained separately.",
+  "fixture_correction": "OP_RETURN synthetic output rejected by BTX policy; replaced with deterministic public witness address.",
+  "limits": [
+    "User assisted native picker and modal cancellation; actual warning/control screenshots supplied by user, not tool-captured",
+    "Only positional [] denied preparation and form-generated positional signing summary tested",
+    "No separate nested-redaction, HTLC/timelock, named-parameter, payment, signing, Windows/Linux/full-suite/release qualification",
+    "Older node binary is only fixture/RPC infrastructure",
+    "No new baseline campaign: tests current integrated accepted behaviour, prior component evidence reused"
+  ],
+  "runtime_released": true,
+  "public_post": "Authorized for PR273 handoff",
+  "original_local_evidence_sha256": {
+    "fixture.json": "787140a8285c553a400480381a80666f96f9c7c24742e6574e67c26d8236ef54",
+    "progress.json": "f2e4d35f621ad3f9880fb37b433a8f62b544df94fb805787cc95102fc1d38210",
+    "user-evidence.json": "c36246709167145d9205f00b2d062d0e7cafbff27fb8a36f16f37c5e7486afc7",
+    "cleanup.json": "a54890c37f1b0a1e8f806b7d392cd01d8c193734638a4a1786334cef707d367a",
+    "node-sanitized.log": "4873c201bb7f2c9746f5f8615800e0fa37aae90487916abf8ea90e6ecfe13efc"
+  },
+  "hash_note": "Original local hashes precede path sanitization. SHA256SUMS.json verifies public package. Screenshot originals are retained privately; their hashes identify evidence not included in this package."
+}
