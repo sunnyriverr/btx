@@ -1,0 +1,1490 @@
+[
+  {
+    "label": "driver",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/source/src",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/driver.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/driver.o"
+    ],
+    "exit": 0,
+    "log": "build/driver.log",
+    "free_after": 1624231936
+  },
+  {
+    "label": "cuda_accel",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/source/src",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/source/src/cuda/matmul_v4_accel_stub.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_accel.o"
+    ],
+    "exit": 0,
+    "log": "build/cuda_accel.log",
+    "free_after": 1624289280
+  },
+  {
+    "label": "cuda_bmx4_accel",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/source/src",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/source/src/cuda/matmul_v4_bmx4_accel_stub.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_bmx4_accel.o"
+    ],
+    "exit": 0,
+    "log": "build/cuda_bmx4_accel.log",
+    "free_after": 1624285184
+  },
+  {
+    "label": "metal_accel",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/source/src",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/source/src/metal/matmul_v4_accel_stub.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_accel.o"
+    ],
+    "exit": 0,
+    "log": "build/metal_accel.log",
+    "free_after": 1624203264
+  },
+  {
+    "label": "metal_bmx4_accel",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/source/src",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/source/src/metal/matmul_v4_bmx4_accel_stub.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_bmx4_accel.o"
+    ],
+    "exit": 0,
+    "log": "build/metal_bmx4_accel.log",
+    "free_after": 1624203264
+  },
+  {
+    "label": "hip_accel",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/source/src",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/source/src/hip/matmul_v4_accel_stub.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_accel.o"
+    ],
+    "exit": 0,
+    "log": "build/hip_accel.log",
+    "free_after": 1624203264
+  },
+  {
+    "label": "hip_bmx4_accel",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/source/src",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/source/src/hip/matmul_v4_bmx4_accel_stub.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_bmx4_accel.o"
+    ],
+    "exit": 0,
+    "log": "build/hip_bmx4_accel.log",
+    "free_after": 1624199168
+  },
+  {
+    "label": "source-native",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/source/src",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-native.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-native.o"
+    ],
+    "exit": 0,
+    "log": "build/source-native.log",
+    "free_after": 1624199168
+  },
+  {
+    "label": "source-native-symbols",
+    "command": [
+      "/usr/bin/nm",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-native.o"
+    ],
+    "exit": 0,
+    "log": "build/source-native-symbols.log",
+    "free_after": 1624195072
+  },
+  {
+    "label": "source-native-symbol-strength",
+    "command": [
+      "/usr/bin/nm",
+      "-m",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-native.o"
+    ],
+    "exit": 0,
+    "log": "build/source-native-symbol-strength.log",
+    "free_after": 1624195072
+  },
+  {
+    "label": "source-native-direct-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/driver.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-native.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_bmx4_accel.o",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-native-direct"
+    ],
+    "exit": 0,
+    "log": "build/source-native-direct-link.log",
+    "free_after": 1624195072
+  },
+  {
+    "label": "source-native-direct-run",
+    "command": [
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-native-direct"
+    ],
+    "exit": 0,
+    "log": "build/source-native-direct-run.log",
+    "free_after": 1624125440
+  },
+  {
+    "label": "source-native-forced-archive-archive",
+    "command": [
+      "/usr/bin/ar",
+      "rcs",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-native-forced-archive.a",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-native.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_bmx4_accel.o"
+    ],
+    "exit": 0,
+    "log": "build/source-native-forced-archive-archive.log",
+    "free_after": 1624109056
+  },
+  {
+    "label": "source-native-forced-archive-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/driver.o",
+      "-Wl,-force_load,[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-native-forced-archive.a",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-native-forced-archive"
+    ],
+    "exit": 0,
+    "log": "build/source-native-forced-archive-link.log",
+    "free_after": 1624109056
+  },
+  {
+    "label": "source-native-forced-archive-run",
+    "command": [
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-native-forced-archive"
+    ],
+    "exit": 0,
+    "log": "build/source-native-forced-archive-run.log",
+    "free_after": 1624072192
+  },
+  {
+    "label": "source-native-ordinary-archive-archive",
+    "command": [
+      "/usr/bin/ar",
+      "rcs",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-native-ordinary-archive.a",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-native.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_bmx4_accel.o"
+    ],
+    "exit": 0,
+    "log": "build/source-native-ordinary-archive-archive.log",
+    "free_after": 1624051712
+  },
+  {
+    "label": "source-native-ordinary-archive-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/driver.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-native-ordinary-archive.a",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-native-ordinary-archive"
+    ],
+    "exit": 0,
+    "log": "build/source-native-ordinary-archive-link.log",
+    "free_after": 1624051712
+  },
+  {
+    "label": "source-native-ordinary-archive-run",
+    "command": [
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-native-ordinary-archive"
+    ],
+    "exit": 0,
+    "log": "build/source-native-ordinary-archive-run.log",
+    "free_after": 1624027136
+  },
+  {
+    "label": "candidate-native",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/candidate/src",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-native.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-native.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-native.log",
+    "free_after": 1624023040
+  },
+  {
+    "label": "candidate-native-symbols",
+    "command": [
+      "/usr/bin/nm",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-native.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-native-symbols.log",
+    "free_after": 1624023040
+  },
+  {
+    "label": "candidate-native-symbol-strength",
+    "command": [
+      "/usr/bin/nm",
+      "-m",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-native.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-native-symbol-strength.log",
+    "free_after": 1624023040
+  },
+  {
+    "label": "candidate-native-direct-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/driver.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-native.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_bmx4_accel.o",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-native-direct"
+    ],
+    "exit": 0,
+    "log": "build/candidate-native-direct-link.log",
+    "free_after": 1624023040
+  },
+  {
+    "label": "candidate-native-direct-run",
+    "command": [
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-native-direct"
+    ],
+    "exit": 0,
+    "log": "build/candidate-native-direct-run.log",
+    "free_after": 1623994368
+  },
+  {
+    "label": "candidate-native-forced-archive-archive",
+    "command": [
+      "/usr/bin/ar",
+      "rcs",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-native-forced-archive.a",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-native.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_bmx4_accel.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-native-forced-archive-archive.log",
+    "free_after": 1623986176
+  },
+  {
+    "label": "candidate-native-forced-archive-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/driver.o",
+      "-Wl,-force_load,[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-native-forced-archive.a",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-native-forced-archive"
+    ],
+    "exit": 0,
+    "log": "build/candidate-native-forced-archive-link.log",
+    "free_after": 1623986176
+  },
+  {
+    "label": "candidate-native-forced-archive-run",
+    "command": [
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-native-forced-archive"
+    ],
+    "exit": 0,
+    "log": "build/candidate-native-forced-archive-run.log",
+    "free_after": 1623961600
+  },
+  {
+    "label": "candidate-native-ordinary-archive-archive",
+    "command": [
+      "/usr/bin/ar",
+      "rcs",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-native-ordinary-archive.a",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-native.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_bmx4_accel.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-native-ordinary-archive-archive.log",
+    "free_after": 1623953408
+  },
+  {
+    "label": "candidate-native-ordinary-archive-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/driver.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-native-ordinary-archive.a",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-native-ordinary-archive"
+    ],
+    "exit": 0,
+    "log": "build/candidate-native-ordinary-archive-link.log",
+    "free_after": 1623949312
+  },
+  {
+    "label": "candidate-native-ordinary-archive-run",
+    "command": [
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-native-ordinary-archive"
+    ],
+    "exit": 0,
+    "log": "build/candidate-native-ordinary-archive-run.log",
+    "free_after": 1623920640
+  },
+  {
+    "label": "source-msvc",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/source/src",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc.o"
+    ],
+    "exit": 0,
+    "log": "build/source-msvc.log",
+    "free_after": 1623916544
+  },
+  {
+    "label": "source-msvc-symbols",
+    "command": [
+      "/usr/bin/nm",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc.o"
+    ],
+    "exit": 0,
+    "log": "build/source-msvc-symbols.log",
+    "free_after": 1623916544
+  },
+  {
+    "label": "source-msvc-symbol-strength",
+    "command": [
+      "/usr/bin/nm",
+      "-m",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc.o"
+    ],
+    "exit": 0,
+    "log": "build/source-msvc-symbol-strength.log",
+    "free_after": 1623916544
+  },
+  {
+    "label": "source-msvc-direct-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/driver.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_bmx4_accel.o",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc-direct"
+    ],
+    "exit": 1,
+    "log": "build/source-msvc-direct-link.log",
+    "free_after": 1623916544
+  },
+  {
+    "label": "source-msvc-forced-archive-archive",
+    "command": [
+      "/usr/bin/ar",
+      "rcs",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc-forced-archive.a",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_bmx4_accel.o"
+    ],
+    "exit": 0,
+    "log": "build/source-msvc-forced-archive-archive.log",
+    "free_after": 1623875584
+  },
+  {
+    "label": "source-msvc-forced-archive-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/driver.o",
+      "-Wl,-force_load,[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc-forced-archive.a",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc-forced-archive"
+    ],
+    "exit": 1,
+    "log": "build/source-msvc-forced-archive-link.log",
+    "free_after": 1623904256
+  },
+  {
+    "label": "candidate-msvc",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/candidate/src",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-msvc.log",
+    "free_after": 1623904256
+  },
+  {
+    "label": "candidate-msvc-symbols",
+    "command": [
+      "/usr/bin/nm",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-msvc-symbols.log",
+    "free_after": 1623904256
+  },
+  {
+    "label": "candidate-msvc-symbol-strength",
+    "command": [
+      "/usr/bin/nm",
+      "-m",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-msvc-symbol-strength.log",
+    "free_after": 1623904256
+  },
+  {
+    "label": "candidate-msvc-direct-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/driver.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_bmx4_accel.o",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc-direct"
+    ],
+    "exit": 0,
+    "log": "build/candidate-msvc-direct-link.log",
+    "free_after": 1623904256
+  },
+  {
+    "label": "candidate-msvc-direct-run",
+    "command": [
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc-direct"
+    ],
+    "exit": 0,
+    "log": "build/candidate-msvc-direct-run.log",
+    "free_after": 1623879680
+  },
+  {
+    "label": "candidate-msvc-forced-archive-archive",
+    "command": [
+      "/usr/bin/ar",
+      "rcs",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc-forced-archive.a",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_bmx4_accel.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-msvc-forced-archive-archive.log",
+    "free_after": 1623867392
+  },
+  {
+    "label": "candidate-msvc-forced-archive-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/driver.o",
+      "-Wl,-force_load,[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc-forced-archive.a",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc-forced-archive"
+    ],
+    "exit": 0,
+    "log": "build/candidate-msvc-forced-archive-link.log",
+    "free_after": 1623867392
+  },
+  {
+    "label": "candidate-msvc-forced-archive-run",
+    "command": [
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc-forced-archive"
+    ],
+    "exit": 0,
+    "log": "build/candidate-msvc-forced-archive-run.log",
+    "free_after": 1623834624
+  },
+  {
+    "label": "candidate-msvc-ordinary-archive-archive",
+    "command": [
+      "/usr/bin/ar",
+      "rcs",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc-ordinary-archive.a",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_bmx4_accel.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-msvc-ordinary-archive-archive.log",
+    "free_after": 1623826432
+  },
+  {
+    "label": "candidate-msvc-ordinary-archive-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/driver.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc-ordinary-archive.a",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc-ordinary-archive"
+    ],
+    "exit": 0,
+    "log": "build/candidate-msvc-ordinary-archive-link.log",
+    "free_after": 1623826432
+  },
+  {
+    "label": "candidate-msvc-ordinary-archive-run",
+    "command": [
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc-ordinary-archive"
+    ],
+    "exit": 0,
+    "log": "build/candidate-msvc-ordinary-archive-run.log",
+    "free_after": 1623797760
+  },
+  {
+    "label": "source-mingw",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/source/src",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-mingw.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-mingw.o"
+    ],
+    "exit": 0,
+    "log": "build/source-mingw.log",
+    "free_after": 1623789568
+  },
+  {
+    "label": "source-mingw-symbols",
+    "command": [
+      "/usr/bin/nm",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-mingw.o"
+    ],
+    "exit": 0,
+    "log": "build/source-mingw-symbols.log",
+    "free_after": 1623785472
+  },
+  {
+    "label": "source-mingw-symbol-strength",
+    "command": [
+      "/usr/bin/nm",
+      "-m",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-mingw.o"
+    ],
+    "exit": 0,
+    "log": "build/source-mingw-symbol-strength.log",
+    "free_after": 1623785472
+  },
+  {
+    "label": "source-mingw-direct-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/driver.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-mingw.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_bmx4_accel.o",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-mingw-direct"
+    ],
+    "exit": 1,
+    "log": "build/source-mingw-direct-link.log",
+    "free_after": 1623785472
+  },
+  {
+    "label": "source-mingw-forced-archive-archive",
+    "command": [
+      "/usr/bin/ar",
+      "rcs",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-mingw-forced-archive.a",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-mingw.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_bmx4_accel.o"
+    ],
+    "exit": 0,
+    "log": "build/source-mingw-forced-archive-archive.log",
+    "free_after": 1623781376
+  },
+  {
+    "label": "source-mingw-forced-archive-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/driver.o",
+      "-Wl,-force_load,[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-mingw-forced-archive.a",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-mingw-forced-archive"
+    ],
+    "exit": 1,
+    "log": "build/source-mingw-forced-archive-link.log",
+    "free_after": 1623781376
+  },
+  {
+    "label": "candidate-mingw",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/candidate/src",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-mingw.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-mingw.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-mingw.log",
+    "free_after": 1623777280
+  },
+  {
+    "label": "candidate-mingw-symbols",
+    "command": [
+      "/usr/bin/nm",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-mingw.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-mingw-symbols.log",
+    "free_after": 1623777280
+  },
+  {
+    "label": "candidate-mingw-symbol-strength",
+    "command": [
+      "/usr/bin/nm",
+      "-m",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-mingw.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-mingw-symbol-strength.log",
+    "free_after": 1623781376
+  },
+  {
+    "label": "candidate-mingw-direct-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/driver.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-mingw.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_bmx4_accel.o",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-mingw-direct"
+    ],
+    "exit": 0,
+    "log": "build/candidate-mingw-direct-link.log",
+    "free_after": 1623781376
+  },
+  {
+    "label": "candidate-mingw-direct-run",
+    "command": [
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-mingw-direct"
+    ],
+    "exit": 0,
+    "log": "build/candidate-mingw-direct-run.log",
+    "free_after": 1623752704
+  },
+  {
+    "label": "candidate-mingw-forced-archive-archive",
+    "command": [
+      "/usr/bin/ar",
+      "rcs",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-mingw-forced-archive.a",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-mingw.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_bmx4_accel.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-mingw-forced-archive-archive.log",
+    "free_after": 1623748608
+  },
+  {
+    "label": "candidate-mingw-forced-archive-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/driver.o",
+      "-Wl,-force_load,[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-mingw-forced-archive.a",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-mingw-forced-archive"
+    ],
+    "exit": 0,
+    "log": "build/candidate-mingw-forced-archive-link.log",
+    "free_after": 1623744512
+  },
+  {
+    "label": "candidate-mingw-forced-archive-run",
+    "command": [
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-mingw-forced-archive"
+    ],
+    "exit": 0,
+    "log": "build/candidate-mingw-forced-archive-run.log",
+    "free_after": 1623719936
+  },
+  {
+    "label": "candidate-mingw-ordinary-archive-archive",
+    "command": [
+      "/usr/bin/ar",
+      "rcs",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-mingw-ordinary-archive.a",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-mingw.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_bmx4_accel.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-mingw-ordinary-archive-archive.log",
+    "free_after": 1623715840
+  },
+  {
+    "label": "candidate-mingw-ordinary-archive-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/driver.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-mingw-ordinary-archive.a",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-mingw-ordinary-archive"
+    ],
+    "exit": 0,
+    "log": "build/candidate-mingw-ordinary-archive-link.log",
+    "free_after": 1623715840
+  },
+  {
+    "label": "candidate-mingw-ordinary-archive-run",
+    "command": [
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-mingw-ordinary-archive"
+    ],
+    "exit": 0,
+    "log": "build/candidate-mingw-ordinary-archive-run.log",
+    "free_after": 1623678976
+  },
+  {
+    "label": "cuda-provider",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/source/src",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda-provider.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda-provider.o"
+    ],
+    "exit": 0,
+    "log": "build/cuda-provider.log",
+    "free_after": 1623662592
+  },
+  {
+    "label": "cuda-driver",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/source/src",
+      "-DTEST_CUDA=1",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/driver.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda-driver.o"
+    ],
+    "exit": 0,
+    "log": "build/cuda-driver.log",
+    "free_after": 1623654400
+  },
+  {
+    "label": "source-msvc--DBTX_ENABLE_CUDA_EXPERIMENTAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/source/src",
+      "-DBTX_ENABLE_CUDA_EXPERIMENTAL=1",
+      "-DBTX_ENABLE_ASCEND=1",
+      "-DBTX_HAVE_CANN=1",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc--DBTX_ENABLE_CUDA_EXPERIMENTAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc--DBTX_ENABLE_CUDA_EXPERIMENTAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o"
+    ],
+    "exit": 0,
+    "log": "build/source-msvc--DBTX_ENABLE_CUDA_EXPERIMENTAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.log",
+    "free_after": 1623638016
+  },
+  {
+    "label": "source-msvc--DBTX_ENABLE_CUDA_EXPERIMENTAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbols",
+    "command": [
+      "/usr/bin/nm",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc--DBTX_ENABLE_CUDA_EXPERIMENTAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o"
+    ],
+    "exit": 0,
+    "log": "build/source-msvc--DBTX_ENABLE_CUDA_EXPERIMENTAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbols.log",
+    "free_after": 1623633920
+  },
+  {
+    "label": "source-msvc--DBTX_ENABLE_CUDA_EXPERIMENTAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbol-strength",
+    "command": [
+      "/usr/bin/nm",
+      "-m",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc--DBTX_ENABLE_CUDA_EXPERIMENTAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o"
+    ],
+    "exit": 0,
+    "log": "build/source-msvc--DBTX_ENABLE_CUDA_EXPERIMENTAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbol-strength.log",
+    "free_after": 1623629824
+  },
+  {
+    "label": "source-enabled-cuda-archive",
+    "command": [
+      "/usr/bin/ar",
+      "rcs",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-enabled-cuda.a",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc--DBTX_ENABLE_CUDA_EXPERIMENTAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda-provider.o"
+    ],
+    "exit": 0,
+    "log": "build/source-enabled-cuda-archive.log",
+    "free_after": 1623531520
+  },
+  {
+    "label": "source-enabled-cuda-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda-driver.o",
+      "-Wl,-force_load,[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-enabled-cuda.a",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-enabled-cuda"
+    ],
+    "exit": 1,
+    "log": "build/source-enabled-cuda-link.log",
+    "free_after": 1623609344
+  },
+  {
+    "label": "candidate-msvc--DBTX_ENABLE_CUDA_EXPERIMENTAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/candidate/src",
+      "-DBTX_ENABLE_CUDA_EXPERIMENTAL=1",
+      "-DBTX_ENABLE_ASCEND=1",
+      "-DBTX_HAVE_CANN=1",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc--DBTX_ENABLE_CUDA_EXPERIMENTAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc--DBTX_ENABLE_CUDA_EXPERIMENTAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-msvc--DBTX_ENABLE_CUDA_EXPERIMENTAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.log",
+    "free_after": 1623601152
+  },
+  {
+    "label": "candidate-msvc--DBTX_ENABLE_CUDA_EXPERIMENTAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbols",
+    "command": [
+      "/usr/bin/nm",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc--DBTX_ENABLE_CUDA_EXPERIMENTAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-msvc--DBTX_ENABLE_CUDA_EXPERIMENTAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbols.log",
+    "free_after": 1623592960
+  },
+  {
+    "label": "candidate-msvc--DBTX_ENABLE_CUDA_EXPERIMENTAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbol-strength",
+    "command": [
+      "/usr/bin/nm",
+      "-m",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc--DBTX_ENABLE_CUDA_EXPERIMENTAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-msvc--DBTX_ENABLE_CUDA_EXPERIMENTAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbol-strength.log",
+    "free_after": 1623588864
+  },
+  {
+    "label": "candidate-enabled-cuda-archive",
+    "command": [
+      "/usr/bin/ar",
+      "rcs",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-enabled-cuda.a",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc--DBTX_ENABLE_CUDA_EXPERIMENTAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda-provider.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-enabled-cuda-archive.log",
+    "free_after": 1623486464
+  },
+  {
+    "label": "candidate-enabled-cuda-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda-driver.o",
+      "-Wl,-force_load,[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-enabled-cuda.a",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-enabled-cuda"
+    ],
+    "exit": 0,
+    "log": "build/candidate-enabled-cuda-link.log",
+    "free_after": 1623584768
+  },
+  {
+    "label": "candidate-enabled-cuda-run",
+    "command": [
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-enabled-cuda"
+    ],
+    "exit": 0,
+    "log": "build/candidate-enabled-cuda-run.log",
+    "free_after": 1623560192
+  },
+  {
+    "label": "metal-provider",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/source/src",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal-provider.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal-provider.o"
+    ],
+    "exit": 0,
+    "log": "build/metal-provider.log",
+    "free_after": 1623552000
+  },
+  {
+    "label": "metal-driver",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/source/src",
+      "-DTEST_METAL=1",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/driver.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal-driver.o"
+    ],
+    "exit": 0,
+    "log": "build/metal-driver.log",
+    "free_after": 1623474176
+  },
+  {
+    "label": "source-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/source/src",
+      "-DBTX_ENABLE_METAL=1",
+      "-DBTX_ENABLE_ASCEND=1",
+      "-DBTX_HAVE_CANN=1",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o"
+    ],
+    "exit": 0,
+    "log": "build/source-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.log",
+    "free_after": 1623625728
+  },
+  {
+    "label": "source-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbols",
+    "command": [
+      "/usr/bin/nm",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o"
+    ],
+    "exit": 0,
+    "log": "build/source-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbols.log",
+    "free_after": 1623613440
+  },
+  {
+    "label": "source-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbol-strength",
+    "command": [
+      "/usr/bin/nm",
+      "-m",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o"
+    ],
+    "exit": 0,
+    "log": "build/source-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbol-strength.log",
+    "free_after": 1623605248
+  },
+  {
+    "label": "source-enabled-metal-archive",
+    "command": [
+      "/usr/bin/ar",
+      "rcs",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-enabled-metal.a",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal-provider.o"
+    ],
+    "exit": 0,
+    "log": "build/source-enabled-metal-archive.log",
+    "free_after": 1623568384
+  },
+  {
+    "label": "source-enabled-metal-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal-driver.o",
+      "-Wl,-force_load,[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-enabled-metal.a",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-enabled-metal"
+    ],
+    "exit": 1,
+    "log": "build/source-enabled-metal-link.log",
+    "free_after": 1623580672
+  },
+  {
+    "label": "candidate-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/candidate/src",
+      "-DBTX_ENABLE_METAL=1",
+      "-DBTX_ENABLE_ASCEND=1",
+      "-DBTX_HAVE_CANN=1",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.log",
+    "free_after": 1623547904
+  },
+  {
+    "label": "candidate-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbols",
+    "command": [
+      "/usr/bin/nm",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbols.log",
+    "free_after": 1623543808
+  },
+  {
+    "label": "candidate-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbol-strength",
+    "command": [
+      "/usr/bin/nm",
+      "-m",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbol-strength.log",
+    "free_after": 1623535616
+  },
+  {
+    "label": "candidate-enabled-metal-archive",
+    "command": [
+      "/usr/bin/ar",
+      "rcs",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-enabled-metal.a",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal-provider.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-enabled-metal-archive.log",
+    "free_after": 1623445504
+  },
+  {
+    "label": "candidate-enabled-metal-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal-driver.o",
+      "-Wl,-force_load,[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-enabled-metal.a",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-enabled-metal"
+    ],
+    "exit": 0,
+    "log": "build/candidate-enabled-metal-link.log",
+    "free_after": 1623527424
+  },
+  {
+    "label": "candidate-enabled-metal-run",
+    "command": [
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-enabled-metal"
+    ],
+    "exit": 0,
+    "log": "build/candidate-enabled-metal-run.log",
+    "free_after": 1623494656
+  },
+  {
+    "label": "wrong-provider-control-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal-driver.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc--DBTX_ENABLE_METAL_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip_bmx4_accel.o",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/wrong-provider-control"
+    ],
+    "exit": 0,
+    "log": "build/wrong-provider-control-link.log",
+    "free_after": 1623490560
+  },
+  {
+    "label": "wrong-provider-control-run",
+    "command": [
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/wrong-provider-control"
+    ],
+    "exit": 1,
+    "log": "build/wrong-provider-control-run.log",
+    "free_after": 1623453696
+  },
+  {
+    "label": "hip-provider",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/source/src",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip-provider.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip-provider.o"
+    ],
+    "exit": 0,
+    "log": "build/hip-provider.log",
+    "free_after": 1623449600
+  },
+  {
+    "label": "hip-driver",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/source/src",
+      "-DTEST_HIP=1",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/driver.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip-driver.o"
+    ],
+    "exit": 0,
+    "log": "build/hip-driver.log",
+    "free_after": 1623400448
+  },
+  {
+    "label": "source-msvc--DBTX_ENABLE_HIP_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/source/src",
+      "-DBTX_ENABLE_HIP=1",
+      "-DBTX_ENABLE_ASCEND=1",
+      "-DBTX_HAVE_CANN=1",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc--DBTX_ENABLE_HIP_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc--DBTX_ENABLE_HIP_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o"
+    ],
+    "exit": 0,
+    "log": "build/source-msvc--DBTX_ENABLE_HIP_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.log",
+    "free_after": 1623392256
+  },
+  {
+    "label": "source-msvc--DBTX_ENABLE_HIP_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbols",
+    "command": [
+      "/usr/bin/nm",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc--DBTX_ENABLE_HIP_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o"
+    ],
+    "exit": 0,
+    "log": "build/source-msvc--DBTX_ENABLE_HIP_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbols.log",
+    "free_after": 1623388160
+  },
+  {
+    "label": "source-msvc--DBTX_ENABLE_HIP_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbol-strength",
+    "command": [
+      "/usr/bin/nm",
+      "-m",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc--DBTX_ENABLE_HIP_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o"
+    ],
+    "exit": 0,
+    "log": "build/source-msvc--DBTX_ENABLE_HIP_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbol-strength.log",
+    "free_after": 1623375872
+  },
+  {
+    "label": "source-enabled-hip-archive",
+    "command": [
+      "/usr/bin/ar",
+      "rcs",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-enabled-hip.a",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-msvc--DBTX_ENABLE_HIP_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip-provider.o"
+    ],
+    "exit": 0,
+    "log": "build/source-enabled-hip-archive.log",
+    "free_after": 1623277568
+  },
+  {
+    "label": "source-enabled-hip-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip-driver.o",
+      "-Wl,-force_load,[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-enabled-hip.a",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/source-enabled-hip"
+    ],
+    "exit": 1,
+    "log": "build/source-enabled-hip-link.log",
+    "free_after": 1623363584
+  },
+  {
+    "label": "candidate-msvc--DBTX_ENABLE_HIP_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-O0",
+      "-I[workspace]/work/btx-review-tools/windows-backend-linkage/candidate/src",
+      "-DBTX_ENABLE_HIP=1",
+      "-DBTX_ENABLE_ASCEND=1",
+      "-DBTX_HAVE_CANN=1",
+      "-c",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc--DBTX_ENABLE_HIP_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.cpp",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc--DBTX_ENABLE_HIP_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-msvc--DBTX_ENABLE_HIP_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.log",
+    "free_after": 1623351296
+  },
+  {
+    "label": "candidate-msvc--DBTX_ENABLE_HIP_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbols",
+    "command": [
+      "/usr/bin/nm",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc--DBTX_ENABLE_HIP_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-msvc--DBTX_ENABLE_HIP_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbols.log",
+    "free_after": 1623347200
+  },
+  {
+    "label": "candidate-msvc--DBTX_ENABLE_HIP_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbol-strength",
+    "command": [
+      "/usr/bin/nm",
+      "-m",
+      "-g",
+      "-U",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc--DBTX_ENABLE_HIP_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-msvc--DBTX_ENABLE_HIP_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1-symbol-strength.log",
+    "free_after": 1623343104
+  },
+  {
+    "label": "candidate-enabled-hip-archive",
+    "command": [
+      "/usr/bin/ar",
+      "rcs",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-enabled-hip.a",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-msvc--DBTX_ENABLE_HIP_1--DBTX_ENABLE_ASCEND_1--DBTX_HAVE_CANN_1.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/cuda_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/metal_bmx4_accel.o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip-provider.o"
+    ],
+    "exit": 0,
+    "log": "build/candidate-enabled-hip-archive.log",
+    "free_after": 1623257088
+  },
+  {
+    "label": "candidate-enabled-hip-link",
+    "command": [
+      "/usr/bin/clang++",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/hip-driver.o",
+      "-Wl,-force_load,[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-enabled-hip.a",
+      "-o",
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-enabled-hip"
+    ],
+    "exit": 0,
+    "log": "build/candidate-enabled-hip-link.log",
+    "free_after": 1623326720
+  },
+  {
+    "label": "candidate-enabled-hip-run",
+    "command": [
+      "[workspace]/work/btx-review-tools/windows-backend-linkage/build/candidate-enabled-hip"
+    ],
+    "exit": 0,
+    "log": "build/candidate-enabled-hip-run.log",
+    "free_after": 1623302144
+  }
+]
