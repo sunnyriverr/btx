@@ -1,0 +1,76 @@
+{
+  "results": [
+    {
+      "variant": "baseline",
+      "command": [
+        "/usr/bin/c++",
+        "-std=c++20",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wno-deprecated-declarations",
+        "-I/opt/homebrew/opt/openssl@3/include",
+        "[workspace]/work/btx-review-tools/snapshot-io-portability/baseline-test.cpp",
+        "-L/opt/homebrew/opt/openssl@3/lib",
+        "-lcrypto",
+        "-o",
+        "[workspace]/work/btx-review-tools/snapshot-io-portability/baseline-test"
+      ],
+      "exit": 0,
+      "output": "PASS: normal 128KiB file, both chunks and digests\nPASS: five exact offsets including 2GiB and >4GiB; partial tail; errors; sparse allocated=266240 logical=4295032955\n",
+      "source_sha256": "d262077ff8beefd669c4cc72ce4f46a017e227f18dd2b9eae194c6037523a0fa",
+      "harness_sha256": "53633f77fcfc715f5760de5c2aeb4d5040e3d00eaccb9bea9a48695208fff916",
+      "binary_sha256": "6ee662c3f240eb84d49c920b7a9af5410507fbd8c68e47d41bfe9e5b7c623594"
+    },
+    {
+      "variant": "candidate",
+      "command": [
+        "/usr/bin/c++",
+        "-DHAS_HELPERS",
+        "-std=c++20",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wno-deprecated-declarations",
+        "-I/opt/homebrew/opt/openssl@3/include",
+        "[workspace]/work/btx-review-tools/snapshot-io-portability/candidate-test.cpp",
+        "-L/opt/homebrew/opt/openssl@3/lib",
+        "-lcrypto",
+        "-o",
+        "[workspace]/work/btx-review-tools/snapshot-io-portability/candidate-test"
+      ],
+      "exit": 0,
+      "output": "PASS: normal 128KiB file, both chunks and digests\nPASS: five exact offsets including 2GiB and >4GiB; partial tail; errors; sparse allocated=266240 logical=4295032955\n",
+      "source_sha256": "763b84499d3f83c03f4abae5b4b8fea823a4d69a86ddef4f538995ccd41faf05",
+      "harness_sha256": "3bdacc22a773852d1fa8bfccf01202c63064800b3856695fda060e4832ad1667",
+      "binary_sha256": "0037abf6a59a8623a537af5c9c122beab2ee56beab04249635cf69710a7cd52f"
+    },
+    {
+      "variant": "narrow-control",
+      "command": [
+        "/usr/bin/c++",
+        "-DHAS_HELPERS",
+        "-std=c++20",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wno-deprecated-declarations",
+        "-I/opt/homebrew/opt/openssl@3/include",
+        "[workspace]/work/btx-review-tools/snapshot-io-portability/narrow-control-test.cpp",
+        "-L/opt/homebrew/opt/openssl@3/lib",
+        "-lcrypto",
+        "-o",
+        "[workspace]/work/btx-review-tools/snapshot-io-portability/narrow-control-test"
+      ],
+      "exit": 1,
+      "output": "PASS: normal 128KiB file, both chunks and digests\nFAIL: chunk read\n",
+      "source_sha256": "763b84499d3f83c03f4abae5b4b8fea823a4d69a86ddef4f538995ccd41faf05",
+      "harness_sha256": "199411ca400632553b55c6957353829782be9416594e14a4475375e3a322685b",
+      "binary_sha256": "6e72de185e97fef9962a3e851c477d2273b5318fe4e785f96910494273a4c5d3"
+    }
+  ],
+  "free_after": 1667948544
+}
