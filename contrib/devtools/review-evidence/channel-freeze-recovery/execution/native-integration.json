@@ -1,0 +1,796 @@
+{
+  "profile": "candidate-only fresh repository-native component build/CTest",
+  "source": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+  "os": "macOS-26.5.1-arm64-arm-64bit",
+  "harness_sha256": "80be83e62a892fd3c69ccabd16ee27f157bd6bfae6f422afcd8c9d6e4fe40370",
+  "cmake_sha256": "6d8a0665ae5e8c4ecc10e4ee662db6c7b2dbe8fe618b0708c7811695889778f4",
+  "lifecycle_sha256": "b3b085cc5a501b7a5218eedb90daf980d27717ef58481d2ea6653e99fd306d3d",
+  "free_before": 1390510080,
+  "task_bytes_before": 11189760,
+  "started_utc": "2026-11-03T00:15:05.508445+00:00",
+  "commands": [
+    {
+      "argv": [
+        "/opt/homebrew/bin/cmake",
+        "-S",
+        "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/test/util/model_security",
+        "-B",
+        "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_OSX_ARCHITECTURES=arm64",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+        "-DBTX_SOURCE_ROOT=<workspace>/work/btx-review-tools/toolchain-2026-10-31/source",
+        "-DBTX_SECURITY_OVERLAY=<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate",
+        "-DBTX_INTEGRATED_SOURCE=<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build/no-daemon",
+        "-DSQLite3_INCLUDE_DIR=/opt/homebrew/opt/sqlite/include",
+        "-DSQLite3_LIBRARY=/opt/homebrew/opt/sqlite/lib/libsqlite3.dylib"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 1.012816458
+    },
+    {
+      "argv": [
+        "/opt/homebrew/bin/cmake",
+        "--build",
+        "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+        "--target",
+        "channel-recovery-tests",
+        "--parallel",
+        "1"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 13.177458
+    },
+    {
+      "argv": [
+        "/opt/homebrew/bin/ctest",
+        "--test-dir",
+        "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+        "-R",
+        "^security-channel-recovery$",
+        "--output-on-failure"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 3.035207166000001
+    }
+  ],
+  "binary_sha256": "440e63b62bec5be06e00ade468d01c414a3a1ce7460b3ed39854b2cf295ec0e9",
+  "summary": {
+    "failed": 0,
+    "passed": 6,
+    "tests": [
+      {
+        "name": "first-freeze-safety-and-unrelated-permit-repeat-reopen",
+        "status": "PASS"
+      },
+      {
+        "name": "successor-survives-repeat-reopen-and-activates-with-real-binding",
+        "status": "PASS"
+      },
+      {
+        "name": "ordinary-canary-active-incident-still-freezes",
+        "status": "PASS"
+      },
+      {
+        "name": "recovery-still-checks-owner-candidate-and-canary",
+        "status": "PASS"
+      },
+      {
+        "name": "qualified-previous-rolls-back-and-sequence-does-not-reset",
+        "status": "PASS"
+      },
+      {
+        "name": "renewed-signed-peer-lease-preserves-eligible-canary-compatibility-and-rearms-incident",
+        "status": "PASS"
+      }
+    ]
+  },
+  "status": "PASS",
+  "free_after": 1369632768,
+  "task_bytes_after": 21135782,
+  "compiled_repository_inputs": [
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/artifacts.cpp",
+      "target_path": "src/modelnet/security_v2/artifacts.cpp",
+      "sha256": "2dbc27537c3f9e8eeb76a1233e463cf21050bf4b81814141b0b1339bed2a08e8",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/artifacts.h",
+      "target_path": "src/modelnet/security_v2/artifacts.h",
+      "sha256": "39832dc18183d54e032cbaeedb185b974abebb9203d2604011dded12e40bf02f",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/broker.cpp",
+      "target_path": "src/modelnet/security_v2/broker.cpp",
+      "sha256": "cc1dd0121c71c2d77aa656b87f1312ca2fb55d3de9ccfd69a9c8f0c16ca56494",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/broker.h",
+      "target_path": "src/modelnet/security_v2/broker.h",
+      "sha256": "1af281bd6fcc49250bfc6fe8c01ebf3abb417b92fa24eb6fd1d3ddb4925b4baa",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/common.cpp",
+      "target_path": "src/modelnet/security_v2/common.cpp",
+      "sha256": "db5e29b92ef34b4588bf89f13845f7ef848ca5395cc94b0a471c092e30ab282e",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/common.h",
+      "target_path": "src/modelnet/security_v2/common.h",
+      "sha256": "fc4ef5aa7258f44f9448fe8c35d26871fa4afe5f7877da250f7f2e94b685f365",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/database.cpp",
+      "target_path": "src/modelnet/security_v2/database.cpp",
+      "sha256": "e1ba9f51c547ca7fb00f18e8e97a76858971cbdee6aecfeffaae101f785bedd1",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/database.h",
+      "target_path": "src/modelnet/security_v2/database.h",
+      "sha256": "048d1e698a0284d4220d19c5169f515619d3ecc1212609943a04b352710df194",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/evaluation.cpp",
+      "target_path": "src/modelnet/security_v2/evaluation.cpp",
+      "sha256": "3b7e6cd5499ee61f59c80d2ec8429f8a6888bdaafbdbde7d525e8dfa91ba1a45",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/evaluation.h",
+      "target_path": "src/modelnet/security_v2/evaluation.h",
+      "sha256": "a7bbfea8ed0840211cb6481e1efbb8245102e691682ced0adc4a9b7bf777432e",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/lifecycle.cpp",
+      "target_path": "src/modelnet/security_v2/lifecycle.cpp",
+      "sha256": "b3b085cc5a501b7a5218eedb90daf980d27717ef58481d2ea6653e99fd306d3d",
+      "expected_identity": "reviewed lifecycle patch",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/lifecycle.h",
+      "target_path": "src/modelnet/security_v2/lifecycle.h",
+      "sha256": "6119fb592c144aa7d43b3bd0d2654951ba5335e0a6a78a9936aed6efb7549a07",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/mesh.cpp",
+      "target_path": "src/modelnet/security_v2/mesh.cpp",
+      "sha256": "0c4b117bba05c8e42945516661d9eee51a99e475c3babfb5e9907a8c40cdaea6",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/mesh.h",
+      "target_path": "src/modelnet/security_v2/mesh.h",
+      "sha256": "2e8fd6f402ab0950726f5487e6f05372973c5a4ada1fe3fdcc3463718549fcc4",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/peer.cpp",
+      "target_path": "src/modelnet/security_v2/peer.cpp",
+      "sha256": "238850341b84920d0cb0915aac035765b435fdb50623f23359564ab4ca3af3e0",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/peer.h",
+      "target_path": "src/modelnet/security_v2/peer.h",
+      "sha256": "fa98412436bdad99003b664f8df0039b4535b6ca206df9774a1a5737fcf47877",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/sandbox.cpp",
+      "target_path": "src/modelnet/security_v2/sandbox.cpp",
+      "sha256": "5f9c1bd667ead7ee83223854e0a853b02de455f3cbe64004bb7ea89ad55217f6",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/sandbox.h",
+      "target_path": "src/modelnet/security_v2/sandbox.h",
+      "sha256": "ae5089b79b097314ab163410619a7282a076ddf416781c8c78b330290ce186b3",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/service.cpp",
+      "target_path": "src/modelnet/security_v2/service.cpp",
+      "sha256": "407adf071ca18e695d2d4c2c3278866d875a56ab5fa3a5de37a02cb99a1c4901",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/service.h",
+      "target_path": "src/modelnet/security_v2/service.h",
+      "sha256": "949477ca0fbf003efd9a47ac466f12e01b1576259c7c140ba9625a93f950a6c7",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/trust.cpp",
+      "target_path": "src/modelnet/security_v2/trust.cpp",
+      "sha256": "dcb65d25866fca3aaa7e7334e82a16667d4877bb3112731838d973437febcd95",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/trust.h",
+      "target_path": "src/modelnet/security_v2/trust.h",
+      "sha256": "9e5a0d46d9efd9a387c6a442dd4849af963aae5b764019e4c2df3b9e46dce590",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/work.cpp",
+      "target_path": "src/modelnet/security_v2/work.cpp",
+      "sha256": "631688bf81bf66d7930dfcee59d9d9aa5c904557efa366366a7baeaeedc784ee",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/work.h",
+      "target_path": "src/modelnet/security_v2/work.h",
+      "sha256": "9389d338f22b911b3dc2133149006daa7495511377a661b6d0cca8ba1e80ed84",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/test/util/model_security/channel_recovery_tests.cpp",
+      "target_path": "test/util/model_security/channel_recovery_tests.cpp",
+      "sha256": "80be83e62a892fd3c69ccabd16ee27f157bd6bfae6f422afcd8c9d6e4fe40370",
+      "expected_identity": "exact final tested harness",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/compat/byteswap.h",
+      "target_path": "src/compat/byteswap.h",
+      "sha256": "023602a03ae3683d5c9e8f69a6ec0e9fbacb806bcd4668d88458b9ad9d5c8634",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/compat/endian.h",
+      "target_path": "src/compat/endian.h",
+      "sha256": "f610dc82ef3d28c8b01826a17fdeaff860de3e34581e5e9b806b9f0e55b51df1",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/crypto/common.h",
+      "target_path": "src/crypto/common.h",
+      "sha256": "9f0c0cf25f809ed3a1bc765a1b5b58c21e04c108cd6a82511f3a108abfc3ec74",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/crypto/sha384.cpp",
+      "target_path": "src/crypto/sha384.cpp",
+      "sha256": "f742593b4198f1150bdef4d671159bb094626f194bb49781c0e174a0245a42c4",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/crypto/sha384.h",
+      "target_path": "src/crypto/sha384.h",
+      "sha256": "98a1fdfcabdfd93d9f1723d750b0510a75eef432bab9e821ea8e8642ee7b7ad1",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/api.h",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/api.h",
+      "sha256": "eff2fe4cca86cb72543628656a40af6720bb66f1781a5fadd55454c695472598",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/config.h",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/config.h",
+      "sha256": "8f1832c9c5c949e5c2b2235d76c489e4f4efc5fbd497f121afc6c0c96243dd74",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/fips202.c",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/fips202.c",
+      "sha256": "e4e486d8c839805ae9ad0c2976c3ad4455eeb9a4126835cb1583d7c287ccd9f6",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/fips202.h",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/fips202.h",
+      "sha256": "e5e06085263e4b7726c398095fd2c6d65e8f1c714de49537198d937d9dae9bb6",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/ntt.c",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/ntt.c",
+      "sha256": "921b76ae7a183305893800e69c0b9ea561bffd2a6e85621767eb789c02a0f8d0",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/ntt.h",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/ntt.h",
+      "sha256": "32345efead2c237177f3c0e050c26caf6c9d1772a629664632d9ff32f2693a3e",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/packing.c",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/packing.c",
+      "sha256": "af51fe6b63164c17a765fcca14afa1ad2bfa11a1389a1964781951cdaf0f6016",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/packing.h",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/packing.h",
+      "sha256": "73b2a0840e23e53edaf9a3509120864ec7ee82b1a2329f35816642a788c96509",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/params.h",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/params.h",
+      "sha256": "1d6c116396e3d20f40d72c35a093af2be9f03177282762bdbdb282bb4c4b64af",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/poly.c",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/poly.c",
+      "sha256": "845f8991d166c9facbfc9646da77e9e9f6b75f0ea8fb9d629e8ac5f234707d6d",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/poly.h",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/poly.h",
+      "sha256": "2b63cc2ec62c027dd16cf92bd120a4bc4f3a41a94a4a51b2005d366fc30a0330",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/polyvec.c",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/polyvec.c",
+      "sha256": "2fa664c380a5bef7e2e9868e0b8f02f8353c4bd81afe0d6328b498baf6864eac",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/polyvec.h",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/polyvec.h",
+      "sha256": "6523a95d74add7e36129831fd5a72370c6275703fafd1529b6af59ef9645368e",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/randombytes.h",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/randombytes.h",
+      "sha256": "5ece412ed498abfd892ecec23480910b76cb8ea1b605da10adc5584ede79f048",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/randombytes_custom.c",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/randombytes_custom.c",
+      "sha256": "f68bbbe64bf2b8def7d9785b517617f96d88e8a6681abc3f9cf9bd3fd25c842e",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/reduce.c",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/reduce.c",
+      "sha256": "3088cac3d23355a3f9adaac9fd4ee864be9caf5fb0ad30bcb4a4da17dba0e4f4",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/reduce.h",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/reduce.h",
+      "sha256": "9abe0b725e0608948eaa74fabd01c4701de5480ce9494a5f6bfa35140eee0399",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/rounding.c",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/rounding.c",
+      "sha256": "7223dbbe56b1fba226d536d64eaf05b1ad3f249d33ec767ee655eee471478816",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/rounding.h",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/rounding.h",
+      "sha256": "7459644c21e7cbfe48361a1f6b6fda687ff8792f8e0577a0862b3de620558d25",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/sign.c",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/sign.c",
+      "sha256": "3abd138813b3f803f4f3cbabb706b93e319e19e27b8defa99dd065f8fc416bed",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/sign.h",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/sign.h",
+      "sha256": "a22ea01f54c68888d75db42def615aa7ca6050679894aab3a048904d98830210",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/symmetric-shake.c",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/symmetric-shake.c",
+      "sha256": "5b23002163d0dd4a1030e51fed8994a06972644e923df0feca6d1d183f4bdd45",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/symmetric.h",
+      "target_path": "src/libbitcoinpqc/dilithium/ref/symmetric.h",
+      "sha256": "a272fe9473a968936121a1aa52ac928790bb653b3697fe58ffd3935f08aaaa14",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include/libbitcoinpqc/ml_dsa.h",
+      "target_path": "src/libbitcoinpqc/include/libbitcoinpqc/ml_dsa.h",
+      "sha256": "6482326fe1d5c1acf424e0662ff707893cb6e3a95b4c51404ef8a06a9a1706ba",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/src/ml_dsa/keygen.c",
+      "target_path": "src/libbitcoinpqc/src/ml_dsa/keygen.c",
+      "sha256": "2186dd39bfcdcf16d7e0334c5371460cd9fc014b9afec14cd9ee15c50820c666",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/src/ml_dsa/sign.c",
+      "target_path": "src/libbitcoinpqc/src/ml_dsa/sign.c",
+      "sha256": "7cbeb215213989afcd4d47af6f386ab1bb8a55fa2ab0630de480b48a4e723d8a",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/src/ml_dsa/utils.c",
+      "target_path": "src/libbitcoinpqc/src/ml_dsa/utils.c",
+      "sha256": "2abd2b4c7c8ed97f267e9a796de3ef99a68f5b8898d593370629457cb4792fe2",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/src/ml_dsa/verify.c",
+      "target_path": "src/libbitcoinpqc/src/ml_dsa/verify.c",
+      "sha256": "cc2d54d80df9905b3c916f07f573be84d9b6f698a836505f53d9225ee51b1aba",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/include/univalue.h",
+      "target_path": "src/univalue/include/univalue.h",
+      "sha256": "ccf88ee034078aa1e25ce5591a5260c4a3761cc832c284aa238112593fb6e8fa",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/include/univalue_escapes.h",
+      "target_path": "src/univalue/include/univalue_escapes.h",
+      "sha256": "5c40c1791c42708dfd4d5a378f92f38c0df4c4e650f4ea3e4f37471e36a6d03b",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/include/univalue_utffilter.h",
+      "target_path": "src/univalue/include/univalue_utffilter.h",
+      "sha256": "1a105117f2d754d20be74d47fe1de66818c85b6e9eab8643147198f2fbabd53b",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/lib/univalue.cpp",
+      "target_path": "src/univalue/lib/univalue.cpp",
+      "sha256": "1458b30698cdd2610fc6a39f9ccbcbccd30a3ee2da0232030f25ab015ec2250c",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/lib/univalue_get.cpp",
+      "target_path": "src/univalue/lib/univalue_get.cpp",
+      "sha256": "93e0b974aded7aea7244545e287ce53cd260a8c559040414e07cbe2139f47783",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/lib/univalue_read.cpp",
+      "target_path": "src/univalue/lib/univalue_read.cpp",
+      "sha256": "2ff671ecf30d20d4abf7ab480de22ee975c05736d285bbcbe0901ab9d0730706",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    },
+    {
+      "path": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/lib/univalue_write.cpp",
+      "target_path": "src/univalue/lib/univalue_write.cpp",
+      "sha256": "5ba836604311eab356d194c51016f6510e9b223d7f97a610be1e69d27f153d3a",
+      "expected_identity": "fd3a905fed3bc4943ad24372da032af4d29304a3",
+      "matches": true
+    }
+  ],
+  "compiled_external_headers": [
+    {
+      "path": "/opt/homebrew/opt/sqlite/include/sqlite3.h",
+      "sha256": "919e7f2e8ed1d8f56ac17b412b8971c76aa5d1a879752cc6058f75e7d5910e1d"
+    }
+  ],
+  "compile_commands_sha256": "dbe73adbfd3603c8da829203f26ec52ec8f6bdc0d3a3d9901f20a81be1999b52",
+  "fresh_archives": [
+    {
+      "path": "native-build/libbtx_security_crypto.a",
+      "sha256": "b8426315bfdf4375c2a0cd9a5211cccc502bf39e0576dd09c3067667607dd513"
+    },
+    {
+      "path": "native-build/libbtx_security_json.a",
+      "sha256": "3e80bbce7dde882dac0d6f13241a9049187d71d9ab1f33dc838abcf2b25c2c89"
+    },
+    {
+      "path": "native-build/libbtx_model_security.a",
+      "sha256": "db989421abbc9b5a3fdab7c159d3a43faf188f388c12ecd7201cc2f2497db0a2"
+    }
+  ],
+  "link_command": "/usr/bin/c++ -O3 -DNDEBUG -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names \"CMakeFiles/channel-recovery-tests.dir/channel_recovery_tests.cpp.o\" -o channel-recovery-tests  libbtx_model_security.a libbtx_security_crypto.a libbtx_security_json.a /opt/homebrew/opt/sqlite/lib/libsqlite3.dylib\n",
+  "source_tree_scope": "Only actually compiled source/header closure checked; external toolchain checkout is dirty and was read only.",
+  "record_capture": {
+    "sha256": "9371ba162d630bcbf14ff7307341a94d66736f0d7992d7096eabd83ef2ea7126",
+    "records": 425
+  },
+  "linked_service_symbols": [],
+  "service_boundary": "Official library compiles Service TU; final test executable has no linked Service symbols, and test constructs no Service/native worker.",
+  "temporary_fixtures_remaining": [],
+  "actual_compiled_units": 32,
+  "configured_compile_commands": [
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/c++ -DCUSTOM_RANDOMBYTES=1 -DDILITHIUM_MODE=2 -Drandombytes=btx_mldsa_randombytes -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -O3 -DNDEBUG -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/crypto/sha384.cpp.o -c <workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/crypto/sha384.cpp",
+      "file": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/crypto/sha384.cpp",
+      "output": "CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/crypto/sha384.cpp.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/cc -DCUSTOM_RANDOMBYTES=1 -DDILITHIUM_MODE=2 -Drandombytes=btx_mldsa_randombytes -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -O3 -DNDEBUG -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/src/ml_dsa/utils.c.o -c <workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/src/ml_dsa/utils.c",
+      "file": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/src/ml_dsa/utils.c",
+      "output": "CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/src/ml_dsa/utils.c.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/cc -DCUSTOM_RANDOMBYTES=1 -DDILITHIUM_MODE=2 -Drandombytes=btx_mldsa_randombytes -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -O3 -DNDEBUG -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/src/ml_dsa/keygen.c.o -c <workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/src/ml_dsa/keygen.c",
+      "file": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/src/ml_dsa/keygen.c",
+      "output": "CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/src/ml_dsa/keygen.c.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/cc -DCUSTOM_RANDOMBYTES=1 -DDILITHIUM_MODE=2 -Drandombytes=btx_mldsa_randombytes -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -O3 -DNDEBUG -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/src/ml_dsa/sign.c.o -c <workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/src/ml_dsa/sign.c",
+      "file": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/src/ml_dsa/sign.c",
+      "output": "CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/src/ml_dsa/sign.c.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/cc -DCUSTOM_RANDOMBYTES=1 -DDILITHIUM_MODE=2 -Drandombytes=btx_mldsa_randombytes -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -O3 -DNDEBUG -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/src/ml_dsa/verify.c.o -c <workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/src/ml_dsa/verify.c",
+      "file": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/src/ml_dsa/verify.c",
+      "output": "CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/src/ml_dsa/verify.c.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/cc -DCUSTOM_RANDOMBYTES=1 -DDILITHIUM_MODE=2 -Drandombytes=btx_mldsa_randombytes -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -O3 -DNDEBUG -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/sign.c.o -c <workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/sign.c",
+      "file": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/sign.c",
+      "output": "CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/sign.c.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/cc -DCUSTOM_RANDOMBYTES=1 -DDILITHIUM_MODE=2 -Drandombytes=btx_mldsa_randombytes -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -O3 -DNDEBUG -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/packing.c.o -c <workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/packing.c",
+      "file": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/packing.c",
+      "output": "CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/packing.c.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/cc -DCUSTOM_RANDOMBYTES=1 -DDILITHIUM_MODE=2 -Drandombytes=btx_mldsa_randombytes -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -O3 -DNDEBUG -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/polyvec.c.o -c <workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/polyvec.c",
+      "file": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/polyvec.c",
+      "output": "CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/polyvec.c.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/cc -DCUSTOM_RANDOMBYTES=1 -DDILITHIUM_MODE=2 -Drandombytes=btx_mldsa_randombytes -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -O3 -DNDEBUG -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/poly.c.o -c <workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/poly.c",
+      "file": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/poly.c",
+      "output": "CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/poly.c.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/cc -DCUSTOM_RANDOMBYTES=1 -DDILITHIUM_MODE=2 -Drandombytes=btx_mldsa_randombytes -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -O3 -DNDEBUG -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/ntt.c.o -c <workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/ntt.c",
+      "file": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/ntt.c",
+      "output": "CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/ntt.c.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/cc -DCUSTOM_RANDOMBYTES=1 -DDILITHIUM_MODE=2 -Drandombytes=btx_mldsa_randombytes -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -O3 -DNDEBUG -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/reduce.c.o -c <workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/reduce.c",
+      "file": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/reduce.c",
+      "output": "CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/reduce.c.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/cc -DCUSTOM_RANDOMBYTES=1 -DDILITHIUM_MODE=2 -Drandombytes=btx_mldsa_randombytes -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -O3 -DNDEBUG -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/rounding.c.o -c <workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/rounding.c",
+      "file": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/rounding.c",
+      "output": "CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/rounding.c.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/cc -DCUSTOM_RANDOMBYTES=1 -DDILITHIUM_MODE=2 -Drandombytes=btx_mldsa_randombytes -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -O3 -DNDEBUG -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/fips202.c.o -c <workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/fips202.c",
+      "file": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/fips202.c",
+      "output": "CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/fips202.c.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/cc -DCUSTOM_RANDOMBYTES=1 -DDILITHIUM_MODE=2 -Drandombytes=btx_mldsa_randombytes -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -O3 -DNDEBUG -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/symmetric-shake.c.o -c <workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/symmetric-shake.c",
+      "file": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/symmetric-shake.c",
+      "output": "CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/symmetric-shake.c.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/cc -DCUSTOM_RANDOMBYTES=1 -DDILITHIUM_MODE=2 -Drandombytes=btx_mldsa_randombytes -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -O3 -DNDEBUG -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/randombytes_custom.c.o -c <workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/randombytes_custom.c",
+      "file": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/randombytes_custom.c",
+      "output": "CMakeFiles/btx_security_crypto.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref/randombytes_custom.c.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/c++  -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/include -O3 -DNDEBUG -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o CMakeFiles/btx_security_json.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/lib/univalue.cpp.o -c <workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/lib/univalue.cpp",
+      "file": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/lib/univalue.cpp",
+      "output": "CMakeFiles/btx_security_json.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/lib/univalue.cpp.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/c++  -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/include -O3 -DNDEBUG -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o CMakeFiles/btx_security_json.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/lib/univalue_get.cpp.o -c <workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/lib/univalue_get.cpp",
+      "file": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/lib/univalue_get.cpp",
+      "output": "CMakeFiles/btx_security_json.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/lib/univalue_get.cpp.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/c++  -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/include -O3 -DNDEBUG -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o CMakeFiles/btx_security_json.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/lib/univalue_read.cpp.o -c <workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/lib/univalue_read.cpp",
+      "file": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/lib/univalue_read.cpp",
+      "output": "CMakeFiles/btx_security_json.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/lib/univalue_read.cpp.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/c++  -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/include -O3 -DNDEBUG -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o CMakeFiles/btx_security_json.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/lib/univalue_write.cpp.o -c <workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/lib/univalue_write.cpp",
+      "file": "<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/lib/univalue_write.cpp",
+      "output": "CMakeFiles/btx_security_json.dir<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/lib/univalue_write.cpp.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/c++  -I<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/include -isystem /opt/homebrew/opt/sqlite/include -O3 -DNDEBUG -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/artifacts.cpp.o -c <workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/artifacts.cpp",
+      "file": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/artifacts.cpp",
+      "output": "CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/artifacts.cpp.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/c++  -I<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/include -isystem /opt/homebrew/opt/sqlite/include -O3 -DNDEBUG -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/broker.cpp.o -c <workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/broker.cpp",
+      "file": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/broker.cpp",
+      "output": "CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/broker.cpp.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/c++  -I<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/include -isystem /opt/homebrew/opt/sqlite/include -O3 -DNDEBUG -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/common.cpp.o -c <workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/common.cpp",
+      "file": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/common.cpp",
+      "output": "CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/common.cpp.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/c++  -I<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/include -isystem /opt/homebrew/opt/sqlite/include -O3 -DNDEBUG -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/database.cpp.o -c <workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/database.cpp",
+      "file": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/database.cpp",
+      "output": "CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/database.cpp.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/c++  -I<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/include -isystem /opt/homebrew/opt/sqlite/include -O3 -DNDEBUG -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/evaluation.cpp.o -c <workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/evaluation.cpp",
+      "file": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/evaluation.cpp",
+      "output": "CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/evaluation.cpp.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/c++  -I<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/include -isystem /opt/homebrew/opt/sqlite/include -O3 -DNDEBUG -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/lifecycle.cpp.o -c <workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/lifecycle.cpp",
+      "file": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/lifecycle.cpp",
+      "output": "CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/lifecycle.cpp.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/c++  -I<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/include -isystem /opt/homebrew/opt/sqlite/include -O3 -DNDEBUG -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/mesh.cpp.o -c <workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/mesh.cpp",
+      "file": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/mesh.cpp",
+      "output": "CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/mesh.cpp.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/c++  -I<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/include -isystem /opt/homebrew/opt/sqlite/include -O3 -DNDEBUG -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/peer.cpp.o -c <workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/peer.cpp",
+      "file": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/peer.cpp",
+      "output": "CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/peer.cpp.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/c++  -I<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/include -isystem /opt/homebrew/opt/sqlite/include -O3 -DNDEBUG -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/sandbox.cpp.o -c <workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/sandbox.cpp",
+      "file": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/sandbox.cpp",
+      "output": "CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/sandbox.cpp.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/c++  -I<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/include -isystem /opt/homebrew/opt/sqlite/include -O3 -DNDEBUG -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/service.cpp.o -c <workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/service.cpp",
+      "file": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/service.cpp",
+      "output": "CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/service.cpp.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/c++  -I<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/include -isystem /opt/homebrew/opt/sqlite/include -O3 -DNDEBUG -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/trust.cpp.o -c <workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/trust.cpp",
+      "file": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/trust.cpp",
+      "output": "CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/trust.cpp.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/c++  -I<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/include -isystem /opt/homebrew/opt/sqlite/include -O3 -DNDEBUG -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/work.cpp.o -c <workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/work.cpp",
+      "file": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/work.cpp",
+      "output": "CMakeFiles/btx_model_security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/work.cpp.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/c++  -I<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/include -isystem /opt/homebrew/opt/sqlite/include -O3 -DNDEBUG -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o CMakeFiles/security-tests.dir/security_tests.cpp.o -c <workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/test/util/model_security/security_tests.cpp",
+      "file": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/test/util/model_security/security_tests.cpp",
+      "output": "CMakeFiles/security-tests.dir/security_tests.cpp.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/c++  -I<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/include -isystem /opt/homebrew/opt/sqlite/include -O3 -DNDEBUG -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o CMakeFiles/btx-security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/main.cpp.o -c <workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/main.cpp",
+      "file": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/main.cpp",
+      "output": "CMakeFiles/btx-security.dir<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src/modelnet/security_v2/main.cpp.o"
+    },
+    {
+      "directory": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/native-build",
+      "command": "/usr/bin/c++  -I<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/include -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/libbitcoinpqc/dilithium/ref -I<workspace>/work/btx-review-tools/toolchain-2026-10-31/source/src/univalue/include -isystem /opt/homebrew/opt/sqlite/include -O3 -DNDEBUG -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o CMakeFiles/channel-recovery-tests.dir/channel_recovery_tests.cpp.o -c <workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/test/util/model_security/channel_recovery_tests.cpp",
+      "file": "<workspace>/work/btx-review-tools/channel-freeze-recovery/execution/candidate/test/util/model_security/channel_recovery_tests.cpp",
+      "output": "CMakeFiles/channel-recovery-tests.dir/channel_recovery_tests.cpp.o"
+    }
+  ],
+  "unbuilt_configured_targets": [
+    "security-tests",
+    "btx-security"
+  ],
+  "repository_native_test_source": "candidate/test/util/model_security/channel_recovery_tests.cpp",
+  "sqlite": {
+    "library": "/opt/homebrew/opt/sqlite/lib/libsqlite3.dylib",
+    "sha256": "75feed7151d3e496343ffee9c25960d85188ed99b2ffb1051fe016f912c6c808",
+    "header_sha256": "919e7f2e8ed1d8f56ac17b412b8971c76aa5d1a879752cc6058f75e7d5910e1d",
+    "header_version": "3.53.4"
+  }
+}
