@@ -1,0 +1,85 @@
+name: Native Windows compatibility header prerequisite
+on:
+  push:
+    branches: [codex/ci-native-posix-header]
+permissions:
+  contents: read
+jobs:
+  native-windows:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: windows-2025
+    timeout-minutes: 10
+    steps:
+      - name: Fetch exact inputs without unrelated assets
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $repo = Join-Path $env:RUNNER_TEMP 'native-header-repo'
+          git init $repo
+          if ($LASTEXITCODE -ne 0) { throw 'git init failed' }
+          git -C $repo remote add origin https://github.com/sunnyriverr/btx.git
+          if ($LASTEXITCODE -ne 0) { throw 'remote add failed' }
+          git -C $repo fetch --filter=blob:none --depth=1 origin $env:GITHUB_SHA ab1b5cbe42d5b3ceb4faafff213292efed2bba18
+          if ($LASTEXITCODE -ne 0) { throw 'fetch failed' }
+          $json = git -C $repo show "$($env:GITHUB_SHA):contrib/devtools/windows-native-header/closure.json"
+          if ($LASTEXITCODE -ne 0) { throw 'manifest read failed' }
+          $manifest = $json | ConvertFrom-Json
+          $paths = @('/contrib/devtools/windows-native-header/', '/test/util/windows_posix_header_tests.cpp', '/src/compat/mingw/posix_extra.h')
+          $paths += $manifest.files.PSObject.Properties.Name | ForEach-Object { '/' + $_ }
+          git -C $repo sparse-checkout set --no-cone -- $paths
+          if ($LASTEXITCODE -ne 0) { throw 'sparse checkout failed' }
+          git -C $repo checkout --detach $env:GITHUB_SHA
+          if ($LASTEXITCODE -ne 0) { throw 'checkout failed' }
+      - name: Native same-fixture baseline and candidate checks
+        shell: cmd
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
+          if not defined BTX_VS exit /b 2
+          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+          if errorlevel 1 exit /b %errorlevel%
+          set "PATH=C:\Program Files\LLVM\bin;%PATH%"
+          set "CL="
+          set "_CL_="
+          set "LINK="
+          python "%RUNNER_TEMP%\native-header-repo\contrib\devtools\windows-native-header\check_header.py" --repo "%RUNNER_TEMP%\native-header-repo" --out "%RUNNER_TEMP%\native-header-output"
+          exit /b %errorlevel%
+      - name: Preserve native evidence
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: native-windows-header
+          path: ${{ runner.temp }}/native-header-output
+          retention-days: 7
+  mingw-preservation:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Fetch exact inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          repo="$RUNNER_TEMP/native-header-repo"
+          git init "$repo"
+          git -C "$repo" remote add origin https://github.com/sunnyriverr/btx.git
+          git -C "$repo" fetch --filter=blob:none --depth=1 origin "$GITHUB_SHA" ab1b5cbe42d5b3ceb4faafff213292efed2bba18
+          git -C "$repo" sparse-checkout set --no-cone /contrib/devtools/windows-native-header/ /test/util/windows_posix_header_tests.cpp /src/compat/mingw/posix_extra.h
+          git -C "$repo" checkout --detach "$GITHUB_SHA"
+      - name: Install cross compiler
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends g++-mingw-w64-x86-64-posix
+      - name: Preserve MinGW compilation and preprocessed tokens
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 "$RUNNER_TEMP/native-header-repo/contrib/devtools/windows-native-header/check_header.py" --repo "$RUNNER_TEMP/native-header-repo" --out "$RUNNER_TEMP/mingw-header-output"
+      - name: Preserve MinGW evidence
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: mingw-header-preservation
+          path: ${{ runner.temp }}/mingw-header-output
+          retention-days: 7
