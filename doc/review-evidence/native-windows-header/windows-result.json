@@ -1,0 +1,443 @@
+{
+  "base": "ab1b5cbe42d5b3ceb4faafff213292efed2bba18",
+  "platform": "Windows-2025Server-10.0.26100-SP0",
+  "native_windows": true,
+  "runner_sha256": "a09aa363fbd037ef2bca1b091ac7c2fdb99106207f6d54ae86dc7e1d51ff092c",
+  "test_sha256": "274fbcafb078219792cca07471dac1b3ded194cf35e8b7455c2aa9bd67efc85e",
+  "candidate_header": "95b5941be1108017c1f5e4e05ef9615dbbd1f8877c5d5fc1ab3c98da543c4c50",
+  "profile": "standalone component / native compiler; not CMake root flags",
+  "toolchain": {
+    "WindowsSDKVersion": "10.0.26100.0\\",
+    "WindowsSdkDir": "C:\\Program Files (x86)\\Windows Kits\\10\\",
+    "VCToolsVersion": "14.51.36231",
+    "UCRTVersion": "10.0.26100.0",
+    "VSCMD_ARG_TGT_ARCH": "x64"
+  },
+  "commands": [
+    {
+      "label": "cl-version",
+      "command": [
+        "cl",
+        "/Bv"
+      ],
+      "exit": 2,
+      "log_sha256": "c540121e17c0d19751b1c744c4c70d492cea729394ebe2284c612f00b7339459",
+      "expected": null
+    },
+    {
+      "label": "cl-header-first-baseline-compile",
+      "command": [
+        "cl",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/W4",
+        "/MD",
+        "/DWIN32",
+        "/D_WIN32_WINNT=0x0A00",
+        "/DWIN32_LEAN_AND_MEAN",
+        "/DNOMINMAX",
+        "/D_CRT_SECURE_NO_WARNINGS",
+        "/ID:\\a\\_temp\\native-header-output\\baseline\\src",
+        "/ID:\\a\\_temp\\native-header-output\\closure\\src",
+        "D:\\a\\_temp\\native-header-repo\\test\\util\\windows_posix_header_tests.cpp",
+        "/Fe:D:\\a\\_temp\\native-header-output\\cl-header-first-baseline.exe",
+        "/Fo:D:\\a\\_temp\\native-header-output\\cl-header-first-baseline.obj",
+        "/link",
+        "ws2_32.lib"
+      ],
+      "exit": 2,
+      "log_sha256": "19a2218f5aab2f8025093d3aa38cd117c0e21e2dfe5e82ddced7c365614912e9",
+      "expected": false
+    },
+    {
+      "label": "cl-header-first-candidate-compile",
+      "command": [
+        "cl",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/W4",
+        "/MD",
+        "/DWIN32",
+        "/D_WIN32_WINNT=0x0A00",
+        "/DWIN32_LEAN_AND_MEAN",
+        "/DNOMINMAX",
+        "/D_CRT_SECURE_NO_WARNINGS",
+        "/ID:\\a\\_temp\\native-header-output\\candidate\\src",
+        "/ID:\\a\\_temp\\native-header-output\\closure\\src",
+        "D:\\a\\_temp\\native-header-repo\\test\\util\\windows_posix_header_tests.cpp",
+        "/Fe:D:\\a\\_temp\\native-header-output\\cl-header-first-candidate.exe",
+        "/Fo:D:\\a\\_temp\\native-header-output\\cl-header-first-candidate.obj",
+        "/link",
+        "ws2_32.lib"
+      ],
+      "exit": 0,
+      "log_sha256": "103c22a5e780683322b1695f8fa4da6ff13143f3e368e2fccde0d738afda2adc",
+      "expected": true
+    },
+    {
+      "label": "cl-header-first-candidate-runtime",
+      "command": [
+        "D:\\a\\_temp\\native-header-output\\cl-header-first-candidate.exe",
+        "D:\\a\\_temp\\native-header-output\\cl-header-first-candidate.tmp"
+      ],
+      "exit": 0,
+      "log_sha256": "e52e8bf583aa6ba4767fb350dfc60a3e93ada76aa4f5c9ba6d7f895d4962171b",
+      "expected": true
+    },
+    {
+      "label": "cl-core-first-baseline-compile",
+      "command": [
+        "cl",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/W4",
+        "/MD",
+        "/DWIN32",
+        "/D_WIN32_WINNT=0x0A00",
+        "/DWIN32_LEAN_AND_MEAN",
+        "/DNOMINMAX",
+        "/D_CRT_SECURE_NO_WARNINGS",
+        "/ID:\\a\\_temp\\native-header-output\\baseline\\src",
+        "/ID:\\a\\_temp\\native-header-output\\closure\\src",
+        "/DBTX_CORE_FIRST",
+        "D:\\a\\_temp\\native-header-repo\\test\\util\\windows_posix_header_tests.cpp",
+        "/Fe:D:\\a\\_temp\\native-header-output\\cl-core-first-baseline.exe",
+        "/Fo:D:\\a\\_temp\\native-header-output\\cl-core-first-baseline.obj",
+        "/link",
+        "ws2_32.lib"
+      ],
+      "exit": 2,
+      "log_sha256": "19a2218f5aab2f8025093d3aa38cd117c0e21e2dfe5e82ddced7c365614912e9",
+      "expected": false
+    },
+    {
+      "label": "cl-core-first-candidate-compile",
+      "command": [
+        "cl",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/W4",
+        "/MD",
+        "/DWIN32",
+        "/D_WIN32_WINNT=0x0A00",
+        "/DWIN32_LEAN_AND_MEAN",
+        "/DNOMINMAX",
+        "/D_CRT_SECURE_NO_WARNINGS",
+        "/ID:\\a\\_temp\\native-header-output\\candidate\\src",
+        "/ID:\\a\\_temp\\native-header-output\\closure\\src",
+        "/DBTX_CORE_FIRST",
+        "D:\\a\\_temp\\native-header-repo\\test\\util\\windows_posix_header_tests.cpp",
+        "/Fe:D:\\a\\_temp\\native-header-output\\cl-core-first-candidate.exe",
+        "/Fo:D:\\a\\_temp\\native-header-output\\cl-core-first-candidate.obj",
+        "/link",
+        "ws2_32.lib"
+      ],
+      "exit": 0,
+      "log_sha256": "103c22a5e780683322b1695f8fa4da6ff13143f3e368e2fccde0d738afda2adc",
+      "expected": true
+    },
+    {
+      "label": "cl-core-first-candidate-runtime",
+      "command": [
+        "D:\\a\\_temp\\native-header-output\\cl-core-first-candidate.exe",
+        "D:\\a\\_temp\\native-header-output\\cl-core-first-candidate.tmp"
+      ],
+      "exit": 0,
+      "log_sha256": "e52e8bf583aa6ba4767fb350dfc60a3e93ada76aa4f5c9ba6d7f895d4962171b",
+      "expected": true
+    },
+    {
+      "label": "cl-cmake-baseline-configure",
+      "command": [
+        "cmake",
+        "-S",
+        "D:\\a\\_temp\\native-header-output\\cl-cmake-baseline-project",
+        "-B",
+        "D:\\a\\_temp\\native-header-output\\cl-cmake-baseline-build",
+        "-G",
+        "Ninja",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_CXX_COMPILER=cl"
+      ],
+      "exit": 0,
+      "log_sha256": "0a8a1da71db6243a1293677a63eb928517cf0fa918cc5ee6e61578bc88611e96",
+      "expected": true
+    },
+    {
+      "label": "cl-cmake-baseline-build",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\a\\_temp\\native-header-output\\cl-cmake-baseline-build",
+        "--verbose",
+        "--parallel",
+        "1"
+      ],
+      "exit": 2,
+      "log_sha256": "11efa7a1ce17cd4b2bf2b6c944ffa47214b79ef44a0229828abfffcb56ec89d9",
+      "expected": false
+    },
+    {
+      "label": "cl-cmake-candidate-configure",
+      "command": [
+        "cmake",
+        "-S",
+        "D:\\a\\_temp\\native-header-output\\cl-cmake-candidate-project",
+        "-B",
+        "D:\\a\\_temp\\native-header-output\\cl-cmake-candidate-build",
+        "-G",
+        "Ninja",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_CXX_COMPILER=cl"
+      ],
+      "exit": 0,
+      "log_sha256": "586a50db0ba84bdda44b9ffa5e4247552bbac8f7fc876a6ea8989a2c9450cbee",
+      "expected": true
+    },
+    {
+      "label": "cl-cmake-candidate-build",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\a\\_temp\\native-header-output\\cl-cmake-candidate-build",
+        "--verbose",
+        "--parallel",
+        "1"
+      ],
+      "exit": 0,
+      "log_sha256": "fa741c9f2b43fbab96a1fa998f164c4cf5fc6ddc99a5ae9888b105ead685e68d",
+      "expected": true
+    },
+    {
+      "label": "clang-cl-version",
+      "command": [
+        "clang-cl",
+        "--version"
+      ],
+      "exit": 0,
+      "log_sha256": "661974250fc5ed291000a9000c99466582a67ef96304a893526f7e46b7db492e",
+      "expected": null
+    },
+    {
+      "label": "clang-cl-header-first-baseline-compile",
+      "command": [
+        "clang-cl",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/W4",
+        "/MD",
+        "/DWIN32",
+        "/D_WIN32_WINNT=0x0A00",
+        "/DWIN32_LEAN_AND_MEAN",
+        "/DNOMINMAX",
+        "/D_CRT_SECURE_NO_WARNINGS",
+        "/ID:\\a\\_temp\\native-header-output\\baseline\\src",
+        "/ID:\\a\\_temp\\native-header-output\\closure\\src",
+        "D:\\a\\_temp\\native-header-repo\\test\\util\\windows_posix_header_tests.cpp",
+        "/Fe:D:\\a\\_temp\\native-header-output\\clang-cl-header-first-baseline.exe",
+        "/Fo:D:\\a\\_temp\\native-header-output\\clang-cl-header-first-baseline.obj",
+        "/link",
+        "ws2_32.lib"
+      ],
+      "exit": 1,
+      "log_sha256": "d73f032cd6529ba38c5aec7b7e8329b14812c23f6fc2967c89ce2682821dd223",
+      "expected": false
+    },
+    {
+      "label": "clang-cl-header-first-candidate-compile",
+      "command": [
+        "clang-cl",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/W4",
+        "/MD",
+        "/DWIN32",
+        "/D_WIN32_WINNT=0x0A00",
+        "/DWIN32_LEAN_AND_MEAN",
+        "/DNOMINMAX",
+        "/D_CRT_SECURE_NO_WARNINGS",
+        "/ID:\\a\\_temp\\native-header-output\\candidate\\src",
+        "/ID:\\a\\_temp\\native-header-output\\closure\\src",
+        "D:\\a\\_temp\\native-header-repo\\test\\util\\windows_posix_header_tests.cpp",
+        "/Fe:D:\\a\\_temp\\native-header-output\\clang-cl-header-first-candidate.exe",
+        "/Fo:D:\\a\\_temp\\native-header-output\\clang-cl-header-first-candidate.obj",
+        "/link",
+        "ws2_32.lib"
+      ],
+      "exit": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected": true
+    },
+    {
+      "label": "clang-cl-header-first-candidate-runtime",
+      "command": [
+        "D:\\a\\_temp\\native-header-output\\clang-cl-header-first-candidate.exe",
+        "D:\\a\\_temp\\native-header-output\\clang-cl-header-first-candidate.tmp"
+      ],
+      "exit": 0,
+      "log_sha256": "e52e8bf583aa6ba4767fb350dfc60a3e93ada76aa4f5c9ba6d7f895d4962171b",
+      "expected": true
+    },
+    {
+      "label": "clang-cl-core-first-baseline-compile",
+      "command": [
+        "clang-cl",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/W4",
+        "/MD",
+        "/DWIN32",
+        "/D_WIN32_WINNT=0x0A00",
+        "/DWIN32_LEAN_AND_MEAN",
+        "/DNOMINMAX",
+        "/D_CRT_SECURE_NO_WARNINGS",
+        "/ID:\\a\\_temp\\native-header-output\\baseline\\src",
+        "/ID:\\a\\_temp\\native-header-output\\closure\\src",
+        "/DBTX_CORE_FIRST",
+        "D:\\a\\_temp\\native-header-repo\\test\\util\\windows_posix_header_tests.cpp",
+        "/Fe:D:\\a\\_temp\\native-header-output\\clang-cl-core-first-baseline.exe",
+        "/Fo:D:\\a\\_temp\\native-header-output\\clang-cl-core-first-baseline.obj",
+        "/link",
+        "ws2_32.lib"
+      ],
+      "exit": 1,
+      "log_sha256": "d73f032cd6529ba38c5aec7b7e8329b14812c23f6fc2967c89ce2682821dd223",
+      "expected": false
+    },
+    {
+      "label": "clang-cl-core-first-candidate-compile",
+      "command": [
+        "clang-cl",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/W4",
+        "/MD",
+        "/DWIN32",
+        "/D_WIN32_WINNT=0x0A00",
+        "/DWIN32_LEAN_AND_MEAN",
+        "/DNOMINMAX",
+        "/D_CRT_SECURE_NO_WARNINGS",
+        "/ID:\\a\\_temp\\native-header-output\\candidate\\src",
+        "/ID:\\a\\_temp\\native-header-output\\closure\\src",
+        "/DBTX_CORE_FIRST",
+        "D:\\a\\_temp\\native-header-repo\\test\\util\\windows_posix_header_tests.cpp",
+        "/Fe:D:\\a\\_temp\\native-header-output\\clang-cl-core-first-candidate.exe",
+        "/Fo:D:\\a\\_temp\\native-header-output\\clang-cl-core-first-candidate.obj",
+        "/link",
+        "ws2_32.lib"
+      ],
+      "exit": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected": true
+    },
+    {
+      "label": "clang-cl-core-first-candidate-runtime",
+      "command": [
+        "D:\\a\\_temp\\native-header-output\\clang-cl-core-first-candidate.exe",
+        "D:\\a\\_temp\\native-header-output\\clang-cl-core-first-candidate.tmp"
+      ],
+      "exit": 0,
+      "log_sha256": "e52e8bf583aa6ba4767fb350dfc60a3e93ada76aa4f5c9ba6d7f895d4962171b",
+      "expected": true
+    },
+    {
+      "label": "clang-cl-cmake-baseline-configure",
+      "command": [
+        "cmake",
+        "-S",
+        "D:\\a\\_temp\\native-header-output\\clang-cl-cmake-baseline-project",
+        "-B",
+        "D:\\a\\_temp\\native-header-output\\clang-cl-cmake-baseline-build",
+        "-G",
+        "Ninja",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_CXX_COMPILER=clang-cl"
+      ],
+      "exit": 0,
+      "log_sha256": "dabbc4d21025f27121e04f6b8865d1df8088142448576a879496228ce5e3e1f4",
+      "expected": true
+    },
+    {
+      "label": "clang-cl-cmake-baseline-build",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\a\\_temp\\native-header-output\\clang-cl-cmake-baseline-build",
+        "--verbose",
+        "--parallel",
+        "1"
+      ],
+      "exit": 1,
+      "log_sha256": "e9dde2eb54ebacec8c0fd8a02b1d9304d0f57f138eac95dd5fffc6b988fcda70",
+      "expected": false
+    },
+    {
+      "label": "clang-cl-cmake-candidate-configure",
+      "command": [
+        "cmake",
+        "-S",
+        "D:\\a\\_temp\\native-header-output\\clang-cl-cmake-candidate-project",
+        "-B",
+        "D:\\a\\_temp\\native-header-output\\clang-cl-cmake-candidate-build",
+        "-G",
+        "Ninja",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_CXX_COMPILER=clang-cl"
+      ],
+      "exit": 0,
+      "log_sha256": "aabbd5c04e58e5c281e392a72af69751a651d8414793bb1e032784ec286c4003",
+      "expected": true
+    },
+    {
+      "label": "clang-cl-cmake-candidate-build",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\a\\_temp\\native-header-output\\clang-cl-cmake-candidate-build",
+        "--verbose",
+        "--parallel",
+        "1"
+      ],
+      "exit": 0,
+      "log_sha256": "020d3a69fffcd8a8a5fe8674b61f0238bfec182fb978d0811c30d9f4d9bb77b0",
+      "expected": true
+    }
+  ],
+  "preprocess": [],
+  "errors": [],
+  "cmake_fragments": [
+    {
+      "label": "cl-cmake-baseline",
+      "compile_commands_sha256": "129f285165de50d2127908f925edc243e9b6b4d4f12e2ce63a5bcb3d72ad2ff7",
+      "expected_forced_include": "-include",
+      "options_sha256": "8e78847921c7174886c0b50a8792da0482c2a3abb8a88f2820033ce44d3f74c3"
+    },
+    {
+      "label": "cl-cmake-candidate",
+      "compile_commands_sha256": "ec83f8e59fc25187ad8ad2826b178f3635f6f997d8915df7371baa0464f7c2d7",
+      "expected_forced_include": "/FI",
+      "options_sha256": "30d248b52d1cf1124417d0a50781663f50424c834748987ca8bbe2d9d93976d5"
+    },
+    {
+      "label": "clang-cl-cmake-baseline",
+      "compile_commands_sha256": "b0839944b628520c1b555697cafa5e7d84e4603e693c6004347f29d50fe0ec34",
+      "expected_forced_include": "-include",
+      "options_sha256": "8e78847921c7174886c0b50a8792da0482c2a3abb8a88f2820033ce44d3f74c3"
+    },
+    {
+      "label": "clang-cl-cmake-candidate",
+      "compile_commands_sha256": "6e6bfd4adc5798f77755b144f08066684608235af357e024a1178c1514ceb7e0",
+      "expected_forced_include": "/FI",
+      "options_sha256": "30d248b52d1cf1124417d0a50781663f50424c834748987ca8bbe2d9d93976d5"
+    }
+  ],
+  "status": "PASS"
+}

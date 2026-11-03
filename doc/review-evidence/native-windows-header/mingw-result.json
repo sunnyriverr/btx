@@ -1,0 +1,282 @@
+{
+  "base": "ab1b5cbe42d5b3ceb4faafff213292efed2bba18",
+  "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+  "native_windows": false,
+  "runner_sha256": "a09aa363fbd037ef2bca1b091ac7c2fdb99106207f6d54ae86dc7e1d51ff092c",
+  "test_sha256": "274fbcafb078219792cca07471dac1b3ded194cf35e8b7455c2aa9bd67efc85e",
+  "candidate_header": "95b5941be1108017c1f5e4e05ef9615dbbd1f8877c5d5fc1ab3c98da543c4c50",
+  "profile": "standalone component / native compiler; not CMake root flags",
+  "toolchain": {
+    "WindowsSDKVersion": null,
+    "WindowsSdkDir": null,
+    "VCToolsVersion": null,
+    "UCRTVersion": null,
+    "VSCMD_ARG_TGT_ARCH": null
+  },
+  "commands": [
+    {
+      "label": "x86_64-w64-mingw32-g++-version",
+      "command": [
+        "x86_64-w64-mingw32-g++",
+        "--version"
+      ],
+      "exit": 0,
+      "log_sha256": "bc80ed8dfba753268f3c99e4f06b9681024c78b6068938c5cfa0d8e43f3e8385",
+      "expected": null
+    },
+    {
+      "label": "x86_64-w64-mingw32-g++-header-first-baseline-compile",
+      "command": [
+        "x86_64-w64-mingw32-g++",
+        "-std=c++20",
+        "-DWIN32",
+        "-D_WIN32_WINNT=0x0A00",
+        "-DWIN32_LEAN_AND_MEAN",
+        "-DNOMINMAX",
+        "-I/home/runner/work/_temp/mingw-header-output/baseline/src",
+        "-I/home/runner/work/_temp/mingw-header-output/closure/src",
+        "/home/runner/work/_temp/native-header-repo/test/util/windows_posix_header_tests.cpp",
+        "-o",
+        "/home/runner/work/_temp/mingw-header-output/x86_64-w64-mingw32-g++-header-first-baseline.exe",
+        "-lws2_32"
+      ],
+      "exit": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected": true
+    },
+    {
+      "label": "x86_64-w64-mingw32-g++-header-first-baseline-preprocess",
+      "command": [
+        "x86_64-w64-mingw32-g++",
+        "-std=c++20",
+        "-DWIN32",
+        "-D_WIN32_WINNT=0x0A00",
+        "-DWIN32_LEAN_AND_MEAN",
+        "-DNOMINMAX",
+        "-I/home/runner/work/_temp/mingw-header-output/baseline/src",
+        "-I/home/runner/work/_temp/mingw-header-output/closure/src",
+        "-E",
+        "-P",
+        "/home/runner/work/_temp/native-header-repo/test/util/windows_posix_header_tests.cpp"
+      ],
+      "exit": 0,
+      "log_sha256": "598305d0fe03409539c87653bc0c19f323daace24b18ca122eb2232aac7be56a",
+      "expected": true
+    },
+    {
+      "label": "x86_64-w64-mingw32-g++-header-first-candidate-compile",
+      "command": [
+        "x86_64-w64-mingw32-g++",
+        "-std=c++20",
+        "-DWIN32",
+        "-D_WIN32_WINNT=0x0A00",
+        "-DWIN32_LEAN_AND_MEAN",
+        "-DNOMINMAX",
+        "-I/home/runner/work/_temp/mingw-header-output/candidate/src",
+        "-I/home/runner/work/_temp/mingw-header-output/closure/src",
+        "/home/runner/work/_temp/native-header-repo/test/util/windows_posix_header_tests.cpp",
+        "-o",
+        "/home/runner/work/_temp/mingw-header-output/x86_64-w64-mingw32-g++-header-first-candidate.exe",
+        "-lws2_32"
+      ],
+      "exit": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected": true
+    },
+    {
+      "label": "x86_64-w64-mingw32-g++-header-first-candidate-preprocess",
+      "command": [
+        "x86_64-w64-mingw32-g++",
+        "-std=c++20",
+        "-DWIN32",
+        "-D_WIN32_WINNT=0x0A00",
+        "-DWIN32_LEAN_AND_MEAN",
+        "-DNOMINMAX",
+        "-I/home/runner/work/_temp/mingw-header-output/candidate/src",
+        "-I/home/runner/work/_temp/mingw-header-output/closure/src",
+        "-E",
+        "-P",
+        "/home/runner/work/_temp/native-header-repo/test/util/windows_posix_header_tests.cpp"
+      ],
+      "exit": 0,
+      "log_sha256": "598305d0fe03409539c87653bc0c19f323daace24b18ca122eb2232aac7be56a",
+      "expected": true
+    },
+    {
+      "label": "x86_64-w64-mingw32-g++-core-first-baseline-compile",
+      "command": [
+        "x86_64-w64-mingw32-g++",
+        "-std=c++20",
+        "-DWIN32",
+        "-D_WIN32_WINNT=0x0A00",
+        "-DWIN32_LEAN_AND_MEAN",
+        "-DNOMINMAX",
+        "-I/home/runner/work/_temp/mingw-header-output/baseline/src",
+        "-I/home/runner/work/_temp/mingw-header-output/closure/src",
+        "-DBTX_CORE_FIRST",
+        "/home/runner/work/_temp/native-header-repo/test/util/windows_posix_header_tests.cpp",
+        "-o",
+        "/home/runner/work/_temp/mingw-header-output/x86_64-w64-mingw32-g++-core-first-baseline.exe",
+        "-lws2_32"
+      ],
+      "exit": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected": true
+    },
+    {
+      "label": "x86_64-w64-mingw32-g++-core-first-baseline-preprocess",
+      "command": [
+        "x86_64-w64-mingw32-g++",
+        "-std=c++20",
+        "-DWIN32",
+        "-D_WIN32_WINNT=0x0A00",
+        "-DWIN32_LEAN_AND_MEAN",
+        "-DNOMINMAX",
+        "-I/home/runner/work/_temp/mingw-header-output/baseline/src",
+        "-I/home/runner/work/_temp/mingw-header-output/closure/src",
+        "-DBTX_CORE_FIRST",
+        "-E",
+        "-P",
+        "/home/runner/work/_temp/native-header-repo/test/util/windows_posix_header_tests.cpp"
+      ],
+      "exit": 0,
+      "log_sha256": "e82fc83e4bbd94cd5027005ff901dab1c07e7b5e13df42151f4cdb1f56c8eefb",
+      "expected": true
+    },
+    {
+      "label": "x86_64-w64-mingw32-g++-core-first-candidate-compile",
+      "command": [
+        "x86_64-w64-mingw32-g++",
+        "-std=c++20",
+        "-DWIN32",
+        "-D_WIN32_WINNT=0x0A00",
+        "-DWIN32_LEAN_AND_MEAN",
+        "-DNOMINMAX",
+        "-I/home/runner/work/_temp/mingw-header-output/candidate/src",
+        "-I/home/runner/work/_temp/mingw-header-output/closure/src",
+        "-DBTX_CORE_FIRST",
+        "/home/runner/work/_temp/native-header-repo/test/util/windows_posix_header_tests.cpp",
+        "-o",
+        "/home/runner/work/_temp/mingw-header-output/x86_64-w64-mingw32-g++-core-first-candidate.exe",
+        "-lws2_32"
+      ],
+      "exit": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected": true
+    },
+    {
+      "label": "x86_64-w64-mingw32-g++-core-first-candidate-preprocess",
+      "command": [
+        "x86_64-w64-mingw32-g++",
+        "-std=c++20",
+        "-DWIN32",
+        "-D_WIN32_WINNT=0x0A00",
+        "-DWIN32_LEAN_AND_MEAN",
+        "-DNOMINMAX",
+        "-I/home/runner/work/_temp/mingw-header-output/candidate/src",
+        "-I/home/runner/work/_temp/mingw-header-output/closure/src",
+        "-DBTX_CORE_FIRST",
+        "-E",
+        "-P",
+        "/home/runner/work/_temp/native-header-repo/test/util/windows_posix_header_tests.cpp"
+      ],
+      "exit": 0,
+      "log_sha256": "e82fc83e4bbd94cd5027005ff901dab1c07e7b5e13df42151f4cdb1f56c8eefb",
+      "expected": true
+    },
+    {
+      "label": "x86_64-w64-mingw32-g++-cmake-baseline-configure",
+      "command": [
+        "cmake",
+        "-S",
+        "/home/runner/work/_temp/mingw-header-output/x86_64-w64-mingw32-g++-cmake-baseline-project",
+        "-B",
+        "/home/runner/work/_temp/mingw-header-output/x86_64-w64-mingw32-g++-cmake-baseline-build",
+        "-G",
+        "Ninja",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_CXX_COMPILER=x86_64-w64-mingw32-g++",
+        "-DCMAKE_SYSTEM_NAME=Windows"
+      ],
+      "exit": 0,
+      "log_sha256": "fbe6d74eec8f28a401f263b746318d4c6d825e841fb11f91f3ca12cb2c320147",
+      "expected": true
+    },
+    {
+      "label": "x86_64-w64-mingw32-g++-cmake-baseline-build",
+      "command": [
+        "cmake",
+        "--build",
+        "/home/runner/work/_temp/mingw-header-output/x86_64-w64-mingw32-g++-cmake-baseline-build",
+        "--verbose",
+        "--parallel",
+        "1"
+      ],
+      "exit": 0,
+      "log_sha256": "c9502fa20541a82b13b6e447423f92ebfffec518f9f7507c4322d3e5ee220331",
+      "expected": true
+    },
+    {
+      "label": "x86_64-w64-mingw32-g++-cmake-candidate-configure",
+      "command": [
+        "cmake",
+        "-S",
+        "/home/runner/work/_temp/mingw-header-output/x86_64-w64-mingw32-g++-cmake-candidate-project",
+        "-B",
+        "/home/runner/work/_temp/mingw-header-output/x86_64-w64-mingw32-g++-cmake-candidate-build",
+        "-G",
+        "Ninja",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_CXX_COMPILER=x86_64-w64-mingw32-g++",
+        "-DCMAKE_SYSTEM_NAME=Windows"
+      ],
+      "exit": 0,
+      "log_sha256": "5a80c6f45c5aea82dfc0e834808e21fb0b4a55cee06e150b24e5111a7ceedd45",
+      "expected": true
+    },
+    {
+      "label": "x86_64-w64-mingw32-g++-cmake-candidate-build",
+      "command": [
+        "cmake",
+        "--build",
+        "/home/runner/work/_temp/mingw-header-output/x86_64-w64-mingw32-g++-cmake-candidate-build",
+        "--verbose",
+        "--parallel",
+        "1"
+      ],
+      "exit": 0,
+      "log_sha256": "79fd46ac924e221f553847edb6d3352ed047d3114d4a85f7fc82410ba3730df8",
+      "expected": true
+    }
+  ],
+  "preprocess": [
+    {
+      "order": "header-first",
+      "identical": true,
+      "baseline_sha256": "598305d0fe03409539c87653bc0c19f323daace24b18ca122eb2232aac7be56a",
+      "candidate_sha256": "598305d0fe03409539c87653bc0c19f323daace24b18ca122eb2232aac7be56a"
+    },
+    {
+      "order": "core-first",
+      "identical": true,
+      "baseline_sha256": "e82fc83e4bbd94cd5027005ff901dab1c07e7b5e13df42151f4cdb1f56c8eefb",
+      "candidate_sha256": "e82fc83e4bbd94cd5027005ff901dab1c07e7b5e13df42151f4cdb1f56c8eefb"
+    }
+  ],
+  "errors": [],
+  "cmake_fragments": [
+    {
+      "label": "x86_64-w64-mingw32-g++-cmake-baseline",
+      "compile_commands_sha256": "ef557c8f4b7a97636cc97ad80f0307fb116fb6d1ea71e580a0a99dab301733f4",
+      "expected_forced_include": "-include",
+      "options_sha256": "d9de57a81c92838e10fef6b474dc795d63eaa3bc9af58ecfe8e3f8541b824993"
+    },
+    {
+      "label": "x86_64-w64-mingw32-g++-cmake-candidate",
+      "compile_commands_sha256": "cc306704f3e3cd8707d46c7a654be9e30b28c534879a36df87afc32fe5bea7ed",
+      "expected_forced_include": "-include",
+      "options_sha256": "39bee06293b5539a0ddb97bf6698c7b4598c01f1ac06d76841af2428ab316850"
+    }
+  ],
+  "status": "PASS"
+}
