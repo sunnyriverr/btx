@@ -1,4 +1,4 @@
-name: Native Windows evaluation compiler portability
+name: Native Windows accepted integration
 on:
   push:
     branches: [codex/ci-windows-root-configure]
@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: btxchain/btx
-          ref: ecd9310a8b35dbf1260d1a64e0ff39bb50e7a629
+          ref: 666673a3153225ba264c7870e0e82e354df86765
           path: btx
           persist-credentials: false
       - name: Identify native compiler cache profile
@@ -75,7 +75,7 @@ jobs:
           set "_CL_="
           python controls/contrib/devtools/windows-root-configure/runner.py vcpkg
           exit /b %errorlevel%
-      - name: Compare generated evaluation object and ordinary state controls
+      - name: Build accepted native node and maintained unit target
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -91,6 +91,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
-          name: native-windows-eval-compile-records
+          name: native-windows-accepted-integration-records
           path: D:\btx-native-035\evidence\
           retention-days: 14
