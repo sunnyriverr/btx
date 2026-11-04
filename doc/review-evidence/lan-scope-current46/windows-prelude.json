@@ -1,0 +1,40 @@
+[
+  {
+    "side": "accepted",
+    "rc": 1,
+    "source_sha256": "95b5941be1108017c1f5e4e05ef9615dbbd1f8877c5d5fc1ab3c98da543c4c50",
+    "fixture_sha256": "d4bbb129714a2f8f7208a27b4141fa203257dc7b1a9f7f619273e64da11f0999",
+    "command": [
+      "clang++",
+      "--target=x86_64-w64-windows-gnu",
+      "-std=c++20",
+      "-D_WIN32_WINNT=0x0A00",
+      "-DNOMINMAX",
+      "-fsyntax-only",
+      "-Wno-pragma-pack",
+      "-Wno-ignored-attributes",
+      "-I<workspace>/work/btx-review-tools/lan-portability/mingw-headers",
+      "work/btx-lanes/session-2/lan-scope-current/evidence/accepted-windows-prelude.cpp"
+    ],
+    "stderr": "unknown type name 'VOID'; did you mean 'PVOID'?\n   81 |   typedef VOID (WINAPI *LPFN_GETACCEPTEXSOCKADDRS)(PVOID lpOutputBuffer,DWORD dwReceiveDataLength,DWORD dwLocalAddressLength,DWORD dwRemoteAddressLength,struct sockaddr **LocalSockaddr,LPINT LocalSockaddrLength,struct sockaddr **RemoteSockaddr,LPINT RemoteSockaddrLength);\n      |           ^~~~\n      |           PVOID\n<workspace>/work/btx-review-tools/lan-portability/mingw-headers/winnt.h:282:17: note: 'PVOID' declared here\n  282 |   typedef void *PVOID;\n      |                 ^\n1 warning and 2 errors generated.\n"
+  },
+  {
+    "side": "candidate",
+    "rc": 0,
+    "source_sha256": "ddc3ad091ded24d26e5e2c2af4db1c75c494ad101e64a111b7901c3f5ecc0355",
+    "fixture_sha256": "d4d1c2337dc7fbe344ee4aab3e50f7b0f7d362a961efcb3a25792f9076b584f7",
+    "command": [
+      "clang++",
+      "--target=x86_64-w64-windows-gnu",
+      "-std=c++20",
+      "-D_WIN32_WINNT=0x0A00",
+      "-DNOMINMAX",
+      "-fsyntax-only",
+      "-Wno-pragma-pack",
+      "-Wno-ignored-attributes",
+      "-I<workspace>/work/btx-review-tools/lan-portability/mingw-headers",
+      "work/btx-lanes/session-2/lan-scope-current/evidence/candidate-windows-prelude.cpp"
+    ],
+    "stderr": "d/Documents/Playground/work/btx-review-tools/lan-portability/mingw-headers/wtypes.h:13:\nIn file included from <workspace>/work/btx-review-tools/lan-portability/mingw-headers/ole2.h:17:\nIn file included from <workspace>/work/btx-review-tools/lan-portability/mingw-headers/objbase.h:14:\n<workspace>/work/btx-review-tools/lan-portability/mingw-headers/combaseapi.h:79:5: warning: expression result unused [-Wunused-value]\n   79 |     static_cast<IUnknown *> (*pp);\n      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n1 warning generated.\n"
+  }
+]
