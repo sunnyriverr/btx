@@ -1,0 +1,31 @@
+cmake_minimum_required(VERSION 3.22)
+project(native_modelnet_unistd_component LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_MSVC_RUNTIME_LIBRARY MultiThreaded)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+add_library(bitcoin_modelnet OBJECT src/modelnet/package_execute.cpp src/modelnet/capability_control.cpp)
+target_include_directories(bitcoin_modelnet PUBLIC ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/src/univalue/include)
+target_compile_definitions(bitcoin_modelnet PUBLIC _WIN32_WINNT=0x0A00 _WIN32_IE=0x0A00 WIN32_LEAN_AND_MEAN NOMINMAX _CRT_SECURE_NO_WARNINGS)
+if(WIN32)
+  # POSIX shims for the model plane. Linux and macOS keep the system headers.
+  target_include_directories(bitcoin_modelnet BEFORE PUBLIC
+    ${PROJECT_SOURCE_DIR}/src/compat/mingw)
+  if(MSVC)
+    # Native CRT headers have no unistd.h; reuse the existing adapter.
+    target_include_directories(bitcoin_modelnet BEFORE PRIVATE
+      ${PROJECT_SOURCE_DIR}/src/compat/msvc)
+    target_compile_options(bitcoin_modelnet PRIVATE
+      "/FI${PROJECT_SOURCE_DIR}/src/compat/mingw/posix_extra.h")
+  else()
+    target_compile_options(bitcoin_modelnet PRIVATE
+      "SHELL:-include ${PROJECT_SOURCE_DIR}/src/compat/mingw/posix_extra.h")
+  endif()
+  target_link_libraries(bitcoin_modelnet PUBLIC ws2_32 iphlpapi bcrypt userenv advapi32 ole32)
+endif()
+
+add_executable(direct_header test/util/windows_modelnet_unistd_tests.cpp)
+target_include_directories(direct_header PRIVATE $<TARGET_PROPERTY:bitcoin_modelnet,INCLUDE_DIRECTORIES>)
+target_compile_options(direct_header PRIVATE $<TARGET_PROPERTY:bitcoin_modelnet,COMPILE_OPTIONS>)
+target_compile_definitions(direct_header PRIVATE $<TARGET_PROPERTY:bitcoin_modelnet,COMPILE_DEFINITIONS>)
+target_link_libraries(direct_header PRIVATE ws2_32 iphlpapi bcrypt userenv advapi32 ole32)

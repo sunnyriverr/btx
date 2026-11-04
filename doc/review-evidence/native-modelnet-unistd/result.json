@@ -1,0 +1,499 @@
+{
+  "base": "2cdff4fc38571df6996d88018bf0ce4d0077b755",
+  "platform": "Windows-2025Server-10.0.26100-SP0",
+  "sdk": "10.0.26100.0\\",
+  "toolset": "14.51.36231",
+  "scope": "Component CMake objects/direct-header runtime; not stock root/full node/unit qualification",
+  "commands": [
+    {
+      "label": "cl-version",
+      "command": [
+        "cl",
+        "/Bv"
+      ],
+      "exit": 2,
+      "log_sha256": "c540121e17c0d19751b1c744c4c70d492cea729394ebe2284c612f00b7339459"
+    },
+    {
+      "label": "cl-baseline-configure",
+      "command": [
+        "cmake",
+        "-S",
+        "D:\\a\\_temp\\native-modelnet-unistd\\cl-baseline",
+        "-B",
+        "D:\\a\\_temp\\native-modelnet-unistd\\cl-baseline\\build",
+        "-G",
+        "Ninja",
+        "-DCMAKE_CXX_COMPILER=cl",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "exit": 0,
+      "log_sha256": "a59dd68b2d994c22aa5efe45796ef350536f594140867d2c21addb53ee09f496"
+    },
+    {
+      "label": "cl-baseline-objects",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\a\\_temp\\native-modelnet-unistd\\cl-baseline\\build",
+        "--target",
+        "bitcoin_modelnet",
+        "--verbose",
+        "--",
+        "-k",
+        "0",
+        "-j",
+        "1"
+      ],
+      "exit": 2,
+      "log_sha256": "4a8cbd1400ed70c66115c932416a9d911cc9e3dc0cc993c657c73f55c57d595b"
+    },
+    {
+      "label": "cl-baseline-header-build",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\a\\_temp\\native-modelnet-unistd\\cl-baseline\\build",
+        "--target",
+        "direct_header",
+        "--verbose",
+        "--",
+        "-j",
+        "1"
+      ],
+      "exit": 2,
+      "log_sha256": "1557556e54eb65c7673c571cda467c40cd8eebc3bd79fd5a233492aab53a080a"
+    },
+    {
+      "label": "cl-candidate-configure",
+      "command": [
+        "cmake",
+        "-S",
+        "D:\\a\\_temp\\native-modelnet-unistd\\cl-candidate",
+        "-B",
+        "D:\\a\\_temp\\native-modelnet-unistd\\cl-candidate\\build",
+        "-G",
+        "Ninja",
+        "-DCMAKE_CXX_COMPILER=cl",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "exit": 0,
+      "log_sha256": "055b577df3aac4d3aacf44d439dd2d8ff7923a353e43d5927728da9dccfbf1b1"
+    },
+    {
+      "label": "cl-candidate-objects",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\a\\_temp\\native-modelnet-unistd\\cl-candidate\\build",
+        "--target",
+        "bitcoin_modelnet",
+        "--verbose",
+        "--",
+        "-k",
+        "0",
+        "-j",
+        "1"
+      ],
+      "exit": 0,
+      "log_sha256": "3212e99b81765204034d6095919f95ac569330222e4b0d65498fcbce9206362f"
+    },
+    {
+      "label": "cl-candidate-header-build",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\a\\_temp\\native-modelnet-unistd\\cl-candidate\\build",
+        "--target",
+        "direct_header",
+        "--verbose",
+        "--",
+        "-j",
+        "1"
+      ],
+      "exit": 0,
+      "log_sha256": "24718b89592dbb462e73b45e3752ec6b028aa4952830bf35bdce2dba6907cbb9"
+    },
+    {
+      "label": "cl-candidate-dependencies",
+      "command": [
+        "ninja",
+        "-C",
+        "D:\\a\\_temp\\native-modelnet-unistd\\cl-candidate\\build",
+        "-t",
+        "deps"
+      ],
+      "exit": 0,
+      "log_sha256": "b0cd50804f2bbfa435eada3559ebd0aa84995be508fc0a6370c594ba85b24ada"
+    },
+    {
+      "label": "cl-candidate-runtime",
+      "command": [
+        "D:\\a\\_temp\\native-modelnet-unistd\\cl-candidate\\build\\direct_header.exe"
+      ],
+      "exit": 0,
+      "log_sha256": "38f8bf073769a652d7a55d18cc758523e0b4a33c87401f886acda522653af5fa"
+    },
+    {
+      "label": "clang-cl-version",
+      "command": [
+        "clang-cl",
+        "--version"
+      ],
+      "exit": 0,
+      "log_sha256": "661974250fc5ed291000a9000c99466582a67ef96304a893526f7e46b7db492e"
+    },
+    {
+      "label": "clang-cl-baseline-configure",
+      "command": [
+        "cmake",
+        "-S",
+        "D:\\a\\_temp\\native-modelnet-unistd\\clang-cl-baseline",
+        "-B",
+        "D:\\a\\_temp\\native-modelnet-unistd\\clang-cl-baseline\\build",
+        "-G",
+        "Ninja",
+        "-DCMAKE_CXX_COMPILER=clang-cl",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "exit": 0,
+      "log_sha256": "582cdb11bb1b1f3b346dfeeb7b793caa03adab4cf8ed3d2fb9e7a3050cd712fd"
+    },
+    {
+      "label": "clang-cl-baseline-objects",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\a\\_temp\\native-modelnet-unistd\\clang-cl-baseline\\build",
+        "--target",
+        "bitcoin_modelnet",
+        "--verbose",
+        "--",
+        "-k",
+        "0",
+        "-j",
+        "1"
+      ],
+      "exit": 1,
+      "log_sha256": "2d3c3fd29407ef97385cb48a70a5ac4c5bb77597ff84a7a739e1eecee198706e"
+    },
+    {
+      "label": "clang-cl-baseline-header-build",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\a\\_temp\\native-modelnet-unistd\\clang-cl-baseline\\build",
+        "--target",
+        "direct_header",
+        "--verbose",
+        "--",
+        "-j",
+        "1"
+      ],
+      "exit": 1,
+      "log_sha256": "b6007fa4a52002c9feb4647892b6cf2ec1a8436759253885b340d77b3c609bde"
+    },
+    {
+      "label": "clang-cl-candidate-configure",
+      "command": [
+        "cmake",
+        "-S",
+        "D:\\a\\_temp\\native-modelnet-unistd\\clang-cl-candidate",
+        "-B",
+        "D:\\a\\_temp\\native-modelnet-unistd\\clang-cl-candidate\\build",
+        "-G",
+        "Ninja",
+        "-DCMAKE_CXX_COMPILER=clang-cl",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "exit": 0,
+      "log_sha256": "9a0f6f8856c4630acb2c6ba64a460c8036d0b246c871212288c5c411cb95a41a"
+    },
+    {
+      "label": "clang-cl-candidate-objects",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\a\\_temp\\native-modelnet-unistd\\clang-cl-candidate\\build",
+        "--target",
+        "bitcoin_modelnet",
+        "--verbose",
+        "--",
+        "-k",
+        "0",
+        "-j",
+        "1"
+      ],
+      "exit": 0,
+      "log_sha256": "1bf33dea04aac7a8bfffefd7583205547a9fc04e55c3ed6cd6197bd1562f7d7a"
+    },
+    {
+      "label": "clang-cl-candidate-header-build",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\a\\_temp\\native-modelnet-unistd\\clang-cl-candidate\\build",
+        "--target",
+        "direct_header",
+        "--verbose",
+        "--",
+        "-j",
+        "1"
+      ],
+      "exit": 0,
+      "log_sha256": "b82224809592d60d56d20c9a269ba357fba5c8cce9615b6b2e8c132438a81932"
+    },
+    {
+      "label": "clang-cl-candidate-dependencies",
+      "command": [
+        "ninja",
+        "-C",
+        "D:\\a\\_temp\\native-modelnet-unistd\\clang-cl-candidate\\build",
+        "-t",
+        "deps"
+      ],
+      "exit": 0,
+      "log_sha256": "fd7e423cdd7e8a4fe97d2803e71bca6521492cb83424ef4acfb8fd8c5ebfca1d"
+    },
+    {
+      "label": "clang-cl-candidate-runtime",
+      "command": [
+        "D:\\a\\_temp\\native-modelnet-unistd\\clang-cl-candidate\\build\\direct_header.exe"
+      ],
+      "exit": 0,
+      "log_sha256": "38f8bf073769a652d7a55d18cc758523e0b4a33c87401f886acda522653af5fa"
+    }
+  ],
+  "variants": {
+    "cl-baseline": {
+      "files": {
+        "src/compat/mingw/posix_extra.h": "95b5941be1108017c1f5e4e05ef9615dbbd1f8877c5d5fc1ab3c98da543c4c50",
+        "src/compat/mingw/sys/time.h": "1b114458a59c8527ce51ce587d3dd42a04d57b811f67c40ec245bb40a2f1861d",
+        "src/compat/mingw/sys/wait.h": "e139c140913a3dc7aca41dd26f6988a9df2ed72122f41e424539610d871fac94",
+        "src/compat/mingw/sys/select.h": "1b114458a59c8527ce51ce587d3dd42a04d57b811f67c40ec245bb40a2f1861d",
+        "src/compat/mingw/sys/resource.h": "0d94752f1dfd5455e752e72377f76bea904ebc062688f3d2f7161d32153beb97",
+        "src/compat/mingw/sys/statvfs.h": "3b500b9e8344f83e6380a49f4cc0e788b36fd34b9f6149410141c8f85f248711",
+        "src/compat/mingw/netinet/in.h": "f402e7bc9d200fdd33fb140cadea67dc82c3a64b93ebd4d752690f6e0750a0dc",
+        "src/compat/mingw/netdb.h": "f402e7bc9d200fdd33fb140cadea67dc82c3a64b93ebd4d752690f6e0750a0dc",
+        "src/compat/mingw/netinet/tcp.h": "1b114458a59c8527ce51ce587d3dd42a04d57b811f67c40ec245bb40a2f1861d",
+        "src/compat/mingw/arpa/inet.h": "f402e7bc9d200fdd33fb140cadea67dc82c3a64b93ebd4d752690f6e0750a0dc",
+        "src/compat/mingw/sys/socket.h": "2c5a38bd7d4e4cdb8133452ad342ef03b427949e46023baf209c856fb8af3b85",
+        "src/compat/mingw/netinet/ip.h": "1b114458a59c8527ce51ce587d3dd42a04d57b811f67c40ec245bb40a2f1861d",
+        "src/compat/mingw/sys/un.h": "83dad07d8ded0b03a65ca42489d80cade17b7f5dcc54912554fdbb6f8ddfc6ad",
+        "src/compat/mingw/poll.h": "48ae524171c630c1a12409d0884f8fbff13edd7e346eb23ec47a96645e8eb14d",
+        "src/modelnet/capability_control.cpp": "f1fa0aaff13c26555c661a554f0489718b26624d9114e238d5c7637fd6f33d61",
+        "src/util/time.h": "390720fafbb76e90193b14dd41241f841f5881b36aca996dcc4608cbf769e94b",
+        "src/util/strencodings.h": "ac314599ab1085d51c8dd3190eb8f53af01b7d15d0cc21f5d2e3bbd8896ad9f4",
+        "src/util/string.h": "504270e2d439a594335acceb7e2ae1153e1391ddaa55027bc7f3fc1b2721b3a4",
+        "src/span.h": "9b8b5ed5ae78aa1700f0934c6e51e47a701807224f38d7f866ddb2398278b74b",
+        "src/crypto/hex_base.h": "1885d59f3248d6295cacaf30fb0bafeb16e96f02c2d8a0dd3bc63e3b406a98f7",
+        "src/util/fs.h": "2c390bae69aaf81293d6355749cf41bad04141114428e7cebfd06f97ae35e78b",
+        "src/tinyformat.h": "670b65ed40fc74b2e33ff2bdc7fba5b76ec06b24cd8c1acf7ce2fc0364481c92",
+        "src/attributes.h": "a84dd4bf004ffbf73deb770f75a2afa337ef4137a2f2cdb93e028aa7b3893879",
+        "src/modelnet/transfer_session.h": "100bcf54426496bb84c62da070f2fd8cf0c8b8304d1334aac171c8cf6c58aee1",
+        "src/univalue/include/univalue.h": "ccf88ee034078aa1e25ce5591a5260c4a3761cc832c284aa238112593fb6e8fa",
+        "src/modelnet/types.h": "b26cf521affab56c3e6da47169802fb0f37190e2a6aafd1199d8d0ac5614589f",
+        "src/modelnet/piece_picker.h": "9f3ac4f92f398ec75f683354de344b34624dad174e0d6eb7888747b492edc029",
+        "src/modelnet/piece_ranges.h": "17f941b45a39c847663e2b03d95f7ae8aa08130e1e10e6eb4b6545c5590afff6",
+        "src/modelnet/package_core.h": "70cdc24fc51d62e182f63ebb3d7b89775a2276afd2858b07bd36682affbe401c",
+        "src/modelnet/capability_types.h": "cfa4b04e22aa1ac1e175097d734f17d342435cb5f668e0bd0a40b277d623d105",
+        "src/modelnet/package_bundle.h": "bfab4dd87608e096262bd5623bfa97f786f337003b073a55c66c7f1b32a5d741",
+        "src/modelnet/capability.h": "4318d4b7f2740f68efaa75bab0a6178898d3c683fbe3d61e9b8f092c8c281f48",
+        "src/modelnet/catalog.h": "ab192c53287156a2178c93621e461917fdc4b379e5994819be24cf787ad34cf7",
+        "src/modelnet/store.h": "09d1ff17443797a5ef99b81d5e5d1eb404905e57535598fcd6dd76fed49eafd6",
+        "src/modelnet/resource_uri.h": "ddcd8e3cf69323b814a518bb767c25356ddde7a4520611e2af8980e2f0b56470",
+        "src/modelnet/qualification.h": "9f7c3a9719fb5167cf1c91295328ffda6937187c39c99a4f63c7a5e2a6059567",
+        "src/modelnet/policy.h": "bdc5a5bc8fd4c9aa5f53aec11ed27c617bb7991afb96ae4651a57b2f4c260d59",
+        "src/modelnet/cores.h": "29a3f7ffb324068492a3fc1e534fe4c35789d165fea258dfe29fd3850dc173e3",
+        "src/modelnet/package_execute.cpp": "faddac9e5210971572b7e1e0b7e2ddca1c575ca74a519974939f0dc95784fd20",
+        "src/crypto/sha384.h": "98a1fdfcabdfd93d9f1723d750b0510a75eef432bab9e821ea8e8642ee7b7ad1",
+        "src/modelnet/package_install.h": "87726c9b6618cc047456e541a9e810782fc2f07516adec65a8d582291a470cfb",
+        "src/modelnet/admission_routes.h": "7b87dc10e31eb53aa2eea18629520eb95e45f3d7fa9cd8474e9237d093034955",
+        "src/modelnet/model_admission.h": "71388f88ce50171b6cd8a1ae5424dc5376a7cff2dbc932b8207bb995790d1833",
+        "src/modelnet/training_evidence.h": "1e841191477e62580e84d1c12c32cc79e1b764a1acb627b56274389a6bd21b0d",
+        "src/modelnet/package_execute.h": "67f2c7efcae61148132332a4009198b735eb3fac7c6455c70f557904039cec75",
+        "src/modelnet/package_acquisition.h": "af44701031def5795b3471a65ab32116dd8df0e2912eb62e93c4e4766f4fef4d",
+        "test/util/windows_modelnet_unistd_tests.cpp": "fb82982e71a574c50caff55ddcd6fe411928e5d258a6c68466ecf18fa0c364f2"
+      },
+      "cmake_fixture_sha256": "6d13a2989a32cb53e5be17c43720e973de10bee86cbf88f0e0ef55b5800341ef",
+      "compile_commands_sha256": "61ed49395d5f976cbca498fd4e7976c217329e861f92baff0105eed69fb6f026"
+    },
+    "cl-candidate": {
+      "files": {
+        "src/compat/mingw/posix_extra.h": "95b5941be1108017c1f5e4e05ef9615dbbd1f8877c5d5fc1ab3c98da543c4c50",
+        "src/compat/mingw/sys/time.h": "1b114458a59c8527ce51ce587d3dd42a04d57b811f67c40ec245bb40a2f1861d",
+        "src/compat/mingw/sys/wait.h": "e139c140913a3dc7aca41dd26f6988a9df2ed72122f41e424539610d871fac94",
+        "src/compat/mingw/sys/select.h": "1b114458a59c8527ce51ce587d3dd42a04d57b811f67c40ec245bb40a2f1861d",
+        "src/compat/mingw/sys/resource.h": "0d94752f1dfd5455e752e72377f76bea904ebc062688f3d2f7161d32153beb97",
+        "src/compat/mingw/sys/statvfs.h": "3b500b9e8344f83e6380a49f4cc0e788b36fd34b9f6149410141c8f85f248711",
+        "src/compat/mingw/netinet/in.h": "f402e7bc9d200fdd33fb140cadea67dc82c3a64b93ebd4d752690f6e0750a0dc",
+        "src/compat/mingw/netdb.h": "f402e7bc9d200fdd33fb140cadea67dc82c3a64b93ebd4d752690f6e0750a0dc",
+        "src/compat/mingw/netinet/tcp.h": "1b114458a59c8527ce51ce587d3dd42a04d57b811f67c40ec245bb40a2f1861d",
+        "src/compat/mingw/arpa/inet.h": "f402e7bc9d200fdd33fb140cadea67dc82c3a64b93ebd4d752690f6e0750a0dc",
+        "src/compat/mingw/sys/socket.h": "2c5a38bd7d4e4cdb8133452ad342ef03b427949e46023baf209c856fb8af3b85",
+        "src/compat/mingw/netinet/ip.h": "1b114458a59c8527ce51ce587d3dd42a04d57b811f67c40ec245bb40a2f1861d",
+        "src/compat/mingw/sys/un.h": "83dad07d8ded0b03a65ca42489d80cade17b7f5dcc54912554fdbb6f8ddfc6ad",
+        "src/compat/mingw/poll.h": "48ae524171c630c1a12409d0884f8fbff13edd7e346eb23ec47a96645e8eb14d",
+        "src/modelnet/capability_control.cpp": "f1fa0aaff13c26555c661a554f0489718b26624d9114e238d5c7637fd6f33d61",
+        "src/util/time.h": "390720fafbb76e90193b14dd41241f841f5881b36aca996dcc4608cbf769e94b",
+        "src/util/strencodings.h": "ac314599ab1085d51c8dd3190eb8f53af01b7d15d0cc21f5d2e3bbd8896ad9f4",
+        "src/util/string.h": "504270e2d439a594335acceb7e2ae1153e1391ddaa55027bc7f3fc1b2721b3a4",
+        "src/span.h": "9b8b5ed5ae78aa1700f0934c6e51e47a701807224f38d7f866ddb2398278b74b",
+        "src/crypto/hex_base.h": "1885d59f3248d6295cacaf30fb0bafeb16e96f02c2d8a0dd3bc63e3b406a98f7",
+        "src/util/fs.h": "2c390bae69aaf81293d6355749cf41bad04141114428e7cebfd06f97ae35e78b",
+        "src/tinyformat.h": "670b65ed40fc74b2e33ff2bdc7fba5b76ec06b24cd8c1acf7ce2fc0364481c92",
+        "src/attributes.h": "a84dd4bf004ffbf73deb770f75a2afa337ef4137a2f2cdb93e028aa7b3893879",
+        "src/modelnet/transfer_session.h": "100bcf54426496bb84c62da070f2fd8cf0c8b8304d1334aac171c8cf6c58aee1",
+        "src/univalue/include/univalue.h": "ccf88ee034078aa1e25ce5591a5260c4a3761cc832c284aa238112593fb6e8fa",
+        "src/modelnet/types.h": "b26cf521affab56c3e6da47169802fb0f37190e2a6aafd1199d8d0ac5614589f",
+        "src/modelnet/piece_picker.h": "9f3ac4f92f398ec75f683354de344b34624dad174e0d6eb7888747b492edc029",
+        "src/modelnet/piece_ranges.h": "17f941b45a39c847663e2b03d95f7ae8aa08130e1e10e6eb4b6545c5590afff6",
+        "src/modelnet/package_core.h": "70cdc24fc51d62e182f63ebb3d7b89775a2276afd2858b07bd36682affbe401c",
+        "src/modelnet/capability_types.h": "cfa4b04e22aa1ac1e175097d734f17d342435cb5f668e0bd0a40b277d623d105",
+        "src/modelnet/package_bundle.h": "bfab4dd87608e096262bd5623bfa97f786f337003b073a55c66c7f1b32a5d741",
+        "src/modelnet/capability.h": "4318d4b7f2740f68efaa75bab0a6178898d3c683fbe3d61e9b8f092c8c281f48",
+        "src/modelnet/catalog.h": "ab192c53287156a2178c93621e461917fdc4b379e5994819be24cf787ad34cf7",
+        "src/modelnet/store.h": "09d1ff17443797a5ef99b81d5e5d1eb404905e57535598fcd6dd76fed49eafd6",
+        "src/modelnet/resource_uri.h": "ddcd8e3cf69323b814a518bb767c25356ddde7a4520611e2af8980e2f0b56470",
+        "src/modelnet/qualification.h": "9f7c3a9719fb5167cf1c91295328ffda6937187c39c99a4f63c7a5e2a6059567",
+        "src/modelnet/policy.h": "bdc5a5bc8fd4c9aa5f53aec11ed27c617bb7991afb96ae4651a57b2f4c260d59",
+        "src/modelnet/cores.h": "29a3f7ffb324068492a3fc1e534fe4c35789d165fea258dfe29fd3850dc173e3",
+        "src/modelnet/package_execute.cpp": "faddac9e5210971572b7e1e0b7e2ddca1c575ca74a519974939f0dc95784fd20",
+        "src/crypto/sha384.h": "98a1fdfcabdfd93d9f1723d750b0510a75eef432bab9e821ea8e8642ee7b7ad1",
+        "src/modelnet/package_install.h": "87726c9b6618cc047456e541a9e810782fc2f07516adec65a8d582291a470cfb",
+        "src/modelnet/admission_routes.h": "7b87dc10e31eb53aa2eea18629520eb95e45f3d7fa9cd8474e9237d093034955",
+        "src/modelnet/model_admission.h": "71388f88ce50171b6cd8a1ae5424dc5376a7cff2dbc932b8207bb995790d1833",
+        "src/modelnet/training_evidence.h": "1e841191477e62580e84d1c12c32cc79e1b764a1acb627b56274389a6bd21b0d",
+        "src/modelnet/package_execute.h": "67f2c7efcae61148132332a4009198b735eb3fac7c6455c70f557904039cec75",
+        "src/modelnet/package_acquisition.h": "af44701031def5795b3471a65ab32116dd8df0e2912eb62e93c4e4766f4fef4d",
+        "test/util/windows_modelnet_unistd_tests.cpp": "fb82982e71a574c50caff55ddcd6fe411928e5d258a6c68466ecf18fa0c364f2",
+        "src/compat/msvc/unistd.h": "aa1781f6a5fbb5cf42e4aa65d583c8334500e0baa6627ce1fa7f84eacc6f1e26"
+      },
+      "cmake_fixture_sha256": "4798ccd10da1fe890768c5b2a71163ad5e022a9c2bb01d6523de87338fb30d32",
+      "compile_commands_sha256": "826c89e5e02ec9d6cd5b539e92eda0f5b44e816e029519bb235235e104ecf61a",
+      "executable_sha256": "96e9c2719282e47aeca8b4f7b5f7032d7e5f1429f4690dcc8066fef0cb6c36ca",
+      "object_sha256": {
+        "CMakeFiles\\ShowIncludes\\main.obj": "c9def8d13dcc294ec4a056f1461bf7283b66bde92b57d2f9f0865e3b994a6486",
+        "CMakeFiles\\4.4.5\\CompilerIdCXX\\CMakeCXXCompilerId.obj": "7ba0a14e6a9a09ea384db60f95fea0900e01be5380960d681ad969c3cb5c9258",
+        "CMakeFiles\\bitcoin_modelnet.dir\\src\\modelnet\\capability_control.cpp.obj": "2ca928c0b69ee63b47c134fd96b6fcf101fa601fda4c6632386cf6cb7108df6d",
+        "CMakeFiles\\bitcoin_modelnet.dir\\src\\modelnet\\package_execute.cpp.obj": "a5953b396d358261f4082534ddb4a0b2b957d0927b1540c764af94e5bf7478cd",
+        "CMakeFiles\\direct_header.dir\\test\\util\\windows_modelnet_unistd_tests.cpp.obj": "599a935d859c2e7d64423d3c9140db05ac929e27b40b1efc59712c10daa748b3"
+      }
+    },
+    "clang-cl-baseline": {
+      "files": {
+        "src/compat/mingw/posix_extra.h": "95b5941be1108017c1f5e4e05ef9615dbbd1f8877c5d5fc1ab3c98da543c4c50",
+        "src/compat/mingw/sys/time.h": "1b114458a59c8527ce51ce587d3dd42a04d57b811f67c40ec245bb40a2f1861d",
+        "src/compat/mingw/sys/wait.h": "e139c140913a3dc7aca41dd26f6988a9df2ed72122f41e424539610d871fac94",
+        "src/compat/mingw/sys/select.h": "1b114458a59c8527ce51ce587d3dd42a04d57b811f67c40ec245bb40a2f1861d",
+        "src/compat/mingw/sys/resource.h": "0d94752f1dfd5455e752e72377f76bea904ebc062688f3d2f7161d32153beb97",
+        "src/compat/mingw/sys/statvfs.h": "3b500b9e8344f83e6380a49f4cc0e788b36fd34b9f6149410141c8f85f248711",
+        "src/compat/mingw/netinet/in.h": "f402e7bc9d200fdd33fb140cadea67dc82c3a64b93ebd4d752690f6e0750a0dc",
+        "src/compat/mingw/netdb.h": "f402e7bc9d200fdd33fb140cadea67dc82c3a64b93ebd4d752690f6e0750a0dc",
+        "src/compat/mingw/netinet/tcp.h": "1b114458a59c8527ce51ce587d3dd42a04d57b811f67c40ec245bb40a2f1861d",
+        "src/compat/mingw/arpa/inet.h": "f402e7bc9d200fdd33fb140cadea67dc82c3a64b93ebd4d752690f6e0750a0dc",
+        "src/compat/mingw/sys/socket.h": "2c5a38bd7d4e4cdb8133452ad342ef03b427949e46023baf209c856fb8af3b85",
+        "src/compat/mingw/netinet/ip.h": "1b114458a59c8527ce51ce587d3dd42a04d57b811f67c40ec245bb40a2f1861d",
+        "src/compat/mingw/sys/un.h": "83dad07d8ded0b03a65ca42489d80cade17b7f5dcc54912554fdbb6f8ddfc6ad",
+        "src/compat/mingw/poll.h": "48ae524171c630c1a12409d0884f8fbff13edd7e346eb23ec47a96645e8eb14d",
+        "src/modelnet/capability_control.cpp": "f1fa0aaff13c26555c661a554f0489718b26624d9114e238d5c7637fd6f33d61",
+        "src/util/time.h": "390720fafbb76e90193b14dd41241f841f5881b36aca996dcc4608cbf769e94b",
+        "src/util/strencodings.h": "ac314599ab1085d51c8dd3190eb8f53af01b7d15d0cc21f5d2e3bbd8896ad9f4",
+        "src/util/string.h": "504270e2d439a594335acceb7e2ae1153e1391ddaa55027bc7f3fc1b2721b3a4",
+        "src/span.h": "9b8b5ed5ae78aa1700f0934c6e51e47a701807224f38d7f866ddb2398278b74b",
+        "src/crypto/hex_base.h": "1885d59f3248d6295cacaf30fb0bafeb16e96f02c2d8a0dd3bc63e3b406a98f7",
+        "src/util/fs.h": "2c390bae69aaf81293d6355749cf41bad04141114428e7cebfd06f97ae35e78b",
+        "src/tinyformat.h": "670b65ed40fc74b2e33ff2bdc7fba5b76ec06b24cd8c1acf7ce2fc0364481c92",
+        "src/attributes.h": "a84dd4bf004ffbf73deb770f75a2afa337ef4137a2f2cdb93e028aa7b3893879",
+        "src/modelnet/transfer_session.h": "100bcf54426496bb84c62da070f2fd8cf0c8b8304d1334aac171c8cf6c58aee1",
+        "src/univalue/include/univalue.h": "ccf88ee034078aa1e25ce5591a5260c4a3761cc832c284aa238112593fb6e8fa",
+        "src/modelnet/types.h": "b26cf521affab56c3e6da47169802fb0f37190e2a6aafd1199d8d0ac5614589f",
+        "src/modelnet/piece_picker.h": "9f3ac4f92f398ec75f683354de344b34624dad174e0d6eb7888747b492edc029",
+        "src/modelnet/piece_ranges.h": "17f941b45a39c847663e2b03d95f7ae8aa08130e1e10e6eb4b6545c5590afff6",
+        "src/modelnet/package_core.h": "70cdc24fc51d62e182f63ebb3d7b89775a2276afd2858b07bd36682affbe401c",
+        "src/modelnet/capability_types.h": "cfa4b04e22aa1ac1e175097d734f17d342435cb5f668e0bd0a40b277d623d105",
+        "src/modelnet/package_bundle.h": "bfab4dd87608e096262bd5623bfa97f786f337003b073a55c66c7f1b32a5d741",
+        "src/modelnet/capability.h": "4318d4b7f2740f68efaa75bab0a6178898d3c683fbe3d61e9b8f092c8c281f48",
+        "src/modelnet/catalog.h": "ab192c53287156a2178c93621e461917fdc4b379e5994819be24cf787ad34cf7",
+        "src/modelnet/store.h": "09d1ff17443797a5ef99b81d5e5d1eb404905e57535598fcd6dd76fed49eafd6",
+        "src/modelnet/resource_uri.h": "ddcd8e3cf69323b814a518bb767c25356ddde7a4520611e2af8980e2f0b56470",
+        "src/modelnet/qualification.h": "9f7c3a9719fb5167cf1c91295328ffda6937187c39c99a4f63c7a5e2a6059567",
+        "src/modelnet/policy.h": "bdc5a5bc8fd4c9aa5f53aec11ed27c617bb7991afb96ae4651a57b2f4c260d59",
+        "src/modelnet/cores.h": "29a3f7ffb324068492a3fc1e534fe4c35789d165fea258dfe29fd3850dc173e3",
+        "src/modelnet/package_execute.cpp": "faddac9e5210971572b7e1e0b7e2ddca1c575ca74a519974939f0dc95784fd20",
+        "src/crypto/sha384.h": "98a1fdfcabdfd93d9f1723d750b0510a75eef432bab9e821ea8e8642ee7b7ad1",
+        "src/modelnet/package_install.h": "87726c9b6618cc047456e541a9e810782fc2f07516adec65a8d582291a470cfb",
+        "src/modelnet/admission_routes.h": "7b87dc10e31eb53aa2eea18629520eb95e45f3d7fa9cd8474e9237d093034955",
+        "src/modelnet/model_admission.h": "71388f88ce50171b6cd8a1ae5424dc5376a7cff2dbc932b8207bb995790d1833",
+        "src/modelnet/training_evidence.h": "1e841191477e62580e84d1c12c32cc79e1b764a1acb627b56274389a6bd21b0d",
+        "src/modelnet/package_execute.h": "67f2c7efcae61148132332a4009198b735eb3fac7c6455c70f557904039cec75",
+        "src/modelnet/package_acquisition.h": "af44701031def5795b3471a65ab32116dd8df0e2912eb62e93c4e4766f4fef4d",
+        "test/util/windows_modelnet_unistd_tests.cpp": "fb82982e71a574c50caff55ddcd6fe411928e5d258a6c68466ecf18fa0c364f2"
+      },
+      "cmake_fixture_sha256": "6d13a2989a32cb53e5be17c43720e973de10bee86cbf88f0e0ef55b5800341ef",
+      "compile_commands_sha256": "402a47029b7d956166910a286bf842ca4261ea2aedae632110f035c6a544e136"
+    },
+    "clang-cl-candidate": {
+      "files": {
+        "src/compat/mingw/posix_extra.h": "95b5941be1108017c1f5e4e05ef9615dbbd1f8877c5d5fc1ab3c98da543c4c50",
+        "src/compat/mingw/sys/time.h": "1b114458a59c8527ce51ce587d3dd42a04d57b811f67c40ec245bb40a2f1861d",
+        "src/compat/mingw/sys/wait.h": "e139c140913a3dc7aca41dd26f6988a9df2ed72122f41e424539610d871fac94",
+        "src/compat/mingw/sys/select.h": "1b114458a59c8527ce51ce587d3dd42a04d57b811f67c40ec245bb40a2f1861d",
+        "src/compat/mingw/sys/resource.h": "0d94752f1dfd5455e752e72377f76bea904ebc062688f3d2f7161d32153beb97",
+        "src/compat/mingw/sys/statvfs.h": "3b500b9e8344f83e6380a49f4cc0e788b36fd34b9f6149410141c8f85f248711",
+        "src/compat/mingw/netinet/in.h": "f402e7bc9d200fdd33fb140cadea67dc82c3a64b93ebd4d752690f6e0750a0dc",
+        "src/compat/mingw/netdb.h": "f402e7bc9d200fdd33fb140cadea67dc82c3a64b93ebd4d752690f6e0750a0dc",
+        "src/compat/mingw/netinet/tcp.h": "1b114458a59c8527ce51ce587d3dd42a04d57b811f67c40ec245bb40a2f1861d",
+        "src/compat/mingw/arpa/inet.h": "f402e7bc9d200fdd33fb140cadea67dc82c3a64b93ebd4d752690f6e0750a0dc",
+        "src/compat/mingw/sys/socket.h": "2c5a38bd7d4e4cdb8133452ad342ef03b427949e46023baf209c856fb8af3b85",
+        "src/compat/mingw/netinet/ip.h": "1b114458a59c8527ce51ce587d3dd42a04d57b811f67c40ec245bb40a2f1861d",
+        "src/compat/mingw/sys/un.h": "83dad07d8ded0b03a65ca42489d80cade17b7f5dcc54912554fdbb6f8ddfc6ad",
+        "src/compat/mingw/poll.h": "48ae524171c630c1a12409d0884f8fbff13edd7e346eb23ec47a96645e8eb14d",
+        "src/modelnet/capability_control.cpp": "f1fa0aaff13c26555c661a554f0489718b26624d9114e238d5c7637fd6f33d61",
+        "src/util/time.h": "390720fafbb76e90193b14dd41241f841f5881b36aca996dcc4608cbf769e94b",
+        "src/util/strencodings.h": "ac314599ab1085d51c8dd3190eb8f53af01b7d15d0cc21f5d2e3bbd8896ad9f4",
+        "src/util/string.h": "504270e2d439a594335acceb7e2ae1153e1391ddaa55027bc7f3fc1b2721b3a4",
+        "src/span.h": "9b8b5ed5ae78aa1700f0934c6e51e47a701807224f38d7f866ddb2398278b74b",
+        "src/crypto/hex_base.h": "1885d59f3248d6295cacaf30fb0bafeb16e96f02c2d8a0dd3bc63e3b406a98f7",
+        "src/util/fs.h": "2c390bae69aaf81293d6355749cf41bad04141114428e7cebfd06f97ae35e78b",
+        "src/tinyformat.h": "670b65ed40fc74b2e33ff2bdc7fba5b76ec06b24cd8c1acf7ce2fc0364481c92",
+        "src/attributes.h": "a84dd4bf004ffbf73deb770f75a2afa337ef4137a2f2cdb93e028aa7b3893879",
+        "src/modelnet/transfer_session.h": "100bcf54426496bb84c62da070f2fd8cf0c8b8304d1334aac171c8cf6c58aee1",
+        "src/univalue/include/univalue.h": "ccf88ee034078aa1e25ce5591a5260c4a3761cc832c284aa238112593fb6e8fa",
+        "src/modelnet/types.h": "b26cf521affab56c3e6da47169802fb0f37190e2a6aafd1199d8d0ac5614589f",
+        "src/modelnet/piece_picker.h": "9f3ac4f92f398ec75f683354de344b34624dad174e0d6eb7888747b492edc029",
+        "src/modelnet/piece_ranges.h": "17f941b45a39c847663e2b03d95f7ae8aa08130e1e10e6eb4b6545c5590afff6",
+        "src/modelnet/package_core.h": "70cdc24fc51d62e182f63ebb3d7b89775a2276afd2858b07bd36682affbe401c",
+        "src/modelnet/capability_types.h": "cfa4b04e22aa1ac1e175097d734f17d342435cb5f668e0bd0a40b277d623d105",
+        "src/modelnet/package_bundle.h": "bfab4dd87608e096262bd5623bfa97f786f337003b073a55c66c7f1b32a5d741",
+        "src/modelnet/capability.h": "4318d4b7f2740f68efaa75bab0a6178898d3c683fbe3d61e9b8f092c8c281f48",
+        "src/modelnet/catalog.h": "ab192c53287156a2178c93621e461917fdc4b379e5994819be24cf787ad34cf7",
+        "src/modelnet/store.h": "09d1ff17443797a5ef99b81d5e5d1eb404905e57535598fcd6dd76fed49eafd6",
+        "src/modelnet/resource_uri.h": "ddcd8e3cf69323b814a518bb767c25356ddde7a4520611e2af8980e2f0b56470",
+        "src/modelnet/qualification.h": "9f7c3a9719fb5167cf1c91295328ffda6937187c39c99a4f63c7a5e2a6059567",
+        "src/modelnet/policy.h": "bdc5a5bc8fd4c9aa5f53aec11ed27c617bb7991afb96ae4651a57b2f4c260d59",
+        "src/modelnet/cores.h": "29a3f7ffb324068492a3fc1e534fe4c35789d165fea258dfe29fd3850dc173e3",
+        "src/modelnet/package_execute.cpp": "faddac9e5210971572b7e1e0b7e2ddca1c575ca74a519974939f0dc95784fd20",
+        "src/crypto/sha384.h": "98a1fdfcabdfd93d9f1723d750b0510a75eef432bab9e821ea8e8642ee7b7ad1",
+        "src/modelnet/package_install.h": "87726c9b6618cc047456e541a9e810782fc2f07516adec65a8d582291a470cfb",
+        "src/modelnet/admission_routes.h": "7b87dc10e31eb53aa2eea18629520eb95e45f3d7fa9cd8474e9237d093034955",
+        "src/modelnet/model_admission.h": "71388f88ce50171b6cd8a1ae5424dc5376a7cff2dbc932b8207bb995790d1833",
+        "src/modelnet/training_evidence.h": "1e841191477e62580e84d1c12c32cc79e1b764a1acb627b56274389a6bd21b0d",
+        "src/modelnet/package_execute.h": "67f2c7efcae61148132332a4009198b735eb3fac7c6455c70f557904039cec75",
+        "src/modelnet/package_acquisition.h": "af44701031def5795b3471a65ab32116dd8df0e2912eb62e93c4e4766f4fef4d",
+        "test/util/windows_modelnet_unistd_tests.cpp": "fb82982e71a574c50caff55ddcd6fe411928e5d258a6c68466ecf18fa0c364f2",
+        "src/compat/msvc/unistd.h": "aa1781f6a5fbb5cf42e4aa65d583c8334500e0baa6627ce1fa7f84eacc6f1e26"
+      },
+      "cmake_fixture_sha256": "4798ccd10da1fe890768c5b2a71163ad5e022a9c2bb01d6523de87338fb30d32",
+      "compile_commands_sha256": "bfd2b5c70a9d9c093b928ab0fcbb19af1a095da452e95f88bb940150babce96f",
+      "executable_sha256": "de28c6d9f8310b4ef96ff3324e7514eac5a081b2704fc81c1c973d0cd32ff1df",
+      "object_sha256": {
+        "CMakeFiles\\ShowIncludes\\main.obj": "6778e38742b81ce03228f1cca7ab70ebb3c82b351476608b7142c69e1d8a044a",
+        "CMakeFiles\\bitcoin_modelnet.dir\\src\\modelnet\\capability_control.cpp.obj": "c7b10526d6a83110390e116f7183e7cc92f6a04908ad624a89e7b8df45d2b0f6",
+        "CMakeFiles\\bitcoin_modelnet.dir\\src\\modelnet\\package_execute.cpp.obj": "7df45f57aa5dacac7b143c472aea596e1b656fb7007220b96cdef4c505e6a2c6",
+        "CMakeFiles\\direct_header.dir\\test\\util\\windows_modelnet_unistd_tests.cpp.obj": "4c4f76a5e66fc35a78ef80caf0ec85d8926bc157849e20df09daf35b74159fde"
+      }
+    }
+  },
+  "errors": []
+}

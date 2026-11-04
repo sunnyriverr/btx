@@ -1,0 +1,104 @@
+Change Dir: 'D:/a/_temp/native-modelnet-unistd/clang-cl-candidate/build'
+
+Run Build Command(s): C:/ProgramData/chocolatey/bin/ninja.exe -v -k 0 -j 1 bitcoin_modelnet
+[1/2] "C:\Program Files\LLVM\bin\clang-cl.exe"  /nologo -TP -DNOMINMAX -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:\a\_temp\native-modelnet-unistd\clang-cl-candidate\src\compat\msvc -ID:\a\_temp\native-modelnet-unistd\clang-cl-candidate\src\compat\mingw -ID:\a\_temp\native-modelnet-unistd\clang-cl-candidate\src -ID:\a\_temp\native-modelnet-unistd\clang-cl-candidate\src\univalue\include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++20 -MT /FID:/a/_temp/native-modelnet-unistd/clang-cl-candidate/src/compat/mingw/posix_extra.h -clang:-MD -clang:-MTCMakeFiles\bitcoin_modelnet.dir\src\modelnet\package_execute.cpp.obj -clang:-MFCMakeFiles\bitcoin_modelnet.dir\src\modelnet\package_execute.cpp.obj.d /FoCMakeFiles\bitcoin_modelnet.dir\src\modelnet\package_execute.cpp.obj /FdCMakeFiles\bitcoin_modelnet.dir\ -c -- D:\a\_temp\native-modelnet-unistd\clang-cl-candidate\src\modelnet\package_execute.cpp
+D:\a\_temp\native-modelnet-unistd\clang-cl-candidate\src\modelnet\package_execute.cpp(140,25): warning: 'write' is deprecated: The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _write. See online help for details. [-Wdeprecated-declarations]
+  140 |     const ssize_t n = ::write(fd, bytes.data(), bytes.size());
+      |                         ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_io.h(559,24): note: 'write' has been explicitly marked deprecated here
+  559 |         _Check_return_ _CRT_NONSTDC_DEPRECATE(_write)
+      |                        ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt.h(428,50): note: expanded from macro '_CRT_NONSTDC_DEPRECATE'
+  428 |         #define _CRT_NONSTDC_DEPRECATE(_NewName) _CRT_DEPRECATE_TEXT(             \
+      |                                                  ^
+C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include\vcruntime.h(348,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  348 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+D:\a\_temp\native-modelnet-unistd\clang-cl-candidate\src\modelnet\package_execute.cpp(141,7): warning: 'close' is deprecated: The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _close. See online help for details. [-Wdeprecated-declarations]
+  141 |     ::close(fd);
+      |       ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_io.h(460,28): note: 'close' has been explicitly marked deprecated here
+  460 |         _Check_return_opt_ _CRT_NONSTDC_DEPRECATE(_close)
+      |                            ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt.h(428,50): note: expanded from macro '_CRT_NONSTDC_DEPRECATE'
+  428 |         #define _CRT_NONSTDC_DEPRECATE(_NewName) _CRT_DEPRECATE_TEXT(             \
+      |                                                  ^
+C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include\vcruntime.h(348,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  348 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+2 warnings generated.
+[2/2] "C:\Program Files\LLVM\bin\clang-cl.exe"  /nologo -TP -DNOMINMAX -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:\a\_temp\native-modelnet-unistd\clang-cl-candidate\src\compat\msvc -ID:\a\_temp\native-modelnet-unistd\clang-cl-candidate\src\compat\mingw -ID:\a\_temp\native-modelnet-unistd\clang-cl-candidate\src -ID:\a\_temp\native-modelnet-unistd\clang-cl-candidate\src\univalue\include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++20 -MT /FID:/a/_temp/native-modelnet-unistd/clang-cl-candidate/src/compat/mingw/posix_extra.h -clang:-MD -clang:-MTCMakeFiles\bitcoin_modelnet.dir\src\modelnet\capability_control.cpp.obj -clang:-MFCMakeFiles\bitcoin_modelnet.dir\src\modelnet\capability_control.cpp.obj.d /FoCMakeFiles\bitcoin_modelnet.dir\src\modelnet\capability_control.cpp.obj /FdCMakeFiles\bitcoin_modelnet.dir\ -c -- D:\a\_temp\native-modelnet-unistd\clang-cl-candidate\src\modelnet\capability_control.cpp
+D:\a\_temp\native-modelnet-unistd\clang-cl-candidate\src\modelnet\capability_control.cpp(526,7): warning: 'unlink' is deprecated: The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _unlink. See online help for details. [-Wdeprecated-declarations]
+  526 |     ::unlink(p.c_str());
+      |       ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\stdio.h(385,9): note: 'unlink' has been explicitly marked deprecated here
+  385 |         _CRT_NONSTDC_DEPRECATE(_unlink)
+      |         ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt.h(428,50): note: expanded from macro '_CRT_NONSTDC_DEPRECATE'
+  428 |         #define _CRT_NONSTDC_DEPRECATE(_NewName) _CRT_DEPRECATE_TEXT(             \
+      |                                                  ^
+C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include\vcruntime.h(348,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  348 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+D:\a\_temp\native-modelnet-unistd\clang-cl-candidate\src\modelnet\capability_control.cpp(532,11): warning: 'close' is deprecated: The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _close. See online help for details. [-Wdeprecated-declarations]
+  532 |         ::close(fd);
+      |           ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_io.h(460,28): note: 'close' has been explicitly marked deprecated here
+  460 |         _Check_return_opt_ _CRT_NONSTDC_DEPRECATE(_close)
+      |                            ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt.h(428,50): note: expanded from macro '_CRT_NONSTDC_DEPRECATE'
+  428 |         #define _CRT_NONSTDC_DEPRECATE(_NewName) _CRT_DEPRECATE_TEXT(             \
+      |                                                  ^
+C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include\vcruntime.h(348,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  348 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+D:\a\_temp\native-modelnet-unistd\clang-cl-candidate\src\modelnet\capability_control.cpp(537,11): warning: 'close' is deprecated: The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _close. See online help for details. [-Wdeprecated-declarations]
+  537 |         ::close(fd);
+      |           ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_io.h(460,28): note: 'close' has been explicitly marked deprecated here
+  460 |         _Check_return_opt_ _CRT_NONSTDC_DEPRECATE(_close)
+      |                            ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt.h(428,50): note: expanded from macro '_CRT_NONSTDC_DEPRECATE'
+  428 |         #define _CRT_NONSTDC_DEPRECATE(_NewName) _CRT_DEPRECATE_TEXT(             \
+      |                                                  ^
+C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include\vcruntime.h(348,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  348 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+D:\a\_temp\native-modelnet-unistd\clang-cl-candidate\src\modelnet\capability_control.cpp(591,11): warning: 'close' is deprecated: The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _close. See online help for details. [-Wdeprecated-declarations]
+  591 |         ::close(cfd);
+      |           ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_io.h(460,28): note: 'close' has been explicitly marked deprecated here
+  460 |         _Check_return_opt_ _CRT_NONSTDC_DEPRECATE(_close)
+      |                            ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt.h(428,50): note: expanded from macro '_CRT_NONSTDC_DEPRECATE'
+  428 |         #define _CRT_NONSTDC_DEPRECATE(_NewName) _CRT_DEPRECATE_TEXT(             \
+      |                                                  ^
+C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include\vcruntime.h(348,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  348 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+D:\a\_temp\native-modelnet-unistd\clang-cl-candidate\src\modelnet\capability_control.cpp(593,7): warning: 'close' is deprecated: The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _close. See online help for details. [-Wdeprecated-declarations]
+  593 |     ::close(fd);
+      |       ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_io.h(460,28): note: 'close' has been explicitly marked deprecated here
+  460 |         _Check_return_opt_ _CRT_NONSTDC_DEPRECATE(_close)
+      |                            ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt.h(428,50): note: expanded from macro '_CRT_NONSTDC_DEPRECATE'
+  428 |         #define _CRT_NONSTDC_DEPRECATE(_NewName) _CRT_DEPRECATE_TEXT(             \
+      |                                                  ^
+C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include\vcruntime.h(348,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  348 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+D:\a\_temp\native-modelnet-unistd\clang-cl-candidate\src\modelnet\capability_control.cpp(594,7): warning: 'unlink' is deprecated: The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _unlink. See online help for details. [-Wdeprecated-declarations]
+  594 |     ::unlink(p.c_str());
+      |       ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\stdio.h(385,9): note: 'unlink' has been explicitly marked deprecated here
+  385 |         _CRT_NONSTDC_DEPRECATE(_unlink)
+      |         ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt.h(428,50): note: expanded from macro '_CRT_NONSTDC_DEPRECATE'
+  428 |         #define _CRT_NONSTDC_DEPRECATE(_NewName) _CRT_DEPRECATE_TEXT(             \
+      |                                                  ^
+C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include\vcruntime.h(348,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  348 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+6 warnings generated.
+

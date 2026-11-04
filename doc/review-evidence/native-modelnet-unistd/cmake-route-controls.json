@@ -1,0 +1,39 @@
+{
+  "scope": "CMake condition/route evaluation only, no MinGW/Unix native compilation",
+  "records": {
+    "native-baseline": {
+      "stdout": "-- include:bitcoin_modelnet;BEFORE;PUBLIC;/exact-source/src/compat/mingw\n-- compile:bitcoin_modelnet;PRIVATE;/FI/exact-source/src/compat/mingw/posix_extra.h\n-- link:bitcoin_modelnet;PUBLIC;ws2_32;iphlpapi;bcrypt;userenv;advapi32;ole32\n",
+      "stderr": "",
+      "script_sha256": "21adbea83c1d69dc665ea31f10a6695305ffcd7f640c78391534e8429909147e"
+    },
+    "native-candidate": {
+      "stdout": "-- include:bitcoin_modelnet;BEFORE;PUBLIC;/exact-source/src/compat/mingw\n-- include:bitcoin_modelnet;BEFORE;PRIVATE;/exact-source/src/compat/msvc\n-- compile:bitcoin_modelnet;PRIVATE;/FI/exact-source/src/compat/mingw/posix_extra.h\n-- link:bitcoin_modelnet;PUBLIC;ws2_32;iphlpapi;bcrypt;userenv;advapi32;ole32\n",
+      "stderr": "",
+      "script_sha256": "945c1f591c53f86ea05c145270eb2d4918bda1e161e0a261884838fc6503e1b8"
+    },
+    "mingw-baseline": {
+      "stdout": "-- include:bitcoin_modelnet;BEFORE;PUBLIC;/exact-source/src/compat/mingw\n-- compile:bitcoin_modelnet;PRIVATE;SHELL:-include /exact-source/src/compat/mingw/posix_extra.h\n-- link:bitcoin_modelnet;PUBLIC;ws2_32;iphlpapi;bcrypt;userenv;advapi32;ole32\n",
+      "stderr": "",
+      "script_sha256": "0772d7593cdd30a8613fca1506e2ddb0a62ab6da2f2a4f306204ea219fb3af36"
+    },
+    "mingw-candidate": {
+      "stdout": "-- include:bitcoin_modelnet;BEFORE;PUBLIC;/exact-source/src/compat/mingw\n-- compile:bitcoin_modelnet;PRIVATE;SHELL:-include /exact-source/src/compat/mingw/posix_extra.h\n-- link:bitcoin_modelnet;PUBLIC;ws2_32;iphlpapi;bcrypt;userenv;advapi32;ole32\n",
+      "stderr": "",
+      "script_sha256": "8e7014c8b4b78bb8ac355ac65c4315e44c88ef0db2ed264f4889f1870e9a58f8"
+    },
+    "unix-baseline": {
+      "stdout": "",
+      "stderr": "",
+      "script_sha256": "1b53f29f0a030d2f095c3eeeaa93edc5714c82d2304418479ae3ae969455b816"
+    },
+    "unix-candidate": {
+      "stdout": "",
+      "stderr": "",
+      "script_sha256": "f71324470ed6d6ac0c61d93b34ade75856528537e3a83a96c329ed0d46d3baa0"
+    }
+  },
+  "mingw_unchanged": true,
+  "unix_unchanged": true,
+  "native_private_route_selected": true,
+  "setup_pilot": "Initial cmake lookup absent from login PATH; rerun same scripts using existing /opt/homebrew/bin/cmake. No product error."
+}
