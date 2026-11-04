@@ -1,0 +1,218 @@
+[
+  {
+    "label": "build-worker.exe",
+    "argv": [
+      "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.exe",
+      "/nologo",
+      "/std:c++20",
+      "/EHsc",
+      "/O2",
+      "/MT",
+      "/W4",
+      "/DWIN32",
+      "/D_WINDOWS",
+      "/DUNICODE",
+      "/D_UNICODE",
+      "/utf-8",
+      "/Zc:preprocessor",
+      "/Zc:__cplusplus",
+      "/sdl",
+      "/D_WIN32_WINNT=0x0A00",
+      "/D_WIN32_IE=0x0A00",
+      "/DNOMINMAX",
+      "/DWIN32_LEAN_AND_MEAN",
+      "/ID:\\a\\btx\\btx\\src",
+      "D:\\a\\btx\\btx\\contrib\\devtools\\windows-environment-repair\\worker.cpp",
+      "/Fe:worker.exe"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\windows-environment-results",
+    "exit": 0,
+    "seconds": 10.281000000000006,
+    "log_sha256": "b95d75cbb526e9d0fcb63171bb243d7fb33816dc0af731fb726deacaa4bb3a9d"
+  },
+  {
+    "label": "build-environment-worker.exe",
+    "argv": [
+      "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.exe",
+      "/nologo",
+      "/std:c++20",
+      "/EHsc",
+      "/O2",
+      "/MT",
+      "/W4",
+      "/DWIN32",
+      "/D_WINDOWS",
+      "/DUNICODE",
+      "/D_UNICODE",
+      "/utf-8",
+      "/Zc:preprocessor",
+      "/Zc:__cplusplus",
+      "/sdl",
+      "/D_WIN32_WINNT=0x0A00",
+      "/D_WIN32_IE=0x0A00",
+      "/DNOMINMAX",
+      "/DWIN32_LEAN_AND_MEAN",
+      "/ID:\\a\\btx\\btx\\src",
+      "D:\\a\\btx\\btx\\contrib\\devtools\\windows-environment-repair\\environment-worker.cpp",
+      "/Fe:environment-worker.exe"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\windows-environment-results",
+    "exit": 0,
+    "seconds": 0.796999999999997,
+    "log_sha256": "b0322a040381bdb02df2a3c60590fd2bca302de438a5dd81c415c585eefb271d"
+  },
+  {
+    "label": "build-baseline",
+    "argv": [
+      "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.exe",
+      "/nologo",
+      "/std:c++20",
+      "/EHsc",
+      "/O2",
+      "/MT",
+      "/W4",
+      "/DWIN32",
+      "/D_WINDOWS",
+      "/DUNICODE",
+      "/D_UNICODE",
+      "/utf-8",
+      "/Zc:preprocessor",
+      "/Zc:__cplusplus",
+      "/sdl",
+      "/D_WIN32_WINNT=0x0A00",
+      "/D_WIN32_IE=0x0A00",
+      "/DNOMINMAX",
+      "/DWIN32_LEAN_AND_MEAN",
+      "/ID:\\a\\btx\\btx\\src",
+      "D:\\a\\btx\\btx\\contrib\\devtools\\windows-environment-repair\\smoke.cpp",
+      "D:\\a\\btx\\btx\\contrib\\devtools\\windows-environment-repair\\baseline-windows-sandbox.cpp",
+      "D:\\a\\btx\\btx\\src\\modelnet\\swarm_confine.cpp",
+      "D:\\a\\btx\\btx\\src\\modelnet\\swarm_fsjail.cpp",
+      "D:\\a\\btx\\btx\\src\\crypto\\sha384.cpp",
+      "/Fe:smoke.exe",
+      "/link",
+      "userenv.lib",
+      "advapi32.lib",
+      "bcrypt.lib",
+      "ole32.lib"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\windows-environment-results\\baseline",
+    "exit": 0,
+    "seconds": 18.46799999999999,
+    "log_sha256": "6c466964b90ba049d43104f070d8078631906dd02db73cd48fc169ba0b1d0f49"
+  },
+  {
+    "label": "build-candidate",
+    "argv": [
+      "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.exe",
+      "/nologo",
+      "/std:c++20",
+      "/EHsc",
+      "/O2",
+      "/MT",
+      "/W4",
+      "/DWIN32",
+      "/D_WINDOWS",
+      "/DUNICODE",
+      "/D_UNICODE",
+      "/utf-8",
+      "/Zc:preprocessor",
+      "/Zc:__cplusplus",
+      "/sdl",
+      "/D_WIN32_WINNT=0x0A00",
+      "/D_WIN32_IE=0x0A00",
+      "/DNOMINMAX",
+      "/DWIN32_LEAN_AND_MEAN",
+      "/ID:\\a\\btx\\btx\\src",
+      "D:\\a\\btx\\btx\\contrib\\devtools\\windows-environment-repair\\smoke.cpp",
+      "D:\\a\\btx\\btx\\src\\modelnet\\swarm_windows_sandbox.cpp",
+      "D:\\a\\btx\\btx\\src\\modelnet\\swarm_confine.cpp",
+      "D:\\a\\btx\\btx\\src\\modelnet\\swarm_fsjail.cpp",
+      "D:\\a\\btx\\btx\\src\\crypto\\sha384.cpp",
+      "/Fe:smoke.exe",
+      "/link",
+      "userenv.lib",
+      "advapi32.lib",
+      "bcrypt.lib",
+      "ole32.lib"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\windows-environment-results\\candidate",
+    "exit": 0,
+    "seconds": 15.671999999999997,
+    "log_sha256": "4444332cb74f70caae4bbdde87218a1947a7ede6206483f4019642799cc54a4d"
+  },
+  {
+    "label": "baseline-valid",
+    "argv": [
+      "D:\\a\\btx\\btx\\windows-environment-results\\baseline\\smoke.exe",
+      "D:\\a\\btx\\btx\\windows-environment-results\\worker.exe",
+      "C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\btx-env-pair-jb9qk_ol\\before"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\windows-environment-results",
+    "exit": 1,
+    "seconds": 0.07800000000000296,
+    "log_sha256": "5a7094438e9af816746fda0846783a492a50b1ce635fe2de9f1007138ff35c7b"
+  },
+  {
+    "label": "baseline-direct",
+    "argv": [
+      "D:\\a\\btx\\btx\\windows-environment-results\\baseline\\smoke.exe",
+      "D:\\a\\btx\\btx\\windows-environment-results\\worker.exe",
+      "C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\btx-env-pair-jb9qk_ol\\before-direct",
+      "backend"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\windows-environment-results",
+    "exit": 1,
+    "seconds": 0.07799999999997453,
+    "log_sha256": "4354cd08f73f9267a52b539855419d789a9f6f9baabacf6ea3dc019d033acac9"
+  },
+  {
+    "label": "candidate-valid",
+    "argv": [
+      "D:\\a\\btx\\btx\\windows-environment-results\\candidate\\smoke.exe",
+      "D:\\a\\btx\\btx\\windows-environment-results\\worker.exe",
+      "C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\btx-env-pair-jb9qk_ol\\after"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\windows-environment-results",
+    "exit": 0,
+    "seconds": 0.09400000000002251,
+    "log_sha256": "9c5eb8456bbae04f9ba951da8aabf20948e63ac165a1ef95cb4b0784a6f07682"
+  },
+  {
+    "label": "candidate-parent-sentinel-excluded",
+    "argv": [
+      "D:\\a\\btx\\btx\\windows-environment-results\\candidate\\smoke.exe",
+      "D:\\a\\btx\\btx\\windows-environment-results\\environment-worker.exe",
+      "C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\btx-env-pair-jb9qk_ol\\private-environment"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\windows-environment-results",
+    "exit": 0,
+    "seconds": 0.09399999999999409,
+    "log_sha256": "9c5eb8456bbae04f9ba951da8aabf20948e63ac165a1ef95cb4b0784a6f07682"
+  },
+  {
+    "label": "candidate-missing-profile-value",
+    "argv": [
+      "D:\\a\\btx\\btx\\windows-environment-results\\candidate\\smoke.exe",
+      "D:\\a\\btx\\btx\\windows-environment-results\\worker.exe",
+      "C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\btx-env-pair-jb9qk_ol\\missing",
+      "backend"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\windows-environment-results",
+    "exit": 1,
+    "seconds": 0.014999999999986358,
+    "log_sha256": "4ff26ecbd4b26cfd90e97103fb9733f485c00c89bf5fbcd188cdd48923154739"
+  },
+  {
+    "label": "candidate-fresh-after-refusal",
+    "argv": [
+      "D:\\a\\btx\\btx\\windows-environment-results\\candidate\\smoke.exe",
+      "D:\\a\\btx\\btx\\windows-environment-results\\worker.exe",
+      "C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\btx-env-pair-jb9qk_ol\\fresh-after-refusal"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\windows-environment-results",
+    "exit": 0,
+    "seconds": 0.09400000000002251,
+    "log_sha256": "9c5eb8456bbae04f9ba951da8aabf20948e63ac165a1ef95cb4b0784a6f07682"
+  }
+]
