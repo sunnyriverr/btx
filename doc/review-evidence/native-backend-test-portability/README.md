@@ -8,4 +8,4 @@ Executed native recipe: https://github.com/sunnyriverr/btx/actions/runs/41761879
 
 native-records contains actual compiler/runtime logs, flags and identity receipts. All26 logs are hashed in result.json; the full14,307-file source catalogs and retained object/executables are in the original run artifact, also preserved locally by the contributor. Its ZIP digest is in native-records/artifacts.json. Artifact expiry does not replace the contributor's retained evidence. The small selected command is from the full unchanged compile database; no manually imitated root compile command supplied the pass.
 
-No upstream handoff is authorized yet. This local evidence packaging changes none of the tested code, inputs or logs. Product credit and platform limits remain unchanged.
+Publication was authorized after the experiment completed. The included REPORT.md and product.json retain their historical pre-publication status; consult the focused PR for current delivery status. This evidence packaging changes none of the tested code, inputs or logs. Product credit and platform limits remain unchanged.
