@@ -1,12 +1,12 @@
 from pathlib import Path
 import os,sys,json,subprocess,hashlib,datetime,time,urllib.request,shutil
 P=Path(__file__).resolve().parent
-BASE='2cdff4fc38571df6996d88018bf0ce4d0077b755'
+BASE='46caec762b0f130d497313d8ca9fa6894ac19ccd'
 VCPKG_COMMIT='afa249f12f52ed8a3b919f195495ba8b330288d1'
 OPENSSL_SHA='967311f84955316969bdb1d8d4b983718ef42338639c621ec4c34fddef355e99'
 ROOT=Path(os.environ['BTX_NATIVE_ROOT']);SOURCE=Path(os.environ['GITHUB_WORKSPACE'])/'btx'
 E=ROOT/'evidence';E.mkdir(parents=True,exist_ok=True);STATE=E/'result.json'
-result=json.loads(STATE.read_text())if STATE.exists()else{'base':BASE,'scope':'Exact stock-source native Windows root configure and bounded generated objects','status':'IN_PROGRESS','commands':[],'stages':{},'product_fixes':[],'whole_node_build_run':False,'unit_test_execution':False,'PR397_applied':False,'compiler_env':{k:os.environ.get(k)for k in ['VCToolsVersion','WindowsSDKVersion','ImageVersion','PROCESSOR_ARCHITECTURE']}}
+result=json.loads(STATE.read_text())if STATE.exists()else{'base':BASE,'scope':'Exact stock-source native Windows root configure and bounded generated objects','status':'IN_PROGRESS','commands':[],'stages':{},'product_fixes':[],'whole_node_build_run':False,'unit_test_execution':False,'PR397_in_upstream':True,'compiler_env':{k:os.environ.get(k)for k in ['VCToolsVersion','WindowsSDKVersion','ImageVersion','PROCESSOR_ARCHITECTURE']}}
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def save():
  result['updated_utc']=datetime.datetime.now(datetime.timezone.utc).isoformat();STATE.write_text(json.dumps(result,indent=2)+'\n')
@@ -85,10 +85,15 @@ def openssl():
   (prefix/'btx-build-provenance.json').write_text(json.dumps({'source_sha256':OPENSSL_SHA,'toolset':os.environ.get('VCToolsVersion'),'files':result['openssl_files'],'configuration':'VC-WIN64A no-shared no-tests, libdir=lib; staticCRT per pinned OpenSSL config','makefile_sha256':sha(E/'openssl-Makefile.txt')},indent=2)+'\n')
 def vcpkg():
  tool=ROOT/'vcpkg'
- if not(tool/'.git').exists():need('vcpkg-clone',['git','clone','--filter=blob:none','--no-checkout','https://github.com/microsoft/vcpkg.git',str(tool)],timeout=240)
+ if not(tool/'.git').exists():need('vcpkg-clone',['git','clone','--no-checkout','https://github.com/microsoft/vcpkg.git',str(tool)],timeout=240)
  need('vcpkg-checkout',['git','-C',str(tool),'checkout','--detach',VCPKG_COMMIT],timeout=120);head=subprocess.check_output(['git','-C',str(tool),'rev-parse','HEAD']).decode().strip()
  if head!=VCPKG_COMMIT:raise RuntimeError('vcpkg source pin mismatch')
  need('vcpkg-bootstrap',['cmd','/c',str(tool/'bootstrap-vcpkg.bat'),'-disableMetrics'],timeout=240);need('vcpkg-version',[str(tool/'vcpkg.exe'),'version']);result['vcpkg_commit']=head;result['vcpkg_executable_sha256']=sha(tool/'vcpkg.exe')
+ promisor=subprocess.run(['git','-C',str(tool),'config','--get','remote.origin.promisor'],capture_output=True,text=True)
+ result['vcpkg_promisor_remote']=promisor.stdout.strip()
+ if promisor.stdout.strip().lower()=='true':raise RuntimeError('vcpkg still has partial-clone lazy fetching')
+ for oid in ['8ed2f86ee404263f5aa1f72f8f4f13ee44262b81','937a2198387cb5c913e4feea170652651dd756ba']:
+  need('vcpkg-historical-blob-'+oid[:8],['git','-C',str(tool),'cat-file','-e',oid],timeout=30)
 def configure():
  tool=ROOT/'vcpkg';prefix=ROOT/'openssl-3.5.4-static';build=ROOT/'project-build'
  os.environ.update(VCPKG_ROOT=str(tool),VCPKG_DISABLE_METRICS='1',VCPKG_MAX_CONCURRENCY='2',VCPKG_BINARY_SOURCES='clear;files,'+str(ROOT/'binary-cache')+',readwrite');(ROOT/'binary-cache').mkdir(exist_ok=True)

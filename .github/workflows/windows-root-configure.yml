@@ -25,7 +25,8 @@ jobs:
       - name: Checkout exact accepted BTX source
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: 2cdff4fc38571df6996d88018bf0ce4d0077b755
+          repository: btxchain/btx
+          ref: 46caec762b0f130d497313d8ca9fa6894ac19ccd
           path: btx
           persist-credentials: false
       - name: Identify native compiler cache profile
@@ -43,6 +44,13 @@ jobs:
             D:\btx-native-035\openssl-3.5.4-static
             D:\btx-native-035\binary-cache
           key: btx356-root-v1-windows-${{ steps.environment.outputs.toolset }}-${{ hashFiles('btx/vcpkg.json') }}-ossl354-afa249f1
+      - name: Reuse completed vcpkg port binaries
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
+        with:
+          path: D:\btx-native-035\binary-cache
+          key: btx356-ports-v1-windows-${{ steps.environment.outputs.toolset }}-${{ hashFiles('btx/vcpkg.json') }}-afa249f1-${{ github.run_id }}
+          restore-keys: |
+            btx356-ports-v1-windows-${{ steps.environment.outputs.toolset }}-${{ hashFiles('btx/vcpkg.json') }}-afa249f1-
       - name: Provision verified native static OpenSSL
         shell: cmd
         run: |
