@@ -1,6 +1,7 @@
 // Calls unchanged production filesystem-jail wrapper and AppContainer backend.
 #include <modelnet/swarm_fsjail.h>
 #include <modelnet/swarm_native_io.h>
+#include <modelnet/swarm_windows_sandbox.h>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -15,7 +16,9 @@ std::vector<unsigned char> Read(const fs::path& path)
 }
 int wmain(int argc,wchar_t** argv)
 {
-    if(argc!=3)return 2;
+    if(argc!=3 && argc!=4)return 2;
+    const bool direct=argc==4 && std::wstring(argv[3])==L"backend";
+    if(argc==4 && !direct)return 2;
     const fs::path worker=std::filesystem::absolute(argv[1]);
     const fs::path root=std::filesystem::absolute(argv[2]);
     fs::create_directories(root);
@@ -30,14 +33,24 @@ int wmain(int argc,wchar_t** argv)
     // Existing Windows policy separately permits new output beyond the input cap.
     request.max_tree_bytes=fs::file_size(helper)+fs::file_size(input);
     std::string error;
-    const auto result=modelnet::SwarmRunFilesystemJail(request,error);
+    modelnet::SwarmFilesystemJailResult result;
+    if(direct) {
+        modelnet::SwarmConfineRequest confined;
+        confined.root=root;confined.helper=helper;confined.network_denied=true;
+        confined.max_address_bytes=8LL*1024*1024*1024;
+        confined.max_cpu_seconds=confined.max_wall_seconds=request.max_wall_seconds;
+        confined.max_nofile=256;confined.max_tree_bytes=request.max_tree_bytes;
+        const auto backend=modelnet::SwarmRunWindowsAppContainer(confined,error);
+        result.launched=backend.launched;result.jailed=backend.limits_applied;
+        result.child_status=backend.child_status;result.code=backend.code;
+    } else result=modelnet::SwarmRunFilesystemJail(request,error);
     const auto output=Read(root/"result.bin");
     const bool output_ok=output.size()==512 && std::all_of(output.begin(),output.end(),[](auto b){return b==0x42;});
     const bool inputs_ok=before_helper==modelnet::native_io::Digest(Read(helper)) &&
         before_input==modelnet::native_io::Digest(Read(input));
     const bool ok=result.launched && result.jailed && result.child_status==0 &&
-        result.code=="JAILED" && error.empty() && output_ok && inputs_ok;
-    std::cout<<"code="<<result.code<<" error="<<error<<" launched="<<result.launched
+        result.code==(direct?"CONFINED":"JAILED") && error.empty() && output_ok && inputs_ok;
+    std::cout<<"entry="<<(direct?"backend":"wrapper")<<" code="<<result.code<<" error="<<error<<" launched="<<result.launched
         <<" jailed_flag="<<result.jailed<<" child="<<result.child_status
         <<" input_cap="<<request.max_tree_bytes<<" output_bytes="<<output.size()
         <<" output_ok="<<output_ok<<" inputs_unchanged="<<inputs_ok<<" verdict="<<(ok?"PASS":"FAIL")<<'\n';

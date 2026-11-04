@@ -31,7 +31,13 @@ try:
     before={x.name for x in profiles.glob('btx.native.*')}
     owned=Path(tempfile.mkdtemp(prefix='btx-accounting-valid-'))
     try:
-        run('valid-native-output',[OUT/'smoke.exe',OUT/'worker.exe',owned/'first'],timeout=20)
+        try:run('valid-native-output',[OUT/'smoke.exe',OUT/'worker.exe',owned/'first'],timeout=20)
+        except Exception:
+            # The wrapper deliberately maps backend setup errors to JAIL_ABSENT.
+            # Inspect a fresh identical-policy backend invocation without relaxing it.
+            try:run('direct-backend-diagnostic',[OUT/'smoke.exe',OUT/'worker.exe',owned/'diagnostic','backend'],timeout=20)
+            except Exception:pass
+            raise
         run('fresh-native-output',[OUT/'smoke.exe',OUT/'worker.exe',owned/'fresh'],timeout=20)
     finally:shutil.rmtree(owned)
     remaining={x.name for x in profiles.glob('btx.native.*')}-before
