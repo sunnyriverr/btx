@@ -23,7 +23,7 @@ def run(label,command,cwd=ROOT,timeout=1800):
     cleanup=subprocess.run(['taskkill','/PID',str(proc.pid),'/T','/F'],capture_output=True)
     (E/(label+'-timeout-cleanup.log')).write_bytes(cleanup.stdout+cleanup.stderr)
     proc.wait(timeout=30);timed_out=True;break
-   if label=='native-daemon-build':
+   if label in ['native-daemon-build','native-unit-build','native-unit-run']:
     resources=host_resources();elapsed=int(time.monotonic()-start)
     if resources['disk_free_bytes']<2*1024**3:
      cleanup=subprocess.run(['taskkill','/PID',str(proc.pid),'/T','/F'],capture_output=True);(E/(label+'-disk-stop.log')).write_bytes(cleanup.stdout+cleanup.stderr);proc.wait(timeout=30);result['resource_stop']='Hosted disk below2GiB';break
@@ -143,7 +143,7 @@ def host_resources():
 
 stage=sys.argv[1]
 try:
- if result['status'].startswith('BLOCKED')or result['status']=='SETUP_ERROR':print('Prior failure retained; skipping',stage)
+ if result['status'].startswith('BLOCKED')or result['status']=='SETUP_ERROR' or 'ERROR' in result['stages'].values():print('Prior failure retained; skipping',stage)
  else:
   result['stages'][stage]='RUNNING';save();{'openssl':openssl,'vcpkg':vcpkg,'configure':configure}[stage]();result['stages'][stage]='COMPLETE'
 except Exception as ex:
@@ -156,4 +156,4 @@ finally:
   if not result['tracked_source_unchanged']:raise RuntimeError('tracked source identity changed')
  except Exception as ex:result['source_verification_error']=str(ex);result['status']='SETUP_ERROR'
  save();print('Recorded diagnostic status:',result['status'],flush=True)
-raise SystemExit(result['status']=='SETUP_ERROR' or (stage=='configure' and result['status']!='NATIVE_NODE_AND_UNITS_PASS'))
+raise SystemExit('ERROR' in result['stages'].values() or result['status']=='SETUP_ERROR' or (stage=='configure' and result['status']!='NATIVE_NODE_AND_UNITS_PASS'))
