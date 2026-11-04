@@ -1,0 +1,52 @@
+Dumping modelnet::HelperSupervisor:
+CXXRecordDecl 0x83db6dda8 </Users/wildwood/Documents/Playground/work/btx-lanes/session-1/windows_integrated_native_acceptance/pid-header-repair/posix/src/modelnet/supervisor.h:99:1, line:127:1> line:99:7 referenced class HelperSupervisor definition
+|-DefinitionData standard_layout has_user_declared_ctor has_mutable_fields can_const_default_init
+| |-DefaultConstructor
+| |-CopyConstructor non_trivial user_declared has_const_param needs_overload_resolution implicit_has_const_param
+| |-MoveConstructor needs_overload_resolution
+| |-CopyAssignment non_trivial has_const_param user_declared needs_overload_resolution implicit_has_const_param
+| |-MoveAssignment needs_overload_resolution
+| `-Destructor non_trivial user_declared needs_overload_resolution
+|-CXXRecordDecl 0x83db6dec8 <col:1, col:7> col:7 implicit referenced class HelperSupervisor
+|-FieldDecl 0x83db6df68 <line:100:5, col:24> col:24 m_cfg 'HelperLaunchConfig':'modelnet::HelperLaunchConfig'
+|-FieldDecl 0x83db6e040 <line:101:5, col:24> col:24 m_mu 'std::mutex' mutable
+|-FieldDecl 0x83db6e0a0 <line:102:5, col:18> col:18 m_st 'HelperStatus':'modelnet::HelperStatus'
+|-FieldDecl 0x83db6e100 <line:103:5, col:19> col:11 m_pid 'pid_t':'int'
+| `-InitListExpr 0x83db7bcf8 <col:16, col:19> 'pid_t':'int'
+|   `-UnaryOperator 0x83db7bc88 <col:17, col:18> 'int' prefix '-'
+|     `-IntegerLiteral 0x83db7bc68 <col:18> 'int' 1
+|-FieldDecl 0x83db6e270 <line:104:5, col:35> col:23 m_stop 'std::atomic<bool>'
+| `-CXXConstructExpr 0x83db7bdd0 <col:29, col:35> 'std::atomic<bool>' 'void (bool) noexcept' list
+|   `-CXXBoolLiteralExpr 0x83db7bd40 <col:30> 'bool' false
+|-FieldDecl 0x83db6e340 <line:105:5, col:17> col:17 m_thread 'std::thread'
+|-FieldDecl 0x83db79eb8 <line:106:5, col:27> col:27 m_shutdown 'std::function<bool ()>'
+|-CXXMethodDecl 0x83db79f60 <line:108:5, col:15> col:10 Loop 'void ()'
+|-CXXMethodDecl 0x83db7a1a0 <line:109:5, col:38> col:10 SpawnLocked 'bool (std::string &)'
+| `-ParmVarDecl 0x83db7a098 <col:22, col:35> col:35 err 'std::string &'
+|-CXXMethodDecl 0x83db7a270 <line:110:5, col:21> col:10 ReapLocked 'void ()'
+|-CXXMethodDecl 0x83db7a510 <line:111:5, col:52> col:10 WaitReady 'bool (int, std::string &)'
+| |-ParmVarDecl 0x83db7a330 <col:20, col:24> col:24 timeout_ms 'int'
+| `-ParmVarDecl 0x83db7a3f0 <col:36, col:49> col:49 err 'std::string &'
+|-CXXMethodDecl 0x83db7a5e8 <line:112:5, col:27> col:10 RequestStopOwned 'void ()'
+|-CXXMethodDecl 0x83db7a6b0 <line:113:5, col:29> col:10 PollAndSyncHostBit 'void ()'
+|-CXXMethodDecl 0x83db7a778 <line:114:5, col:23> col:10 ClearHostBit 'void ()'
+|-AccessSpecDecl 0x83db7a820 <line:116:1, col:7> col:1 public
+|-CXXConstructorDecl 0x83db7ab00 <line:117:5, col:90> col:14 HelperSupervisor 'void (HelperLaunchConfig, std::function<bool ()>)'
+| |-ParmVarDecl 0x83db7a858 <col:31, col:50> col:50 cfg 'HelperLaunchConfig':'modelnet::HelperLaunchConfig' destroyed
+| `-ParmVarDecl 0x83db7a9d0 <col:55, col:89> col:77 shutdown 'std::function<bool ()>' cinit destroyed
+|   `-ExprWithCleanups 0x83db7bc50 <col:86, col:89> 'std::function<bool ()>'
+|     `-CXXBindTemporaryExpr 0x83db7bc30 <col:86, col:89> 'std::function<bool ()>' (CXXTemporary 0x83db7bc30)
+|       `-CXXConstructExpr 0x83db7b928 <col:86, col:89> 'std::function<bool ()>' 'void () noexcept' list
+|-CXXDestructorDecl 0x83db7ac38 <line:118:5, col:23> col:5 ~HelperSupervisor 'void ()' noexcept-unevaluated 0x83db7ac38
+|-CXXConstructorDecl 0x83db7aeb0 <line:120:5, col:54> col:5 HelperSupervisor 'void (const HelperSupervisor &)' delete implicit-inline
+| `-ParmVarDecl 0x83db7ada8 <col:22, col:44> col:45 'const HelperSupervisor &'
+|-CXXMethodDecl 0x83db7b108 <line:121:5, col:65> col:23 operator= 'HelperSupervisor &(const HelperSupervisor &)' delete implicit-inline
+| `-ParmVarDecl 0x83db7af90 <col:33, col:55> col:56 'const HelperSupervisor &'
+|-CXXMethodDecl 0x83db7b2c8 <line:124:5, col:32> col:10 Start 'bool (std::string &)'
+| |-ParmVarDecl 0x83db7b238 <col:16, col:29> col:29 err 'std::string &'
+| `-FullComment 0x83de7ccd0 <line:123:8, col:72>
+|   `-ParagraphComment 0x83de7cca8 <col:8, col:72>
+|     `-TextComment 0x83de7cc80 <col:8, col:72> Text=" Never fails monetary init. required=true is the only hard fail. "
+|-CXXMethodDecl 0x83db7b398 <line:125:5, col:15> col:10 Stop 'void ()'
+`-CXXMethodDecl 0x83db7b4f0 <line:126:5, col:29> col:18 Snapshot 'HelperStatus () const'
+

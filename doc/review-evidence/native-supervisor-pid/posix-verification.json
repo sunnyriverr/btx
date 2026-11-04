@@ -1,0 +1,177 @@
+{
+  "utc": "2026-11-04T04:08:48.594385+00:00",
+  "base": "46caec762b0f130d497313d8ca9fa6894ac19ccd",
+  "platform": "macOS-26.5.1-arm64-arm-64bit",
+  "architecture": "arm64",
+  "compiler": "Apple clang version 17.0.0 (clang-1700.6.3.2)\nTarget: arm64-apple-darwin25.5.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin\n",
+  "scope": "Actual nine-header dependency closure, first include compile/link/run and compiler AST/layout on Mac; no supervisor lifecycle execution or Linux result",
+  "results": {
+    "baseline": {
+      "runtime": "supervisor size=520 align=8 pid_t size=4\n",
+      "member_ast": "|-FieldDecl 0x83db6e100 <line:103:5, col:19> col:11 m_pid 'pid_t':'int'",
+      "class_tokens_sha256": "93d8e794a987e66b7d4634e0e50f20109bd12c6e94556f094c082418c327ae69",
+      "binary_sha256": "e9250cbcf7e85c1581173d60bee1dcff874f85f5db33c82e86876f1c2dd05bcf",
+      "header_sha256": "234a2e9f8173f222b4f6324a8424f3758aab18e60497ec2d5eac0ba3b2fc6848"
+    },
+    "candidate": {
+      "runtime": "supervisor size=520 align=8 pid_t size=4\n",
+      "member_ast": "|-FieldDecl 0x7dbb6e100 <line:110:5, col:19> col:11 m_pid 'pid_t':'int'",
+      "class_tokens_sha256": "93d8e794a987e66b7d4634e0e50f20109bd12c6e94556f094c082418c327ae69",
+      "binary_sha256": "07eb4816b0a69feb26c3ff178b30f68c7237e6b8f1227b95421c2b21995a2246",
+      "header_sha256": "fab40ee929a1477dc79b510ee45c895c5c9bc14029470c7edc2effec0c61b2aa"
+    }
+  },
+  "commands": [
+    {
+      "label": "baseline-build",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/clang++",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/Users/wildwood/Documents/Playground/work/btx-lanes/session-1/windows_integrated_native_acceptance/pid-header-repair/posix/src",
+        "-I/Users/wildwood/Documents/Playground/work/btx-lanes/session-1/windows_integrated_native_acceptance/pid-header-repair/posix/src/univalue/include",
+        "-Xclang",
+        "-fdump-record-layouts",
+        "header-first.cpp",
+        "-o",
+        "/Users/wildwood/Documents/Playground/work/btx-lanes/session-1/windows_integrated_native_acceptance/pid-header-repair/posix/baseline"
+      ],
+      "exit": 0,
+      "log_sha256": "357027528cc0de09a5fa8ba7fe360bee6e2a869105f8946a1aafaadb4875515b"
+    },
+    {
+      "label": "baseline-run",
+      "command": [
+        "/Users/wildwood/Documents/Playground/work/btx-lanes/session-1/windows_integrated_native_acceptance/pid-header-repair/posix/baseline"
+      ],
+      "exit": 0,
+      "log_sha256": "c0939fd8650ba1e6a75d61a392ff2d5165685baa6de2c1328027d1f131c6aead"
+    },
+    {
+      "label": "baseline-ast",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/clang++",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/Users/wildwood/Documents/Playground/work/btx-lanes/session-1/windows_integrated_native_acceptance/pid-header-repair/posix/src",
+        "-I/Users/wildwood/Documents/Playground/work/btx-lanes/session-1/windows_integrated_native_acceptance/pid-header-repair/posix/src/univalue/include",
+        "-Xclang",
+        "-ast-dump",
+        "-Xclang",
+        "-ast-dump-filter=modelnet::HelperSupervisor",
+        "-fsyntax-only",
+        "header-first.cpp"
+      ],
+      "exit": 0,
+      "log_sha256": "a9e8865b43647f820e24f36e98290deafa4ab52e7cb9b8aa528e8f10b448e7b1"
+    },
+    {
+      "label": "baseline-preprocessed",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/clang++",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/Users/wildwood/Documents/Playground/work/btx-lanes/session-1/windows_integrated_native_acceptance/pid-header-repair/posix/src",
+        "-I/Users/wildwood/Documents/Playground/work/btx-lanes/session-1/windows_integrated_native_acceptance/pid-header-repair/posix/src/univalue/include",
+        "-E",
+        "-P",
+        "header-first.cpp"
+      ],
+      "exit": 0,
+      "log_sha256": "36c7ef3e07ad4efa167a8380b7c220d6cb563dcacb57a9b6bf805db1bbf24971"
+    },
+    {
+      "label": "candidate-build",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/clang++",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/Users/wildwood/Documents/Playground/work/btx-lanes/session-1/windows_integrated_native_acceptance/pid-header-repair/posix/src",
+        "-I/Users/wildwood/Documents/Playground/work/btx-lanes/session-1/windows_integrated_native_acceptance/pid-header-repair/posix/src/univalue/include",
+        "-Xclang",
+        "-fdump-record-layouts",
+        "header-first.cpp",
+        "-o",
+        "/Users/wildwood/Documents/Playground/work/btx-lanes/session-1/windows_integrated_native_acceptance/pid-header-repair/posix/candidate"
+      ],
+      "exit": 0,
+      "log_sha256": "357027528cc0de09a5fa8ba7fe360bee6e2a869105f8946a1aafaadb4875515b"
+    },
+    {
+      "label": "candidate-run",
+      "command": [
+        "/Users/wildwood/Documents/Playground/work/btx-lanes/session-1/windows_integrated_native_acceptance/pid-header-repair/posix/candidate"
+      ],
+      "exit": 0,
+      "log_sha256": "c0939fd8650ba1e6a75d61a392ff2d5165685baa6de2c1328027d1f131c6aead"
+    },
+    {
+      "label": "candidate-ast",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/clang++",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/Users/wildwood/Documents/Playground/work/btx-lanes/session-1/windows_integrated_native_acceptance/pid-header-repair/posix/src",
+        "-I/Users/wildwood/Documents/Playground/work/btx-lanes/session-1/windows_integrated_native_acceptance/pid-header-repair/posix/src/univalue/include",
+        "-Xclang",
+        "-ast-dump",
+        "-Xclang",
+        "-ast-dump-filter=modelnet::HelperSupervisor",
+        "-fsyntax-only",
+        "header-first.cpp"
+      ],
+      "exit": 0,
+      "log_sha256": "9152384e1e96a2fb8b7e7e9dc2e58a49b518426b440822c95e7f5db799befa0a"
+    },
+    {
+      "label": "candidate-preprocessed",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/clang++",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/Users/wildwood/Documents/Playground/work/btx-lanes/session-1/windows_integrated_native_acceptance/pid-header-repair/posix/src",
+        "-I/Users/wildwood/Documents/Playground/work/btx-lanes/session-1/windows_integrated_native_acceptance/pid-header-repair/posix/src/univalue/include",
+        "-E",
+        "-P",
+        "header-first.cpp"
+      ],
+      "exit": 0,
+      "log_sha256": "36c7ef3e07ad4efa167a8380b7c220d6cb563dcacb57a9b6bf805db1bbf24971"
+    },
+    {
+      "label": "compiler-version",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/clang++",
+        "--version"
+      ],
+      "exit": 0,
+      "log_sha256": "c9a0f2a2beeef9150274187e178d98d667dc2f26bc05916d679fb8eb9e49b28d"
+    }
+  ],
+  "posix_preprocessed_class_identical": true,
+  "posix_member_still_pid_t": true,
+  "supervisor_cpp_sha256": "7369263cf196cd8fdfc7fca1e22eeaed73a361189b9415a4c6c625219fd1b5b9",
+  "headers": {
+    "src/tinyformat.h": "670b65ed40fc74b2e33ff2bdc7fba5b76ec06b24cd8c1acf7ce2fc0364481c92",
+    "src/attributes.h": "a84dd4bf004ffbf73deb770f75a2afa337ef4137a2f2cdb93e028aa7b3893879",
+    "src/span.h": "9b8b5ed5ae78aa1700f0934c6e51e47a701807224f38d7f866ddb2398278b74b",
+    "src/util/fs.h": "2c390bae69aaf81293d6355749cf41bad04141114428e7cebfd06f97ae35e78b",
+    "src/util/string.h": "504270e2d439a594335acceb7e2ae1153e1391ddaa55027bc7f3fc1b2721b3a4",
+    "src/modelnet/profile.h": "7c8212e94ed7dea963bd24223d5bff8a004e305d775e1bf2aaf9e1395886f3e8",
+    "src/modelnet/supervisor.h": "fab40ee929a1477dc79b510ee45c895c5c9bc14029470c7edc2effec0c61b2aa",
+    "src/modelnet/types.h": "b26cf521affab56c3e6da47169802fb0f37190e2a6aafd1199d8d0ac5614589f",
+    "src/univalue/include/univalue.h": "ccf88ee034078aa1e25ce5591a5260c4a3761cc832c284aa238112593fb6e8fa"
+  }
+}
