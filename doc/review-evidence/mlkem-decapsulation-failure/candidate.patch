@@ -1,0 +1,248 @@
+diff --git a/src/bench/ml_kem_bench.cpp b/src/bench/ml_kem_bench.cpp
+index bf2d2789..b4fd2340 100644
+--- a/src/bench/ml_kem_bench.cpp
++++ b/src/bench/ml_kem_bench.cpp
+@@ -33,7 +33,8 @@ static void MLKEMDecapsBench(benchmark::Bench& bench)
+     const auto enc = mlkem::Encaps(kp.pk);
+     bench.minEpochIterations(1000).run([&] {
+         auto ss = mlkem::Decaps(enc.ct, kp.sk);
+-        ankerl::nanobench::doNotOptimizeAway(ss);
++        assert(ss.has_value());
++        ankerl::nanobench::doNotOptimizeAway(*ss);
+     });
+ }
+ 
+diff --git a/src/crypto/ml_kem.cpp b/src/crypto/ml_kem.cpp
+index 6c1a3108..00c309b1 100644
+--- a/src/crypto/ml_kem.cpp
++++ b/src/crypto/ml_kem.cpp
+@@ -76,13 +76,13 @@ EncapsResult EncapsDerand(const PublicKey& pk, Span<const uint8_t> seed)
+     return result;
+ }
+ 
+-SharedSecret Decaps(const Ciphertext& ct, const SecretKey& sk)
++std::optional<SharedSecret> Decaps(const Ciphertext& ct, const SecretKey& sk)
+ {
+-    Assume(sk.size() == SECRETKEYBYTES);
++    if (sk.size() != SECRETKEYBYTES) return std::nullopt;
+     SharedSecret ss(SHAREDSECRETBYTES, 0);
+     const int rc = PQCLEAN_MLKEM768_CLEAN_crypto_kem_dec(
+         ss.data(), ct.data(), sk.data());
+-    Assume(rc == 0);
++    if (rc != 0) return std::nullopt;
+     return ss;
+ }
+ 
+diff --git a/src/crypto/ml_kem.h b/src/crypto/ml_kem.h
+index e236c427..e4dcc9a4 100644
+--- a/src/crypto/ml_kem.h
++++ b/src/crypto/ml_kem.h
+@@ -11,6 +11,7 @@
+ #include <array>
+ #include <cstddef>
+ #include <cstdint>
++#include <optional>
+ #include <vector>
+ 
+ namespace mlkem {
+@@ -51,8 +52,10 @@ struct EncapsResult {
+ /** Deterministic encapsulation from a 32-byte seed (tests only). */
+ [[nodiscard]] EncapsResult EncapsDerand(const PublicKey& pk, Span<const uint8_t> seed);
+ 
+-/** Decapsulate: recover shared secret from ciphertext and secret key. */
+-[[nodiscard]] SharedSecret Decaps(const Ciphertext& ct, const SecretKey& sk);
++/** Recover a shared secret, or nullopt for invalid secret-key length or backend failure.
++ * Full-length wrong keys/ciphertexts retain ML-KEM implicit rejection.
++ */
++[[nodiscard]] std::optional<SharedSecret> Decaps(const Ciphertext& ct, const SecretKey& sk);
+ 
+ } // namespace mlkem
+ 
+diff --git a/src/net.cpp b/src/net.cpp
+index 3183bf4b..f52589c3 100644
+--- a/src/net.cpp
++++ b/src/net.cpp
+@@ -1474,10 +1474,11 @@ bool V2Transport::ProcessReceivedPacketBytes() noexcept
+                 }
+                 mlkem::Ciphertext ct;
+                 std::copy(m_recv_decode_buffer.begin(), m_recv_decode_buffer.end(), ct.begin());
+-                const mlkem::SharedSecret ss = mlkem::Decaps(ct, m_pq_keypair.sk);
++                const auto ss = mlkem::Decaps(ct, m_pq_keypair.sk);
++                if (!ss) return false;
+                 {
+                     LOCK(m_send_mutex);
+-                    m_cipher.RekeyHybridPQ(MakeByteSpan(ss));
++                    m_cipher.RekeyHybridPQ(MakeByteSpan(*ss));
+                     m_pq_send_gated = false;
+                 }
+                 // The ML-KEM secret key is no longer needed; wipe it.
+diff --git a/src/shielded/bundle.cpp b/src/shielded/bundle.cpp
+index 5b397742..098b0423 100644
+--- a/src/shielded/bundle.cpp
++++ b/src/shielded/bundle.cpp
+@@ -247,7 +247,9 @@ constexpr uint64_t SHIELDED_VERIFY_UNITS_PER_SETTLEMENT_PROOF{100};
+         return std::nullopt;
+     }
+ 
+-    auto ss = mlkem::Decaps(grant.kem_ct, operator_sk);
++    auto secret = mlkem::Decaps(grant.kem_ct, operator_sk);
++    if (!secret) return std::nullopt;
++    auto& ss = *secret;
+ 
+     std::vector<uint8_t, secure_allocator<uint8_t>> aead_key(32, 0);
+     CHKDF_HMAC_SHA256_L32 hkdf(ss.data(), ss.size(), VIEW_GRANT_SALT);
+diff --git a/src/shielded/note_encryption.cpp b/src/shielded/note_encryption.cpp
+index 19400f6b..f5fbedd8 100644
+--- a/src/shielded/note_encryption.cpp
++++ b/src/shielded/note_encryption.cpp
+@@ -556,7 +556,9 @@ std::optional<ShieldedNote> NoteEncryption::TryDecrypt(const EncryptedNote& enc_
+         return std::nullopt;
+     }
+ 
+-    mlkem::SharedSecret ss = mlkem::Decaps(enc_note.kem_ciphertext, kem_sk);
++    auto secret = mlkem::Decaps(enc_note.kem_ciphertext, kem_sk);
++    if (!secret) return std::nullopt;
++    auto& ss = *secret;
+     auto aead_key = DeriveAeadKey(ss);
+     const auto aead_nonce = DeriveAeadNonce(ss);
+ 
+diff --git a/src/test/ml_kem_tests.cpp b/src/test/ml_kem_tests.cpp
+index 99806230..66b08f3d 100644
+--- a/src/test/ml_kem_tests.cpp
++++ b/src/test/ml_kem_tests.cpp
+@@ -47,7 +47,9 @@ BOOST_AUTO_TEST_CASE(encaps_decaps_roundtrip)
+     const auto kp = mlkem::KeyGen();
+     const auto enc = mlkem::Encaps(kp.pk);
+     const auto ss = mlkem::Decaps(enc.ct, kp.sk);
+-    BOOST_CHECK(enc.ss == ss);
++    BOOST_REQUIRE(ss.has_value());
++    BOOST_REQUIRE_EQUAL(ss->size(), mlkem::SHAREDSECRETBYTES);
++    BOOST_CHECK(enc.ss == *ss);
+ }
+ 
+ BOOST_AUTO_TEST_CASE(decaps_with_wrong_sk_produces_different_secret)
+@@ -56,7 +58,35 @@ BOOST_AUTO_TEST_CASE(decaps_with_wrong_sk_produces_different_secret)
+     const auto kp_b = mlkem::KeyGen();
+     const auto enc = mlkem::Encaps(kp_a.pk);
+     const auto ss_wrong = mlkem::Decaps(enc.ct, kp_b.sk);
+-    BOOST_CHECK(enc.ss != ss_wrong);
++    BOOST_REQUIRE(ss_wrong.has_value());
++    BOOST_REQUIRE_EQUAL(ss_wrong->size(), mlkem::SHAREDSECRETBYTES);
++    BOOST_CHECK(enc.ss != *ss_wrong);
++}
++
++BOOST_AUTO_TEST_CASE(decaps_altered_ciphertext_retains_implicit_rejection)
++{
++    const auto kp = mlkem::KeyGen();
++    const auto enc = mlkem::Encaps(kp.pk);
++    auto ct = enc.ct;
++    ct[0] ^= 1;
++    const auto ss = mlkem::Decaps(ct, kp.sk);
++    BOOST_REQUIRE(ss.has_value());
++    BOOST_REQUIRE_EQUAL(ss->size(), mlkem::SHAREDSECRETBYTES);
++    BOOST_CHECK(*ss != enc.ss);
++}
++
++BOOST_AUTO_TEST_CASE(decaps_rejects_invalid_secret_key_lengths)
++{
++    const auto kp = mlkem::KeyGen();
++    const auto enc = mlkem::Encaps(kp.pk);
++    for (const size_t length : {size_t{0}, mlkem::SECRETKEYBYTES - 1, mlkem::SECRETKEYBYTES + 1}) {
++        auto sk = kp.sk;
++        sk.resize(length);
++        BOOST_CHECK(!mlkem::Decaps(enc.ct, sk).has_value());
++    }
++    const auto recovered = mlkem::Decaps(enc.ct, kp.sk);
++    BOOST_REQUIRE(recovered.has_value());
++    BOOST_CHECK(*recovered == enc.ss);
+ }
+ 
+ BOOST_AUTO_TEST_CASE(fips203_sk_contains_pk_and_hash)
+diff --git a/src/test/note_encryption_tests.cpp b/src/test/note_encryption_tests.cpp
+index c2b62523..4bd0d190 100644
+--- a/src/test/note_encryption_tests.cpp
++++ b/src/test/note_encryption_tests.cpp
+@@ -39,6 +39,25 @@ BOOST_AUTO_TEST_CASE(encrypt_decrypt_roundtrip)
+     BOOST_CHECK(dec->memo == note.memo);
+ }
+ 
++BOOST_AUTO_TEST_CASE(decrypt_rejects_invalid_secret_key_lengths)
++{
++    const auto recipient = mlkem::KeyGen();
++    ShieldedNote note;
++    note.value = COIN;
++    note.recipient_pk_hash = uint256::ONE;
++    note.rho = GetRandHash();
++    note.rcm = GetRandHash();
++    const auto enc = shielded::NoteEncryption::Encrypt(note, recipient.pk);
++    for (const size_t length : {size_t{0}, mlkem::SECRETKEYBYTES - 1, mlkem::SECRETKEYBYTES + 1}) {
++        auto sk = recipient.sk;
++        sk.resize(length);
++        BOOST_CHECK(!shielded::NoteEncryption::TryDecrypt(enc, recipient.pk, sk).has_value());
++    }
++    const auto recovered = shielded::NoteEncryption::TryDecrypt(enc, recipient.pk, recipient.sk);
++    BOOST_REQUIRE(recovered.has_value());
++    BOOST_CHECK_EQUAL(recovered->value, note.value);
++}
++
+ BOOST_AUTO_TEST_CASE(decrypt_with_wrong_key_returns_nullopt)
+ {
+     const auto recipient = mlkem::KeyGen();
+diff --git a/src/test/shielded_transaction_tests.cpp b/src/test/shielded_transaction_tests.cpp
+index 9a8c548b..6aa58af9 100644
+--- a/src/test/shielded_transaction_tests.cpp
++++ b/src/test/shielded_transaction_tests.cpp
+@@ -478,6 +478,27 @@ BOOST_AUTO_TEST_CASE(view_grant_roundtrip_encrypt_decrypt)
+     BOOST_CHECK_EQUAL_COLLECTIONS(decrypted->begin(), decrypted->end(), view_key.begin(), view_key.end());
+ }
+ 
++BOOST_AUTO_TEST_CASE(view_grant_rejects_invalid_secret_key_lengths)
++{
++    const auto keypair = mlkem::KeyGen();
++    const std::vector<uint8_t> view_key(32, 0x42);
++    const std::vector<uint8_t> metadata_aad{'m', 'e', 't', 'a'};
++    const auto grant = CViewGrant::Create(view_key, keypair.pk);
++    const auto bound_grant = CViewGrant::CreateWithAad(view_key, keypair.pk, metadata_aad);
++    for (const size_t length : {size_t{0}, mlkem::SECRETKEYBYTES - 1, mlkem::SECRETKEYBYTES + 1}) {
++        auto sk = keypair.sk;
++        sk.resize(length);
++        BOOST_CHECK(!grant.Decrypt(sk).has_value());
++        BOOST_CHECK(!bound_grant.DecryptWithAad(sk, metadata_aad).has_value());
++    }
++    const auto recovered = grant.Decrypt(keypair.sk);
++    const auto recovered_bound = bound_grant.DecryptWithAad(keypair.sk, metadata_aad);
++    BOOST_REQUIRE(recovered.has_value());
++    BOOST_REQUIRE(recovered_bound.has_value());
++    BOOST_CHECK_EQUAL_COLLECTIONS(recovered->begin(), recovered->end(), view_key.begin(), view_key.end());
++    BOOST_CHECK_EQUAL_COLLECTIONS(recovered_bound->begin(), recovered_bound->end(), view_key.begin(), view_key.end());
++}
++
+ BOOST_AUTO_TEST_CASE(view_grant_metadata_aad_authenticates_context)
+ {
+     const auto keypair = mlkem::KeyGen();
+diff --git a/src/wallet/shielded_rpc.cpp b/src/wallet/shielded_rpc.cpp
+index e82e2df4..ed6cfc4e 100644
+--- a/src/wallet/shielded_rpc.cpp
++++ b/src/wallet/shielded_rpc.cpp
+@@ -7007,7 +7007,7 @@ void EnsureBridgeFeeHeadroomOrThrow(const BridgeFeeHeadroomAssessment& assessmen
+     keypair.sk.assign(kem_sk.begin(), kem_sk.end());
+     const auto enc = mlkem::Encaps(keypair.pk);
+     const auto dec = mlkem::Decaps(enc.ct, keypair.sk);
+-    return dec == enc.ss;
++    return dec && *dec == enc.ss;
+ }
+ 
+ [[nodiscard]] bool CommitShieldedTransaction(const std::shared_ptr<CWallet>& pwallet,
+diff --git a/src/wallet/shielded_wallet.cpp b/src/wallet/shielded_wallet.cpp
+index 95a4ab7d..47455c38 100644
+--- a/src/wallet/shielded_wallet.cpp
++++ b/src/wallet/shielded_wallet.cpp
+@@ -1228,7 +1228,7 @@ bool AppendOutputChunkViews(ShieldedTxView& tx_view,
+     if (keypair.sk.size() != mlkem::SECRETKEYBYTES) return false;
+     const auto enc = mlkem::Encaps(keypair.pk);
+     const auto dec = mlkem::Decaps(enc.ct, keypair.sk);
+-    return dec == enc.ss;
++    return dec && *dec == enc.ss;
+ }
+ 
+ [[nodiscard]] bool EncryptWithWalletKey(const CWallet& wallet,

@@ -1,0 +1,189 @@
+{
+  "base": "ecd9310a8b35dbf1260d1a64e0ff39bb50e7a629",
+  "scope": "Actual wrapper and primitive; baseline wrapper/header plus common freshly-built current libraries; same native local component harness. No caller integration runtime.",
+  "commands": [
+    {
+      "label": "compile-baseline-wrapper",
+      "argv": [
+        "/usr/bin/c++",
+        "-I<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/baseline-inputs",
+        "-DENABLE_ARM_SHANI",
+        "-DOBJC_OLD_DISPATCH_PROTOTYPES=0",
+        "-I<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/build/src",
+        "-I<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/source/src",
+        "-I<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/source/src/crypto/ml-kem-768",
+        "-O2",
+        "-std=c++20",
+        "-arch",
+        "arm64",
+        "-fPIC",
+        "-fdebug-prefix-map=<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/source/src=.",
+        "-fmacro-prefix-map=<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/source/src=.",
+        "-Wall",
+        "-Wextra",
+        "-Wgnu",
+        "-Wformat",
+        "-Wformat-security",
+        "-Wvla",
+        "-Wshadow-field",
+        "-Wthread-safety",
+        "-Wloop-analysis",
+        "-Wredundant-decls",
+        "-Wunused-member-function",
+        "-Wdate-time",
+        "-Wconditional-uninitialized",
+        "-Wimplicit-fallthrough",
+        "-Wunreachable-code-loop-increment",
+        "-Wdocumentation",
+        "-Wself-assign",
+        "-Wundef",
+        "-Woverloaded-virtual",
+        "-Wsuggest-override",
+        "-Wno-unused-parameter",
+        "-U_FORTIFY_SOURCE",
+        "-D_FORTIFY_SOURCE=3",
+        "-Wstack-protector",
+        "-fstack-protector-all",
+        "-mbranch-protection=bti",
+        "-o",
+        "<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/wrapper-baseline.o",
+        "-c",
+        "<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/baseline-inputs/crypto/ml_kem.cpp"
+      ]
+    },
+    {
+      "label": "link-baseline-wrapper",
+      "argv": [
+        "/usr/bin/c++",
+        "-std=c++20",
+        "-O2",
+        "-I<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/baseline-inputs",
+        "-I<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/build/src",
+        "-I<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/source/src",
+        "<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/wrapper_checks.cpp",
+        "<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/wrapper-baseline.o",
+        "<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/build/lib/libbitcoin_crypto.a",
+        "<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/build/lib/libbitcoin_util.a",
+        "<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/build/lib/libbitcoin_clientversion.a",
+        "-framework",
+        "CoreFoundation",
+        "-framework",
+        "Security",
+        "-o",
+        "<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/wrapper-baseline"
+      ]
+    },
+    {
+      "label": "link-candidate-wrapper",
+      "argv": [
+        "/usr/bin/c++",
+        "-std=c++20",
+        "-O2",
+        "-I<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/build/src",
+        "-I<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/source/src",
+        "<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/wrapper_checks.cpp",
+        "<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/build/lib/libbitcoin_crypto.a",
+        "<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/build/lib/libbitcoin_util.a",
+        "<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/build/lib/libbitcoin_clientversion.a",
+        "-framework",
+        "CoreFoundation",
+        "-framework",
+        "Security",
+        "-o",
+        "<workspace>/work/btx-lanes/session-2/mlkem-decapsulation-failure/wrapper-candidate"
+      ]
+    }
+  ],
+  "results": [
+    {
+      "variant": "baseline",
+      "case": "valid",
+      "returncode": 0,
+      "expected": true,
+      "log": "baseline-valid.log"
+    },
+    {
+      "variant": "baseline",
+      "case": "wrong",
+      "returncode": 0,
+      "expected": true,
+      "log": "baseline-wrong.log"
+    },
+    {
+      "variant": "baseline",
+      "case": "altered",
+      "returncode": 0,
+      "expected": true,
+      "log": "baseline-altered.log"
+    },
+    {
+      "variant": "baseline",
+      "case": "empty",
+      "returncode": 1,
+      "expected": true,
+      "log": "baseline-empty.log"
+    },
+    {
+      "variant": "baseline",
+      "case": "short",
+      "returncode": 1,
+      "expected": true,
+      "log": "baseline-short.log"
+    },
+    {
+      "variant": "baseline",
+      "case": "long",
+      "returncode": 1,
+      "expected": true,
+      "log": "baseline-long.log"
+    },
+    {
+      "variant": "candidate",
+      "case": "valid",
+      "returncode": 0,
+      "expected": true,
+      "log": "candidate-valid.log"
+    },
+    {
+      "variant": "candidate",
+      "case": "wrong",
+      "returncode": 0,
+      "expected": true,
+      "log": "candidate-wrong.log"
+    },
+    {
+      "variant": "candidate",
+      "case": "altered",
+      "returncode": 0,
+      "expected": true,
+      "log": "candidate-altered.log"
+    },
+    {
+      "variant": "candidate",
+      "case": "empty",
+      "returncode": 0,
+      "expected": true,
+      "log": "candidate-empty.log"
+    },
+    {
+      "variant": "candidate",
+      "case": "short",
+      "returncode": 0,
+      "expected": true,
+      "log": "candidate-short.log"
+    },
+    {
+      "variant": "candidate",
+      "case": "long",
+      "returncode": 0,
+      "expected": true,
+      "log": "candidate-long.log"
+    }
+  ],
+  "sha256": {
+    "wrapper_checks.cpp": "a47c6e78e622450212a4723cef48b2cd960baae2e63dbd4b6695825e34a5701c",
+    "wrapper-baseline": "4b0c0051c6a80958dce77a210b25d57a6ad52c8b105e75be9a06469ef86214ba",
+    "wrapper-candidate": "88c83860bbfd5dd60755e5004b2c8dbbf9e8c0ca1eb520739ffca87ed118e5d3",
+    "wrapper-baseline.o": "7acf28747089e22c1c1f1f9bf4bcfed1079554a4aac853ad87bdfa9d0ea5b3cc"
+  }
+}
