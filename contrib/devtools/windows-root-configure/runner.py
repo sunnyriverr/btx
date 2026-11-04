@@ -1,25 +1,19 @@
 from pathlib import Path
 import os,sys,json,subprocess,hashlib,datetime,time,urllib.request,shutil,re
 P=Path(__file__).resolve().parent
-BASE='1b404ed8e52eae249ac73036007ba5a382b0d3ba'
+BASE='ecd9310a8b35dbf1260d1a64e0ff39bb50e7a629'
 VCPKG_COMMIT='afa249f12f52ed8a3b919f195495ba8b330288d1'
 OPENSSL_SHA='967311f84955316969bdb1d8d4b983718ef42338639c621ec4c34fddef355e99'
 ROOT=Path(os.environ['BTX_NATIVE_ROOT']);SOURCE=Path(os.environ['GITHUB_WORKSPACE'])/'btx'
 E=ROOT/'evidence';E.mkdir(parents=True,exist_ok=True);STATE=E/'result.json'
-result=json.loads(STATE.read_text())if STATE.exists()else{'base':BASE,'scope':'Same three native generated Modelnet targets, exact403 prerequisite, guarded Windows operations','status':'IN_PROGRESS','commands':[],'stages':{},'product_fixes':[],'whole_node_build_run':False,'unit_test_execution':False,'PR397_in_upstream':True,'compiler_env':{k:os.environ.get(k)for k in ['VCToolsVersion','WindowsSDKVersion','ImageVersion','PROCESSOR_ARCHITECTURE']}}
-MANIFEST=json.loads((P/'source-manifest.json').read_text())
+result=json.loads(STATE.read_text())if STATE.exists()else{'base':BASE,'scope':'Same actual native generated bounty_eval.cpp object; explicit unsupported native executor, unchanged POSIX','status':'IN_PROGRESS','commands':[],'stages':{},'product_fixes':[],'whole_node_build_run':False,'unit_test_execution':False,'PR397_in_upstream':True,'compiler_env':{k:os.environ.get(k)for k in ['VCToolsVersion','WindowsSDKVersion','ImageVersion','PROCESSOR_ARCHITECTURE']}}
 result.setdefault('job_started_epoch',time.time())
-EXPECTED_WORKING_BLOBS={f:r['baseline']['git_blob'] for f,r in MANIFEST['files'].items()}
-for f,row in MANIFEST['files'].items():
- data=(P/row['baseline']['input']).read_bytes()
- if hashlib.sha256(data).hexdigest()!=row['baseline']['sha256']:raise RuntimeError('baseline input mismatch')
- (SOURCE/f).write_bytes(data)
-
+EXPECTED_WORKING_BLOBS={}
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def save():
  result['updated_utc']=datetime.datetime.now(datetime.timezone.utc).isoformat();STATE.write_text(json.dumps(result,indent=2)+'\n')
 def run(label,command,cwd=ROOT,timeout=1800):
- remaining=65*60-(time.time()-result['job_started_epoch'])
+ remaining=25*60-(time.time()-result['job_started_epoch'])
  if remaining<30:raise TimeoutError('shared job budget exhausted before '+label)
  timeout=min(timeout,int(remaining))
  log=E/(label+'.log');start=time.monotonic();timed_out=False;result['active_command']=label;save()
@@ -30,12 +24,12 @@ def run(label,command,cwd=ROOT,timeout=1800):
     cleanup=subprocess.run(['taskkill','/PID',str(proc.pid),'/T','/F'],capture_output=True)
     (E/(label+'-timeout-cleanup.log')).write_bytes(cleanup.stdout+cleanup.stderr)
     proc.wait(timeout=30);timed_out=True;break
-   if label.endswith('-object') or label in ['modelnet-build','daemon-build','default-all-build','unit-run']:
+   if label=='native-daemon-build':
     resources=host_resources();elapsed=int(time.monotonic()-start)
     if resources['disk_free_bytes']<2*1024**3:
      cleanup=subprocess.run(['taskkill','/PID',str(proc.pid),'/T','/F'],capture_output=True);(E/(label+'-disk-stop.log')).write_bytes(cleanup.stdout+cleanup.stderr);proc.wait(timeout=30);result['resource_stop']='Hosted disk below2GiB';break
     if elapsed//30>result.get('last_progress_bucket',-1):
-     result['last_progress_bucket']=elapsed//30;result.setdefault('build_resource_samples',[]).append({'seconds':elapsed,**resources});save();print('Build elapsed',elapsed,'seconds; free disk',resources['disk_free_bytes'],'available RAM',resources['available_ram_bytes'],flush=True)
+     result['last_progress_bucket']=elapsed//30;result.setdefault('build_resource_samples',[]).append({'seconds':elapsed,**resources});save();print('Daemon build elapsed',elapsed,'seconds; free disk',resources['disk_free_bytes'],'available RAM',resources['available_ram_bytes'],flush=True)
    time.sleep(2)
  result['commands'].append({'label':label,'command':command,'cwd':str(cwd),'exit':proc.returncode,'process_pid':proc.pid,'seconds':round(time.monotonic()-start,2),'timed_out':timed_out,'log_sha256':sha(log)});save();print(label,proc.returncode,log.read_text(errors='replace')[-6500:],flush=True)
  if result.get('resource_stop'):raise RuntimeError('terminal resource stop: '+result['resource_stop'])
@@ -112,75 +106,46 @@ def configure():
   if(build/f).exists():shutil.copyfile(build/f,E/Path(f).name)
  result['configure_exit']=code
  if code:result.update(status='BLOCKED_CONFIGURE',first_failed_stage='actual_root_configure');return
- targets={name:'src/modelnet/CMakeFiles/bitcoin_modelnet.dir/'+name+'.cpp.obj' for name in ['generate','pq1_runtime','helper']}
  need('generated-targets',['ninja','-C',str(build),'-t','targets','all'])
- listing=(E/'generated-targets.log').read_text(errors='replace')
- database=sha(build/'compile_commands.json');entries=json.loads((build/'compile_commands.json').read_text());selected={}
- for name,target in targets.items():
-  if target+':' not in listing:raise RuntimeError('actual generated target absent: '+target)
-  found=[x for x in entries if x['file'].replace('\\','/').endswith('/src/modelnet/'+name+'.cpp')]
-  if len(found)!=1:raise RuntimeError('ambiguous compile command: '+name)
-  selected[name]=found[0]
- (E/'selected-compile-commands.json').write_text(json.dumps(selected,indent=2)+'\n')
- resources=host_resources();result['before_object_resources']=resources;save()
- if resources['disk_free_bytes']<6*1024**3 or resources['available_ram_bytes']<4*1024**3:raise RuntimeError('hosted resources unavailable')
- baseline={f:(SOURCE/f).read_bytes() for f in MANIFEST['files']}
+ target='src/modelnet/CMakeFiles/bitcoin_modelnet.dir/bounty_eval.cpp.obj'
+ if target+':' not in (E/'generated-targets.log').read_text(errors='replace'):raise RuntimeError('requested generated object missing')
+ entries=json.loads((build/'compile_commands.json').read_text());selected=[x for x in entries if x['file'].replace('\\','/').endswith('/src/modelnet/bounty_eval.cpp')]
+ if len(selected)!=1:raise RuntimeError('ambiguous generated evaluation compile command')
+ (E/'target-compile-command.json').write_text(json.dumps(selected[0],indent=2)+'\n')
+ manifest=json.loads((P/'source-manifest.json').read_text());file=manifest['file'];baseline=(SOURCE/file).read_bytes();candidate=(P/'candidate.cpp').read_bytes()
+ if manifest['base']!=BASE or sha(SOURCE/file)!=manifest['baseline_sha256'] or hashlib.sha256(candidate).hexdigest()!=manifest['candidate_sha256']:raise RuntimeError('source input mismatch')
+ command=['cmake','--build',str(build),'--target',target,'--verbose','--','-j','1'];result['target']=target;result['before_object_resources']=host_resources();save()
+ if result['before_object_resources']['disk_free_bytes']<6*1024**3 or result['before_object_resources']['available_ram_bytes']<3*1024**3:raise RuntimeError('Hosted resource prerequisites unavailable')
+ code=run('baseline-eval-object',command,SOURCE,240);log=(E/'baseline-eval-object.log').read_text(errors='replace')
+ if code==0 or "error: unknown type name 'pid_t'" not in log or "error: use of undeclared identifier 'usleep'" not in log:raise RuntimeError('baseline did not reproduce native process declarations compile barrier')
+ if (build/target).exists():raise RuntimeError('baseline unexpectedly produced object')
+ source_identity('baseline-after')
  try:
-  for name,target in targets.items():
-   cmd=['cmake','--build',str(build),'--target',target,'--verbose','--','-j','1']
-   rc=run('baseline-'+name+'-object',cmd,SOURCE,300)
-   text=(E/('baseline-'+name+'-object.log')).read_text(errors='replace')
-   expected={'generate':['X_OK'],'pq1_runtime':['popen','pclose'],'helper':['S_IWOTH','pid_t']}[name]
-   if rc==0 or not all(x in text for x in expected) or not re.search(r'error(?:\s+C\d+)?\s*:',text):raise RuntimeError('expected baseline failure missing: '+name)
-   if(build/target).exists():raise RuntimeError('baseline produced object: '+name)
-   if sha(build/'compile_commands.json')!=database:raise RuntimeError('baseline compile database changed')
-  source_identity('baseline-after')
-  for f,row in MANIFEST['files'].items():
-   data=(P/row['candidate']['input']).read_bytes()
-   if hashlib.sha256(data).hexdigest()!=row['candidate']['sha256']:raise RuntimeError('candidate input hash mismatch')
-   (SOURCE/f).write_bytes(data);EXPECTED_WORKING_BLOBS[f]=row['candidate']['git_blob']
-  result['product_fixes']=list(MANIFEST['files']);source_identity('candidate-before')
-  for name,target in targets.items():
-   cmd=['cmake','--build',str(build),'--target',target,'--verbose','--','-j','1']
-   rc=run('candidate-'+name+'-object',cmd,SOURCE,600)
-   if rc or not(build/target).exists():result.update(status='BLOCKED_CANDIDATE_OBJECT',failed_target=target);return
-   shutil.copyfile(build/target,E/('candidate-'+name+'.obj'))
-   if sha(build/'compile_commands.json')!=database:raise RuntimeError('candidate compile database changed')
-  result['same_generated_targets_pass']=True;result['compile_database_unchanged']=True;save()
-  need('native-controls',[sys.executable,str(P/'fixtures/native.py'),str(SOURCE),str(ROOT),str(E)],timeout=780)
-  source_identity('candidate-after')
-  result['status']='PAIRED_THREE_TARGETS_AND_NATIVE_CONTROLS_PASS';save()
-  # Candidate-only continuation. The full failing baseline already exists.
-  deadline=time.monotonic()+2400
-  for label,target in [('modelnet-build','bitcoin_modelnet'),('daemon-build','btxd'),('default-all-build',None)]:
-   if deadline-time.monotonic()<30:result['status']='INTEGRATION_BUDGET_EXHAUSTED';return
-   cmd=['cmake','--build',str(build),'--verbose']
-   if target:cmd+=['--target',target]
-   cmd+=['--','-j','4','-k','1']
-   if label=='daemon-build':result['whole_node_build_run']=True
-   rc=run(label,cmd,SOURCE,int(deadline-time.monotonic()))
-   result.setdefault('integration_gates',{})[label]={'exit':rc};save()
-   if rc:result['status']='BLOCKED_INTEGRATION';result['first_failed_stage']=label;return
-  units=build/'bin/test_btx.exe'
-  if not units.exists():result['status']='UNIT_BINARY_ABSENT';return
-  rc=run('unit-run',[str(units),'--log_level=test_suite','--report_level=detailed'],build,600)
-  text=(E/'unit-run.log').read_text(errors='replace');match=re.search(r'Running (\d+) test cases?',text)
-  result['unit_cases_announced']=int(match.group(1))if match else None
-  result['unit_test_execution']=bool(match and int(match.group(1))>0)
-  result['status']='FULL_NATIVE_PASS'if rc==0 and result['unit_test_execution']else'UNIT_FAILURES'
+  EXPECTED_WORKING_BLOBS[file]=manifest['candidate_blob'];(SOURCE/file).write_bytes(candidate);result['product_fixes']=[file];source_identity('candidate-before')
+  need('candidate-eval-object',command,SOURCE,240)
+  if not (build/target).is_file():raise RuntimeError('candidate passed without object')
+  shutil.copyfile(build/target,E/'candidate-bounty_eval.obj');result['target_object_sha256']=sha(build/target)
+  if sha(build/'compile_commands.json')!=sha(E/'compile_commands.json'):raise RuntimeError('compile database changed')
+  for compiler,variant in [('cl','candidate'),('clang-cl','candidate'),('clang-cl','mutant')]:
+   destination=E/(variant+'-'+compiler)
+   need(variant+'-'+compiler+'-component',[sys.executable,str(P/'component.py'),str(SOURCE),str(destination),variant,compiler],ROOT,240)
+   record=json.loads((destination/'receipt.json').read_text())
+   if record['status']!=('EXPECTED_STATE_MUTANT_REJECTED' if variant=='mutant' else 'PASS'):raise RuntimeError('component status not qualified')
+  source_identity('candidate-after');result.update(status='PAIRED_EVAL_COMPILER_AND_STATE_CONTROLS_PASS',same_generated_target_command=command,compile_database_unchanged=True,full_daemon_build=False,unit_test_execution=False,fixture_executed=True,state_mutant_rejected=True,POSIX_control_external='mac/*/receipt.json')
  finally:
-  for f,data in baseline.items():(SOURCE/f).write_bytes(data);EXPECTED_WORKING_BLOBS[f]=MANIFEST['files'][f]['baseline']['git_blob']
-  source_identity('restored');result['source_restored']=all((SOURCE/f).read_bytes()==data for f,data in baseline.items())
+  (SOURCE/file).write_bytes(baseline);EXPECTED_WORKING_BLOBS.pop(file,None);source_identity('restored');result['source_restored']=sha(SOURCE/file)==manifest['baseline_sha256']
 
 stage=sys.argv[1]
 try:
- if result['status'].startswith('BLOCKED') or result['status']=='SETUP_ERROR':print('Prior failure retained; skipping',stage)
- else:
-  result['stages'][stage]='RUNNING';save();{'openssl':openssl,'vcpkg':vcpkg,'configure':configure}[stage]();result['stages'][stage]='COMPLETE'
+ if result['status'] not in ['IN_PROGRESS','PAIRED_EVAL_COMPILER_AND_STATE_CONTROLS_PASS']:raise RuntimeError('prior terminal status retained')
+ result['stages'][stage]='RUNNING';save();{'openssl':openssl,'vcpkg':vcpkg,'configure':configure}[stage]();result['stages'][stage]='COMPLETE'
 except Exception as ex:
- result.update(status='COMMAND_TIMEOUT'if isinstance(ex,TimeoutError)else'SETUP_ERROR',error=type(ex).__name__+': '+str(ex));result['stages'][stage]='ERROR';print(result['error'],flush=True)
+ label=result.get('active_command') or result.get('last_completed_command') or stage
+ result.update(status='COMMAND_TIMEOUT' if isinstance(ex,TimeoutError) else 'SETUP_OR_CONTROL_ERROR',first_failed_stage=label,error=type(ex).__name__+': '+str(ex));result['stages'][stage]='ERROR';print(result['error'],flush=True)
 finally:
- try:source_identity('after')
- except Exception as ex:result['source_verification_error']=str(ex);result['status']='SETUP_ERROR'
- save();print('Recorded diagnostic status:',result['status'],flush=True)
-raise SystemExit(0 if result['status']in['PAIRED_THREE_TARGETS_AND_NATIVE_CONTROLS_PASS','FULL_NATIVE_PASS'] or (stage!='configure'and result['status']=='IN_PROGRESS') else 1)
+ try:
+  source_identity('after');before=json.loads((E/'before-source.json').read_text());after=json.loads((E/'after-source.json').read_text());changed=[f for f in before['files'] if before['files'][f]!=after['files'][f]];result['tracked_source_changed_files']=changed
+  if changed:raise RuntimeError('source not restored')
+ except Exception as ex:result['source_verification_error']=str(ex);result['status']='SOURCE_VERIFICATION_ERROR'
+ save();print('Recorded status:',result['status'],flush=True)
+raise SystemExit(0 if result['status'] in ['IN_PROGRESS','PAIRED_EVAL_COMPILER_AND_STATE_CONTROLS_PASS'] else 1)

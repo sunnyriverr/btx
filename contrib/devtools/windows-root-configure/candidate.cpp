@@ -2,173 +2,280 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://opensource.org/license/mit/.
 
-#include <modelnet/obs01/obs01.h>
-#include <modelnet/nifdt_contract/contract.h>
-#include <modelnet/prf01/prf01.h>
-#include <modelnet/prf02/prf02.h>
-#include <modelnet/prf03/prf03.h>
-#include <modelnet/prf04/prf04.h>
-#include <modelnet/prf05/prf05.h>
-#include <modelnet/prf06/prf06.h>
-#include <modelnet/prf07/prf07.h>
-#include <modelnet/prf08/prf08.h>
-#include <modelnet/prf09/prf09.h>
-#include <modelnet/qat01/qat01.h>
-#include <modelnet/qat02/qat02.h>
-#include <modelnet/qat03/qat03.h>
-#include <modelnet/qat04/qat04.h>
-#include <modelnet/qat05/qat05.h>
-#include <modelnet/qat06/qat06.h>
-#include <modelnet/rel01/rel01.h>
-#include <util/fs.h>
+#include <modelnet/bounty.h>
 
-#include <cstdlib>
+#include <crypto/sha384.h>
+#include <random.h>
+#include <util/fs.h>
+#include <util/strencodings.h>
+
+#include <chrono>
+#include <csignal>
+#include <cstring>
 #include <fstream>
-#include <string>
-#include <system_error>
-#ifdef _WIN32
-#include <process.h>
-#else
+#include <sstream>
+#include <sys/wait.h>
 #include <unistd.h>
-#endif
 
 namespace modelnet {
 namespace {
 
-template <typename T>
-bool ReportsQualification(const T& gate)
+bool FileSha384(const fs::path& p, Digest48& out, uint64_t& size, std::string& err)
 {
-    if (gate.passed() || gate.gpu_passed() || gate.release_qualified() || gate.hardware_qualified()) {
-        return true;
-    }
-    if constexpr (requires(const T& g) { g.windows_passed(); }) {
-        return gate.windows_passed();
-    }
-    return false;
-}
-
-template <typename T>
-bool Accept(std::string& err)
-{
-    T gate;
-    if (!gate.Pass(err)) return false;
-    if (ReportsQualification(gate)) {
-        err = NIFDT_UNQUALIFIED;
+    std::ifstream in(p, std::ios::binary);
+    if (!in) {
+        err = "missing file " + fs::PathToString(p);
         return false;
     }
+    CSHA384 hasher;
+    char buf[4096];
+    size = 0;
+    while (in) {
+        in.read(buf, sizeof(buf));
+        const auto n = in.gcount();
+        if (n > 0) {
+            hasher.Write(reinterpret_cast<const unsigned char*>(buf), static_cast<size_t>(n));
+            size += static_cast<uint64_t>(n);
+        }
+    }
+    hasher.Finalize(out.data.data());
     return true;
 }
 
-struct LabDir {
-    std::string previous;
-    bool had{false};
-    explicit LabDir(const fs::path& dir)
-    {
-        const char* cur = std::getenv("BTX035_LAB_DIR");
-        had = cur != nullptr;
-        if (had) previous = cur;
-        ::setenv("BTX035_LAB_DIR", PathToString(dir).c_str(), 1);
-    }
-    ~LabDir()
-    {
-        if (had) ::setenv("BTX035_LAB_DIR", previous.c_str(), 1);
-        else ::unsetenv("BTX035_LAB_DIR");
-    }
-};
-
-struct TempTree {
-    fs::path root;
-    explicit TempTree(const fs::path& path) : root(path) {}
-    ~TempTree()
-    {
-        std::error_code ec;
-        fs::remove_all(root, ec);
-    }
-};
-
-bool PrepareLab(const fs::path& dir, bool truncated, std::string& err)
+// Reject empty, absolute, and any name containing "..". The opened path is the
+// lexical normalization of a relative name that stays under root.
+bool EvalArtifactPath(const fs::path& root, const std::string& name, fs::path& out, std::string& err)
 {
-    try {
-        fs::create_directories(dir);
-        if (!fs::is_directory(dir)) {
-            err = "BTX035_RECOVERY_REQUIRED";
-            return false;
-        }
-        if (truncated) {
-            std::ofstream out(PathToString(dir / "lab.json"), std::ios::binary);
-            out << "{\"automatic_spend_atoms\":\"0\"";
-            if (!out.good()) {
-                err = "BTX035_RECOVERY_REQUIRED";
-                return false;
-            }
-        }
-    } catch (const std::filesystem::filesystem_error&) {
-        err = "BTX035_RECOVERY_REQUIRED";
+    if (name.empty() || name.find("..") != std::string::npos) {
+        err = "path rejected";
         return false;
     }
+    const fs::path rel = fs::PathFromString(name);
+    if (rel.empty() || rel.is_absolute()) {
+        err = "path rejected";
+        return false;
+    }
+    const fs::path normal = rel.lexically_normal();
+    const std::string norm_s = fs::PathToString(normal);
+    if (normal.empty() || normal.is_absolute() || norm_s.empty() || norm_s.find("..") != std::string::npos) {
+        err = "path rejected";
+        return false;
+    }
+    const fs::path root_norm = root.lexically_normal();
+    const fs::path joined = (root_norm / normal).lexically_normal();
+    const fs::path rel_to = joined.lexically_relative(root_norm);
+    const std::string rel_s = fs::PathToString(rel_to);
+    if (rel_to.empty() || rel_s.empty() || rel_s.find("..") != std::string::npos) {
+        err = "path rejected";
+        return false;
+    }
+    out = joined;
     return true;
 }
 
 } // namespace
 
-bool Obs01::Pass(std::string& err)
+bool EvaluationProfileReady(const std::string& profile_id)
 {
-    if (m_done) {
-        err.clear();
-        return true;
-    }
+    return profile_id == "EXACT_CHECKS";
+}
 
-    if (!Accept<Prf01>(err)) return false;
-    if (!Accept<Prf02>(err)) return false;
-    {
-#ifdef _WIN32
-        const auto process_id = ::_getpid();
-#else
-        const auto process_id = ::getpid();
-#endif
-        const TempTree tree{fs::temp_directory_path() / ("btx-obs01-" + std::to_string(process_id))};
-        const fs::path admission = tree.root / "prf03";
-        if (!PrepareLab(admission, false, err)) return false;
-        const LabDir hold(admission);
-        if (!Accept<Prf03>(err)) return false;
-        const fs::path recovery = tree.root / "prf05";
-        if (!PrepareLab(recovery, true, err)) return false;
-        const LabDir recover(recovery);
-        if (!Accept<Prf05>(err)) return false;
-    }
-    if (!Accept<Prf04>(err)) return false;
-    if (!Accept<Prf06>(err)) return false;
-    if (!Accept<Prf07>(err)) return false;
-    if (!Accept<Prf08>(err)) return false;
-    if (!Accept<Prf09>(err)) return false;
-    if (!Accept<Qat01>(err)) return false;
-    if (!Accept<Qat02>(err)) return false;
-    if (!Accept<Qat03>(err)) return false;
-    if (!Accept<Qat04>(err)) return false;
-    if (!Accept<Qat05>(err)) return false;
-    if (!Accept<Qat06>(err)) return false;
-    if (!Accept<Rel01>(err)) return false;
-
-    if (passed() || gpu_passed() || windows_passed() || release_qualified() || hardware_qualified()) {
-        err = NIFDT_UNQUALIFIED;
+bool PrepareEvaluation(const UniValue& spec, const UniValue& submission, const UniValue& resources,
+                       UniValue& plan, std::string& err)
+{
+    const std::string profile = spec.exists("profile_id") ? spec["profile_id"].get_str() : "EXACT_CHECKS";
+    if (!EvaluationProfileReady(profile)) {
+        err = "profile not installed or not executed on this node";
         return false;
     }
-
-    m_done = true;
-    err.clear();
+    if (!submission.exists("artifact_dir") || !submission["artifact_dir"].isStr()) {
+        err = "submission artifact_dir required";
+        return false;
+    }
+    const fs::path dir = fs::PathFromString(submission["artifact_dir"].get_str());
+    if (!fs::is_directory(dir)) {
+        err = "artifact_dir missing";
+        return false;
+    }
+    int64_t timeout_ms = 15000;
+    int64_t mem_bytes = 256 * 1024 * 1024;
+    if (resources.exists("timeout_ms")) timeout_ms = resources["timeout_ms"].getInt<int64_t>();
+    if (resources.exists("memory_bytes")) mem_bytes = resources["memory_bytes"].getInt<int64_t>();
+    if (timeout_ms < 1 || timeout_ms > 600000) {
+        err = "timeout bound";
+        return false;
+    }
+    plan = UniValue(UniValue::VOBJ);
+    plan.pushKV("profile_id", spec.exists("profile_id") ? spec["profile_id"].get_str() : "EXACT_CHECKS");
+    plan.pushKV("artifact_dir", fs::PathToString(dir));
+    plan.pushKV("timeout_ms", timeout_ms);
+    plan.pushKV("memory_bytes", mem_bytes);
+    plan.pushKV("spec", spec);
+    plan.pushKV("wallet", false);
+    plan.pushKV("network", false);
     return true;
 }
 
-bool Obs01::Release(std::string& err)
+bool RunEvaluationJob(UniValue& job, std::string& err)
 {
-    err = NIFDT_UNQUALIFIED;
+    if (!job.exists("plan") || !job["plan"].isObject()) {
+        err = "plan";
+        return false;
+    }
+    const UniValue plan = job["plan"];
+    if (!plan.exists("profile_id") || !plan["profile_id"].isStr()) {
+        err = "plan";
+        return false;
+    }
+    const std::string profile = plan["profile_id"].get_str();
+    if (profile != "EXACT_CHECKS") {
+        err = "unexecuted profile";
+        return false;
+    }
+#ifdef _WIN32
+    // This executor requires an isolated POSIX child; native fork is unavailable.
+    job.pushKV("state", "FAILED");
+    err = "isolated evaluation process is not supported on this platform";
     return false;
+#else
+    job.pushKV("state", "RUNNING");
+    const fs::path dir = fs::PathFromString(plan["artifact_dir"].get_str());
+    const UniValue spec = plan.exists("spec") ? plan["spec"] : UniValue(UniValue::VOBJ);
+    const int64_t timeout_ms = plan["timeout_ms"].getInt<int64_t>();
+
+    int pipefd[2];
+    if (pipe(pipefd) != 0) {
+        err = "pipe";
+        return false;
+    }
+    const pid_t pid = fork();
+    if (pid < 0) {
+        close(pipefd[0]);
+        close(pipefd[1]);
+        err = "fork";
+        return false;
+    }
+    if (pid == 0) {
+        close(pipefd[0]);
+        UniValue report(UniValue::VOBJ);
+        UniValue tasks(UniValue::VARR);
+        bool ok = true;
+        if (spec.exists("required_files") && spec["required_files"].isArray()) {
+            for (const auto& f : spec["required_files"].getValues()) {
+                UniValue t(UniValue::VOBJ);
+                const std::string name = f.isStr() ? f.get_str() : (f.exists("name") ? f["name"].get_str() : "");
+                t.pushKV("name", name);
+                Digest48 h;
+                uint64_t sz = 0;
+                std::string ferr;
+                fs::path safe;
+                if (!EvalArtifactPath(dir, name, safe, ferr)) {
+                    t.pushKV("ok", false);
+                    t.pushKV("error", ferr);
+                    ok = false;
+                } else if (!FileSha384(safe, h, sz, ferr)) {
+                    t.pushKV("ok", false);
+                    t.pushKV("error", ferr);
+                    ok = false;
+                } else {
+                    t.pushKV("sha384", h.Hex());
+                    t.pushKV("size", static_cast<int64_t>(sz));
+                    if (f.isObject() && f.exists("sha384") && f["sha384"].get_str() != h.Hex()) {
+                        t.pushKV("ok", false);
+                        t.pushKV("error", "hash mismatch");
+                        ok = false;
+                    } else if (f.isObject() && f.exists("max_bytes") && sz > static_cast<uint64_t>(f["max_bytes"].getInt<int64_t>())) {
+                        t.pushKV("ok", false);
+                        t.pushKV("error", "size");
+                        ok = false;
+                    } else {
+                        t.pushKV("ok", true);
+                    }
+                }
+                tasks.push_back(t);
+            }
+        } else {
+            ok = false;
+            report.pushKV("error", "missing required_files; missing tasks fail");
+        }
+        report.pushKV("tasks", tasks);
+        report.pushKV("pass", ok);
+        report.pushKV("profile_id", profile);
+        const std::string js = report.write() + "\n";
+        const ssize_t wn = write(pipefd[1], js.data(), js.size());
+        (void)wn;
+        close(pipefd[1]);
+        _exit(ok ? 0 : 2);
+    }
+    close(pipefd[1]);
+    job.pushKV("pid", pid);
+    const int64_t start = std::chrono::duration_cast<std::chrono::milliseconds>(
+                                std::chrono::system_clock::now().time_since_epoch())
+                                .count();
+    int status = 0;
+    bool cancelled = job.exists("cancel") && job["cancel"].get_bool();
+    while (true) {
+        if (job.exists("cancel") && job["cancel"].get_bool()) cancelled = true;
+        if (cancelled) {
+            kill(pid, SIGKILL);
+            waitpid(pid, &status, 0);
+            close(pipefd[0]);
+            job.pushKV("state", "CANCELLED");
+            err = "cancelled";
+            return false;
+        }
+        const pid_t w = waitpid(pid, &status, WNOHANG);
+        if (w == pid) break;
+        if (std::chrono::duration_cast<std::chrono::milliseconds>(
+                std::chrono::system_clock::now().time_since_epoch())
+                    .count() -
+                start >
+            timeout_ms) {
+            kill(pid, SIGKILL);
+            waitpid(pid, &status, 0);
+            close(pipefd[0]);
+            job.pushKV("state", "TIMED_OUT");
+            err = "timeout";
+            return false;
+        }
+        usleep(20 * 1000);
+    }
+    std::string raw;
+    char buf[4096];
+    ssize_t n;
+    while ((n = read(pipefd[0], buf, sizeof(buf))) > 0) raw.append(buf, static_cast<size_t>(n));
+    close(pipefd[0]);
+    UniValue report;
+    if (!report.read(raw) || !report.isObject()) {
+        err = "eval report";
+        job.pushKV("state", "FAILED");
+        return false;
+    }
+    job.pushKV("report", report);
+    job.pushKV("state", (report.exists("pass") && report["pass"].get_bool()) ? "COMPLETE" : "FAILED");
+    job.pushKV("pass", report.exists("pass") && report["pass"].get_bool());
+    job.pushKV("isolated_process", true);
+    job.pushKV("wallet", false);
+    return true;
+#endif
 }
 
-bool Obs01::Spend(std::string& err)
+bool CancelEvaluationJob(UniValue& job, std::string& err)
 {
-    err = NIFDT_AUTOMATIC_SPEND;
-    return false;
+    job.pushKV("cancel", true);
+#ifndef _WIN32
+    if (job.exists("pid") && job["pid"].isNum()) {
+        const pid_t pid = static_cast<pid_t>(job["pid"].getInt<int64_t>());
+        if (pid > 1) {
+            kill(pid, SIGKILL);
+            int status = 0;
+            waitpid(pid, &status, 0);
+        }
+    }
+#endif
+    job.pushKV("state", "CANCELLED");
+    err.clear();
+    return true;
 }
 
 } // namespace modelnet
