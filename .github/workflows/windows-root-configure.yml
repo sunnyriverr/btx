@@ -1,4 +1,4 @@
-name: Native Windows build and units after Obs01 PID repair
+name: Native Windows Modelnet operation compatibility
 on:
   push:
     branches: [codex/ci-windows-root-configure]
@@ -22,7 +22,7 @@ jobs:
         with:
           path: controls
           persist-credentials: false
-      - name: Checkout exact published Obs01 PID candidate
+      - name: Checkout exact404 source; checked403 prerequisite applied by runner
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: sunnyriverr/btx
@@ -75,30 +75,7 @@ jobs:
           set "_CL_="
           python controls/contrib/devtools/windows-root-configure/runner.py vcpkg
           exit /b %errorlevel%
-      - name: Fingerprint exact native project profile
-        id: project_profile
-        shell: cmd
-        run: |
-          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
-          if not defined BTX_VS exit /b 2
-          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
-          if errorlevel 1 exit /b %errorlevel%
-          set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
-          set "CL="
-          set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/runner.py profile
-          exit /b %errorlevel%
-      - name: Restore only an identical source and native profile checkpoint
-        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
-        with:
-          path: |
-            D:\btx-native-035\project-build
-            D:\btx-native-035\vcpkg-installed
-          key: btx356-project-v1-${{ steps.project_profile.outputs.key }}-${{ github.run_id }}
-          restore-keys: |
-            btx356-project-v1-${{ steps.project_profile.outputs.key }}-
-      - name: Build real modelnet, daemon and default targets then full units
-        id: build
+      - name: Compare three generated targets and native operation controls
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -110,39 +87,10 @@ jobs:
           set "_CL_="
           python controls/contrib/devtools/windows-root-configure/runner.py configure
           exit /b %errorlevel%
-      - name: Retain built libraries and quiescent checkpoint
-        if: always()
-        id: retention
-        shell: cmd
-        run: |
-          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
-          if not defined BTX_VS exit /b 2
-          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
-          if errorlevel 1 exit /b %errorlevel%
-          set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
-          set "CL="
-          set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/runner.py retain
-          exit /b %errorlevel%
-      - name: Save resumable exact-profile project checkpoint
-        if: always() && steps.retention.outputs.checkpoint_valid == 'true'
-        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
-        with:
-          path: |
-            D:\btx-native-035\project-build
-            D:\btx-native-035\vcpkg-installed
-          key: btx356-project-v1-${{ steps.project_profile.outputs.key }}-${{ github.run_id }}
-      - name: Retain immutable library bundle for compatible consumers
-        if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
-        with:
-          name: native-356-library-bundle
-          path: D:\btx-native-035\library-bundle\
-          retention-days: 14
       - name: Preserve original diagnostic records
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
-          name: native-356-integration-records
+          name: native-windows-compatibility-records
           path: D:\btx-native-035\evidence\
           retention-days: 14
