@@ -1,0 +1,35 @@
+{
+  "reason": "Alpine GCC14 membership header lacks its own cstdint declaration include",
+  "source_changed": false,
+  "common_baseline_candidate_flag": "-include cstdint",
+  "commands": [
+    {
+      "label": "configure-cstdint",
+      "args": [
+        "cmake",
+        "-S",
+        "/tmp/btx-session2-helper-restart-current/source",
+        "-B",
+        "/tmp/btx-session2-helper-restart-current/build",
+        "-DCMAKE_CXX_FLAGS=-include cstdint"
+      ],
+      "rc": 0,
+      "seconds": 0.38207358300000005
+    },
+    {
+      "label": "membership-cstdint",
+      "args": [
+        "cmake",
+        "--build",
+        "/tmp/btx-session2-helper-restart-current/build",
+        "--verbose",
+        "--target",
+        "src/modelnet/CMakeFiles/bitcoin_modelnet.dir/swarm_membership.cpp.o",
+        "--",
+        "-j1"
+      ],
+      "rc": 0,
+      "seconds": 0.387382375
+    }
+  ]
+}
