@@ -1,13 +1,12 @@
 from pathlib import Path
-import os,sys,json,subprocess,hashlib,datetime,time,urllib.request,shutil,re
+import os,sys,json,subprocess,hashlib,datetime,time,urllib.request,shutil
 P=Path(__file__).resolve().parent
-BASE='46caec762b0f130d497313d8ca9fa6894ac19ccd'
+BASE='68a17f15ac21ef2295c0e492ede35063f0afd921'
 VCPKG_COMMIT='afa249f12f52ed8a3b919f195495ba8b330288d1'
 OPENSSL_SHA='967311f84955316969bdb1d8d4b983718ef42338639c621ec4c34fddef355e99'
 ROOT=Path(os.environ['BTX_NATIVE_ROOT']);SOURCE=Path(os.environ['GITHUB_WORKSPACE'])/'btx'
 E=ROOT/'evidence';E.mkdir(parents=True,exist_ok=True);STATE=E/'result.json'
-result=json.loads(STATE.read_text())if STATE.exists()else{'base':BASE,'scope':'Same actual native Windows generated init.cpp object before/after public header repair','status':'IN_PROGRESS','commands':[],'stages':{},'product_fixes':[],'whole_node_build_run':False,'unit_test_execution':False,'PR397_in_upstream':True,'compiler_env':{k:os.environ.get(k)for k in ['VCToolsVersion','WindowsSDKVersion','ImageVersion','PROCESSOR_ARCHITECTURE']}}
-EXPECTED_WORKING_BLOBS={}
+result=json.loads(STATE.read_text())if STATE.exists()else{'base':BASE,'scope':'Actual native Windows btxd build/link on accepted46 plus published PR401 header repair; no test-source patch','status':'IN_PROGRESS','commands':[],'stages':{},'product_fixes':['src/modelnet/supervisor.h'],'accepted_upstream_base':'46caec762b0f130d497313d8ca9fa6894ac19ccd','patch_pr':401,'whole_node_build_run':False,'unit_test_execution':False,'PR397_in_upstream':True,'compiler_env':{k:os.environ.get(k)for k in ['VCToolsVersion','WindowsSDKVersion','ImageVersion','PROCESSOR_ARCHITECTURE']}}
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def save():
  result['updated_utc']=datetime.datetime.now(datetime.timezone.utc).isoformat();STATE.write_text(json.dumps(result,indent=2)+'\n')
@@ -54,8 +53,8 @@ def source_identity(label):
    continue
   if path.is_symlink():raise RuntimeError('unexpected symlink for regular Git blob: '+name)
   data=path.read_bytes();raw=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
-  if raw!=EXPECTED_WORKING_BLOBS.get(name,oid):raise RuntimeError('working bytes differ: '+name)
-  entries[name]={'git_mode':mode,'git_blob':oid,'expected_working_blob':EXPECTED_WORKING_BLOBS.get(name,oid),'working_sha256':hashlib.sha256(data).hexdigest()}
+  if raw!=oid:raise RuntimeError('working bytes differ: '+name)
+  entries[name]={'git_mode':mode,'git_blob':oid,'working_sha256':hashlib.sha256(data).hexdigest()}
  target=E/(label+'-source.json');target.write_text(json.dumps({'head':head,'files':entries},indent=2)+'\n');result[label+'_source_sha256']=sha(target);result[label+'_tracked_files']=len(entries)
 def metadata():
  source_identity('before')
@@ -96,43 +95,22 @@ def configure():
  if code:result.update(status='BLOCKED_CONFIGURE',first_failed_stage='actual_root_configure');return
  need('generated-targets',['ninja','-C',str(build),'-t','targets','all']);targets=(E/'generated-targets.log').read_text(errors='replace')
  if 'bin/btxd.exe:' not in targets or 'btxd:' not in targets:raise RuntimeError('real generated daemon target absent')
- target='src/CMakeFiles/bitcoin_node.dir/init.cpp.obj'
- if target+':' not in targets:raise RuntimeError('real init.cpp generated target absent')
- entries=json.loads((build/'compile_commands.json').read_text());selected=[x for x in entries if x['file'].replace('\\','/').endswith('/src/init.cpp')]
- if len(selected)!=1:raise RuntimeError('ambiguous real init compile command')
- (E/'init-compile-command.json').write_text(json.dumps(selected[0],indent=2)+'\n')
- manifest=json.loads((P/'source-manifest.json').read_text());file=manifest['file'];candidate=(P/'candidate.h').read_bytes()
- if manifest['base']!=BASE or sha(SOURCE/file)!=manifest['baseline_sha256'] or hashlib.sha256(candidate).hexdigest()!=manifest['candidate_sha256']:raise RuntimeError('header input identity mismatch')
- command=['cmake','--build',str(build),'--target',target,'--verbose','--','-j','1']
- result['target']=target;result['before_object_resources']=host_resources();save()
- if result['before_object_resources']['disk_free_bytes']<6*1024**3:raise RuntimeError('Hosted disk below6GiB')
- baseline_code=run('baseline-init-object',command,SOURCE,240)
- original=(E/'baseline-init-object.log').read_text(errors='replace')
- if baseline_code==0 or 'supervisor.h(103,5): error: unknown type name \'pid_t\'' not in original:raise RuntimeError('baseline did not reproduce exact pid_t header failure')
- if (build/target).exists():raise RuntimeError('baseline unexpectedly produced target object')
- source_identity('baseline-after')
- header=ROOT/'header-first.cpp';header.write_text('#include <modelnet/supervisor.h>\n#include <type_traits>\nstatic_assert(sizeof(modelnet::HelperSupervisor)>0);\nstatic_assert(!std::is_copy_constructible_v<modelnet::HelperSupervisor>);\n',encoding='utf-8')
- def header_controls(variant):
-  for compiler in ['cl','clang-cl']:
-   obj=ROOT/(compiler+'-'+variant+'.obj');cmd=[compiler,'/nologo','/std:c++20','/EHsc','/MT','/DWIN32','/DNOMINMAX','/I'+str(SOURCE/'src'),'/I'+str(SOURCE/'src/univalue/include'),'/I'+str(build/'src'),'/c',str(header),'/Fo'+str(obj)]
-   rc=run(variant+'-'+compiler+'-header-first',cmd,ROOT,60)
-   if variant=='baseline':
-    log=(E/(variant+'-'+compiler+'-header-first.log')).read_text(errors='replace')
-    expected=('pid_t' in log) if compiler=='clang-cl' else bool(re.search(r'supervisor\.h\(103(?:,\d+)?\).*error C(?:3646|4430)',log))
-    if rc==0 or not expected:raise RuntimeError('direct header control did not detect expected header declaration failure')
-   elif rc:raise RuntimeError('candidate direct header compilation failed')
-   else:
-    shutil.copyfile(obj,E/(compiler+'-header-first.obj'));result.setdefault('header_objects',{})[compiler]=sha(obj)
- header_controls('baseline')
- EXPECTED_WORKING_BLOBS[file]=manifest['candidate_blob'];(SOURCE/file).write_bytes(candidate);result['product_fixes']=[file];source_identity('candidate-before')
- candidate_code=run('candidate-init-object',command,SOURCE,240)
- if candidate_code:result.update(status='BLOCKED_CANDIDATE_OBJECT',failed_target=target);return
- if not(build/target).exists():raise RuntimeError('candidate passed without object')
- shutil.copyfile(build/target,E/'candidate-init.obj');result['init_object_sha256']=sha(build/target)
- if sha(build/'compile_commands.json')!=sha(E/'compile_commands.json'):raise RuntimeError('compile database changed between controls')
- header_controls('candidate')
- result.update(status='PAIRED_OBJECT_AND_HEADER_PASS',same_generated_target_command=command,compile_database_unchanged=True,full_daemon_build=False,executable_invoked=False)
-
+ resources=host_resources();result['before_daemon_resources']=resources;save()
+ if resources['disk_free_bytes']<6*1024**3:raise RuntimeError('Insufficient hosted disk before daemon build; require6GiB')
+ result['whole_node_build_run']=True;result['target']='btxd';save()
+ code=run('native-daemon-build',['cmake','--build',str(build),'--target','btxd','--verbose','--','-j','2','-k','1'],SOURCE,1800)
+ result['daemon_build_exit']=code
+ need('daemon-target-dependencies',['ninja','-C',str(build),'-t','query','bin/btxd.exe'])
+ result['after_daemon_resources']=host_resources()
+ if result.get('resource_stop'):result.update(status='BLOCKED_RESOURCE',first_failed_stage='daemon_resource_bound');return
+ if code:
+  result.update(status='BLOCKED_DAEMON_BUILD',first_failed_stage='native_daemon_build');return
+ exe=build/'bin/btxd.exe'
+ if not exe.exists():raise RuntimeError('daemon command succeeded without executable')
+ result.update(daemon_executable_sha256=sha(exe),daemon_executable_bytes=exe.stat().st_size)
+ need('daemon-binary-imports',['dumpbin','/dependents',str(exe)])
+ result['executable_invoked']=False
+ result['status']='DAEMON_BUILD_AND_LINK_PASS'
 
 def host_resources():
  import ctypes
@@ -152,10 +130,8 @@ except Exception as ex:
  result.update(status=status,first_failed_stage=label,error=type(ex).__name__+': '+str(ex));result['stages'][stage]='ERROR';print(result['error'],flush=True)
 finally:
  try:
-  manifest=json.loads((P/'source-manifest.json').read_text())
-  if sha(SOURCE/manifest['file'])==manifest['candidate_sha256']:EXPECTED_WORKING_BLOBS[manifest['file']]=manifest['candidate_blob']
-  source_identity('after');before=json.loads((E/'before-source.json').read_text());after=json.loads((E/'after-source.json').read_text());changed=[f for f in before['files'] if before['files'][f]!=after['files'][f]];result['tracked_source_changed_files']=changed
-  if changed not in ([],[manifest['file']]):raise RuntimeError('unexpected tracked source change')
+  source_identity('after');result['tracked_source_unchanged']=json.loads((E/'before-source.json').read_text())==json.loads((E/'after-source.json').read_text())
+  if not result['tracked_source_unchanged']:raise RuntimeError('tracked source identity changed')
  except Exception as ex:result['source_verification_error']=str(ex);result['status']='SETUP_ERROR'
  save();print('Recorded diagnostic status:',result['status'],flush=True)
 raise SystemExit(result['status']=='SETUP_ERROR')
