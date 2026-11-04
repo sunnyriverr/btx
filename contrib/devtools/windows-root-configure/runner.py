@@ -33,9 +33,22 @@ def source_identity(label):
   if not record:continue
   meta,name=record.split(b'\t',1);mode,kind,oid=meta.decode().split()
   if kind!='blob':raise RuntimeError('unexpected gitlink')
-  name=name.decode();data=(SOURCE/name).read_bytes();raw=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
+  name=name.decode();path=SOURCE/name
+  if mode=='120000':
+   expected=subprocess.check_output(['git','-C',str(SOURCE),'cat-file','blob',oid])
+   if path.is_symlink():
+    data=os.readlink(path).replace('\\','/').encode()
+    if data!=expected:raise RuntimeError('symlink target differs: '+name)
+    entries[name]={'git_mode':mode,'git_blob':oid,'checkout_kind':'symlink','target':data.decode(),'resolved_sha256':sha(path)if path.is_file()else None}
+   else:
+    data=path.read_bytes()
+    if data!=expected:raise RuntimeError('symlink placeholder differs: '+name)
+    entries[name]={'git_mode':mode,'git_blob':oid,'checkout_kind':'link_placeholder','target':data.decode(),'working_sha256':sha(path)}
+   continue
+  if path.is_symlink():raise RuntimeError('unexpected symlink for regular Git blob: '+name)
+  data=path.read_bytes();raw=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
   if raw!=oid:raise RuntimeError('working bytes differ: '+name)
-  entries[name]=hashlib.sha256(data).hexdigest()
+  entries[name]={'git_mode':mode,'git_blob':oid,'working_sha256':hashlib.sha256(data).hexdigest()}
  target=E/(label+'-source.json');target.write_text(json.dumps({'head':head,'files':entries},indent=2)+'\n');result[label+'_source_sha256']=sha(target);result[label+'_tracked_files']=len(entries)
 def metadata():
  source_identity('before')
