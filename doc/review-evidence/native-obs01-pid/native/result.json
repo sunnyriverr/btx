@@ -1,0 +1,534 @@
+{
+  "base": "ecd9310a8b35dbf1260d1a64e0ff39bb50e7a629",
+  "scope": "Same actual native Windows generated obs01.cpp object before/after scoped PID portability repair",
+  "status": "PAIRED_OBS01_PID_AND_CLEANUP_PASS",
+  "commands": [
+    {
+      "label": "cmake-version",
+      "command": [
+        "cmake",
+        "--version"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 7984,
+      "seconds": 2.05,
+      "timed_out": false,
+      "log_sha256": "30d9c504b2b91d7683a1b8d25f9f987cb24ff9f35fd553950540cd847f8e23de"
+    },
+    {
+      "label": "ninja-version",
+      "command": [
+        "ninja",
+        "--version"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 8448,
+      "seconds": 2.22,
+      "timed_out": false,
+      "log_sha256": "f7204ca4d4bbe623e6045a5088ac906c5e1966b4fd2a11af9d156bad3327526f"
+    },
+    {
+      "label": "clang-version",
+      "command": [
+        "clang-cl",
+        "--version"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 7272,
+      "seconds": 2.08,
+      "timed_out": false,
+      "log_sha256": "661974250fc5ed291000a9000c99466582a67ef96304a893526f7e46b7db492e"
+    },
+    {
+      "label": "cl-version",
+      "command": [
+        "cl",
+        "/Bv"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 2,
+      "process_pid": 6608,
+      "seconds": 2.05,
+      "timed_out": false,
+      "log_sha256": "c540121e17c0d19751b1c744c4c70d492cea729394ebe2284c612f00b7339459"
+    },
+    {
+      "label": "openssl-version",
+      "command": [
+        "D:\\btx-native-035\\openssl-3.5.4-static\\bin\\openssl.exe",
+        "version",
+        "-a"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 1244,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "8ec7e22412f9b01dcae301d469cd4822bcf5bea2913cd9c74f00b7c5654b702e"
+    },
+    {
+      "label": "vcpkg-clone",
+      "command": [
+        "git",
+        "clone",
+        "--no-checkout",
+        "https://github.com/microsoft/vcpkg.git",
+        "D:\\btx-native-035\\vcpkg"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 9024,
+      "seconds": 12.0,
+      "timed_out": false,
+      "log_sha256": "b7682cd35378ee73ea64ff25d41146492355a31d184aa23c9e2a7c1568d2aae4"
+    },
+    {
+      "label": "vcpkg-checkout",
+      "command": [
+        "git",
+        "-C",
+        "D:\\btx-native-035\\vcpkg",
+        "checkout",
+        "--detach",
+        "afa249f12f52ed8a3b919f195495ba8b330288d1"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 3436,
+      "seconds": 4.0,
+      "timed_out": false,
+      "log_sha256": "c7eb77dcf59b404e01015e50b293a2ac8af3c448f197b5001f654aab57dfa103"
+    },
+    {
+      "label": "vcpkg-bootstrap",
+      "command": [
+        "cmd",
+        "/c",
+        "D:\\btx-native-035\\vcpkg\\bootstrap-vcpkg.bat",
+        "-disableMetrics"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 3272,
+      "seconds": 2.02,
+      "timed_out": false,
+      "log_sha256": "a68ec968c9b75c704553d6e687a2987d7191c189c0209547e35abed030e9f045"
+    },
+    {
+      "label": "vcpkg-version",
+      "command": [
+        "D:\\btx-native-035\\vcpkg\\vcpkg.exe",
+        "version"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 3136,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "bd34078a4a7278c80370e9685054a1503c151a671be7e6fdf893eb3a2b4e6cc6"
+    },
+    {
+      "label": "vcpkg-historical-blob-8ed2f86e",
+      "command": [
+        "git",
+        "-C",
+        "D:\\btx-native-035\\vcpkg",
+        "cat-file",
+        "-e",
+        "8ed2f86ee404263f5aa1f72f8f4f13ee44262b81"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 7148,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "vcpkg-historical-blob-937a2198",
+      "command": [
+        "git",
+        "-C",
+        "D:\\btx-native-035\\vcpkg",
+        "cat-file",
+        "-e",
+        "937a2198387cb5c913e4feea170652651dd756ba"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 5912,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "root-configure",
+      "command": [
+        "cmake",
+        "--debug-find-pkg=OpenSSL",
+        "--preset",
+        "windows-clangcl-static",
+        "-S",
+        "D:\\a\\btx\\btx\\btx",
+        "-B",
+        "D:\\btx-native-035\\project-build",
+        "-DBUILD_TESTS=ON",
+        "-DVCPKG_MANIFEST_NO_DEFAULT_FEATURES=ON",
+        "-DVCPKG_MANIFEST_FEATURES=wallet;tests;zeromq",
+        "-DVCPKG_INSTALLED_DIR=D:\\btx-native-035\\vcpkg-installed",
+        "-DOPENSSL_ROOT_DIR=D:\\btx-native-035\\openssl-3.5.4-static",
+        "-DOPENSSL_USE_STATIC_LIBS=ON",
+        "-DOPENSSL_MSVC_STATIC_RT=ON",
+        "-DOPENSSL_INCLUDE_DIR=D:\\btx-native-035\\openssl-3.5.4-static\\include",
+        "-DOPENSSL_SSL_LIBRARY=D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib",
+        "-DOPENSSL_CRYPTO_LIBRARY=D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "process_pid": 2032,
+      "seconds": 88.02,
+      "timed_out": false,
+      "log_sha256": "9b171dfb8080501f45e5eded1ae85abe1c0912ab4d7ae791a5b60eb26042a09e"
+    },
+    {
+      "label": "generated-targets",
+      "command": [
+        "ninja",
+        "-C",
+        "D:\\btx-native-035\\project-build",
+        "-t",
+        "targets",
+        "all"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 3216,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "95b9e4e449deca87acd02398d759b594019d94f9983e69e8b56a441de4c1a9a0"
+    },
+    {
+      "label": "baseline-obs01-object",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\btx-native-035\\project-build",
+        "--target",
+        "src/modelnet/CMakeFiles/bitcoin_modelnet.dir/obs01/obs01.cpp.obj",
+        "--verbose",
+        "--",
+        "-j",
+        "1"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 1,
+      "process_pid": 5788,
+      "seconds": 4.0,
+      "timed_out": false,
+      "log_sha256": "7410fdc8b5475537e6b10ab0c8f52d375ed2c5ada2a6bc26c93d6feb7b07429d"
+    },
+    {
+      "label": "baseline-cl-build",
+      "command": [
+        "cl",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/O2",
+        "/MT",
+        "/utf-8",
+        "/D_CRT_SECURE_NO_WARNINGS",
+        "/DNOMINMAX",
+        "/ID:\\a\\btx\\btx\\btx\\src\\compat\\msvc",
+        "/ID:\\a\\btx\\btx\\btx\\src\\compat\\mingw",
+        "/ID:\\btx-native-035\\project-build\\src",
+        "/ID:\\a\\btx\\btx\\btx\\src",
+        "/FID:\\a\\btx\\btx\\btx\\src\\compat\\mingw\\posix_extra.h",
+        "D:\\a\\btx\\btx\\controls\\contrib\\devtools\\windows-root-configure\\baseline-pid-check.cpp",
+        "/FeD:\\btx-native-035\\baseline-cl.exe",
+        "/FoD:\\btx-native-035\\baseline-cl.obj",
+        "/link",
+        "ws2_32.lib"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 2,
+      "process_pid": 2972,
+      "seconds": 4.0,
+      "timed_out": false,
+      "log_sha256": "ede1998dee64c95b5206417c49413a633aa3d09bf07e9cacd7d10171c55b54e3"
+    },
+    {
+      "label": "baseline-clang-cl-build",
+      "command": [
+        "clang-cl",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/O2",
+        "/MT",
+        "/utf-8",
+        "/D_CRT_SECURE_NO_WARNINGS",
+        "/DNOMINMAX",
+        "/ID:\\a\\btx\\btx\\btx\\src\\compat\\msvc",
+        "/ID:\\a\\btx\\btx\\btx\\src\\compat\\mingw",
+        "/ID:\\btx-native-035\\project-build\\src",
+        "/ID:\\a\\btx\\btx\\btx\\src",
+        "/FID:\\a\\btx\\btx\\btx\\src\\compat\\mingw\\posix_extra.h",
+        "D:\\a\\btx\\btx\\controls\\contrib\\devtools\\windows-root-configure\\baseline-pid-check.cpp",
+        "/FeD:\\btx-native-035\\baseline-clang-cl.exe",
+        "/FoD:\\btx-native-035\\baseline-clang-cl.obj",
+        "/link",
+        "ws2_32.lib"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 1,
+      "process_pid": 2668,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "2386a22349e925f8389c1c76c07b6b87ae1065b6980dde66ed1a085abee9613f"
+    },
+    {
+      "label": "candidate-obs01-object",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\btx-native-035\\project-build",
+        "--target",
+        "src/modelnet/CMakeFiles/bitcoin_modelnet.dir/obs01/obs01.cpp.obj",
+        "--verbose",
+        "--",
+        "-j",
+        "1"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "process_pid": 7948,
+      "seconds": 4.01,
+      "timed_out": false,
+      "log_sha256": "7471fc33c12408261c54e21535a1422160ecaed34ba8ad87902ba3667c37adfd"
+    },
+    {
+      "label": "candidate-cl-build",
+      "command": [
+        "cl",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/O2",
+        "/MT",
+        "/utf-8",
+        "/D_CRT_SECURE_NO_WARNINGS",
+        "/DNOMINMAX",
+        "/ID:\\a\\btx\\btx\\btx\\src\\compat\\msvc",
+        "/ID:\\a\\btx\\btx\\btx\\src\\compat\\mingw",
+        "/ID:\\btx-native-035\\project-build\\src",
+        "/ID:\\a\\btx\\btx\\btx\\src",
+        "/FID:\\a\\btx\\btx\\btx\\src\\compat\\mingw\\posix_extra.h",
+        "D:\\a\\btx\\btx\\controls\\contrib\\devtools\\windows-root-configure\\candidate-pid-check.cpp",
+        "/FeD:\\btx-native-035\\candidate-cl.exe",
+        "/FoD:\\btx-native-035\\candidate-cl.obj",
+        "/link",
+        "ws2_32.lib"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 5100,
+      "seconds": 4.0,
+      "timed_out": false,
+      "log_sha256": "15077736c035b63d8c490a4a0d25a4aef11be32eaef3a60195363fe3ac998323"
+    },
+    {
+      "label": "candidate-cl-run",
+      "command": [
+        "D:\\btx-native-035\\candidate-cl.exe",
+        "D:\\btx-native-035\\candidate-cl-files"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 8164,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "af105f818159dbb6309d436df7785961be02f3053ba0788d80f48c56d525c233"
+    },
+    {
+      "label": "candidate-clang-cl-build",
+      "command": [
+        "clang-cl",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/O2",
+        "/MT",
+        "/utf-8",
+        "/D_CRT_SECURE_NO_WARNINGS",
+        "/DNOMINMAX",
+        "/ID:\\a\\btx\\btx\\btx\\src\\compat\\msvc",
+        "/ID:\\a\\btx\\btx\\btx\\src\\compat\\mingw",
+        "/ID:\\btx-native-035\\project-build\\src",
+        "/ID:\\a\\btx\\btx\\btx\\src",
+        "/FID:\\a\\btx\\btx\\btx\\src\\compat\\mingw\\posix_extra.h",
+        "D:\\a\\btx\\btx\\controls\\contrib\\devtools\\windows-root-configure\\candidate-pid-check.cpp",
+        "/FeD:\\btx-native-035\\candidate-clang-cl.exe",
+        "/FoD:\\btx-native-035\\candidate-clang-cl.obj",
+        "/link",
+        "ws2_32.lib"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 2528,
+      "seconds": 4.0,
+      "timed_out": false,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "candidate-clang-cl-run",
+      "command": [
+        "D:\\btx-native-035\\candidate-clang-cl.exe",
+        "D:\\btx-native-035\\candidate-clang-cl-files"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 5592,
+      "seconds": 2.02,
+      "timed_out": false,
+      "log_sha256": "68045631af8adefcc8e0efcebf59071b4ae242aab2846abcec4accb6540e8344"
+    },
+    {
+      "label": "wrong-clang-cl-build",
+      "command": [
+        "clang-cl",
+        "/nologo",
+        "/std:c++20",
+        "/EHsc",
+        "/O2",
+        "/MT",
+        "/utf-8",
+        "/D_CRT_SECURE_NO_WARNINGS",
+        "/DNOMINMAX",
+        "/ID:\\a\\btx\\btx\\btx\\src\\compat\\msvc",
+        "/ID:\\a\\btx\\btx\\btx\\src\\compat\\mingw",
+        "/ID:\\btx-native-035\\project-build\\src",
+        "/ID:\\a\\btx\\btx\\btx\\src",
+        "/FID:\\a\\btx\\btx\\btx\\src\\compat\\mingw\\posix_extra.h",
+        "D:\\a\\btx\\btx\\controls\\contrib\\devtools\\windows-root-configure\\wrong-pid-check.cpp",
+        "/FeD:\\btx-native-035\\wrong-clang-cl.exe",
+        "/FoD:\\btx-native-035\\wrong-clang-cl.obj",
+        "/link",
+        "ws2_32.lib"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 5164,
+      "seconds": 4.0,
+      "timed_out": false,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "wrong-clang-cl-run",
+      "command": [
+        "D:\\btx-native-035\\wrong-clang-cl.exe",
+        "D:\\btx-native-035\\wrong-clang-cl-files"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 1,
+      "process_pid": 2688,
+      "seconds": 2.02,
+      "timed_out": false,
+      "log_sha256": "5b2388961bf418f7dbc0d02899b26ac1841ea9dc5e18860486571029f4198703"
+    }
+  ],
+  "stages": {
+    "openssl": "COMPLETE",
+    "vcpkg": "COMPLETE",
+    "configure": "COMPLETE"
+  },
+  "product_fixes": [
+    "src/modelnet/obs01/obs01.cpp"
+  ],
+  "whole_node_build_run": false,
+  "unit_test_execution": false,
+  "PR397_in_upstream": true,
+  "compiler_env": {
+    "VCToolsVersion": "14.51.36231",
+    "WindowsSDKVersion": "10.0.26100.0\\",
+    "ImageVersion": "20261030.294.1",
+    "PROCESSOR_ARCHITECTURE": "AMD64"
+  },
+  "updated_utc": "2026-11-04T07:13:43.588263+00:00",
+  "before_source_sha256": "42ddea940cf10b49e137347b0f34a13c5c7f8efc9ab78a585ebe36655e34a029",
+  "before_tracked_files": 14309,
+  "active_command": null,
+  "last_completed_command": "wrong-clang-cl-run",
+  "resolved_tools": {
+    "cl": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.EXE",
+    "clang-cl": "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+    "cmake": "C:\\Program Files\\CMake\\bin\\cmake.EXE",
+    "ninja": "C:\\ProgramData\\Chocolatey\\bin\\ninja.EXE",
+    "perl": "C:\\Strawberry\\perl\\bin\\perl.EXE",
+    "nasm": "C:\\Strawberry\\c\\bin\\nasm.EXE",
+    "nmake": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\nmake.EXE",
+    "dumpbin": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\dumpbin.EXE"
+  },
+  "openssl_cache_reused": true,
+  "openssl_files": {
+    "include/openssl/opensslv.h": "df513ae26e8baebbc641ba19f3d16f3e9ac0895cb092c81a39e1669f7fcb9c5c",
+    "lib/libssl.lib": "860ce6dd4edf55af8a82a958afb9bae9cd025f3ef7e263bcc266d79cdd5179e8",
+    "lib/libcrypto.lib": "f9385fc262485a1c779aa9a740ee3bde3025b9eb61b113e311024c9571899e12",
+    "bin/openssl.exe": "c63c66cb528c20dbd9f474679c8a19ea13d40f57c7f8efa4085ceb6dbe5c5552"
+  },
+  "openssl_source_sha256": "967311f84955316969bdb1d8d4b983718ef42338639c621ec4c34fddef355e99",
+  "openssl_prefix": "D:\\btx-native-035\\openssl-3.5.4-static",
+  "dependency_native_smoke_reused_from": "https://github.com/sunnyriverr/btx/actions/runs/41755903799",
+  "dependency_smoke_rerun": false,
+  "after_source_sha256": "42ddea940cf10b49e137347b0f34a13c5c7f8efc9ab78a585ebe36655e34a029",
+  "after_tracked_files": 14309,
+  "tracked_source_changed_files": [],
+  "vcpkg_commit": "afa249f12f52ed8a3b919f195495ba8b330288d1",
+  "vcpkg_executable_sha256": "191ee64b0887af80aad3eff6c5e888ab733d3ef2182885ed4747b4574c201834",
+  "vcpkg_promisor_remote": "",
+  "configure_exit": 0,
+  "target": "src/modelnet/CMakeFiles/bitcoin_modelnet.dir/obs01/obs01.cpp.obj",
+  "before_object_resources": {
+    "disk_free_bytes": 234647232512,
+    "cpus": 4,
+    "total_ram_bytes": 17174360064,
+    "available_ram_bytes": 13879394304
+  },
+  "baseline-after_source_sha256": "42ddea940cf10b49e137347b0f34a13c5c7f8efc9ab78a585ebe36655e34a029",
+  "baseline-after_tracked_files": 14309,
+  "candidate-before_source_sha256": "be1da916f0c49af42cb5bbb9a3d8b58abf88fc6f6dd69c8c00128a7222d61134",
+  "candidate-before_tracked_files": 14309,
+  "obs01_object_sha256": "8800b5cd0ce1ec317a57b7e9641ec356d336746a11a8a67578d96fef0625b2a3",
+  "compiled_fixtures": {
+    "candidate-cl": "3efe0e2d455997398cdb1e435af3883cdfa2569e02e2a652a989ab75615613ae",
+    "candidate-clang-cl": "639ad36b4e6d8422d8d32b37c02370249143e7f6874c6050a3182c9f4e3f31c3",
+    "wrong-clang-cl": "decde9e2bbfab3a42da00be3ebaaa0859ca27b59dc26f2265ab2de74ca96cb9f"
+  },
+  "candidate-after_source_sha256": "be1da916f0c49af42cb5bbb9a3d8b58abf88fc6f6dd69c8c00128a7222d61134",
+  "candidate-after_tracked_files": 14309,
+  "same_generated_target_command": [
+    "cmake",
+    "--build",
+    "D:\\btx-native-035\\project-build",
+    "--target",
+    "src/modelnet/CMakeFiles/bitcoin_modelnet.dir/obs01/obs01.cpp.obj",
+    "--verbose",
+    "--",
+    "-j",
+    "1"
+  ],
+  "compile_database_unchanged": true,
+  "full_daemon_build": false,
+  "qualification_gates_executed": false,
+  "fixture_executed": true,
+  "owned_filesystem_fixture_cleaned": true,
+  "wrong_pid_mutant_rejected": true,
+  "POSIX_control_external": "mac/results.json",
+  "restored_source_sha256": "42ddea940cf10b49e137347b0f34a13c5c7f8efc9ab78a585ebe36655e34a029",
+  "restored_tracked_files": 14309,
+  "source_restored": true
+}
