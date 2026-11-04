@@ -37,6 +37,15 @@ try:
             # Inspect a fresh identical-policy backend invocation without relaxing it.
             try:run('direct-backend-diagnostic',[OUT/'smoke.exe',OUT/'worker.exe',owned/'diagnostic','backend'],timeout=20)
             except Exception:pass
+            # Narrow fixture differential, not a product patch or inherited environment.
+            prior=os.environ.get('BTX_ACCOUNTING_LOCALAPPDATA_CONTROL')
+            os.environ['BTX_ACCOUNTING_LOCALAPPDATA_CONTROL']='1'
+            try:
+                run('localappdata-only-control',[OUT/'smoke.exe',OUT/'worker.exe',owned/'localappdata'],timeout=20)
+                run('fresh-localappdata-control',[OUT/'smoke.exe',OUT/'worker.exe',owned/'fresh-localappdata'],timeout=20)
+            finally:
+                if prior is None:os.environ.pop('BTX_ACCOUNTING_LOCALAPPDATA_CONTROL',None)
+                else:os.environ['BTX_ACCOUNTING_LOCALAPPDATA_CONTROL']=prior
             raise
         run('fresh-native-output',[OUT/'smoke.exe',OUT/'worker.exe',owned/'fresh'],timeout=20)
     finally:shutil.rmtree(owned)
