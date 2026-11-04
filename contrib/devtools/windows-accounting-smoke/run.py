@@ -6,9 +6,17 @@ ROOT=Path.cwd();OUT=ROOT/'accounting-smoke-results';OUT.mkdir(exist_ok=True)
 records=[]
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 def run(name,args,timeout=60):
-    start=time.monotonic();z=subprocess.run([str(x) for x in args],cwd=OUT,capture_output=True,text=True,timeout=timeout)
+    start=time.monotonic()
+    row={'name':name,'argv':[str(x) for x in args],'returncode':None,'log':name+'.log'}
+    records.append(row)
+    try:z=subprocess.run(row['argv'],cwd=OUT,capture_output=True,text=True,timeout=timeout)
+    except subprocess.TimeoutExpired as error:
+        def text(value):return value.decode(errors='replace') if isinstance(value,bytes) else value or ''
+        (OUT/(name+'.log')).write_text(text(error.stdout)+text(error.stderr))
+        row.update(timed_out=True,elapsed_seconds=time.monotonic()-start)
+        raise
     (OUT/(name+'.log')).write_text(z.stdout+z.stderr)
-    records.append({'name':name,'argv':[str(x) for x in args],'returncode':z.returncode,'elapsed_seconds':time.monotonic()-start,'log':name+'.log'})
+    row.update(returncode=z.returncode,elapsed_seconds=time.monotonic()-start)
     if z.returncode:raise RuntimeError(name+' returned '+str(z.returncode))
     return z
 try:
@@ -16,7 +24,7 @@ try:
     for n,h in manifest['files'].items():assert sha(ROOT/n)==h,n
     assert os.name=='nt','Requires native Windows'
     cl=shutil.which('cl.exe');assert cl,'VS tool environment not initialized'
-    flags=['/nologo','/std:c++20','/EHsc','/O2','/MT','/W4','/D_WIN32_WINNT=0x0A00','/DNOMINMAX','/DWIN32_LEAN_AND_MEAN','/I'+str(ROOT/'src')]
+    flags=['/nologo','/std:c++20','/EHsc','/O2','/MT','/W4','/DWIN32','/D_WINDOWS','/DUNICODE','/D_UNICODE','/utf-8','/Zc:preprocessor','/Zc:__cplusplus','/sdl','/D_WIN32_WINNT=0x0A00','/D_WIN32_IE=0x0A00','/DNOMINMAX','/DWIN32_LEAN_AND_MEAN','/I'+str(ROOT/'src')]
     run('build-worker',[cl,*flags,str(P/'worker.cpp'),'/Fe:worker.exe'])
     run('build-component',[cl,*flags,str(P/'smoke.cpp'),str(ROOT/'src/modelnet/swarm_windows_sandbox.cpp'),str(ROOT/'src/modelnet/swarm_confine.cpp'),str(ROOT/'src/modelnet/swarm_fsjail.cpp'),str(ROOT/'src/crypto/sha384.cpp'),'/Fe:smoke.exe','/link','userenv.lib','advapi32.lib','bcrypt.lib','ole32.lib'])
     profiles=Path(os.environ['LOCALAPPDATA'])/'Packages'

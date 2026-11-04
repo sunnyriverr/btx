@@ -19,7 +19,7 @@ int wmain(int argc,wchar_t** argv)
     const fs::path worker=std::filesystem::absolute(argv[1]);
     const fs::path root=std::filesystem::absolute(argv[2]);
     fs::create_directories(root);
-    const fs::path helper=root/L"tool.exe", input=root/L"input.bin";
+    const fs::path helper=root/"tool.exe", input=root/"input.bin";
     fs::copy_file(worker,helper,fs::copy_options::none);
     {std::ofstream out(input,std::ios::binary);out<<"finite-input\n";if(!out)return 3;}
     const auto before_helper=modelnet::native_io::Digest(Read(helper));
@@ -31,7 +31,7 @@ int wmain(int argc,wchar_t** argv)
     request.max_tree_bytes=fs::file_size(helper)+fs::file_size(input);
     std::string error;
     const auto result=modelnet::SwarmRunFilesystemJail(request,error);
-    const auto output=Read(root/L"result.bin");
+    const auto output=Read(root/"result.bin");
     const bool output_ok=output.size()==512 && std::all_of(output.begin(),output.end(),[](auto b){return b==0x42;});
     const bool inputs_ok=before_helper==modelnet::native_io::Digest(Read(helper)) &&
         before_input==modelnet::native_io::Digest(Read(input));
