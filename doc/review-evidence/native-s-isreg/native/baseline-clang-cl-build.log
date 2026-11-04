@@ -1,0 +1,13 @@
+D:\a\btx\btx\controls\contrib\devtools\windows-root-configure\file-type-check.cpp(34,52): error: use of undeclared identifier 'S_ISREG'
+   34 |     return !(::lstat(narrow.c_str(), &st) != 0 || !S_ISREG(st.st_mode) || S_ISLNK(st.st_mode));
+      |                                                    ^
+D:\a\btx\btx\controls\contrib\devtools\windows-root-configure\file-type-check.cpp(50,57): error: use of undeclared identifier 'S_ISREG'
+   50 |     for (const auto& c : cases) Check(static_cast<bool>(S_ISREG(c.mode)) == c.regular, c.name);
+      |                                                         ^
+D:\a\btx\btx\controls\contrib\devtools\windows-root-configure\file-type-check.cpp(53,11): error: use of undeclared identifier 'S_ISREG'
+   53 |     Check(S_ISREG(next()) && evaluations == 1, "single-evaluation");
+      |           ^
+D:\a\btx\btx\controls\contrib\devtools\windows-root-configure\file-type-check.cpp(95,50): error: use of undeclared identifier 'S_ISREG'
+   95 |         Check(rc == 0 && S_ISLNK(st.st_mode) && !S_ISREG(st.st_mode), link.name);
+      |                                                  ^
+4 errors generated.
