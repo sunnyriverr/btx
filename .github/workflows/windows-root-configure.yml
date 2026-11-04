@@ -1,4 +1,4 @@
-name: Native Windows stock-root configure diagnostic
+name: Native Windows generated unit portability repair
 on:
   push:
     branches: [codex/ci-windows-root-configure]
@@ -75,7 +75,7 @@ jobs:
           set "_CL_="
           python controls/contrib/devtools/windows-root-configure/runner.py vcpkg
           exit /b %errorlevel%
-      - name: Configure actual stock root and diagnose first barrier
+      - name: Compare exact generated unit target and environment controls
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"

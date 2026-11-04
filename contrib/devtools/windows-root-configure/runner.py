@@ -6,7 +6,8 @@ VCPKG_COMMIT='afa249f12f52ed8a3b919f195495ba8b330288d1'
 OPENSSL_SHA='967311f84955316969bdb1d8d4b983718ef42338639c621ec4c34fddef355e99'
 ROOT=Path(os.environ['BTX_NATIVE_ROOT']);SOURCE=Path(os.environ['GITHUB_WORKSPACE'])/'btx'
 E=ROOT/'evidence';E.mkdir(parents=True,exist_ok=True);STATE=E/'result.json'
-result=json.loads(STATE.read_text())if STATE.exists()else{'base':BASE,'scope':'Exact stock-source native Windows root configure and bounded generated objects','status':'IN_PROGRESS','commands':[],'stages':{},'product_fixes':[],'whole_node_build_run':False,'unit_test_execution':False,'PR397_in_upstream':True,'compiler_env':{k:os.environ.get(k)for k in ['VCToolsVersion','WindowsSDKVersion','ImageVersion','PROCESSOR_ARCHITECTURE']}}
+result=json.loads(STATE.read_text())if STATE.exists()else{'base':BASE,'scope':'Exact root-generated unit portability before/after plus actual-helper runtime controls','status':'IN_PROGRESS','commands':[],'stages':{},'product_fixes':[],'planned_test_source_fix':'src/test/matmul_backend_capabilities_tests.cpp','whole_node_build_run':False,'unit_test_execution':False,'PR397_in_upstream':True,'compiler_env':{k:os.environ.get(k)for k in ['VCToolsVersion','WindowsSDKVersion','ImageVersion','PROCESSOR_ARCHITECTURE']}}
+EXPECTED_WORKING_BLOBS={}
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def save():
  result['updated_utc']=datetime.datetime.now(datetime.timezone.utc).isoformat();STATE.write_text(json.dumps(result,indent=2)+'\n')
@@ -47,8 +48,8 @@ def source_identity(label):
    continue
   if path.is_symlink():raise RuntimeError('unexpected symlink for regular Git blob: '+name)
   data=path.read_bytes();raw=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
-  if raw!=oid:raise RuntimeError('working bytes differ: '+name)
-  entries[name]={'git_mode':mode,'git_blob':oid,'working_sha256':hashlib.sha256(data).hexdigest()}
+  if raw!=EXPECTED_WORKING_BLOBS.get(name,oid):raise RuntimeError('working bytes differ: '+name)
+  entries[name]={'git_mode':mode,'git_blob':oid,'expected_working_blob':EXPECTED_WORKING_BLOBS.get(name,oid),'working_sha256':hashlib.sha256(data).hexdigest()}
  target=E/(label+'-source.json');target.write_text(json.dumps({'head':head,'files':entries},indent=2)+'\n');result[label+'_source_sha256']=sha(target);result[label+'_tracked_files']=len(entries)
 def metadata():
  source_identity('before')
@@ -104,12 +105,57 @@ def configure():
  result['configure_exit']=code
  if code:result.update(status='BLOCKED_CONFIGURE',first_failed_stage='actual_root_configure');return
  need('generated-targets',['ninja','-C',str(build),'-t','targets','all']);targets=(E/'generated-targets.log').read_text(errors='replace')
- for label,target in [('production','src/modelnet/CMakeFiles/bitcoin_modelnet.dir/types.cpp.obj'),('unit','src/test/CMakeFiles/test_btx.dir/matmul_backend_capabilities_tests.cpp.obj')]:
-  if target+':'not in targets:raise RuntimeError('expected generated target missing: '+target)
-  code=run('root-'+label+'-object',['cmake','--build',str(build),'--target',target,'--verbose','--','-j','1'],SOURCE,180)
-  if code:result.update(status='BLOCKED_OBJECT',first_failed_stage='root_'+label+'_object',failed_target=target);return
-  result[label+'_object_sha256']=sha(build/target)
- result['status']='CONFIGURE_AND_TWO_OBJECTS_PASS'
+ target='src/test/CMakeFiles/test_btx.dir/matmul_backend_capabilities_tests.cpp.obj'
+ if target+':' not in targets:raise RuntimeError('expected generated target missing')
+ command=['cmake','--build',str(build),'--target',target,'--verbose','--','-j','1']
+ result['generated_compile_database_sha256']=sha(build/'compile_commands.json')
+ original_code=run('baseline-unit-object',command,SOURCE,180)
+ baseline_log=(E/'baseline-unit-object.log').read_text(errors='replace')
+ if original_code==0 or "(24,10): fatal error: 'unistd.h' file not found" not in baseline_log:raise RuntimeError('baseline did not reproduce exact unit portability blocker')
+ source_identity('baseline-after')
+ if json.loads((E/'before-source.json').read_text())!=json.loads((E/'baseline-after-source.json').read_text()):raise RuntimeError('baseline source changed')
+ file='src/test/matmul_backend_capabilities_tests.cpp'
+ manifest=json.loads((P/'source-manifest.json').read_text());candidate=(P/'candidate.cpp').read_bytes()
+ if manifest['base']!=BASE or sha(SOURCE/file)!=manifest['baseline_sha256'] or hashlib.sha256(candidate).hexdigest()!=manifest['candidate_sha256']:raise RuntimeError('candidate input identity differs')
+ EXPECTED_WORKING_BLOBS[file]=hashlib.sha1(b'blob '+str(len(candidate)).encode()+b'\0'+candidate).hexdigest()
+ (SOURCE/file).write_bytes(candidate);result['product_fixes']=[file]
+ source_identity('candidate-before')
+ candidate_code=run('candidate-unit-object',command,SOURCE,180)
+ if candidate_code:result.update(status='BLOCKED_CANDIDATE_OBJECT',failed_target=target);return
+ if sha(build/'compile_commands.json')!=result['generated_compile_database_sha256']:raise RuntimeError('generated compilation database changed')
+ result['unit_object_sha256']=sha(build/target);shutil.copyfile(build/target,E/'candidate-unit.obj')
+ result['candidate_source_sha256']=sha(SOURCE/file)
+ component_controls(SOURCE/file)
+ result['status']='PAIRED_GENERATED_UNIT_AND_COMPONENT_CONTROLS_PASS'
+
+def component_controls(source):
+ text=source.read_text();start=text.index('class ScopedEnvVar\n');end=text.index('\n};',start)+len('\n};');helper=text[start:end]
+ tests_start=text.index('BOOST_AUTO_TEST_CASE(scoped_environment_restores_values)');tests_end=text.index('BOOST_AUTO_TEST_CASE(cpu_backend_always_available)',tests_start);cases=text[tests_start:tests_end]
+ if cases!=(P/'in-tree-cases.inc').read_text():raise RuntimeError('extracted cases differ')
+ includes=ROOT/'vcpkg-installed/x64-windows-static/include';header='#define BOOST_TEST_MODULE BackendScopedEnvironment\n#include <boost/test/included/unit_test.hpp>\n#include <cstdlib>\n#include <string>\n#include <cstdio>\n'
+ fixture=(P/'component_fixture.inc').read_text();component=header+helper+'\n'+fixture+'\n'+cases
+ cpp=E/'component.cpp';cpp.write_text(component);result['component_source_sha256']=sha(cpp)
+ probe=includes/'boost/version.hpp';result['boost_version_header_sha256']=sha(probe)
+ for compiler in ['clang-cl','cl']:
+  exe=E/(compiler+'-component.exe');obj=E/(compiler+'-component.obj')
+  need(compiler+'-component-build',[compiler,'/nologo','/std:c++20','/MT','/EHsc','/I'+str(includes),str(cpp),'/Fe'+str(exe),'/Fo'+str(obj)],timeout=180)
+  for name,value in [('absent',None),('preexisting','before-test')]:
+   if value is None:os.environ.pop('BTX_TEST_BACKEND_SCOPED_ENV',None)
+   else:os.environ['BTX_TEST_BACKEND_SCOPED_ENV']=value
+   need(compiler+'-component-'+name,[str(exe),'--log_level=test_suite'],timeout=60)
+  result[compiler+'_component_sha256']=sha(exe);result[compiler+'_component_object_sha256']=sha(obj);obj.unlink()
+ dt_start=helper.index('    ~ScopedEnvVar()');dt_end=helper.index('\nprivate:',dt_start)
+ mutant=helper[:dt_start]+'    ~ScopedEnvVar() {}\n'+helper[dt_end:]
+ mcpp=E/'component-no-restore.cpp';mcpp.write_text(header+mutant+'\n'+fixture+'\n'+cases)
+ mexe=E/'component-no-restore.exe'
+ need('mutant-component-build',['clang-cl','/nologo','/std:c++20','/MT','/EHsc','/I'+str(includes),str(mcpp),'/Fe'+str(mexe),'/Fo'+str(E/'component-no-restore.obj')],timeout=180)
+ os.environ['BTX_TEST_BACKEND_SCOPED_ENV']='before-test'
+ mutant_exit=run('mutant-component-expected-failure',[str(mexe),'--log_level=test_suite'],timeout=60)
+ mutant_log=(E/'mutant-component-expected-failure.log').read_text(errors='replace')
+ if mutant_exit==0 or 'has failed' not in mutant_log or 'scoped_environment_restores_' not in mutant_log:raise RuntimeError('no-restore mutant did not fail the expected assertions')
+ result['component_test_execution']=True
+ os.environ.pop('BTX_TEST_BACKEND_SCOPED_ENV',None)
+
 stage=sys.argv[1]
 try:
  if result['status'].startswith('BLOCKED')or result['status']=='SETUP_ERROR':print('Prior failure retained; skipping',stage)
@@ -119,8 +165,8 @@ except Exception as ex:
  result.update(status='SETUP_ERROR',first_failed_stage=stage,error=type(ex).__name__+': '+str(ex));result['stages'][stage]='ERROR';print(result['error'],flush=True)
 finally:
  try:
-  source_identity('after');result['tracked_source_unchanged']=json.loads((E/'before-source.json').read_text())==json.loads((E/'after-source.json').read_text())
-  if not result['tracked_source_unchanged']:raise RuntimeError('tracked source identity changed')
+  source_identity('after');before=json.loads((E/'before-source.json').read_text());after=json.loads((E/'after-source.json').read_text());changed=[f for f in before['files'] if before['files'][f]!=after['files'][f]];result['tracked_source_changed_files']=changed
+  if changed!=list(EXPECTED_WORKING_BLOBS):raise RuntimeError('unexpected tracked source identity delta')
  except Exception as ex:result['source_verification_error']=str(ex);result['status']='SETUP_ERROR'
  save();print('Recorded diagnostic status:',result['status'],flush=True)
 raise SystemExit(result['status']=='SETUP_ERROR')
