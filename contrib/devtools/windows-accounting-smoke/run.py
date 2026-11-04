@@ -26,7 +26,7 @@ try:
     cl=shutil.which('cl.exe');assert cl,'VS tool environment not initialized'
     flags=['/nologo','/std:c++20','/EHsc','/O2','/MT','/W4','/DWIN32','/D_WINDOWS','/DUNICODE','/D_UNICODE','/utf-8','/Zc:preprocessor','/Zc:__cplusplus','/sdl','/D_WIN32_WINNT=0x0A00','/D_WIN32_IE=0x0A00','/DNOMINMAX','/DWIN32_LEAN_AND_MEAN','/I'+str(ROOT/'src')]
     run('build-worker',[cl,*flags,str(P/'worker.cpp'),'/Fe:worker.exe'])
-    run('build-component',[cl,*flags,str(P/'smoke.cpp'),str(ROOT/'src/modelnet/swarm_windows_sandbox.cpp'),str(ROOT/'src/modelnet/swarm_confine.cpp'),str(ROOT/'src/modelnet/swarm_fsjail.cpp'),str(ROOT/'src/crypto/sha384.cpp'),'/Fe:smoke.exe','/link','userenv.lib','advapi32.lib','bcrypt.lib','ole32.lib'])
+    run('build-component',[cl,*flags,'/FI'+str(P/'trace.h'),str(P/'smoke.cpp'),str(ROOT/'src/modelnet/swarm_windows_sandbox.cpp'),str(ROOT/'src/modelnet/swarm_confine.cpp'),str(ROOT/'src/modelnet/swarm_fsjail.cpp'),str(ROOT/'src/crypto/sha384.cpp'),'/Fe:smoke.exe','/link','userenv.lib','advapi32.lib','bcrypt.lib','ole32.lib'])
     profiles=Path(os.environ['LOCALAPPDATA'])/'Packages'
     before={x.name for x in profiles.glob('btx.native.*')}
     owned=Path(tempfile.mkdtemp(prefix='btx-accounting-valid-'))
