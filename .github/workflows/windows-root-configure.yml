@@ -1,4 +1,4 @@
-name: Native Windows generated unit portability repair
+name: Native Windows stock daemon build
 on:
   push:
     branches: [codex/ci-windows-root-configure]
@@ -75,7 +75,7 @@ jobs:
           set "_CL_="
           python controls/contrib/devtools/windows-root-configure/runner.py vcpkg
           exit /b %errorlevel%
-      - name: Compare exact generated unit target and environment controls
+      - name: Build actual stock btxd target and capture first failure
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -91,6 +91,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
-          name: windows-root-configure-records
+          name: native-windows-daemon-records
           path: D:\btx-native-035\evidence\
           retention-days: 14

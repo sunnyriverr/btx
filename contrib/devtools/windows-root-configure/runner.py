@@ -6,13 +6,12 @@ VCPKG_COMMIT='afa249f12f52ed8a3b919f195495ba8b330288d1'
 OPENSSL_SHA='967311f84955316969bdb1d8d4b983718ef42338639c621ec4c34fddef355e99'
 ROOT=Path(os.environ['BTX_NATIVE_ROOT']);SOURCE=Path(os.environ['GITHUB_WORKSPACE'])/'btx'
 E=ROOT/'evidence';E.mkdir(parents=True,exist_ok=True);STATE=E/'result.json'
-result=json.loads(STATE.read_text())if STATE.exists()else{'base':BASE,'scope':'Exact root-generated unit portability before/after plus actual-helper runtime controls','status':'IN_PROGRESS','commands':[],'stages':{},'product_fixes':[],'planned_test_source_fix':'src/test/matmul_backend_capabilities_tests.cpp','whole_node_build_run':False,'unit_test_execution':False,'PR397_in_upstream':True,'compiler_env':{k:os.environ.get(k)for k in ['VCToolsVersion','WindowsSDKVersion','ImageVersion','PROCESSOR_ARCHITECTURE']}}
-EXPECTED_WORKING_BLOBS={}
+result=json.loads(STATE.read_text())if STATE.exists()else{'base':BASE,'scope':'Actual stock native Windows btxd build/link; no test-source patch','status':'IN_PROGRESS','commands':[],'stages':{},'product_fixes':[],'whole_node_build_run':False,'unit_test_execution':False,'PR397_in_upstream':True,'compiler_env':{k:os.environ.get(k)for k in ['VCToolsVersion','WindowsSDKVersion','ImageVersion','PROCESSOR_ARCHITECTURE']}}
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def save():
  result['updated_utc']=datetime.datetime.now(datetime.timezone.utc).isoformat();STATE.write_text(json.dumps(result,indent=2)+'\n')
 def run(label,command,cwd=ROOT,timeout=1800):
- log=E/(label+'.log');start=time.monotonic();timed_out=False
+ log=E/(label+'.log');start=time.monotonic();timed_out=False;result['active_command']=label;save()
  with log.open('wb')as out:
   proc=subprocess.Popen(command,cwd=cwd,stdout=out,stderr=subprocess.STDOUT)
   while proc.poll()is None:
@@ -20,10 +19,16 @@ def run(label,command,cwd=ROOT,timeout=1800):
     cleanup=subprocess.run(['taskkill','/PID',str(proc.pid),'/T','/F'],capture_output=True)
     (E/(label+'-timeout-cleanup.log')).write_bytes(cleanup.stdout+cleanup.stderr)
     proc.wait(timeout=30);timed_out=True;break
+   if label=='native-daemon-build':
+    resources=host_resources();elapsed=int(time.monotonic()-start)
+    if resources['disk_free_bytes']<2*1024**3:
+     cleanup=subprocess.run(['taskkill','/PID',str(proc.pid),'/T','/F'],capture_output=True);(E/(label+'-disk-stop.log')).write_bytes(cleanup.stdout+cleanup.stderr);proc.wait(timeout=30);result['resource_stop']='Hosted disk below2GiB';break
+    if elapsed//30>result.get('last_progress_bucket',-1):
+     result['last_progress_bucket']=elapsed//30;result.setdefault('build_resource_samples',[]).append({'seconds':elapsed,**resources});save();print('Daemon build elapsed',elapsed,'seconds; free disk',resources['disk_free_bytes'],'available RAM',resources['available_ram_bytes'],flush=True)
    time.sleep(2)
  result['commands'].append({'label':label,'command':command,'cwd':str(cwd),'exit':proc.returncode,'seconds':round(time.monotonic()-start,2),'timed_out':timed_out,'log_sha256':sha(log)});save();print(label,proc.returncode,log.read_text(errors='replace')[-6500:],flush=True)
  if timed_out:raise TimeoutError(label+' timed out; owned process tree terminated and log retained')
- return proc.returncode
+ result['last_completed_command']=label;result['active_command']=None;save();return proc.returncode
 def need(label,command,cwd=ROOT,timeout=1800):
  if run(label,command,cwd,timeout):raise RuntimeError(label+' failed; see original log')
 def source_identity(label):
@@ -48,8 +53,8 @@ def source_identity(label):
    continue
   if path.is_symlink():raise RuntimeError('unexpected symlink for regular Git blob: '+name)
   data=path.read_bytes();raw=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
-  if raw!=EXPECTED_WORKING_BLOBS.get(name,oid):raise RuntimeError('working bytes differ: '+name)
-  entries[name]={'git_mode':mode,'git_blob':oid,'expected_working_blob':EXPECTED_WORKING_BLOBS.get(name,oid),'working_sha256':hashlib.sha256(data).hexdigest()}
+  if raw!=oid:raise RuntimeError('working bytes differ: '+name)
+  entries[name]={'git_mode':mode,'git_blob':oid,'working_sha256':hashlib.sha256(data).hexdigest()}
  target=E/(label+'-source.json');target.write_text(json.dumps({'head':head,'files':entries},indent=2)+'\n');result[label+'_source_sha256']=sha(target);result[label+'_tracked_files']=len(entries)
 def metadata():
  source_identity('before')
@@ -57,33 +62,17 @@ def metadata():
  run('cl-version',['cl','/Bv']);result['resolved_tools']={x:shutil.which(x)for x in ['cl','clang-cl','cmake','ninja','perl','nasm','nmake','dumpbin']}
  if any(not v for v in result['resolved_tools'].values()):raise RuntimeError('required native setup tool missing')
 def openssl():
- prefix=ROOT/'openssl-3.5.4-static';metadata();archive=ROOT/'openssl-3.5.4.tar.gz';cached=(prefix/'lib/libcrypto.lib').exists()
- if cached:
-  receipt=prefix/'btx-build-provenance.json'
-  if not receipt.exists():raise RuntimeError('incomplete OpenSSL cache; no provenance')
-  prior=json.loads(receipt.read_text())
-  if prior['source_sha256']!=OPENSSL_SHA or prior['toolset']!=os.environ.get('VCToolsVersion'):raise RuntimeError('cached OpenSSL source/toolset mismatch')
-  for f,h in prior['files'].items():
-   if sha(prefix/f)!=h:raise RuntimeError('cached OpenSSL library/header mismatch')
-  if sha(prefix/'btx-Makefile.txt')!=prior['makefile_sha256']:raise RuntimeError('cached OpenSSL Makefile mismatch')
-  shutil.copyfile(prefix/'btx-Makefile.txt',E/'openssl-Makefile.txt')
- result['openssl_cache_reused']=cached
- if not archive.exists():urllib.request.urlretrieve('https://github.com/openssl/openssl/releases/download/openssl-3.5.4/openssl-3.5.4.tar.gz',archive)
- if sha(archive)!=OPENSSL_SHA:raise RuntimeError('OpenSSL official source digest mismatch')
- result['openssl_source_sha256']=sha(archive)
- if not(prefix/'lib/libcrypto.lib').exists():
-  unpack=ROOT/'openssl-source';unpack.mkdir(exist_ok=True);need('openssl-extract',['tar','-xzf',str(archive),'-C',str(unpack)]);source=unpack/'openssl-3.5.4'
-  need('openssl-configure',['perl','Configure','VC-WIN64A','no-shared','no-tests','--prefix='+prefix.as_posix(),'--openssldir='+(prefix/'ssl').as_posix(),'--libdir=lib'],source)
-  need('openssl-build',['nmake','/S','build_sw'],source,1200);need('openssl-install',['nmake','/S','install_sw'],source,180);shutil.copyfile(source/'Makefile',E/'openssl-Makefile.txt');need('openssl-configdata',['perl','configdata.pm','--dump'],source)
+ metadata();prefix=ROOT/'openssl-3.5.4-static';receipt=prefix/'btx-build-provenance.json'
+ if not receipt.exists():raise RuntimeError('Required verified OpenSSL cache missing; no speculative dependency rebuild')
+ prior=json.loads(receipt.read_text());expected=json.loads((P/'dependency-identity.json').read_text())
+ if prior['source_sha256']!=OPENSSL_SHA or prior['toolset']!=os.environ.get('VCToolsVersion'):raise RuntimeError('cached OpenSSL source/toolset mismatch')
+ for f,h in expected['openssl_files'].items():
+  if sha(prefix/f)!=h or prior['files'][f]!=h:raise RuntimeError('cached OpenSSL identity mismatch: '+f)
+ if sha(prefix/'btx-Makefile.txt')!=prior['makefile_sha256']:raise RuntimeError('cached OpenSSL Makefile mismatch')
+ shutil.copyfile(prefix/'btx-Makefile.txt',E/'openssl-Makefile.txt')
  need('openssl-version',[str(prefix/'bin/openssl.exe'),'version','-a'])
- probe=E/'openssl_probe.c';probe.write_text((P/'openssl_probe.c').read_text());exe=E/'openssl_probe.exe'
- need('openssl-probe-build',['cl','/nologo','/MT','/O2','/I'+str(prefix/'include'),str(probe),'/Fe'+str(exe),'/Fo'+str(E/'openssl_probe.obj'),'/link','/LIBPATH:'+str(prefix/'lib'),'libssl.lib','libcrypto.lib','ws2_32.lib','gdi32.lib','advapi32.lib','crypt32.lib','user32.lib'])
- need('openssl-probe-run',[str(exe)]);need('openssl-probe-dependents',['dumpbin','/dependents',str(exe)]);deps=(E/'openssl-probe-dependents.log').read_text(errors='replace').lower()
- if any(x in deps for x in ['libcrypto-','libssl-','vcruntime']):raise RuntimeError('unexpected dynamic dependency in static OpenSSL smoke')
- result['openssl_prefix']=str(prefix);result['openssl_files']={f:sha(prefix/f)for f in ['include/openssl/opensslv.h','lib/libssl.lib','lib/libcrypto.lib','bin/openssl.exe']};result['openssl_probe_executable_sha256']=sha(exe)
- if not cached:
-  shutil.copyfile(E/'openssl-Makefile.txt',prefix/'btx-Makefile.txt')
-  (prefix/'btx-build-provenance.json').write_text(json.dumps({'source_sha256':OPENSSL_SHA,'toolset':os.environ.get('VCToolsVersion'),'files':result['openssl_files'],'configuration':'VC-WIN64A no-shared no-tests, libdir=lib; staticCRT per pinned OpenSSL config','makefile_sha256':sha(E/'openssl-Makefile.txt')},indent=2)+'\n')
+ result.update(openssl_cache_reused=True,openssl_files=expected['openssl_files'],openssl_source_sha256=OPENSSL_SHA,openssl_prefix=str(prefix),dependency_native_smoke_reused_from=expected['prior_native_run'],dependency_smoke_rerun=False)
+
 def vcpkg():
  tool=ROOT/'vcpkg'
  if not(tool/'.git').exists():need('vcpkg-clone',['git','clone','--no-checkout','https://github.com/microsoft/vcpkg.git',str(tool)],timeout=240)
@@ -105,56 +94,30 @@ def configure():
  result['configure_exit']=code
  if code:result.update(status='BLOCKED_CONFIGURE',first_failed_stage='actual_root_configure');return
  need('generated-targets',['ninja','-C',str(build),'-t','targets','all']);targets=(E/'generated-targets.log').read_text(errors='replace')
- target='src/test/CMakeFiles/test_btx.dir/matmul_backend_capabilities_tests.cpp.obj'
- if target+':' not in targets:raise RuntimeError('expected generated target missing')
- command=['cmake','--build',str(build),'--target',target,'--verbose','--','-j','1']
- result['generated_compile_database_sha256']=sha(build/'compile_commands.json')
- original_code=run('baseline-unit-object',command,SOURCE,180)
- baseline_log=(E/'baseline-unit-object.log').read_text(errors='replace')
- if original_code==0 or "(24,10): fatal error: 'unistd.h' file not found" not in baseline_log:raise RuntimeError('baseline did not reproduce exact unit portability blocker')
- source_identity('baseline-after')
- if json.loads((E/'before-source.json').read_text())!=json.loads((E/'baseline-after-source.json').read_text()):raise RuntimeError('baseline source changed')
- file='src/test/matmul_backend_capabilities_tests.cpp'
- manifest=json.loads((P/'source-manifest.json').read_text());candidate=(P/'candidate.cpp').read_bytes()
- if manifest['base']!=BASE or sha(SOURCE/file)!=manifest['baseline_sha256'] or hashlib.sha256(candidate).hexdigest()!=manifest['candidate_sha256']:raise RuntimeError('candidate input identity differs')
- EXPECTED_WORKING_BLOBS[file]=hashlib.sha1(b'blob '+str(len(candidate)).encode()+b'\0'+candidate).hexdigest()
- (SOURCE/file).write_bytes(candidate);result['product_fixes']=[file]
- source_identity('candidate-before')
- candidate_code=run('candidate-unit-object',command,SOURCE,180)
- if candidate_code:result.update(status='BLOCKED_CANDIDATE_OBJECT',failed_target=target);return
- if sha(build/'compile_commands.json')!=result['generated_compile_database_sha256']:raise RuntimeError('generated compilation database changed')
- result['unit_object_sha256']=sha(build/target);shutil.copyfile(build/target,E/'candidate-unit.obj')
- result['candidate_source_sha256']=sha(SOURCE/file)
- component_controls(SOURCE/file)
- result['status']='PAIRED_GENERATED_UNIT_AND_COMPONENT_CONTROLS_PASS'
+ if 'bin/btxd.exe:' not in targets or 'btxd:' not in targets:raise RuntimeError('real generated daemon target absent')
+ resources=host_resources();result['before_daemon_resources']=resources;save()
+ if resources['disk_free_bytes']<6*1024**3:raise RuntimeError('Insufficient hosted disk before daemon build; require6GiB')
+ result['whole_node_build_run']=True;result['target']='btxd';save()
+ code=run('native-daemon-build',['cmake','--build',str(build),'--target','btxd','--verbose','--','-j','2','-k','1'],SOURCE,1800)
+ result['daemon_build_exit']=code
+ need('daemon-target-dependencies',['ninja','-C',str(build),'-t','query','bin/btxd.exe'])
+ result['after_daemon_resources']=host_resources()
+ if result.get('resource_stop'):result.update(status='BLOCKED_RESOURCE',first_failed_stage='daemon_resource_bound');return
+ if code:
+  result.update(status='BLOCKED_DAEMON_BUILD',first_failed_stage='native_daemon_build');return
+ exe=build/'bin/btxd.exe'
+ if not exe.exists():raise RuntimeError('daemon command succeeded without executable')
+ result.update(daemon_executable_sha256=sha(exe),daemon_executable_bytes=exe.stat().st_size)
+ need('daemon-binary-imports',['dumpbin','/dependents',str(exe)])
+ result['executable_invoked']=False
+ result['status']='DAEMON_BUILD_AND_LINK_PASS'
 
-def component_controls(source):
- text=source.read_text();start=text.index('class ScopedEnvVar\n');end=text.index('\n};',start)+len('\n};');helper=text[start:end]
- tests_start=text.index('BOOST_AUTO_TEST_CASE(scoped_environment_restores_values)');tests_end=text.index('BOOST_AUTO_TEST_CASE(cpu_backend_always_available)',tests_start);cases=text[tests_start:tests_end]
- if cases!=(P/'in-tree-cases.inc').read_text():raise RuntimeError('extracted cases differ')
- includes=ROOT/'vcpkg-installed/x64-windows-static/include';header='#define BOOST_TEST_MODULE BackendScopedEnvironment\n#include <boost/test/included/unit_test.hpp>\n#include <cstdlib>\n#include <string>\n#include <cstdio>\n'
- fixture=(P/'component_fixture.inc').read_text();component=header+helper+'\n'+fixture+'\n'+cases
- cpp=E/'component.cpp';cpp.write_text(component);result['component_source_sha256']=sha(cpp)
- probe=includes/'boost/version.hpp';result['boost_version_header_sha256']=sha(probe)
- for compiler in ['clang-cl','cl']:
-  exe=E/(compiler+'-component.exe');obj=E/(compiler+'-component.obj')
-  need(compiler+'-component-build',[compiler,'/nologo','/std:c++20','/MT','/EHsc','/I'+str(includes),str(cpp),'/Fe'+str(exe),'/Fo'+str(obj)],timeout=180)
-  for name,value in [('absent',None),('preexisting','before-test')]:
-   if value is None:os.environ.pop('BTX_TEST_BACKEND_SCOPED_ENV',None)
-   else:os.environ['BTX_TEST_BACKEND_SCOPED_ENV']=value
-   need(compiler+'-component-'+name,[str(exe),'--log_level=test_suite'],timeout=60)
-  result[compiler+'_component_sha256']=sha(exe);result[compiler+'_component_object_sha256']=sha(obj);obj.unlink()
- dt_start=helper.index('    ~ScopedEnvVar()');dt_end=helper.index('\nprivate:',dt_start)
- mutant=helper[:dt_start]+'    ~ScopedEnvVar() {}\n'+helper[dt_end:]
- mcpp=E/'component-no-restore.cpp';mcpp.write_text(header+mutant+'\n'+fixture+'\n'+cases)
- mexe=E/'component-no-restore.exe'
- need('mutant-component-build',['clang-cl','/nologo','/std:c++20','/MT','/EHsc','/I'+str(includes),str(mcpp),'/Fe'+str(mexe),'/Fo'+str(E/'component-no-restore.obj')],timeout=180)
- os.environ['BTX_TEST_BACKEND_SCOPED_ENV']='before-test'
- mutant_exit=run('mutant-component-expected-failure',[str(mexe),'--log_level=test_suite'],timeout=60)
- mutant_log=(E/'mutant-component-expected-failure.log').read_text(errors='replace')
- if mutant_exit==0 or 'has failed' not in mutant_log or 'scoped_environment_restores_' not in mutant_log:raise RuntimeError('no-restore mutant did not fail the expected assertions')
- result['component_test_execution']=True
- os.environ.pop('BTX_TEST_BACKEND_SCOPED_ENV',None)
+def host_resources():
+ import ctypes
+ class MemoryStatus(ctypes.Structure):
+  _fields_=[('length',ctypes.c_uint32),('load',ctypes.c_uint32)]+[(x,ctypes.c_uint64) for x in ['total_phys','avail_phys','total_page','avail_page','total_virtual','avail_virtual','avail_extended']]
+ memory=MemoryStatus();memory.length=ctypes.sizeof(memory);ok=ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(memory))
+ return {'disk_free_bytes':shutil.disk_usage(ROOT).free,'cpus':os.cpu_count(),'total_ram_bytes':memory.total_phys if ok else None,'available_ram_bytes':memory.avail_phys if ok else None}
 
 stage=sys.argv[1]
 try:
@@ -162,11 +125,13 @@ try:
  else:
   result['stages'][stage]='RUNNING';save();{'openssl':openssl,'vcpkg':vcpkg,'configure':configure}[stage]();result['stages'][stage]='COMPLETE'
 except Exception as ex:
- result.update(status='SETUP_ERROR',first_failed_stage=stage,error=type(ex).__name__+': '+str(ex));result['stages'][stage]='ERROR';print(result['error'],flush=True)
+ label=result.get('active_command') or result.get('last_completed_command') or stage
+ status=('BUILD_TIMEOUT' if label=='native-daemon-build' else 'COMMAND_TIMEOUT') if isinstance(ex,TimeoutError) else ('POST_LINK_INSPECTION_ERROR' if result.get('daemon_executable_sha256') else 'SETUP_ERROR')
+ result.update(status=status,first_failed_stage=label,error=type(ex).__name__+': '+str(ex));result['stages'][stage]='ERROR';print(result['error'],flush=True)
 finally:
  try:
-  source_identity('after');before=json.loads((E/'before-source.json').read_text());after=json.loads((E/'after-source.json').read_text());changed=[f for f in before['files'] if before['files'][f]!=after['files'][f]];result['tracked_source_changed_files']=changed
-  if changed!=list(EXPECTED_WORKING_BLOBS):raise RuntimeError('unexpected tracked source identity delta')
+  source_identity('after');result['tracked_source_unchanged']=json.loads((E/'before-source.json').read_text())==json.loads((E/'after-source.json').read_text())
+  if not result['tracked_source_unchanged']:raise RuntimeError('tracked source identity changed')
  except Exception as ex:result['source_verification_error']=str(ex);result['status']='SETUP_ERROR'
  save();print('Recorded diagnostic status:',result['status'],flush=True)
 raise SystemExit(result['status']=='SETUP_ERROR')
