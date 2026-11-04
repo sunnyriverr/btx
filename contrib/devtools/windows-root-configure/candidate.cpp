@@ -21,6 +21,9 @@
 #include <string>
 #include <string_view>
 #include <vector>
+#if !defined(_WIN32)
+#include <unistd.h>
+#endif
 
 namespace {
 
@@ -1122,6 +1125,10 @@ BOOST_AUTO_TEST_CASE(metal_profiling_samples_increment_after_digest)
 
 BOOST_AUTO_TEST_CASE(metal_zero_copy_profile_reports_aligned_input_wrap)
 {
+#if defined(_WIN32)
+    BOOST_CHECK(!btx::metal::ProbeMatMulDigestAcceleration().available);
+    BOOST_TEST_MESSAGE("Metal zero-copy input wrapping is unavailable on Windows");
+#else
     // Use n=128 so matrix buffers (128*128*4 = 65536 bytes) exceed the system
     // page size, satisfying WrapSharedNoCopyBuffer's minimum-length guard.
     constexpr uint32_t kN = 128;
@@ -1196,6 +1203,7 @@ BOOST_AUTO_TEST_CASE(metal_zero_copy_profile_reports_aligned_input_wrap)
 
     const auto profiling = btx::metal::ProbeMatMulProfilingStats();
     BOOST_CHECK(profiling.last_zero_copy_inputs);
+#endif
 }
 
 BOOST_AUTO_TEST_CASE(metal_gpu_generated_inputs_match_cpu_oracle_generation)
