@@ -1,0 +1,72 @@
+{
+  "utc": "2026-11-04T00:07:56.515042+00:00",
+  "verdict": "PASS scoped native bundled LaunchServices cold/warm scheme delivery; no duplicates observed in finite UI windows",
+  "commit": "e70c81f03b76c5e62712ebb51dfaac7d41295af2",
+  "binary_sha256": "8cbeae85f0b66f3c674c96c12914f562919b49decb684d5b71f811566b5a47c0",
+  "platform": "ProductName:\t\tmacOS\nProductVersion:\t\t26.5.1\nBuildVersion:\t\t25F80\n",
+  "arch": "arm64",
+  "build": "TauriCLI2.12.2 genuine app bundle; Rust1.95locked/offline; defaultconfig and identifier; localad-hoc signing",
+  "cases": [
+    {
+      "case": "cold-btx",
+      "uri": "btx:atlas-ls-cold-btx?amount=0.125",
+      "cold": true,
+      "before_pids": [],
+      "after_pids": [
+        78709
+      ],
+      "refresh": "No preview; normalrefresh advanced10:00:43->10:01:03, samples4->6",
+      "preview_to_later_quiet_seconds": 25.606,
+      "interval_limit": "Timestamp was emitted before the close action; exact after-close duration not independently established."
+    },
+    {
+      "case": "warm-repeat-btx",
+      "uri": "btx:atlas-ls-warm-repeat-btx?amount=0.125",
+      "cold": false,
+      "before_pids": [
+        78709
+      ],
+      "after_pids": [
+        78709
+      ],
+      "quiet_after_close_seconds": 30.18,
+      "refresh": "samples16->19 observed10:02:43->10:03:13, no preview"
+    },
+    {
+      "case": "cold-p2p",
+      "uri": "btx-p2p://atlas-ls-cold-p2p.invalid:8333",
+      "cold": true,
+      "before_pids": [],
+      "after_pids": [
+        79261
+      ],
+      "quiet_after_close_seconds": 41.366,
+      "refresh": "samples3->7, observed10:05:05->10:05:45, no preview"
+    },
+    {
+      "case": "warm-p2p",
+      "uri": "btx-p2p://atlas-ls-warm-p2p.invalid:8333",
+      "cold": false,
+      "before_pids": [
+        79261
+      ],
+      "after_pids": [
+        79261
+      ],
+      "quiet_after_close_seconds": 26.543,
+      "refresh": "samples11->14, observed10:06:25->10:06:55; no preview"
+    }
+  ],
+  "additional_warm_pilot": "FirstwarmURL showed exactpreview; firstCloseaction didnot visiblydismiss. Not treated as proof of duplicateddelivery. DistinctURI repeat using knownworkingCloseDialog provided unambiguous warmacceptance.",
+  "observation": "Coordinator inspected nativeCUA accessibility/visiblepreview tooloutput; structuredtranscriptions in observationJSONs; rawAX/screenshotfiles not archived. No directnativequeue invocation/injection.",
+  "user_assistance": "User completed native confirmation twice; actualLIVELOCAL and exactpreviews independentlyobserved.",
+  "cleanup_verified": true,
+  "upstream_post": false,
+  "limits": [
+    "Targeted LaunchServices open-a app URL, not a default-handler-selection/installer test",
+    "One cold/warm sequence per scheme; finite sampled quiet observations, not universalexactly-once. Coldbtx26sinterval starts at previewobservation; others30.180/41.366/26.543s start afterclose.",
+    "Localadhoc bundle, no signing/notarization/release qualification",
+    "NoWindows/Linux/file-association/parity/mainnet/payment/mining/inference qualification",
+    "Existingolder wallet-disabled/modelnet-disabled regtestnode provided only read-onlyUIconnection/polling"
+  ]
+}
