@@ -34,31 +34,40 @@ def source_identity(label):
   entries[name]={'mode':mode,'blob':oid,'working_sha256':hashlib.sha256(data).hexdigest()}
  (E/(label+'-source.json')).write_text(json.dumps(entries,indent=2)+'\n');R[label+'_source_entries']=len(entries);save();return entries
 try:
- before=source_identity('before');R['ci_head']=os.environ.get('GITHUB_SHA');R['runner_sha256']=sha(P/'runner.py');(E/'profile-reference.json').write_bytes((P/'profile-reference.json').read_bytes());save()
- # Match critical definitions/ABI/shim settings from the existing real CMake command.
- definitions=['NOMINMAX','UNICODE','WIN32_LEAN_AND_MEAN','_CRT_SECURE_NO_WARNINGS','_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING','_UNICODE','_WIN32_IE=0x0A00','_WIN32_WINNT=0x0A00','WIN32','_WINDOWS']
- common=['/nologo','/TP','/std:c++20','/O2','/MT','/EHsc','/Gy','/Gw','/W3','/utf-8','/Zc:preprocessor','/Zc:__cplusplus','/sdl']+['/D'+x for x in definitions]+['/FI'+str(S/'src/compat/mingw/posix_extra.h')]+['/I'+str(S/x) for x in ['src/compat/msvc','src/compat/mingw','src','src/univalue/include','src/libbitcoinpqc/include']]
- R['profile_omissions']='No root-generated schema macros, OpenSSL include, or OpenMP flag: unused by tested LAN component paths. No rootCMake/fullproject claim.'
- for compiler in ['cl','clang-cl']:
-  out=E/compiler;out.mkdir(exist_ok=True);run(compiler+'-version',[compiler,'/Bv' if compiler=='cl' else '--version'],20)
-  # Exact unchanged PR400 TU against identical headers/options; compiler-specific outcome retained.
-  baseline=P/'baseline-native_discovery.cpp'
-  assert sha(baseline)=='d6265aea738a1f3d86047e96417fa47fba5c40561b228e356261374fbd1eb9af'
-  p=run(compiler+'-baseline-discovery',[compiler,*common,'/c',str(baseline),'/Fo'+str(out/'baseline-discovery.obj')])
-  R.setdefault('baseline_compile',{})[compiler]={'rc':p.returncode,'source_sha256':sha(baseline)}
-  if compiler=='cl':
-   assert p.returncode!=0 and 'C2143' in p.stdout and 'C5101' in p.stdout, 'Expected original MSVC macro parse failure was not reproduced'
-  objects=[]
-  for label,file in [('discovery',S/'src/modelnet/native_discovery.cpp'),('nat',S/'src/modelnet/model_nat.cpp'),('fixture',P/'lan_native.cpp')]:
-   obj=out/(label+'.obj');p=run(compiler+'-'+label,[compiler,*common,'/c',str(file),'/Fo'+str(obj)])
-   if p.returncode: R['status']='NATIVE_COMPILE_BLOCKED';R['first_failed_stage']=compiler+'-'+label;save();raise SystemExit(1)
-   objects.append(obj)
-  exe=out/'lan-native.exe';p=run(compiler+'-link',[compiler,'/nologo','/MT',*map(str,objects),'/Fe'+str(exe),'/link','/OPT:REF','/INCREMENTAL:NO','ws2_32.lib','iphlpapi.lib','bcrypt.lib','userenv.lib','advapi32.lib','ole32.lib'])
-  if p.returncode:R['status']='COMPONENT_LINK_BLOCKED';R['first_failed_stage']=compiler+'-link';save();raise SystemExit(1)
-  p=run(compiler+'-runtime',[str(exe)],20);R['results'][compiler]={'rc':p.returncode,'exe_sha256':sha(exe),'objects':{x.name:sha(x) for x in objects},'runtime_pass':p.returncode==0}
-  if p.returncode:R['status']='RUNTIME_ENVIRONMENT_LIMIT' if p.returncode==77 else 'RUNTIME_NOT_QUALIFIED';R['first_failed_stage']=compiler+'-runtime';save();raise SystemExit(1)
- after=source_identity('after');assert before==after
- R['status']='PASS_NATIVE_COMPONENT_AND_VALID_DISCOVERY';R['harness_sha256']=sha(P/'lan_native.cpp');R['logs']={x.name:sha(x) for x in E.glob('*.log')};save()
+ before=source_identity('before');R['ci_head']=os.environ.get('GITHUB_SHA');R['runner_sha256']=sha(P/'runner.py')
+ R['profile']='Native MinGW GCC full discovery/NAT TUs, C++20/O2/static/function sections; component runtime only, not root or MSVC LINK'
+ R['prior_msvc_compile_pair_run']=41776498958;save()
+ (E/'profile-reference.json').write_bytes((P/'profile-reference.json').read_bytes())
+ compiler=Path('C:/mingw64/bin/g++.exe');assert compiler.is_file(),'Preinstalled native MinGW unavailable'
+ os.environ['PATH']=str(compiler.parent)+os.pathsep+os.environ['PATH']
+ R['compiler_sha256']=sha(compiler)
+ run('gcc-version',[str(compiler),'-v'],20)
+ target=run('gcc-target',[str(compiler),'-dumpmachine'],20)
+ assert target.returncode==0 and target.stdout.strip()=='x86_64-w64-mingw32'
+ run('ld-version',['C:/mingw64/bin/ld.exe','--version'],20)
+ common=['-std=c++20','-O2','-ffunction-sections','-fdata-sections','-static','-pthread']
+ libraries=['-lws2_32','-liphlpapi','-lbcrypt','-luserenv','-ladvapi32','-lole32','-luuid']
+ for mode in ['dead','live']:
+  probe=P/('probe-'+mode+'.cpp');p=run('gc-probe-'+mode,[str(compiler),*common,str(probe),'-Wl,--gc-sections','-o',str(E/('gc-'+mode+'.exe'))])
+  if mode=='dead':assert p.returncode==0,'Unused-dependency linker control failed'
+  else:assert p.returncode!=0 and 'UnavailableProbeDependency' in p.stdout,'Reachable-dependency linker control failed'
+ assert run('gc-probe-runtime',[str(E/'gc-dead.exe')],20).returncode==0
+ definitions=['WIN32','_WINDOWS','NOMINMAX','UNICODE','WIN32_LEAN_AND_MEAN','_UNICODE','_WIN32_WINNT=0x0A00','_WIN32_IE=0x0A00']
+ common+=['-D'+x for x in definitions]+['-include',str(S/'src/compat/mingw/posix_extra.h')]
+ common+=['-I'+str(S/x) for x in ['src/compat/mingw','src','src/univalue/include','src/libbitcoinpqc/include']]
+ objects=[]
+ for label,file in [('discovery',S/'src/modelnet/native_discovery.cpp'),('nat',S/'src/modelnet/model_nat.cpp'),('fixture',P/'lan_native.cpp')]:
+  obj=E/(label+'.obj');p=run('gcc-'+label,[str(compiler),*common,'-c',str(file),'-o',str(obj)])
+  if p.returncode:R['status']='NATIVE_COMPILE_BLOCKED';R['first_failed_stage']='gcc-'+label;save();raise SystemExit(1)
+  objects.append(obj)
+ exe=E/'lan-native.exe'
+ p=run('gcc-link',[str(compiler),'-static','-pthread','-Wl,--gc-sections','-Wl,-Map,'+str(E/'component.map'),*map(str,objects),*libraries,'-o',str(exe)])
+ if p.returncode:R['status']='COMPONENT_LINK_BLOCKED';R['first_failed_stage']='gcc-link';save();raise SystemExit(1)
+ p=run('gcc-runtime',[str(exe)],20)
+ R['results']['gcc']={'rc':p.returncode,'exe_sha256':sha(exe),'objects':{x.name:sha(x) for x in objects},'runtime_pass':p.returncode==0}
+ if p.returncode:R['status']='RUNTIME_ENVIRONMENT_LIMIT' if p.returncode==77 else 'RUNTIME_NOT_QUALIFIED';R['first_failed_stage']='gcc-runtime';save();raise SystemExit(1)
+ assert source_identity('after')==before
+ R['status']='PASS_NATIVE_MINGW_COMPONENT_AND_VALID_DISCOVERY';save()
 except BaseException as exc:
  if R['status']=='IN_PROGRESS':R['status']='ERROR'
  R['error']=str(exc);save();raise
