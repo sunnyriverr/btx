@@ -1,0 +1,69 @@
+{
+  "binary": "<workspace>/work/btx-lanes/session-1/windows_integrated_native_acceptance/windows-compatibility-repair/fixtures/mac-baseline-build/controls",
+  "platform": "posix",
+  "temporary_root": "<owned-temp>",
+  "temporary_root_removed": true,
+  "parent_environment_unchanged": true,
+  "results": [
+    {
+      "mode": "full",
+      "returncode": 0,
+      "seconds": 1.102,
+      "marker_invocations": [
+        "invoked",
+        "invoked",
+        "invoked",
+        "invoked"
+      ],
+      "stdout": "PASS read fixture fd limit\nPASS bound fixture fd limit to 256\nPASS install descriptor leakage control\nPASS real PR403 descriptor cleanup closes inherited fd\nPASS all four POSIX executable backend flags true\nPASS POSIX profile advertises supported execution\nPASS POSIX file admission: executable, nonexec, missing, directory\nPASS POSIX OpenSSL discovery returns existing nonempty path fallback\nPASS optional inference setting actually absent\nPASS absent optional inference succeeds\nPASS legitimate CUDA resident starts and lives\nPASS legitimate CUDA resident stops and reaps\nPASS legitimate CUDA one-shot protocol\nPASS legitimate adapter stdin/stdout protocol\nPASS legitimate llama execution\nPASS CUDA missing executable refuses\nPASS adapter nonexecutable input refuses\nPASS llama nonexecutable input refuses\nPASS POSIX workers actually executed\nPASS POSIX private PEM writer succeeds\nPASS POSIX private PEM has mode 0600\nPASS POSIX private listener and adoption succeed\nPASS POSIX world-writable socket refuses adoption\nPASS POSIX socket symlink refuses adoption\nPASS POSIX actual local Unix RPC exchange\nRESULT checks=25 failures=0\n",
+      "stderr": ""
+    },
+    {
+      "mode": "empty",
+      "returncode": 0,
+      "seconds": 0.004,
+      "marker_invocations": [],
+      "stdout": "PASS empty override actually inherited\nPASS OpenSSL explicit empty override preserved\nPASS empty inference setting actually inherited\nPASS empty optional inference succeeds\nPASS empty optional inference output unchanged\nRESULT checks=5 failures=0\n",
+      "stderr": ""
+    },
+    {
+      "mode": "override",
+      "returncode": 0,
+      "seconds": 0.004,
+      "marker_invocations": [],
+      "stdout": "PASS OpenSSL exact override preserved\nRESULT checks=1 failures=0\n",
+      "stderr": ""
+    },
+    {
+      "mode": "infer",
+      "returncode": 0,
+      "seconds": 0.14,
+      "marker_invocations": [
+        "invoked"
+      ],
+      "stdout": "PASS read inference fixture fd limit\nPASS bound inference fixture fd limit\nPASS install inference descriptor leakage control\nPASS configured inference executes successfully\nPASS configured inference protocol output\nRESULT checks=5 failures=0\n",
+      "stderr": ""
+    },
+    {
+      "mode": "profile-nonexec",
+      "returncode": 0,
+      "seconds": 0.003,
+      "marker_invocations": [],
+      "stdout": "PASS configured missing/nonexecutable files advertise no backend\nPASS configured missing/nonexecutable exported profile unavailable\nRESULT checks=2 failures=0\n",
+      "stderr": ""
+    },
+    {
+      "mode": "profile-missing",
+      "returncode": 0,
+      "seconds": 0.003,
+      "marker_invocations": [],
+      "stdout": "PASS configured missing/nonexecutable files advertise no backend\nPASS configured missing/nonexecutable exported profile unavailable\nRESULT checks=2 failures=0\n",
+      "stderr": ""
+    }
+  ],
+  "pass": true,
+  "_publication": {
+    "original_record_sha256": "902079bc45f76f77eb22f76d2ae024dbadb0061d0c2383d6dfceaabc7036eed4",
+    "redaction": "Personal absolute paths replaced; test results, stdout and source/binary hashes preserved."
+  }
+}

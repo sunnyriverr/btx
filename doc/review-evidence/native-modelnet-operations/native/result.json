@@ -1,0 +1,766 @@
+{
+  "base": "1b404ed8e52eae249ac73036007ba5a382b0d3ba",
+  "scope": "Same three native generated Modelnet targets, exact403 prerequisite, guarded Windows operations",
+  "status": "BLOCKED_INTEGRATION",
+  "commands": [
+    {
+      "label": "cmake-version",
+      "command": [
+        "cmake",
+        "--version"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 3272,
+      "seconds": 2.05,
+      "timed_out": false,
+      "log_sha256": "30d9c504b2b91d7683a1b8d25f9f987cb24ff9f35fd553950540cd847f8e23de"
+    },
+    {
+      "label": "ninja-version",
+      "command": [
+        "ninja",
+        "--version"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 8988,
+      "seconds": 2.03,
+      "timed_out": false,
+      "log_sha256": "f7204ca4d4bbe623e6045a5088ac906c5e1966b4fd2a11af9d156bad3327526f"
+    },
+    {
+      "label": "clang-version",
+      "command": [
+        "clang-cl",
+        "--version"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 8064,
+      "seconds": 4.09,
+      "timed_out": false,
+      "log_sha256": "661974250fc5ed291000a9000c99466582a67ef96304a893526f7e46b7db492e"
+    },
+    {
+      "label": "cl-version",
+      "command": [
+        "cl",
+        "/Bv"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 2,
+      "process_pid": 1180,
+      "seconds": 2.05,
+      "timed_out": false,
+      "log_sha256": "c540121e17c0d19751b1c744c4c70d492cea729394ebe2284c612f00b7339459"
+    },
+    {
+      "label": "openssl-version",
+      "command": [
+        "D:\\btx-native-035\\openssl-3.5.4-static\\bin\\openssl.exe",
+        "version",
+        "-a"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 7260,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "000d730b06f4810784acc07cf2b53071e58a58a2ac843419166f7d9b4db9efff"
+    },
+    {
+      "label": "vcpkg-clone",
+      "command": [
+        "git",
+        "clone",
+        "--no-checkout",
+        "https://github.com/microsoft/vcpkg.git",
+        "D:\\btx-native-035\\vcpkg"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 5360,
+      "seconds": 16.02,
+      "timed_out": false,
+      "log_sha256": "b7682cd35378ee73ea64ff25d41146492355a31d184aa23c9e2a7c1568d2aae4"
+    },
+    {
+      "label": "vcpkg-checkout",
+      "command": [
+        "git",
+        "-C",
+        "D:\\btx-native-035\\vcpkg",
+        "checkout",
+        "--detach",
+        "afa249f12f52ed8a3b919f195495ba8b330288d1"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 5760,
+      "seconds": 4.0,
+      "timed_out": false,
+      "log_sha256": "c7eb77dcf59b404e01015e50b293a2ac8af3c448f197b5001f654aab57dfa103"
+    },
+    {
+      "label": "vcpkg-bootstrap",
+      "command": [
+        "cmd",
+        "/c",
+        "D:\\btx-native-035\\vcpkg\\bootstrap-vcpkg.bat",
+        "-disableMetrics"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 8404,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "a68ec968c9b75c704553d6e687a2987d7191c189c0209547e35abed030e9f045"
+    },
+    {
+      "label": "vcpkg-version",
+      "command": [
+        "D:\\btx-native-035\\vcpkg\\vcpkg.exe",
+        "version"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 8204,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "bd34078a4a7278c80370e9685054a1503c151a671be7e6fdf893eb3a2b4e6cc6"
+    },
+    {
+      "label": "vcpkg-historical-blob-8ed2f86e",
+      "command": [
+        "git",
+        "-C",
+        "D:\\btx-native-035\\vcpkg",
+        "cat-file",
+        "-e",
+        "8ed2f86ee404263f5aa1f72f8f4f13ee44262b81"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 8340,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "vcpkg-historical-blob-937a2198",
+      "command": [
+        "git",
+        "-C",
+        "D:\\btx-native-035\\vcpkg",
+        "cat-file",
+        "-e",
+        "937a2198387cb5c913e4feea170652651dd756ba"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 3832,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "root-configure",
+      "command": [
+        "cmake",
+        "--debug-find-pkg=OpenSSL",
+        "--preset",
+        "windows-clangcl-static",
+        "-S",
+        "D:\\a\\btx\\btx\\btx",
+        "-B",
+        "D:\\btx-native-035\\project-build",
+        "-DBUILD_TESTS=ON",
+        "-DVCPKG_MANIFEST_NO_DEFAULT_FEATURES=ON",
+        "-DVCPKG_MANIFEST_FEATURES=wallet;tests;zeromq",
+        "-DVCPKG_INSTALLED_DIR=D:\\btx-native-035\\vcpkg-installed",
+        "-DOPENSSL_ROOT_DIR=D:\\btx-native-035\\openssl-3.5.4-static",
+        "-DOPENSSL_USE_STATIC_LIBS=ON",
+        "-DOPENSSL_MSVC_STATIC_RT=ON",
+        "-DOPENSSL_INCLUDE_DIR=D:\\btx-native-035\\openssl-3.5.4-static\\include",
+        "-DOPENSSL_SSL_LIBRARY=D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib",
+        "-DOPENSSL_CRYPTO_LIBRARY=D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "process_pid": 1944,
+      "seconds": 104.03,
+      "timed_out": false,
+      "log_sha256": "243fa9a0ba0921efe69764cd2c90671e908cb37736f13f685b493de6cc9dc817"
+    },
+    {
+      "label": "generated-targets",
+      "command": [
+        "ninja",
+        "-C",
+        "D:\\btx-native-035\\project-build",
+        "-t",
+        "targets",
+        "all"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 8228,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "95b9e4e449deca87acd02398d759b594019d94f9983e69e8b56a441de4c1a9a0"
+    },
+    {
+      "label": "baseline-generate-object",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\btx-native-035\\project-build",
+        "--target",
+        "src/modelnet/CMakeFiles/bitcoin_modelnet.dir/generate.cpp.obj",
+        "--verbose",
+        "--",
+        "-j",
+        "1"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 1,
+      "process_pid": 7648,
+      "seconds": 6.0,
+      "timed_out": false,
+      "log_sha256": "2502f427666fde8967e1a72df6ad59158645359679e3bf87190ac35d8abbb1d4"
+    },
+    {
+      "label": "baseline-pq1_runtime-object",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\btx-native-035\\project-build",
+        "--target",
+        "src/modelnet/CMakeFiles/bitcoin_modelnet.dir/pq1_runtime.cpp.obj",
+        "--verbose",
+        "--",
+        "-j",
+        "1"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 1,
+      "process_pid": 7064,
+      "seconds": 6.0,
+      "timed_out": false,
+      "log_sha256": "73f57b4eb5713991696635ff50c1b70acfdb88a5317c9a16396af145112f72bd"
+    },
+    {
+      "label": "baseline-helper-object",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\btx-native-035\\project-build",
+        "--target",
+        "src/modelnet/CMakeFiles/bitcoin_modelnet.dir/helper.cpp.obj",
+        "--verbose",
+        "--",
+        "-j",
+        "1"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 1,
+      "process_pid": 6044,
+      "seconds": 8.0,
+      "timed_out": false,
+      "log_sha256": "53e40243d8710da160be06f25672a1120deeb3e66110ba9118bf848a968f15c5"
+    },
+    {
+      "label": "candidate-generate-object",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\btx-native-035\\project-build",
+        "--target",
+        "src/modelnet/CMakeFiles/bitcoin_modelnet.dir/generate.cpp.obj",
+        "--verbose",
+        "--",
+        "-j",
+        "1"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "process_pid": 1788,
+      "seconds": 6.0,
+      "timed_out": false,
+      "log_sha256": "c72f7202feef726398c42fcc11775dc0856c781f7540396fe7571203f0285aa1"
+    },
+    {
+      "label": "candidate-pq1_runtime-object",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\btx-native-035\\project-build",
+        "--target",
+        "src/modelnet/CMakeFiles/bitcoin_modelnet.dir/pq1_runtime.cpp.obj",
+        "--verbose",
+        "--",
+        "-j",
+        "1"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "process_pid": 2012,
+      "seconds": 6.0,
+      "timed_out": false,
+      "log_sha256": "f86112eb2eef3c4a1d703690191c40bf134127fe00ea6db1af14b889213f07b8"
+    },
+    {
+      "label": "candidate-helper-object",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\btx-native-035\\project-build",
+        "--target",
+        "src/modelnet/CMakeFiles/bitcoin_modelnet.dir/helper.cpp.obj",
+        "--verbose",
+        "--",
+        "-j",
+        "1"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "process_pid": 7464,
+      "seconds": 20.02,
+      "timed_out": false,
+      "log_sha256": "02168fa0709457d36ad249df714cbc3fb87fea5f107098d9ff0260dfa9f366b6"
+    },
+    {
+      "label": "native-controls",
+      "command": [
+        "C:\\hostedtoolcache\\windows\\Python\\3.12.10\\x64\\python.exe",
+        "D:\\a\\btx\\btx\\controls\\contrib\\devtools\\windows-root-configure\\fixtures\\native.py",
+        "D:\\a\\btx\\btx\\btx",
+        "D:\\btx-native-035",
+        "D:\\btx-native-035\\evidence"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "process_pid": 1992,
+      "seconds": 22.02,
+      "timed_out": false,
+      "log_sha256": "221fd98fb93f6914b3977fc8efb7e6eff9ad2738bf75514fd30e4a6c136ddb3b"
+    },
+    {
+      "label": "modelnet-build",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\btx-native-035\\project-build",
+        "--verbose",
+        "--target",
+        "bitcoin_modelnet",
+        "--",
+        "-j",
+        "4",
+        "-k",
+        "1"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 1,
+      "process_pid": 8228,
+      "seconds": 1327.91,
+      "timed_out": false,
+      "log_sha256": "531af79131896fdf41eb58caf39acc2edc756a93cafae64a8c076cedb6d0dadd"
+    }
+  ],
+  "stages": {
+    "openssl": "COMPLETE",
+    "vcpkg": "COMPLETE",
+    "configure": "COMPLETE"
+  },
+  "product_fixes": [
+    "src/modelnet/generate.cpp",
+    "src/modelnet/pq1_runtime.cpp",
+    "src/modelnet/helper.cpp"
+  ],
+  "whole_node_build_run": false,
+  "unit_test_execution": false,
+  "PR397_in_upstream": true,
+  "compiler_env": {
+    "VCToolsVersion": "14.51.36231",
+    "WindowsSDKVersion": "10.0.26100.0\\",
+    "ImageVersion": "20261030.294.1",
+    "PROCESSOR_ARCHITECTURE": "AMD64"
+  },
+  "job_started_epoch": 1793783414.1345308,
+  "updated_utc": "2026-11-04T09:37:07.938692+00:00",
+  "before_source_sha256": "c4a26a588f3defd16f0939b64005bba470f2574127e204196809a12f079f943b",
+  "before_tracked_files": 14309,
+  "active_command": null,
+  "last_completed_command": "modelnet-build",
+  "resolved_tools": {
+    "cl": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.EXE",
+    "clang-cl": "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+    "cmake": "C:\\Program Files\\CMake\\bin\\cmake.EXE",
+    "ninja": "C:\\ProgramData\\Chocolatey\\bin\\ninja.EXE",
+    "perl": "C:\\Strawberry\\perl\\bin\\perl.EXE",
+    "nasm": "C:\\Strawberry\\c\\bin\\nasm.EXE",
+    "nmake": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\nmake.EXE",
+    "dumpbin": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\dumpbin.EXE"
+  },
+  "openssl_cache_reused": true,
+  "openssl_files": {
+    "include/openssl/opensslv.h": "df513ae26e8baebbc641ba19f3d16f3e9ac0895cb092c81a39e1669f7fcb9c5c",
+    "lib/libssl.lib": "860ce6dd4edf55af8a82a958afb9bae9cd025f3ef7e263bcc266d79cdd5179e8",
+    "lib/libcrypto.lib": "f9385fc262485a1c779aa9a740ee3bde3025b9eb61b113e311024c9571899e12",
+    "bin/openssl.exe": "c63c66cb528c20dbd9f474679c8a19ea13d40f57c7f8efa4085ceb6dbe5c5552"
+  },
+  "openssl_source_sha256": "967311f84955316969bdb1d8d4b983718ef42338639c621ec4c34fddef355e99",
+  "openssl_prefix": "D:\\btx-native-035\\openssl-3.5.4-static",
+  "dependency_native_smoke_reused_from": "https://github.com/sunnyriverr/btx/actions/runs/41755903799",
+  "dependency_smoke_rerun": false,
+  "after_source_sha256": "c4a26a588f3defd16f0939b64005bba470f2574127e204196809a12f079f943b",
+  "after_tracked_files": 14309,
+  "vcpkg_commit": "afa249f12f52ed8a3b919f195495ba8b330288d1",
+  "vcpkg_executable_sha256": "191ee64b0887af80aad3eff6c5e888ab733d3ef2182885ed4747b4574c201834",
+  "vcpkg_promisor_remote": "",
+  "configure_exit": 0,
+  "before_object_resources": {
+    "disk_free_bytes": 156414050304,
+    "cpus": 4,
+    "total_ram_bytes": 17174360064,
+    "available_ram_bytes": 13910839296
+  },
+  "last_progress_bucket": 44,
+  "build_resource_samples": [
+    {
+      "seconds": 0,
+      "disk_free_bytes": 156414050304,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13909729280
+    },
+    {
+      "seconds": 30,
+      "disk_free_bytes": 156386586624,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13112664064
+    },
+    {
+      "seconds": 60,
+      "disk_free_bytes": 156382085120,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13478051840
+    },
+    {
+      "seconds": 90,
+      "disk_free_bytes": 156380422144,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13648203776
+    },
+    {
+      "seconds": 120,
+      "disk_free_bytes": 156379111424,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13649502208
+    },
+    {
+      "seconds": 150,
+      "disk_free_bytes": 156377882624,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13702778880
+    },
+    {
+      "seconds": 180,
+      "disk_free_bytes": 156376326144,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13789589504
+    },
+    {
+      "seconds": 210,
+      "disk_free_bytes": 156375093248,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13789601792
+    },
+    {
+      "seconds": 240,
+      "disk_free_bytes": 156373864448,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13564223488
+    },
+    {
+      "seconds": 271,
+      "disk_free_bytes": 156372992000,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13563801600
+    },
+    {
+      "seconds": 301,
+      "disk_free_bytes": 156372107264,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13530050560
+    },
+    {
+      "seconds": 331,
+      "disk_free_bytes": 156370501632,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13639774208
+    },
+    {
+      "seconds": 361,
+      "disk_free_bytes": 156369289216,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13512073216
+    },
+    {
+      "seconds": 391,
+      "disk_free_bytes": 156367994880,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13584990208
+    },
+    {
+      "seconds": 420,
+      "disk_free_bytes": 156366782464,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13515485184
+    },
+    {
+      "seconds": 450,
+      "disk_free_bytes": 156365307904,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13394137088
+    },
+    {
+      "seconds": 480,
+      "disk_free_bytes": 156364075008,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13450010624
+    },
+    {
+      "seconds": 510,
+      "disk_free_bytes": 156362715136,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13482270720
+    },
+    {
+      "seconds": 540,
+      "disk_free_bytes": 156361568256,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13310726144
+    },
+    {
+      "seconds": 570,
+      "disk_free_bytes": 156360085504,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13400068096
+    },
+    {
+      "seconds": 600,
+      "disk_free_bytes": 156358787072,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13297238016
+    },
+    {
+      "seconds": 631,
+      "disk_free_bytes": 156357218304,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13338890240
+    },
+    {
+      "seconds": 661,
+      "disk_free_bytes": 156355743744,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13123776512
+    },
+    {
+      "seconds": 691,
+      "disk_free_bytes": 156354662400,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13050187776
+    },
+    {
+      "seconds": 721,
+      "disk_free_bytes": 156353437696,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13332201472
+    },
+    {
+      "seconds": 751,
+      "disk_free_bytes": 156352303104,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13225418752
+    },
+    {
+      "seconds": 781,
+      "disk_free_bytes": 156351549440,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13170683904
+    },
+    {
+      "seconds": 811,
+      "disk_free_bytes": 156350627840,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13105426432
+    },
+    {
+      "seconds": 841,
+      "disk_free_bytes": 156349284352,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13177982976
+    },
+    {
+      "seconds": 870,
+      "disk_free_bytes": 156348387328,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13103042560
+    },
+    {
+      "seconds": 900,
+      "disk_free_bytes": 156347551744,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13146808320
+    },
+    {
+      "seconds": 930,
+      "disk_free_bytes": 156346703872,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13045669888
+    },
+    {
+      "seconds": 960,
+      "disk_free_bytes": 156345352192,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13010165760
+    },
+    {
+      "seconds": 990,
+      "disk_free_bytes": 156343984128,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 12962217984
+    },
+    {
+      "seconds": 1020,
+      "disk_free_bytes": 156342595584,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 12975128576
+    },
+    {
+      "seconds": 1050,
+      "disk_free_bytes": 156341657600,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 12922843136
+    },
+    {
+      "seconds": 1080,
+      "disk_free_bytes": 156340269056,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13148618752
+    },
+    {
+      "seconds": 1111,
+      "disk_free_bytes": 156337709056,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13136596992
+    },
+    {
+      "seconds": 1141,
+      "disk_free_bytes": 156335222784,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13153771520
+    },
+    {
+      "seconds": 1171,
+      "disk_free_bytes": 156332163072,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 12955144192
+    },
+    {
+      "seconds": 1201,
+      "disk_free_bytes": 156329074688,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13241245696
+    },
+    {
+      "seconds": 1231,
+      "disk_free_bytes": 156327215104,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13069930496
+    },
+    {
+      "seconds": 1261,
+      "disk_free_bytes": 156322705408,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 13039632384
+    },
+    {
+      "seconds": 1291,
+      "disk_free_bytes": 156317609984,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 12843634688
+    },
+    {
+      "seconds": 1321,
+      "disk_free_bytes": 156310896640,
+      "cpus": 4,
+      "total_ram_bytes": 17174360064,
+      "available_ram_bytes": 12946587648
+    }
+  ],
+  "baseline-after_source_sha256": "c4a26a588f3defd16f0939b64005bba470f2574127e204196809a12f079f943b",
+  "baseline-after_tracked_files": 14309,
+  "candidate-before_source_sha256": "081be6135f21049cb6e9f5012f962874e75541462ce056a0ffb9edcab6f01144",
+  "candidate-before_tracked_files": 14309,
+  "same_generated_targets_pass": true,
+  "compile_database_unchanged": true,
+  "candidate-after_source_sha256": "081be6135f21049cb6e9f5012f962874e75541462ce056a0ffb9edcab6f01144",
+  "candidate-after_tracked_files": 14309,
+  "integration_gates": {
+    "modelnet-build": {
+      "exit": 1
+    }
+  },
+  "first_failed_stage": "modelnet-build",
+  "restored_source_sha256": "c4a26a588f3defd16f0939b64005bba470f2574127e204196809a12f079f943b",
+  "restored_tracked_files": 14309,
+  "source_restored": true
+}

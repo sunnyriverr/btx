@@ -1,0 +1,167 @@
+// Test harness. Product functions above are extracted byte-for-byte.
+using namespace modelnet;
+static int failures = 0;
+static int checks = 0;
+static void Check(bool ok, const char* label)
+{
+    ++checks;
+    std::cout << (ok ? "PASS " : "FAIL ") << label << '\n';
+    if (!ok) ++failures;
+}
+static std::string Read(const fs::path& path)
+{
+    std::ifstream in(path); return {std::istreambuf_iterator<char>(in), {}};
+}
+static void Write(const fs::path& path, const char* text)
+{
+    std::ofstream out(path); out << text;
+}
+int main(int argc, char** argv)
+{
+    if (argc != 3) return 2;
+    const std::string mode = argv[1];
+    const fs::path root = fs::PathFromString(argv[2]);
+    const fs::path worker = root / "worker";
+    const fs::path marker = root / "marker";
+    UniValue out(UniValue::VOBJ); out.pushKV("sentinel", "untouched");
+    std::string err;
+    if (mode == "empty") {
+        Check(std::getenv("BTX_OPENSSL") && !*std::getenv("BTX_OPENSSL"), "empty override actually inherited");
+        Check(OpensslBin().empty(), "OpenSSL explicit empty override preserved");
+        Check(std::getenv("BTX_MODEL_INFER_CMD") && !*std::getenv("BTX_MODEL_INFER_CMD"), "empty inference setting actually inherited");
+        Check(MaybeRunInferCmd(root, out, err), "empty optional inference succeeds");
+        Check(out.size() == 1 && out["sentinel"].get_str() == "untouched", "empty optional inference output unchanged");
+    } else if (mode == "override") {
+        Check(OpensslBin() == "fixture explicit openssl override", "OpenSSL exact override preserved");
+    } else if (mode == "infer") {
+#ifndef _WIN32
+        struct rlimit infer_lim{};
+        Check(getrlimit(RLIMIT_NOFILE, &infer_lim) == 0, "read inference fixture fd limit");
+        infer_lim.rlim_cur = std::min<rlim_t>(infer_lim.rlim_max, 256);
+        Check(setrlimit(RLIMIT_NOFILE, &infer_lim) == 0, "bound inference fixture fd limit");
+        const int infer_fd = open("/dev/null", O_RDONLY);
+        Check(infer_fd >= 0 && dup2(infer_fd, 200) == 200, "install inference descriptor leakage control");
+        if (infer_fd >= 0) close(infer_fd);
+#endif
+        const bool ok = MaybeRunInferCmd(root, out, err);
+#ifdef _WIN32
+        Check(!ok && !err.empty(), "configured inference refuses natively");
+        Check(out.size() == 1 && out["sentinel"].get_str() == "untouched", "refused inference output unchanged");
+        Check(!fs::exists(marker), "configured inference creates no worker marker");
+#else
+        Check(ok && out["infer_ok"].get_bool() && out["generated"].get_bool(), "configured inference executes successfully");
+        Check(out["infer_stdout"].get_str() == "fixture-infer", "configured inference protocol output");
+        close(200);
+#endif
+    } else if (mode == "profile-nonexec" || mode == "profile-missing") {
+        const HostGenerateProfile p = ProbeHostGenerateProfile();
+        const UniValue json = HostGenerateProfileJson(p);
+        Check(!p.llama_cli && !p.generate_adapter && !p.cuda_loader && !p.exl3_cli,
+              "configured missing/nonexecutable files advertise no backend");
+        Check(json["formats"].empty() && json["backends"].empty() && !json["can_generate"].get_bool(),
+              "configured missing/nonexecutable exported profile unavailable");
+    } else if (mode == "full") {
+#ifndef _WIN32
+        signal(SIGPIPE, SIG_IGN);
+        // This process and its own children only: keep the real fallback FD sweep bounded.
+        struct rlimit lim{};
+        Check(getrlimit(RLIMIT_NOFILE, &lim) == 0, "read fixture fd limit");
+        lim.rlim_cur = std::min<rlim_t>(lim.rlim_max, 256);
+        Check(setrlimit(RLIMIT_NOFILE, &lim) == 0, "bound fixture fd limit to 256");
+        const int inherited_fd = open("/dev/null", O_RDONLY);
+        Check(inherited_fd >= 0 && dup2(inherited_fd, 200) == 200, "install descriptor leakage control");
+        if (inherited_fd >= 0) close(inherited_fd);
+        pid_t fdchild = fork();
+        if (fdchild == 0) { CloseWorkerDescriptors(); _exit(fcntl(200, F_GETFD) == -1 && errno == EBADF ? 0 : 1); }
+        int fdstatus = 0;
+        Check(fdchild > 0 && waitpid(fdchild, &fdstatus, 0) == fdchild && WIFEXITED(fdstatus) && WEXITSTATUS(fdstatus) == 0,
+              "real PR403 descriptor cleanup closes inherited fd");
+#endif
+        const HostGenerateProfile p = ProbeHostGenerateProfile();
+        const UniValue json = HostGenerateProfileJson(p);
+#ifdef _WIN32
+        Check(!p.llama_cli && !p.generate_adapter && !p.cuda_loader && !p.exl3_cli, "all four native backend flags false with existing files");
+        Check(!json["llama_cli"].get_bool() && !json["generate_adapter"].get_bool() && !json["cuda_loader"].get_bool() && !json["exl3_cli"].get_bool(), "all four exported native backend flags false");
+        Check(json["formats"].empty() && json["backends"].empty() && !json["can_generate"].get_bool(), "native profile advertises no formats/backends/generation");
+        Check(!IsExecutableFile(worker), "native existing backend is unavailable");
+        Check(OpensslBin() == "openssl", "native unset OpenSSL uses existing fallback");
+#else
+        Check(p.llama_cli && p.generate_adapter && p.cuda_loader && p.exl3_cli, "all four POSIX executable backend flags true");
+        Check(json["formats"].size() == 3 && json["backends"].size() == 4 && json["can_generate"].get_bool(), "POSIX profile advertises supported execution");
+        const fs::path nonexec = root / "nonexec"; Write(nonexec, "not executable"); chmod(fs::PathToString(nonexec).c_str(), 0600);
+        Check(IsExecutableFile(worker) && !IsExecutableFile(nonexec) && !IsExecutableFile(root / "missing") && !IsExecutableFile(root), "POSIX file admission: executable, nonexec, missing, directory");
+        Check(!OpensslBin().empty(), "POSIX OpenSSL discovery returns existing nonempty path fallback");
+#endif
+        Check(!std::getenv("BTX_MODEL_INFER_CMD"), "optional inference setting actually absent");
+        Check(MaybeRunInferCmd(root, out, err), "absent optional inference succeeds");
+        using TestPid = decltype(ResidentCuda{}.pid);
+        TestPid pid = 9876;
+        bool cuda = RunCudaLoader(worker, root, out, err, &pid);
+#ifdef _WIN32
+        Check(!cuda && pid == 0 && !err.empty(), "CUDA hold refuses and clears PID");
+        Check(!RunCudaLoader(worker, root, out, err, nullptr), "CUDA one-shot refuses");
+        Check(!RunGenerateAdapter(worker, root, "fixture", 4, out, err), "generate adapter refuses");
+        Check(!RunLlamaGenerate(worker, root / "dummy.gguf", "fixture", 4, out, err), "llama runner refuses");
+        Check(out.size() == 1 && out["sentinel"].get_str() == "untouched", "native runners leave output unchanged");
+        Check(g_resident.empty(), "native runner refusal creates no resident entry");
+        Check(!PidAlive(0) && !PidAlive(4242), "native PID checks never claim live worker");
+        ResidentCuda stale; stale.pid = 4242; g_resident["fixture"] = stale;
+        StopResident("fixture"); Check(g_resident.empty(), "native stale resident cleanup erases record");
+        Check(!fs::exists(marker), "native runner guards create no worker marker");
+        const fs::path sentinel = root / "sentinel.sock"; Write(sentinel, "endpoint sentinel");
+        Check(!UnixSocketSafeToAdopt(sentinel, err) && !err.empty(), "native Unix adoption check refuses");
+        Check(!UnixConnectedPeerIsSelf(-1, err) && !err.empty(), "native peer identity check refuses");
+        fs::path requested = sentinel;
+        Check(ListenUnix(requested, err) < 0 && requested == sentinel && Read(sentinel) == "endpoint sentinel", "native listener refuses before sentinel/path mutation");
+        Check(!CallUnixRpc(sentinel, "hello", UniValue(UniValue::VARR), out, err) && Read(sentinel) == "endpoint sentinel", "native Unix RPC refuses before sentinel mutation");
+        fs::path missing_socket = root / "missing-socket-parent" / "helper.sock";
+        Check(ListenUnix(missing_socket, err) < 0 && !fs::exists(missing_socket.parent_path()), "native listener creates no parent directory");
+        const fs::path pem = root / "key.pem"; Write(pem, "PEM sentinel");
+        bool called = false;
+        auto writer = [&](FILE*) { called = true; return true; };
+        Check(!WritePrivatePem(pem, writer) && !called && Read(pem) == "PEM sentinel", "native private PEM refuses before callback/truncation");
+        const fs::path missing_pem = root / "missing-pem-parent" / "key.pem";
+        Check(!WritePrivatePem(missing_pem, writer) && !called && !fs::exists(missing_pem.parent_path()), "native private PEM creates no parent/file");
+#else
+        Check(cuda && pid > 0 && PidAlive(pid), "legitimate CUDA resident starts and lives");
+        if (cuda && pid > 0) { ResidentCuda r; r.pid = pid; g_resident["fixture"] = r; StopResident("fixture"); }
+        Check(g_resident.empty() && !PidAlive(pid), "legitimate CUDA resident stops and reaps");
+        Check(RunCudaLoader(worker, root, out, err, nullptr) && out["ok"].get_bool(), "legitimate CUDA one-shot protocol");
+        Check(RunGenerateAdapter(worker, root, "fixture", 4, out, err) && out["text"].get_str() == "fixture-adapter", "legitimate adapter stdin/stdout protocol");
+        Check(RunLlamaGenerate(worker, root / "dummy.gguf", "fixture", 4, out, err) && out["text"].get_str() == "fixture-llama", "legitimate llama execution");
+        Check(!RunCudaLoader(root / "missing", root, out, err, nullptr), "CUDA missing executable refuses");
+        Check(!RunGenerateAdapter(root / "nonexec", root, "fixture", 4, out, err), "adapter nonexecutable input refuses");
+        Check(!RunLlamaGenerate(root / "nonexec", root / "dummy.gguf", "fixture", 4, out, err), "llama nonexecutable input refuses");
+        Check(fs::exists(marker), "POSIX workers actually executed");
+        const fs::path pem = root / "key.pem";
+        bool called = false;
+        Check(WritePrivatePem(pem, [&](FILE* f) { called = true; return std::fputs("private fixture", f) >= 0; }) && called && Read(pem) == "private fixture", "POSIX private PEM writer succeeds");
+        struct stat st{}; stat(fs::PathToString(pem).c_str(), &st);
+        Check((st.st_mode & 0777) == 0600, "POSIX private PEM has mode 0600");
+        fs::path sock = root / "s" / "rpc";
+        const int listenfd = ListenUnix(sock, err);
+        Check(listenfd >= 0 && UnixSocketSafeToAdopt(sock, err), "POSIX private listener and adoption succeed");
+        if (listenfd >= 0) {
+            chmod(fs::PathToString(sock).c_str(), 0602);
+            Check(!UnixSocketSafeToAdopt(sock, err), "POSIX world-writable socket refuses adoption");
+            chmod(fs::PathToString(sock).c_str(), 0600);
+            const fs::path link = root / "s" / "link";
+            fs::create_symlink(sock, link);
+            Check(!UnixSocketSafeToAdopt(link, err), "POSIX socket symlink refuses adoption");
+            std::thread server([&] {
+                const int fd = accept(listenfd, nullptr, nullptr);
+                if (fd < 0) return;
+                std::string pe; const bool same = UnixConnectedPeerIsSelf(fd, pe);
+                const std::string request = RecvUntil(fd, 4096, nullptr, 3000);
+                const std::string reply = same && request.find("hello") != std::string::npos ? "{\"result\":\"fixture-rpc\",\"error\":null}\n" : "{}\n";
+                send(fd, reply.data(), reply.size(), 0); close(fd);
+            });
+            Check(CallUnixRpc(sock, "hello", UniValue(UniValue::VARR), out, err) && out.get_str() == "fixture-rpc", "POSIX actual local Unix RPC exchange");
+            server.join(); close(listenfd); fs::remove(sock);
+        }
+        close(200);
+#endif
+    } else return 2;
+    std::cout << "RESULT checks=" << checks << " failures=" << failures << '\n';
+    return failures ? 1 : 0;
+}
