@@ -1,0 +1,472 @@
+{
+  "base": "46caec762b0f130d497313d8ca9fa6894ac19ccd",
+  "scope": "Exact root-generated unit portability before/after plus actual-helper runtime controls",
+  "status": "PAIRED_GENERATED_UNIT_AND_COMPONENT_CONTROLS_PASS",
+  "commands": [
+    {
+      "label": "cmake-version",
+      "command": [
+        "cmake",
+        "--version"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.05,
+      "timed_out": false,
+      "log_sha256": "30d9c504b2b91d7683a1b8d25f9f987cb24ff9f35fd553950540cd847f8e23de"
+    },
+    {
+      "label": "ninja-version",
+      "command": [
+        "ninja",
+        "--version"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.02,
+      "timed_out": false,
+      "log_sha256": "f7204ca4d4bbe623e6045a5088ac906c5e1966b4fd2a11af9d156bad3327526f"
+    },
+    {
+      "label": "clang-version",
+      "command": [
+        "clang-cl",
+        "--version"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.08,
+      "timed_out": false,
+      "log_sha256": "661974250fc5ed291000a9000c99466582a67ef96304a893526f7e46b7db492e"
+    },
+    {
+      "label": "cl-version",
+      "command": [
+        "cl",
+        "/Bv"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 2,
+      "seconds": 2.03,
+      "timed_out": false,
+      "log_sha256": "c540121e17c0d19751b1c744c4c70d492cea729394ebe2284c612f00b7339459"
+    },
+    {
+      "label": "openssl-version",
+      "command": [
+        "D:\\btx-native-035\\openssl-3.5.4-static\\bin\\openssl.exe",
+        "version",
+        "-a"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "000d730b06f4810784acc07cf2b53071e58a58a2ac843419166f7d9b4db9efff"
+    },
+    {
+      "label": "openssl-probe-build",
+      "command": [
+        "cl",
+        "/nologo",
+        "/MT",
+        "/O2",
+        "/ID:\\btx-native-035\\openssl-3.5.4-static\\include",
+        "D:\\btx-native-035\\evidence\\openssl_probe.c",
+        "/FeD:\\btx-native-035\\evidence\\openssl_probe.exe",
+        "/FoD:\\btx-native-035\\evidence\\openssl_probe.obj",
+        "/link",
+        "/LIBPATH:D:\\btx-native-035\\openssl-3.5.4-static\\lib",
+        "libssl.lib",
+        "libcrypto.lib",
+        "ws2_32.lib",
+        "gdi32.lib",
+        "advapi32.lib",
+        "crypt32.lib",
+        "user32.lib"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 6.0,
+      "timed_out": false,
+      "log_sha256": "77f0b48200d24c6b02ecadfa9ccc016350194aa21f337174ca42991d74b048ad"
+    },
+    {
+      "label": "openssl-probe-run",
+      "command": [
+        "D:\\btx-native-035\\evidence\\openssl_probe.exe"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.01,
+      "timed_out": false,
+      "log_sha256": "008c0109de0ed474c98ddedbaa48ed8d7a5e2a842e5ea67be1b1ed37b90e4a5f"
+    },
+    {
+      "label": "openssl-probe-dependents",
+      "command": [
+        "dumpbin",
+        "/dependents",
+        "D:\\btx-native-035\\evidence\\openssl_probe.exe"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.02,
+      "timed_out": false,
+      "log_sha256": "a7ba6fa63bd37523a7ec3954b14602c2c6bf6d4257991d84dfcdae1a32110dd4"
+    },
+    {
+      "label": "vcpkg-clone",
+      "command": [
+        "git",
+        "clone",
+        "--no-checkout",
+        "https://github.com/microsoft/vcpkg.git",
+        "D:\\btx-native-035\\vcpkg"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 16.03,
+      "timed_out": false,
+      "log_sha256": "b7682cd35378ee73ea64ff25d41146492355a31d184aa23c9e2a7c1568d2aae4"
+    },
+    {
+      "label": "vcpkg-checkout",
+      "command": [
+        "git",
+        "-C",
+        "D:\\btx-native-035\\vcpkg",
+        "checkout",
+        "--detach",
+        "afa249f12f52ed8a3b919f195495ba8b330288d1"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 6.0,
+      "timed_out": false,
+      "log_sha256": "c7eb77dcf59b404e01015e50b293a2ac8af3c448f197b5001f654aab57dfa103"
+    },
+    {
+      "label": "vcpkg-bootstrap",
+      "command": [
+        "cmd",
+        "/c",
+        "D:\\btx-native-035\\vcpkg\\bootstrap-vcpkg.bat",
+        "-disableMetrics"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.02,
+      "timed_out": false,
+      "log_sha256": "a68ec968c9b75c704553d6e687a2987d7191c189c0209547e35abed030e9f045"
+    },
+    {
+      "label": "vcpkg-version",
+      "command": [
+        "D:\\btx-native-035\\vcpkg\\vcpkg.exe",
+        "version"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "bd34078a4a7278c80370e9685054a1503c151a671be7e6fdf893eb3a2b4e6cc6"
+    },
+    {
+      "label": "vcpkg-historical-blob-8ed2f86e",
+      "command": [
+        "git",
+        "-C",
+        "D:\\btx-native-035\\vcpkg",
+        "cat-file",
+        "-e",
+        "8ed2f86ee404263f5aa1f72f8f4f13ee44262b81"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "vcpkg-historical-blob-937a2198",
+      "command": [
+        "git",
+        "-C",
+        "D:\\btx-native-035\\vcpkg",
+        "cat-file",
+        "-e",
+        "937a2198387cb5c913e4feea170652651dd756ba"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "root-configure",
+      "command": [
+        "cmake",
+        "--debug-find-pkg=OpenSSL",
+        "--preset",
+        "windows-clangcl-static",
+        "-S",
+        "D:\\a\\btx\\btx\\btx",
+        "-B",
+        "D:\\btx-native-035\\project-build",
+        "-DBUILD_TESTS=ON",
+        "-DVCPKG_MANIFEST_NO_DEFAULT_FEATURES=ON",
+        "-DVCPKG_MANIFEST_FEATURES=wallet;tests;zeromq",
+        "-DVCPKG_INSTALLED_DIR=D:\\btx-native-035\\vcpkg-installed",
+        "-DOPENSSL_ROOT_DIR=D:\\btx-native-035\\openssl-3.5.4-static",
+        "-DOPENSSL_USE_STATIC_LIBS=ON",
+        "-DOPENSSL_MSVC_STATIC_RT=ON",
+        "-DOPENSSL_INCLUDE_DIR=D:\\btx-native-035\\openssl-3.5.4-static\\include",
+        "-DOPENSSL_SSL_LIBRARY=D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib",
+        "-DOPENSSL_CRYPTO_LIBRARY=D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 94.02,
+      "timed_out": false,
+      "log_sha256": "09d55224ace81463c096a81f2247d68c3ce075395fa08fb3866220b57dbfa15f"
+    },
+    {
+      "label": "generated-targets",
+      "command": [
+        "ninja",
+        "-C",
+        "D:\\btx-native-035\\project-build",
+        "-t",
+        "targets",
+        "all"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "95b9e4e449deca87acd02398d759b594019d94f9983e69e8b56a441de4c1a9a0"
+    },
+    {
+      "label": "baseline-unit-object",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\btx-native-035\\project-build",
+        "--target",
+        "src/test/CMakeFiles/test_btx.dir/matmul_backend_capabilities_tests.cpp.obj",
+        "--verbose",
+        "--",
+        "-j",
+        "1"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 1,
+      "seconds": 6.0,
+      "timed_out": false,
+      "log_sha256": "15c64ba2ec80bc9a5d90c67ba2fd7786bf4f3765443c0ee52006bb9e64d92f1d"
+    },
+    {
+      "label": "candidate-unit-object",
+      "command": [
+        "cmake",
+        "--build",
+        "D:\\btx-native-035\\project-build",
+        "--target",
+        "src/test/CMakeFiles/test_btx.dir/matmul_backend_capabilities_tests.cpp.obj",
+        "--verbose",
+        "--",
+        "-j",
+        "1"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 8.0,
+      "timed_out": false,
+      "log_sha256": "41622ece0553b678718eee271be14b32b9ec350c571e5ee9976508af2b07d8e7"
+    },
+    {
+      "label": "clang-cl-component-build",
+      "command": [
+        "clang-cl",
+        "/nologo",
+        "/std:c++20",
+        "/MT",
+        "/EHsc",
+        "/ID:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\include",
+        "D:\\btx-native-035\\evidence\\component.cpp",
+        "/FeD:\\btx-native-035\\evidence\\clang-cl-component.exe",
+        "/FoD:\\btx-native-035\\evidence\\clang-cl-component.obj"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 6.0,
+      "timed_out": false,
+      "log_sha256": "f550d439b897764bb64d8f3aefa3ae82a38f6ed1b4bd3a49e740e7cd72ffa6bc"
+    },
+    {
+      "label": "clang-cl-component-absent",
+      "command": [
+        "D:\\btx-native-035\\evidence\\clang-cl-component.exe",
+        "--log_level=test_suite"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.02,
+      "timed_out": false,
+      "log_sha256": "5a99df35dfaac940b7288fda00ed6bcb9b4e980e5378784f2808ae53313ec3cb"
+    },
+    {
+      "label": "clang-cl-component-preexisting",
+      "command": [
+        "D:\\btx-native-035\\evidence\\clang-cl-component.exe",
+        "--log_level=test_suite"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "a1ba1fe50b5b1dfb5ee85e139df528866351a070f8368a20124139846027e354"
+    },
+    {
+      "label": "cl-component-build",
+      "command": [
+        "cl",
+        "/nologo",
+        "/std:c++20",
+        "/MT",
+        "/EHsc",
+        "/ID:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\include",
+        "D:\\btx-native-035\\evidence\\component.cpp",
+        "/FeD:\\btx-native-035\\evidence\\cl-component.exe",
+        "/FoD:\\btx-native-035\\evidence\\cl-component.obj"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 6.0,
+      "timed_out": false,
+      "log_sha256": "9ca036b25f80f6dbfcbd82bf174314f0703c114b937db082d8b21fd3d04071c2"
+    },
+    {
+      "label": "cl-component-absent",
+      "command": [
+        "D:\\btx-native-035\\evidence\\cl-component.exe",
+        "--log_level=test_suite"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "c737569bdadc3a791fa784b6fb24ea73fe6c9a3718ed2bab09a7f38bd21a96bd"
+    },
+    {
+      "label": "cl-component-preexisting",
+      "command": [
+        "D:\\btx-native-035\\evidence\\cl-component.exe",
+        "--log_level=test_suite"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.02,
+      "timed_out": false,
+      "log_sha256": "8423422ff88c955c17f07366b3fb8ed059fb015d9fa60b10b272866663c3faae"
+    },
+    {
+      "label": "mutant-component-build",
+      "command": [
+        "clang-cl",
+        "/nologo",
+        "/std:c++20",
+        "/MT",
+        "/EHsc",
+        "/ID:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\include",
+        "D:\\btx-native-035\\evidence\\component-no-restore.cpp",
+        "/FeD:\\btx-native-035\\evidence\\component-no-restore.exe",
+        "/FoD:\\btx-native-035\\evidence\\component-no-restore.obj"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 6.0,
+      "timed_out": false,
+      "log_sha256": "6851a2016bff7d3533439908c725d02441b68126837cafc60f3d7b27ecedf932"
+    },
+    {
+      "label": "mutant-component-expected-failure",
+      "command": [
+        "D:\\btx-native-035\\evidence\\component-no-restore.exe",
+        "--log_level=test_suite"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 90,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "defa2cabcb5076d23a099f31e73e08696bb4fae46a7a5fc79032206f37137c22"
+    }
+  ],
+  "stages": {
+    "openssl": "COMPLETE",
+    "vcpkg": "COMPLETE",
+    "configure": "COMPLETE"
+  },
+  "product_fixes": [
+    "src/test/matmul_backend_capabilities_tests.cpp"
+  ],
+  "planned_test_source_fix": "src/test/matmul_backend_capabilities_tests.cpp",
+  "whole_node_build_run": false,
+  "unit_test_execution": false,
+  "PR397_in_upstream": true,
+  "compiler_env": {
+    "VCToolsVersion": "14.51.36231",
+    "WindowsSDKVersion": "10.0.26100.0\\",
+    "ImageVersion": "20261030.294.1",
+    "PROCESSOR_ARCHITECTURE": "AMD64"
+  },
+  "updated_utc": "2026-11-04T02:41:23.303172+00:00",
+  "before_source_sha256": "a3cebe644e4a4823c30abff7125751e57a68baaef21a67d3519b6d8e3b8bc15c",
+  "before_tracked_files": 14307,
+  "resolved_tools": {
+    "cl": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.EXE",
+    "clang-cl": "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+    "cmake": "C:\\Program Files\\CMake\\bin\\cmake.EXE",
+    "ninja": "C:\\ProgramData\\Chocolatey\\bin\\ninja.EXE",
+    "perl": "C:\\Strawberry\\perl\\bin\\perl.EXE",
+    "nasm": "C:\\Strawberry\\c\\bin\\nasm.EXE",
+    "nmake": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\nmake.EXE",
+    "dumpbin": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\dumpbin.EXE"
+  },
+  "openssl_cache_reused": true,
+  "openssl_source_sha256": "967311f84955316969bdb1d8d4b983718ef42338639c621ec4c34fddef355e99",
+  "openssl_prefix": "D:\\btx-native-035\\openssl-3.5.4-static",
+  "openssl_files": {
+    "include/openssl/opensslv.h": "df513ae26e8baebbc641ba19f3d16f3e9ac0895cb092c81a39e1669f7fcb9c5c",
+    "lib/libssl.lib": "860ce6dd4edf55af8a82a958afb9bae9cd025f3ef7e263bcc266d79cdd5179e8",
+    "lib/libcrypto.lib": "f9385fc262485a1c779aa9a740ee3bde3025b9eb61b113e311024c9571899e12",
+    "bin/openssl.exe": "c63c66cb528c20dbd9f474679c8a19ea13d40f57c7f8efa4085ceb6dbe5c5552"
+  },
+  "openssl_probe_executable_sha256": "38ff7f545d4d6a3d1c3533c4ae397952e94655375daa89909bf211754f8972f5",
+  "after_source_sha256": "3806069b2ecbb9e1513e1443627dc04eee7f49fde80b2f828eca8efd7cd5275c",
+  "after_tracked_files": 14307,
+  "tracked_source_changed_files": [
+    "src/test/matmul_backend_capabilities_tests.cpp"
+  ],
+  "vcpkg_commit": "afa249f12f52ed8a3b919f195495ba8b330288d1",
+  "vcpkg_executable_sha256": "191ee64b0887af80aad3eff6c5e888ab733d3ef2182885ed4747b4574c201834",
+  "vcpkg_promisor_remote": "",
+  "configure_exit": 0,
+  "generated_compile_database_sha256": "a991664401a33704ed75d27e3cd1ca79c61a52fff968fa16f131b28964a5853e",
+  "baseline-after_source_sha256": "a3cebe644e4a4823c30abff7125751e57a68baaef21a67d3519b6d8e3b8bc15c",
+  "baseline-after_tracked_files": 14307,
+  "candidate-before_source_sha256": "3806069b2ecbb9e1513e1443627dc04eee7f49fde80b2f828eca8efd7cd5275c",
+  "candidate-before_tracked_files": 14307,
+  "unit_object_sha256": "b756ec56277c42932190b02e38ce947ca5af91677f164ef46b0505d1df77cb00",
+  "candidate_source_sha256": "de04d3a5733eb36fa6490409aea77655acca874f3ff5c757dbccf336bbb55078",
+  "component_source_sha256": "a648b504eb4d16f2bc4b71b397a15c7393f595e08c7bccda01c7809416361555",
+  "boost_version_header_sha256": "063ed28eceb611d52f58e57aca61edb1e086ed902fbded81ac61936009c52cf0",
+  "clang-cl_component_sha256": "128763845e80df29d70fe71b56e4c6130daed4fc725f4add54e546d1354cc14e",
+  "clang-cl_component_object_sha256": "0bd1456d5ee53a242380538fcc9d792f3c4f8dbef9dd46b3b521a2a4cd06ff3a",
+  "cl_component_sha256": "625528f897f7f34ccf671d0a947cd9065d77144a31a475d50293ad2120af4eb9",
+  "cl_component_object_sha256": "8f8be5132d6e5ce629acf24f3756f5ac2fce64331851173f0601571adab28862",
+  "component_test_execution": true
+}

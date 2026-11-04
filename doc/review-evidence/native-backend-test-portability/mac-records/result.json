@@ -1,0 +1,101 @@
+{
+  "scope": "macOS exact extracted guard plus identical new in-tree cases; not full BTX build",
+  "commands": [
+    {
+      "variant": "baseline",
+      "label": "build",
+      "command": [
+        "/usr/bin/clang++",
+        "-std=c++20",
+        "-O0",
+        "-I/opt/homebrew/include",
+        "/Users/wildwood/Documents/Playground/work/btx-review-tools/windows-unit-portability/mac/baseline.cpp",
+        "-o",
+        "/Users/wildwood/Documents/Playground/work/btx-review-tools/windows-unit-portability/mac/baseline-component"
+      ],
+      "exit": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "variant": "baseline",
+      "label": "absent",
+      "command": [
+        "/Users/wildwood/Documents/Playground/work/btx-review-tools/windows-unit-portability/mac/baseline-component",
+        "--log_level=test_suite"
+      ],
+      "exit": 0,
+      "log_sha256": "f19a6a0b1c925c7df91e16214365e7a3877bb92286241d13fd42a6df3f2ddf47"
+    },
+    {
+      "variant": "baseline",
+      "label": "preexisting",
+      "command": [
+        "/Users/wildwood/Documents/Playground/work/btx-review-tools/windows-unit-portability/mac/baseline-component",
+        "--log_level=test_suite"
+      ],
+      "exit": 0,
+      "log_sha256": "04c42b1e0c805f51a31d37be2aec9932031cbba86c9a9057ff510defdeb4ac30"
+    },
+    {
+      "variant": "baseline",
+      "label": "empty",
+      "command": [
+        "/Users/wildwood/Documents/Playground/work/btx-review-tools/windows-unit-portability/mac/baseline-component",
+        "--log_level=test_suite"
+      ],
+      "exit": 0,
+      "log_sha256": "a56f4b906ec530ec2cd8fdfa21d9236e5b72719caed4691d88b4546ea860dfd8"
+    },
+    {
+      "variant": "candidate",
+      "label": "build",
+      "command": [
+        "/usr/bin/clang++",
+        "-std=c++20",
+        "-O0",
+        "-I/opt/homebrew/include",
+        "/Users/wildwood/Documents/Playground/work/btx-review-tools/windows-unit-portability/mac/candidate.cpp",
+        "-o",
+        "/Users/wildwood/Documents/Playground/work/btx-review-tools/windows-unit-portability/mac/candidate-component"
+      ],
+      "exit": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "variant": "candidate",
+      "label": "absent",
+      "command": [
+        "/Users/wildwood/Documents/Playground/work/btx-review-tools/windows-unit-portability/mac/candidate-component",
+        "--log_level=test_suite"
+      ],
+      "exit": 0,
+      "log_sha256": "3fc1db6a009ddca8bb93b3525bdbc69042aa4ff9491edc17342d9d27979d37cf"
+    },
+    {
+      "variant": "candidate",
+      "label": "preexisting",
+      "command": [
+        "/Users/wildwood/Documents/Playground/work/btx-review-tools/windows-unit-portability/mac/candidate-component",
+        "--log_level=test_suite"
+      ],
+      "exit": 0,
+      "log_sha256": "b491a2b36b9a6b7c6d702d098bb7ff492c9250f96b5817b0c8c8145869675620"
+    },
+    {
+      "variant": "candidate",
+      "label": "empty",
+      "command": [
+        "/Users/wildwood/Documents/Playground/work/btx-review-tools/windows-unit-portability/mac/candidate-component",
+        "--log_level=test_suite"
+      ],
+      "exit": 0,
+      "log_sha256": "c237330a5eaa16468610d9e5dca6e69222f59bf4c6bfd9b0b10adc1e1c03b752"
+    }
+  ],
+  "baseline_source_sha256": "7f1268ab8cae2d6e10cbfa2a83003ed30c03e011d61be6db4aa531102ad6efee",
+  "baseline_exe_sha256": "66f4e675744cda1264f3886f506168be34c1c22d38a06d16c46a8faf8db1de6a",
+  "candidate_source_sha256": "34cf7d72f0af2851b1dcd7af4bb94eab6224669e701f5d378b90b0f326d506cb",
+  "candidate_exe_sha256": "643c7c2640590f101d23c38c19cc2d3d5817d8b5307539fc094691a2cb893738",
+  "free_gib": 2.838897705078125,
+  "pass": true
+}

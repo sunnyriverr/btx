@@ -1,0 +1,13 @@
+{
+  "utc": "2026-11-04T02:33:51.009587+00:00",
+  "base": "46caec762b0f130d497313d8ca9fa6894ac19ccd",
+  "commit": "c3af59dfea2dd3ca9ed2e3efb7677f706b4196ad",
+  "tree": "a74d7417046bb0f907daf830584990f8095fb7c6",
+  "branch": "refs/heads/codex/fix-native-backend-test-env",
+  "file": "src/test/matmul_backend_capabilities_tests.cpp",
+  "blob": "2de50e3a6966a69e0a66d5d5707b538abd26152a",
+  "credit": "Numair Faraz <numair@cyb.ne.jp>",
+  "message": "test: make backend capability fixtures portable on Windows\n\nUse the native CRT environment API following the existing Metal guard.\nRetain POSIX headers and the Metal zero-copy allocation body on POSIX;\non Windows keep the case registered and check backend unavailability.\nAdd scoped environment restoration tests.\n\nCo-authored-by: Numair Faraz <numair@cyb.ne.jp>\n",
+  "published": false,
+  "supersedes_private_candidate": "4a286b26e68eae661e66eb484d943f7fd31a851b"
+}

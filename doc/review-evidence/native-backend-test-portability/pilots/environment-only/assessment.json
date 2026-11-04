@@ -1,0 +1,15 @@
+{
+  "utc": "2026-11-04T02:34:30.959655+00:00",
+  "run": 41760698599,
+  "status": "BLOCKED_CANDIDATE_OBJECT",
+  "configure_passed": true,
+  "baseline_unistd_failure_reproduced": true,
+  "candidate_env_errors_cleared_but_same_TU_POSIX_Metal_calls_unportable": true,
+  "only_expected_source_changed": [
+    "src/test/matmul_backend_capabilities_tests.cpp"
+  ],
+  "logs_verified": 18,
+  "component_controls_executed": false,
+  "fix_needed": "Keep POSIXinclude and originalMetalcase body onPOSIX; retain named case onWindows with unavailablebackendcheck",
+  "root_cause_of_rework": "Initial audit searched process/environment names but missed later page-size/aligned-allocation use; removing unistd called unused was inaccurate."
+}
