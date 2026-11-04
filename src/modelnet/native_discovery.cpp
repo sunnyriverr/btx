@@ -63,13 +63,11 @@ void CloseSocket(intptr_t fd)
 }
 bool SocketOption(intptr_t fd, int level, int option, const void* data, size_t size)
 {
-    return setsockopt(
 #ifdef _WIN32
-        static_cast<SOCKET>(fd), level, option, static_cast<const char*>(data), static_cast<int>(size)
+    return setsockopt(static_cast<SOCKET>(fd), level, option, static_cast<const char*>(data), static_cast<int>(size)) == 0;
 #else
-        static_cast<int>(fd), level, option, data, static_cast<socklen_t>(size)
+    return setsockopt(static_cast<int>(fd), level, option, data, static_cast<socklen_t>(size)) == 0;
 #endif
-    ) == 0;
 }
 struct LanInterface {
     uint32_t address;

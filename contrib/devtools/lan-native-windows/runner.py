@@ -1,7 +1,7 @@
 from pathlib import Path
 import os,sys,json,subprocess,hashlib,time,platform
 S=Path(os.environ['GITHUB_WORKSPACE'])/'source';P=Path(__file__).resolve().parent;E=Path(os.environ['RUNNER_TEMP'])/'lan400-native-evidence';E.mkdir(exist_ok=True)
-HEAD='3acc3f74d92f646cf95cdcb8c4d92a7ec97afc9a';R={'head':HEAD,'status':'IN_PROGRESS','profile':'Native full component TUs, C++20/O2/staticCRT, actual Windows compatibility shim; direct compiler qualification, not root-target/fullhelper','compiler_env':{x:os.environ.get(x) for x in ['VCToolsVersion','WindowsSDKVersion','ImageVersion','PROCESSOR_ARCHITECTURE']},'commands':[],'platform':platform.platform(),'results':{},'no_product_edits':None}
+HEAD='d6be75960231f2c28e0ae355c75232f71bef40b7';BASELINE='3acc3f74d92f646cf95cdcb8c4d92a7ec97afc9a';R={'head':HEAD,'status':'IN_PROGRESS','profile':'Native full component TUs, C++20/O2/staticCRT, actual Windows compatibility shim; direct compiler qualification, not root-target/fullhelper','compiler_env':{x:os.environ.get(x) for x in ['VCToolsVersion','WindowsSDKVersion','ImageVersion','PROCESSOR_ARCHITECTURE']},'commands':[],'platform':platform.platform(),'results':{},'no_product_edits':None}
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def save(): (E/'result.json').write_text(json.dumps(R,indent=2)+'\n')
 def run(label,args,timeout=60):
@@ -41,6 +41,13 @@ try:
  R['profile_omissions']='No root-generated schema macros, OpenSSL include, or OpenMP flag: unused by tested LAN component paths. No rootCMake/fullproject claim.'
  for compiler in ['cl','clang-cl']:
   out=E/compiler;out.mkdir(exist_ok=True);run(compiler+'-version',[compiler,'/Bv' if compiler=='cl' else '--version'],20)
+  # Exact unchanged PR400 TU against identical headers/options; compiler-specific outcome retained.
+  baseline=P/'baseline-native_discovery.cpp'
+  assert sha(baseline)=='d6265aea738a1f3d86047e96417fa47fba5c40561b228e356261374fbd1eb9af'
+  p=run(compiler+'-baseline-discovery',[compiler,*common,'/c',str(baseline),'/Fo'+str(out/'baseline-discovery.obj')])
+  R.setdefault('baseline_compile',{})[compiler]={'rc':p.returncode,'source_sha256':sha(baseline)}
+  if compiler=='cl':
+   assert p.returncode!=0 and 'C2143' in p.stdout and 'C5101' in p.stdout, 'Expected original MSVC macro parse failure was not reproduced'
   objects=[]
   for label,file in [('discovery',S/'src/modelnet/native_discovery.cpp'),('nat',S/'src/modelnet/model_nat.cpp'),('fixture',P/'lan_native.cpp')]:
    obj=out/(label+'.obj');p=run(compiler+'-'+label,[compiler,*common,'/c',str(file),'/Fo'+str(obj)])
