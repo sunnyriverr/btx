@@ -1,52 +1,21 @@
 {
-  "utc": "2026-11-04T05:55:21.001610+00:00",
-  "accepted_base": "46caec762b0f130d497313d8ca9fa6894ac19ccd",
-  "source": "13bb7791b179d9ba012e654eb5fbcc437750250c",
-  "tree": "20cc8fdcc804bde127dfc4ab99cd356e0271a4e5",
-  "branch": "codex/ci-native-356-integrated-source",
+  "utc": "2026-11-04T07:36:19.805655+00:00",
+  "accepted_base": "ecd9310a8b35dbf1260d1a64e0ff39bb50e7a629",
+  "source": "1b404ed8e52eae249ac73036007ba5a382b0d3ba",
+  "tree": "77ec48a79365aa4bf6fa93d7ae45abccf6e8c22a",
+  "source_branch": "codex/fix-obs01-native-pid",
   "patches": [
     {
-      "pr": 401,
-      "original_commit": "68a17f15ac21ef2295c0e492ede35063f0afd921",
-      "integrated_commit": "68a17f15ac21ef2295c0e492ede35063f0afd921",
-      "file": "src/modelnet/supervisor.h",
-      "blob": "5881e5143b04aa55d428b415b24e93d5fa373a0b",
-      "sha256": "fab40ee929a1477dc79b510ee45c895c5c9bc14029470c7edc2effec0c61b2aa",
-      "author": "Sunny River",
-      "author_email": "255313950+sunnyriverr@users.noreply.github.com",
-      "author_date": "2026-11-04T14:09:27+10:00",
-      "original_message": "modelnet: make supervisor PID header portable\n\nThe native Windows daemon init.cpp target includes supervisor.h without\nModelnet's private compatibility header. Its unguarded pid_t member is\ntherefore undeclared. Use a signed placeholder on the existing unsupported\nWindows spawn path; retain pid_t on POSIX and include its defining header.\nNo spawn, process ownership, lifecycle or MatMul acceptance code changes.\n\nRefs #356. Thanks to repch1c for the Windows defect inventory and\nJpp-matata for independent native Windows investigation.\n"
-    },
-    {
-      "pr": 402,
-      "original_commit": "a8b96b89917f9e15ca5f4d3d716c26627098d6a1",
-      "integrated_commit": "5dcf93b4626c1fa02f7adbae87b7734095568c41",
-      "file": "src/compat/mingw/posix_extra.h",
-      "blob": "0697670f53408563501071fe6da0b643530bf027",
-      "sha256": "8f07daefd4c0721a8992aad69aa3f18e45841abe41039f0fa7c0ae26ed96c4a2",
-      "author": "Sunny River",
-      "author_email": "255313950+sunnyriverr@users.noreply.github.com",
-      "author_date": "2026-11-04T15:05:27+10:00",
-      "original_message": "modelnet: provide native regular-file predicate\n\nThe native Windows CRT does not declare S_ISREG, so the real Modelnet\nstore.cpp target cannot compile its post-materialization file-type check.\nProvide the missing predicate in the existing Windows compatibility\nheader, with exact file-type mask equality. Preserve existing definitions,\nPOSIX behavior, lstat/reparse handling and all storage safety checks.\n\nRefs #356. Thanks to repch1c for the Windows inventory and Jpp-matata\nfor independent native Windows investigation.\n"
-    },
-    {
-      "pr": 398,
-      "original_commit": "c3af59dfea2dd3ca9ed2e3efb7677f706b4196ad",
-      "integrated_commit": "13bb7791b179d9ba012e654eb5fbcc437750250c",
-      "file": "src/test/matmul_backend_capabilities_tests.cpp",
-      "blob": "2de50e3a6966a69e0a66d5d5707b538abd26152a",
-      "sha256": "de04d3a5733eb36fa6490409aea77655acca874f3ff5c757dbccf336bbb55078",
-      "author": "Sunny River",
-      "author_email": "255313950+sunnyriverr@users.noreply.github.com",
-      "author_date": "2026-11-04T12:33:51+10:00",
-      "original_message": "test: make backend capability fixtures portable on Windows\n\nUse the native CRT environment API following the existing Metal guard.\nRetain POSIX headers and the Metal zero-copy allocation body on POSIX;\non Windows keep the case registered and check backend unavailability.\nAdd scoped environment restoration tests.\n\nCo-authored-by: Numair Faraz <numair@cyb.ne.jp>\n"
+      "scope": "Obs01 PID portability",
+      "commit": "1b404ed8e52eae249ac73036007ba5a382b0d3ba",
+      "file": "src/modelnet/obs01/obs01.cpp",
+      "blob": "c6ab3b58f5eac2d5966818942e6d398408074976",
+      "pr": 404,
+      "url": "https://github.com/btxchain/btx/pull/404"
     }
   ],
-  "changed_files": [
-    "src/compat/mingw/posix_extra.h",
-    "src/modelnet/supervisor.h",
-    "src/test/matmul_backend_capabilities_tests.cpp"
-  ],
-  "new_product_changes": false,
-  "scope": "Integration-only exactly published398/401/402; unaccepted source, no PR"
+  "new_product_changes_in_driver": false,
+  "stock_accepted_tree": false,
+  "scope": "Exact published candidate, not stock-source or release qualification unless tree-equivalent adoption is established",
+  "publication_receipt": "../obs01-pid-repair/publication/publication-receipt.json"
 }
