@@ -1,0 +1,22 @@
+{
+  "baseline": {
+    "fixture": "baseline-pid-check.cpp",
+    "sha256": "7a81760fd1d2a302df73b33cff3c2f3ddd2ba72a1c92d9d77faf007d0a78f7ec",
+    "headers": "#include <unistd.h>",
+    "pid_root_block": "        const TempTree tree{fs::temp_directory_path() / (\"btx-obs01-\" + std::to_string(::getpid()))};",
+    "TempTree_sha256": "768ed470beec8aa3ceec504ebebf186cbe94602435f3ea4ab0a144a17b097555"
+  },
+  "candidate": {
+    "fixture": "candidate-pid-check.cpp",
+    "sha256": "eba8bed86837533217408d3f11131fed281bb28b99ccbcef24621bbeea5483de",
+    "headers": "#ifdef _WIN32\n#include <process.h>\n#else\n#include <unistd.h>\n#endif",
+    "pid_root_block": "#ifdef _WIN32\n        const auto process_id = ::_getpid();\n#else\n        const auto process_id = ::getpid();\n#endif\n        const TempTree tree{fs::temp_directory_path() / (\"btx-obs01-\" + std::to_string(process_id))};",
+    "TempTree_sha256": "768ed470beec8aa3ceec504ebebf186cbe94602435f3ea4ab0a144a17b097555"
+  },
+  "wrong_pid": {
+    "fixture": "wrong-pid-check.cpp",
+    "sha256": "282d3f0f26f23773923bcae7d5b5764dabc545f43c3c5cb80aaa9d6f811918a6",
+    "purpose": "Reject constant PID as an invalid compile-only workaround"
+  },
+  "source_inversion_exact": true
+}
