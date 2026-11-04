@@ -1,0 +1,7 @@
+<workspace>/work/btx-lanes/session-2/mlkem-peer-key-validation/source/src/net.cpp:3697:9: warning: calling function 'MaybeCheckNotHeld' requires negative capability '!m_archive_serve_mutex' [-Wthread-safety-analysis]
+ 3697 |         WAIT_LOCK(m_archive_serve_mutex, lock);
+      |         ^
+<workspace>/work/btx-lanes/session-2/mlkem-peer-key-validation/source/src/sync.h:262:45: note: expanded from macro 'WAIT_LOCK'
+  262 | #define WAIT_LOCK(cs, name) UniqueLock name(MaybeCheckNotHeld(cs), #cs, __FILE__, __LINE__)
+      |                                             ^
+1 warning generated.

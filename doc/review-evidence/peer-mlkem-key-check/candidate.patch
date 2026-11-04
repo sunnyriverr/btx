@@ -1,0 +1,102 @@
+diff --git a/src/crypto/ml_kem.cpp b/src/crypto/ml_kem.cpp
+index 6c1a3108..2c6e3ce1 100644
+--- a/src/crypto/ml_kem.cpp
++++ b/src/crypto/ml_kem.cpp
+@@ -57,6 +57,18 @@ KeyPair KeyGenDerand(Span<const uint8_t> seed)
+     return result;
+ }
+ 
++bool IsValidEncapsulationKey(const PublicKey& pk) noexcept
++{
++    static_assert(PUBLICKEYBYTES == KYBER_PUBLICKEYBYTES);
++    // The encoded polynomial vector is followed by an unrestricted 32-byte seed.
++    for (size_t i = 0; i < KYBER_POLYVECBYTES; i += 3) {
++        const uint16_t a = pk[i] | ((uint16_t{pk[i + 1]} & 0x0f) << 8);
++        const uint16_t b = (pk[i + 1] >> 4) | (uint16_t{pk[i + 2]} << 4);
++        if (a >= KYBER_Q || b >= KYBER_Q) return false;
++    }
++    return true;
++}
++
+ EncapsResult Encaps(const PublicKey& pk)
+ {
+     std::array<uint8_t, ENCAPS_SEEDBYTES> coin;
+diff --git a/src/crypto/ml_kem.h b/src/crypto/ml_kem.h
+index e236c427..9b00ae22 100644
+--- a/src/crypto/ml_kem.h
++++ b/src/crypto/ml_kem.h
+@@ -45,6 +45,11 @@ struct EncapsResult {
+ /** Deterministic key generation from a 64-byte seed (tests only). */
+ [[nodiscard]] KeyPair KeyGenDerand(Span<const uint8_t> seed);
+ 
++/** Check the FIPS 203 section 7.2 canonical encoding of an encapsulation key.
++ * This does not establish proper generation or ownership of the key.
++ */
++[[nodiscard]] bool IsValidEncapsulationKey(const PublicKey& pk) noexcept;
++
+ /** Encapsulate to recipient public key. */
+ [[nodiscard]] EncapsResult Encaps(const PublicKey& pk);
+ 
+diff --git a/src/net.cpp b/src/net.cpp
+index 3183bf4b..78de2f5b 100644
+--- a/src/net.cpp
++++ b/src/net.cpp
+@@ -1444,6 +1444,10 @@ bool V2Transport::ProcessReceivedPacketBytes() noexcept
+                     mlkem::PublicKey their_pk;
+                     std::copy(m_recv_decode_buffer.begin() + 1, m_recv_decode_buffer.end(),
+                               their_pk.begin());
++                    if (!mlkem::IsValidEncapsulationKey(their_pk)) {
++                        LogDebug(BCLog::NET, "v2 transport: rejecting noncanonical ML-KEM peer key, peer=%d\n", m_nodeid);
++                        return false;
++                    }
+                     SendPQCiphertextAndRekey(their_pk);
+                     SetReceiveState(RecvState::APP);
+                 } else if (peer_pq && !m_initiating && m_recv_decode_buffer.size() == 1) {
+diff --git a/src/test/ml_kem_tests.cpp b/src/test/ml_kem_tests.cpp
+index 99806230..23b96baa 100644
+--- a/src/test/ml_kem_tests.cpp
++++ b/src/test/ml_kem_tests.cpp
+@@ -42,6 +42,43 @@ BOOST_AUTO_TEST_CASE(deterministic_keygen_from_seed)
+     BOOST_CHECK(kp1.sk == kp2.sk);
+ }
+ 
++BOOST_AUTO_TEST_CASE(encapsulation_key_check_preserves_generated_keys)
++{
++    std::array<uint8_t, mlkem::KEYGEN_SEEDBYTES> seed{};
++    for (const uint8_t value : {uint8_t{0}, uint8_t{0x42}, uint8_t{0xff}}) {
++        seed.fill(value);
++        const auto kp = mlkem::KeyGenDerand(seed);
++        BOOST_CHECK(mlkem::IsValidEncapsulationKey(kp.pk));
++        const auto enc = mlkem::Encaps(kp.pk);
++        BOOST_CHECK(mlkem::Decaps(enc.ct, kp.sk) == enc.ss);
++    }
++}
++
++BOOST_AUTO_TEST_CASE(encapsulation_key_check_does_not_restrict_seed)
++{
++    mlkem::PublicKey pk{};
++    BOOST_CHECK(mlkem::IsValidEncapsulationKey(pk));
++    std::fill(pk.end() - 32, pk.end(), uint8_t{0xff});
++    BOOST_CHECK(mlkem::IsValidEncapsulationKey(pk));
++}
++
++BOOST_AUTO_TEST_CASE(encapsulation_key_check_range_and_position)
++{
++    for (size_t offset = 0; offset < mlkem::PUBLICKEYBYTES - 32; offset += 3) {
++        for (const uint16_t value : {uint16_t{0}, uint16_t{3328}, uint16_t{3329}, uint16_t{4095}}) {
++            for (const bool second : {false, true}) {
++                mlkem::PublicKey pk{};
++                const uint16_t a = second ? 0 : value;
++                const uint16_t b = second ? value : 0;
++                pk[offset] = a & 0xff;
++                pk[offset + 1] = (a >> 8) | ((b & 0x0f) << 4);
++                pk[offset + 2] = b >> 4;
++                BOOST_CHECK_EQUAL(mlkem::IsValidEncapsulationKey(pk), value < 3329);
++            }
++        }
++    }
++}
++
+ BOOST_AUTO_TEST_CASE(encaps_decaps_roundtrip)
+ {
+     const auto kp = mlkem::KeyGen();

@@ -1,0 +1,9 @@
+from pathlib import Path
+import json,shlex,subprocess,time,hashlib
+r=Path(__file__).resolve().parent;rows=json.loads((r/'build/compile_commands.json').read_text());base=r/'baseline-net.cpp';base.write_bytes(subprocess.check_output(['git','-C',str(r/'source'),'show','ecd9310a8b35dbf1260d1a64e0ff39bb50e7a629:src/net.cpp']))
+x=next(x for x in rows if x['file']==str(r/'source/src/net.cpp'));a=shlex.split(x['command']);a[a.index('-c')+1]=str(base);a[a.index('-o')+1]=str(r/'baseline-net.o')
+with (r/'baseline-net-build.log').open('w') as f:subprocess.run(a,cwd=x['directory'],stdout=f,stderr=subprocess.STDOUT,check=True,timeout=240)
+link=json.loads((r/'positive-link-command.json').read_text());orig=Path(x['directory'])/shlex.split(x['command'])[shlex.split(x['command']).index('-o')+1];link[link.index(str(orig))]=str(r/'baseline-net.o');link[link.index('-o')+1]=str(r/'runtime/baseline-positive-transport')
+with (r/'baseline-positive-link.log').open('w') as f:subprocess.run(link,stdout=f,stderr=subprocess.STDOUT,check=True,timeout=60)
+t=time.monotonic();q=subprocess.run([str(r/'runtime/baseline-positive-transport')],cwd=r,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,timeout=30);(r/'baseline-positive-run.log').write_text(q.stdout+q.stderr)
+z={'returncode':q.returncode,'seconds':time.monotonic()-t,'stdout':q.stdout,'stderr':q.stderr,'compile':a,'link':link,'net_source_sha256':hashlib.sha256(base.read_bytes()).hexdigest(),'binary_sha256':hashlib.sha256((r/'runtime/baseline-positive-transport').read_bytes()).hexdigest(),'scope':'Accepted baseline net.cpp with same positive-only fixture and common fresh crypto/support libraries. New validation predicate in common crypto is unused by baseline. No malformed-key receive test.'};(r/'baseline-positive-results.json').write_text(json.dumps(z,indent=2)+'\n');print(q.returncode,q.stdout);assert q.returncode==0
