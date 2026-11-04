@@ -1,4 +1,4 @@
-name: Native Windows daemon after PID header repair
+name: Native Windows S_ISREG file-type repair
 on:
   push:
     branches: [codex/ci-windows-root-configure]
@@ -22,11 +22,11 @@ jobs:
         with:
           path: controls
           persist-credentials: false
-      - name: Checkout exact accepted base plus published PR401
+      - name: Checkout exact accepted BTX source
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          repository: sunnyriverr/btx
-          ref: 68a17f15ac21ef2295c0e492ede35063f0afd921
+          repository: btxchain/btx
+          ref: 46caec762b0f130d497313d8ca9fa6894ac19ccd
           path: btx
           persist-credentials: false
       - name: Identify native compiler cache profile
@@ -75,7 +75,7 @@ jobs:
           set "_CL_="
           python controls/contrib/devtools/windows-root-configure/runner.py vcpkg
           exit /b %errorlevel%
-      - name: Build actual btxd target after published header repair
+      - name: Compare same generated store object and native file-type controls
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -91,6 +91,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
-          name: native-windows-daemon-after-pid-records
+          name: native-windows-s-isreg-records
           path: D:\btx-native-035\evidence\
           retention-days: 14
