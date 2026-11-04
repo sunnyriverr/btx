@@ -112,11 +112,15 @@ def configure():
  for expected in ['lib/bitcoin_modelnet.lib:','bin/btxd.exe:','bin/test_btx.exe:']:
   if expected not in targets:raise RuntimeError('Real generated target absent: '+expected)
  for name,target in [('modelnet','lib/bitcoin_modelnet.lib'),('daemon','bin/btxd.exe'),('unit','bin/test_btx.exe')]:need(name+'-dependencies',['ninja','-C',str(build),'-t','query',target])
- # Preserve generated link blocks, including flags/system import libraries.
- blocks={};ninja=(build/'build.ninja').read_text(errors='replace')
- for target in ['lib/bitcoin_modelnet.lib','bin/btxd.exe','bin/test_btx.exe']:
-  start=ninja.index('build '+target+':');end=ninja.find('\n\n',start);blocks[target]=ninja[start:end if end>=0 else None]
- (E/'generated-link-rules.json').write_text(json.dumps(blocks,indent=2)+'\n')
+ # Retain authoritative generated rules without guessing Windows path spelling.
+ # Dependency queries above prove the real targets exist; metadata needs no parser.
+ rule_files={}
+ for relative in ['build.ninja','CMakeFiles/rules.ninja']:
+  path=build/relative
+  if not path.is_file():raise RuntimeError('Generated rule file absent: '+relative)
+  name='generated-'+Path(relative).name
+  shutil.copyfile(path,E/name);rule_files[relative]={'evidence':name,'sha256':sha(E/name)}
+ (E/'generated-link-rules.json').write_text(json.dumps({'format':'raw-ninja-rules-v2','files':rule_files,'targets':{'modelnet':'lib/bitcoin_modelnet.lib','daemon':'bin/btxd.exe','unit':'bin/test_btx.exe'}},indent=2)+'\n')
  result['gates']={};budget_start=time.monotonic()
  for label,target in [('modelnet-build','bitcoin_modelnet'),('daemon-build','btxd'),('default-all-build','all')]:
   remaining=2400-(time.monotonic()-budget_start)
@@ -173,7 +177,7 @@ def retain():
  for folder in ['src','include']:
   for suffix in ['*.h','*.hpp']:
    for path in(build/folder).rglob(suffix):copy(path,'generated/'+str(path.relative_to(build)),'generated_header')
- for name in ['result.json','before-source.json','CMakeCache.txt','generated-link-rules.json','modelnet-dependencies.log','daemon-dependencies.log','unit-dependencies.log']:
+ for name in ['result.json','before-source.json','CMakeCache.txt','generated-link-rules.json','generated-build.ninja','generated-rules.ninja','modelnet-dependencies.log','daemon-dependencies.log','unit-dependencies.log']:
   if(E/name).exists():copy(E/name,'provenance/'+name,'provenance')
  gates=result.get('gates',{});modelnet=gates.get('modelnet-build',{}).get('exit')==0
  manifest={'source':BASE,'accepted_base':result['accepted_base'],'patches':json.loads((P/'integration-source.json').read_text())['patches'],'profile':result.get('checkpoint_profile'),'gates':gates,'status':result['status'],'modelnet_target_passed':modelnet,'has_modelnet_archive':any(x['path']=='project/lib/bitcoin_modelnet.lib'for x in files),'dependency_runtime_closure_independently_qualified':False,'consumer_must_verify_source_abi_and_transitive_compatibility':True,'external_toolchain_inputs':externals,'files':files}
