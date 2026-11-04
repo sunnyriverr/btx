@@ -123,6 +123,9 @@ def configure():
  try:
   EXPECTED_WORKING_BLOBS[file]=manifest['candidate_blob'];(SOURCE/file).write_bytes(candidate);result['product_fixes']=[file];source_identity('candidate-before')
   need('candidate-eval-object',command,SOURCE,240)
+  warnings=[line for line in (E/'candidate-eval-object.log').read_text(errors='replace').splitlines() if 'warning:' in line]
+  if any("'/Zc:preprocessor'" not in line for line in warnings):raise RuntimeError('new source warning in candidate target')
+  result['candidate_target_warnings']=warnings
   if not (build/target).is_file():raise RuntimeError('candidate passed without object')
   shutil.copyfile(build/target,E/'candidate-bounty_eval.obj');result['target_object_sha256']=sha(build/target)
   if sha(build/'compile_commands.json')!=sha(E/'compile_commands.json'):raise RuntimeError('compile database changed')

@@ -18,6 +18,7 @@
 #include <unistd.h>
 
 namespace modelnet {
+#ifndef _WIN32
 namespace {
 
 bool FileSha384(const fs::path& p, Digest48& out, uint64_t& size, std::string& err)
@@ -74,6 +75,7 @@ bool EvalArtifactPath(const fs::path& root, const std::string& name, fs::path& o
 }
 
 } // namespace
+#endif
 
 bool EvaluationProfileReady(const std::string& profile_id)
 {
