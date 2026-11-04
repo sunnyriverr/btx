@@ -25,7 +25,9 @@ cmake --build D:\btx-native-035\project-build --target src/CMakeFiles/bitcoin_no
 
 The original must fail specifically at supervisor.h103 unknown pid_t. Replace only that header with source/candidate.h (hash in source-manifest.json), rerun the identical command, and require a new object. Do not add forced includes, disable Modelnet or modify compile flags. native/runner.py is the actual executed controller; native/workflow.yml records checkout/cache/compiler initialization. Its configure stage performs this exact pair and the two direct compiler controls. Direct-header probe and generated compiler command are retained alongside the logs.
 
-Mac evidence used the real nine-header dependency closure from the same base, not header stubs; posix/ contains the fixture and the executed probe/script/logs. posix-check.py's default repository path is the original local source location; change R to your immutable base repository location to inspect the unchanged implementation hash when rerunning elsewhere. No real child process lifecycle was executed.
+Mac evidence used the real nine-header dependency closure from the same base, not header stubs; posix/ contains the fixture and probe/logs; the executed posix-check.py is at this evidence root. posix-check.py's default repository path is the original local source location; change R to your immutable base repository location to inspect the unchanged implementation hash when rerunning elsewhere. No real child process lifecycle was executed.
+
+The native controller and its candidate/manifest/dependency inputs are together in native/. To use the retained workflow, copy that folder to its controls/contrib/devtools/windows-root-configure path, retaining the recorded exact source checkout and compiler initialization. On Mac, run the root posix-check.py after pointing its R constant at your immutable base repository.
 
 ## Limits
 

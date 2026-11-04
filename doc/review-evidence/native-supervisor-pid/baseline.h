@@ -1,0 +1,134 @@
+// Copyright (c) 2026 The BTX developers
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or https://opensource.org/license/mit/.
+
+#ifndef BITCOIN_MODELNET_SUPERVISOR_H
+#define BITCOIN_MODELNET_SUPERVISOR_H
+
+#include <modelnet/profile.h>
+#include <univalue.h>
+#include <util/fs.h>
+
+#include <atomic>
+#include <cstdint>
+#include <functional>
+#include <mutex>
+#include <string>
+#include <thread>
+#include <vector>
+
+namespace modelnet {
+
+enum class HelperState : uint8_t {
+    DISABLED = 0,
+    STARTING = 1,
+    READY = 2,
+    DEGRADED = 3,
+    FAILED_RETRYING = 4,
+};
+
+const char* HelperStateName(HelperState s);
+
+struct HelperLaunchConfig {
+    fs::path helper_exe;
+    fs::path modeldir;
+    fs::path rpc_socket;
+    std::string storage_arg{"auto"};
+    std::string seed{"auto"};
+    bool preserve_rare{false};
+    bool follow_peers{true};
+    bool lan_discovery{true};
+    uint64_t auto_cap_bytes{0};
+    uint64_t reserve_bytes{0};
+    uint64_t upload_bps{0};
+    /** CPU-only discovery relay. Independent of hosting. */
+    bool relay{false};
+    /** Search-index role (policy). Helper already maintains a local index; not a monetary NODE_* bit. */
+    bool index{false};
+    /** -modelhost=auto|1. Never implied merely because the helper is running. */
+    HostMode host_mode{HostMode::OFF};
+    /** PQ1 listen host:port. Empty = unix RPC only. Packaged btxd default is 0.0.0.0:29447. */
+    std::string bind;
+    /** btxd -natpmp. When false the helper does not map the PQ1 port. */
+    bool natpmp{true};
+    /** btxd's outbound proxies as "<proxy>=<ipv4|ipv6|onion|name>"; the helper dials its peers through them. */
+    std::vector<std::string> proxies;
+    /** btxd -proxyrandomize (Tor stream isolation). */
+    bool proxy_randomize{true};
+    /** btxd -onlynet networks. Empty = every network. */
+    std::vector<std::string> onlynets;
+    std::vector<std::string> peers;
+    std::string watch_dir;
+    std::string pwc_chain{"regtest"};
+    std::string qualification_file;
+    /** Operator set -modelrpcsocket: connect, do not spawn, do not kill. */
+    bool external_socket{false};
+    bool required{false};
+    /** Operator set -modeld/-modelhelper to a missing path: never search packaged substitutes. */
+    bool helper_explicitly_missing{false};
+};
+
+struct HelperStatus {
+    bool enabled{false};
+    bool managed_by_btxd{false};
+    HelperState state{HelperState::DISABLED};
+    int64_t pid{-1};
+    int restart_count{0};
+    std::string error;
+    bool public_host_reachable{false};
+    bool advertised_host{false};
+};
+
+struct HelperSpawnSpec {
+    fs::path exe;
+    std::vector<std::string> argv;
+    std::vector<std::string> env;
+};
+
+bool EnvLooksLikeWalletSecret(const std::string& key);
+std::vector<std::string> SanitizeHelperEnv(char** envp);
+std::vector<std::string> BuildHelperArgv(const HelperLaunchConfig& cfg);
+void ApplyProfileToLaunchConfig(const ProfilePolicy& policy, HelperLaunchConfig& cfg);
+/** Copy advertised_host / public_host_reachable from helper getmodelnetworkinfo JSON. */
+void ApplyHelperNetworkInfo(HelperStatus& st, const UniValue& result);
+bool ArgvContainsWalletMaterial(const std::vector<std::string>& argv);
+int NextBackoffMs(int fail_count, uint32_t jitter);
+
+fs::path FindPackagedModeld(const fs::path& override_path);
+
+class HelperSupervisor {
+    HelperLaunchConfig m_cfg;
+    mutable std::mutex m_mu;
+    HelperStatus m_st;
+    pid_t m_pid{-1};
+    std::atomic<bool> m_stop{false};
+    std::thread m_thread;
+    std::function<bool()> m_shutdown;
+
+    void Loop();
+    bool SpawnLocked(std::string& err);
+    void ReapLocked();
+    bool WaitReady(int timeout_ms, std::string& err);
+    void RequestStopOwned();
+    void PollAndSyncHostBit();
+    void ClearHostBit();
+
+public:
+    explicit HelperSupervisor(HelperLaunchConfig cfg, std::function<bool()> shutdown = {});
+    ~HelperSupervisor();
+
+    HelperSupervisor(const HelperSupervisor&) = delete;
+    HelperSupervisor& operator=(const HelperSupervisor&) = delete;
+
+    /** Never fails monetary init. required=true is the only hard fail. */
+    bool Start(std::string& err);
+    void Stop();
+    HelperStatus Snapshot() const;
+};
+
+void SetManagedSupervisor(HelperSupervisor* p);
+HelperStatus SnapshotManagedHelper();
+
+} // namespace modelnet
+
+#endif // BITCOIN_MODELNET_SUPERVISOR_H
