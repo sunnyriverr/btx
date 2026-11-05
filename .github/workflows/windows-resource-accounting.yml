@@ -1,0 +1,65 @@
+name: Native Windows resource accounting
+on:
+  push:
+    branches: [codex/ci-windows-resource-accounting]
+permissions:
+  contents: read
+jobs:
+  smoke:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: windows-2025
+    timeout-minutes: 10
+    steps:
+      - name: Preserve exact source bytes
+        shell: pwsh
+        run: |
+          git config --global core.autocrlf false
+      - name: Checkout bounded component and fixtures
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /CMakeLists.txt
+            /contrib/devtools/windows-resource-accounting/
+            /src/modelnet/swarm_windows_sandbox.cpp
+            /src/modelnet/swarm_windows_accounting.h
+            /test/util/native_qualification/windows_accounting_tests.cpp
+            /test/util/native_qualification/run_windows_accounting_tests.py
+            /src/modelnet/swarm_windows_sandbox.h
+            /src/modelnet/swarm_confine.cpp
+            /src/modelnet/swarm_confine.h
+            /src/modelnet/swarm_fsjail.cpp
+            /src/modelnet/swarm_fsjail.h
+            /src/modelnet/swarm_process_guard.h
+            /src/modelnet/swarm_native_io.h
+            /src/crypto/sha384.cpp
+            /src/crypto/sha384.h
+            /src/crypto/common.h
+            /src/compat/endian.h
+            /src/compat/byteswap.h
+            /src/util/fs.h
+            /src/tinyformat.h
+            /src/attributes.h
+            /src/span.h
+            /src/util/string.h
+      - name: Qualify accounting and ordinary worker recovery
+        shell: cmd
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_ACCOUNTING_VS=%%i"
+          if not defined BTX_ACCOUNTING_VS exit /b 2
+          call "%BTX_ACCOUNTING_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+          if errorlevel 1 exit /b %errorlevel%
+          set "CL="
+          set "_CL_="
+          python test/util/native_qualification/run_windows_accounting_tests.py --baseline-tree contrib/devtools/windows-resource-accounting/baseline --manifest contrib/devtools/windows-resource-accounting/inputs.json
+          exit /b %errorlevel%
+      - name: Collect diagnostic text
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: windows-resource-accounting
+          path: |
+            windows-accounting-results/*.json
+            windows-accounting-results/*.log
+          if-no-files-found: warn
