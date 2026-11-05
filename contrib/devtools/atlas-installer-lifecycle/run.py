@@ -88,7 +88,9 @@ def main():
     launch(installer,'/S /NS',case+'-'+label)
     check(case+' real class registered '+label,default(ext)=='BTX Model Resource')
     check(case+' actual default install path '+label,default(product)==str(installed))
-    check(case+' installed exe identity '+label,sha(installed/(d['MAINBINARYNAME']+'.exe'))==package['binary_sha256'])
+    actual_sha=sha(installed/(d['MAINBINARYNAME']+'.exe'))
+    STATE.setdefault('installed_binary_observations',{})[case+'-'+label]={'actual_sha256':actual_sha,'expected_embedded_sha256':package['binary_sha256']}
+    check(case+' installed exe identity '+label,actual_sha==package['binary_sha256'])
     check(case+' real uninstaller '+label,(installed/'uninstall.exe').is_file())
     STATE.setdefault('uninstaller_sha256',{})[case+'-'+label]=sha(installed/'uninstall.exe')
     expected='"'+str(installed/(d['MAINBINARYNAME']+'.exe'))+'" "%1"'
