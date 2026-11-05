@@ -20,15 +20,23 @@ original=unit.read_bytes();st=unit.stat()
 commands=json.loads((build/'compile_commands.json').read_text())
 row=[r for r in commands if r['file'].replace('\\','/').endswith('/src/modelnet/capability_runtime.cpp')]
 assert len(row)==1
+assert Path(row[0]['directory']).resolve()==build.resolve()
+assert Path(row[0]['output']).resolve()==obj.resolve()
 (e/'capability-runtime-generated-command.json').write_text(json.dumps(row[0],indent=2))
 result={'source':config['source'],'inputs':config,'target':target,'generated_command':row[0],
         'same_invocation_before_after':True,'cmake_reconfigured':False,'cache_saved':False,
         'compile_commands_sha256':sha(build/'compile_commands.json'),'stages':[]}
 invocation=['ninja','-C',str(build),'-f',str(manifest),'-j','1',target]
+generated_inputs={str(f.relative_to(build)):sha(f) for f in build.rglob('*.h')}
+for name in ['CMakeCache.txt','compile_commands.json','build.ninja','CMakeFiles/rules.ninja','.ninja_log','.ninja_deps']:
+    f=build/name
+    if f.exists():generated_inputs[name]=sha(f)
+result['generated_inputs_before']=generated_inputs
+result['execution_method']='Exact cached compile_commands entry in its original directory; Ninja plan diagnostic only, no version-header regeneration'
 def run(label,command,timeout=180):
     log=e/(label+'.log');t=time.monotonic()
-    with log.open('wb') as f: rc=subprocess.run(command,stdout=f,stderr=subprocess.STDOUT,timeout=timeout).returncode
-    r={'label':label,'command':command,'exit':rc,'seconds':round(time.monotonic()-t,3),'log_sha256':sha(log)}
+    with log.open('wb') as f: rc=subprocess.run(command,cwd=build,stdout=f,stderr=subprocess.STDOUT,timeout=timeout).returncode
+    r={'label':label,'command':command,'cwd':str(build),'exit':rc,'seconds':round(time.monotonic()-t,3),'log_sha256':sha(log)}
     result['stages'].append(r)
     (e/'capability-runtime-pair.json').write_text(json.dumps(result,indent=2))
     return rc,log.read_text(errors='replace')
@@ -38,17 +46,23 @@ try:
     assert changed_source()==[]
     rc,text=run('capability-runtime-target-plan',invocation[:-1]+['-n',target])
     steps=re.findall(r'^\[(\d+)/(\d+)\]',text,re.M)
-    assert rc==0 and steps and all(b=='1' for a,b in steps), text
-    rc,text=run('capability-runtime-before',invocation)
+    assert rc==0 and steps and steps[-1][1] in ['1','2'], text
+    assert text.count('Building CXX object')==1 and 'capability_runtime.cpp.obj' in text
+    if steps[-1][1]=='2': assert 'Generating bitcoin-build-info.h' in text
+    # The generated target has an unrelated version-header prerequisite. Execute
+    # its exact generated compiler entry to freeze every other build input.
+    rc,text=run('capability-runtime-before',row[0]['command'])
     assert rc!=0 and all(s in text for s in ['pid_t','popen','pclose','STDOUT_FILENO'])
     assert not obj.exists()
     unit.write_bytes((P/'candidate.cpp').read_bytes())
     assert changed_source()==['src/modelnet/capability_runtime.cpp']
     result['candidate_source_delta']=['src/modelnet/capability_runtime.cpp']
-    rc,text=run('capability-runtime-after',invocation)
+    rc,text=run('capability-runtime-after',row[0]['command'])
     assert rc==0 and obj.is_file()
     result['candidate_object_sha256']=sha(obj)
     result['candidate_warnings']=[s for s in text.splitlines() if 'warning:' in s.lower()]
+    assert all(sha(build/name)==digest for name,digest in generated_inputs.items())
+    result['generated_headers_and_build_metadata_unchanged']=True
     # Supported CPU lifecycle/refusal controls use actual runtime, smoke, types,
     # digest and JSON implementation. Only lease randomness is a test fixture.
     for compiler in ['clang-cl','cl']:
@@ -65,6 +79,7 @@ finally:
     if obj.exists():obj.unlink()
     result['source_restored']=changed_source()==[]
     result['baseline_target_absent_restored']=not obj.exists()
+    result['generated_headers_and_build_metadata_unchanged']=all(sha(build/name)==digest for name,digest in generated_inputs.items())
     result['project_cache_saved']=False
     result['local_ninja_logs_may_contain_candidate']='Hosted scratch only; original immutable cache not overwritten'
     (e/'capability-runtime-pair.json').write_text(json.dumps(result,indent=2))
