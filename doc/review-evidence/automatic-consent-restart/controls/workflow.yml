@@ -1,0 +1,65 @@
+name: Automatic consent restart qualification
+on:
+  push:
+    branches: [codex/ci-automatic-consent-restart]
+permissions:
+  contents: read
+jobs:
+  qualify:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    steps:
+      - name: Checkout owned test fixture
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /contrib/devtools/automatic-consent-restart/
+      - name: Checkout exact accepted swarm source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 666673a3153225ba264c7870e0e82e354df86765
+          path: consent-product
+          persist-credentials: false
+      - name: Verify exact product and runner capacity
+        run: python3 contrib/devtools/automatic-consent-restart/run.py preflight
+      - name: Install documented Linux prerequisites
+        run: python3 contrib/devtools/automatic-consent-restart/run.py dependencies
+      - name: Restore only this task's verified compiler and OpenSSL cache
+        id: native-cache
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
+        with:
+          path: |
+            consent-native/ccache
+            consent-native/openssl
+          key: btx-consent-linux-native-v1-666673a3-ubuntu24-gcc13-O1-ssl359
+      - name: Build hash-pinned OpenSSL prefix
+        run: python3 contrib/devtools/automatic-consent-restart/run.py openssl
+      - name: Configure unchanged root product
+        run: python3 contrib/devtools/automatic-consent-restart/run.py configure
+      - name: Build native services and framework CLI
+        run: python3 contrib/devtools/automatic-consent-restart/run.py build
+      - name: Preserve successful compilation before observing behavior
+        if: steps.native-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
+        with:
+          path: |
+            consent-native/ccache
+            consent-native/openssl
+          key: btx-consent-linux-native-v1-666673a3-ubuntu24-gcc13-O1-ssl359
+      - name: Observe active consent withdrawal and restart recovery
+        run: python3 contrib/devtools/automatic-consent-restart/run.py test
+      - name: Retain outcomes and clean only owned processes
+        if: always()
+        run: python3 contrib/devtools/automatic-consent-restart/run.py finalize
+      - name: Retain small qualification records
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: automatic-consent-restart-records
+          path: consent-results/
+          if-no-files-found: error
+          retention-days: 7

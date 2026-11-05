@@ -1,0 +1,451 @@
+{
+  "base": "666673a3153225ba264c7870e0e82e354df86765",
+  "commands": [
+    {
+      "label": "fixture-cli-preflight",
+      "args": [
+        "python3",
+        "/home/runner/work/btx/btx/contrib/devtools/automatic-consent-restart/feature_swarm_consent_restart.py",
+        "--help"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "fixture-cli-preflight.log"
+    },
+    {
+      "label": "cmake-version",
+      "args": [
+        "cmake",
+        "--version"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.01,
+      "stop": null,
+      "log": "cmake-version.log"
+    },
+    {
+      "label": "python-version",
+      "args": [
+        "python3",
+        "--version"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "python-version.log"
+    },
+    {
+      "label": "gcc-version",
+      "args": [
+        "g++-13",
+        "--version"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.01,
+      "stop": null,
+      "log": "gcc-version.log"
+    },
+    {
+      "label": "apt-update",
+      "args": [
+        "sudo",
+        "apt-get",
+        "update"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 9.0,
+      "stop": null,
+      "log": "apt-update.log"
+    },
+    {
+      "label": "apt-install",
+      "args": [
+        "sudo",
+        "apt-get",
+        "install",
+        "-y",
+        "--no-install-recommends",
+        "build-essential",
+        "gcc-13",
+        "g++-13",
+        "cmake",
+        "ninja-build",
+        "pkgconf",
+        "python3",
+        "libevent-dev",
+        "libboost-dev",
+        "libsqlite3-dev",
+        "libzmq3-dev",
+        "ccache"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 32.01,
+      "stop": null,
+      "log": "apt-install.log"
+    },
+    {
+      "label": "dependency-versions",
+      "args": [
+        "dpkg-query",
+        "-W",
+        "gcc-13",
+        "g++-13",
+        "cmake",
+        "ninja-build",
+        "python3",
+        "libevent-dev",
+        "libboost-dev",
+        "libsqlite3-dev",
+        "libzmq3-dev",
+        "ccache"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "dependency-versions.log"
+    },
+    {
+      "label": "openssl-configure",
+      "args": [
+        "perl",
+        "Configure",
+        "linux-x86_64",
+        "--prefix=/home/runner/work/btx/btx/consent-native/openssl",
+        "--libdir=lib",
+        "no-shared",
+        "no-tests",
+        "no-docs",
+        "-fPIC"
+      ],
+      "cwd": "/home/runner/work/btx/btx/consent-native/openssl-3.5.9",
+      "returncode": 0,
+      "seconds": 8.0,
+      "stop": null,
+      "log": "openssl-configure.log"
+    },
+    {
+      "label": "openssl-build",
+      "args": [
+        "make",
+        "-j2"
+      ],
+      "cwd": "/home/runner/work/btx/btx/consent-native/openssl-3.5.9",
+      "returncode": 0,
+      "seconds": 103.03,
+      "stop": null,
+      "log": "openssl-build.log"
+    },
+    {
+      "label": "openssl-install",
+      "args": [
+        "make",
+        "install_sw"
+      ],
+      "cwd": "/home/runner/work/btx/btx/consent-native/openssl-3.5.9",
+      "returncode": 0,
+      "seconds": 3.0,
+      "stop": null,
+      "log": "openssl-install.log"
+    },
+    {
+      "label": "openssl-version",
+      "args": [
+        "/home/runner/work/btx/btx/consent-native/openssl/bin/openssl",
+        "version",
+        "-a"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "openssl-version.log"
+    },
+    {
+      "label": "openssl-kem",
+      "args": [
+        "/home/runner/work/btx/btx/consent-native/openssl/bin/openssl",
+        "list",
+        "-kem-algorithms"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "openssl-kem.log"
+    },
+    {
+      "label": "openssl-signatures",
+      "args": [
+        "/home/runner/work/btx/btx/consent-native/openssl/bin/openssl",
+        "list",
+        "-signature-algorithms"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "openssl-signatures.log"
+    },
+    {
+      "label": "root-configure",
+      "args": [
+        "cmake",
+        "-S",
+        "/home/runner/work/btx/btx/consent-product",
+        "-B",
+        "/home/runner/work/btx/btx/consent-native/build",
+        "-G",
+        "Ninja",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_C_COMPILER=gcc-13",
+        "-DCMAKE_CXX_COMPILER=g++-13",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+        "-DCMAKE_C_FLAGS_RELEASE=-O1 -DNDEBUG",
+        "-DCMAKE_CXX_FLAGS_RELEASE=-O1 -DNDEBUG",
+        "-DBUILD_DAEMON=ON",
+        "-DBUILD_CLI=ON",
+        "-DBUILD_UTIL=ON",
+        "-DWITH_MODELNET=ON",
+        "-DBUILD_GUI=OFF",
+        "-DENABLE_WALLET=OFF",
+        "-DBUILD_TESTS=OFF",
+        "-DBUILD_BENCH=OFF",
+        "-DBUILD_TX=OFF",
+        "-DBUILD_FUZZ_BINARY=OFF",
+        "-DWITH_CCACHE=ON",
+        "-DCMAKE_C_COMPILER_LAUNCHER=ccache",
+        "-DCMAKE_CXX_COMPILER_LAUNCHER=ccache",
+        "-DWITH_SQLITE=ON",
+        "-DWITH_ZMQ=ON",
+        "-DOPENSSL_USE_STATIC_LIBS=ON",
+        "-DOPENSSL_ROOT_DIR=/home/runner/work/btx/btx/consent-native/openssl",
+        "-DOPENSSL_INCLUDE_DIR=/home/runner/work/btx/btx/consent-native/openssl/include",
+        "-DOPENSSL_SSL_LIBRARY=/home/runner/work/btx/btx/consent-native/openssl/lib/libssl.a",
+        "-DOPENSSL_CRYPTO_LIBRARY=/home/runner/work/btx/btx/consent-native/openssl/lib/libcrypto.a"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 18.0,
+      "stop": null,
+      "log": "root-configure.log"
+    },
+    {
+      "label": "root-build-plan",
+      "args": [
+        "ninja",
+        "-C",
+        "/home/runner/work/btx/btx/consent-native/build",
+        "-n",
+        "btxd",
+        "btx-modeld",
+        "btx-guardd",
+        "btx-cli"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "root-build-plan.log"
+    },
+    {
+      "label": "root-build",
+      "args": [
+        "cmake",
+        "--build",
+        "/home/runner/work/btx/btx/consent-native/build",
+        "--target",
+        "btxd",
+        "btx-modeld",
+        "btx-guardd",
+        "btx-cli",
+        "--parallel",
+        "2"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1693.35,
+      "stop": null,
+      "log": "root-build.log"
+    },
+    {
+      "label": "ldd-btxd",
+      "args": [
+        "ldd",
+        "/home/runner/work/btx/btx/consent-native/build/bin/btxd"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "ldd-btxd.log"
+    },
+    {
+      "label": "ldd-btx-modeld",
+      "args": [
+        "ldd",
+        "/home/runner/work/btx/btx/consent-native/build/bin/btx-modeld"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "ldd-btx-modeld.log"
+    },
+    {
+      "label": "ldd-btx-guardd",
+      "args": [
+        "ldd",
+        "/home/runner/work/btx/btx/consent-native/build/bin/btx-guardd"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "ldd-btx-guardd.log"
+    },
+    {
+      "label": "ldd-btx-cli",
+      "args": [
+        "ldd",
+        "/home/runner/work/btx/btx/consent-native/build/bin/btx-cli"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "ldd-btx-cli.log"
+    },
+    {
+      "label": "ccache-stats",
+      "args": [
+        "ccache",
+        "--show-stats"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "ccache-stats.log"
+    },
+    {
+      "label": "consent-test",
+      "args": [
+        "python3",
+        "/home/runner/work/btx/btx/contrib/devtools/automatic-consent-restart/feature_swarm_consent_restart.py",
+        "--configfile=/home/runner/work/btx/btx/consent-native/build/test/config.ini",
+        "--tmpdir=/home/runner/work/btx/btx/consent-runtime",
+        "--portseed=41725",
+        "--nocleanup",
+        "--result-json=/home/runner/work/btx/btx/consent-results/consent-observations.json"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 122.02,
+      "stop": null,
+      "log": "consent-test.log"
+    }
+  ],
+  "errors": [],
+  "phases": {
+    "preflight": "pass",
+    "dependencies": "pass",
+    "openssl": "pass",
+    "configure": "pass",
+    "build": "pass",
+    "test": "pass",
+    "finalize": "pass"
+  },
+  "runner": {
+    "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+    "uname": [
+      "Linux",
+      "runnervm48cm3",
+      "7.0.0-1017-azure",
+      "#17~24.04.1-Ubuntu SMP PREEMPT Thu Sep 24 18:46:57 UTC 2026",
+      "x86_64",
+      "x86_64"
+    ],
+    "free_bytes": 91660087296,
+    "cpu": 4,
+    "meminfo": "MemTotal:       16367524 kB\nMemFree:        14460508 kB\nMemAvailable:   15304924 kB\nBuffers:           67708 kB\nCached:          1058464 kB\nSwapCached:            0 kB\nActive:           712152 kB\nInactive:         660968 kB\nActive(anon):     302932 kB\nInactive(anon):        0 kB\nActive(file):     409220 kB\nInactive(file):   660968 kB\nUnevictable:       46760 kB\nMlocked:           43688 kB\nSwapTotal:       3145724 kB\nSwapFree:        3145724 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:            192340 kB\nWriteback:             0 kB\nAnonPages:        293864 kB\nMapped:           331836 kB\nShmem:             47232 kB\nKReclaimable:      71116 kB\nSlab:             147988 kB\nSReclaimable:      71116 kB\nSUnreclaim:        76872 kB\nKernelStack:        4208 kB\nPageTables:         6244 kB\nSecPageTables:         0 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    11329484 kB\nCommitted_AS:    2031084 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:       42744 kB\nVmallocChunk:          0 kB\nPercpu:             2336 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:         0 kB\nFilePmdMapped:         0 kB\nCmaTotal:              0 kB\nCmaFree:         1462272 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nGPUActive:             0 kB\nGPUReclaim:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      128128 kB\nDirectMap2M:     4061184 kB\nDirectMap1G:    14680064 kB\n",
+    "run_id": "42017579549",
+    "fixture_head": "4a15f7ad7a053ed3e8619c5aa07e8da2c034dcd3"
+  },
+  "source_before": {
+    "head": "666673a3153225ba264c7870e0e82e354df86765",
+    "files": 14309,
+    "manifest_sha256": "c8497991392e27c28ffe00a22284413fb2863f1b9474a4a191dc95a11e5be2e0"
+  },
+  "openssl": {
+    "version": "3.5.9",
+    "source_sha256": "603f5602e2eef00d77fbd429d34dcd5822bb301757a1bc9cdb24c670f1eb859a",
+    "prefix": "/home/runner/work/btx/btx/consent-native/openssl",
+    "files": {
+      "bin/openssl": "6f6d668b0976a3f7206d415de9f4ee022c00bdabdae680b41f94e3412d5bf147",
+      "lib/libssl.a": "f355167951857505b5b0305fd2e8ea8f224fa29d780211175d32767b07234727",
+      "lib/libcrypto.a": "64544f42eaac26e11ba4a0c42f5b5161c0190c83f979e663e90a27d592d5407a",
+      "include/openssl/opensslv.h": "9647fc99758cf83e3bcf11ae310894fd4911ad62bff22d8213a614df89cfedda"
+    }
+  },
+  "binaries": {
+    "btxd": {
+      "path": "/home/runner/work/btx/btx/consent-native/build/bin/btxd",
+      "sha256": "fdbb95c5db0305523ac3e696a7e0f318b2a0679494605e75b0fa5cae14b4adbb",
+      "bytes": 48902912
+    },
+    "btx-modeld": {
+      "path": "/home/runner/work/btx/btx/consent-native/build/bin/btx-modeld",
+      "sha256": "0e99cc73987d9edbeaeb063366fecfa60da98b19cef1b52ec8155d570862c6bd",
+      "bytes": 33681904
+    },
+    "btx-guardd": {
+      "path": "/home/runner/work/btx/btx/consent-native/build/bin/btx-guardd",
+      "sha256": "2504405253f5746cc941f3f43ba2a9903174686eb42ba92f13df959d3bf6f1ce",
+      "bytes": 73624
+    },
+    "btx-cli": {
+      "path": "/home/runner/work/btx/btx/consent-native/build/bin/btx-cli",
+      "sha256": "3eef65ff8c52bb825d371462e230c8297ffe18568e40582ac125690aa2760567",
+      "bytes": 18961608
+    }
+  },
+  "source_after-build": {
+    "head": "666673a3153225ba264c7870e0e82e354df86765",
+    "files": 14309,
+    "manifest_sha256": "c8497991392e27c28ffe00a22284413fb2863f1b9474a4a191dc95a11e5be2e0"
+  },
+  "test_identity": {
+    "sha256": "286cca5763f1e69af390f7e0ee45fa5eeb1df4c7942a36635da104dbaab0f3b4",
+    "fixture": "/home/runner/work/btx/btx/contrib/devtools/automatic-consent-restart/feature_swarm_consent_restart.py",
+    "runtime": "/home/runner/work/btx/btx/consent-runtime",
+    "product_changes": false,
+    "repeat": 1
+  },
+  "maintained_test_pass": true,
+  "source_after-test": {
+    "head": "666673a3153225ba264c7870e0e82e354df86765",
+    "files": 14309,
+    "manifest_sha256": "c8497991392e27c28ffe00a22284413fb2863f1b9474a4a191dc95a11e5be2e0"
+  },
+  "cleanup": {
+    "before": [],
+    "signals": [],
+    "remaining": [],
+    "owned_runtime_removed": true
+  },
+  "source_final": {
+    "head": "666673a3153225ba264c7870e0e82e354df86765",
+    "files": 14309,
+    "manifest_sha256": "c8497991392e27c28ffe00a22284413fb2863f1b9474a4a191dc95a11e5be2e0"
+  },
+  "final_free_bytes": 90654019584,
+  "qualification_pass": true
+}
