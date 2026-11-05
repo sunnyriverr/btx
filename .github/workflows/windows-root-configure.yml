@@ -1,4 +1,4 @@
-name: Native Windows five fixture contract qualification
+name: Native Windows document byte preservation control
 on:
   push:
     branches: [codex/ci-windows-root-configure]
@@ -95,14 +95,14 @@ jobs:
           path: |
             D:\btx-native-035\project-build
             D:\btx-native-035\vcpkg-installed
-          key: btx356-unit-fixtures-v1-e5050bc6a1ad12b12740b51a536d9354857b8bf45c646430f05d474aea3139bf-42032913033
+          key: btx356-unit-fixtures-v1-acda7e6df09d38a2363212e58b4145d1641ed14cfdcc98c6179f83874909534f-42104359495
       - name: Require existing exact-profile checkpoint for restore proof
         shell: pwsh
         env:
           MATCHED_CACHE: ${{ steps.project_restore.outputs.cache-matched-key }}
         run: |
           if (-not $env:MATCHED_CACHE) { throw "Restore proof requires an existing cache; refusing fresh rebuild" }
-      - name: Verify exact retained objects and reuse matching baseline failures
+      - name: Verify warm candidate cache and unchanged fixture objects
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -114,7 +114,7 @@ jobs:
           set "_CL_="
           python controls/contrib/devtools/windows-root-configure/five.py prepare
           exit /b %errorlevel%
-      - name: Compile five maintained fixture objects and real CLI prerequisites
+      - name: Build isolated document-library correction and real CLI links
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -126,7 +126,7 @@ jobs:
           set "_CL_="
           python controls/contrib/devtools/windows-root-configure/five.py build
           exit /b %errorlevel%
-      - name: Run supported native cases and real filesystem process controls
+      - name: Run unchanged document suite with byte and file-safety assertions
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -164,6 +164,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
-          name: native-windows-fixture-five
+          name: native-windows-document-byte-control
           path: D:\btx-native-035\evidence\
           retention-days: 14

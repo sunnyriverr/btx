@@ -38,7 +38,12 @@ def prepare():
     assert delta in [{}, allowed, {k: list(reversed(v)) for k, v in allowed.items()}], delta
     assert subprocess.check_output(['ninja', '--version'], text=True).strip() == '1.13.2'
     s.need('source-parent-fetch', ['git', 'fetch', '--no-tags', '--depth=2',
-        'https://github.com/sunnyriverr/btx.git', I['cached_source']], 180)
+        'https://github.com/sunnyriverr/btx.git', I.get('public_parent', I['cached_source'])], 180)
+    bundle = E / 'five-source.bundle'
+    bundle.write_bytes(base64.b64decode((P / 'five-source.bundle.base64').read_text()))
+    assert sha(bundle) == I['bundle_sha256']
+    s.need('bundle-verify', ['git', 'bundle', 'verify', str(bundle)], 60)
+    s.need('bundle-fetch', ['git', 'fetch', str(bundle), *I.get('bundle_refs', [I['bundle_ref']])], 60)
     s.need('cached-checkout', ['git', 'checkout', '--detach', I['cached_source']], 60)
     cat = s.catalog(I['cached_source'], 'cached')
     assert cat == cp['source_catalog']
@@ -57,20 +62,9 @@ def prepare():
         assert matches == [row['command']]
     R['sdk_helper_sha256'] = sha(ROOT / I['sdk_cached_object'])
     assert R['sdk_helper_sha256'] == I['sdk_cached_object_sha256']
-    baseline = json.loads((P / 'baseline-reuse.json').read_text())
-    assert len(baseline['records']) == 5
-    for record in baseline['records']:
-        row = next(x for x in I['files'] if x['file'] == record['file'])
-        assert row['command'] == record['maintained_command']
-        assert cat['files'][row['path']]['working_sha256'] == record['source_sha256']
-        assert R['original_config']['compile_commands.json'] == record['compile_table_sha256']
-    R['baseline_reused'] = [{'file': x['file'], 'run': x['run'], 'fatal_lines': x['fatal_lines']}
-                            for x in baseline['records']]
-    bundle = E / 'five-source.bundle'
-    bundle.write_bytes(base64.b64decode((P / 'five-source.bundle.base64').read_text()))
-    assert sha(bundle) == I['bundle_sha256']
-    s.need('bundle-verify', ['git', 'bundle', 'verify', str(bundle)], 60)
-    s.need('bundle-fetch', ['git', 'fetch', str(bundle), I['bundle_ref']], 60)
+    R['reused_passing_groups'] = I['reuse_passing_groups']
+    for row in I['files']:
+        assert sha(BUILD / row['target']) == I['fixture_objects_guard'][row['file']]
     s.need('candidate-checkout', ['git', 'checkout', '--detach', I['target']], 60)
     changed = subprocess.check_output(['git', 'diff', '--name-only', I['cached_source'], I['target']],
                                      cwd=SOURCE, text=True).splitlines()
@@ -110,6 +104,7 @@ def build():
     R['binaries'] = {name: sha(BUILD / 'bin' / (name + '.exe'))
                      for name in ['windows_fixture_five', 'btx-open', 'btx-modeld', 'btxd']}
     R['fixture_objects'] = {x['file']: sha(BUILD / x['target']) for x in I['files']}
+    assert R['fixture_objects'] == I['fixture_objects_guard']
     assert sha(ROOT / I['sdk_cached_object']) == R['sdk_helper_sha256']
     info = (BUILD / 'src/bitcoin-build-info.h').read_text()
     assert I['target'][:7] in info and re.search(r'BUILD_GIT_DIRTY\s+0', info)
@@ -176,10 +171,10 @@ def run():
         R['owned_data_removed'] = not data.exists()
         s.save()
     assert not R['owned_processes_before_cleanup']
-    assert len(R['suite_results']) == 5 and all(x['passed'] for x in R['suite_results']), 'Relevant native control failed'
+    assert len(R['suite_results']) == len(I['runtime_suites']) and all(x['passed'] for x in R['suite_results']), 'Relevant native control failed'
     for name, expected in R['binaries'].items():
         assert sha(BUILD / 'bin' / (name + '.exe')) == expected
-    R['status'] = 'FIVE_SCOPED_PASS'
+    R['status'] = 'SCOPED_RUNTIME_PASS'
     s.save()
 
 

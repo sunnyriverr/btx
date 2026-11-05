@@ -1,20 +1,16 @@
 {
-  "base": "29d0fc8a973ff5ef92e51fa1da6ad5bab037b2d9",
-  "target": "f410081e1d4a377ba5ff9147a77736c7221ce155",
-  "tree": "55f2064c776cbdfe1183ab2e22f8ccabacca7e09",
+  "base": "f410081e1d4a377ba5ff9147a77736c7221ce155",
+  "target": "0bc4625be266d9cf0975d85ea9a4aed4e325c7a9",
+  "tree": "878cac603455b1cc23e6b88215b50123750f962d",
   "changed": [
-    "src/test/modelnet_ahp_doc_tests.cpp",
-    "src/test/modelnet_pq1_worker_share_tests.cpp",
-    "src/test/modelnet_records_cache_tests.cpp",
-    "src/test/modelnet_retrieve_peer_reply_tests.cpp",
-    "src/test/modelnet_unique_todo_tests.cpp"
+    "src/modelnet/package_documents.cpp"
   ],
-  "bundle_ref": "refs/heads/codex/fix-windows-five-fixtures-integration",
-  "bundle_sha256": "4c1fa4e715a1ddf4e8982a6a601b18dd2d84bac6acbad75bdf1a5b5fadaae126",
-  "cached_source": "29d0fc8a973ff5ef92e51fa1da6ad5bab037b2d9",
-  "checkpoint_sha256": "01eb31fc9b302260597582770c849120b6a5d53bb136410a65bba966d6451e8e",
-  "cache_key": "btx356-unit-fixtures-v1-e5050bc6a1ad12b12740b51a536d9354857b8bf45c646430f05d474aea3139bf-42032913033",
-  "objects_before": 3837,
+  "bundle_ref": "refs/heads/codex/fix-windows-document-byte-write-integration",
+  "bundle_sha256": "f1c2044213ea6c4e24fa1e97727782705d923019054e51299741cc8f3dca0223",
+  "cached_source": "f410081e1d4a377ba5ff9147a77736c7221ce155",
+  "checkpoint_sha256": "539f4844f8c3475cbd1f1bd3e51acce80e793239dd070ed993c43095821a35d5",
+  "cache_key": "btx356-unit-fixtures-v1-acda7e6df09d38a2363212e58b4145d1641ed14cfdcc98c6179f83874909534f-42104359495",
+  "objects_before": 3844,
   "files": [
     {
       "file": "modelnet_ahp_doc_tests.cpp",
@@ -76,19 +72,103 @@
   "sdk_cached_object_sha256": "b5e38bb159da785f93eef49a6599ddb5ea3ca49998e8ad5aabfc614296796ba3",
   "component_link_block": "build bin\\windows_fixture_five.exe: CXX_EXECUTABLE_LINKER__test_btx_Release src\\test\\CMakeFiles\\test_btx.dir\\main.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\modelnet_ahp_doc_tests.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\modelnet_pq1_worker_share_tests.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\modelnet_records_cache_tests.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\modelnet_retrieve_peer_reply_tests.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\modelnet_unique_todo_tests.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\util\\sdk_process.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\__\\lightwatch.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\__\\wallet\\test\\init_test_fixture.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\__\\wallet\\test\\wallet_test_fixture.cpp.obj | D$:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\event_extra.lib D$:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib D$:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib lib\\test_util.lib lib\\bitcoin_cli.lib lib\\bitcoin_node.lib lib\\bitcoin_wallet.lib D$:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\event_extra.lib D$:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\event_core.lib lib\\bitcoin_zmq.lib D$:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\libzmq-mt-s-4_3_5.lib lib\\bitcoin_shielded.lib lib\\bitcoin_modelnet.lib D$:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib D$:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib lib\\bitcoin_common.lib src\\univalue\\univalue.lib lib\\bitcoin_db.lib src\\leveldb.lib src\\crc32c.lib C$:\\Program$ Files\\Microsoft$ Visual$ Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x64\\libomp.lib lib\\btx_matmul_backend.lib lib\\bitcoin_consensus.lib lib\\bitcoin_util.lib lib\\bitcoin_clientversion.lib src\\secp256k1\\lib\\libsecp256k1.lib lib\\bitcoinpqc.lib lib\\bitcoin_crypto.lib C$:\\Program$ Files\\LLVM\\lib\\clang\\20\\lib\\windows\\clang_rt.builtins-x86_64.lib D$:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\sqlite3.lib || lib\\bitcoin_cli.lib lib\\bitcoin_clientversion.lib lib\\bitcoin_common.lib lib\\bitcoin_consensus.lib lib\\bitcoin_crypto.lib lib\\bitcoin_db.lib lib\\bitcoin_modelnet.lib lib\\bitcoin_node.lib lib\\bitcoin_shielded.lib lib\\bitcoin_util.lib lib\\bitcoin_wallet.lib lib\\bitcoin_zmq.lib lib\\bitcoinpqc.lib lib\\btx_matmul_backend.lib lib\\test_util.lib src\\crc32c.lib src\\leveldb.lib src\\secp256k1\\lib\\libsecp256k1.lib src\\univalue\\univalue.lib\n  CONFIG = Release\n  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -MT\n  LINK_FLAGS = /machine:x64 /INCREMENTAL:NO /subsystem:console /DYNAMICBASE /HIGHENTROPYVA /NXCOMPAT\n  LINK_LIBRARIES = D:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\event_extra.lib  D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib  D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib  lib\\test_util.lib  lib\\bitcoin_cli.lib  lib\\bitcoin_node.lib  lib\\bitcoin_wallet.lib  D:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\event_extra.lib  D:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\event_core.lib  shell32.lib  lib\\bitcoin_zmq.lib  D:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\libzmq-mt-s-4_3_5.lib  rpcrt4.lib  lib\\bitcoin_shielded.lib  lib\\bitcoin_modelnet.lib  D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib  D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib  crypt32.lib  lib\\bitcoin_common.lib  src\\univalue\\univalue.lib  lib\\bitcoin_db.lib  src\\leveldb.lib  src\\crc32c.lib  \"C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x64\\libomp.lib\"  lib\\btx_matmul_backend.lib  lib\\bitcoin_consensus.lib  lib\\bitcoin_util.lib  ws2_32.lib  iphlpapi.lib  lib\\bitcoin_clientversion.lib  src\\secp256k1\\lib\\libsecp256k1.lib  lib\\bitcoinpqc.lib  lib\\bitcoin_crypto.lib  \"C:\\Program Files\\LLVM\\lib\\clang\\20\\lib\\windows\\clang_rt.builtins-x86_64.lib\"  bcrypt.lib  userenv.lib  advapi32.lib  ole32.lib  D:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\sqlite3.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib\n  OBJECT_DIR = src\\test\\CMakeFiles\\test_btx.dir\n  POST_BUILD = C:\\Windows\\system32\\cmd.exe /C \"cd /D D:\\btx-native-035\\project-build\\src\\test && D:\\btx-native-035\\vcpkg\\vcpkg.exe z-applocal --target-binary=D:/btx-native-035/project-build/bin/windows_fixture_five.exe --installed-bin-dir=D:/btx-native-035/vcpkg-installed/x64-windows-static/bin\"\n  PRE_LINK = cd .\n  TARGET_COMPILE_PDB = src\\test\\CMakeFiles\\test_btx.dir\\\n  TARGET_FILE = bin\\windows_fixture_five.exe\n  TARGET_IMPLIB = lib\\windows_fixture_five.lib\n  TARGET_PDB = bin\\windows_fixture_five.pdb\n  TARGET_SUPPORT_DIR = src\\test\\CMakeFiles\\test_btx.dir\n  RSP_FILE = CMakeFiles\\windows_fixture_five.rsp",
   "runtime_suites": [
-    "modelnet_retrieve_peer_reply_tests",
-    "modelnet_records_cache_tests",
-    "modelnet_pq1_worker_share_tests",
-    "modelnet_ahp_doc_tests",
-    "modelnet_unique_todo_tests"
+    "modelnet_ahp_doc_tests"
   ],
   "minimum_cases": [
-    1,
-    5,
-    1,
-    13,
-    30
+    17
   ],
-  "scope": "Five fixture-only candidate on integrated29d0(accepted666+411415417418); same maintained five object commands baseline/candidate; scoped component runtime with original library closure and cached unchanged SDK helper; not fullunit, POSIX live helper, MinGW, mainnet, hardware or release qualification.",
-  "accepted_base": "666673a3153225ba264c7870e0e82e354df86765"
+  "scope": "Document-library Windows binary-mode prerequisite after fivefixture batch; same17AHP cases failbefore/passafter with unchanged assertions. Four first-campaign groups reused by exact fixture object hash and isolated function delta; not a single allsuite/fullunit run, POSIX/MinGW/device/release qualification.",
+  "accepted_base": "666673a3153225ba264c7870e0e82e354df86765",
+  "public_parent": "29d0fc8a973ff5ef92e51fa1da6ad5bab037b2d9",
+  "bundle_refs": [
+    "refs/heads/codex/fix-windows-document-byte-write-integration",
+    "refs/heads/codex/fix-windows-five-fixtures-integration"
+  ],
+  "fixture_objects_guard": {
+    "modelnet_ahp_doc_tests.cpp": "32ca308ea7684948606ebfaec4bfb3365b0503e4c376335458b076a224082a2a",
+    "modelnet_pq1_worker_share_tests.cpp": "671e72ea9c29c04b50dfbdc3caf901e23711eb5e270448180b4af4fec6219874",
+    "modelnet_records_cache_tests.cpp": "ab87b91d9c421d38f4b6174dc6c0643b2611032fbd9940118766ea4696c5bd74",
+    "modelnet_retrieve_peer_reply_tests.cpp": "f332b2a6826cff003151be3581472f15c7a104af7945c31fed17696bdcfe1667",
+    "modelnet_unique_todo_tests.cpp": "4f7246f0bf652dee41b1805eb86b1c12afc15eb6408cb665fa9924f396c0fa53"
+  },
+  "reuse_passing_groups": {
+    "run": 42104359495,
+    "source": "f410081e1d4a377ba5ff9147a77736c7221ce155",
+    "suites": [
+      {
+        "suite": "modelnet_retrieve_peer_reply_tests",
+        "exit": 0,
+        "cases_started": 1,
+        "assertions": [
+          3,
+          3
+        ],
+        "passed": true,
+        "owned_processes_after_suite": [],
+        "applicability_messages": [
+          "Windows helper Unix RPC is unsupported; the three Unix retrieval integration cases are not run"
+        ]
+      },
+      {
+        "suite": "modelnet_records_cache_tests",
+        "exit": 0,
+        "cases_started": 5,
+        "assertions": [
+          5278,
+          5278
+        ],
+        "passed": true,
+        "owned_processes_after_suite": [],
+        "applicability_messages": []
+      },
+      {
+        "suite": "modelnet_pq1_worker_share_tests",
+        "exit": 0,
+        "cases_started": 1,
+        "assertions": [
+          14245,
+          14245
+        ],
+        "passed": true,
+        "owned_processes_after_suite": [],
+        "applicability_messages": []
+      },
+      {
+        "suite": "modelnet_unique_todo_tests",
+        "exit": 0,
+        "cases_started": 34,
+        "assertions": [
+          492,
+          492
+        ],
+        "passed": true,
+        "owned_processes_after_suite": [],
+        "applicability_messages": [
+          "HONEST_NOT_RUN F2 wallet-signed mandate; wallet_sign stays false",
+          "HONEST_NOT_RUN -modelindex as a product flag; helper/modeld reject",
+          "HONEST_NOT_RUN BUILD_GUI=ON / Qt journeys; this tree stays BUILD_GUI=OFF",
+          "Sparse fixture logical=429496729600 allocated=0 bytes",
+          "HONEST_NOT_RUN 400 GiB object I/O (sparse addressing is not payload I/O)",
+          "CUDA unique probe: llama.cpp present=false not installed; adapter code present, hardware/runtime NOT_RUN until probe succeeds",
+          "CUDA unique probe: vLLM present=false not installed; adapter code present, hardware/runtime NOT_RUN until probe succeeds",
+          "ROCm unique probe: llama.cpp not installed; adapter code present, hardware/runtime NOT_RUN until probe succeeds",
+          "ROCm unique probe: vLLM not installed; adapter code present, hardware/runtime NOT_RUN until probe succeeds",
+          "Metal unique probe: llama.cpp not installed; adapter code present, hardware/runtime NOT_RUN until probe succeeds",
+          "Metal unique probe: MLX not installed; adapter code present, hardware/runtime NOT_RUN until probe succeeds",
+          "NIXL unique probe: {\"stub\":false,\"portable_host_buffer\":true,\"automatic_spend_atoms\":0,\"nixl\":false,\"gds\":false,\"nixl_status\":\"NOT_RUN\",\"gds_status\":\"NOT_RUN\",\"nixl_detail\":\"NOT_RUN: BTX_NIXL_LIB unset\",\"gds_detail\":\"NOT_RUN: BTX_CUFILE_LIB unset\",\"assurance\":\"HOST_BUFFER\"}",
+          "GDS unique probe: {\"stub\":false,\"portable_host_buffer\":true,\"automatic_spend_atoms\":0,\"nixl\":false,\"gds\":false,\"nixl_status\":\"NOT_RUN\",\"gds_status\":\"NOT_RUN\",\"nixl_detail\":\"NOT_RUN: BTX_NIXL_LIB unset\",\"gds_detail\":\"NOT_RUN: BTX_CUFILE_LIB unset\",\"assurance\":\"HOST_BUFFER\"}",
+          "CXL unique probe cxl=false NOT_RUN",
+          "HONEST_NOT_RUN env-gated unique_todo_remote_process: BTX_REMOTE_PROCESS_BTXD unset",
+          "HONEST_NOT_RUN live CEX IdP",
+          "HONEST_NOT_RUN live HSM",
+          "HONEST_NOT_RUN second cmake tree forbidden by disk policy",
+          "HONEST_NOT_RUN 1000 real downloaders; 1000 sockets NOT_RUN",
+          "HONEST_NOT_RUN 10m anti-entropy; did not allocate 10m rows",
+          "HONEST_NOT_RUN 20-buyer lab",
+          "HONEST_NOT_RUN mixed 0.34.7 helper; BTX_MIXED_0347 unset"
+        ]
+      }
+    ],
+    "reason": "Only ExtractPackageDocuments binary-mode flag changes. Current tree callers are the unchanged AHP case; four other suites do not call it. Five fixture object hashes required unchanged."
+  }
 }
