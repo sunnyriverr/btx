@@ -1,0 +1,49 @@
+name: Security node integration qualification
+on:
+  push:
+    branches: [codex/ci-security-node-integration]
+permissions:
+  contents: read
+jobs:
+  qualify:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - name: Checkout owned fixture
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /contrib/devtools/security-node-integration/
+      - name: Checkout exact accepted security source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: e9c1e364262543a3a7543885e55fd6c2849bf1c0
+          path: security-product
+          persist-credentials: false
+      - name: Verify source and runner admission
+        run: python3 contrib/devtools/security-node-integration/run.py preflight
+      - name: Install documented Linux dependencies
+        run: python3 contrib/devtools/security-node-integration/run.py dependencies
+      - name: Build verified matching OpenSSL prefix
+        run: python3 contrib/devtools/security-node-integration/run.py openssl
+      - name: Configure unchanged root product
+        run: python3 contrib/devtools/security-node-integration/run.py configure
+      - name: Build real services and framework CLI
+        run: python3 contrib/devtools/security-node-integration/run.py build
+      - name: Run unchanged maintained one-node lifecycle
+        run: python3 contrib/devtools/security-node-integration/run.py test
+      - name: Retain outcomes and clean only owned children
+        if: always()
+        run: python3 contrib/devtools/security-node-integration/run.py finalize
+      - name: Retain small qualification records
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: security-node-integration-records
+          path: security-integration-results/
+          if-no-files-found: error
+          retention-days: 7
