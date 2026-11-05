@@ -1,70 +1,129 @@
-#include <modelnet/bounty.h>
-#include <util/fs.h>
-#include <fstream>
+// Scoped component controls for the existing JIT-RUN CPU/refusal contract.
+#include "runtime.cpp"
+#include <random.h>
 #include <iostream>
-#include <iterator>
-#include <cerrno>
-#ifndef _WIN32
-#include <sys/wait.h>
-#endif
 
-static int checks=0, failures=0;
-static void check(bool ok, const char* label) {
-    ++checks; if (!ok) ++failures;
-    std::cout << (ok ? "PASS " : "FAIL ") << label << std::endl;
+// Deterministic test lease IDs only. Production randomness is not under test.
+void GetRandBytes(Span<unsigned char> bytes) noexcept
+{
+    static unsigned char n = 0;
+    for (auto& b : bytes) b = ++n;
 }
-int main(int argc, char** argv) {
-    if(argc!=2) return 2;
-    const auto root=fs::PathFromString(argv[1]);
-    if(!fs::is_directory(root) || !fs::is_empty(root)) return 2;
-    const auto artifact=root/"artifact.txt";
-    {std::ofstream f(artifact,std::ios::binary); f << "abc";}
-    const std::string digest="cb00753f45a35e8bb5a03d699ac65007272c32ab0eded1631a8b605a43ff5bed8086072ba1e7cc2358baeca134c825a7";
-    UniValue file(UniValue::VOBJ), files(UniValue::VARR), spec(UniValue::VOBJ), submission(UniValue::VOBJ), resources(UniValue::VOBJ), plan;
-    file.pushKV("name","artifact.txt"); file.pushKV("sha384",digest); file.pushKV("max_bytes",3); files.push_back(file);
-    spec.pushKV("profile_id","EXACT_CHECKS"); spec.pushKV("required_files",files);
-    submission.pushKV("artifact_dir",fs::PathToString(root));
-    resources.pushKV("timeout_ms",15000); resources.pushKV("memory_bytes",268435456);
-    std::string err;
-    check(modelnet::EvaluationProfileReady("EXACT_CHECKS"),"existing profile available");
-    check(modelnet::PrepareEvaluation(spec,submission,resources,plan,err),"valid owned artifact prepared");
-    check(!plan["wallet"].get_bool() && !plan["network"].get_bool(),"preparation permissions unchanged");
-    check(plan["timeout_ms"].getInt<int64_t>()==15000 && plan["memory_bytes"].getInt<int64_t>()==268435456,"preparation limits unchanged");
-    auto make_job=[&](const UniValue& p) { UniValue j(UniValue::VOBJ); j.pushKV("plan",p);j.pushKV("state","RUNNING");j.pushKV("sentinel","owned-component-job");return j;};
-    UniValue absent(UniValue::VOBJ);
-    check(!modelnet::RunEvaluationJob(absent,err) && err=="plan","common missing plan guard");
-    auto uninstalled=plan;uninstalled.pushKV("profile_id","NOT_INSTALLED");auto uninstalled_job=make_job(uninstalled);
-    check(!modelnet::RunEvaluationJob(uninstalled_job,err) && err=="unexecuted profile","common uninstalled profile guard");
-    auto job=make_job(plan);
+
+namespace {
+int checks = 0, failures = 0;
+void Check(bool ok, const char* label)
+{
+    ++checks;
+    if (!ok) ++failures;
+    std::cout << (ok ? "PASS " : "FAIL ") << label << '\n';
+}
+struct Env {
+    std::string name, old;
+    bool had;
+    Env(const char* k, const char* value) : name(k), had(std::getenv(k) != nullptr)
+    {
+        if (had) old = std::getenv(k);
+        Set(value);
+    }
+    void Set(const char* v) {
 #ifdef _WIN32
-    check(!modelnet::RunEvaluationJob(job,err),"Windows unavailable executor refuses");
-    check(err=="isolated evaluation process is not supported on this platform","Windows explicit unsupported error");
-    check(job["state"].get_str()=="FAILED","Windows caller-shaped job terminal FAILED");
-    check(!job.exists("pid") && !job.exists("report") && !job.exists("pass") && !job.exists("isolated_process"),"Windows no process or success claim");
+        _putenv_s(name.c_str(), v ? v : "");
 #else
-    check(modelnet::RunEvaluationJob(job,err),"POSIX valid evaluation executed");
-    check(job["state"].get_str()=="COMPLETE" && job["pass"].get_bool(),"POSIX valid file passes");
-    check(job["report"]["tasks"][0]["sha384"].get_str()==digest && job["report"]["tasks"][0]["size"].getInt<int64_t>()==3,"POSIX real digest and size");
-    check(job["isolated_process"].get_bool() && !job["wallet"].get_bool(),"POSIX isolation and wallet restriction");
-    auto reaped=[&](const UniValue& j) {int status=0;errno=0;check(waitpid(static_cast<pid_t>(j["pid"].getInt<int64_t>()),&status,WNOHANG)==-1 && errno==ECHILD,"POSIX owned child already reaped");};
-    reaped(job);
-    auto cancelled=make_job(plan);cancelled.pushKV("cancel",true);
-    check(!modelnet::RunEvaluationJob(cancelled,err) && err=="cancelled" && cancelled["state"].get_str()=="CANCELLED","POSIX pre-cancelled job remains cancelled");reaped(cancelled);
-    auto check_file_failure=[&](const std::string& name,const std::string& hash,const char* label){
-        auto changed=file;changed.pushKV("name",name);changed.pushKV("sha384",hash);UniValue list(UniValue::VARR);list.push_back(changed);
-        auto s=spec;s.pushKV("required_files",list);UniValue p;
-        check(modelnet::PrepareEvaluation(s,submission,resources,p,err),"POSIX failure control prepares");auto j=make_job(p);
-        check(modelnet::RunEvaluationJob(j,err) && j["state"].get_str()=="FAILED" && !j["pass"].get_bool(),label);reaped(j);
-    };
-    check_file_failure("missing.txt",digest,"POSIX missing required file stays failed");
-    check_file_failure("artifact.txt",std::string(96,'0'),"POSIX checksum mismatch stays failed");
+        if (v) setenv(name.c_str(), v, 1); else unsetenv(name.c_str());
 #endif
-    check(job["plan"].write()==plan.write() && job["sentinel"].get_str()=="owned-component-job","job plan and sentinel unchanged");
-    UniValue logical(UniValue::VOBJ);logical.pushKV("pid",1);err="prior";
-    check(modelnet::CancelEvaluationJob(logical,err) && logical["cancel"].get_bool() && logical["state"].get_str()=="CANCELLED" && err.empty(),"logical cancellation remains available");
-    {std::ifstream f(artifact,std::ios::binary);std::string content((std::istreambuf_iterator<char>(f)),{});check(content=="abc","owned input unchanged");}
-    check(std::distance(fs::directory_iterator(root),fs::directory_iterator())==1,"no extra artifact files");
-    fs::remove(artifact);check(fs::is_empty(root),"owned artifacts cleaned");
-    std::cout << "RESULT checks=" << checks << " failures=" << failures << std::endl;
+    }
+    ~Env() { Set(had ? old.c_str() : nullptr); }
+};
+}
+
+int main(int argc, char** argv)
+{
+    using namespace modelnet;
+    if (argc != 2) return 2;
+    const unsigned char payload[] = {'t','i','n','y','-','c','p','u','-','f','i','x','t','u','r','e'};
+    Span<const unsigned char> bytes{payload, sizeof(payload)};
+    UniValue params(UniValue::VOBJ);
+    params.pushKV("backend", "CPU");
+    params.pushKV("adapter_abi", RUNTIME_ADAPTER_ABI);
+    ReadyReceipt loaded, remapped, rebuilt;
+    std::string code, err;
+    Digest48 expected;
+    Check(CpuFixtureSmoke(bytes, expected, err), "real CPU smoke");
+    Check(LoadTrustedRuntime("synthetic-cpu-fixture", bytes, params, loaded, code, err), "CPU load");
+    Check(loaded.smoke_performed && loaded.smoke_passed && !loaded.lease_id.empty() &&
+          loaded.achieved == ReadinessTarget::FIRST_USEFUL_RESULT, "CPU readiness and lease");
+    Check(loaded.json["smoke_digest48"].get_str() == expected.Hex(), "CPU digest matches verified bytes");
+    Check(loaded.json["stub"].isFalse() && loaded.json["remote_endpoint"].isFalse() &&
+          loaded.json["funded_wallet"].isFalse() && loaded.json["automatic_spend_atoms"].getInt<int>() == 0,
+          "local no-spend receipt");
+    UniValue sleep;
+    Check(SleepRuntimePreserveWeights(loaded.lease_id, sleep, code, err), "sleep succeeds");
+    Check(sleep["weights_preserved"].isTrue() && sleep["kv_discarded"].isTrue() &&
+          sleep["workspace_discarded"].isTrue() && sleep["ready"].isFalse(), "sleep preserves weights and clears readiness");
+    Check(!WakeRuntimeRemapOnly(loaded.lease_id, remapped, code, err) && code == "PREMATURE_READY" &&
+          !remapped.smoke_performed && !remapped.smoke_passed, "remap alone refuses readiness");
+    Check(remapped.json["remap_only"].isTrue() && remapped.json["kv_rebuilt"].isFalse() &&
+          remapped.json["ready"].isFalse(), "remap receipt retains unready state");
+    Check(WakeRuntimeRebuildKv(loaded.lease_id, rebuilt, code, err), "wake rebuild succeeds");
+    Check(rebuilt.smoke_performed && rebuilt.smoke_passed && rebuilt.lease_id == loaded.lease_id &&
+          rebuilt.json["smoke_digest48"].get_str() == expected.Hex(), "wake re-smokes same retained bytes");
+    Check(rebuilt.achieved == ReadinessTarget::FIRST_USEFUL_RESULT && rebuilt.json["kv_rebuilt"].isTrue() &&
+          rebuilt.json["remap_only"].isFalse() && rebuilt.json["ready"].isTrue() &&
+          rebuilt.json["weights_preserved"].isTrue(), "wake receipt restores readiness after rebuild");
+    Check(!SleepRuntimePreserveWeights("not-a-lease", sleep, code, err) && code == "UNKNOWN_LEASE", "unknown sleep lease");
+    Check(!WakeRuntimeRemapOnly("not-a-lease", remapped, code, err) && code == "UNKNOWN_LEASE", "unknown remap lease");
+    Check(!WakeRuntimeRebuildKv("not-a-lease", rebuilt, code, err) && code == "UNKNOWN_LEASE", "unknown wake lease");
+    ReadyReceipt rec;
+    auto refused = [&](const char* runtime, Span<const unsigned char> data, const UniValue& p, const char* wanted) {
+        bool ok = LoadTrustedRuntime(runtime, data, p, rec, code, err);
+        return !ok && code == wanted && !rec.smoke_performed && !rec.smoke_passed && rec.lease_id.empty();
+    };
+    Check(refused("synthetic-cpu-fixture", {}, params, "UNVERIFIED_RANGE"), "empty verified payload refused");
+    UniValue bad(UniValue::VOBJ); bad.pushKV("adapter_abi", "unsupported");
+    Check(refused("synthetic-cpu-fixture", bytes, bad, "ADAPTER_ABI_MISMATCH"), "ABI mismatch refused");
+    bad = UniValue(UniValue::VOBJ); bad.pushKV("backend", "unknown");
+    Check(refused("synthetic-cpu-fixture", bytes, bad, "UNKNOWN_ADAPTER_PARAMETER"), "unknown backend refused");
+    Check(refused("unknown-runtime", bytes, params, "UNSUPPORTED_RUNTIME_PROFILE"), "unknown runtime refused");
+    bad = UniValue(UniValue::VOBJ); bad.pushKV("backend", "CUDA");
+    Check(refused("synthetic-cpu-fixture", bytes, bad, "UNSUPPORTED_RUNTIME_PROFILE"), "CPU fixture cannot qualify CUDA");
+    for (const char* key : {"executable_path", "command", "LD_PRELOAD", "unrecognized_flag"}) {
+        bad = UniValue(UniValue::VOBJ); bad.pushKV(key, "unsupported");
+        Check(refused("synthetic-cpu-fixture", bytes, bad, "UNKNOWN_ADAPTER_PARAMETER"), key);
+    }
+    bad = UniValue(UniValue::VOBJ); UniValue flags(UniValue::VOBJ); flags.pushKV("unrecognized_flag", 1); bad.pushKV("flags", flags);
+    Check(refused("synthetic-cpu-fixture", bytes, bad, "UNKNOWN_ADAPTER_PARAMETER"), "unknown nested flag refused");
+    Env llama("BTX_LLAMA_CLI", nullptr), vllm("BTX_VLLM", nullptr), mlx("BTX_MLX", nullptr), cuda("BTX_MODEL_CUDA_LOADER", nullptr);
+    bad = UniValue(UniValue::VOBJ); bad.pushKV("backend", "CPU");
+    Check(refused("llama.cpp", bytes, bad, "RUNTIME_NOT_INSTALLED"), "operator environment required");
+    llama.Set(argv[1]);
+    Check(refused("llama.cpp", bytes, bad, "LIVE_RUNTIME_NOT_RUN"), "existing operator path alone is not runtime success");
+#ifdef _WIN32
+    vllm.Set(argv[1]); mlx.Set(argv[1]); cuda.Set(argv[1]);
+    const auto accelerated = ProbeAcceleratedAdapters();
+    Check(accelerated.size() == 3, "three accelerated statuses");
+    for (const auto& s : accelerated) {
+        Check(!s.present && !s.stub && s.detail.find("NOT_RUN") != std::string::npos, s.backend.c_str());
+    }
+    for (const auto& pair : {std::pair{"llama.cpp", "CUDA"}, {"vLLM", "ROCM"}, {"MLX", "METAL"}, {"safetensors-cuda", "CUDA"}}) {
+        bad = UniValue(UniValue::VOBJ); bad.pushKV("backend", pair.second);
+        Check(refused(pair.first, bytes, bad, "HARDWARE_NOT_RUN"), pair.first);
+    }
+#endif
+    // Internal missing-state controls exercise the guarded wake predicate.
+    {
+        std::lock_guard<std::mutex> lock(g_rt_mu);
+        g_sessions[loaded.lease_id].weights_resident = false;
+    }
+    Check(!WakeRuntimeRebuildKv(loaded.lease_id, rec, code, err) && code == "UNVERIFIED_RANGE" && !rec.smoke_passed,
+          "nonresident weights refuse wake");
+    {
+        std::lock_guard<std::mutex> lock(g_rt_mu);
+        g_sessions[loaded.lease_id].weights_resident = true;
+        g_sessions[loaded.lease_id].weights.clear();
+    }
+    Check(!WakeRuntimeRebuildKv(loaded.lease_id, rec, code, err) && code == "UNVERIFIED_RANGE" && !rec.smoke_passed,
+          "empty weights refuse wake");
+    std::cout << "checks=" << checks << " failures=" << failures << '\n';
     return failures ? 1 : 0;
 }

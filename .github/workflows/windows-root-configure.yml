@@ -116,6 +116,18 @@ jobs:
           set "_CL_="
           python controls/contrib/devtools/windows-root-configure/resume-verified.py
           exit /b %errorlevel%
+      - name: Qualify one cached compiler target and CPU lifecycle
+        shell: cmd
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
+          if not defined BTX_VS exit /b 2
+          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+          if errorlevel 1 exit /b %errorlevel%
+          set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
+          set "CL="
+          set "_CL_="
+          python controls/contrib/devtools/windows-root-configure/paired.py
+          exit /b %errorlevel%
       - name: Preserve original diagnostic records
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
