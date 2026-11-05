@@ -116,7 +116,7 @@ jobs:
           set "_CL_="
           python controls/contrib/devtools/windows-root-configure/runner.py configure
           exit /b %errorlevel%
-      - name: Explain saved-object freshness without compiling
+      - name: Inspect object dirty reasons without compiling
         timeout-minutes: 5
         shell: cmd
         run: |
@@ -127,7 +127,7 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/checkpoint-diagnose.py
+          python controls/contrib/devtools/windows-root-configure/object-dirty-diagnostic.py
           exit /b %errorlevel%
       - name: Preserve original diagnostic records
         if: always()
