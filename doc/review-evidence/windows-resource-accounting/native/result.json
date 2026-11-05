@@ -1,0 +1,222 @@
+{
+  "verdict": "PASS",
+  "error": null,
+  "cases": [
+    {
+      "label": "baseline-normal",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "required_tokens": [
+        "VERDICT PASS normal",
+        "inputs_unchanged=1"
+      ],
+      "pass": true,
+      "new_matching_profile_directories": []
+    },
+    {
+      "label": "baseline-nonzero",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "required_tokens": [
+        "VERDICT PASS nonzero",
+        "inputs_unchanged=1"
+      ],
+      "pass": true,
+      "new_matching_profile_directories": []
+    },
+    {
+      "label": "baseline-cpu",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "required_tokens": [
+        "CASE cpu code=JAILED launched=1 jailed=1 child=0",
+        "output_ok=1 inputs_unchanged=1",
+        "VERDICT FAIL expected-resource-refusal-did-not-occur"
+      ],
+      "pass": true,
+      "new_matching_profile_directories": []
+    },
+    {
+      "label": "baseline-tree",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "required_tokens": [
+        "CASE tree code=JAILED launched=1 jailed=1 child=0",
+        "output_ok=1 inputs_unchanged=1",
+        "VERDICT FAIL expected-resource-refusal-did-not-occur"
+      ],
+      "pass": true,
+      "new_matching_profile_directories": []
+    },
+    {
+      "label": "baseline-query",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "required_tokens": [
+        "CASE query code=JAILED launched=1 jailed=1 child=0",
+        "output_ok=1 inputs_unchanged=1",
+        "VERDICT FAIL expected-resource-refusal-did-not-occur"
+      ],
+      "pass": true,
+      "new_matching_profile_directories": []
+    },
+    {
+      "label": "baseline-final-cpu",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "required_tokens": [
+        "CASE final-cpu code=JAILED launched=1 jailed=1 child=0",
+        "output_ok=1 inputs_unchanged=1",
+        "VERDICT FAIL expected-resource-refusal-did-not-occur"
+      ],
+      "pass": true,
+      "new_matching_profile_directories": []
+    },
+    {
+      "label": "baseline-clock",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "required_tokens": [
+        "CASE clock code=JAILED launched=1 jailed=1 child=0",
+        "output_ok=1 inputs_unchanged=1",
+        "VERDICT FAIL expected-resource-refusal-did-not-occur"
+      ],
+      "pass": true,
+      "new_matching_profile_directories": []
+    },
+    {
+      "label": "production-normal",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "required_tokens": [
+        "VERDICT PASS normal",
+        "inputs_unchanged=1"
+      ],
+      "pass": true,
+      "new_matching_profile_directories": []
+    },
+    {
+      "label": "production-nonzero",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "required_tokens": [
+        "VERDICT PASS nonzero",
+        "inputs_unchanged=1"
+      ],
+      "pass": true,
+      "new_matching_profile_directories": []
+    },
+    {
+      "label": "production-policy",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "required_tokens": [
+        "POLICY PASS"
+      ],
+      "pass": true,
+      "new_matching_profile_directories": []
+    },
+    {
+      "label": "production-scanner",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "required_tokens": [
+        "SCANNER PASS"
+      ],
+      "pass": true,
+      "new_matching_profile_directories": []
+    },
+    {
+      "label": "fault-normal",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "required_tokens": [
+        "VERDICT PASS normal",
+        "started_observed=1",
+        "staged_missing=1",
+        "process_exited=1"
+      ],
+      "pass": true,
+      "new_matching_profile_directories": []
+    },
+    {
+      "label": "fault-cpu",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "required_tokens": [
+        "VERDICT PASS cpu",
+        "started_observed=1",
+        "staged_missing=1",
+        "process_exited=1",
+        "RECOVERY after=cpu same_process=1",
+        "RECOVERY PASS cpu"
+      ],
+      "pass": true,
+      "new_matching_profile_directories": []
+    },
+    {
+      "label": "fault-tree",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "required_tokens": [
+        "VERDICT PASS tree",
+        "started_observed=1",
+        "staged_missing=1",
+        "process_exited=1",
+        "RECOVERY after=tree same_process=1",
+        "RECOVERY PASS tree"
+      ],
+      "pass": true,
+      "new_matching_profile_directories": []
+    },
+    {
+      "label": "fault-query",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "required_tokens": [
+        "VERDICT PASS query",
+        "started_observed=1",
+        "staged_missing=1",
+        "process_exited=1",
+        "RECOVERY after=query same_process=1",
+        "RECOVERY PASS query"
+      ],
+      "pass": true,
+      "new_matching_profile_directories": []
+    },
+    {
+      "label": "fault-final-cpu",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "required_tokens": [
+        "VERDICT PASS final-cpu",
+        "started_observed=1",
+        "staged_missing=1",
+        "process_exited=1",
+        "RECOVERY after=final-cpu same_process=1",
+        "RECOVERY PASS final-cpu",
+        "FINAL_OBSERVATION completion_poll=1 process_signaled=1"
+      ],
+      "pass": true,
+      "new_matching_profile_directories": []
+    },
+    {
+      "label": "fault-clock",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "required_tokens": [
+        "VERDICT PASS clock",
+        "started_observed=1",
+        "staged_missing=1",
+        "process_exited=1",
+        "RECOVERY after=clock same_process=1",
+        "RECOVERY PASS clock"
+      ],
+      "pass": true,
+      "new_matching_profile_directories": []
+    }
+  ],
+  "cleanup": "Owned original fixture roots removed",
+  "remaining_profile_directories": [],
+  "scope": "Native component; rejection uses synthetic accounting samples with real finite workers/Jobs and same-process recovery. Not a real CPU/disk quota violation, all-filesystem, Windows11, fullnode or release qualification."
+}

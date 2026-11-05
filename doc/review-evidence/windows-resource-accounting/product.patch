@@ -1,0 +1,1127 @@
+diff --git a/src/modelnet/swarm_confine.h b/src/modelnet/swarm_confine.h
+index 0616eadc..51cf54d9 100644
+--- a/src/modelnet/swarm_confine.h
++++ b/src/modelnet/swarm_confine.h
+@@ -34,7 +34,14 @@ namespace modelnet {
+  * filesystem, so a file written outside root is bounded only by
+  * RLIMIT_FSIZE. Windows uses a
+  * zero-capability AppContainer, private staged files, a one-process Job with
+- * memory/CPU/wall limits and an explicit stdio handle allowlist. max_nofile
++ * memory/user-CPU limits and an explicit stdio handle allowlist. The parent
++ * samples summed Job user+kernel CPU and staged logical file lengths, with
++ * at most 100 ms requested waits and time checks during bounded tree walks.
++ * Existing input allowance plus 64 MiB of output is the live Windows tree
++ * envelope; final input hashes and output limits still apply. Sampling is
++ * not an atomic snapshot or hard disk quota; I/O/scheduling may delay it.
++ * An incomplete pass is retried once, then refused rather than treated as
++ * zero. Wall time excludes system sleep, as Windows 8+ waits do. max_nofile
+  * is a POSIX descriptor quota; Windows bounds inherited handles and process
+  * memory, not the number of later OS handle allocations. No environment
+  * credentials or inherited RPC/wallet descriptors cross exec. Wall timeout
+diff --git a/src/modelnet/swarm_fsjail.cpp b/src/modelnet/swarm_fsjail.cpp
+index 535373b1..04cb4df4 100644
+--- a/src/modelnet/swarm_fsjail.cpp
++++ b/src/modelnet/swarm_fsjail.cpp
+@@ -358,7 +358,7 @@ SwarmFilesystemJailResult SwarmRunFilesystemJail(const SwarmFilesystemJailReques
+     confined.network_denied = true;
+     const auto run = SwarmRunConfined(confined, err);
+     if (!run.launched) {
+-        return Refuse(run.code == "CONFINEMENT_TIMEOUT" ? "JAIL_TIMEOUT" :
++        return Refuse((run.code == "CONFINEMENT_TIMEOUT" || run.code == "WINDOWS_SANDBOX_CPU_LIMIT") ? "JAIL_TIMEOUT" :
+                       run.code == "TREE_LIMIT" ? "TREE_LIMIT" : "JAIL_ABSENT", err);
+     }
+     SwarmFilesystemJailResult result;
+diff --git a/src/modelnet/swarm_windows_accounting.h b/src/modelnet/swarm_windows_accounting.h
+new file mode 100644
+index 00000000..aa940cd1
+--- /dev/null
++++ b/src/modelnet/swarm_windows_accounting.h
+@@ -0,0 +1,346 @@
++// Copyright (c) 2026 The BTX developers. MIT license. See COPYING.
++#ifndef BTX_MODELNET_SWARM_WINDOWS_ACCOUNTING_H
++#define BTX_MODELNET_SWARM_WINDOWS_ACCOUNTING_H
++
++#ifdef _WIN32
++#include <windows.h>
++
++#include <cstddef>
++#include <cstdint>
++#include <functional>
++#include <limits>
++#include <memory>
++#include <set>
++#include <string>
++#include <utility>
++#include <vector>
++
++namespace modelnet::windows_accounting {
++
++inline constexpr uint64_t MAX_OUTPUT_BYTES = 64ULL * 1024 * 1024;
++
++inline bool LiveTreeBudget(uint64_t input, uint64_t& out)
++{
++    if (input > (std::numeric_limits<uint64_t>::max)() - MAX_OUTPUT_BYTES) return false;
++    out = input + MAX_OUTPUT_BYTES;
++    return true;
++}
++
++enum class CpuState { within, over_limit, invalid };
++
++inline CpuState EvaluateCpu(LONGLONG user, LONGLONG kernel, uint64_t budget_ticks)
++{
++    if (user < 0 || kernel < 0) return CpuState::invalid;
++    const auto u = static_cast<uint64_t>(user);
++    const auto k = static_cast<uint64_t>(kernel);
++    // Subtraction avoids overflowing the sum. Equality is permitted.
++    return u > budget_ticks || k > budget_ticks - u ? CpuState::over_limit : CpuState::within;
++}
++
++enum class TreeState { within, over_limit, incomplete, failure, interrupted };
++
++struct TreeResult {
++    TreeState state{TreeState::failure};
++    DWORD error{ERROR_SUCCESS};
++    uint64_t bytes{0};
++    size_t entries{0};
++};
++
++/** Metadata-only sample of one owned staged root, not an atomic disk quota.
++ *
++ * Calls are serial. Each pass restarts enumeration and owns all descendant
++ * handles/buffers. Incomplete passes must not be used as a successful sample;
++ * the supervisor may restart once while retaining its original CPU/wall clocks.
++ * No filesystem-name allowlist or pathname traversal fallback is used.
++ */
++class TreeSampler {
++    class Handle {
++        HANDLE m_value{INVALID_HANDLE_VALUE};
++        bool m_owned{true};
++    public:
++        Handle() = default;
++        explicit Handle(HANDLE value, bool owned = true) : m_value(value), m_owned(owned) {}
++        ~Handle() { if (Valid() && m_owned) CloseHandle(m_value); }
++        Handle(const Handle&) = delete;
++        Handle& operator=(const Handle&) = delete;
++        Handle(Handle&& other) noexcept : m_value(other.m_value), m_owned(other.m_owned)
++        {
++            other.m_value = INVALID_HANDLE_VALUE;
++        }
++        Handle& operator=(Handle&& other) noexcept
++        {
++            if (this != &other) {
++                if (Valid() && m_owned) CloseHandle(m_value);
++                m_value = other.m_value;
++                m_owned = other.m_owned;
++                other.m_value = INVALID_HANDLE_VALUE;
++            }
++            return *this;
++        }
++        bool Valid() const { return m_value != INVALID_HANDLE_VALUE && m_value != nullptr; }
++        HANDLE Get() const { return m_value; }
++    };
++
++    static constexpr size_t MAX_ENTRIES = 8192;
++    static constexpr size_t MAX_ENTRY_DEPTH = 64;
++    static constexpr size_t BUFFER_BYTES = 64 * 1024;
++
++    struct Frame {
++        Handle directory;
++        size_t depth;
++        // Heap storage keeps deep trees off the Windows thread stack. ULONG64
++        // provides sufficient alignment for FILE_ID_BOTH_DIR_INFO records.
++        std::vector<ULONG64> buffer;
++        size_t offset{0};
++        bool restart{true};
++        bool need_batch{true};
++
++        Frame(Handle handle, size_t entry_depth)
++            : directory(std::move(handle)), depth(entry_depth), buffer(BUFFER_BYTES / sizeof(ULONG64)) {}
++        Frame(Frame&&) noexcept = default;
++        Frame& operator=(Frame&&) noexcept = default;
++        Frame(const Frame&) = delete;
++        Frame& operator=(const Frame&) = delete;
++    };
++
++    Handle m_root;
++    std::wstring m_anchor;
++    DWORD m_volume;
++    uint64_t m_root_id;
++
++    TreeSampler(Handle root, std::wstring anchor, DWORD volume, uint64_t id)
++        : m_root(std::move(root)), m_anchor(std::move(anchor)), m_volume(volume), m_root_id(id) {}
++
++    static uint64_t Id(const BY_HANDLE_FILE_INFORMATION& info)
++    {
++        return (static_cast<uint64_t>(info.nFileIndexHigh) << 32) | info.nFileIndexLow;
++    }
++
++    static DWORD LastError()
++    {
++        const DWORD error = GetLastError();
++        return error == ERROR_SUCCESS ? ERROR_GEN_FAILURE : error;
++    }
++
++    static TreeState ApiFailureState(DWORD error)
++    {
++        // An ambiguous denial is not a harmless missing entry or zero usage.
++        // Return the entire pass as incomplete; a persistent denial refuses.
++        switch (error) {
++        case ERROR_FILE_NOT_FOUND:
++        case ERROR_PATH_NOT_FOUND:
++        case ERROR_DELETE_PENDING:
++        case ERROR_SHARING_VIOLATION:
++        case ERROR_ACCESS_DENIED:
++            return TreeState::incomplete;
++        default:
++            return TreeState::failure;
++        }
++    }
++
++    static bool FinalPath(HANDLE handle, std::wstring& path, DWORD& error)
++    {
++        std::vector<wchar_t> buffer(32768);
++        const DWORD length = GetFinalPathNameByHandleW(handle, buffer.data(),
++            static_cast<DWORD>(buffer.size()), FILE_NAME_NORMALIZED | VOLUME_NAME_DOS);
++        if (length == 0) { error = LastError(); return false; }
++        if (length >= buffer.size()) { error = ERROR_FILENAME_EXCED_RANGE; return false; }
++        path.assign(buffer.data(), length);
++        while (path.size() > 4 && path.back() == L'\\') path.pop_back();
++        error = ERROR_SUCCESS;
++        return true;
++    }
++
++    static bool EqualPath(const std::wstring& left, const std::wstring& right)
++    {
++        return left.size() == right.size() &&
++            CompareStringOrdinal(left.data(), static_cast<int>(left.size()),
++                right.data(), static_cast<int>(right.size()), FALSE) == CSTR_EQUAL;
++    }
++
++    bool BelowRoot(const std::wstring& path) const
++    {
++        return path.size() > m_anchor.size() && path[m_anchor.size()] == L'\\' &&
++            CompareStringOrdinal(path.data(), static_cast<int>(m_anchor.size()),
++                m_anchor.data(), static_cast<int>(m_anchor.size()), FALSE) == CSTR_EQUAL;
++    }
++
++public:
++    ~TreeSampler() = default;
++    TreeSampler(const TreeSampler&) = delete;
++    TreeSampler& operator=(const TreeSampler&) = delete;
++
++    static std::unique_ptr<TreeSampler> Create(const std::wstring& root, DWORD& error)
++    {
++        Handle handle(CreateFileW(root.c_str(), FILE_LIST_DIRECTORY,
++            FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr, OPEN_EXISTING,
++            FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT, nullptr));
++        if (!handle.Valid()) { error = LastError(); return {}; }
++        BY_HANDLE_FILE_INFORMATION info{};
++        if (!GetFileInformationByHandle(handle.Get(), &info)) { error = LastError(); return {}; }
++        if (!(info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ||
++            (info.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) || Id(info) == 0) {
++            error = ERROR_INVALID_DATA;
++            return {};
++        }
++        std::wstring anchor;
++        if (!FinalPath(handle.Get(), anchor, error)) return {};
++        error = ERROR_SUCCESS;
++        return std::unique_ptr<TreeSampler>(new TreeSampler(
++            std::move(handle), std::move(anchor), info.dwVolumeSerialNumber, Id(info)));
++    }
++
++    TreeResult Sample(uint64_t cap, const std::function<bool()>& keep_running) const
++    {
++        TreeResult result{TreeState::within, ERROR_SUCCESS, 0, 0};
++        const auto stopped = [&] {
++            if (!keep_running || keep_running()) return false;
++            result.state = TreeState::interrupted;
++            result.error = ERROR_CANCELLED;
++            return true;
++        };
++        const auto failed = [&](DWORD error) {
++            result.state = ApiFailureState(error);
++            result.error = error;
++        };
++
++        if (stopped()) return result;
++        BY_HANDLE_FILE_INFORMATION root_info{};
++        if (!GetFileInformationByHandle(m_root.Get(), &root_info)) { failed(LastError()); return result; }
++        if (stopped()) return result;
++        if (root_info.dwVolumeSerialNumber != m_volume || Id(root_info) != m_root_id ||
++            !(root_info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ||
++            (root_info.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)) {
++            result.state = TreeState::failure; result.error = ERROR_INVALID_DATA; return result;
++        }
++        std::wstring current_anchor;
++        DWORD error = ERROR_SUCCESS;
++        if (stopped()) return result;
++        if (!FinalPath(m_root.Get(), current_anchor, error)) { failed(error); return result; }
++        if (stopped()) return result;
++        if (!EqualPath(current_anchor, m_anchor)) {
++            result.state = TreeState::incomplete; result.error = ERROR_RETRY; return result;
++        }
++
++        std::set<uint64_t> seen{m_root_id};
++        std::vector<Frame> stack;
++        // Snapshot counts root entries at depth0. An empty terminal directory
++        // can therefore retain a depth65 frame without accepting depth65 entries.
++        stack.reserve(MAX_ENTRY_DEPTH + 2);
++        stack.emplace_back(Handle(m_root.Get(), false), 0);
++        size_t batches = 0;
++        while (!stack.empty()) {
++            if (stopped()) return result;
++            Frame& frame = stack.back();
++            if (frame.need_batch) {
++                std::wstring directory_path;
++                if (!FinalPath(frame.directory.Get(), directory_path, error)) { failed(error); return result; }
++                if (stopped()) return result;
++                if (frame.depth == 0 ? !EqualPath(directory_path, m_anchor) : !BelowRoot(directory_path)) {
++                    result.state = TreeState::failure; result.error = ERROR_ACCESS_DENIED; return result;
++                }
++                if (++batches > MAX_ENTRIES * 2 + 2) {
++                    result.state = TreeState::over_limit; result.error = ERROR_BUFFER_OVERFLOW; return result;
++                }
++                const auto kind = frame.restart ? FileIdBothDirectoryRestartInfo : FileIdBothDirectoryInfo;
++                const BOOL ok = GetFileInformationByHandleEx(frame.directory.Get(), kind,
++                    frame.buffer.data(), static_cast<DWORD>(BUFFER_BYTES));
++                const DWORD api_error = ok ? ERROR_SUCCESS : LastError();
++                if (stopped()) return result;
++                if (!ok) {
++                    if (api_error == ERROR_NO_MORE_FILES) { stack.pop_back(); continue; }
++                    failed(api_error); return result;
++                }
++                frame.restart = false; frame.need_batch = false; frame.offset = 0;
++            }
++
++            const size_t offset = frame.offset;
++            if (offset % alignof(FILE_ID_BOTH_DIR_INFO) != 0 ||
++                offset > BUFFER_BYTES - offsetof(FILE_ID_BOTH_DIR_INFO, FileName)) {
++                result.state = TreeState::failure; result.error = ERROR_INVALID_DATA; return result;
++            }
++            const auto* bytes = reinterpret_cast<const unsigned char*>(frame.buffer.data());
++            const auto* entry = reinterpret_cast<const FILE_ID_BOTH_DIR_INFO*>(bytes + offset);
++            if (entry->FileNameLength == 0 || entry->FileNameLength % sizeof(wchar_t) != 0 ||
++                entry->FileNameLength > BUFFER_BYTES - offset - offsetof(FILE_ID_BOTH_DIR_INFO, FileName) ||
++                (entry->NextEntryOffset != 0 &&
++                    (entry->NextEntryOffset < offsetof(FILE_ID_BOTH_DIR_INFO, FileName) + entry->FileNameLength ||
++                     entry->NextEntryOffset % alignof(FILE_ID_BOTH_DIR_INFO) != 0 ||
++                     entry->NextEntryOffset > BUFFER_BYTES - offset))) {
++                result.state = TreeState::failure; result.error = ERROR_INVALID_DATA; return result;
++            }
++            const std::wstring name(entry->FileName, entry->FileNameLength / sizeof(wchar_t));
++            const DWORD attributes = entry->FileAttributes;
++            const LARGE_INTEGER file_id = entry->FileId;
++            const size_t depth = frame.depth;
++            // Advance the parent before potentially pushing a child frame.
++            if (entry->NextEntryOffset == 0) frame.need_batch = true;
++            else frame.offset += entry->NextEntryOffset;
++            if (name == L"." || name == L"..") continue;
++
++            if (++result.entries > MAX_ENTRIES || depth > MAX_ENTRY_DEPTH) {
++                result.state = TreeState::over_limit; result.error = ERROR_BUFFER_OVERFLOW; return result;
++            }
++            if ((attributes & FILE_ATTRIBUTE_REPARSE_POINT) || file_id.QuadPart == 0) {
++                result.state = TreeState::failure; result.error = ERROR_INVALID_DATA; return result;
++            }
++            const bool directory = (attributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
++            FILE_ID_DESCRIPTOR descriptor{};
++            descriptor.dwSize = sizeof(descriptor); descriptor.Type = FileIdType; descriptor.FileId = file_id;
++            if (stopped()) return result;
++            Handle item(OpenFileById(m_root.Get(), &descriptor, directory ? FILE_LIST_DIRECTORY : 0,
++                FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr,
++                FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT));
++            const DWORD open_error = item.Valid() ? ERROR_SUCCESS : LastError();
++            if (stopped()) return result;
++            if (!item.Valid()) { failed(open_error); return result; }
++
++            BY_HANDLE_FILE_INFORMATION info{};
++            if (stopped()) return result;
++            if (!GetFileInformationByHandle(item.Get(), &info)) { failed(LastError()); return result; }
++            if (stopped()) return result;
++            if (info.dwVolumeSerialNumber != m_volume || Id(info) != static_cast<uint64_t>(file_id.QuadPart) ||
++                (info.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) ||
++                ((info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) != directory) {
++                result.state = TreeState::failure; result.error = ERROR_INVALID_DATA; return result;
++            }
++            std::wstring path;
++            if (stopped()) return result;
++            if (!FinalPath(item.Get(), path, error)) { failed(error); return result; }
++            if (stopped()) return result;
++            if (!BelowRoot(path)) {
++                result.state = TreeState::failure; result.error = ERROR_ACCESS_DENIED; return result;
++            }
++            if (!seen.emplace(Id(info)).second) {
++                result.state = TreeState::incomplete; result.error = ERROR_RETRY; return result;
++            }
++            if (directory) {
++                stack.emplace_back(std::move(item), depth + 1);
++                continue;
++            }
++
++            FILE_STANDARD_INFO standard{};
++            if (stopped()) return result;
++            if (!GetFileInformationByHandleEx(item.Get(), FileStandardInfo, &standard, sizeof(standard))) {
++                failed(LastError()); return result;
++            }
++            if (stopped()) return result;
++            if (standard.DeletePending) {
++                result.state = TreeState::incomplete; result.error = ERROR_DELETE_PENDING; return result;
++            }
++            if (standard.Directory || standard.NumberOfLinks != 1 || standard.EndOfFile.QuadPart < 0) {
++                result.state = TreeState::failure; result.error = ERROR_INVALID_DATA; return result;
++            }
++            const uint64_t length = static_cast<uint64_t>(standard.EndOfFile.QuadPart);
++            if (length > cap - result.bytes) {
++                result.state = TreeState::over_limit; result.error = ERROR_FILE_TOO_LARGE; return result;
++            }
++            result.bytes += length;
++        }
++        return result;
++    }
++};
++
++} // namespace modelnet::windows_accounting
++#endif // _WIN32
++#endif // BTX_MODELNET_SWARM_WINDOWS_ACCOUNTING_H
+diff --git a/src/modelnet/swarm_windows_sandbox.cpp b/src/modelnet/swarm_windows_sandbox.cpp
+index 49b6ed50..08b2be95 100644
+--- a/src/modelnet/swarm_windows_sandbox.cpp
++++ b/src/modelnet/swarm_windows_sandbox.cpp
+@@ -13,6 +13,7 @@
+ #include <bcrypt.h>
+ #include <objbase.h>
+ #include <modelnet/swarm_windows_sandbox.h>
++#include <modelnet/swarm_windows_accounting.h>
+ #include <modelnet/swarm_process_guard.h>
+ #include <modelnet/swarm_native_io.h>
+ #include <array>
+@@ -23,10 +24,19 @@
+ #include <memory>
+ #include <vector>
+ 
++#ifdef BTX_WINDOWS_ACCOUNTING_TEST
++// Only the native regression binary defines these; never a runtime option.
++namespace modelnet::windows_accounting_test {
++void AdjustCpu(HANDLE,const std::wstring&,bool,bool&,LONGLONG&,LONGLONG&);
++void AdjustClock(const std::wstring&,bool&,ULONGLONG&);
++void AdjustTree(const std::wstring&,bool&,uint64_t&);
++}
++#endif
++
+ namespace modelnet {
+ namespace {
+ constexpr size_t MAX_ENTRIES=8192;
+-constexpr uint64_t MAX_OUTPUT_BYTES=64ULL*1024*1024;
++constexpr uint64_t MAX_OUTPUT_BYTES=windows_accounting::MAX_OUTPUT_BYTES;
+ struct Handle {
+     HANDLE value{nullptr};
+     ~Handle(){if(value && value!=INVALID_HANDLE_VALUE)CloseHandle(value);}
+@@ -87,7 +97,11 @@ struct Profile {
+     fs::path work;
+     PSECURITY_DESCRIPTOR descriptor{nullptr};
+     bool created{false};
+-    ~Profile(){Cleanup();}
++    bool cleanup_deferred{false};
++    ~Profile(){
++        if(!cleanup_deferred)Cleanup();
++        else {if(sid)FreeSid(sid);if(descriptor)LocalFree(descriptor);}
++    }
+     bool Cleanup()
+     {
+         bool ok=true;
+@@ -315,6 +329,8 @@ SwarmConfineResult SwarmRunWindowsAppContainer(const SwarmConfineRequest& reques
+        request.max_address_bytes<=0 || request.max_cpu_seconds<=0 || request.max_cpu_seconds>86400 ||
+        request.max_wall_seconds<=0 || request.max_wall_seconds>86400 || request.max_tree_bytes==0 ||
+        static_cast<uint64_t>(request.max_address_bytes)>SIZE_MAX)return Fail("WINDOWS_SANDBOX_POLICY",error);
++    uint64_t live_tree_budget=0;
++    if(!windows_accounting::LiveTreeBudget(request.max_tree_bytes,live_tree_budget))return Fail("WINDOWS_SANDBOX_POLICY",error);
+     // CreateProcess needs this profile lookup value for AppContainer setup.
+     // Keep the explicit child allowlist; never inherit the parent environment.
+     const DWORD local_size=GetEnvironmentVariableW(L"LOCALAPPDATA",nullptr,0);
+@@ -379,15 +395,84 @@ SwarmConfineResult SwarmRunWindowsAppContainer(const SwarmConfineRequest& reques
+         TerminateProcess(process.value,126);WaitForSingleObject(process.value,5000);
+         return Fail("WINDOWS_SANDBOX_TOKEN_OR_JOB",error);
+     }
+-    if(ResumeThread(thread.value)==static_cast<DWORD>(-1)) {
+-        TerminateJobObject(job.value,126);WaitForSingleObject(process.value,5000);
+-        return Fail("WINDOWS_SANDBOX_RESUME",error);
+-    }
+-    const DWORD waited=WaitForSingleObject(process.value,static_cast<DWORD>(request.max_wall_seconds)*1000);
+-    if(waited!=WAIT_OBJECT_0) {
+-        TerminateJobObject(job.value,124);WaitForSingleObject(process.value,5000);
+-        return Fail(waited==WAIT_TIMEOUT?"CONFINEMENT_TIMEOUT":"WINDOWS_SANDBOX_WAIT",error);
+-    }
++    std::unique_ptr<windows_accounting::TreeSampler> sampler;
++    const auto refuse=[&](const char* code) {
++        sampler.reset();
++        if(WaitForSingleObject(process.value,0)!=WAIT_OBJECT_0) {
++            TerminateJobObject(job.value,124);
++            if(WaitForSingleObject(process.value,5000)!=WAIT_OBJECT_0) {
++                // Kill-on-close remains a backstop if explicit termination fails.
++                CloseHandle(job.value);job.value=nullptr;
++                if(WaitForSingleObject(process.value,5000)!=WAIT_OBJECT_0) {
++                    // Never remove the tree while its writer is known running.
++                    profile.cleanup_deferred=true;
++                    return Fail("WINDOWS_SANDBOX_STOP",error);
++                }
++            }
++        }
++        if(!profile.Cleanup())return Fail("WINDOWS_SANDBOX_CLEANUP",error);
++        return Fail(code?code:"WINDOWS_SANDBOX_ACCOUNTING",error);
++    };
++    try {
++        DWORD sample_error=0;
++        sampler=windows_accounting::TreeSampler::Create(profile.work.native(),sample_error);
++        if(!sampler)return refuse("WINDOWS_SANDBOX_ACCOUNTING");
++        ULONGLONG started=0;
++        if(!QueryUnbiasedInterruptTime(&started))return refuse("WINDOWS_SANDBOX_ACCOUNTING");
++        const uint64_t wall_ticks=static_cast<uint64_t>(request.max_wall_seconds)*10000000;
++        const uint64_t cpu_ticks=static_cast<uint64_t>(request.max_cpu_seconds)*10000000;
++        ULONGLONG last_clock=started;
++        bool finished=false;const char* reason=nullptr;
++        const auto running=[&]() {
++            // Observe completion before querying CPU: a query made before
++            // the exit signal cannot stand in for the final accounting read.
++            const DWORD state=WaitForSingleObject(process.value,0);
++            if(state!=WAIT_OBJECT_0 && state!=WAIT_TIMEOUT){reason="WINDOWS_SANDBOX_WAIT";return false;}
++            JOBOBJECT_BASIC_ACCOUNTING_INFORMATION accounting{};
++            bool cpu_ok=QueryInformationJobObject(job.value,JobObjectBasicAccountingInformation,
++                &accounting,sizeof(accounting),nullptr)!=0;
++            LONGLONG user=accounting.TotalUserTime.QuadPart,kernel=accounting.TotalKernelTime.QuadPart;
++            ULONGLONG now=0;bool clock_ok=QueryUnbiasedInterruptTime(&now)!=0;
++#ifdef BTX_WINDOWS_ACCOUNTING_TEST
++            windows_accounting_test::AdjustCpu(job.value,profile.work.native(),state==WAIT_OBJECT_0,cpu_ok,user,kernel);
++            windows_accounting_test::AdjustClock(profile.work.native(),clock_ok,now);
++#endif
++            const auto cpu=windows_accounting::EvaluateCpu(user,kernel,cpu_ticks);
++            if(!cpu_ok || !clock_ok || now<last_clock || cpu==windows_accounting::CpuState::invalid) {
++                reason="WINDOWS_SANDBOX_ACCOUNTING";return false;
++            }
++            last_clock=now;
++            if(cpu==windows_accounting::CpuState::over_limit){reason="WINDOWS_SANDBOX_CPU_LIMIT";return false;}
++            // If it exits after the initial poll, the next poll reads final CPU.
++            if(state==WAIT_OBJECT_0){finished=true;return false;}
++            if(now-started>=wall_ticks){reason="CONFINEMENT_TIMEOUT";return false;}
++            return true;
++        };
++        if(ResumeThread(thread.value)==static_cast<DWORD>(-1))return refuse("WINDOWS_SANDBOX_RESUME");
++        for(;;) {
++            if(!running()){if(finished)break;return refuse(reason);}
++            auto sample=sampler->Sample(live_tree_budget,running);
++            if(sample.state==windows_accounting::TreeState::incomplete)
++                sample=sampler->Sample(live_tree_budget,running); // One retry, same clocks.
++            if(sample.state==windows_accounting::TreeState::interrupted) {
++                if(finished)break;return refuse(reason?reason:"WINDOWS_SANDBOX_ACCOUNTING");
++            }
++            if(sample.state==windows_accounting::TreeState::over_limit)return refuse("TREE_LIMIT");
++            if(sample.state!=windows_accounting::TreeState::within)return refuse("WINDOWS_SANDBOX_ACCOUNTING");
++#ifdef BTX_WINDOWS_ACCOUNTING_TEST
++            bool tree_ok=true;uint64_t observed=sample.bytes;
++            windows_accounting_test::AdjustTree(profile.work.native(),tree_ok,observed);
++            if(!tree_ok)return refuse("WINDOWS_SANDBOX_ACCOUNTING");
++            if(observed>live_tree_budget)return refuse("TREE_LIMIT");
++#endif
++            if(!running()){if(finished)break;return refuse(reason);}
++            const uint64_t remaining=wall_ticks-(last_clock-started);
++            const DWORD slice=static_cast<DWORD>(std::min<uint64_t>(100,(remaining+9999)/10000));
++            const DWORD waited=WaitForSingleObject(process.value,slice);
++            if(waited!=WAIT_TIMEOUT && waited!=WAIT_OBJECT_0)return refuse("WINDOWS_SANDBOX_WAIT");
++        }
++        sampler.reset();
++    } catch(...) {return refuse("WINDOWS_SANDBOX_ACCOUNTING");}
+     DWORD exit_code=0;
+     if(!GetExitCodeProcess(process.value,&exit_code) || exit_code>INT_MAX)return Fail("WINDOWS_SANDBOX_EXIT",error);
+     if(exit_code==0 && !PublishOutputs(request.root,profile.work,inputs,request.max_tree_bytes))return Fail("WINDOWS_SANDBOX_OUTPUT",error);
+diff --git a/test/util/native_qualification/run_windows_accounting_tests.py b/test/util/native_qualification/run_windows_accounting_tests.py
+new file mode 100644
+index 00000000..bc98d8ca
+--- /dev/null
++++ b/test/util/native_qualification/run_windows_accounting_tests.py
+@@ -0,0 +1,115 @@
++#!/usr/bin/env python3
++"""Bounded native Windows accounting component tests, no node required.
++
++Run in a Visual Studio x64 developer prompt. --baseline-tree compiles the same
++fixture against pre-repair source. Rejection proof uses synthetic samples with
++a real ordinary worker; it is not a real resource-exhaustion qualification.
++"""
++from pathlib import Path
++import argparse,hashlib,json,os,platform,shutil,subprocess,sys,tempfile,time
++ROOT=Path(__file__).resolve().parents[3]
++CPP=['src/modelnet/swarm_windows_sandbox.cpp','src/modelnet/swarm_confine.cpp',
++     'src/modelnet/swarm_fsjail.cpp','src/crypto/sha384.cpp']
++INPUTS=CPP+['src/modelnet/swarm_windows_sandbox.h','src/modelnet/swarm_confine.h',
++    'src/modelnet/swarm_fsjail.h','src/modelnet/swarm_process_guard.h','src/modelnet/swarm_native_io.h',
++    'src/crypto/sha384.h','src/crypto/common.h','src/compat/endian.h','src/compat/byteswap.h',
++    'src/util/fs.h','src/tinyformat.h','src/span.h','src/attributes.h','src/util/string.h','CMakeLists.txt']
++FIXTURE='test/util/native_qualification/windows_accounting_tests.cpp'
++SELF='test/util/native_qualification/run_windows_accounting_tests.py'
++def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
++
++def main():
++    parser=argparse.ArgumentParser(description=__doc__)
++    parser.add_argument('--baseline-tree',type=Path)
++    parser.add_argument('--manifest',type=Path)
++    parser.add_argument('--output',type=Path,default=ROOT/'windows-accounting-results')
++    args=parser.parse_args()
++    if os.name!='nt':raise SystemExit('Native Windows and an x64 Visual Studio developer prompt are required.')
++    out=args.output.resolve();out.mkdir(parents=True,exist_ok=True);marker=out/'.btx-accounting-test'
++    if any(out.iterdir()) and not marker.exists():raise SystemExit('Select a fresh test output folder.')
++    marker.write_text('BTXWindowsAccountingTestsV1\n')
++    records=[];cases=[];identities={};owned=None;profiles=None;before=set();error=None;verdict='FAIL'
++    def save():
++        (out/'commands.json').write_text(json.dumps(records,indent=2)+'\n')
++        (out/'identities.json').write_text(json.dumps(identities,indent=2)+'\n')
++    def run(label,argv,cwd=out,timeout=90):
++        row={'label':label,'argv':[str(x) for x in argv],'cwd':str(cwd),'exit':None};records.append(row);save();start=time.monotonic()
++        try:
++            z=subprocess.run(row['argv'],cwd=cwd,capture_output=True,text=True,timeout=timeout)
++            log=z.stdout+z.stderr;row['exit']=z.returncode
++        except subprocess.TimeoutExpired as exc:
++            def text(x):return x.decode(errors='replace') if isinstance(x,bytes) else x or ''
++            log=text(exc.stdout)+text(exc.stderr);row['timed_out']=True
++            (out/(label+'.log')).write_text(log);row['seconds']=time.monotonic()-start;save();raise
++        (out/(label+'.log')).write_text(log);row['seconds']=time.monotonic()-start;row['log_sha256']=sha(out/(label+'.log'));save();return z
++    try:
++        cl=shutil.which('cl.exe');assert cl,'cl.exe not found'
++        baseline=args.baseline_tree.resolve() if args.baseline_tree else None
++        sources={'candidate':{name:sha(ROOT/name) for name in INPUTS+[FIXTURE,SELF,'src/modelnet/swarm_windows_accounting.h']}}
++        if baseline:sources['baseline']={name:sha(baseline/name) for name in INPUTS}
++        if args.manifest:
++            expected=json.loads(args.manifest.read_text())
++            for variant,files in expected['sources'].items():
++                for name,digest in files.items():assert sources[variant][name]==digest,(variant,name)
++        identities.update(platform=platform.platform(),machine=platform.machine(),compiler=cl,
++            windows_sdk_version=os.environ.get('WindowsSDKVersion'),sources=sources,binaries={})
++        flags=['/nologo','/std:c++20','/EHsc','/O2','/MT','/W4','/DWIN32','/D_WINDOWS','/DUNICODE','/D_UNICODE',
++            '/utf-8','/Zc:preprocessor','/Zc:__cplusplus','/sdl','/D_WIN32_WINNT=0x0A00','/D_WIN32_IE=0x0A00',
++            '/DNOMINMAX','/DWIN32_LEAN_AND_MEAN']
++        def build(name,source,definitions,worker=False):
++            directory=out/(name+'-objects');directory.mkdir(exist_ok=True)
++            argv=[cl,*flags,*definitions,'/I'+str(source/'src'),'/I'+str(ROOT/'src'),str(ROOT/FIXTURE)]
++            if not worker:argv += [str(source/n) for n in CPP]
++            argv += ['/Fe:'+str(out/(name+'.exe'))]
++            if not worker:argv += ['/link','userenv.lib','advapi32.lib','bcrypt.lib','ole32.lib']
++            z=run('build-'+name,argv,cwd=directory);assert z.returncode==0,'build failed: '+name
++            identities['binaries'][name+'.exe']=sha(out/(name+'.exe'));save()
++        build('worker',ROOT,['/DBTX_ACCOUNTING_WORKER'],worker=True)
++        if baseline:build('baseline',baseline,['/DBTX_ACCOUNTING_BASELINE','/DBTX_WINDOWS_ACCOUNTING_TEST'])
++        build('production',ROOT,[])
++        build('fault',ROOT,['/DBTX_WINDOWS_ACCOUNTING_TEST'])
++        profiles=Path(os.environ['LOCALAPPDATA'])/'Packages';before={x.name for x in profiles.glob('btx.native.*')}
++        owned=Path(tempfile.mkdtemp(prefix='btx-acct-'))
++        def case(binary,mode,expected,required):
++            label=binary+'-'+mode;z=run(label,[out/(binary+'.exe'),mode,out/'worker.exe',owned/label],timeout=45)
++            ok=z.returncode==expected and all(s in z.stdout for s in required)
++            new_profiles=sorted({x.name for x in profiles.glob('btx.native.*')}-before)
++            cases.append({'label':label,'expected_exit':expected,'actual_exit':z.returncode,'required_tokens':required,
++                'pass':ok,'new_matching_profile_directories':new_profiles})
++            assert ok,label+' failed; see recorded log'
++            assert not new_profiles,label+' left new matching profile directories'
++        faults=['cpu','tree','query','final-cpu','clock']
++        if baseline:
++            for mode in ['normal','nonzero']:case('baseline',mode,0,['VERDICT PASS '+mode,'inputs_unchanged=1'])
++            for mode in faults:case('baseline',mode,1,['CASE '+mode+' code=JAILED launched=1 jailed=1 child=0',
++                'output_ok=1 inputs_unchanged=1','VERDICT FAIL expected-resource-refusal-did-not-occur'])
++        for mode in ['normal','nonzero']:case('production',mode,0,['VERDICT PASS '+mode,'inputs_unchanged=1'])
++        case('production','policy',0,['POLICY PASS'])
++        case('production','scanner',0,['SCANNER PASS'])
++        case('fault','normal',0,['VERDICT PASS normal','started_observed=1','staged_missing=1','process_exited=1'])
++        for mode in faults:
++            required=['VERDICT PASS '+mode,'started_observed=1','staged_missing=1','process_exited=1',
++                'RECOVERY after='+mode+' same_process=1','RECOVERY PASS '+mode]
++            if mode=='final-cpu':required.append('FINAL_OBSERVATION completion_poll=1 process_signaled=1')
++            case('fault',mode,0,required)
++        identities['binary_hashes_unchanged']=all(sha(out/n)==h for n,h in identities['binaries'].items())
++        assert identities['binary_hashes_unchanged']
++        identities['source_hashes_unchanged']=all(sha((ROOT if v=='candidate' else baseline)/n)==h
++            for v,files in sources.items() for n,h in files.items())
++        assert identities['source_hashes_unchanged']
++        verdict='PASS'
++    except Exception as exc:error=str(exc)
++    finally:
++        cleanup='No owned fixture root created'
++        if owned is not None:
++            try:shutil.rmtree(owned);cleanup='Owned original fixture roots removed'
++            except Exception as exc:verdict='FAIL';error=str(exc);cleanup='Owned original fixture cleanup failed'
++        remaining=None if profiles is None else sorted({x.name for x in profiles.glob('btx.native.*')}-before)
++        if remaining:verdict='FAIL';error='New matching profile directories remain: '+repr(remaining)
++        save()
++        result={'verdict':verdict,'error':error,'cases':cases,'cleanup':cleanup,'remaining_profile_directories':remaining,
++            'scope':'Native component; rejection uses synthetic accounting samples with real finite workers/Jobs and same-process recovery. Not a real CPU/disk quota violation, all-filesystem, Windows11, fullnode or release qualification.'}
++        (out/'result.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))
++    return 0 if verdict=='PASS' else 1
++
++if __name__=='__main__':sys.exit(main())
+diff --git a/test/util/native_qualification/windows_accounting_tests.cpp b/test/util/native_qualification/windows_accounting_tests.cpp
+new file mode 100644
+index 00000000..f78849c9
+--- /dev/null
++++ b/test/util/native_qualification/windows_accounting_tests.cpp
+@@ -0,0 +1,466 @@
++// Copyright (c) 2026 The BTX developers. MIT license. See COPYING.
++// Native finite-worker regression. Synthetic samples are test-only; the worker
++// never exceeds its real resource budgets. Build the worker from this file with
++// BTX_ACCOUNTING_WORKER; build backend fault variants with
++// BTX_WINDOWS_ACCOUNTING_TEST. Neither flag is a product runtime setting.
++#include <windows.h>
++#include <algorithm>
++#include <array>
++#include <cstdint>
++#include <fstream>
++#include <iostream>
++#include <limits>
++#include <stdexcept>
++#include <string>
++#include <vector>
++
++namespace {
++constexpr DWORD OUTPUT_BYTES = 1024 * 1024;
++
++struct Handle {
++    HANDLE value{INVALID_HANDLE_VALUE};
++    explicit Handle(HANDLE v) : value(v) {}
++    ~Handle() { if (value != INVALID_HANDLE_VALUE && value != nullptr) CloseHandle(value); }
++    Handle(const Handle&) = delete;
++    Handle& operator=(const Handle&) = delete;
++    bool valid() const { return value != INVALID_HANDLE_VALUE && value != nullptr; }
++};
++
++void Require(bool condition, const char* name)
++{
++    if (!condition) throw std::runtime_error(name);
++}
++
++void WriteFileBytes(const wchar_t* path, const char* bytes, DWORD count)
++{
++    Handle file(CreateFileW(path, GENERIC_WRITE,
++        FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
++        nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr));
++    Require(file.valid(), "fixture-create");
++    DWORD written = 0;
++    Require(WriteFile(file.value, bytes, count, &written, nullptr) != FALSE && written == count,
++        "fixture-write");
++    Require(FlushFileBuffers(file.value) != FALSE, "fixture-flush");
++}
++} // namespace
++
++#ifdef BTX_ACCOUNTING_WORKER
++
++int main()
++{
++    try {
++        std::ifstream in("input.bin", std::ios::binary);
++        const std::string mode{std::istreambuf_iterator<char>(in), std::istreambuf_iterator<char>()};
++        Require(in.is_open() && !in.bad(), "fixture-input");
++        WriteFileBytes(L"started.bin", "STARTED", 7);
++        Sleep(200); // Real launch/first-sample opportunity; not CPU consumption.
++        if (mode == "nonzero") return 7;
++
++        Require(CreateDirectoryW(L"moving", nullptr) != FALSE, "ordinary-create-directory");
++        WriteFileBytes(L"moving\\seed.bin", "abc", 3);
++        Require(MoveFileExW(L"moving", L"moved", MOVEFILE_WRITE_THROUGH) != FALSE,
++            "ordinary-rename-directory");
++        Require(CreateDirectoryW(L"remove-me", nullptr) != FALSE, "ordinary-create-empty-directory");
++        Require(RemoveDirectoryW(L"remove-me") != FALSE, "ordinary-delete-directory");
++        WriteFileBytes(L"temporary.bin", "x", 1);
++        Require(DeleteFileW(L"temporary.bin") != FALSE, "ordinary-delete-file");
++
++        // An ordinary exclusive writer remains open while the parent samples
++        // metadata. Contents are finite and below the existing output budget.
++        Handle output(CreateFileW(L"result.bin", GENERIC_WRITE, 0, nullptr,
++            CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr));
++        Require(output.valid(), "ordinary-output-open");
++        std::array<char, 64 * 1024> bytes{};
++        bytes.fill('B');
++        for (DWORD offset = 0; offset < OUTPUT_BYTES; offset += static_cast<DWORD>(bytes.size())) {
++            DWORD written = 0;
++            Require(WriteFile(output.value, bytes.data(), static_cast<DWORD>(bytes.size()),
++                &written, nullptr) != FALSE && written == bytes.size(), "ordinary-output-write");
++            Require(FlushFileBuffers(output.value) != FALSE, "ordinary-output-flush");
++            Sleep(10);
++        }
++        // Close the exclusive output before the normal final integrity pass.
++        Require(CloseHandle(output.value) != FALSE, "ordinary-output-close");
++        output.value = INVALID_HANDLE_VALUE;
++        WriteFileBytes(L"finished.bin", "FINISHED", 8);
++        return 0;
++    } catch (const std::exception& exception) {
++        try {
++            const std::string message{exception.what()};
++            WriteFileBytes(L"worker-error.txt", message.data(), static_cast<DWORD>(message.size()));
++        } catch (...) {}
++        return 2;
++    }
++}
++
++#else // BTX_ACCOUNTING_WORKER
++
++#include <modelnet/swarm_fsjail.h>
++#include <modelnet/swarm_native_io.h>
++#ifndef BTX_ACCOUNTING_BASELINE
++#include <modelnet/swarm_windows_accounting.h>
++#endif
++#include <atomic>
++#include <filesystem>
++#include <mutex>
++
++namespace {
++std::string g_mode;
++std::mutex g_root_mutex;
++std::wstring g_staged_root;
++std::atomic<unsigned int> g_cpu_injections{0};
++std::atomic<unsigned int> g_tree_injections{0};
++std::atomic<unsigned int> g_clock_injections{0};
++std::atomic<bool> g_started_observed{false};
++std::atomic<bool> g_final_exit_observed{false};
++struct WorkerProcess {
++    HANDLE handle{nullptr};
++    ~WorkerProcess() { if (handle) CloseHandle(handle); }
++} g_worker_process;
++
++void CaptureWorkerProcess(HANDLE job)
++{
++    std::lock_guard lock(g_root_mutex);
++    if (g_worker_process.handle) return;
++    // The supplied handle is this invocation's one-process Job. Never choose
++    // a PID from the host process list or an untrusted file.
++    alignas(JOBOBJECT_BASIC_PROCESS_ID_LIST) std::array<unsigned char,
++        sizeof(JOBOBJECT_BASIC_PROCESS_ID_LIST) + sizeof(ULONG_PTR)> bytes{};
++    auto* list = reinterpret_cast<JOBOBJECT_BASIC_PROCESS_ID_LIST*>(bytes.data());
++    if (QueryInformationJobObject(job, JobObjectBasicProcessIdList, list,
++            static_cast<DWORD>(bytes.size()), nullptr) == FALSE || list->NumberOfProcessIdsInList != 1) return;
++    const ULONG_PTR id = list->ProcessIdList[0];
++    if (id == 0 || id > std::numeric_limits<DWORD>::max()) return;
++    g_worker_process.handle = OpenProcess(SYNCHRONIZE | PROCESS_QUERY_LIMITED_INFORMATION,
++        FALSE, static_cast<DWORD>(id));
++}
++
++bool WorkerCaptured()
++{
++    std::lock_guard lock(g_root_mutex);
++    return g_worker_process.handle != nullptr;
++}
++
++bool ExistsFile(const std::wstring& root, const wchar_t* name)
++{
++    const fs::path path = fs::path(root) / fs::path(name);
++    const DWORD attributes = GetFileAttributesW(path.c_str());
++    return attributes != INVALID_FILE_ATTRIBUTES &&
++        !(attributes & (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_REPARSE_POINT));
++}
++
++bool CaptureStarted(const std::wstring& root)
++{
++    {
++        std::lock_guard lock(g_root_mutex);
++        if (g_staged_root.empty()) g_staged_root = root;
++        else Require(g_staged_root == root, "unexpected-second-staged-root");
++    }
++    const bool started = ExistsFile(root, L"started.bin");
++    if (started) g_started_observed.store(true);
++    return started;
++}
++
++std::vector<unsigned char> ReadBytes(const fs::path& path)
++{
++    std::ifstream file(path, std::ios::binary);
++    return {std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>()};
++}
++
++bool IsMissing(const fs::path& path)
++{
++    if (GetFileAttributesW(path.c_str()) != INVALID_FILE_ATTRIBUTES) return false;
++    const DWORD error = GetLastError();
++    return error == ERROR_FILE_NOT_FOUND || error == ERROR_PATH_NOT_FOUND;
++}
++
++bool OnlyOriginalInputs(const fs::path& root)
++{
++    for (const auto& entry : fs::directory_iterator(root)) {
++        const fs::path name = entry.path().filename();
++        if (name != fs::path(L"worker.exe") && name != fs::path(L"input.bin")) return false;
++    }
++    return true;
++}
++
++void CheckPolicy()
++{
++#ifdef BTX_ACCOUNTING_BASELINE
++    throw std::runtime_error("policy-unavailable-in-baseline");
++#else
++    using namespace modelnet::windows_accounting;
++    uint64_t bytes = 0;
++    Require(LiveTreeBudget(1, bytes) && bytes == 1 + MAX_OUTPUT_BYTES, "policy-live-envelope");
++    Require(LiveTreeBudget(std::numeric_limits<uint64_t>::max() - MAX_OUTPUT_BYTES, bytes) &&
++        bytes == std::numeric_limits<uint64_t>::max(), "policy-live-equality");
++    Require(!LiveTreeBudget(std::numeric_limits<uint64_t>::max() - MAX_OUTPUT_BYTES + 1, bytes),
++        "policy-live-overflow");
++    Require(!LiveTreeBudget(std::numeric_limits<uint64_t>::max(), bytes), "policy-live-max-overflow");
++    constexpr uint64_t SECOND = 10000000;
++    Require(EvaluateCpu(2 * SECOND, 3 * SECOND, 6 * SECOND) == CpuState::within, "policy-cpu-below");
++    Require(EvaluateCpu(2 * SECOND, 4 * SECOND, 6 * SECOND) == CpuState::within, "policy-cpu-equality");
++    Require(EvaluateCpu(0, 6 * SECOND + 1, 6 * SECOND) == CpuState::over_limit, "policy-cpu-kernel-only");
++    Require(EvaluateCpu(6 * SECOND, 1, 6 * SECOND) == CpuState::over_limit, "policy-cpu-combined");
++    Require(EvaluateCpu(-1, 0, SECOND) == CpuState::invalid, "policy-cpu-negative-user");
++    Require(EvaluateCpu(0, -1, SECOND) == CpuState::invalid, "policy-cpu-negative-kernel");
++    Require(EvaluateCpu(std::numeric_limits<LONGLONG>::max(),
++        std::numeric_limits<LONGLONG>::max(), SECOND) == CpuState::over_limit, "policy-cpu-large-counters");
++    std::cout << "POLICY PASS live-envelope equality overflow user-plus-kernel invalid-counters\n";
++#endif
++}
++
++void CheckScanner(const fs::path& root)
++{
++#ifdef BTX_ACCOUNTING_BASELINE
++    (void)root;
++    throw std::runtime_error("scanner-unavailable-in-baseline");
++#else
++    using namespace modelnet::windows_accounting;
++    Require(!fs::exists(root), "scanner-root-must-be-fresh");
++    fs::create_directories(root);
++    const fs::path tiny = root / fs::path(L"tiny.bin");
++    WriteFileBytes(tiny.c_str(), "12345678", 8);
++    DWORD error = ERROR_SUCCESS;
++    auto sampler = TreeSampler::Create(root.native(), error);
++    std::cout << "SCANNER create_ok=" << static_cast<bool>(sampler) << " error=" << error << '\n';
++    Require(sampler != nullptr, "scanner-create");
++    const auto keep_running = [] { return true; };
++    const auto over = sampler->Sample(7, keep_running);
++    Require(over.state == TreeState::over_limit, "scanner-actual-eight-byte-cap-seven");
++    const auto exact = sampler->Sample(8, keep_running);
++    Require(exact.state == TreeState::within && exact.bytes == 8 && exact.entries == 1,
++        "scanner-actual-eight-byte-equality");
++    const auto repeated = sampler->Sample(8, keep_running);
++    Require(repeated.state == TreeState::within && repeated.bytes == 8 && repeated.entries == 1,
++        "scanner-repeated-pass-must-restart-enumeration");
++    const auto interrupted = sampler->Sample(8, [] { return false; });
++    Require(interrupted.state == TreeState::interrupted, "scanner-callback-interruption");
++    const auto resumed = sampler->Sample(8, keep_running);
++    Require(resumed.state == TreeState::within && resumed.bytes == 8 && resumed.entries == 1,
++        "scanner-same-instance-after-interruption");
++    sampler.reset();
++    std::error_code cleanup_error;
++    const auto removed = fs::remove_all(root, cleanup_error);
++    Require(!cleanup_error && removed == 2 && IsMissing(root), "scanner-owned-root-cleanup");
++    std::cout << "SCANNER PASS cap7=over_limit cap8=within bytes=8 entries=1"
++        << " repeated_sample=PASS interrupted=PASS same_instance_recovery=PASS cleanup=PASS\n";
++    std::cout << "VERDICT PASS scanner\n";
++#endif
++}
++} // namespace
++
++// Only the backend compiled with BTX_WINDOWS_ACCOUNTING_TEST calls these.
++// No worker load or real OS counter is enlarged by a synthetic observation.
++namespace modelnet::windows_accounting_test {
++void AdjustCpu(HANDLE job, const std::wstring& root, bool completion_observed, bool& ok, LONGLONG& user, LONGLONG& kernel)
++{
++    CaptureWorkerProcess(job);
++    const bool started = CaptureStarted(root);
++    if (!started) return;
++    if (g_mode == "cpu") {
++        ok = true; user = 0; kernel = 7LL * 10000000;
++        ++g_cpu_injections;
++    } else if (g_mode == "query") {
++        ok = false;
++        ++g_cpu_injections;
++    } else if (g_mode == "final-cpu" && ExistsFile(root, L"finished.bin")) {
++        JOBOBJECT_BASIC_ACCOUNTING_INFORMATION accounting{};
++        const bool queried = QueryInformationJobObject(job, JobObjectBasicAccountingInformation,
++            &accounting, sizeof(accounting), nullptr) != FALSE;
++        const bool signaled = WorkerCaptured() && WaitForSingleObject(g_worker_process.handle, 0) == WAIT_OBJECT_0;
++        std::cout << "FINAL_OBSERVATION completion_poll=" << completion_observed
++            << " process_signaled=" << signaled << " job_query=" << queried
++            << " active_processes=" << accounting.ActiveProcesses << '\n';
++        if (completion_observed && signaled) {
++            ok = true; user = 0; kernel = 7LL * 10000000;
++            ++g_cpu_injections;
++            g_final_exit_observed.store(true);
++        }
++    }
++}
++
++void AdjustClock(const std::wstring& root, bool& ok, ULONGLONG& ticks)
++{
++    (void)ticks;
++    if (CaptureStarted(root) && WorkerCaptured() && g_mode == "clock") {
++        ok = false;
++        ++g_clock_injections;
++    }
++}
++
++void AdjustTree(const std::wstring& root, bool& ok, uint64_t& observed)
++{
++    if (CaptureStarted(root) && g_mode == "tree") {
++        ok = true; observed = std::numeric_limits<uint64_t>::max();
++        ++g_tree_injections;
++    }
++}
++} // namespace modelnet::windows_accounting_test
++
++namespace {
++void RecoveryInSameProcess(const fs::path& worker, const fs::path& original_root,
++    const std::string& previous_case)
++{
++    // The negative observations were printed and asserted before this reset.
++    // Only fixture providers/observers are reset; the product process remains.
++    {
++        std::lock_guard lock(g_root_mutex);
++        if (g_worker_process.handle) CloseHandle(g_worker_process.handle);
++        g_worker_process.handle = nullptr;
++        g_staged_root.clear();
++    }
++    g_mode = "normal";
++    g_cpu_injections.store(0);
++    g_tree_injections.store(0);
++    g_clock_injections.store(0);
++    g_started_observed.store(false);
++    g_final_exit_observed.store(false);
++
++    const fs::path root = original_root / fs::path(L"recovery");
++    Require(!fs::exists(root), "recovery-root-must-be-fresh");
++    fs::create_directories(root);
++    const fs::path helper = root / fs::path(L"worker.exe");
++    const fs::path input = root / fs::path(L"input.bin");
++    fs::copy_file(worker, helper, fs::copy_options::none);
++    WriteFileBytes(input.c_str(), "ordinary", 8);
++    const auto helper_hash = modelnet::native_io::Digest(ReadBytes(helper));
++    const auto input_hash = modelnet::native_io::Digest(ReadBytes(input));
++    modelnet::SwarmFilesystemJailRequest request;
++    request.root = root; request.helper = helper; request.network_denied = true;
++    request.max_wall_seconds = 6;
++    request.max_tree_bytes = fs::file_size(helper) + fs::file_size(input);
++    std::string error;
++    const auto run = modelnet::SwarmRunFilesystemJail(request, error);
++    const auto output = ReadBytes(root / fs::path(L"result.bin"));
++    const bool output_ok = output.size() == OUTPUT_BYTES &&
++        std::all_of(output.begin(), output.end(), [](unsigned char value) { return value == 'B'; });
++    const bool inputs_unchanged = helper_hash == modelnet::native_io::Digest(ReadBytes(helper)) &&
++        input_hash == modelnet::native_io::Digest(ReadBytes(input));
++    std::wstring staged;
++    { std::lock_guard lock(g_root_mutex); staged = g_staged_root; }
++    const bool staged_missing = !staged.empty() && IsMissing(fs::path(staged));
++    const bool process_exited = WorkerCaptured() &&
++        WaitForSingleObject(g_worker_process.handle, 0) == WAIT_OBJECT_0;
++    DWORD process_exit = STILL_ACTIVE;
++    Require(g_worker_process.handle &&
++        GetExitCodeProcess(g_worker_process.handle, &process_exit) != FALSE,
++        "recovery-process-exit-query");
++    std::cout << "RECOVERY after=" << previous_case << " same_process=1 code=" << run.code
++        << " launched=" << run.launched << " jailed=" << run.jailed << " child=" << run.child_status
++        << " output_bytes=" << output.size() << " output_ok=" << output_ok
++        << " inputs_unchanged=" << inputs_unchanged << " staged_missing=" << staged_missing
++        << " process_exited=" << process_exited << " process_exit=" << process_exit
++        << " cpu_injections=" << g_cpu_injections.load() << " tree_injections=" << g_tree_injections.load()
++        << " clock_injections=" << g_clock_injections.load() << '\n';
++    if (!staged.empty()) std::cout << "RECOVERY_STAGED_ROOT " << fs::path(staged).utf8string() << '\n';
++    Require(run.launched && run.jailed && run.code == "JAILED" && run.child_status == 0 && error.empty(),
++        "fresh-recovery-worker-did-not-succeed");
++    Require(output_ok && inputs_unchanged, "fresh-recovery-output-or-input-mismatch");
++    Require(staged_missing && process_exited && process_exit == 0,
++        "fresh-recovery-cleanup-or-process-exit-not-observed");
++    Require(g_cpu_injections.load() == 0 && g_tree_injections.load() == 0 && g_clock_injections.load() == 0,
++        "fresh-recovery-injection-state-not-reset");
++    Require(ReadBytes(root / fs::path(L"moved") / fs::path(L"seed.bin")) ==
++        std::vector<unsigned char>({'a', 'b', 'c'}), "fresh-recovery-renamed-file-mismatch");
++    Require(IsMissing(root / fs::path(L"remove-me")) && IsMissing(root / fs::path(L"temporary.bin")),
++        "fresh-recovery-deletion-failed");
++    std::cout << "RECOVERY PASS " << previous_case << '\n';
++}
++} // namespace
++
++int wmain(int argc, wchar_t** argv)
++{
++    if (argc != 4) return 2;
++    try {
++        const fs::path worker = fs::absolute(fs::path(argv[2]));
++        const fs::path root = fs::absolute(fs::path(argv[3]));
++        const std::wstring wide_mode(argv[1]);
++        Require(wide_mode == L"normal" || wide_mode == L"nonzero" || wide_mode == L"cpu" ||
++            wide_mode == L"tree" || wide_mode == L"query" || wide_mode == L"final-cpu" ||
++            wide_mode == L"clock" || wide_mode == L"policy" || wide_mode == L"scanner", "unknown-case");
++        for (const wchar_t character : wide_mode) g_mode.push_back(static_cast<char>(character));
++        if (g_mode == "policy") { CheckPolicy(); return 0; }
++        if (g_mode == "scanner") { CheckScanner(root); return 0; }
++        const std::string case_name = g_mode;
++
++        Require(!fs::exists(root), "root-must-be-fresh");
++        fs::create_directories(root);
++        const fs::path helper = root / fs::path(L"worker.exe");
++        const fs::path input = root / fs::path(L"input.bin");
++        fs::copy_file(worker, helper, fs::copy_options::none);
++        const std::string input_text = g_mode == "nonzero" ? "nonzero" : "ordinary";
++        WriteFileBytes(input.c_str(), input_text.data(), static_cast<DWORD>(input_text.size()));
++        const auto helper_hash = modelnet::native_io::Digest(ReadBytes(helper));
++        const auto input_hash = modelnet::native_io::Digest(ReadBytes(input));
++
++        modelnet::SwarmFilesystemJailRequest request;
++        request.root = root; request.helper = helper; request.network_denied = true;
++        request.max_wall_seconds = 6;
++        request.max_tree_bytes = fs::file_size(helper) + fs::file_size(input);
++        std::string error;
++        const auto run = modelnet::SwarmRunFilesystemJail(request, error);
++        const bool inputs_unchanged = helper_hash == modelnet::native_io::Digest(ReadBytes(helper)) &&
++            input_hash == modelnet::native_io::Digest(ReadBytes(input));
++        const auto output = ReadBytes(root / fs::path(L"result.bin"));
++        const bool output_ok = output.size() == OUTPUT_BYTES &&
++            std::all_of(output.begin(), output.end(), [](unsigned char value) { return value == 'B'; });
++        std::wstring staged;
++        { std::lock_guard lock(g_root_mutex); staged = g_staged_root; }
++        const bool staged_missing = !staged.empty() && IsMissing(fs::path(staged));
++        const bool no_new_outputs = OnlyOriginalInputs(root);
++        const bool process_observed = WorkerCaptured();
++        const bool process_exited = process_observed &&
++            WaitForSingleObject(g_worker_process.handle, 0) == WAIT_OBJECT_0;
++        DWORD process_exit = STILL_ACTIVE;
++        if (process_observed && GetExitCodeProcess(g_worker_process.handle, &process_exit) == FALSE)
++            throw std::runtime_error("owned-process-exit-query");
++        std::cout << "CASE " << g_mode << " code=" << run.code << " launched=" << run.launched
++            << " jailed=" << run.jailed << " child=" << run.child_status << " error=" << error
++            << " input_cap=" << request.max_tree_bytes << " output_bytes=" << output.size()
++            << " output_ok=" << output_ok << " inputs_unchanged=" << inputs_unchanged
++            << " started_observed=" << g_started_observed.load()
++            << " cpu_injections=" << g_cpu_injections.load() << " tree_injections=" << g_tree_injections.load()
++            << " clock_injections=" << g_clock_injections.load() << " final_exit_observed=" << g_final_exit_observed.load()
++            << " staged_captured=" << !staged.empty() << " staged_missing=" << staged_missing
++            << " no_new_outputs=" << no_new_outputs
++            << " process_observed=" << process_observed << " process_exited=" << process_exited
++            << " process_exit=" << process_exit << '\n';
++        if (!staged.empty()) std::cout << "STAGED_ROOT " << fs::path(staged).utf8string() << '\n';
++        Require(inputs_unchanged, "original-inputs-mutated");
++        Require(staged.empty() || staged_missing, "owned-staged-root-not-removed");
++
++        if (g_mode == "normal") {
++            Require(run.launched && run.jailed && run.child_status == 0 && run.code == "JAILED" && error.empty(),
++                "ordinary-worker-did-not-succeed");
++            Require(output_ok, "ordinary-output-mismatch");
++            Require(OUTPUT_BYTES > request.max_tree_bytes, "fixture-output-must-exceed-input-cap");
++            Require(ReadBytes(root / fs::path(L"moved") / fs::path(L"seed.bin")) ==
++                std::vector<unsigned char>({'a', 'b', 'c'}), "ordinary-renamed-file-mismatch");
++            Require(IsMissing(root / fs::path(L"remove-me")) && IsMissing(root / fs::path(L"temporary.bin")),
++                "ordinary-deletion-failed");
++        } else if (g_mode == "nonzero") {
++            Require(run.launched && run.jailed && run.child_status == 7 && run.code == "JAILED" && error.empty(),
++                "ordinary-nonzero-status-lost");
++            Require(output.empty() && no_new_outputs, "nonzero-output-published");
++        } else {
++            const char* expected = g_mode == "cpu" || g_mode == "final-cpu" ? "JAIL_TIMEOUT" :
++                g_mode == "tree" ? "TREE_LIMIT" : "JAIL_ABSENT";
++            Require(!run.launched && !run.jailed && run.code == expected && output.empty() && no_new_outputs,
++                "expected-resource-refusal-did-not-occur");
++            Require(g_started_observed.load() && staged_missing, "real-start-and-cleanup-not-observed");
++            Require(process_exited && process_exit != STILL_ACTIVE, "owned-worker-termination-not-observed");
++            if (g_mode == "cpu" || g_mode == "query" || g_mode == "final-cpu")
++                Require(g_cpu_injections.load() != 0, "cpu-provider-not-exercised");
++            if (g_mode == "tree") Require(g_tree_injections.load() != 0, "tree-provider-not-exercised");
++            if (g_mode == "clock") Require(g_clock_injections.load() != 0, "clock-provider-not-exercised");
++            if (g_mode == "final-cpu") Require(g_final_exit_observed.load(), "post-exit-check-not-exercised");
++            RecoveryInSameProcess(worker, root, case_name);
++        }
++        std::cout << "VERDICT PASS " << case_name << '\n';
++        return 0;
++    } catch (const std::exception& exception) {
++        std::cout << "VERDICT FAIL " << exception.what() << '\n';
++        return 1;
++    }
++}
++#endif // BTX_ACCOUNTING_WORKER
