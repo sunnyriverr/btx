@@ -1,0 +1,41 @@
+name: RPC conversion classification
+on:
+  push:
+    branches: [codex/ci-rpc-conversion-classification]
+permissions:
+  contents: read
+jobs:
+  classify:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Compile unchanged conversion component
+        run: |
+          mkdir records
+          git rev-parse HEAD > records/fixture-head.txt
+          g++ --version > records/compiler.txt
+          g++ -std=c++20 -O0 -include vector -Isrc -Isrc/univalue/include contrib/devtools/rpc-conversion-classification/probe.cpp src/rpc/client.cpp src/univalue/lib/univalue.cpp src/univalue/lib/univalue_get.cpp src/univalue/lib/univalue_read.cpp src/univalue/lib/univalue_write.cpp -o /tmp/rpc-conversion-probe > records/build.log 2>&1
+          sha256sum src/rpc/client.cpp /tmp/rpc-conversion-probe > records/identities.txt
+      - name: Classify without dispatching RPCs
+        run: |
+          /tmp/rpc-conversion-probe < contrib/devtools/rpc-conversion-classification/cases.jsonl > records/conversions.jsonl
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          a=Path('contrib/devtools/rpc-conversion-classification/cases.jsonl').read_text().splitlines()
+          b=Path('records/conversions.jsonl').read_text().splitlines()
+          assert len(a)==len(b)==1254
+          out=[json.loads(x) for x in b]
+          assert all(len(x)==2 for x in out)
+          for r, expected in zip(out[-6:], [7, 'plain-text', {}, 'plain-text', 'FREE_ONLY', {}]):
+              assert r[0]['value']==expected and r[1]['value']==expected
+          print('1254 paired conversions; six existing controls pass; no RPC dispatch')
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: rpc-conversion-classification
+          path: records
+          retention-days: 7
