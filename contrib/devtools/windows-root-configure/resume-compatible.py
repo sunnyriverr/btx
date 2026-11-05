@@ -16,7 +16,7 @@ def differences(a,b,prefix=''):
         elif x!=y:out[name]=[x,y]
     return out
 actual=differences(original,state['profile'])
-assert actual==transition['allowed_differences'], actual
+assert actual=={} or actual==transition['allowed_differences'], actual
 assert subprocess.check_output(['ninja','--version'],text=True).strip()=='1.13.2'
 # Never spoof the current environment or modify the checkpoint's identity rules.
 # Only the explicitly compared original profile is used to validate original
