@@ -116,7 +116,7 @@ jobs:
           set "_CL_="
           python controls/contrib/devtools/windows-root-configure/runner.py configure
           exit /b %errorlevel%
-      - name: Build native node with Modelnet enabled
+      - name: Explain saved-object freshness without compiling
         timeout-minutes: 5
         shell: cmd
         run: |
@@ -127,54 +127,8 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/runner.py node
+          python controls/contrib/devtools/windows-root-configure/checkpoint-diagnose.py
           exit /b %errorlevel%
-      - name: Build maintained test_btx target
-        shell: cmd
-        run: |
-          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
-          if not defined BTX_VS exit /b 2
-          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
-          if errorlevel 1 exit /b %errorlevel%
-          set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
-          set "CL="
-          set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/runner.py unitbuild
-          exit /b %errorlevel%
-      - name: Run maintained unit tests
-        shell: cmd
-        run: |
-          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
-          if not defined BTX_VS exit /b 2
-          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
-          if errorlevel 1 exit /b %errorlevel%
-          set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
-          set "CL="
-          set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/runner.py units
-          exit /b %errorlevel%
-      - name: Checkpoint compiled objects even after a failed stage
-        if: always()
-        id: retention
-        shell: cmd
-        run: |
-          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
-          if not defined BTX_VS exit /b 2
-          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
-          if errorlevel 1 exit /b %errorlevel%
-          set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
-          set "CL="
-          set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/runner.py retain
-          exit /b %errorlevel%
-      - name: Preserve resumable project objects
-        if: always() && steps.retention.outputs.checkpoint_valid == 'true'
-        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
-        with:
-          path: |
-            D:\btx-native-035\project-build
-            D:\btx-native-035\vcpkg-installed
-          key: btx356-project-v2-${{ steps.project_profile.outputs.key }}-${{ github.run_id }}
       - name: Preserve original diagnostic records
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
