@@ -1,77 +1,47 @@
 {
   "base": "666673a3153225ba264c7870e0e82e354df86765",
-  "published_source": "362c36b2fda0f73741c06c4bcb090153fea38a08",
-  "cached_source": "473a2a0bf8e528a977d07137712d6a1d6dfc8cf6",
-  "target": "4593f590eb711c6536a650a5ec7a29d4c50dbd37",
-  "tree": "76ee7f7faf8c4dac35affaa641219fd556bc0c22",
+  "cached_source": "4593f590eb711c6536a650a5ec7a29d4c50dbd37",
+  "target": "e1fa6642d0d9b662b179dedeb01a4bee941ba2de",
+  "tree": "d9c34066e72eb9405c316d473aed6bf7228ad3a0",
   "changed": [
-    "src/test/CMakeLists.txt",
-    "src/test/modelnet_cr12_desktop_tests.cpp",
-    "src/test/modelnet_cr12_sdk_tests.cpp",
-    "src/test/modelnet_cr12_ux_tests.cpp",
-    "src/test/modelnet_hcp_priv_port_ops_tests.cpp",
-    "src/test/util/sdk_process.cpp",
-    "src/test/util/sdk_process.h"
+    "src/test/modelnet_jit_journey_tests.cpp",
+    "src/test/modelnet_jit_tests.cpp"
   ],
-  "bundle_ref": "refs/heads/codex/fix-windows-sdk-fixtures",
-  "bundle_sha256": "eb8f2513945014f6fa64cae78d2b3ed2441fdd67a84984c732685b8553b9d435",
-  "checkpoint_sha256": "b1b557e3fa0d8a27e97d255f4d204c6ed00a369bb46cd53eeafeda5c6bed26e2",
-  "cache_key": "btx356-unit-fixtures-v1-0cbada279996a3d784d5c498b3556a3c4f3e65c914156e61ad7c78881877e419-42005749177",
-  "scope": "Native Windows four maintained SDK/HCP/UX/desktop fixtures plus shared launcher controls; explicit component, not full maintained test_btx or stock acceptance",
   "files": [
-    "modelnet_hcp_priv_port_ops_tests.cpp",
-    "modelnet_cr12_ux_tests.cpp",
-    "modelnet_cr12_sdk_tests.cpp",
-    "modelnet_cr12_desktop_tests.cpp"
+    "modelnet_jit_tests.cpp",
+    "modelnet_jit_journey_tests.cpp"
   ],
-  "runtime_suites": [
-    "modelnet_cr12_sdk_tests",
-    "modelnet_cr12_desktop_tests",
-    "modelnet_cr12_ux_tests",
-    "modelnet_hcp_priv_port_ops_tests"
+  "bundle_ref": "refs/heads/codex/test-windows-jit-fixtures",
+  "bundle_sha256": "0eedd8808e949db97fab393b15f4fc119da6c3cb1191c2f36b7fb643569946ec",
+  "checkpoint_sha256": "f7edc37eb49f6971fdc341ea1202dd66952c6a78bd1f2a42d5703ad71572558f",
+  "cache_key": "btx356-unit-fixtures-v1-b2225c9817bbf8d49e6174039df60405e35e458b7b8d1a5b4603f22daa7373b1-42010437780",
+  "runtime_cases": [
+    "modelnet_jit_tests/jit_api_priv_scale_journey_safety",
+    "modelnet_jit_journey_tests/jit_api_04_cli_verbs",
+    "modelnet_jit_journey_tests/jit_api_04_cli_schema",
+    "modelnet_jit_journey_tests/jit_journey_01_to_12"
   ],
+  "scope": "Native Windows JIT fixture compiler and existing daemon/CLI diagnostic; no product change/full unit qualification",
   "baseline": [
     {
-      "file": "modelnet_hcp_priv_port_ops_tests.cpp",
-      "target": "src/test/CMakeFiles/test_btx.dir/modelnet_hcp_priv_port_ops_tests.cpp.obj",
+      "file": "modelnet_jit_tests.cpp",
+      "target": "src/test/CMakeFiles/test_btx.dir/modelnet_jit_tests.cpp.obj",
       "command": {
         "directory": "D:/btx-native-035/project-build",
-        "command": "\"C:\\Program Files\\LLVM\\bin\\clang-cl.exe\"  /nologo -TP -DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_NO_USER_CONFIG -DBTX_REFERENCE_TEST_VECTORS_PATH=\\\"D:/a/btx/btx/btx/test/reference/shielded_test_vectors.json\\\" -DMODELNET_AHP_FIXTURE_DIR=\\\"D:/a/btx/btx/btx/src/test/data/agent-package\\\" -DMODELNET_B0_CODEC_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_b0_codec_vectors.json\\\" -DMODELNET_BOUNTY_VECTORS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/bounty/reference/golden-vectors.json\\\" -DMODELNET_BTXD_PATH=\\\"D:/btx-native-035/project-build/bin/btxd\\\" -DMODELNET_BTX_OPEN_PATH=\\\"D:/btx-native-035/project-build/bin/btx-open\\\" -DMODELNET_BTX_PACKAGE_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/btx-package-vectors\\\" -DMODELNET_CRL12_OPERATIONS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/operations-v1.2.json\\\" -DMODELNET_CRL12_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12-portal/index.html\\\" -DMODELNET_CRL12_SCHEMA_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\\\" -DMODELNET_HCP_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/hcp-portal/index.html\\\" -DMODELNET_MODELD_PATH=\\\"D:/btx-native-035/project-build/bin/btx-modeld\\\" -DMODELNET_V11_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_v11_vectors.json\\\" -DNOMINMAX -DUNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING -D_UNICODE -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:\\btx-native-035\\project-build\\src -ID:\\a\\btx\\btx\\btx\\src -ID:\\a\\btx\\btx\\btx\\src\\secp256k1\\include -ID:\\a\\btx\\btx\\btx\\src\\libbitcoinpqc\\include -ID:\\a\\btx\\btx\\btx\\src\\compat\\mingw -ID:\\a\\btx\\btx\\btx\\src\\univalue\\include -imsvcD:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\include -imsvcD:\\btx-native-035\\openssl-3.5.4-static\\include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -std:c++20 -MT /utf-8 /Zc:preprocessor /Zc:__cplusplus /sdl /W3 /wd4018 /wd4146 /wd4244 /wd4267 /wd4715 /wd4805 -Xclang -fopenmp /Fosrc\\test\\CMakeFiles\\test_btx.dir\\modelnet_hcp_priv_port_ops_tests.cpp.obj /Fdsrc\\test\\CMakeFiles\\test_btx.dir\\ -c -- D:\\a\\btx\\btx\\btx\\src\\test\\modelnet_hcp_priv_port_ops_tests.cpp ",
-        "file": "D:/a/btx/btx/btx/src/test/modelnet_hcp_priv_port_ops_tests.cpp",
-        "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/modelnet_hcp_priv_port_ops_tests.cpp.obj"
+        "command": "\"C:\\Program Files\\LLVM\\bin\\clang-cl.exe\"  /nologo -TP -DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_NO_USER_CONFIG -DBTX_REFERENCE_TEST_VECTORS_PATH=\\\"D:/a/btx/btx/btx/test/reference/shielded_test_vectors.json\\\" -DMODELNET_AHP_FIXTURE_DIR=\\\"D:/a/btx/btx/btx/src/test/data/agent-package\\\" -DMODELNET_B0_CODEC_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_b0_codec_vectors.json\\\" -DMODELNET_BOUNTY_VECTORS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/bounty/reference/golden-vectors.json\\\" -DMODELNET_BTXD_PATH=\\\"D:/btx-native-035/project-build/bin/btxd\\\" -DMODELNET_BTX_OPEN_PATH=\\\"D:/btx-native-035/project-build/bin/btx-open\\\" -DMODELNET_BTX_PACKAGE_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/btx-package-vectors\\\" -DMODELNET_CRL12_OPERATIONS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/operations-v1.2.json\\\" -DMODELNET_CRL12_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12-portal/index.html\\\" -DMODELNET_CRL12_SCHEMA_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\\\" -DMODELNET_HCP_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/hcp-portal/index.html\\\" -DMODELNET_MODELD_PATH=\\\"D:/btx-native-035/project-build/bin/btx-modeld\\\" -DMODELNET_V11_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_v11_vectors.json\\\" -DNOMINMAX -DUNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING -D_UNICODE -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:\\btx-native-035\\project-build\\src -ID:\\a\\btx\\btx\\btx\\src -ID:\\a\\btx\\btx\\btx\\src\\secp256k1\\include -ID:\\a\\btx\\btx\\btx\\src\\libbitcoinpqc\\include -ID:\\a\\btx\\btx\\btx\\src\\compat\\mingw -ID:\\a\\btx\\btx\\btx\\src\\univalue\\include -imsvcD:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\include -imsvcD:\\btx-native-035\\openssl-3.5.4-static\\include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -std:c++20 -MT /utf-8 /Zc:preprocessor /Zc:__cplusplus /sdl /W3 /wd4018 /wd4146 /wd4244 /wd4267 /wd4715 /wd4805 -Xclang -fopenmp /Fosrc\\test\\CMakeFiles\\test_btx.dir\\modelnet_jit_tests.cpp.obj /Fdsrc\\test\\CMakeFiles\\test_btx.dir\\ -c -- D:\\a\\btx\\btx\\btx\\src\\test\\modelnet_jit_tests.cpp ",
+        "file": "D:/a/btx/btx/btx/src/test/modelnet_jit_tests.cpp",
+        "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/modelnet_jit_tests.cpp.obj"
       },
       "present_before": false
     },
     {
-      "file": "modelnet_cr12_ux_tests.cpp",
-      "target": "src/test/CMakeFiles/test_btx.dir/modelnet_cr12_ux_tests.cpp.obj",
+      "file": "modelnet_jit_journey_tests.cpp",
+      "target": "src/test/CMakeFiles/test_btx.dir/modelnet_jit_journey_tests.cpp.obj",
       "command": {
         "directory": "D:/btx-native-035/project-build",
-        "command": "\"C:\\Program Files\\LLVM\\bin\\clang-cl.exe\"  /nologo -TP -DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_NO_USER_CONFIG -DBTX_REFERENCE_TEST_VECTORS_PATH=\\\"D:/a/btx/btx/btx/test/reference/shielded_test_vectors.json\\\" -DMODELNET_AHP_FIXTURE_DIR=\\\"D:/a/btx/btx/btx/src/test/data/agent-package\\\" -DMODELNET_B0_CODEC_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_b0_codec_vectors.json\\\" -DMODELNET_BOUNTY_VECTORS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/bounty/reference/golden-vectors.json\\\" -DMODELNET_BTXD_PATH=\\\"D:/btx-native-035/project-build/bin/btxd\\\" -DMODELNET_BTX_OPEN_PATH=\\\"D:/btx-native-035/project-build/bin/btx-open\\\" -DMODELNET_BTX_PACKAGE_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/btx-package-vectors\\\" -DMODELNET_CRL12_OPERATIONS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/operations-v1.2.json\\\" -DMODELNET_CRL12_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12-portal/index.html\\\" -DMODELNET_CRL12_SCHEMA_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\\\" -DMODELNET_HCP_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/hcp-portal/index.html\\\" -DMODELNET_MODELD_PATH=\\\"D:/btx-native-035/project-build/bin/btx-modeld\\\" -DMODELNET_V11_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_v11_vectors.json\\\" -DNOMINMAX -DUNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING -D_UNICODE -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:\\btx-native-035\\project-build\\src -ID:\\a\\btx\\btx\\btx\\src -ID:\\a\\btx\\btx\\btx\\src\\secp256k1\\include -ID:\\a\\btx\\btx\\btx\\src\\libbitcoinpqc\\include -ID:\\a\\btx\\btx\\btx\\src\\compat\\mingw -ID:\\a\\btx\\btx\\btx\\src\\univalue\\include -imsvcD:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\include -imsvcD:\\btx-native-035\\openssl-3.5.4-static\\include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -std:c++20 -MT /utf-8 /Zc:preprocessor /Zc:__cplusplus /sdl /W3 /wd4018 /wd4146 /wd4244 /wd4267 /wd4715 /wd4805 -Xclang -fopenmp /Fosrc\\test\\CMakeFiles\\test_btx.dir\\modelnet_cr12_ux_tests.cpp.obj /Fdsrc\\test\\CMakeFiles\\test_btx.dir\\ -c -- D:\\a\\btx\\btx\\btx\\src\\test\\modelnet_cr12_ux_tests.cpp ",
-        "file": "D:/a/btx/btx/btx/src/test/modelnet_cr12_ux_tests.cpp",
-        "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/modelnet_cr12_ux_tests.cpp.obj"
-      },
-      "present_before": false
-    },
-    {
-      "file": "modelnet_cr12_sdk_tests.cpp",
-      "target": "src/test/CMakeFiles/test_btx.dir/modelnet_cr12_sdk_tests.cpp.obj",
-      "command": {
-        "directory": "D:/btx-native-035/project-build",
-        "command": "\"C:\\Program Files\\LLVM\\bin\\clang-cl.exe\"  /nologo -TP -DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_NO_USER_CONFIG -DBTX_REFERENCE_TEST_VECTORS_PATH=\\\"D:/a/btx/btx/btx/test/reference/shielded_test_vectors.json\\\" -DMODELNET_AHP_FIXTURE_DIR=\\\"D:/a/btx/btx/btx/src/test/data/agent-package\\\" -DMODELNET_B0_CODEC_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_b0_codec_vectors.json\\\" -DMODELNET_BOUNTY_VECTORS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/bounty/reference/golden-vectors.json\\\" -DMODELNET_BTXD_PATH=\\\"D:/btx-native-035/project-build/bin/btxd\\\" -DMODELNET_BTX_OPEN_PATH=\\\"D:/btx-native-035/project-build/bin/btx-open\\\" -DMODELNET_BTX_PACKAGE_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/btx-package-vectors\\\" -DMODELNET_CRL12_OPERATIONS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/operations-v1.2.json\\\" -DMODELNET_CRL12_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12-portal/index.html\\\" -DMODELNET_CRL12_SCHEMA_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\\\" -DMODELNET_HCP_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/hcp-portal/index.html\\\" -DMODELNET_MODELD_PATH=\\\"D:/btx-native-035/project-build/bin/btx-modeld\\\" -DMODELNET_V11_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_v11_vectors.json\\\" -DNOMINMAX -DUNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING -D_UNICODE -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:\\btx-native-035\\project-build\\src -ID:\\a\\btx\\btx\\btx\\src -ID:\\a\\btx\\btx\\btx\\src\\secp256k1\\include -ID:\\a\\btx\\btx\\btx\\src\\libbitcoinpqc\\include -ID:\\a\\btx\\btx\\btx\\src\\compat\\mingw -ID:\\a\\btx\\btx\\btx\\src\\univalue\\include -imsvcD:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\include -imsvcD:\\btx-native-035\\openssl-3.5.4-static\\include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -std:c++20 -MT /utf-8 /Zc:preprocessor /Zc:__cplusplus /sdl /W3 /wd4018 /wd4146 /wd4244 /wd4267 /wd4715 /wd4805 -Xclang -fopenmp /Fosrc\\test\\CMakeFiles\\test_btx.dir\\modelnet_cr12_sdk_tests.cpp.obj /Fdsrc\\test\\CMakeFiles\\test_btx.dir\\ -c -- D:\\a\\btx\\btx\\btx\\src\\test\\modelnet_cr12_sdk_tests.cpp ",
-        "file": "D:/a/btx/btx/btx/src/test/modelnet_cr12_sdk_tests.cpp",
-        "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/modelnet_cr12_sdk_tests.cpp.obj"
-      },
-      "present_before": false
-    },
-    {
-      "file": "modelnet_cr12_desktop_tests.cpp",
-      "target": "src/test/CMakeFiles/test_btx.dir/modelnet_cr12_desktop_tests.cpp.obj",
-      "command": {
-        "directory": "D:/btx-native-035/project-build",
-        "command": "\"C:\\Program Files\\LLVM\\bin\\clang-cl.exe\"  /nologo -TP -DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_NO_USER_CONFIG -DBTX_REFERENCE_TEST_VECTORS_PATH=\\\"D:/a/btx/btx/btx/test/reference/shielded_test_vectors.json\\\" -DMODELNET_AHP_FIXTURE_DIR=\\\"D:/a/btx/btx/btx/src/test/data/agent-package\\\" -DMODELNET_B0_CODEC_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_b0_codec_vectors.json\\\" -DMODELNET_BOUNTY_VECTORS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/bounty/reference/golden-vectors.json\\\" -DMODELNET_BTXD_PATH=\\\"D:/btx-native-035/project-build/bin/btxd\\\" -DMODELNET_BTX_OPEN_PATH=\\\"D:/btx-native-035/project-build/bin/btx-open\\\" -DMODELNET_BTX_PACKAGE_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/btx-package-vectors\\\" -DMODELNET_CRL12_OPERATIONS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/operations-v1.2.json\\\" -DMODELNET_CRL12_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12-portal/index.html\\\" -DMODELNET_CRL12_SCHEMA_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\\\" -DMODELNET_HCP_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/hcp-portal/index.html\\\" -DMODELNET_MODELD_PATH=\\\"D:/btx-native-035/project-build/bin/btx-modeld\\\" -DMODELNET_V11_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_v11_vectors.json\\\" -DNOMINMAX -DUNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING -D_UNICODE -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:\\btx-native-035\\project-build\\src -ID:\\a\\btx\\btx\\btx\\src -ID:\\a\\btx\\btx\\btx\\src\\secp256k1\\include -ID:\\a\\btx\\btx\\btx\\src\\libbitcoinpqc\\include -ID:\\a\\btx\\btx\\btx\\src\\compat\\mingw -ID:\\a\\btx\\btx\\btx\\src\\univalue\\include -imsvcD:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\include -imsvcD:\\btx-native-035\\openssl-3.5.4-static\\include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -std:c++20 -MT /utf-8 /Zc:preprocessor /Zc:__cplusplus /sdl /W3 /wd4018 /wd4146 /wd4244 /wd4267 /wd4715 /wd4805 -Xclang -fopenmp /Fosrc\\test\\CMakeFiles\\test_btx.dir\\modelnet_cr12_desktop_tests.cpp.obj /Fdsrc\\test\\CMakeFiles\\test_btx.dir\\ -c -- D:\\a\\btx\\btx\\btx\\src\\test\\modelnet_cr12_desktop_tests.cpp ",
-        "file": "D:/a/btx/btx/btx/src/test/modelnet_cr12_desktop_tests.cpp",
-        "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/modelnet_cr12_desktop_tests.cpp.obj"
+        "command": "\"C:\\Program Files\\LLVM\\bin\\clang-cl.exe\"  /nologo -TP -DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_NO_USER_CONFIG -DBTX_REFERENCE_TEST_VECTORS_PATH=\\\"D:/a/btx/btx/btx/test/reference/shielded_test_vectors.json\\\" -DMODELNET_AHP_FIXTURE_DIR=\\\"D:/a/btx/btx/btx/src/test/data/agent-package\\\" -DMODELNET_B0_CODEC_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_b0_codec_vectors.json\\\" -DMODELNET_BOUNTY_VECTORS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/bounty/reference/golden-vectors.json\\\" -DMODELNET_BTXD_PATH=\\\"D:/btx-native-035/project-build/bin/btxd\\\" -DMODELNET_BTX_OPEN_PATH=\\\"D:/btx-native-035/project-build/bin/btx-open\\\" -DMODELNET_BTX_PACKAGE_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/btx-package-vectors\\\" -DMODELNET_CRL12_OPERATIONS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/operations-v1.2.json\\\" -DMODELNET_CRL12_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12-portal/index.html\\\" -DMODELNET_CRL12_SCHEMA_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\\\" -DMODELNET_HCP_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/hcp-portal/index.html\\\" -DMODELNET_MODELD_PATH=\\\"D:/btx-native-035/project-build/bin/btx-modeld\\\" -DMODELNET_V11_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_v11_vectors.json\\\" -DNOMINMAX -DUNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING -D_UNICODE -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:\\btx-native-035\\project-build\\src -ID:\\a\\btx\\btx\\btx\\src -ID:\\a\\btx\\btx\\btx\\src\\secp256k1\\include -ID:\\a\\btx\\btx\\btx\\src\\libbitcoinpqc\\include -ID:\\a\\btx\\btx\\btx\\src\\compat\\mingw -ID:\\a\\btx\\btx\\btx\\src\\univalue\\include -imsvcD:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\include -imsvcD:\\btx-native-035\\openssl-3.5.4-static\\include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -std:c++20 -MT /utf-8 /Zc:preprocessor /Zc:__cplusplus /sdl /W3 /wd4018 /wd4146 /wd4244 /wd4267 /wd4715 /wd4805 -Xclang -fopenmp /Fosrc\\test\\CMakeFiles\\test_btx.dir\\modelnet_jit_journey_tests.cpp.obj /Fdsrc\\test\\CMakeFiles\\test_btx.dir\\ -c -- D:\\a\\btx\\btx\\btx\\src\\test\\modelnet_jit_journey_tests.cpp ",
+        "file": "D:/a/btx/btx/btx/src/test/modelnet_jit_journey_tests.cpp",
+        "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/modelnet_jit_journey_tests.cpp.obj"
       },
       "present_before": false
     }

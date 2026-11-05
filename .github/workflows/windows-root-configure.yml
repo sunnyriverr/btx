@@ -1,4 +1,4 @@
-name: Native Windows SDK fixture parity
+name: Native Windows JIT control-channel diagnostic
 on:
   push:
     branches: [codex/ci-windows-root-configure]
@@ -95,7 +95,7 @@ jobs:
           path: |
             D:\btx-native-035\project-build
             D:\btx-native-035\vcpkg-installed
-          key: btx356-unit-fixtures-v1-0cbada279996a3d784d5c498b3556a3c4f3e65c914156e61ad7c78881877e419-42005749177
+          key: btx356-unit-fixtures-v1-b2225c9817bbf8d49e6174039df60405e35e458b7b8d1a5b4603f22daa7373b1-42010437780
       - name: Require existing exact-profile checkpoint for restore proof
         shell: pwsh
         env:
@@ -126,7 +126,7 @@ jobs:
           set "_CL_="
           python controls/contrib/devtools/windows-root-configure/fixture.py build
           exit /b %errorlevel%
-      - name: Run maintained persistence and cloud controls
+      - name: Run existing JIT daemon and CLI controls
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
