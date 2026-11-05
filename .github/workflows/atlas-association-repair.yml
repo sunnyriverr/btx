@@ -1,0 +1,65 @@
+name: Atlas association repair qualification
+on:
+  push:
+    branches: [codex/ci-atlas-association-repair]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  qualify:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: windows-2025
+    timeout-minutes: 20
+    steps:
+      - name: Preserve exact source bytes
+        shell: pwsh
+        run: git config --global core.autocrlf false
+      - name: Checkout owned qualification fixture
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /contrib/devtools/atlas-association-repair/
+      - name: Checkout immutable Atlas base
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: e70c81f03b76c5e62712ebb51dfaac7d41295af2
+          path: atlas-product
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /gui/atlas/
+      - name: Reuse original baseline installer assets
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: atlas-installer-package
+          run-id: 41983707124
+          github-token: ${{ github.token }}
+          path: baseline-package
+      - name: Bundle exact repair without recompiling the app
+        shell: pwsh
+        run: python contrib/devtools/atlas-association-repair/bundle.py
+      - name: Native maintained regression fails before and passes after
+        shell: pwsh
+        run: python contrib/devtools/atlas-association-repair/edges.py
+      - name: Run unchanged actual-installer acceptance checks
+        shell: pwsh
+        run: python contrib/devtools/atlas-association-repair/run.py
+      - name: Retain exact qualification evidence
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: atlas-repair-observations
+          path: atlas-installer-results/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Retain repaired real package
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: atlas-repair-package
+          path: atlas-candidate-package/*.exe
+          if-no-files-found: warn
+          retention-days: 14
