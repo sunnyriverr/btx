@@ -7,7 +7,7 @@ out.mkdir(parents=True,exist_ok=True)
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 shutil.copyfile(P/(variant+'.cpp'),out/'runtime.cpp')
 shutil.copyfile(P/'controls.cpp',out/'controls.cpp')
-sources=[out/'controls.cpp']+[source/'src'/f for f in ['modelnet/capability_exec.cpp','modelnet/capability_types.cpp','modelnet/types.cpp','univalue/lib/univalue.cpp','univalue/lib/univalue_get.cpp','univalue/lib/univalue_read.cpp','univalue/lib/univalue_write.cpp','crypto/sha384.cpp','crypto/hex_base.cpp','util/strencodings.cpp']]
+sources=[out/'controls.cpp']+[source/'src'/f for f in ['modelnet/capability_exec.cpp','modelnet/capability_types.cpp','modelnet/package_pjson.cpp','modelnet/types.cpp','univalue/lib/univalue.cpp','univalue/lib/univalue_get.cpp','univalue/lib/univalue_read.cpp','univalue/lib/univalue_write.cpp','crypto/sha384.cpp','crypto/hex_base.cpp','util/strencodings.cpp']]
 exe=out/('component.exe' if os.name=='nt' else 'component')
 includes=[source/'src',source/'src/univalue/include']
 if os.name=='nt':
@@ -31,5 +31,9 @@ except BaseException as ex:
     receipt['status']='ERROR';receipt['error']=type(ex).__name__+': '+str(ex);raise
 finally:
     receipt['logs']={p.name:sha(p) for p in out.glob('*.log')}
+    if os.name=='nt':
+        for f in out.iterdir():
+            if f.suffix.lower() in ['.obj','.exe','.pdb','.ilk']: f.unlink()
+        receipt['compiled_outputs_removed_after_hashing']=True
     (out/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
     print(json.dumps({k:receipt.get(k) for k in ['variant','compiler','status','build_exit','run_exit','error']}))
