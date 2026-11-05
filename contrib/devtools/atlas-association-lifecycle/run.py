@@ -80,10 +80,12 @@ def main():
             check('bounded compiler archive', sum(x.file_size for x in z.infolist()) < 50_000_000)
             check('compiler archive paths', all(not Path(x.filename).is_absolute() and '..' not in Path(x.filename).parts for x in z.infolist()))
             z.extractall(scratch/'tool')
-        compilers = list((scratch/'tool').rglob('makensis.exe'))
-        check('single compiler', len(compilers) == 1)
-        compiler = compilers[0]
-        STATE['compiler'] = {'sha256': sha(compiler), 'path': str(compiler)}
+        # Match Tauri's <toolset>/makensis.exe launcher, not Bin/makensis.exe.
+        compiler = scratch/'tool/nsis-3.13/makensis.exe'
+        check('Tauri compiler launcher exists', compiler.is_file())
+        for relative, digest in manifest['compiler_files'].items():
+            check('compiler file '+relative, sha(scratch/'tool'/relative) == digest)
+        STATE['compiler'] = {'sha256': sha(compiler), 'path': str(compiler), 'files': manifest['compiler_files']}
         command([compiler, '/VERSION'], 'compiler-version.log')
         sentinel = path('BTXProbe.'+token+'.Unrelated')
         check('sentinel absent', not exists(sentinel))
