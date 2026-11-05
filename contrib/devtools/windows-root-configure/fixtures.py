@@ -90,6 +90,7 @@ def pair():
     assert any(r['exit']!=0 and r['opaque_diagnostics'] for r in before if r['file']in I['opaque_targets'])
     R['already_passing_baseline_controls']=[r['file']for r in before if r['exit']==0];s.save()
     assert metadata()==R['generated_inputs_before_pair'];patch=P/'fixtures.patch';assert sha(patch)==I['patch_sha256']
+    s.need('fixture-git-index-refresh',['git','update-index','--refresh'],30)
     s.need('fixture-apply-check',['git','apply','--check',str(patch)],30);s.need('fixture-apply',['git','apply','--index',str(patch)],30)
     tree=subprocess.check_output(['git','write-tree'],cwd=SOURCE,text=True).strip();assert tree==I['integration_tree'];env=os.environ.copy();env.update(I['commit_environment'])
     commit=subprocess.check_output(['git','commit-tree',tree,'-p',BASE],input=I['integration_message'],cwd=SOURCE,text=True,env=env).strip();assert commit==TARGET
