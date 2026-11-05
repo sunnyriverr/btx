@@ -97,6 +97,16 @@ def decode():
   any('symbol'in f for f in e['frames']) for e in events
   if e['code'] in ['0xc000001d','0xc0000409','0x80000003','0xc0000005'])
  R['daemon_frame_observed']=any('RunCapabilityDaemon'in f.get('symbol','')for e in events for f in e['frames'])
+ tool=shutil.which('llvm-objdump')
+ R['optional_callsite_disassembler']=tool
+ if tool:
+  chosen=[f for e in events for f in e['frames'] if 'RunCapabilityDaemon'in f.get('symbol','') or f.get('symbol')in['close','_close','_invalid_parameter_internal','_invalid_parameter_noinfo','_invoke_watson']]
+  seen=set()
+  for frame in chosen:
+   address=base+int(frame['rva'],16)
+   if address in seen:continue
+   seen.add(address)
+   s.run('trace-callsite-'+str(len(seen)),[tool,'--disassemble','--start-address='+hex(max(base+R['binary']['pe']['rva'],address-48)),'--stop-address='+hex(address+48),R['binary']['path']],40)
  (E/'decoded-stack.json').write_text(json.dumps({'source':I['source'],'original_binary':R['binary'],'text_mapping_identical':True,'symbols':len(symbols),'exceptions':events,'child_exit':R['child_exit']},indent=2)+'\n')
 
 def run():
@@ -119,6 +129,7 @@ def run():
    os.chmod(f,stat.S_IWRITE|stat.S_IREAD);R['harness_readonly_adjustments'].append(str(f.relative_to(data)));func(path)
   shutil.rmtree(data,onerror=permission_cleanup);R['owned_data_removed']=not data.exists();s.save()
  decode();R['status']='NATIVE_STACK_CAPTURED'if R['captured_failure_stack']else'NO_FAILURE_STACK';s.save();print('DECODED_STACK_JSON', (E/'decoded-stack.json').read_text(),flush=True)
+ assert R['captured_failure_stack'] and R['daemon_frame_observed'],'Inconclusive daemon caller stack; no cause proof'
 
 def verify():
  cp=json.loads((BUILD/'btx-checkpoint.json').read_text());R['after_files_verified']=validate_files(cp);assert sha(BUILD/'btx-checkpoint.json')==I['checkpoint_sha256']
