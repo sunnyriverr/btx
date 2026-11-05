@@ -1,0 +1,54 @@
+name: Actual Atlas NSIS lifecycle
+on:
+  push:
+    branches: [codex/ci-atlas-installer-lifecycle]
+permissions:
+  contents: read
+jobs:
+  qualify:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: windows-2025
+    timeout-minutes: 40
+    steps:
+      - name: Preserve source bytes
+        shell: pwsh
+        run: git config --global core.autocrlf false
+      - name: Checkout own qualification fixture
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /contrib/devtools/atlas-installer-lifecycle/
+      - name: Checkout exact current Atlas
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: e70c81f03b76c5e62712ebb51dfaac7d41295af2
+          path: atlas-product
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /gui/atlas/
+      - name: Build unchanged locked Atlas and offline NSIS package
+        shell: pwsh
+        run: python contrib/devtools/atlas-installer-lifecycle/build.py
+      - name: Observe actual reinstall and uninstall workflows
+        shell: pwsh
+        run: python contrib/devtools/atlas-installer-lifecycle/run.py
+      - name: Retain small evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: atlas-installer-observations
+          path: atlas-installer-results/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Retain the actual built installer
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: atlas-installer-package
+          path: atlas-package-output/*.exe
+          if-no-files-found: warn
+          retention-days: 14
