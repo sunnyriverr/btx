@@ -1,4 +1,4 @@
-name: Known Windows unit fixture qualification
+name: Focused Windows fixture platform qualification
 on:
   push:
     branches: [codex/ci-windows-root-configure]
@@ -8,7 +8,7 @@ jobs:
   configure:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: windows-2025
-    timeout-minutes: 220
+    timeout-minutes: 60
     env:
       BTX_NATIVE_ROOT: D:\btx-native-035
     steps:
@@ -95,7 +95,7 @@ jobs:
           path: |
             D:\btx-native-035\project-build
             D:\btx-native-035\vcpkg-installed
-          key: btx356-pr411-v1-d7694be6c11d3d913c663f2080116f561d555de0e4d0404adec44bc5c653ac91-41968885601
+          key: btx356-unit-fixtures-v1-11a58e38f82171bbab3cb1e63b08d4d7405215a5646f228ec7e3f974cc39ca6d-41975209022
       - name: Require existing exact-profile checkpoint for restore proof
         shell: pwsh
         env:
@@ -112,9 +112,9 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/fixtures.py prepare
+          python controls/contrib/devtools/windows-root-configure/four.py prepare
           exit /b %errorlevel%
-      - name: Prove known fixture compiler failures and corrected controls
+      - name: Build the four fixture targets in parallel with maintained link closure
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -124,9 +124,9 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/fixtures.py pair
+          python controls/contrib/devtools/windows-root-configure/four.py build
           exit /b %errorlevel%
-      - name: Resume maintained unit compilation after fixture qualification
+      - name: Run selected maintained Windows safety and refusal controls
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -136,19 +136,7 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/fixtures.py unitbuild
-          exit /b %errorlevel%
-      - name: Run maintained unpruned native unit target
-        shell: cmd
-        run: |
-          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
-          if not defined BTX_VS exit /b 2
-          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
-          if errorlevel 1 exit /b %errorlevel%
-          set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
-          set "CL="
-          set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/fixtures.py unitrun
+          python controls/contrib/devtools/windows-root-configure/four.py run
           exit /b %errorlevel%
       - name: Checkpoint only the exact candidate after execution
         if: always()
@@ -162,7 +150,7 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/fixtures.py retain
+          python controls/contrib/devtools/windows-root-configure/four.py retain
           exit /b %errorlevel%
       - name: Preserve candidate objects under separate source-profile key
         if: always() && steps.retention.outcome == 'success' && steps.retention.outputs.checkpoint_valid == 'true'
