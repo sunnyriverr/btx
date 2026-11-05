@@ -53,6 +53,12 @@
 #include <string>
 #include <vector>
 
+#if defined(_WIN32)
+// Windows headers also define GetObject, which is a model-store method here.
+#pragma push_macro("GetObject")
+#undef GetObject
+#endif
+
 BOOST_FIXTURE_TEST_SUITE(modelnet_cloud_tests, BasicTestingSetup)
 
 namespace {
@@ -930,3 +936,7 @@ BOOST_AUTO_TEST_CASE(cloud_https_not_stub_error)
 }
 
 BOOST_AUTO_TEST_SUITE_END()
+
+#if defined(_WIN32)
+#pragma pop_macro("GetObject")
+#endif
