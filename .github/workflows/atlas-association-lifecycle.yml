@@ -1,0 +1,32 @@
+name: Atlas association lifecycle component
+on:
+  push:
+    branches: [codex/ci-atlas-association-lifecycle]
+permissions:
+  contents: read
+jobs:
+  observe:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: windows-2025
+    timeout-minutes: 8
+    steps:
+      - name: Preserve fixture bytes
+        shell: pwsh
+        run: git config --global core.autocrlf false
+      - name: Checkout isolated fixture only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /contrib/devtools/atlas-association-lifecycle/
+      - name: Observe native association restoration and preservation
+        shell: pwsh
+        run: python contrib/devtools/atlas-association-lifecycle/run.py
+      - name: Retain observations including restoration failures
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: atlas-association-lifecycle
+          path: association-results/
+          if-no-files-found: error
