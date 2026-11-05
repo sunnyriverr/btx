@@ -1,0 +1,111 @@
+{
+  "utc": "2026-11-05T09:58:13.028579+00:00",
+  "status": "VERIFIED_NATIVE_WINDOWS_OPTIONAL_HELPER_LIFECYCLE_PASS",
+  "run": 42005749177,
+  "ci": "9a10584abf0ae93eab67bc6793b22c43ee4ff0ae",
+  "source": "473a2a0bf8e528a977d07137712d6a1d6dfc8cf6",
+  "tree": "d860c05655a867235ca38e6e78d5b2431cc24a8f",
+  "prerequisites": [
+    411,
+    415
+  ],
+  "archive_sha256": "24e6dc6cddc8ec2e760514e09a63e711783af5a4d8602e23c3851209074c75f1",
+  "node_before_sha256": "349c5d3c08b54a624aab32a2a4cdcf38f0412e1264a283daf7cdf52ee0ec94d9",
+  "node_sha256": "35b0aa504dfde65843a12374c731799d92ac7f10b1ab002a5b699b87356be485",
+  "modelnet_library_sha256": "4c924f0731642e0b8aedece02ba8a3229a59b254c0da20637aaea39db5fb529c",
+  "node_planned_steps": 6,
+  "node_build_seconds": 12.28,
+  "source_files_verified": 14311,
+  "command_logs_verified": 8,
+  "source_config_checkpoint_frozen_graph_verified": true,
+  "actual_default_helper_policy": true,
+  "exits": {
+    "optional-first": 0,
+    "optional-restart": 0,
+    "disabled-control": 0,
+    "required-control": 1
+  },
+  "same_datadir_restart": true,
+  "height": 0,
+  "five_health_polls_per_successful_start": true,
+  "cookie_removed_ports_closed_natural_cleanup": true,
+  "fresh_per_boot_logs_verified": true,
+  "no_forced_kills_or_children": true,
+  "objects_retained": 3830,
+  "checkpoint_sha256": "b1b557e3fa0d8a27e97d255f4d204c6ed00a369bb46cd53eeafeda5c6bed26e2",
+  "checkpoint_key": "0cbada279996a3d784d5c498b3556a3c4f3e65c914156e61ad7c78881877e419",
+  "actual_profile": {
+    "source": "666673a3153225ba264c7870e0e82e354df86765",
+    "tools": {
+      "clang-cl": {
+        "path": "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "sha256": "57e32b1ea2456f12f97bf802453171bbff12d56b2c486b4eca0c75343c0cda2c"
+      },
+      "cl": {
+        "path": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.EXE",
+        "sha256": "b0a1818ebae6da7f18230a84e76ce839212584ac4c2ab55b97a0d5268085da57"
+      },
+      "cmake": {
+        "path": "C:\\Program Files\\CMake\\bin\\cmake.EXE",
+        "sha256": "84935c0b7cb09c140de0d3b042d4e93e5fac4e6371e75bf28eae3d841f79dfb3"
+      },
+      "ninja": {
+        "path": "C:\\ProgramData\\Chocolatey\\bin\\ninja.EXE",
+        "sha256": "6a4dd2358fccbb483729091586413cc2f2f74e72d329187f5a6b4cbba3c025ad"
+      }
+    },
+    "args": [
+      "cmake",
+      "--debug-find-pkg=OpenSSL",
+      "--preset",
+      "windows-clangcl-static",
+      "-S",
+      "D:\\a\\btx\\btx\\btx",
+      "-B",
+      "D:\\btx-native-035\\project-build",
+      "-DBUILD_TESTS=ON",
+      "-DWITH_MODELNET=ON",
+      "-DVCPKG_MANIFEST_NO_DEFAULT_FEATURES=ON",
+      "-DVCPKG_MANIFEST_FEATURES=wallet;tests;zeromq",
+      "-DVCPKG_INSTALLED_DIR=D:\\btx-native-035\\vcpkg-installed",
+      "-DOPENSSL_ROOT_DIR=D:\\btx-native-035\\openssl-3.5.4-static",
+      "-DOPENSSL_USE_STATIC_LIBS=ON",
+      "-DOPENSSL_MSVC_STATIC_RT=ON",
+      "-DOPENSSL_INCLUDE_DIR=D:\\btx-native-035\\openssl-3.5.4-static\\include",
+      "-DOPENSSL_SSL_LIBRARY=D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib",
+      "-DOPENSSL_CRYPTO_LIBRARY=D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib",
+      "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+    ],
+    "environment": {
+      "ImageVersion": "20261103.298.1",
+      "VCToolsVersion": "14.51.36231",
+      "WindowsSDKVersion": "10.0.26100.0\\",
+      "INCLUDE": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\include;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\include;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Auxiliary\\VS\\include;C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.26100.0\\ucrt;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\um;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\shared;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\winrt;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\cppwinrt;C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\include\\um",
+      "LIB": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\lib\\x64;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x64;C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\lib\\um\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\lib\\10.0.26100.0\\ucrt\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\\\lib\\10.0.26100.0\\\\um\\x64",
+      "LIBPATH": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\lib\\x64;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x64;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x86\\store\\references;C:\\Program Files (x86)\\Windows Kits\\10\\UnionMetadata\\10.0.26100.0;C:\\Program Files (x86)\\Windows Kits\\10\\References\\10.0.26100.0;C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319",
+      "CL": null,
+      "_CL_": null
+    },
+    "controls": {
+      "runner.py": "73fea130e528e1034d508ec2ff1da76d710074792dc1af618ccb3a499e2f3f8b",
+      "checkpoint.py": "eb65c4501a306c92ea9e78a70c1932d00fa831d86ea302888c3eb9769b9c6ebb",
+      "checkpoint-selftest.py": "27d586dd8ba09eef10d5a4bbcb8b4ce6cb3480565ea0ee4f92c6cba4bb6d214a",
+      "dependency-identity.json": "f823d61237a287c704cada283764695a782fa001a725442122920d75ced8a4a5"
+    },
+    "openssl_files": {
+      "include/openssl/opensslv.h": "df513ae26e8baebbc641ba19f3d16f3e9ac0895cb092c81a39e1669f7fcb9c5c",
+      "lib/libssl.lib": "860ce6dd4edf55af8a82a958afb9bae9cd025f3ef7e263bcc266d79cdd5179e8",
+      "lib/libcrypto.lib": "f9385fc262485a1c779aa9a740ee3bde3025b9eb61b113e311024c9571899e12",
+      "bin/openssl.exe": "c63c66cb528c20dbd9f474679c8a19ea13d40f57c7f8efa4085ceb6dbe5c5552"
+    }
+  },
+  "host_transition": {},
+  "limits": [
+    "Explicitly absent helper path, not actual running-helper crash/admission or automatic packaged discovery",
+    "Swarm guard also absent; no protected worker/guard admission claim",
+    "Fresh height0regtest, not nonempty-chain restart/sync/validation/mining/GPU/wallet",
+    "NativeServer2025 clang-cl, not Windows11/fullcl.exe",
+    "Candidate411+415 integration, not accepted stock/fullunit/release or356closure",
+    "No upstream post or product fix"
+  ]
+}
