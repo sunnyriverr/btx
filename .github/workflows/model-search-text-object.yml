@@ -1,0 +1,23 @@
+name: Model search text and object regression
+on:
+  push:
+    branches: [codex/ci-model-search-text-object]
+permissions:
+  contents: read
+jobs:
+  paired:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Run maintained case before and after
+        run: python3 contrib/devtools/model-search-text-object/run.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: model-search-text-object-records
+          path: |
+            records/*.json
+            records/*.log
+          retention-days: 7
