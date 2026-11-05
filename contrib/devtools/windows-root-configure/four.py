@@ -37,7 +37,7 @@ def prepare():
  for r in I['baseline']:
   log=P/'four-baseline'/r['log'];assert sha(log)==r['log_sha256'];shutil.copyfile(log,E/('baseline-'+r['log']))
  for f in ['WITH_MODELNET:BOOL=ON','BUILD_TESTS:BOOL=ON','ENABLE_WALLET:BOOL=ON','WITH_ZMQ:BOOL=ON']:assert f in(BUILD/'CMakeCache.txt').read_text()
- before=symbols('four-before-library');assert any('?GetObjectW@S3PieceStore@modelnet@@'in x for x in before),'Expected pre-fix SDK-renamed library API'
+ before=symbols('four-before-library');assert any('?GetObject@S3PieceStore@modelnet@@'in x for x in before) and not any('?GetObjectW@S3PieceStore@modelnet@@'in x for x in before),'Expected qualified canonical library from prior run'
  s.need('four-index-refresh',['git','update-index','--refresh'],30);s.need('four-candidate-checkout',['git','checkout','--detach',TARGET],60)
  cat=s.catalog(TARGET,'four-before');R['source_catalog']=cat;changed=subprocess.check_output(['git','diff','--name-only',BASE,TARGET],cwd=SOURCE,text=True).splitlines();assert changed==I['changed'];R['source_delta']=changed
  original=(BUILD/'build.ninja').read_bytes();text=original.decode().replace('\r\n','\n');a=text.index('build bin\\test_btx.exe:');b=text.index('\n\n',a);block=text[a:b];lines=block.splitlines();rule='CXX_EXECUTABLE_LINKER__test_btx_Release';old=lines[0];_,tail=old.split(' | ',1)
@@ -65,7 +65,8 @@ def run():
  assert R['status']=='FOCUSED_LINKED';exe=BUILD/'bin/windows_fixture_controls.exe';data=Path('D:/f4'+os.environ['GITHUB_RUN_ID']);assert not data.exists();data.mkdir();R['unit_data']=str(data);R['cases']=[]
  for n,case in enumerate(I['runtime_cases']):
   code=s.run('four-case-'+str(n),[str(exe),'--run_test='+case,'--report_level=detailed','--log_level=test_suite','--','-testdatadir='+str(data)],150);R['cases'].append({'case':case,'exit':code});s.save()
-  if code:R['status']='FOCUSED_CONTROL_FAILURE';raise RuntimeError('Selected maintained control failed: '+case)
+  if code:R['status']='FOCUSED_CONTROL_FAILURE'
+ assert all(x['exit']==0 for x in R['cases']), 'One or more selected maintained controls failed; all results retained'
  assert sha(exe)==R['binary_sha256'];s.quiesce();R['status']='FOCUSED_PASS';s.save()
 
 def retain():

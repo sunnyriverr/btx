@@ -1,4 +1,4 @@
-name: Focused Windows fixture platform qualification
+name: Finish Windows fixture runtime qualification
 on:
   push:
     branches: [codex/ci-windows-root-configure]
@@ -95,7 +95,7 @@ jobs:
           path: |
             D:\btx-native-035\project-build
             D:\btx-native-035\vcpkg-installed
-          key: btx356-unit-fixtures-v1-11a58e38f82171bbab3cb1e63b08d4d7405215a5646f228ec7e3f974cc39ca6d-41975209022
+          key: btx356-unit-fixtures-v1-a2c944cf37dc6acab76e14a1238b8277a9a0cf8f9dc217ca3d329fcd59a3bf8e-41983219088
       - name: Require existing exact-profile checkpoint for restore proof
         shell: pwsh
         env:
@@ -114,7 +114,7 @@ jobs:
           set "_CL_="
           python controls/contrib/devtools/windows-root-configure/four.py prepare
           exit /b %errorlevel%
-      - name: Build the four fixture targets in parallel with maintained link closure
+      - name: Incrementally rebuild changed byte fixture with maintained link closure
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
