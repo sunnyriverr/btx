@@ -27,12 +27,16 @@ def prepare():
  config=(BUILD/'CMakeCache.txt').read_text()
  for flag in ['WITH_MODELNET:BOOL=ON','BUILD_TESTS:BOOL=ON','ENABLE_WALLET:BOOL=ON','WITH_ZMQ:BOOL=ON']:assert flag in config
  commands=json.loads((BUILD/'compile_commands.json').read_text());R['maintained_test_compile_entries']=sum('/test_btx.dir/'in c['output'].replace('\\','/')for c in commands);assert R['maintained_test_compile_entries']==2606
- R['source_changes_from_checkpoint']=[];R['profile']={'source':TARGET,'actual_current_profile':actual,'input_checkpoint_sha256':I['checkpoint_sha256'],'source_bundle_sha256':I['bundle_sha256'],'controls_sha256':sha(P/'full.py'),'scope':I['scope'],'normal_ninja_dependencies':True,'configuration':R['original_config']};R['status']='FULL_READY';s.save()
+ manifest=E/'full-unit.ninja';shutil.copyfile(BUILD/'build.ninja',manifest);assert sha(manifest)==R['original_config']['build.ninja'];R['manifest_sha256']=sha(manifest)
+ R['expected_missing_unit_objects']=sum('/test_btx.dir/'in c['output'].replace('\\','/')and 'project-build\\'+c['output'].replace('\\','/').split('/project-build/',1)[1].replace('/','\\')not in cp['files']for c in commands)
+ R['source_changes_from_checkpoint']=[];R['profile']={'source':TARGET,'actual_current_profile':actual,'input_checkpoint_sha256':I['checkpoint_sha256'],'source_bundle_sha256':I['bundle_sha256'],'controls_sha256':sha(P/'full.py'),'support_sha256':sha(P/'integration_support.py'),'scope':I['scope'],'normal_ninja_dependencies':True,'configuration':R['original_config']};R['status']='FULL_READY';s.save()
 
 def build():
- assert R['status']=='FULL_READY';common=['ninja','-C',str(BUILD)]
+ assert R['status']=='FULL_READY';common=['ninja','-C',str(BUILD),'-f',str(E/'full-unit.ninja')]
  s.need('full-unit-plan',common+['-d','explain','-n','test_btx'],120);text=(E/'full-unit-plan.log').read_text(errors='replace');steps=re.findall(r'^\[(\d+)/(\d+)\]',text,re.M);R['planned_steps']=int(steps[-1][1])if steps else 0
- assert 0<R['planned_steps']<=3000,R['planned_steps'];assert 'command line changed for'not in text,'Unexpected command identity invalidation'
+ assert 'Re-running CMake'not in text and 'Re-checking globbed directories'not in text,'Bootstrap is not the maintained object plan'
+ assert R['expected_missing_unit_objects']<R['planned_steps']<=3000,R['planned_steps'];assert 'command line changed for'not in text,'Unexpected command identity invalidation'
+ assert sha(E/'full-unit.ninja')==R['original_config']['build.ninja']
  R['initial_resources']=s.resources();assert R['initial_resources']['disk_free']>6*1024**3 and R['initial_resources']['available_ram']>3*1024**3
  R['status']='FULL_UNIT_BUILDING';s.save();code=s.run('candidate-unit-build',common+['--verbose','-j','4','-k','1','test_btx'],1800);R['unit_build_exit']=code
  if code:

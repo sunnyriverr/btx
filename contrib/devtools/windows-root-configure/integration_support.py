@@ -28,7 +28,15 @@ def run(label,cmd,timeout,cwd=SOURCE):
                     s=resources()
                     if s['disk_free']<2*1024**3 or s['available_ram']<1024**3:reason='RESOURCE_BUDGET'
                     if int(elapsed)//30>bucket:
-                        bucket=int(elapsed)//30;R.setdefault('samples',[]).append({'command':label,'seconds':round(elapsed),**s});save();print(label,round(elapsed),s,flush=True)
+                        bucket=int(elapsed)//30
+                        if label=='candidate-unit-build':
+                            try:
+                                with log.open('rb')as progress:
+                                    progress.seek(0,2);size=progress.tell();progress.seek(max(0,size-65536));tail=progress.read().decode(errors='replace')
+                                match=re.findall(r'\[(\d+)/(\d+)\]',tail);s['log_bytes']=size
+                                if match:s['last_ninja_step']='/'.join(match[-1])
+                            except OSError:pass
+                        R.setdefault('samples',[]).append({'command':label,'seconds':round(elapsed),**s});save();print(label,round(elapsed),s,flush=True)
                 if reason:
                     z=subprocess.run(['taskkill','/PID',str(proc.pid),'/T','/F'],capture_output=True);(E/(label+'-cleanup.log')).write_bytes(z.stdout+z.stderr)
                     R['cleanup_confirmed']=z.returncode==0;proc.wait(timeout=30);break
