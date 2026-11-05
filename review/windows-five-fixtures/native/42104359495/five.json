@@ -1,0 +1,482 @@
+{
+  "status": "LINKED",
+  "commands": [
+    {
+      "label": "source-parent-fetch",
+      "command": [
+        "git",
+        "fetch",
+        "--no-tags",
+        "--depth=2",
+        "https://github.com/sunnyriverr/btx.git",
+        "29d0fc8a973ff5ef92e51fa1da6ad5bab037b2d9"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 4.0,
+      "log_sha256": "64639f5d923be96cc6e3fb32019b9f8939ae8d14be7b8126aa5d1d86c397e6de",
+      "budget_stop": null
+    },
+    {
+      "label": "cached-checkout",
+      "command": [
+        "git",
+        "checkout",
+        "--detach",
+        "29d0fc8a973ff5ef92e51fa1da6ad5bab037b2d9"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.02,
+      "log_sha256": "4d40047d578da5588f939c51e080649ec40eb6505770dfa40b94a6ee0f3e0289",
+      "budget_stop": null
+    },
+    {
+      "label": "bundle-verify",
+      "command": [
+        "git",
+        "bundle",
+        "verify",
+        "D:\\btx-native-035\\evidence\\five-source.bundle"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.0,
+      "log_sha256": "09621e9fbeeb367d181df84c3c5744e3ec04981ffa76cddeff3cd525532e9af2",
+      "budget_stop": null
+    },
+    {
+      "label": "bundle-fetch",
+      "command": [
+        "git",
+        "fetch",
+        "D:\\btx-native-035\\evidence\\five-source.bundle",
+        "refs/heads/codex/fix-windows-five-fixtures-integration"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.0,
+      "log_sha256": "a06c04d037dd5bcf7862bc99494b17218eaa9d9e241a25ef8db663c4ef484167",
+      "budget_stop": null
+    },
+    {
+      "label": "candidate-checkout",
+      "command": [
+        "git",
+        "checkout",
+        "--detach",
+        "f410081e1d4a377ba5ff9147a77736c7221ce155"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.01,
+      "log_sha256": "a95eff28655cb08a9c8e1e329616b40c9398e35bd0394e2c81e6381024b6ed45",
+      "budget_stop": null
+    },
+    {
+      "label": "five-plan",
+      "command": [
+        "ninja",
+        "-C",
+        "D:\\btx-native-035\\project-build",
+        "-f",
+        "D:\\btx-native-035\\evidence\\five.ninja",
+        "-n",
+        "-d",
+        "explain",
+        "bin/windows_fixture_five.exe",
+        "bin/btx-open.exe",
+        "bin/btx-modeld.exe",
+        "bin/btxd.exe"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.0,
+      "log_sha256": "ae31f8056296ec8793a499bd73beb7191de62d5450338d4b27daad4c94d83873",
+      "budget_stop": null
+    },
+    {
+      "label": "focused-build",
+      "command": [
+        "ninja",
+        "-C",
+        "D:\\btx-native-035\\project-build",
+        "-f",
+        "D:\\btx-native-035\\evidence\\five.ninja",
+        "--verbose",
+        "-j",
+        "4",
+        "-k",
+        "1",
+        "bin/windows_fixture_five.exe",
+        "bin/btx-open.exe",
+        "bin/btx-modeld.exe",
+        "bin/btxd.exe"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 18.05,
+      "log_sha256": "314fdf49778901b141d62dca7a98005d9c712746c524c7b05499c073f134069e",
+      "budget_stop": null
+    },
+    {
+      "label": "suite-inventory",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\windows_fixture_five.exe",
+        "--list_content"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.02,
+      "log_sha256": "7265f04312dc9954eb56233e2998b9f6ac40106660becda58cfbeaf4d243f3ab",
+      "budget_stop": null
+    },
+    {
+      "label": "suite-0",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\windows_fixture_five.exe",
+        "--run_test=modelnet_retrieve_peer_reply_tests",
+        "--report_level=detailed",
+        "--log_level=test_suite",
+        "--",
+        "-testdatadir=D:\\f542104359495\\0\\node"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.0,
+      "log_sha256": "6f6339b6dc948010e1583237fc372e81019577c89e8da31ca40db67368e1b324",
+      "budget_stop": null
+    },
+    {
+      "label": "suite-1",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\windows_fixture_five.exe",
+        "--run_test=modelnet_records_cache_tests",
+        "--report_level=detailed",
+        "--log_level=test_suite",
+        "--",
+        "-testdatadir=D:\\f542104359495\\1\\node"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 4.0,
+      "log_sha256": "3dc02c8c21b25213da446ec9b4c59836f8d6f22ee5a344594d99c716e22b936e",
+      "budget_stop": null
+    },
+    {
+      "label": "suite-2",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\windows_fixture_five.exe",
+        "--run_test=modelnet_pq1_worker_share_tests",
+        "--report_level=detailed",
+        "--log_level=test_suite",
+        "--",
+        "-testdatadir=D:\\f542104359495\\2\\node"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.0,
+      "log_sha256": "3efb9c8d7f70f3b59719ccb321c6552169fae65ee3a02feed97897d8255f0ed3",
+      "budget_stop": null
+    },
+    {
+      "label": "suite-3",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\windows_fixture_five.exe",
+        "--run_test=modelnet_ahp_doc_tests",
+        "--report_level=detailed",
+        "--log_level=test_suite",
+        "--",
+        "-testdatadir=D:\\f542104359495\\3\\node"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 201,
+      "seconds": 2.02,
+      "log_sha256": "bfbd78f9d452b6010e380dfada4a3ecf5c9b80583a637565d73c5d8b1adc0feb",
+      "budget_stop": null
+    },
+    {
+      "label": "suite-4",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\windows_fixture_five.exe",
+        "--run_test=modelnet_unique_todo_tests",
+        "--report_level=detailed",
+        "--log_level=test_suite",
+        "--",
+        "-testdatadir=D:\\f542104359495\\4\\node"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 4.0,
+      "log_sha256": "815553005b0748ece35a2651e2f17446efc6d027dabf1ec0f91dc55cd6c02a5d",
+      "budget_stop": null
+    }
+  ],
+  "process_active": false,
+  "scope": "Five fixture-only candidate on integrated29d0(accepted666+411415417418); same maintained five object commands baseline/candidate; scoped component runtime with original library closure and cached unchanged SDK helper; not fullunit, POSIX live helper, MinGW, mainnet, hardware or release qualification.",
+  "base": "29d0fc8a973ff5ef92e51fa1da6ad5bab037b2d9",
+  "target": "f410081e1d4a377ba5ff9147a77736c7221ce155",
+  "unit_built": false,
+  "unit_invoked": true,
+  "full_unit_qualified": false,
+  "active_command": null,
+  "updated_utc": "2026-11-05T20:36:00.512572+00:00",
+  "restore": {
+    "restored": true,
+    "files_verified": 10769,
+    "source_timestamps_restored": 14169,
+    "previous_result": {
+      "status": "AFTER_ONLY_PASS",
+      "full_unit": false,
+      "baseline_exit": [],
+      "candidate_exit": [
+        0
+      ]
+    }
+  },
+  "actual_profile": {
+    "source": "666673a3153225ba264c7870e0e82e354df86765",
+    "tools": {
+      "clang-cl": {
+        "path": "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "sha256": "57e32b1ea2456f12f97bf802453171bbff12d56b2c486b4eca0c75343c0cda2c"
+      },
+      "cl": {
+        "path": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.EXE",
+        "sha256": "b0a1818ebae6da7f18230a84e76ce839212584ac4c2ab55b97a0d5268085da57"
+      },
+      "cmake": {
+        "path": "C:\\Program Files\\CMake\\bin\\cmake.EXE",
+        "sha256": "84935c0b7cb09c140de0d3b042d4e93e5fac4e6371e75bf28eae3d841f79dfb3"
+      },
+      "ninja": {
+        "path": "C:\\ProgramData\\Chocolatey\\bin\\ninja.EXE",
+        "sha256": "5142e84796e4bd57acb91ee19d30174d11bcca2b1a99d45a43251b9b1e6c32a9"
+      }
+    },
+    "args": [
+      "cmake",
+      "--debug-find-pkg=OpenSSL",
+      "--preset",
+      "windows-clangcl-static",
+      "-S",
+      "D:\\a\\btx\\btx\\btx",
+      "-B",
+      "D:\\btx-native-035\\project-build",
+      "-DBUILD_TESTS=ON",
+      "-DWITH_MODELNET=ON",
+      "-DVCPKG_MANIFEST_NO_DEFAULT_FEATURES=ON",
+      "-DVCPKG_MANIFEST_FEATURES=wallet;tests;zeromq",
+      "-DVCPKG_INSTALLED_DIR=D:\\btx-native-035\\vcpkg-installed",
+      "-DOPENSSL_ROOT_DIR=D:\\btx-native-035\\openssl-3.5.4-static",
+      "-DOPENSSL_USE_STATIC_LIBS=ON",
+      "-DOPENSSL_MSVC_STATIC_RT=ON",
+      "-DOPENSSL_INCLUDE_DIR=D:\\btx-native-035\\openssl-3.5.4-static\\include",
+      "-DOPENSSL_SSL_LIBRARY=D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib",
+      "-DOPENSSL_CRYPTO_LIBRARY=D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib",
+      "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+    ],
+    "environment": {
+      "ImageVersion": "20261030.294.1",
+      "VCToolsVersion": "14.51.36231",
+      "WindowsSDKVersion": "10.0.26100.0\\",
+      "INCLUDE": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\include;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\include;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Auxiliary\\VS\\include;C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.26100.0\\ucrt;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\um;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\shared;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\winrt;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\cppwinrt;C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\include\\um",
+      "LIB": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\lib\\x64;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x64;C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\lib\\um\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\lib\\10.0.26100.0\\ucrt\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\\\lib\\10.0.26100.0\\\\um\\x64",
+      "LIBPATH": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\lib\\x64;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x64;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x86\\store\\references;C:\\Program Files (x86)\\Windows Kits\\10\\UnionMetadata\\10.0.26100.0;C:\\Program Files (x86)\\Windows Kits\\10\\References\\10.0.26100.0;C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319",
+      "CL": null,
+      "_CL_": null
+    },
+    "controls": {
+      "runner.py": "73fea130e528e1034d508ec2ff1da76d710074792dc1af618ccb3a499e2f3f8b",
+      "checkpoint.py": "eb65c4501a306c92ea9e78a70c1932d00fa831d86ea302888c3eb9769b9c6ebb",
+      "checkpoint-selftest.py": "27d586dd8ba09eef10d5a4bbcb8b4ce6cb3480565ea0ee4f92c6cba4bb6d214a",
+      "dependency-identity.json": "f823d61237a287c704cada283764695a782fa001a725442122920d75ced8a4a5"
+    },
+    "openssl_files": {
+      "include/openssl/opensslv.h": "df513ae26e8baebbc641ba19f3d16f3e9ac0895cb092c81a39e1669f7fcb9c5c",
+      "lib/libssl.lib": "860ce6dd4edf55af8a82a958afb9bae9cd025f3ef7e263bcc266d79cdd5179e8",
+      "lib/libcrypto.lib": "f9385fc262485a1c779aa9a740ee3bde3025b9eb61b113e311024c9571899e12",
+      "bin/openssl.exe": "c63c66cb528c20dbd9f474679c8a19ea13d40f57c7f8efa4085ceb6dbe5c5552"
+    }
+  },
+  "host_transition": {},
+  "original_config": {
+    "build.ninja": "03abe6e53694a28502a2cb16ede803342a655fcb5a1be0f001936f7f4ef99d98",
+    "CMakeFiles/rules.ninja": "a709c8c906308b3b0e559455b365be3f65ddd519c9aea8c9de1ca7cc0c752e4b",
+    "CMakeCache.txt": "26177cbd305c3f6a56cbf2610dfa4851b053ec40f206536c17c3881cd687af34",
+    "compile_commands.json": "a991664401a33704ed75d27e3cd1ca79c61a52fff968fa16f131b28964a5853e"
+  },
+  "sdk_helper_sha256": "b5e38bb159da785f93eef49a6599ddb5ea3ca49998e8ad5aabfc614296796ba3",
+  "baseline_reused": [
+    {
+      "file": "modelnet_ahp_doc_tests.cpp",
+      "run": 41994623193,
+      "fatal_lines": [
+        "D:\\a\\btx\\btx\\btx\\src\\test\\modelnet_ahp_doc_tests.cpp(52,10): fatal error: 'unistd.h' file not found"
+      ]
+    },
+    {
+      "file": "modelnet_pq1_worker_share_tests.cpp",
+      "run": 41994623193,
+      "fatal_lines": [
+        "D:\\a\\btx\\btx\\btx\\src\\test\\modelnet_pq1_worker_share_tests.cpp(31,10): fatal error: 'unistd.h' file not found"
+      ]
+    },
+    {
+      "file": "modelnet_records_cache_tests.cpp",
+      "run": 41994623193,
+      "fatal_lines": [
+        "D:\\a\\btx\\btx\\btx\\src\\test\\modelnet_records_cache_tests.cpp(35,10): fatal error: 'unistd.h' file not found"
+      ]
+    },
+    {
+      "file": "modelnet_unique_todo_tests.cpp",
+      "run": 41994623193,
+      "fatal_lines": [
+        "D:\\a\\btx\\btx\\btx\\src\\test\\modelnet_unique_todo_tests.cpp(44,10): fatal error: 'unistd.h' file not found"
+      ]
+    },
+    {
+      "file": "modelnet_retrieve_peer_reply_tests.cpp",
+      "run": 41990045506,
+      "fatal_lines": [
+        "D:\\a\\btx\\btx\\btx\\src\\test\\modelnet_retrieve_peer_reply_tests.cpp(26,10): fatal error: 'unistd.h' file not found"
+      ]
+    }
+  ],
+  "graph_sha256": "7dced5506a0546a09642c6bb31f7c1eb338b3152b51792fccc8593c45dd8084a",
+  "planned_steps": 16,
+  "samples": [
+    {
+      "command": "focused-build",
+      "seconds": 0,
+      "disk_free": 233407299584,
+      "available_ram": 13845876736,
+      "total_ram": 17174360064,
+      "cpus": 4
+    }
+  ],
+  "build_exit": 0,
+  "binaries": {
+    "windows_fixture_five": "6f14388fc11e33648097c1cd3b74e913f4ea4dba1d23fcfe843d17fe76d0361b",
+    "btx-open": "2f7e003a274498cd95554b21311329c6ad931b4709c18d47acb4fbe31cf81e72",
+    "btx-modeld": "b5b861eec6ba49f3c7c4f40cb656b1b735e00068d00b22d7d470f1cb4e231bda",
+    "btxd": "44187d81d09e644a01bce0b45e1b418fe77c793b2f914d0857469945cb62df50"
+  },
+  "fixture_objects": {
+    "modelnet_ahp_doc_tests.cpp": "32ca308ea7684948606ebfaec4bfb3365b0503e4c376335458b076a224082a2a",
+    "modelnet_pq1_worker_share_tests.cpp": "671e72ea9c29c04b50dfbdc3caf901e23711eb5e270448180b4af4fec6219874",
+    "modelnet_records_cache_tests.cpp": "ab87b91d9c421d38f4b6174dc6c0643b2611032fbd9940118766ea4696c5bd74",
+    "modelnet_retrieve_peer_reply_tests.cpp": "f332b2a6826cff003151be3581472f15c7a104af7945c31fed17696bdcfe1667",
+    "modelnet_unique_todo_tests.cpp": "4f7246f0bf652dee41b1805eb86b1c12afc15eb6408cb665fa9924f396c0fa53"
+  },
+  "build_info": "#define BUILD_GIT_COMMIT \"f410081e1d4a\"\n#define BUILD_GIT_FULL_COMMIT \"f410081e1d4a377ba5ff9147a77736c7221ce155\"\n#define BUILD_GIT_DIRTY 0\n#define BUILD_GIT_SOURCE_TREE_FINGERPRINT \"fdfb19d4a44989a21d0085bdeec063fe4e197ebf659a06fb58f57344f2113757\"\n",
+  "unit_data": "D:\\f542104359495",
+  "suite_results": [
+    {
+      "suite": "modelnet_retrieve_peer_reply_tests",
+      "exit": 0,
+      "cases_started": 1,
+      "assertions": [
+        3,
+        3
+      ],
+      "passed": true,
+      "owned_processes_after_suite": [],
+      "applicability_messages": [
+        "Windows helper Unix RPC is unsupported; the three Unix retrieval integration cases are not run"
+      ]
+    },
+    {
+      "suite": "modelnet_records_cache_tests",
+      "exit": 0,
+      "cases_started": 5,
+      "assertions": [
+        5278,
+        5278
+      ],
+      "passed": true,
+      "owned_processes_after_suite": [],
+      "applicability_messages": []
+    },
+    {
+      "suite": "modelnet_pq1_worker_share_tests",
+      "exit": 0,
+      "cases_started": 1,
+      "assertions": [
+        14245,
+        14245
+      ],
+      "passed": true,
+      "owned_processes_after_suite": [],
+      "applicability_messages": []
+    },
+    {
+      "suite": "modelnet_ahp_doc_tests",
+      "exit": 201,
+      "cases_started": 17,
+      "assertions": [
+        399,
+        400
+      ],
+      "passed": false,
+      "owned_processes_after_suite": [],
+      "applicability_messages": []
+    },
+    {
+      "suite": "modelnet_unique_todo_tests",
+      "exit": 0,
+      "cases_started": 34,
+      "assertions": [
+        492,
+        492
+      ],
+      "passed": true,
+      "owned_processes_after_suite": [],
+      "applicability_messages": [
+        "HONEST_NOT_RUN F2 wallet-signed mandate; wallet_sign stays false",
+        "HONEST_NOT_RUN -modelindex as a product flag; helper/modeld reject",
+        "HONEST_NOT_RUN BUILD_GUI=ON / Qt journeys; this tree stays BUILD_GUI=OFF",
+        "Sparse fixture logical=429496729600 allocated=0 bytes",
+        "HONEST_NOT_RUN 400 GiB object I/O (sparse addressing is not payload I/O)",
+        "CUDA unique probe: llama.cpp present=false not installed; adapter code present, hardware/runtime NOT_RUN until probe succeeds",
+        "CUDA unique probe: vLLM present=false not installed; adapter code present, hardware/runtime NOT_RUN until probe succeeds",
+        "ROCm unique probe: llama.cpp not installed; adapter code present, hardware/runtime NOT_RUN until probe succeeds",
+        "ROCm unique probe: vLLM not installed; adapter code present, hardware/runtime NOT_RUN until probe succeeds",
+        "Metal unique probe: llama.cpp not installed; adapter code present, hardware/runtime NOT_RUN until probe succeeds",
+        "Metal unique probe: MLX not installed; adapter code present, hardware/runtime NOT_RUN until probe succeeds",
+        "NIXL unique probe: {\"stub\":false,\"portable_host_buffer\":true,\"automatic_spend_atoms\":0,\"nixl\":false,\"gds\":false,\"nixl_status\":\"NOT_RUN\",\"gds_status\":\"NOT_RUN\",\"nixl_detail\":\"NOT_RUN: BTX_NIXL_LIB unset\",\"gds_detail\":\"NOT_RUN: BTX_CUFILE_LIB unset\",\"assurance\":\"HOST_BUFFER\"}",
+        "GDS unique probe: {\"stub\":false,\"portable_host_buffer\":true,\"automatic_spend_atoms\":0,\"nixl\":false,\"gds\":false,\"nixl_status\":\"NOT_RUN\",\"gds_status\":\"NOT_RUN\",\"nixl_detail\":\"NOT_RUN: BTX_NIXL_LIB unset\",\"gds_detail\":\"NOT_RUN: BTX_CUFILE_LIB unset\",\"assurance\":\"HOST_BUFFER\"}",
+        "CXL unique probe cxl=false NOT_RUN",
+        "HONEST_NOT_RUN env-gated unique_todo_remote_process: BTX_REMOTE_PROCESS_BTXD unset",
+        "HONEST_NOT_RUN live CEX IdP",
+        "HONEST_NOT_RUN live HSM",
+        "HONEST_NOT_RUN second cmake tree forbidden by disk policy",
+        "HONEST_NOT_RUN 1000 real downloaders; 1000 sockets NOT_RUN",
+        "HONEST_NOT_RUN 10m anti-entropy; did not allocate 10m rows",
+        "HONEST_NOT_RUN 20-buyer lab",
+        "HONEST_NOT_RUN mixed 0.34.7 helper; BTX_MIXED_0347 unset"
+      ]
+    }
+  ],
+  "owned_processes_before_cleanup": [],
+  "owned_processes_after_execution": [],
+  "process_quiescence_confirmed": true,
+  "readonly_cleanup": [],
+  "owned_data_removed": true,
+  "failures": [
+    {
+      "stage": "run",
+      "type": "AssertionError",
+      "error": "Relevant native control failed"
+    }
+  ],
+  "checkpoint_capture": {
+    "files": 10779,
+    "bytes": 1736435069,
+    "manifest_sha256": "539f4844f8c3475cbd1f1bd3e51acce80e793239dd070ed993c43095821a35d5"
+  },
+  "objects_retained": 3844,
+  "checkpoint_sha256": "539f4844f8c3475cbd1f1bd3e51acce80e793239dd070ed993c43095821a35d5",
+  "checkpoint_key": "acda7e6df09d38a2363212e58b4145d1641ed14cfdcc98c6179f83874909534f"
+}

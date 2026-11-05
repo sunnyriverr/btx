@@ -1,0 +1,191 @@
+{
+  "utc": "2026-11-05T20:56:15.029460+00:00",
+  "verdict": "PASS for scoped five-fixture Windows batch plus necessary internal document byte-mode correction",
+  "accepted_base": "666673a3153225ba264c7870e0e82e354df86765",
+  "prerequisites": [
+    411,
+    415,
+    417,
+    418
+  ],
+  "fixture_source": "f410081e1d4a377ba5ff9147a77736c7221ce155",
+  "final_integrated_source": "0bc4625be266d9cf0975d85ea9a4aed4e325c7a9",
+  "final_tree": "878cac603455b1cc23e6b88215b50123750f962d",
+  "platform": "Native hosted Windows Server2025 x64; clang-cl20.1.8/MSVC14.51.36231/SDK10.0.26100; Modelnet/wallet/tests/ZMQ ON, GUI OFF",
+  "before_compile_evidence": "TASK/baseline-reuse.json",
+  "compile": {
+    "first_run": 42104359495,
+    "planned_steps": 16,
+    "five_maintained_objects_and_real_cli_link": true,
+    "doc_run": 42106421481,
+    "doc_planned_steps": 11,
+    "all_fixture_objects_identical_across_doc_fix": {
+      "modelnet_ahp_doc_tests.cpp": "32ca308ea7684948606ebfaec4bfb3365b0503e4c376335458b076a224082a2a",
+      "modelnet_pq1_worker_share_tests.cpp": "671e72ea9c29c04b50dfbdc3caf901e23711eb5e270448180b4af4fec6219874",
+      "modelnet_records_cache_tests.cpp": "ab87b91d9c421d38f4b6174dc6c0643b2611032fbd9940118766ea4696c5bd74",
+      "modelnet_retrieve_peer_reply_tests.cpp": "f332b2a6826cff003151be3581472f15c7a104af7945c31fed17696bdcfe1667",
+      "modelnet_unique_todo_tests.cpp": "4f7246f0bf652dee41b1805eb86b1c12afc15eb6408cb665fa9924f396c0fa53"
+    }
+  },
+  "runtime_qualification": {
+    "first_run": 42104359495,
+    "first_source": "f410081e",
+    "passing_groups_reused": [
+      {
+        "suite": "modelnet_retrieve_peer_reply_tests",
+        "exit": 0,
+        "cases_started": 1,
+        "assertions": [
+          3,
+          3
+        ],
+        "passed": true,
+        "owned_processes_after_suite": [],
+        "applicability_messages": [
+          "Windows helper Unix RPC is unsupported; the three Unix retrieval integration cases are not run"
+        ]
+      },
+      {
+        "suite": "modelnet_records_cache_tests",
+        "exit": 0,
+        "cases_started": 5,
+        "assertions": [
+          5278,
+          5278
+        ],
+        "passed": true,
+        "owned_processes_after_suite": [],
+        "applicability_messages": []
+      },
+      {
+        "suite": "modelnet_pq1_worker_share_tests",
+        "exit": 0,
+        "cases_started": 1,
+        "assertions": [
+          14245,
+          14245
+        ],
+        "passed": true,
+        "owned_processes_after_suite": [],
+        "applicability_messages": []
+      },
+      {
+        "suite": "modelnet_unique_todo_tests",
+        "exit": 0,
+        "cases_started": 34,
+        "assertions": [
+          492,
+          492
+        ],
+        "passed": true,
+        "owned_processes_after_suite": [],
+        "applicability_messages": [
+          "HONEST_NOT_RUN F2 wallet-signed mandate; wallet_sign stays false",
+          "HONEST_NOT_RUN -modelindex as a product flag; helper/modeld reject",
+          "HONEST_NOT_RUN BUILD_GUI=ON / Qt journeys; this tree stays BUILD_GUI=OFF",
+          "Sparse fixture logical=429496729600 allocated=0 bytes",
+          "HONEST_NOT_RUN 400 GiB object I/O (sparse addressing is not payload I/O)",
+          "CUDA unique probe: llama.cpp present=false not installed; adapter code present, hardware/runtime NOT_RUN until probe succeeds",
+          "CUDA unique probe: vLLM present=false not installed; adapter code present, hardware/runtime NOT_RUN until probe succeeds",
+          "ROCm unique probe: llama.cpp not installed; adapter code present, hardware/runtime NOT_RUN until probe succeeds",
+          "ROCm unique probe: vLLM not installed; adapter code present, hardware/runtime NOT_RUN until probe succeeds",
+          "Metal unique probe: llama.cpp not installed; adapter code present, hardware/runtime NOT_RUN until probe succeeds",
+          "Metal unique probe: MLX not installed; adapter code present, hardware/runtime NOT_RUN until probe succeeds",
+          "NIXL unique probe: {\"stub\":false,\"portable_host_buffer\":true,\"automatic_spend_atoms\":0,\"nixl\":false,\"gds\":false,\"nixl_status\":\"NOT_RUN\",\"gds_status\":\"NOT_RUN\",\"nixl_detail\":\"NOT_RUN: BTX_NIXL_LIB unset\",\"gds_detail\":\"NOT_RUN: BTX_CUFILE_LIB unset\",\"assurance\":\"HOST_BUFFER\"}",
+          "GDS unique probe: {\"stub\":false,\"portable_host_buffer\":true,\"automatic_spend_atoms\":0,\"nixl\":false,\"gds\":false,\"nixl_status\":\"NOT_RUN\",\"gds_status\":\"NOT_RUN\",\"nixl_detail\":\"NOT_RUN: BTX_NIXL_LIB unset\",\"gds_detail\":\"NOT_RUN: BTX_CUFILE_LIB unset\",\"assurance\":\"HOST_BUFFER\"}",
+          "CXL unique probe cxl=false NOT_RUN",
+          "HONEST_NOT_RUN env-gated unique_todo_remote_process: BTX_REMOTE_PROCESS_BTXD unset",
+          "HONEST_NOT_RUN live CEX IdP",
+          "HONEST_NOT_RUN live HSM",
+          "HONEST_NOT_RUN second cmake tree forbidden by disk policy",
+          "HONEST_NOT_RUN 1000 real downloaders; 1000 sockets NOT_RUN",
+          "HONEST_NOT_RUN 10m anti-entropy; did not allocate 10m rows",
+          "HONEST_NOT_RUN 20-buyer lab",
+          "HONEST_NOT_RUN mixed 0.34.7 helper; BTX_MIXED_0347 unset"
+        ]
+      }
+    ],
+    "first_ahp_failure": {
+      "suite": "modelnet_ahp_doc_tests",
+      "exit": 201,
+      "cases_started": 17,
+      "assertions": [
+        399,
+        400
+      ],
+      "passed": false,
+      "owned_processes_after_suite": [],
+      "applicability_messages": []
+    },
+    "second_run": 42106421481,
+    "second_source": "0bc4625b",
+    "same_ahp_suite_after": {
+      "suite": "modelnet_ahp_doc_tests",
+      "exit": 0,
+      "cases_started": 17,
+      "assertions": [
+        400,
+        400
+      ],
+      "passed": true,
+      "owned_processes_after_suite": [],
+      "applicability_messages": []
+    },
+    "qualified_distinct_cases": 58,
+    "qualified_assertions": 20418,
+    "not_a_single_all58_run": true,
+    "unix_live_helper_cases_not_run": 13,
+    "posix_bodies_preserved": true
+  },
+  "doc_cause": {
+    "before_raw_excerpt_repr": "b'has failed [# Example\\r\\r\\nfixture readme\\r\\r\\n != # Example\\r\\nfixture readme\\r\\n]\\r\\nD:\\\\a\\\\btx\\\\btx\\\\btx\\\\src\\\\test\\\\modelnet_ahp_doc_tests.cpp(954): Leavin'",
+    "product_delta": [
+      "src/modelnet/package_documents.cpp"
+    ],
+    "test_assertions_changed_by_product_fix": false,
+    "windows_only_binary_flag": true,
+    "old_exclusive_nofollow_permissions_path_checks_preserved": true,
+    "current_caller_scope": "Source trace finds only existing tests; not a demonstrated live-user/CLI extraction outage."
+  },
+  "sparse": {
+    "logical_bytes": 429496729600,
+    "allocated_bytes": 0,
+    "file_deleted_and_runtime_data_removed": true,
+    "not_payload_io": true
+  },
+  "artifacts": [
+    {
+      "run": 42104359495,
+      "archive_sha256": "9633c24f205d2fb252bbc3ed1bc03cd02ba33d89f69187a34b518d15c7e7d384",
+      "archive_bytes": 5386701
+    },
+    {
+      "run": 42106421481,
+      "archive_sha256": "1878534f4bdb1828547b16e69a4ef2398f956d767eb64f1ba3668cdd9bdce7af",
+      "archive_bytes": 5382248
+    }
+  ],
+  "cleanup": {
+    "both_jobs_complete": true,
+    "no_budget_stop_or_forced_kill": true,
+    "no_owned_survivors": true,
+    "owned_data_removed": true,
+    "no_readonly_fallback": true
+  },
+  "cache": {
+    "input_original": 10059998657,
+    "input_document": 10082750892,
+    "objects_final": 3844,
+    "checkpoint_sha256": "90b659626f0442a092aebc7b91300499301598cb7f46761b4c8e5849959b2b49",
+    "key": "btx356-unit-fixtures-v1-9154a7a9d2cfafda6b0054bb34c6228d7f242f9e3bef807fed760f7c0e44e4c8-42106421481",
+    "source": "0bc4625be266d9cf0975d85ea9a4aed4e325c7a9"
+  },
+  "scope_limits": [
+    "Scoped component executable uses five maintained object commands and original library closure; fulltest_btx not linked/run.",
+    "Four passing groups reused by exact fixture objects and isolated extraction function delta; only same17AHP rerun.",
+    "No POSIX suite/MinGW/Windows11interactive/device/mainnet/release qualification.",
+    "Existing hardware, live custody/IdP, scale and mixed-binary NOT_RUN messages remain NOT_RUN.",
+    "All tests use disposable hosted data; no wallet/production access or version/consensus rule change."
+  ],
+  "publication": "User no-posting hold remains"
+}
