@@ -1,4 +1,4 @@
-name: Native Windows accepted integration
+name: Resumable native Windows build and units
 on:
   push:
     branches: [codex/ci-windows-root-configure]
@@ -8,7 +8,7 @@ jobs:
   configure:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: windows-2025
-    timeout-minutes: 35
+    timeout-minutes: 200
     env:
       BTX_NATIVE_ROOT: D:\btx-native-035
     steps:
@@ -75,7 +75,29 @@ jobs:
           set "_CL_="
           python controls/contrib/devtools/windows-root-configure/runner.py vcpkg
           exit /b %errorlevel%
-      - name: Build accepted native node and maintained unit target
+      - name: Fingerprint source and native build profile
+        id: project_profile
+        shell: cmd
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
+          if not defined BTX_VS exit /b 2
+          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+          if errorlevel 1 exit /b %errorlevel%
+          set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
+          set "CL="
+          set "_CL_="
+          python controls/contrib/devtools/windows-root-configure/runner.py profile
+          exit /b %errorlevel%
+      - name: Restore exact source and profile project objects
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
+        with:
+          path: |
+            D:\btx-native-035\project-build
+            D:\btx-native-035\vcpkg-installed
+          key: btx356-project-v2-${{ steps.project_profile.outputs.key }}-${{ github.run_id }}
+          restore-keys: |
+            btx356-project-v2-${{ steps.project_profile.outputs.key }}-
+      - name: Configure exact accepted native project
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -87,10 +109,68 @@ jobs:
           set "_CL_="
           python controls/contrib/devtools/windows-root-configure/runner.py configure
           exit /b %errorlevel%
+      - name: Build native node with Modelnet enabled
+        shell: cmd
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
+          if not defined BTX_VS exit /b 2
+          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+          if errorlevel 1 exit /b %errorlevel%
+          set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
+          set "CL="
+          set "_CL_="
+          python controls/contrib/devtools/windows-root-configure/runner.py node
+          exit /b %errorlevel%
+      - name: Build maintained test_btx target
+        shell: cmd
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
+          if not defined BTX_VS exit /b 2
+          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+          if errorlevel 1 exit /b %errorlevel%
+          set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
+          set "CL="
+          set "_CL_="
+          python controls/contrib/devtools/windows-root-configure/runner.py unitbuild
+          exit /b %errorlevel%
+      - name: Run maintained unit tests
+        shell: cmd
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
+          if not defined BTX_VS exit /b 2
+          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+          if errorlevel 1 exit /b %errorlevel%
+          set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
+          set "CL="
+          set "_CL_="
+          python controls/contrib/devtools/windows-root-configure/runner.py units
+          exit /b %errorlevel%
+      - name: Checkpoint compiled objects even after a failed stage
+        if: always()
+        id: retention
+        shell: cmd
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
+          if not defined BTX_VS exit /b 2
+          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+          if errorlevel 1 exit /b %errorlevel%
+          set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
+          set "CL="
+          set "_CL_="
+          python controls/contrib/devtools/windows-root-configure/runner.py retain
+          exit /b %errorlevel%
+      - name: Preserve resumable project objects
+        if: always() && steps.retention.outputs.checkpoint_valid == 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
+        with:
+          path: |
+            D:\btx-native-035\project-build
+            D:\btx-native-035\vcpkg-installed
+          key: btx356-project-v2-${{ steps.project_profile.outputs.key }}-${{ github.run_id }}
       - name: Preserve original diagnostic records
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
-          name: native-windows-accepted-integration-records
+          name: native-windows-resumable-integration-records
           path: D:\btx-native-035\evidence\
           retention-days: 14

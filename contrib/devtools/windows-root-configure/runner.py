@@ -1,5 +1,6 @@
 from pathlib import Path
 import os,sys,json,subprocess,hashlib,datetime,time,urllib.request,shutil
+import checkpoint
 P=Path(__file__).resolve().parent
 BASE='666673a3153225ba264c7870e0e82e354df86765'
 VCPKG_COMMIT='afa249f12f52ed8a3b919f195495ba8b330288d1'
@@ -12,24 +13,25 @@ def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def save():
  result['updated_utc']=datetime.datetime.now(datetime.timezone.utc).isoformat();STATE.write_text(json.dumps(result,indent=2)+'\n')
 def run(label,command,cwd=ROOT,timeout=1800):
- remaining=25*60-(time.time()-result['job_started_epoch'])
+ remaining=180*60-(time.time()-result['job_started_epoch'])
  if remaining<30:raise TimeoutError('Total job budget exhausted before '+label)
  timeout=min(timeout,int(remaining))
  log=E/(label+'.log');start=time.monotonic();timed_out=False;result['active_command']=label;save()
  with log.open('wb')as out:
-  proc=subprocess.Popen(command,cwd=cwd,stdout=out,stderr=subprocess.STDOUT)
+  proc=subprocess.Popen(command,cwd=cwd,stdout=out,stderr=subprocess.STDOUT);result['process_active']=True;save()
   while proc.poll()is None:
    if time.monotonic()-start>timeout:
     cleanup=subprocess.run(['taskkill','/PID',str(proc.pid),'/T','/F'],capture_output=True)
-    (E/(label+'-timeout-cleanup.log')).write_bytes(cleanup.stdout+cleanup.stderr)
+    (E/(label+'-timeout-cleanup.log')).write_bytes(cleanup.stdout+cleanup.stderr);result['cleanup_confirmed']=cleanup.returncode==0
     proc.wait(timeout=30);timed_out=True;break
    if label in ['native-daemon-build','native-unit-build','native-unit-run']:
     resources=host_resources();elapsed=int(time.monotonic()-start)
-    if resources['disk_free_bytes']<2*1024**3:
-     cleanup=subprocess.run(['taskkill','/PID',str(proc.pid),'/T','/F'],capture_output=True);(E/(label+'-disk-stop.log')).write_bytes(cleanup.stdout+cleanup.stderr);proc.wait(timeout=30);result['resource_stop']='Hosted disk below2GiB';break
+    if resources['disk_free_bytes']<2*1024**3 or resources['available_ram_bytes']<1024**3:
+     cleanup=subprocess.run(['taskkill','/PID',str(proc.pid),'/T','/F'],capture_output=True);(E/(label+'-disk-stop.log')).write_bytes(cleanup.stdout+cleanup.stderr);result['cleanup_confirmed']=cleanup.returncode==0;proc.wait(timeout=30);result['resource_stop']='Hosted disk below2GiB or available RAM below1GiB';break
     if elapsed//30>result.get('last_progress_bucket',-1):
      result['last_progress_bucket']=elapsed//30;result.setdefault('build_resource_samples',[]).append({'seconds':elapsed,**resources});save();print('Daemon build elapsed',elapsed,'seconds; free disk',resources['disk_free_bytes'],'available RAM',resources['available_ram_bytes'],flush=True)
    time.sleep(2)
+ result['process_active']=False;result['active_command']=None
  result['commands'].append({'label':label,'command':command,'cwd':str(cwd),'exit':proc.returncode,'seconds':round(time.monotonic()-start,2),'timed_out':timed_out,'log_sha256':sha(log)});save();print(label,proc.returncode,log.read_text(errors='replace')[-6500:],flush=True)
  if result.get('resource_stop'):raise RuntimeError('Terminal disk stop')
  if timed_out:raise TimeoutError(label+' timed out; owned process tree terminated and log retained')
@@ -89,71 +91,72 @@ def vcpkg():
  if promisor.stdout.strip().lower()=='true':raise RuntimeError('vcpkg still has partial-clone lazy fetching')
  for oid in ['8ed2f86ee404263f5aa1f72f8f4f13ee44262b81','937a2198387cb5c913e4feea170652651dd756ba']:
   need('vcpkg-historical-blob-'+oid[:8],['git','-C',str(tool),'cat-file','-e',oid],timeout=30)
+def configure_args():
+ prefix=ROOT/'openssl-3.5.4-static'
+ return ['cmake','--debug-find-pkg=OpenSSL','--preset','windows-clangcl-static','-S',str(SOURCE),'-B',str(ROOT/'project-build'),'-DBUILD_TESTS=ON','-DWITH_MODELNET=ON','-DVCPKG_MANIFEST_NO_DEFAULT_FEATURES=ON','-DVCPKG_MANIFEST_FEATURES=wallet;tests;zeromq','-DVCPKG_INSTALLED_DIR='+str(ROOT/'vcpkg-installed'),'-DOPENSSL_ROOT_DIR='+str(prefix),'-DOPENSSL_USE_STATIC_LIBS=ON','-DOPENSSL_MSVC_STATIC_RT=ON','-DOPENSSL_INCLUDE_DIR='+str(prefix/'include'),'-DOPENSSL_SSL_LIBRARY='+str(prefix/'lib/libssl.lib'),'-DOPENSSL_CRYPTO_LIBRARY='+str(prefix/'lib/libcrypto.lib'),'-DCMAKE_EXPORT_COMPILE_COMMANDS=ON']
+def identity():
+ return {'source':BASE,'tools':{n:{'path':shutil.which(n),'sha256':sha(Path(shutil.which(n)))} for n in ['clang-cl','cl','cmake','ninja']},'args':configure_args(),'environment':{k:os.environ.get(k) for k in ['ImageVersion','VCToolsVersion','WindowsSDKVersion','INCLUDE','LIB','LIBPATH','CL','_CL_']},'controls':{f:sha(P/f) for f in ['runner.py','checkpoint.py','checkpoint-selftest.py','dependency-identity.json']},'openssl_files':json.loads((P/'dependency-identity.json').read_text())['openssl_files']}
+def profile():
+ need('checkpoint-selftest',[sys.executable,str(P/'checkpoint-selftest.py')],ROOT,60)
+ result['profile']=identity();result['checkpoint_key']=hashlib.sha256(json.dumps(result['profile'],sort_keys=True).encode()).hexdigest()
+ with open(os.environ['GITHUB_OUTPUT'],'a',encoding='utf-8') as f:f.write('key='+result['checkpoint_key']+'\n')
 def configure():
- tool=ROOT/'vcpkg';prefix=ROOT/'openssl-3.5.4-static';build=ROOT/'project-build'
- os.environ.update(VCPKG_ROOT=str(tool),VCPKG_DISABLE_METRICS='1',VCPKG_MAX_CONCURRENCY='2',VCPKG_BINARY_SOURCES='clear;files,'+str(ROOT/'binary-cache')+',readwrite');(ROOT/'binary-cache').mkdir(exist_ok=True)
- args=['cmake','--debug-find-pkg=OpenSSL','--preset','windows-clangcl-static','-S',str(SOURCE),'-B',str(build),'-DBUILD_TESTS=ON','-DWITH_MODELNET=ON','-DVCPKG_MANIFEST_NO_DEFAULT_FEATURES=ON','-DVCPKG_MANIFEST_FEATURES=wallet;tests;zeromq','-DVCPKG_INSTALLED_DIR='+str(ROOT/'vcpkg-installed'),'-DOPENSSL_ROOT_DIR='+str(prefix),'-DOPENSSL_USE_STATIC_LIBS=ON','-DOPENSSL_MSVC_STATIC_RT=ON','-DOPENSSL_INCLUDE_DIR='+str(prefix/'include'),'-DOPENSSL_SSL_LIBRARY='+str(prefix/'lib/libssl.lib'),'-DOPENSSL_CRYPTO_LIBRARY='+str(prefix/'lib/libcrypto.lib'),'-DCMAKE_EXPORT_COMPILE_COMMANDS=ON']
- code=run('root-configure',args,SOURCE,1800)
- for f in ['CMakeCache.txt','CMakeFiles/CMakeConfigureLog.yaml','vcpkg-manifest-install.log','compile_commands.json']:
-  if(build/f).exists():shutil.copyfile(build/f,E/Path(f).name)
- result['configure_exit']=code
- if code:result.update(status='BLOCKED_CONFIGURE',first_failed_stage='actual_root_configure');return
- cache=(build/'CMakeCache.txt').read_text()
- for setting in ['WITH_MODELNET:BOOL=ON','BUILD_TESTS:BOOL=ON','ENABLE_WALLET:BOOL=ON']:
-  if setting not in cache:raise RuntimeError('Required integrated profile absent: '+setting)
- need('generated-targets',['ninja','-C',str(build),'-t','targets','all']);targets=(E/'generated-targets.log').read_text(errors='replace')
- if 'bin/btxd.exe:' not in targets or 'btxd:' not in targets:raise RuntimeError('real generated daemon target absent')
- resources=host_resources();result['before_daemon_resources']=resources;save()
- if resources['disk_free_bytes']<6*1024**3:raise RuntimeError('Insufficient hosted disk before daemon build; require6GiB')
- result['whole_node_build_run']=True;result['target']='btxd';save()
- code=run('native-daemon-build',['cmake','--build',str(build),'--target','btxd','--verbose','--','-j','2','-k','1'],SOURCE,1800)
- result['daemon_build_exit']=code
- need('daemon-target-dependencies',['ninja','-C',str(build),'-t','query','bin/btxd.exe'])
- result['after_daemon_resources']=host_resources()
- if result.get('resource_stop'):result.update(status='BLOCKED_RESOURCE',first_failed_stage='daemon_resource_bound');return
- if code:
-  result.update(status='BLOCKED_DAEMON_BUILD',first_failed_stage='native_daemon_build');return
- exe=build/'bin/btxd.exe'
- if not exe.exists():raise RuntimeError('daemon command succeeded without executable')
- result.update(daemon_executable_sha256=sha(exe),daemon_executable_bytes=exe.stat().st_size)
- need('daemon-binary-imports',['dumpbin','/dependents',str(exe)])
- need('daemon-version',[str(exe),'-version'],SOURCE,30)
- result['executable_invoked']=True
- result['status']='DAEMON_BUILD_AND_LINK_PASS'
- code=run('native-unit-build',['cmake','--build',str(build),'--target','test_btx','--verbose','--','-j','2','-k','1'],SOURCE,600)
- result['unit_build_exit']=code
- if code:
-  result.update(status='BLOCKED_UNIT_BUILD',first_failed_stage='native_unit_build');return
- unit=build/'bin/test_btx.exe'
- if not unit.exists():raise RuntimeError('unit target success without executable')
- result['unit_binary_sha256']=sha(unit)
- need('unit-inventory',[str(unit),'--list_content'],SOURCE,60)
- result['unit_test_execution']=True
- code=run('native-unit-run',[str(unit),'--report_level=detailed','--catch_system_errors=yes'],SOURCE,600)
- result['unit_run_exit']=code
- result['status']='NATIVE_NODE_AND_UNITS_PASS' if code==0 else 'UNIT_FAILURES'
-
-
-def host_resources():
- import ctypes
- class MemoryStatus(ctypes.Structure):
-  _fields_=[('length',ctypes.c_uint32),('load',ctypes.c_uint32)]+[(x,ctypes.c_uint64) for x in ['total_phys','avail_phys','total_page','avail_page','total_virtual','avail_virtual','avail_extended']]
- memory=MemoryStatus();memory.length=ctypes.sizeof(memory);ok=ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(memory))
- return {'disk_free_bytes':shutil.disk_usage(ROOT).free,'cpus':os.cpu_count(),'total_ram_bytes':memory.total_phys if ok else None,'available_ram_bytes':memory.avail_phys if ok else None}
-
-stage=sys.argv[1]
+ if identity()!=result['profile']:raise RuntimeError('Profile changed before restore/configure')
+ catalog=json.loads((E/'before-source.json').read_text());result['checkpoint_restore']=checkpoint.restore(ROOT,SOURCE,result['profile'],catalog);save()
+ os.environ.update(VCPKG_ROOT=str(ROOT/'vcpkg'),VCPKG_DISABLE_METRICS='1',VCPKG_MAX_CONCURRENCY='2',VCPKG_BINARY_SOURCES='clear;files,'+str(ROOT/'binary-cache')+',readwrite')
+ code=run('root-configure',configure_args(),SOURCE,1800)
+ for f in ['CMakeCache.txt','CMakeFiles/CMakeConfigureLog.yaml','vcpkg-manifest-install.log','compile_commands.json','build.ninja','CMakeFiles/rules.ninja']:
+  if (ROOT/'project-build'/f).exists():shutil.copyfile(ROOT/'project-build'/f,E/Path(f).name)
+ if code:raise RuntimeError('Root configure failed')
+ cache=(ROOT/'project-build/CMakeCache.txt').read_text()
+ for flag in ['WITH_MODELNET:BOOL=ON','BUILD_TESTS:BOOL=ON','ENABLE_WALLET:BOOL=ON']:
+  if flag not in cache:raise RuntimeError('Required profile absent: '+flag)
+ result['status']='CONFIGURE_PASS'
+def node():
+ build=ROOT/'project-build';result['whole_node_build_run']=True;save()
+ code=run('native-daemon-build',['cmake','--build',str(build),'--target','btxd','--verbose','--','-j','4','-k','1'],SOURCE,3600);result['node_exit']=code
+ if code:result['status']='NODE_BUILD_FAILURE';raise RuntimeError('Node build failed; original compiler log retained')
+ exe=build/'bin/btxd.exe';result['node_binary_sha256']=sha(exe);need('node-imports',['dumpbin','/dependents',str(exe)],SOURCE,60);need('node-version',[str(exe),'-version'],SOURCE,30);result['status']='NODE_BUILD_PASS'
+def unitbuild():
+ build=ROOT/'project-build';result['unit_build_attempted']=True;save()
+ code=run('native-unit-build',['cmake','--build',str(build),'--target','test_btx','--verbose','--','-j','4','-k','1'],SOURCE,3600);result['unit_build_exit']=code
+ if code:result['status']='UNIT_BUILD_FAILURE';raise RuntimeError('Unit build failed; no workarounds applied')
+ exe=build/'bin/test_btx.exe';result['unit_binary_sha256']=sha(exe);need('unit-inventory',[str(exe),'--list_content'],SOURCE,60);result['status']='UNIT_BUILD_PASS'
+def units():
+ exe=ROOT/'project-build/bin/test_btx.exe'
+ if sha(exe)!=result['unit_binary_sha256']:raise RuntimeError('Unit binary changed')
+ result['unit_invocation_attempted']=True;save()
+ # CWD is the exact source root: maintained relative test vectors/scripts remain available.
+ code=run('native-unit-run',[str(exe),'--log_level=test_suite','--report_level=detailed','--catch_system_errors=yes'],SOURCE,3600);result['unit_exit']=code
+ import re
+ text=(E/'native-unit-run.log').read_text(errors='replace');m=re.search(r'Running (\d+) test cases?',text);result['unit_test_execution']=bool(m and int(m.group(1))>0)
+ result['status']='NODE_AND_UNITS_PASS' if code==0 and result['unit_test_execution'] else 'UNIT_RUN_FAILURE'
+ if result['status']!='NODE_AND_UNITS_PASS':raise RuntimeError('Unit tests did not pass; retain detailed result')
+def retain():
+ if result.get('process_active') or not result.get('cleanup_confirmed',True):raise RuntimeError('Process quiescence unconfirmed; checkpoint refused')
+ source_identity('retained');catalog=json.loads((E/'retained-source.json').read_text())
+ if catalog!=json.loads((E/'before-source.json').read_text()):raise RuntimeError('Source changed before checkpoint')
+ if not result.get('profile') or not (ROOT/'project-build/CMakeCache.txt').exists():raise RuntimeError('No configured profile to checkpoint')
+ result['checkpoint_capture']=checkpoint.capture(ROOT,SOURCE,result['profile'],catalog,{'status':result['status'],'node_exit':result.get('node_exit'),'unit_build_exit':result.get('unit_build_exit')})
+ marker=ROOT/'project-build/btx-checkpoint.json';shutil.copyfile(marker,E/'btx-checkpoint.json')
+ j=json.loads(marker.read_text());result['objects_retained']=sum(x.endswith('.obj') for x in j['files']);save()
+ with open(os.environ['GITHUB_OUTPUT'],'a',encoding='utf-8') as f:f.write('checkpoint_valid=true\n')
+stage=sys.argv[1];failed=False
 try:
- if result['status'].startswith('BLOCKED')or result['status']=='SETUP_ERROR' or 'ERROR' in result['stages'].values():print('Prior failure retained; skipping',stage)
- else:
-  result['stages'][stage]='RUNNING';save();{'openssl':openssl,'vcpkg':vcpkg,'configure':configure}[stage]();result['stages'][stage]='COMPLETE'
+ if stage!='retain' and 'ERROR' in result['stages'].values():raise RuntimeError('Prior stage failed; stopping continuation')
+ result['stages'][stage]='RUNNING';save();{'openssl':openssl,'vcpkg':vcpkg,'profile':profile,'configure':configure,'node':node,'unitbuild':unitbuild,'units':units,'retain':retain}[stage]();result['stages'][stage]='COMPLETE'
 except Exception as ex:
- label=result.get('active_command') or result.get('last_completed_command') or stage
- status=('BUILD_TIMEOUT' if label=='native-daemon-build' else 'COMMAND_TIMEOUT') if isinstance(ex,TimeoutError) else ('POST_LINK_INSPECTION_ERROR' if result.get('daemon_executable_sha256') else 'SETUP_ERROR')
- result.update(status=status,first_failed_stage=label,error=type(ex).__name__+': '+str(ex));result['stages'][stage]='ERROR';print(result['error'],flush=True)
+ failed=True;result['stages'][stage]='ERROR'
+ if stage=='retain':result['retention_error']=str(ex)
+ else:
+  if isinstance(ex,TimeoutError):result['status']='TIMEOUT_'+stage.upper()
+  elif result['status'] not in ['NODE_BUILD_FAILURE','UNIT_BUILD_FAILURE','UNIT_RUN_FAILURE']:result['status']='ERROR_'+stage.upper()
+  result['first_failed_stage']=stage;result['error']=type(ex).__name__+': '+str(ex)
+ print('Stage failed',stage,str(ex),flush=True)
 finally:
  try:
   source_identity('after');result['tracked_source_unchanged']=json.loads((E/'before-source.json').read_text())==json.loads((E/'after-source.json').read_text())
-  if not result['tracked_source_unchanged']:raise RuntimeError('tracked source identity changed')
- except Exception as ex:result['source_verification_error']=str(ex);result['status']='SETUP_ERROR'
- save();print('Recorded diagnostic status:',result['status'],flush=True)
-raise SystemExit('ERROR' in result['stages'].values() or result['status']=='SETUP_ERROR' or (stage=='configure' and result['status']!='NATIVE_NODE_AND_UNITS_PASS'))
+  if not result['tracked_source_unchanged']:raise RuntimeError('Tracked source changed')
+ except Exception as ex:failed=True;result['source_verification_error']=str(ex)
+ save();print('Result',stage,result['status'],flush=True)
+raise SystemExit(1 if failed else 0)
