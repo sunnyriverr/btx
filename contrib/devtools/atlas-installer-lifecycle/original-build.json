@@ -1,0 +1,1164 @@
+{
+  "platform": "Windows-2025Server-10.0.26100-SP0",
+  "commands": [
+    {
+      "args": [
+        "rustup",
+        "toolchain",
+        "install",
+        "1.95.0",
+        "--profile",
+        "minimal"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 11.66,
+      "log": "rust-install.log"
+    },
+    {
+      "args": [
+        "rustc",
+        "+1.95.0",
+        "-Vv"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 0.61,
+      "log": "rust-version.log"
+    },
+    {
+      "args": [
+        "cargo",
+        "+1.95.0",
+        "tauri",
+        "--version"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 0.59,
+      "log": "cli-version.log"
+    },
+    {
+      "args": [
+        "cargo",
+        "+1.95.0",
+        "tauri",
+        "build",
+        "--ci",
+        "--bundles",
+        "nsis",
+        "--",
+        "--locked"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\atlas-product\\gui\\atlas",
+      "exit": 0,
+      "seconds": 302.28,
+      "log": "package-build.log"
+    }
+  ],
+  "checks": [
+    {
+      "name": "native Windows",
+      "pass": true
+    },
+    {
+      "name": "fixture build.py",
+      "pass": true
+    },
+    {
+      "name": "fixture run.py",
+      "pass": true
+    },
+    {
+      "name": "fixture wait-installer.ps1",
+      "pass": true
+    },
+    {
+      "name": "fixture product-inputs.json",
+      "pass": true
+    },
+    {
+      "name": "exact product revision",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/.gitignore",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/AGENT_HANDOFF.md",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/ARCHITECTURE.md",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/BUILD.md",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/CMakeLists.txt",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/Cargo.lock",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/Cargo.toml",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/FEATURE_PARITY.md",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/LICENSE",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/NOTICE.md",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/OPERATION_CATALOG.md",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/README.md",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/SECURITY_ASSURANCE.md",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/VALIDATION.md",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/crates/atlas-core/Cargo.toml",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/crates/atlas-core/examples/qualify_regtest.rs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/crates/atlas-core/src/agent.rs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/crates/atlas-core/src/amount.rs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/crates/atlas-core/src/auth.rs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/crates/atlas-core/src/files.rs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/crates/atlas-core/src/journal.rs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/crates/atlas-core/src/lib.rs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/crates/atlas-core/src/links.rs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/crates/atlas-core/src/money.rs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/crates/atlas-core/src/operations.rs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/crates/atlas-core/src/rpc.rs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/crates/atlas-core/src/settings.rs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/crates/atlas-core/src/strict_json.rs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/crates/atlas-core/tests/rpc_contract.rs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/package.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/rust-toolchain.toml",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/schemas/node-settings.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/schemas/operations.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/Cargo.toml",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/build.rs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/capabilities/main.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/icons/128x128.png",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/icons/256x256.png",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/icons/32x32.png",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/icons/512x512.png",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/icons/icon.icns",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/icons/icon.ico",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/permissions/autogenerated/atlas_activity.toml",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/permissions/autogenerated/atlas_agent.toml",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/permissions/autogenerated/atlas_cancel.toml",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/permissions/autogenerated/atlas_config.toml",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/permissions/autogenerated/atlas_connect.toml",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/permissions/autogenerated/atlas_copy.toml",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/permissions/autogenerated/atlas_desktop.toml",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/permissions/autogenerated/atlas_document.toml",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/permissions/autogenerated/atlas_execute.toml",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/permissions/autogenerated/atlas_launch.toml",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/permissions/autogenerated/atlas_money.toml",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/permissions/autogenerated/atlas_neuronlab.toml",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/permissions/autogenerated/atlas_neuronlab_cancel.toml",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/permissions/autogenerated/atlas_pending_links.toml",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/permissions/autogenerated/atlas_prepare.toml",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/permissions/autogenerated/atlas_qr.toml",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/permissions/autogenerated/atlas_read.toml",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/permissions/autogenerated/atlas_status.toml",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/src/commands.rs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/src/host.rs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/src/main.rs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/src/neuronlab.rs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/src-tauri/tauri.conf.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/tests/benchmark.mjs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/tests/browser_smoke.py",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/tests/core.test.mjs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/tests/downloads-refresh.test.mjs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/tests/feed-sequence.test.mjs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/tests/model-status.test.mjs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/tests/network-qt.test.mjs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/tests/neuronlab.test.mjs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/tests/observe.test.mjs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/tests/openui.test.mjs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/tests/operation-prefill.test.mjs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/tests/presentation.test.mjs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/tests/qt-parity.test.mjs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/tests/qt-surface.test.mjs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/tests/remaining.test.mjs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/tests/scene-metrics.test.mjs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/tests/science-worker-shim.mjs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/tests/science.test.mjs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/tests/static-audit.mjs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/tests/wallet-qt.test.mjs",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/app.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/components/assistant.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/components/openui-panel.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/components/surfaces.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/components/ui.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/bridge.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/capture.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/catalog.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/graph.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/i18n.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/json.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/mempool.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/model-status.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/money.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/network.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/observe.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/openui-prompt.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/openui-schema.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/openui.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/qt-gaps.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/qt-surface.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/receive-history.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/settings-catalog.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/store.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/surface.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/uri.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/wallet-qt.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/core/workflow.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/fixtures/demo.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/index.html",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/az.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/az@latin.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/be.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/bg.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/bn.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/br.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/bs.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/ca.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/cmn.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/cs.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/cy.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/da.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/de_CH.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/el.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/en.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/eo.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/es.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/es_CL.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/es_CO.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/es_DO.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/es_SV.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/es_VE.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/et.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/eu.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/fi.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/fil.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/fr.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/ga.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/ga_IE.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/gl.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/gu.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/hak.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/he.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/hr.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/hu.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/id.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/is.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/it.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/ja.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/ka.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/kk.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/kk@latin.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/km.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/ko.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/ky.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/lt.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/lv.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/mg.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/mk.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/mn.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/ms.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/nb.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/pl.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/ps.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/pt.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/pt_BR.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/ro.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/ru.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/si.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/sk.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/sl.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/sm.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/sn.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/sq.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/sr.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/sr@ijekavianlatin.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/sr@latin.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/sv.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/szl.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/ta.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/te.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/th.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/tk.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/tl.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/tr.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/uk.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/ur.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/uz.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/uz@Cyrl.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/uz@Latn.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/yue.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/zh.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/zh_CN.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/zh_HK.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/zh_Hans.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/zh_Hant.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/locales/zh_TW.json",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/mark.svg",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/neuronlab/contract.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/neuronlab/recorded-fixture.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/neuronlab/scene.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/neuronlab/science/embedding-data.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/neuronlab/science/scatter-worker.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/neuronlab/science/scatter.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/neuronlab/science/view.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/neuronlab/style.css",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/neuronlab/view.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/render/math.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/render/scene.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/style.css",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/vendor/OPENUI-LICENSE.txt",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/vendor/openui-lang.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/views/atlas.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/views/model-panels.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/views/models.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/views/network.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/views/observations.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/views/operations.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/views/research.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/views/settings.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/views/wallet.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/views/work.js",
+      "pass": true
+    },
+    {
+      "name": "before gui/atlas/web/workers/layout.js",
+      "pass": true
+    },
+    {
+      "name": "offline config unchanged",
+      "pass": true
+    },
+    {
+      "name": "CLI archive digest",
+      "pass": true
+    },
+    {
+      "name": "CLI archive bounded",
+      "pass": true
+    },
+    {
+      "name": "CLI archive paths",
+      "pass": true
+    },
+    {
+      "name": "one CLI binary",
+      "pass": true
+    },
+    {
+      "name": "rust-install exit",
+      "pass": true
+    },
+    {
+      "name": "rust-version exit",
+      "pass": true
+    },
+    {
+      "name": "cli-version exit",
+      "pass": true
+    },
+    {
+      "name": "package-build exit",
+      "pass": true
+    },
+    {
+      "name": "one real NSIS bundle",
+      "pass": true
+    },
+    {
+      "name": "built Atlas executable exists",
+      "pass": true
+    },
+    {
+      "name": "one generated NSIS script",
+      "pass": true
+    },
+    {
+      "name": "generated per-user mode",
+      "pass": true
+    },
+    {
+      "name": "generated offline WebView",
+      "pass": true
+    },
+    {
+      "name": "generated real btx association",
+      "pass": true
+    },
+    {
+      "name": "generated unassociation",
+      "pass": true
+    },
+    {
+      "name": "generated installer.nsi",
+      "pass": true
+    },
+    {
+      "name": "generated FileAssociation.nsh",
+      "pass": true
+    },
+    {
+      "name": "generated utils.nsh",
+      "pass": true
+    },
+    {
+      "name": "actual dependency macro content unchanged",
+      "pass": false
+    }
+  ],
+  "errors": [
+    "RuntimeError('actual dependency macro content unchanged')"
+  ],
+  "inputs": {
+    "source": "e70c81f03b76c5e62712ebb51dfaac7d41295af2",
+    "cli": {
+      "url": "https://github.com/tauri-apps/tauri/releases/download/tauri-cli-v2.12.4/cargo-tauri-x86_64-pc-windows-msvc.zip",
+      "sha256": "3e8687fb184bd7f10ebd8642f7715f79f4a605c0694c142a21507e8a24dc0f8b"
+    },
+    "macro_sha256": "85ce72519d5461b5777f95123176b5536de163abd9a4742f9235453c4ddf56d8",
+    "fixtures": {
+      "build.py": "e0370e822eb3a032b7a18e282709961cfe63b0d996b957011f8a3ff118b69a94",
+      "run.py": "a239740ca91e2b46c4fb5c05cfbe791f29e5b58007b9b9a7b8c88cc8ec0ac1ca",
+      "wait-installer.ps1": "349c10cbf5928b3792212baf6e6566813cc1196714e04e598cd7748a96c481b6",
+      "product-inputs.json": "44f607f3db8249d43c31bc674f45f7ec1021214373f4834f1d85be135e721830"
+    }
+  },
+  "effective_source_config": {
+    "$schema": "https://schema.tauri.app/config/2",
+    "productName": "BTX Atlas",
+    "version": "0.1.0",
+    "identifier": "dev.btx.atlas",
+    "build": {
+      "frontendDist": "../web"
+    },
+    "app": {
+      "withGlobalTauri": true,
+      "windows": [],
+      "security": {
+        "csp": "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' ipc: http://ipc.localhost; worker-src 'self'; font-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'",
+        "capabilities": [
+          "main"
+        ],
+        "freezePrototype": true
+      }
+    },
+    "bundle": {
+      "active": true,
+      "targets": "all",
+      "createUpdaterArtifacts": false,
+      "shortDescription": "BTX spatial node, model and wallet workbench",
+      "category": "DeveloperTool",
+      "macOS": {
+        "minimumSystemVersion": "12.0"
+      },
+      "windows": {
+        "webviewInstallMode": {
+          "type": "offlineInstaller"
+        }
+      },
+      "fileAssociations": [
+        {
+          "ext": [
+            "btx"
+          ],
+          "name": "BTX Model Resource",
+          "description": "Preview a BTX model resource; never automatically execute or spend",
+          "role": "Viewer"
+        }
+      ],
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/256x256.png",
+        "icons/icon.ico",
+        "icons/icon.icns"
+      ]
+    },
+    "plugins": {
+      "deep-link": {
+        "desktop": {
+          "schemes": [
+            "btx",
+            "btx-p2p"
+          ]
+        }
+      }
+    }
+  },
+  "cli_binary_sha256": "3eee23d4513d032f422ad2d80a1ca502fad757d173318a9d23770784cac549c2",
+  "built_package_raw": {
+    "installer_path": "D:\\a\\btx\\btx\\atlas-package-output\\BTX Atlas_0.1.0_x64-setup.exe",
+    "installer_sha256": "8df000ba197a46417dac4887bf895928feda08c00bb7453057bac9586968a8ac",
+    "binary_path": "D:\\a\\_temp\\atlas-package-target\\release\\btx-atlas.exe",
+    "binary_sha256": "23b4a5e1f4bab7ce348db39bd19207b5680a1ba342cd24ffe9220acc5c2b2252"
+  },
+  "pass": false
+}

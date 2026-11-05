@@ -4,11 +4,12 @@ on:
     branches: [codex/ci-atlas-installer-lifecycle]
 permissions:
   contents: read
+  actions: read
 jobs:
   qualify:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: windows-2025
-    timeout-minutes: 40
+    timeout-minutes: 12
     steps:
       - name: Preserve source bytes
         shell: pwsh
@@ -20,19 +21,16 @@ jobs:
           sparse-checkout-cone-mode: false
           sparse-checkout: |
             /contrib/devtools/atlas-installer-lifecycle/
-      - name: Checkout exact current Atlas
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Reuse exact retained installer without rebuilding
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
-          repository: btxchain/btx
-          ref: e70c81f03b76c5e62712ebb51dfaac7d41295af2
-          path: atlas-product
-          persist-credentials: false
-          sparse-checkout-cone-mode: false
-          sparse-checkout: |
-            /gui/atlas/
-      - name: Build unchanged locked Atlas and offline NSIS package
+          name: atlas-installer-package
+          run-id: 41983707124
+          github-token: ${{ github.token }}
+          path: atlas-package-output
+      - name: Verify package identity and documented CRLF-only difference
         shell: pwsh
-        run: python contrib/devtools/atlas-installer-lifecycle/build.py
+        run: python contrib/devtools/atlas-installer-lifecycle/resume.py
       - name: Observe actual reinstall and uninstall workflows
         shell: pwsh
         run: python contrib/devtools/atlas-installer-lifecycle/run.py
@@ -43,12 +41,4 @@ jobs:
           name: atlas-installer-observations
           path: atlas-installer-results/
           if-no-files-found: error
-          retention-days: 14
-      - name: Retain the actual built installer
-        if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
-        with:
-          name: atlas-installer-package
-          path: atlas-package-output/*.exe
-          if-no-files-found: warn
           retention-days: 14

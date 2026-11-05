@@ -29,7 +29,10 @@ def remove(key):
 def default(key):
  t=tree(key);return None if t is None else t['values'].get('',{}).get('value')
 def main():
- build=json.loads((OUT/'build.json').read_text());check('qualified actual build',build['pass'])
+ if (OUT/'qualification.json').exists():
+  build=json.loads((OUT/'qualification.json').read_text());check('qualified retained package',build['qualified_for_lifecycle_test']);STATE['build_qualification']=build['facts']
+ else:
+  build=json.loads((OUT/'build.json').read_text());check('qualified actual build',build['pass'])
  package=build['package'];STATE['package']=package
  installer=Path(package['installer_path']);check('actual installer identity',sha(installer)==package['installer_sha256'])
  d=package['definitions'];check('actual product identities',d['PRODUCTNAME']=='BTX Atlas' and d['BUNDLEID']=='dev.btx.atlas' and d['INSTALLMODE']=='currentUser' and d['MANUFACTURER']=='btx')
