@@ -93,7 +93,7 @@ def pair():
     s.need('fixture-git-index-refresh',['git','update-index','--refresh'],30)
     s.need('fixture-apply-check',['git','apply','--check',str(patch)],30);s.need('fixture-apply',['git','apply','--index',str(patch)],30)
     tree=subprocess.check_output(['git','write-tree'],cwd=SOURCE,text=True).strip();assert tree==I['integration_tree'];env=os.environ.copy();env.update(I['commit_environment'])
-    commit=subprocess.check_output(['git','commit-tree',tree,'-p',BASE],input=I['integration_message'],cwd=SOURCE,text=True,env=env).strip();assert commit==TARGET
+    commit=subprocess.check_output(['git','commit-tree',tree,'-p',BASE],input=I['integration_message'].encode('utf-8'),cwd=SOURCE,env=env).decode('ascii').strip();assert commit==TARGET
     s.need('fixture-clean-integration',['git','reset','--hard',TARGET],30);R['source_catalog']=s.catalog(TARGET,'fixture-before')
     delta=subprocess.check_output(['git','diff','--name-only',BASE,TARGET],cwd=SOURCE,text=True).splitlines();assert delta==I['changed_paths'];R['source_delta']=delta;R['status']='CANDIDATE_PAIR';s.save()
     after=batch('fixture-after',rows+rows_for(['matmul_backend_capabilities_tests.cpp']));assert all(r['exit']==0 for r in after if r['file']in known or r['file']=='matmul_backend_capabilities_tests.cpp'),[(r['file'],r['exit'])for r in after if r['file']in known];assert metadata()==R['generated_inputs_before_pair']
