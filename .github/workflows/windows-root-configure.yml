@@ -1,4 +1,4 @@
-name: Incremental PR411 native Windows integration
+name: Known Windows unit fixture qualification
 on:
   push:
     branches: [codex/ci-windows-root-configure]
@@ -95,7 +95,7 @@ jobs:
           path: |
             D:\btx-native-035\project-build
             D:\btx-native-035\vcpkg-installed
-          key: btx356-project-v2-c5e688f330d725d795e28fb435e8dad20b663e03ff60eb53281fd9db1f479417-41945111088
+          key: btx356-pr411-v1-d7694be6c11d3d913c663f2080116f561d555de0e4d0404adec44bc5c653ac91-41968885601
       - name: Require existing exact-profile checkpoint for restore proof
         shell: pwsh
         env:
@@ -112,9 +112,9 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/resume-compatible.py
+          python controls/contrib/devtools/windows-root-configure/fixtures.py prepare
           exit /b %errorlevel%
-      - name: Build published candidate, maintained units and invoke units
+      - name: Prove known fixture compiler failures and corrected controls
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -124,7 +124,31 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/integration.py build
+          python controls/contrib/devtools/windows-root-configure/fixtures.py pair
+          exit /b %errorlevel%
+      - name: Resume maintained unit compilation after fixture qualification
+        shell: cmd
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
+          if not defined BTX_VS exit /b 2
+          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+          if errorlevel 1 exit /b %errorlevel%
+          set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
+          set "CL="
+          set "_CL_="
+          python controls/contrib/devtools/windows-root-configure/fixtures.py unitbuild
+          exit /b %errorlevel%
+      - name: Run maintained unpruned native unit target
+        shell: cmd
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
+          if not defined BTX_VS exit /b 2
+          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+          if errorlevel 1 exit /b %errorlevel%
+          set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
+          set "CL="
+          set "_CL_="
+          python controls/contrib/devtools/windows-root-configure/fixtures.py unitrun
           exit /b %errorlevel%
       - name: Checkpoint only the exact candidate after execution
         if: always()
@@ -138,7 +162,7 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/integration.py retain
+          python controls/contrib/devtools/windows-root-configure/fixtures.py retain
           exit /b %errorlevel%
       - name: Preserve candidate objects under separate source-profile key
         if: always() && steps.retention.outcome == 'success' && steps.retention.outputs.checkpoint_valid == 'true'
@@ -147,7 +171,7 @@ jobs:
           path: |
             D:\btx-native-035\project-build
             D:\btx-native-035\vcpkg-installed
-          key: btx356-pr411-v1-${{ steps.retention.outputs.checkpoint_key }}-${{ github.run_id }}
+          key: btx356-unit-fixtures-v1-${{ steps.retention.outputs.checkpoint_key }}-${{ github.run_id }}
       - name: Preserve original diagnostic records
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
