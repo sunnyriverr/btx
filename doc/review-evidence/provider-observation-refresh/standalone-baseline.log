@@ -1,0 +1,29 @@
+Running 1 test case...
+Entering test module "provider_refresh_component"
+/tmp/btx-session2-provider-refresh-fix/component.cpp(18): Entering test case "search_refreshes_signed_provider_observations"
+/tmp/btx-session2-provider-refresh-fix/component.cpp(102): error: in "search_refreshes_signed_provider_observations": check search["results"][0]["availability"]["providers_complete"].getInt<int>() == initially_complete ? 0 : 1 has failed [0 != 1]
+/tmp/btx-session2-provider-refresh-fix/component.cpp(105): error: in "search_refreshes_signed_provider_observations": check view["providers"][0]["complete"].get_bool() == !initially_complete has failed [false != true]
+/tmp/btx-session2-provider-refresh-fix/component.cpp(106): error: in "search_refreshes_signed_provider_observations": check view["providers"][0]["relayed"].get_bool() has failed
+/tmp/btx-session2-provider-refresh-fix/component.cpp(107): error: in "search_refreshes_signed_provider_observations": check !view["providers"][0]["direct"].get_bool() has failed
+/tmp/btx-session2-provider-refresh-fix/component.cpp(108): error: in "search_refreshes_signed_provider_observations": check rpc("getmodelavailability", id_params)["providers_complete"].getInt<int>() == initially_complete ? 0 : 1 has failed [0 != 1]
+/tmp/btx-session2-provider-refresh-fix/component.cpp(109): error: in "search_refreshes_signed_provider_observations": check rpc("getmodelpeercount", id_params)["complete"].getInt<int>() == initially_complete ? 0 : 1 has failed [0 != 1]
+/tmp/btx-session2-provider-refresh-fix/component.cpp(117): error: in "search_refreshes_signed_provider_observations": check rpc("getmodelproviders", id_params)["providers"][0]["complete"].get_bool() == !initially_complete has failed [false != true]
+/tmp/btx-session2-provider-refresh-fix/component.cpp(102): error: in "search_refreshes_signed_provider_observations": check search["results"][0]["availability"]["providers_complete"].getInt<int>() == initially_complete ? 0 : 1 has failed [1 != 0]
+/tmp/btx-session2-provider-refresh-fix/component.cpp(105): error: in "search_refreshes_signed_provider_observations": check view["providers"][0]["complete"].get_bool() == !initially_complete has failed [true != false]
+/tmp/btx-session2-provider-refresh-fix/component.cpp(106): error: in "search_refreshes_signed_provider_observations": check view["providers"][0]["relayed"].get_bool() has failed
+/tmp/btx-session2-provider-refresh-fix/component.cpp(107): error: in "search_refreshes_signed_provider_observations": check !view["providers"][0]["direct"].get_bool() has failed
+/tmp/btx-session2-provider-refresh-fix/component.cpp(108): error: in "search_refreshes_signed_provider_observations": check rpc("getmodelavailability", id_params)["providers_complete"].getInt<int>() == initially_complete ? 0 : 1 has failed [1 != 0]
+/tmp/btx-session2-provider-refresh-fix/component.cpp(109): error: in "search_refreshes_signed_provider_observations": check rpc("getmodelpeercount", id_params)["complete"].getInt<int>() == initially_complete ? 0 : 1 has failed [1 != 0]
+/tmp/btx-session2-provider-refresh-fix/component.cpp(117): error: in "search_refreshes_signed_provider_observations": check rpc("getmodelproviders", id_params)["providers"][0]["complete"].get_bool() == !initially_complete has failed [true != false]
+/tmp/btx-session2-provider-refresh-fix/component.cpp(18): Leaving test case "search_refreshes_signed_provider_observations"; testing time: 108093us
+Leaving test module "provider_refresh_component"; testing time: 108099us
+
+Test module "provider_refresh_component" has failed with:
+  1 test case out of 1 failed
+  88 assertions out of 102 passed
+  14 assertions out of 102 failed
+
+  Test case "search_refreshes_signed_provider_observations" has failed with:
+    88 assertions out of 102 passed
+    14 assertions out of 102 failed
+

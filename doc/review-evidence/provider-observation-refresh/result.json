@@ -1,0 +1,1459 @@
+{
+  "base": "5eb69ade93cf148edb693fa6dadbe54db9bccb17",
+  "scope": "native in-process helper plus pending413",
+  "commands": [
+    {
+      "label": "compile-regression",
+      "command": [
+        "/usr/bin/c++",
+        "-I/tmp/btx-session2-helper-restart-current/build/src",
+        "-I/tmp/btx-session2-helper-restart-current/source/src",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/univalue/include",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/libbitcoinpqc/include",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/leveldb/include",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/leveldb/helpers/memenv",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/secp256k1/include",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/crc32c/include",
+        "-include",
+        "cstdint",
+        "-O1",
+        "-std=c++20",
+        "-fPIE",
+        "-fno-extended-identifiers",
+        "-fdebug-prefix-map=/tmp/btx-session2-helper-restart-current/source/src=.",
+        "-fmacro-prefix-map=/tmp/btx-session2-helper-restart-current/source/src=.",
+        "-fstack-reuse=none",
+        "-Wall",
+        "-Wextra",
+        "-Wformat",
+        "-Wformat-security",
+        "-Wvla",
+        "-Wredundant-decls",
+        "-Wdate-time",
+        "-Wduplicated-branches",
+        "-Wduplicated-cond",
+        "-Wlogical-op",
+        "-Wimplicit-fallthrough",
+        "-Wbidi-chars=any",
+        "-Wundef",
+        "-Woverloaded-virtual",
+        "-Wsuggest-override",
+        "-Wno-unused-parameter",
+        "-U_FORTIFY_SOURCE",
+        "-D_FORTIFY_SOURCE=3",
+        "-Wstack-protector",
+        "-fstack-protector-all",
+        "-fstack-clash-protection",
+        "-mbranch-protection=standard",
+        "-fopenmp",
+        "-o",
+        "/tmp/btx-session2-provider-refresh-fix/component.o",
+        "-c",
+        "/tmp/btx-session2-provider-refresh-fix/component.cpp"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 2.01,
+      "free": 69217280
+    },
+    {
+      "label": "link-baseline-regression",
+      "command": [
+        "/bin/sh",
+        "-c",
+        "/usr/bin/c++ -include cstdint -O1 \"-Wl,--enable-new-dtags,-rpath,\\$ORIGIN/../lib\" -Wl,-z,stack-size=8388608 -fstack-reuse=none -fstack-protector-all -fstack-clash-protection -Wl,-z,relro -Wl,-z,now -Wl,-z,separate-code -fPIE -pie /tmp/btx-session2-provider-refresh-fix/component.o -o /tmp/btx-session2-provider-refresh-fix/component  -Wl,--start-group  lib/libbitcoin_modelnet.a  lib/libbitcoin_common.a  lib/libbitcoin_shielded.a  lib/libbitcoin_db.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a  -Wl,--end-group  /usr/lib/libssl.so  /usr/lib/libcrypto.so  lib/libbitcoin_common.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  /usr/lib/libgomp.so  /usr/lib/libpthread.a  lib/libbitcoin_db.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a -lboost_unit_test_framework -s"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.51,
+      "free": 48610304
+    },
+    {
+      "label": "baseline-regression",
+      "command": [
+        "/tmp/btx-session2-provider-refresh-fix/component",
+        "--log_level=test_suite",
+        "--report_level=detailed"
+      ],
+      "exit": 201,
+      "stop": null,
+      "seconds": 2.28,
+      "free": 48570368
+    },
+    {
+      "label": "compile-candidate-helper",
+      "command": [
+        "/usr/bin/c++",
+        "-DBTX_CR11_OPERATIONS_SHA384=\"f1db635725ed785d08a6cc493d77c3f2cc0c3e389fc26be821450d663d69cb3f51cf119975f9eed9f684be4a77896b01\"",
+        "-DBTX_CR11_SCHEMA_SHA384=\"3db7e38bf8c9d5ff2cf8280b8056fea39fc9b0b32ca99632ef97fd7f6e39c6cd34fd3afbc0c1ca15314328fc4003b399\"",
+        "-DBTX_CRL12_OPERATIONS_SHA384=\"c1d4f1107ef35af3bd34b55ef0437121d101bf0044f45cfabee7e40f4ff52bfe358acf11c56b68d8bc1fc032fe6287fa\"",
+        "-DBTX_CRL12_SCHEMA_SHA384=\"2473a9ea6e51eadb5c302f2e3c15f2612e1db0c05fb39a461b8412dc754839490cfc3cf116dcdf7ae15c5ea4c4889701\"",
+        "-I/tmp/btx-session2-helper-restart-current/build/src",
+        "-I/tmp/btx-session2-helper-restart-current/source/src",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/univalue/include",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/libbitcoinpqc/include",
+        "-include",
+        "cstdint",
+        "-O1",
+        "-std=c++20",
+        "-fPIC",
+        "-fno-extended-identifiers",
+        "-fdebug-prefix-map=/tmp/btx-session2-helper-restart-current/source/src=.",
+        "-fmacro-prefix-map=/tmp/btx-session2-helper-restart-current/source/src=.",
+        "-fstack-reuse=none",
+        "-Wall",
+        "-Wextra",
+        "-Wformat",
+        "-Wformat-security",
+        "-Wvla",
+        "-Wredundant-decls",
+        "-Wdate-time",
+        "-Wduplicated-branches",
+        "-Wduplicated-cond",
+        "-Wlogical-op",
+        "-Wimplicit-fallthrough",
+        "-Wbidi-chars=any",
+        "-Wundef",
+        "-Woverloaded-virtual",
+        "-Wsuggest-override",
+        "-Wno-unused-parameter",
+        "-U_FORTIFY_SOURCE",
+        "-D_FORTIFY_SOURCE=3",
+        "-Wstack-protector",
+        "-fstack-protector-all",
+        "-fstack-clash-protection",
+        "-mbranch-protection=standard",
+        "-fopenmp",
+        "-o",
+        "/tmp/btx-session2-provider-refresh-fix/helper.o",
+        "-c",
+        "/tmp/btx-session2-provider-refresh-fix/helper.cpp"
+      ],
+      "exit": 1,
+      "stop": null,
+      "seconds": 11.26,
+      "free": 69202944
+    },
+    {
+      "label": "compile-candidate-helper",
+      "command": [
+        "/usr/bin/c++",
+        "-DBTX_CR11_OPERATIONS_SHA384=\"f1db635725ed785d08a6cc493d77c3f2cc0c3e389fc26be821450d663d69cb3f51cf119975f9eed9f684be4a77896b01\"",
+        "-DBTX_CR11_SCHEMA_SHA384=\"3db7e38bf8c9d5ff2cf8280b8056fea39fc9b0b32ca99632ef97fd7f6e39c6cd34fd3afbc0c1ca15314328fc4003b399\"",
+        "-DBTX_CRL12_OPERATIONS_SHA384=\"c1d4f1107ef35af3bd34b55ef0437121d101bf0044f45cfabee7e40f4ff52bfe358acf11c56b68d8bc1fc032fe6287fa\"",
+        "-DBTX_CRL12_SCHEMA_SHA384=\"2473a9ea6e51eadb5c302f2e3c15f2612e1db0c05fb39a461b8412dc754839490cfc3cf116dcdf7ae15c5ea4c4889701\"",
+        "-I/tmp/btx-session2-helper-restart-current/build/src",
+        "-I/tmp/btx-session2-helper-restart-current/source/src",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/univalue/include",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/libbitcoinpqc/include",
+        "-include",
+        "cstdint",
+        "-O1",
+        "-std=c++20",
+        "-fPIC",
+        "-fno-extended-identifiers",
+        "-fdebug-prefix-map=/tmp/btx-session2-helper-restart-current/source/src=.",
+        "-fmacro-prefix-map=/tmp/btx-session2-helper-restart-current/source/src=.",
+        "-fstack-reuse=none",
+        "-Wall",
+        "-Wextra",
+        "-Wformat",
+        "-Wformat-security",
+        "-Wvla",
+        "-Wredundant-decls",
+        "-Wdate-time",
+        "-Wduplicated-branches",
+        "-Wduplicated-cond",
+        "-Wlogical-op",
+        "-Wimplicit-fallthrough",
+        "-Wbidi-chars=any",
+        "-Wundef",
+        "-Woverloaded-virtual",
+        "-Wsuggest-override",
+        "-Wno-unused-parameter",
+        "-U_FORTIFY_SOURCE",
+        "-D_FORTIFY_SOURCE=3",
+        "-Wstack-protector",
+        "-fstack-protector-all",
+        "-fstack-clash-protection",
+        "-mbranch-protection=standard",
+        "-fopenmp",
+        "-o",
+        "/tmp/btx-session2-provider-refresh-fix/helper.o",
+        "-c",
+        "/tmp/btx-session2-provider-refresh-fix/helper.cpp"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 17.56,
+      "free": 66118656
+    },
+    {
+      "label": "link-candidate-regression",
+      "command": [
+        "/bin/sh",
+        "-c",
+        "/usr/bin/c++ -include cstdint -O1 \"-Wl,--enable-new-dtags,-rpath,\\$ORIGIN/../lib\" -Wl,-z,stack-size=8388608 -fstack-reuse=none -fstack-protector-all -fstack-clash-protection -Wl,-z,relro -Wl,-z,now -Wl,-z,separate-code -fPIE -pie /tmp/btx-session2-provider-refresh-fix/component.o /tmp/btx-session2-provider-refresh-fix/helper.o -o /tmp/btx-session2-provider-refresh-fix/component  -Wl,--start-group  lib/libbitcoin_modelnet.a  lib/libbitcoin_common.a  lib/libbitcoin_shielded.a  lib/libbitcoin_db.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a  -Wl,--end-group  /usr/lib/libssl.so  /usr/lib/libcrypto.so  lib/libbitcoin_common.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  /usr/lib/libgomp.so  /usr/lib/libpthread.a  lib/libbitcoin_db.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a -lboost_unit_test_framework -s"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.5,
+      "free": 45514752
+    },
+    {
+      "label": "candidate-regression",
+      "command": [
+        "/tmp/btx-session2-provider-refresh-fix/component",
+        "--log_level=test_suite",
+        "--report_level=detailed"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 2.28,
+      "free": 45479936
+    },
+    {
+      "label": "compile-original-probe",
+      "command": [
+        "/usr/bin/c++",
+        "-I/tmp/btx-session2-helper-restart-current/build/src",
+        "-I/tmp/btx-session2-helper-restart-current/source/src",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/univalue/include",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/libbitcoinpqc/include",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/leveldb/include",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/leveldb/helpers/memenv",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/secp256k1/include",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/crc32c/include",
+        "-include",
+        "cstdint",
+        "-O1",
+        "-std=c++20",
+        "-fPIE",
+        "-fno-extended-identifiers",
+        "-fdebug-prefix-map=/tmp/btx-session2-helper-restart-current/source/src=.",
+        "-fmacro-prefix-map=/tmp/btx-session2-helper-restart-current/source/src=.",
+        "-fstack-reuse=none",
+        "-Wall",
+        "-Wextra",
+        "-Wformat",
+        "-Wformat-security",
+        "-Wvla",
+        "-Wredundant-decls",
+        "-Wdate-time",
+        "-Wduplicated-branches",
+        "-Wduplicated-cond",
+        "-Wlogical-op",
+        "-Wimplicit-fallthrough",
+        "-Wbidi-chars=any",
+        "-Wundef",
+        "-Woverloaded-virtual",
+        "-Wsuggest-override",
+        "-Wno-unused-parameter",
+        "-U_FORTIFY_SOURCE",
+        "-D_FORTIFY_SOURCE=3",
+        "-Wstack-protector",
+        "-fstack-protector-all",
+        "-fstack-clash-protection",
+        "-mbranch-protection=standard",
+        "-fopenmp",
+        "-o",
+        "/tmp/btx-session2-provider-refresh-fix/probe.o",
+        "-c",
+        "/tmp/btx-session2-provider-refresh-fix/probe.cpp"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 1.01,
+      "free": 66019328
+    },
+    {
+      "label": "link-candidate-original-probe",
+      "command": [
+        "/bin/sh",
+        "-c",
+        "/usr/bin/c++ -include cstdint -O1 \"-Wl,--enable-new-dtags,-rpath,\\$ORIGIN/../lib\" -Wl,-z,stack-size=8388608 -fstack-reuse=none -fstack-protector-all -fstack-clash-protection -Wl,-z,relro -Wl,-z,now -Wl,-z,separate-code -fPIE -pie /tmp/btx-session2-provider-refresh-fix/probe.o /tmp/btx-session2-provider-refresh-fix/helper.o -o /tmp/btx-session2-provider-refresh-fix/probe  -Wl,--start-group  lib/libbitcoin_modelnet.a  lib/libbitcoin_common.a  lib/libbitcoin_shielded.a  lib/libbitcoin_db.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a  -Wl,--end-group  /usr/lib/libssl.so  /usr/lib/libcrypto.so  lib/libbitcoin_common.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  /usr/lib/libgomp.so  /usr/lib/libpthread.a  lib/libbitcoin_db.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a -s"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.5,
+      "free": 45446144
+    },
+    {
+      "label": "complete_to_partial",
+      "command": [
+        "/tmp/btx-session2-provider-refresh-fix/probe",
+        "/tmp/btx-session2-provider-refresh-fix/complete_to_partial",
+        "/tmp/btx-session2-provider-refresh-fix/model.safetensors",
+        "1"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.26,
+      "free": 45413376
+    },
+    {
+      "label": "partial_to_complete",
+      "command": [
+        "/tmp/btx-session2-provider-refresh-fix/probe",
+        "/tmp/btx-session2-provider-refresh-fix/partial_to_complete",
+        "/tmp/btx-session2-provider-refresh-fix/model.safetensors",
+        "0"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.26,
+      "free": 45377536
+    },
+    {
+      "label": "compile413-integration",
+      "command": [
+        "/usr/bin/c++",
+        "-I/tmp/btx-session2-helper-restart-current/build/src",
+        "-I/tmp/btx-session2-helper-restart-current/source/src",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/univalue/include",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/libbitcoinpqc/include",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/leveldb/include",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/leveldb/helpers/memenv",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/secp256k1/include",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/crc32c/include",
+        "-include",
+        "cstdint",
+        "-O1",
+        "-std=c++20",
+        "-fPIE",
+        "-fno-extended-identifiers",
+        "-fdebug-prefix-map=/tmp/btx-session2-helper-restart-current/source/src=.",
+        "-fmacro-prefix-map=/tmp/btx-session2-helper-restart-current/source/src=.",
+        "-fstack-reuse=none",
+        "-Wall",
+        "-Wextra",
+        "-Wformat",
+        "-Wformat-security",
+        "-Wvla",
+        "-Wredundant-decls",
+        "-Wdate-time",
+        "-Wduplicated-branches",
+        "-Wduplicated-cond",
+        "-Wlogical-op",
+        "-Wimplicit-fallthrough",
+        "-Wbidi-chars=any",
+        "-Wundef",
+        "-Woverloaded-virtual",
+        "-Wsuggest-override",
+        "-Wno-unused-parameter",
+        "-U_FORTIFY_SOURCE",
+        "-D_FORTIFY_SOURCE=3",
+        "-Wstack-protector",
+        "-fstack-protector-all",
+        "-fstack-clash-protection",
+        "-mbranch-protection=standard",
+        "-fopenmp",
+        "-o",
+        "/tmp/btx-session2-provider-refresh-fix/integration.o",
+        "-c",
+        "/tmp/btx-session2-provider-refresh-fix/integration.cpp"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 1.75,
+      "free": 65842176
+    },
+    {
+      "label": "link413-integration",
+      "command": [
+        "/bin/sh",
+        "-c",
+        "/usr/bin/c++ -include cstdint -O1 \"-Wl,--enable-new-dtags,-rpath,\\$ORIGIN/../lib\" -Wl,-z,stack-size=8388608 -fstack-reuse=none -fstack-protector-all -fstack-clash-protection -Wl,-z,relro -Wl,-z,now -Wl,-z,separate-code -fPIE -pie /tmp/btx-session2-provider-refresh-fix/integration.o /tmp/btx-session2-provider-refresh-fix/helper.o -o /tmp/btx-session2-provider-refresh-fix/integration  -Wl,--start-group  lib/libbitcoin_modelnet.a  lib/libbitcoin_common.a  lib/libbitcoin_shielded.a  lib/libbitcoin_db.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a  -Wl,--end-group  /usr/lib/libssl.so  /usr/lib/libcrypto.so  lib/libbitcoin_common.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  /usr/lib/libgomp.so  /usr/lib/libpthread.a  lib/libbitcoin_db.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a -lboost_unit_test_framework -s"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.51,
+      "free": 45232128
+    },
+    {
+      "label": "candidate413-integration",
+      "command": [
+        "/tmp/btx-session2-provider-refresh-fix/integration",
+        "--log_level=test_suite",
+        "--report_level=detailed"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 2.28,
+      "free": 45196288
+    },
+    {
+      "label": "compile-final-regression",
+      "command": [
+        "/usr/bin/c++",
+        "-I/tmp/btx-session2-helper-restart-current/build/src",
+        "-I/tmp/btx-session2-helper-restart-current/source/src",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/univalue/include",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/libbitcoinpqc/include",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/leveldb/include",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/leveldb/helpers/memenv",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/secp256k1/include",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/crc32c/include",
+        "-include",
+        "cstdint",
+        "-O1",
+        "-std=c++20",
+        "-fPIE",
+        "-fno-extended-identifiers",
+        "-fdebug-prefix-map=/tmp/btx-session2-helper-restart-current/source/src=.",
+        "-fmacro-prefix-map=/tmp/btx-session2-helper-restart-current/source/src=.",
+        "-fstack-reuse=none",
+        "-Wall",
+        "-Wextra",
+        "-Wformat",
+        "-Wformat-security",
+        "-Wvla",
+        "-Wredundant-decls",
+        "-Wdate-time",
+        "-Wduplicated-branches",
+        "-Wduplicated-cond",
+        "-Wlogical-op",
+        "-Wimplicit-fallthrough",
+        "-Wbidi-chars=any",
+        "-Wundef",
+        "-Woverloaded-virtual",
+        "-Wsuggest-override",
+        "-Wno-unused-parameter",
+        "-U_FORTIFY_SOURCE",
+        "-D_FORTIFY_SOURCE=3",
+        "-Wstack-protector",
+        "-fstack-protector-all",
+        "-fstack-clash-protection",
+        "-mbranch-protection=standard",
+        "-fopenmp",
+        "-o",
+        "/tmp/btx-session2-provider-refresh-fix/component.o",
+        "-c",
+        "/tmp/btx-session2-provider-refresh-fix/component.cpp"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 1.75,
+      "free": 65806336
+    },
+    {
+      "label": "final-baseline-link",
+      "command": [
+        "/bin/sh",
+        "-c",
+        "/usr/bin/c++ -include cstdint -O1 \"-Wl,--enable-new-dtags,-rpath,\\$ORIGIN/../lib\" -Wl,-z,stack-size=8388608 -fstack-reuse=none -fstack-protector-all -fstack-clash-protection -Wl,-z,relro -Wl,-z,now -Wl,-z,separate-code -fPIE -pie /tmp/btx-session2-provider-refresh-fix/component.o -o /tmp/btx-session2-provider-refresh-fix/component  -Wl,--start-group  lib/libbitcoin_modelnet.a  lib/libbitcoin_common.a  lib/libbitcoin_shielded.a  lib/libbitcoin_db.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a  -Wl,--end-group  /usr/lib/libssl.so  /usr/lib/libcrypto.so  lib/libbitcoin_common.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  /usr/lib/libgomp.so  /usr/lib/libpthread.a  lib/libbitcoin_db.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a -lboost_unit_test_framework -s"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.51,
+      "free": 45201408
+    },
+    {
+      "label": "final-baseline",
+      "command": [
+        "/tmp/btx-session2-provider-refresh-fix/component",
+        "--log_level=test_suite",
+        "--report_level=detailed"
+      ],
+      "exit": 201,
+      "stop": null,
+      "seconds": 0.25,
+      "free": 45162496
+    },
+    {
+      "label": "final-candidate-link",
+      "command": [
+        "/bin/sh",
+        "-c",
+        "/usr/bin/c++ -include cstdint -O1 \"-Wl,--enable-new-dtags,-rpath,\\$ORIGIN/../lib\" -Wl,-z,stack-size=8388608 -fstack-reuse=none -fstack-protector-all -fstack-clash-protection -Wl,-z,relro -Wl,-z,now -Wl,-z,separate-code -fPIE -pie /tmp/btx-session2-provider-refresh-fix/component.o /tmp/btx-session2-provider-refresh-fix/helper.o -o /tmp/btx-session2-provider-refresh-fix/component  -Wl,--start-group  lib/libbitcoin_modelnet.a  lib/libbitcoin_common.a  lib/libbitcoin_shielded.a  lib/libbitcoin_db.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a  -Wl,--end-group  /usr/lib/libssl.so  /usr/lib/libcrypto.so  lib/libbitcoin_common.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  /usr/lib/libgomp.so  /usr/lib/libpthread.a  lib/libbitcoin_db.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a -lboost_unit_test_framework -s"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.51,
+      "free": 45197312
+    },
+    {
+      "label": "final-candidate",
+      "command": [
+        "/tmp/btx-session2-provider-refresh-fix/component",
+        "--log_level=test_suite",
+        "--report_level=detailed"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.26,
+      "free": 45159424
+    },
+    {
+      "label": "standalone-baseline-compile",
+      "command": [
+        "/usr/bin/c++",
+        "-DBTX_CR11_OPERATIONS_SHA384=\"f1db635725ed785d08a6cc493d77c3f2cc0c3e389fc26be821450d663d69cb3f51cf119975f9eed9f684be4a77896b01\"",
+        "-DBTX_CR11_SCHEMA_SHA384=\"3db7e38bf8c9d5ff2cf8280b8056fea39fc9b0b32ca99632ef97fd7f6e39c6cd34fd3afbc0c1ca15314328fc4003b399\"",
+        "-DBTX_CRL12_OPERATIONS_SHA384=\"c1d4f1107ef35af3bd34b55ef0437121d101bf0044f45cfabee7e40f4ff52bfe358acf11c56b68d8bc1fc032fe6287fa\"",
+        "-DBTX_CRL12_SCHEMA_SHA384=\"2473a9ea6e51eadb5c302f2e3c15f2612e1db0c05fb39a461b8412dc754839490cfc3cf116dcdf7ae15c5ea4c4889701\"",
+        "-I/tmp/btx-session2-helper-restart-current/build/src",
+        "-I/tmp/btx-session2-helper-restart-current/source/src",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/univalue/include",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/libbitcoinpqc/include",
+        "-include",
+        "cstdint",
+        "-O1",
+        "-std=c++20",
+        "-fPIC",
+        "-fno-extended-identifiers",
+        "-fdebug-prefix-map=/tmp/btx-session2-helper-restart-current/source/src=.",
+        "-fmacro-prefix-map=/tmp/btx-session2-helper-restart-current/source/src=.",
+        "-fstack-reuse=none",
+        "-Wall",
+        "-Wextra",
+        "-Wformat",
+        "-Wformat-security",
+        "-Wvla",
+        "-Wredundant-decls",
+        "-Wdate-time",
+        "-Wduplicated-branches",
+        "-Wduplicated-cond",
+        "-Wlogical-op",
+        "-Wimplicit-fallthrough",
+        "-Wbidi-chars=any",
+        "-Wundef",
+        "-Woverloaded-virtual",
+        "-Wsuggest-override",
+        "-Wno-unused-parameter",
+        "-U_FORTIFY_SOURCE",
+        "-D_FORTIFY_SOURCE=3",
+        "-Wstack-protector",
+        "-fstack-protector-all",
+        "-fstack-clash-protection",
+        "-mbranch-protection=standard",
+        "-fopenmp",
+        "-o",
+        "/tmp/btx-session2-provider-refresh-fix/helper.o",
+        "-c",
+        "/tmp/btx-session2-provider-refresh-fix/baseline-helper.cpp"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 12.78,
+      "free": 64667648
+    },
+    {
+      "label": "standalone-baseline-link",
+      "command": [
+        "/bin/sh",
+        "-c",
+        "/usr/bin/c++ -include cstdint -O1 \"-Wl,--enable-new-dtags,-rpath,\\$ORIGIN/../lib\" -Wl,-z,stack-size=8388608 -fstack-reuse=none -fstack-protector-all -fstack-clash-protection -Wl,-z,relro -Wl,-z,now -Wl,-z,separate-code -fPIE -pie /tmp/btx-session2-provider-refresh-fix/component.o /tmp/btx-session2-provider-refresh-fix/helper.o -o /tmp/btx-session2-provider-refresh-fix/component  -Wl,--start-group  lib/libbitcoin_modelnet.a  lib/libbitcoin_common.a  lib/libbitcoin_shielded.a  lib/libbitcoin_db.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a  -Wl,--end-group  /usr/lib/libssl.so  /usr/lib/libcrypto.so  lib/libbitcoin_common.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  /usr/lib/libgomp.so  /usr/lib/libpthread.a  lib/libbitcoin_db.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a -lboost_unit_test_framework -s"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.5,
+      "free": 44066816
+    },
+    {
+      "label": "standalone-baseline",
+      "command": [
+        "/tmp/btx-session2-provider-refresh-fix/component",
+        "--log_level=test_suite",
+        "--report_level=detailed"
+      ],
+      "exit": 201,
+      "stop": null,
+      "seconds": 0.26,
+      "free": 44027904
+    },
+    {
+      "label": "standalone-candidate-compile",
+      "command": [
+        "/usr/bin/c++",
+        "-DBTX_CR11_OPERATIONS_SHA384=\"f1db635725ed785d08a6cc493d77c3f2cc0c3e389fc26be821450d663d69cb3f51cf119975f9eed9f684be4a77896b01\"",
+        "-DBTX_CR11_SCHEMA_SHA384=\"3db7e38bf8c9d5ff2cf8280b8056fea39fc9b0b32ca99632ef97fd7f6e39c6cd34fd3afbc0c1ca15314328fc4003b399\"",
+        "-DBTX_CRL12_OPERATIONS_SHA384=\"c1d4f1107ef35af3bd34b55ef0437121d101bf0044f45cfabee7e40f4ff52bfe358acf11c56b68d8bc1fc032fe6287fa\"",
+        "-DBTX_CRL12_SCHEMA_SHA384=\"2473a9ea6e51eadb5c302f2e3c15f2612e1db0c05fb39a461b8412dc754839490cfc3cf116dcdf7ae15c5ea4c4889701\"",
+        "-I/tmp/btx-session2-helper-restart-current/build/src",
+        "-I/tmp/btx-session2-helper-restart-current/source/src",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/univalue/include",
+        "-I/tmp/btx-session2-helper-restart-current/source/src/libbitcoinpqc/include",
+        "-include",
+        "cstdint",
+        "-O1",
+        "-std=c++20",
+        "-fPIC",
+        "-fno-extended-identifiers",
+        "-fdebug-prefix-map=/tmp/btx-session2-helper-restart-current/source/src=.",
+        "-fmacro-prefix-map=/tmp/btx-session2-helper-restart-current/source/src=.",
+        "-fstack-reuse=none",
+        "-Wall",
+        "-Wextra",
+        "-Wformat",
+        "-Wformat-security",
+        "-Wvla",
+        "-Wredundant-decls",
+        "-Wdate-time",
+        "-Wduplicated-branches",
+        "-Wduplicated-cond",
+        "-Wlogical-op",
+        "-Wimplicit-fallthrough",
+        "-Wbidi-chars=any",
+        "-Wundef",
+        "-Woverloaded-virtual",
+        "-Wsuggest-override",
+        "-Wno-unused-parameter",
+        "-U_FORTIFY_SOURCE",
+        "-D_FORTIFY_SOURCE=3",
+        "-Wstack-protector",
+        "-fstack-protector-all",
+        "-fstack-clash-protection",
+        "-mbranch-protection=standard",
+        "-fopenmp",
+        "-o",
+        "/tmp/btx-session2-provider-refresh-fix/helper.o",
+        "-c",
+        "/tmp/btx-session2-provider-refresh-fix/helper.accepted-base.cpp"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 12.77,
+      "free": 64859136
+    },
+    {
+      "label": "standalone-candidate-link",
+      "command": [
+        "/bin/sh",
+        "-c",
+        "/usr/bin/c++ -include cstdint -O1 \"-Wl,--enable-new-dtags,-rpath,\\$ORIGIN/../lib\" -Wl,-z,stack-size=8388608 -fstack-reuse=none -fstack-protector-all -fstack-clash-protection -Wl,-z,relro -Wl,-z,now -Wl,-z,separate-code -fPIE -pie /tmp/btx-session2-provider-refresh-fix/component.o /tmp/btx-session2-provider-refresh-fix/helper.o -o /tmp/btx-session2-provider-refresh-fix/component  -Wl,--start-group  lib/libbitcoin_modelnet.a  lib/libbitcoin_common.a  lib/libbitcoin_shielded.a  lib/libbitcoin_db.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a  -Wl,--end-group  /usr/lib/libssl.so  /usr/lib/libcrypto.so  lib/libbitcoin_common.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  /usr/lib/libgomp.so  /usr/lib/libpthread.a  lib/libbitcoin_db.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a -lboost_unit_test_framework -s"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.51,
+      "free": 44257280
+    },
+    {
+      "label": "standalone-candidate",
+      "command": [
+        "/tmp/btx-session2-provider-refresh-fix/component",
+        "--log_level=test_suite",
+        "--report_level=detailed"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.26,
+      "free": 44222464
+    }
+  ],
+  "runs": {
+    "baseline_regression_exit": 201,
+    "candidate_regression_exit": 0,
+    "complete_to_partial": {
+      "initial_complete": true,
+      "latest_complete": false,
+      "accepted_new_record": true,
+      "new_cache_record": {
+        "type": "btx-provider-v1",
+        "resource": "54998490c65233537a8998825f8002385059aab3347a082f042d9ced5596ca81c550200d3cad4c13341d6596f5550fcb",
+        "service_id": "3ea83e0f407c3241340e26724c8a42187bb1b02dbf00d01a88a7cb480f7eff08e499208189e2e8aaec7a65efd2ce385b",
+        "endpoints": [
+          "192.0.2.10:29447"
+        ],
+        "reachability_kind": "relay",
+        "complete": false,
+        "ranges": [
+          {
+            "first": 0,
+            "count": 1
+          }
+        ],
+        "seq": 11,
+        "expiry_ms": 1793913866032,
+        "pubkey": "d5e6a814c85e4b111209b4e10760876ddc0b23748260d509301a54234ac91f1b257bbf07c00173526b3fdddc9bb17fc19cb729aec69afd841a935b77d93b0644904855a9fe615326d7d9be8ee552f6372c4a1a478714743e52a63b99c5a312efa0dccfb0dc5eeb66b56f87cc21fad774896b638e09fed31d73080538ff983edfcf1f694d7498f118852aff52b00d284c45925b5cf1345d9f27e1122f82bc97b05cf0da42332d72a2b0ccb25a3a50bb6e29660092aaee916eab0dfa2acaae0d0449079e3f3c3ace865900cce4b3314272c6d4fa50732ac496be005177e859e2f432fa27e2f072db0c3841a741fcc674e8b066314ec938d9d1be88b51785c3213796e4e687a131824c8fba28189d0d578974fe7c36a1cf33ca36fd029c88a6c110b701f12e0329dfcee01a6d470e8af63749c51316a8436d57f3371abee874beb60c6110a4d06610a89df06496048e8efac6eee2dbfa82e6e5b7e0e4aa59220ba7622f18bf6c31e9885c6a1521adc4b592f9b042d01b144736488e0c9ea62c299c793d1371daee7c3735c4ae648217952846b187b07f2e4bf828dd37507c5f24f0938913a7db321ffd9307f7bbcf0a84691851e221f1950be3c26f4bbb0ab695cfcef30096cf8b3aef02c77799d2e796f9e4303f5c45da5e0f9a561ccdfd1d312f8b9d5607fe081e1e52f63ba3ca7e2571aecc5150ab5bde07ee0b30ce6f5a32e5e4eb653129d41f041f6112f20ebdc108e218f96c04c6334443a5aafd3a2fbceab952e5cc236226827c041261b44cb6d64e8fad42c0ba308b229ade467ea1d649a83e5e0c9c1f76e5bd1460d7405e9900cc6918e7fab81f9aa7901f4d10b746ee108a436d782e37865fe4929e54e52fa99e0b4b1921c957be6f0559774e900c378b65276923ffa857ae8dc3194c73ab77f62a88654bcc8a097523556d679bb241b67b456b83653bd8f355909e1096eb8152c37565aeb68ea502d45d9a26480925da6d47f91d4a6c689e0ccb1125dff18eaf51a1e1fb87022370c8b7486fd30b0a3830a57d861966342b641e41233effd97706042dd5c220acbbf4b8baf7c9de4abe9ee1396be81f4b855dc7b29445af9e5073719102842dbe78c5b96f9380ac15a5c850f16881c23ad5fa300f4e64bc9c6fa95dfdd853bd44415cd34dc4d1c1f8f186db037531407dea761c4acfb36c586b1ff52cd552d620b0a30677b852fb1192e993b1c5cda82cea7fd98b169bf76cc3d45724bdba6755705942d0a0f3f1c84e18ed75122e7271cdef7f32b91db8b4ea742e9e2ba664d824d9bc920e05574433daa8fb1edbcf14bf7393d224e10ba6e91fb84d2429794e869b6db6b26fda9ff81b876b0a6f23f68d6418779d924ed9f5502e5f4d7eb37d30346de6c06cf113e52dff933f3c6a4c9b45f7f82537685965afa499c475c81b6cf6acfe50711cd8e2b95f809835766aa275a0896d6e38455a6b04a735d87edebbaa6bbd3c036ebc3c5d91e5e13c0cb37565197c86aa6bcefaa4dd78caaf61483e5678fb03a538f6ecff210ca46fc4ff906d68a1297e429bcf7281a427bb26b70a68260bd906f768faf8d65bd368d3b6091b64837a0cdf1da9209e93f6ed335013a1448cd3586dc2fb2c525844bdf6f7496973df280727a6dbd935c5a1f9f29d6c156acca8708d08766190fe149c2f57a336f08576221de66f23599fdafc49fad69d961435540a9e5d936e636c1401c07a18a174cdaae8bf7ed1e559607c3019f9d9db979a1d061db22d633fd2e948c8ec7ef88727b93963478338d7b22dc89b9c63cf3d95b0429c635ec81313a251243862f627b20b10c9a1245cdf8ae62b098b893d603909ee01",
+        "sig": "66cd668621a9b9eb02acb9f0f5fde8a30df9c2ecae5d4f3879dda9659a3e9f08907caceac1b89048f1650623335707cab911276524474ea88c70c13a1f925bbed4fb27673b55be3a2f7f6a52c4f9ffb85e8dcec473c4d6889f81a6542bebacef5e1309823c94a9e30d7fa686bf38637c20d4615fd2981a964afc0e1a261189e614382a7c2ba3067ebf1516c6b601c3acb3dc4c2a4fc8ec91a0665e699433fd2b18d7e96c6b6e351eb2752354f34f60c3dd675929fb555bfd3097e741375d548a5160a00b7b7c5daed737709edfe3ebd5220c572db64420e826a4e64219ad852cd0863aec9c60dba5dbc0b93d6c7df9d92654bf5020dec8a5708dd8fdc5959eb0d66b3c482ec899b868ef72713218de484511bd68d26ae33b3e30484897f06d2874940f23c98b0742a0b227cd460afbda52b8fa5d27219a5f5c4105895a65265e88fc737c9eebaf7029a7e2784cd4783b62691f7fc13afe135a99411e25169e9aea5b177583a14c850eaaef6be6f556d4bdf999a89a8e04932852740a869e1de39e464ef8a96e88070b8347fb895962e76f5cadcb3c9bc9729c1b342b5e961c73aa8533b18473dd25250392bb2f70b5571371a5d8ab6360075ebeb37ae1bee822645eb3da3851c5ab0505dc13d998a17ae49c76239b4282c4d0b4cffc2b6e0a0e713c105c54cdc37b1ad59914249d9de519d9437d864d97dd70dc4fdf408e6c3bef839000d50acb4cb827576933e0e7ecaff4ab9da4ca41fd9db1f482b36d31d2910044ec5b6ff8a584b59e0b92622707a2211104c3b8ba2a5ef6381abeefd59a19119739f1c3f073cc0184bb927df224b4e810aa61a8f67d2b4943b8513130ee938354b88be1647db42ddac44fe2b995b588ed5f3ee6a798e71a8899aa628f8ff2f64051ebc698cbda93567ecf8cbcda36ea7dce32c30d8aeeabe8d6cf1428f4a0ce3d1a59621577dfa0081bd38865b6679faa2ad733600998e4d22e99ac756950a736a02893e356841e41452d7c9b6069d61ac75ff1621bcc0942f3d21773aa95dcc40ebe2b712eaf7414b5d87882e3f9187f0039f7b1e33c33448be5c528001a1988b34538490ba34af15e0f785697d3d8353a219441176183645f4caf879c125ea47940799dfa14d995eecf0544e7ce3a6118f5aad82271144bf58ab9b9d9ac8737b0a19d16a75cd0df733c55f77a9953c83aba14f8a898d5ba41936c687f9a5d09a294d81edabdebee1a61ad53fd95f7bdb3cd5892af9c6de930c738c8b1b988e770d6d7ab912f1fe9fa17525c238cd6fae4e07c52753d6e39893266ca9d39c04719dc1b03e1919a5b1feb05a92365b10ef2e23dfc03bc3da6d8d22ab0e15b443b64369abdc0a977d9d81ed889ff5f11c97efb7bce31246f257e4180d412434840c59c922aad84196fbc787487e75a964a6275adc7be4658a1053b20c23d5d3ec18738d6454dbe918ada6ebf125e65f4394c0638cb4b04cf8e0e7642c6be2c76472b048e6c229b76afea1dc3a1ac07fb91c4d6530fc28114c0e5776b0fc269494cd2f39b99eb02d4db4290ef2d0df89a8dee8984d59799c43d7950f4b6a22bded40e57adaeed23860e6671c7ba1643ff3fccc24e42cfe4e9a2017c998f75365ccdb4fc3dcf9c66a0b6c7d49e685012a7ec59921ea600b3abd05e817cc033980b6a50ef018d1e7ed8ffea6fdd723314ecc653e4bafffabf6ee1645ff99e719ae67454233621ebe451262018234930d6d86aec18a17b122f9306054ec0fb14a5470f88cfb2afdf29bece2ea04d2b4afd1e43d105c7997cc53432d9ac69ac3962755521adcd671856e0d85599e2e312794777903151ecf51692c3e6e698dfec264fb64928b291bacdc9503e05cd00df3b5c61c130a9bf435d9a725f46e6e4288efd2cb31d6809c4f1a4fd8344cbd32d584184decb6875e8ab44bcfca59f56fbd89b6d12d3f183239e94ac8b0491c973e0fd32406afa5c923f78c3b2b29132a92eca13457b0db7225b7ffed4ef0cdb996b06077a6f6ec990bd821a75c3735ff906a44568464d420d6c0351b4125bf245b9d61da4a16f4a6a839d279c2ad6c904cf374a74dc1061ee6e53133458f0e3165d6c5dd33aa6d4e6f4c4b9c167d4258bb65ee4cfbd02cc3f6e2825f8a1055b8484713a07c00f9f2efaeb63d9ceda0afbc32b0984b89eff3a48411332ddef4c4afe4451be80822e9c787b9809c86d646e14edf605b4261709a247e950938a8884a045ab577afb8a1f29e55697c091b2d4e970d309e7834fd624e0047ed84d72506ada14e41d4866717a09fcbc0fd0aca5d9121008cbe40b63c2878d41d45e405136c17874f5c97cac5d9e341080e5f55844fca7c088776a4840e7cd8c6486bd9705e1386a5ab54ac1264d8a30c33296be7b4ed308f94882bce547722a4aedef0c9b9b3d7916660345dc0e790c83be85d9f4290a12e74febf4c3f8714a4f6174ffdaf94946e5507dca7d4c184d226979fe7f82c6a202058754cf8b7349a0aee041bee7c900ef1bd56b40691fff305d1759a888f2ec004b322e88f6937f6b7a361e8d6d8eb9576804e9d622d28811d6e523a13710cb8cd28274df2e8f256e55cf2ebe3f09a308319a8910c563562a9a9db38673a22b8f114aee7411e961cc3e921b6608b9ad801daf133a02032454f040f6bd10af8afd8af849c68c221c14cb06e9f71ecb40b39971733888fcad61cb4eb0fa7c33ad222152d77ccc40231b1fd2e45d1d6a9df0b1eaef8563085577acd4d15de6fa94230510a51968a7e6c1bf84fea437cdebb9bfce1b34fed7a166d3d0c86fe2780fc8361c5c081fb46d2c7e898c559973a0e34f0858ae6ef8d2fe9c2bf05dbba520e77ff42fb23681db80609b6b0022b9e139337bdc42b9db0219fee89b020c9a424d37c5b8476c5891a9a6a996654940e7f3d788423af25ee731b75ae1058d954fd219422076f3a6c8b14306ef2995778e4ff207a38a8903dd0c4138a7c6c0029e82a3320e43938dc97226a359454d1bfd30187e5a37e54293c9f58bafd3b3bf1fc5ffc5436b6267800cdc16045250d684e1f9460d1f4af4c6c7a338113e73fb4a42f7e828e5076ba4b0eb37ac2a7e040c8ae103e8d088b23468afe30eefdf50b18a1f05adf63e97c14d759a66f12abf6af444122df8478e988bdc540b8067f32fccd3fddc31cb7844273f11399f1fac2c0a31f904413cc5983d5fb6ddb3f2f28fec6b14a5872a358de5c47a139c25b211b6f969be9f3e7a12da68892fe4818525848371274ffd8c8adcfec6830ba2dc8a305853076d39749a9ba0282716282a2d45619495a4adb9c1c4cfd6dbe7fb0c0e1421383b3c6f7b7e8394bfe4ecfafe000c262f40444c6d8083acbec0daeff0f5f80f2f4f5b5c606d7a86888b8d9ad9eef1fa0000000000000000000012233546",
+        "inference": false,
+        "generic_dht": false
+      },
+      "before": {
+        "schema_version": 2,
+        "providers": [
+          {
+            "provider_id": "3ea83e0f407c3241340e26724c8a42187bb1b02dbf00d01a88a7cb480f7eff08e499208189e2e8aaec7a65efd2ce385b",
+            "reachability": "direct",
+            "complete": true,
+            "last_seen": 1793913566033,
+            "direct": true,
+            "relayed": false
+          }
+        ]
+      },
+      "after": {
+        "schema_version": 2,
+        "providers": [
+          {
+            "provider_id": "3ea83e0f407c3241340e26724c8a42187bb1b02dbf00d01a88a7cb480f7eff08e499208189e2e8aaec7a65efd2ce385b",
+            "reachability": "relay",
+            "complete": false,
+            "last_seen": 1793913566034,
+            "direct": false,
+            "relayed": true
+          }
+        ]
+      },
+      "availability": {
+        "providers_total": 1,
+        "providers_complete": 0,
+        "providers_partial": 1,
+        "min_piece_sources": 0,
+        "pieces_with_0_sources": 0,
+        "pieces_with_1_source": 0,
+        "pieces_with_2_sources": 0,
+        "reconstructable": false,
+        "reconstructable_known": false,
+        "missing_piece_count": 0,
+        "fragile": false,
+        "class": "UNKNOWN",
+        "observed_provider_count": 1,
+        "global_complete": false,
+        "schema_version": 2,
+        "model_id": "54998490c65233537a8998825f8002385059aab3347a082f042d9ced5596ca81c550200d3cad4c13341d6596f5550fcb"
+      },
+      "peercount": {
+        "total": 1,
+        "complete": 0,
+        "partial": 1,
+        "reachable_direct": 0,
+        "reachable_relay": 1,
+        "observed_provider_count": 1,
+        "note": "this node's current network view; not a global census",
+        "schema_version": 2
+      },
+      "search": {
+        "schema_version": 3,
+        "query_id": "41f8c77f7201c034",
+        "text": "",
+        "scope": "LOCAL",
+        "coverage": {
+          "local": true,
+          "connected_peers_queried": 0,
+          "index_peers_queried": 0,
+          "index_peers_configured": 0,
+          "routing_peers_queried": 0,
+          "responses_received": 0,
+          "timed_out": 0,
+          "complete": false,
+          "global_complete": false
+        },
+        "results": [
+          {
+            "schema_version": 3,
+            "model_id": "54998490c65233537a8998825f8002385059aab3347a082f042d9ced5596ca81c550200d3cad4c13341d6596f5550fcb",
+            "artifact_id": "95a49c10cef0929a32c7b894c8c9dcfbc7ebd81e3d35975a22d6a353ed4000152333e84586175c5baf6712ca29fe2409",
+            "uri": "btx://pq2jvcfyxx2ge4x75fnzp9lqqz8pg9n24nx3aqstcy9kww64vke2qu25pqp5726nqnxswkt9h4258uk64mfjp",
+            "name": "model.safetensors",
+            "aliases": [],
+            "publisher": {},
+            "family": "",
+            "architecture": "",
+            "parameters": 0,
+            "format": "",
+            "quantization": "",
+            "languages": [],
+            "tags": [],
+            "modalities": [],
+            "description": "",
+            "size_bytes": 1096,
+            "file_count": 0,
+            "published_at": 0,
+            "availability": {
+              "providers_total": 1,
+              "providers_complete": 0,
+              "providers_partial": 1,
+              "min_piece_sources": 0,
+              "pieces_with_0_sources": 0,
+              "pieces_with_1_source": 0,
+              "pieces_with_2_sources": 0,
+              "reconstructable": false,
+              "reconstructable_known": false,
+              "missing_piece_count": 0,
+              "fragile": false,
+              "class": "UNKNOWN",
+              "observed_provider_count": 1,
+              "global_complete": false
+            },
+            "local": {
+              "known": true,
+              "downloaded": true,
+              "partial": false,
+              "seeded": false,
+              "pinned": false,
+              "qualification": "NOT_RUN"
+            },
+            "release": {
+              "id": "",
+              "state": "PUBLIC",
+              "actions": [
+                "DOWNLOAD",
+                "KEEP",
+                "COPY_URI"
+              ]
+            },
+            "sources": 1,
+            "search": {
+              "score": 1,
+              "metadata_verified": false,
+              "provenance": [
+                "local_index"
+              ]
+            },
+            "share": {
+              "uri": "btx://pq2jvcfyxx2ge4x75fnzp9lqqz8pg9n24nx3aqstcy9kww64vke2qu25pqp5726nqnxswkt9h4258uk64mfjp",
+              "copy_text": "btx://pq2jvcfyxx2ge4x75fnzp9lqqz8pg9n24nx3aqstcy9kww64vke2qu25pqp5726nqnxswkt9h4258uk64mfjp",
+              "family": "",
+              "format": "",
+              "quantization": "",
+              "signed": false
+            },
+            "next_actions": [
+              "getmodelsharecard",
+              "getmodel FREE_ONLY",
+              "showmodel",
+              "automatic_spend_atoms stays 0"
+            ],
+            "result_type": "LOCAL_MODEL",
+            "lifecycle_state": "PUBLIC",
+            "actions": [
+              "DOWNLOAD",
+              "KEEP",
+              "COPY_URI"
+            ],
+            "downloadable_now": true,
+            "fundable_now": false,
+            "ciphertext_cacheable": false,
+            "entry": {
+              "schema_version": 3,
+              "model": {
+                "model_id": "54998490c65233537a8998825f8002385059aab3347a082f042d9ced5596ca81c550200d3cad4c13341d6596f5550fcb",
+                "artifact_id": "95a49c10cef0929a32c7b894c8c9dcfbc7ebd81e3d35975a22d6a353ed4000152333e84586175c5baf6712ca29fe2409",
+                "uri": "btx://pq2jvcfyxx2ge4x75fnzp9lqqz8pg9n24nx3aqstcy9kww64vke2qu25pqp5726nqnxswkt9h4258uk64mfjp",
+                "name": "model.safetensors",
+                "aliases": [],
+                "description": "",
+                "family": "",
+                "architecture": "",
+                "parameter_count": 0,
+                "format": "",
+                "quantization": "",
+                "languages": [],
+                "modalities": [],
+                "tags": [],
+                "size_bytes": 1096,
+                "published_at": 0
+              },
+              "publisher": {
+                "metadata_verified": false
+              },
+              "lifecycle": {
+                "state": "PUBLIC",
+                "public": true,
+                "downloadable_plaintext": true,
+                "ciphertext_available": false,
+                "consensus": false
+              },
+              "release": {
+                "id": "",
+                "state": "PUBLIC",
+                "actions": [
+                  "DOWNLOAD",
+                  "KEEP",
+                  "COPY_URI"
+                ]
+              },
+              "availability": {
+                "providers_total": 1,
+                "providers_complete": 0,
+                "providers_partial": 1,
+                "min_piece_sources": 0,
+                "pieces_with_0_sources": 0,
+                "pieces_with_1_source": 0,
+                "pieces_with_2_sources": 0,
+                "reconstructable": false,
+                "reconstructable_known": false,
+                "missing_piece_count": 0,
+                "fragile": false,
+                "class": "UNKNOWN",
+                "observed_provider_count": 1,
+                "global_complete": false
+              },
+              "local": {
+                "known": true,
+                "downloaded": true,
+                "partial": false,
+                "seeded": false,
+                "pinned": false,
+                "qualification": "NOT_RUN"
+              },
+              "search": {
+                "score": 1,
+                "metadata_verified": false,
+                "publisher_signed": false,
+                "locally_derived": true,
+                "provenance": [
+                  "local_index"
+                ]
+              },
+              "result_type": "LOCAL_MODEL",
+              "actions": [
+                "DOWNLOAD",
+                "KEEP",
+                "COPY_URI"
+              ],
+              "downloadable_now": true,
+              "fundable_now": false,
+              "ciphertext_cacheable": false,
+              "refund_available_locally": false,
+              "requires_wallet": false,
+              "requires_user_approval": false,
+              "automatic_spend_atoms": 0,
+              "sources_observed": 1,
+              "first_seen_at": 0,
+              "published_at": 0
+            },
+            "economy": {
+              "schema_version": 3,
+              "model": {
+                "model_id": "54998490c65233537a8998825f8002385059aab3347a082f042d9ced5596ca81c550200d3cad4c13341d6596f5550fcb",
+                "artifact_id": "95a49c10cef0929a32c7b894c8c9dcfbc7ebd81e3d35975a22d6a353ed4000152333e84586175c5baf6712ca29fe2409",
+                "uri": "btx://pq2jvcfyxx2ge4x75fnzp9lqqz8pg9n24nx3aqstcy9kww64vke2qu25pqp5726nqnxswkt9h4258uk64mfjp",
+                "name": "model.safetensors",
+                "aliases": [],
+                "description": "",
+                "family": "",
+                "architecture": "",
+                "parameter_count": 0,
+                "format": "",
+                "quantization": "",
+                "languages": [],
+                "modalities": [],
+                "tags": [],
+                "size_bytes": 1096,
+                "published_at": 0
+              },
+              "publisher": {
+                "metadata_verified": false
+              },
+              "lifecycle": {
+                "state": "PUBLIC",
+                "public": true,
+                "downloadable_plaintext": true,
+                "ciphertext_available": false,
+                "consensus": false
+              },
+              "release": {
+                "id": "",
+                "state": "PUBLIC",
+                "actions": [
+                  "DOWNLOAD",
+                  "KEEP",
+                  "COPY_URI"
+                ]
+              },
+              "availability": {
+                "providers_total": 1,
+                "providers_complete": 0,
+                "providers_partial": 1,
+                "min_piece_sources": 0,
+                "pieces_with_0_sources": 0,
+                "pieces_with_1_source": 0,
+                "pieces_with_2_sources": 0,
+                "reconstructable": false,
+                "reconstructable_known": false,
+                "missing_piece_count": 0,
+                "fragile": false,
+                "class": "UNKNOWN",
+                "observed_provider_count": 1,
+                "global_complete": false
+              },
+              "local": {
+                "known": true,
+                "downloaded": true,
+                "partial": false,
+                "seeded": false,
+                "pinned": false,
+                "qualification": "NOT_RUN"
+              },
+              "search": {
+                "score": 1,
+                "metadata_verified": false,
+                "publisher_signed": false,
+                "locally_derived": true,
+                "provenance": [
+                  "local_index"
+                ]
+              },
+              "result_type": "LOCAL_MODEL",
+              "actions": [
+                "DOWNLOAD",
+                "KEEP",
+                "COPY_URI"
+              ],
+              "downloadable_now": true,
+              "fundable_now": false,
+              "ciphertext_cacheable": false,
+              "refund_available_locally": false,
+              "requires_wallet": false,
+              "requires_user_approval": false,
+              "automatic_spend_atoms": 0,
+              "sources_observed": 1,
+              "first_seen_at": 0,
+              "published_at": 0
+            }
+          }
+        ],
+        "results_returned": 1,
+        "total_candidates_seen": 1,
+        "applied_filters": [],
+        "unsupported_filters": [],
+        "remote_count": 0,
+        "note": "current network view; not a complete global directory",
+        "automatic_spend_atoms": 0,
+        "next_actions": [
+          "getmodel FREE_ONLY",
+          "getmodeltransfers",
+          "automatic_spend_atoms stays 0"
+        ]
+      },
+      "rollback_refused": true,
+      "display_matches_latest": true
+    },
+    "partial_to_complete": {
+      "initial_complete": false,
+      "latest_complete": true,
+      "accepted_new_record": true,
+      "new_cache_record": {
+        "type": "btx-provider-v1",
+        "resource": "54998490c65233537a8998825f8002385059aab3347a082f042d9ced5596ca81c550200d3cad4c13341d6596f5550fcb",
+        "service_id": "9826ec765948b0803e6a8a69fb059cd3d1a95c3fd2914d05c177b3791823f2626ba6d3bb724c0837848143c7d32b2483",
+        "endpoints": [
+          "192.0.2.10:29447"
+        ],
+        "reachability_kind": "relay",
+        "complete": true,
+        "ranges": [
+          {
+            "first": 0,
+            "count": 1
+          }
+        ],
+        "seq": 11,
+        "expiry_ms": 1793913866285,
+        "pubkey": "306c62ecf84281848c2a56b5558e8dee2190a49b185eb13e0f654f7288c57ff56d28f529a1961ecbb2431941a33112901da83c5cba29382d8bb8ee675985e99110c983b392335e167981b5331f2c23dfe97e1c46465fb05514e83895c161331530b4f00c64bf993798115fb09326eec5c33d4f42cf6f2fc822e1cb822e3ea49fc1b564726b316dd0bf2a309c0c66d4d5fcc04d29e54b1906863875db299136e5207ffae7135e422d32b8ec648facc1fdabfbe353bdcec0c8b61cb798fd1cdf94ad568f1bd69fb360c77d5535c39986f52bb32c17d7aba66beca3629b89b6ba82ea6a71f989dd7744712dd2750aabba73ae47ec298b148035c9ae722ae60386172ea2fe187d0204081b947bb01779b0429becde376e9062d548c8812209faf8a75375c0075b862ae253cc62e9a08974caaa93f4f99c2cfe1a29dfa1dd361706a6983aa916ec6d2a6080332441e1b9434264dc19911c6f60742417b5c87f4ea70a76cbe49bd3005b3f9caa220cc6ba66fb1f44b124030fbb923aa78cf1ab8e9b43c2b97ea746a05acc05a5fd4ad66b5abb48c13e4de235218d93a5ffc4432f0e90f3824cf1dc8d080b9bbd2f81d7b249a27d0ff1de1e52077879c1dfa6ae77d31e28f1d640ae5f607307eaadb2f0fec012ba195d8ed33f402bc69749396620a000c5e718488662fd69da5b8d047be19c2b280eedcd7f253f02a711d4b9f850003beaf7e29f63e543d5f21480e49c794512f8e967af912f11628171814b48f03b355e0fda66f075874725bf0f9c3e4d111c10b5ce7f45a915c85cd7cce1d9c39719349d8b4d4c0db8d4244478fa1e2e9fca317174077dd890eaae42ce13eff4be1260a7774e7f2eb49f712bbddb89684fa5beb0048f839c1a8bb1e59a74ef74dfa0e761ea232f6c7a295b3e26a45822d5770b41b70ba841d5dc3b25451e5ace95e536c4cc4f51046a606601928d059ac16de4d5088c43029b8b5e1a0205f1c4182ca0794241fffbb0a946203fa3f5f633e50746fb086f48990c8f8ab4ca0a3475b6d77d3f0d62b47feaca0027b2f8e322dca7de618b37f4d884e20417a8a8096742e6723364608367136f3175a0886ae30c900d4ebe618867a04fa395482e142b4b143f0e09e88ee979e9e4ad5b65b860fc9eac0659da820542034a208e160da62c51123844e84163cbbb35a441fc6f27b1688cfcd9184dff710e2c120d3dbf5666829838d268ef6ddce0f977b83fbb883b28c6b7bad7f6f95b650d8ab2c12c5f4f35d5466d4916196e5bbe393930f02887a9968e398c0ea9b986a0bb3a7885ad6aa25e91a4a66143b8142b1c9e0e8334c3d9a62dcb166e9a03728e0d605569879978476190213cf4fc7324657f0d19ea2973e13128c47858769103ddc835cd57d3fe51ce7a0236cb3fc98a4292c475bad964da589b66655ca519af87cbae6bc84c16916588f4f719f2f57c9e899381ca289a9d9f20d619a7f95e3cba724d91f1110909cc6a1c910692ae3ddef5dfc972a9d1524beebb5ebb07885e085cfac843ea10a0f10f23f269767490ec26823b766f913a7c1be8d1f8f9806810933591b0efc35a2b81da4b8503c32651c0f69b78c3e431ce71fdd6fa21769e3e74b6cc50db5b9a429cf28b96334a61b81b292cd60d16e6b878f7f8b75934d64cf17394d4d3b5013778e9eef611d2c9316b74dbeceb3efe13c70d68a46a4bda6a19f82ccab034d25210b1f799d27e0b2cecfd919d915b0fe592aa615c25e9224e657b9cecf261c47d4a9aee815557b8480a356fc3b439dd52732c49a7229d59e121daf93bf48853e74f01943fb673ad336c9785a1a079edb3301e988918e00c1bcb6f1887f2",
+        "sig": "7b79076fbb2187688b8a7e6171517417047440fd841fdd168ca1f1078cf75c8e8f51734ce9b1160139943c92ba5daec37b235d3cec1673a2b65a236bf6fdd586bc2d7804f4e50d9227e9ed819bfe26f9d41ac8488b67737e06f601279c1653c910f511571595e0a559591bc8d32c1ebc71496fac3fc4893e91604382ccd272a2cb926ebde3b994875f50c6f85df3cfa308b6b3d28a55b6fa5eaf865710e7abcbc110056d8562c6f050989ba6bc744e01311f3bfa8c9a57248268c29c586ae15c9a6e28063310655ac91cbb1d784e7067bd9d1fc685277e9f733e08905eba9ec08a1efdafb44299e4724cbd88c305d6ded474037b2b394838f80aab09fbe70180a0f18625508472e8f9e2f2019d4673c75d6939a80ab45d4ef476fdf961183b85edcec6ab11b1f3121d80c4f3cddb9a29ee3c8855fd2f0f7571b864e07459db075749bc59792a29ecafcde190daa2eaa1f9b345ddfd1c67a4d0f498d9a9e317d3b8df1b0ec47478b15ff69ea27aa00c807d7ee0a957594a966a9df178e831a96ac51dfd4a3355c35f90b09cb523681c9a245423481713aa8d31e7ae141affd10e2612b0fe1ada225fe0f062f29334d66543fd76096c67aa966c82559291442c1585973c9a6ada410a6e555f7d3582771c144ca70552cfedd1ac9096e587051e20f2494812aef3659547e49ce574a29b5a0439eb17d353f09020b83d880afadb293bbce25a134514051f6fbfc468682ad964caa7590312b218e3f57d902291650f64d5a5f1af378f65b30f600771959ceefed01c47539e0a89fee40f8adcd5db0af51adf0d8029c2f7e171e426f9321d0903d900ea3d0780a4701640c679933476e3bde1e20ce5ae4fbb751bdcf4d1a4ad9706548044b8da641b8fa04ec5cb8e7df389174d330a8676398d560252e715b69514c7782c8d51a08e1a61643c4ca339d18ba887f3b1fb600c8e75b43866a6994a4b416c1e00674b1120bf8e8e8db226bff178ce3d6ba3e6b9a71f9f534a9e819bde011a7434bcded16b15f72e3d6689c0f4b9884da752ac5c4a74c47e2c1a0f6f7b2b0bfac0ab487c1929a9e684348b13c09a71de8b35a71927baa956b1c7d79a5d9713ac5bc8ff1a2fbb1e4272ed8313d35ea21fa92ce142ab21abb0fdbc9cccebace1869de447eeafc0e2322b7bc9542517a4722b53827f40aebe200552fd08a475284d1c77c9ef63de917d3ec536621103a3d74d5a5aaf7adc83f9c3a40cb384e136f686ecc9874d75e6336184d4977cd7744c47d85ca880e9a7b09c0c536b938099545ccbd6cb058d7230fbae04f3f5dcc805de132e6485d6329093808a396c6a6fdd2cfd5c88d0c13ff0d0cad5d04606ad27f4d88c5c05372c311b8768f5648388feff4b1e065dd8fc7d82f181feb099c3cc8d6ef04af4a0390d82e5099dd339388c9434e0686b06a76fc31dda9325ad11e1f9027ae70bcea9d03318c2ce887a5aa30d5ef43456426baf1c186c0f711ee9977788e632b5b547aefb549670b73bcd852d5236b00fb312f3cd6509f80d26a7a64782ab5e95dd76c764892b8c4a885d52b44674b5f6fa7f924632cc1e3a758c8e079d7e431e4544789c13802b176b64a2757ef81ae4fb559b23cf04eaac3912230e2b4fdb83fa77de29371f9ea57bdb072f7332a47109242063e37a74a3495ba0009f715553376d23871bc012ea4a8c7c3ff5d214e79a0d002f2b0b63a23ab570c1fd81dc78d73bbbb37c0c26e0834f5c4a028bf79b0059a2027ad073c1b62ab64824932993edab71a5b54df00880643870aedd26986a1669ca46e9235783960171440cf77494aa47c7dd3e307afa4c9d364cc96d02a623fb2489f8de84934aa03f706d55fa5805abb156320cf287cc272e7a8a7efe7c9b66bf1fa276a1e829d163b49db4a37d890804aa4b8a2052994b55ad801590b17cb70c416689c53353dd7be5d13fb240ff53f2f778f8e9abd78c90e5e3f930fe1bf1a3604f4a1ba26d3730ac4749bdcb78ac0930f4dc2471974f63715e9abcabc650fca5657d13206f87f3cf6969d0cae185b77d1924db9c53a1be08c49b2524f1e0012bfd955248e8e451dcfb7198414e13f9923687c081d8ff6c1fd80f578264c2717b5855ef0bd49ea76c6b17f1e05863bab1c2502874f4ce4b5c8a11e0f0b122bbc02358849581fe8b852631b3e0a76c728fec7a1710da96673f367027d7e266634c912183aa27a3ddc5f57f4ea02071ed1ede1d6bff6e749d8f647841ee6c3e9838239f6236de3bf4daf4ce51a1e9cc63d5ecca4240bccba974cc87568d9e760d135ef62af332929c9e3dbaf8a3d49b4f9bc3ab305de89f40f3a21ba4b5cdb2b855d91ffbac1310410862c98e2d1e8aaa2c914c6c63d789c28b69fed4c85b68821c5ac26d7eaaa14372e9c4ad4fe311d99eaa875bc45451c462268921374ce70f1a681db234daf848c0ca528f33f201f01eb300e32e2fff41efd025faa98bb77a7a7f5355309940cdced5bec6f4fa9ccfd89c6c4bded1ab31a29451ed44a8b9ef609889b528aa9d375bf2f0e5b2ed2f57a158274676a4f7e4b7b48da4aa507d4b1d9c7d03b1b0ebbce3817e1d27e77245d086a4ccd315e82d1cb320170178e265f5b7beb6d5738b7d630be523908f9e042dac7cf98a15d80d965cffda85f8df5d1b75a55716c58232f27c30234d333f4268e49f3dae946491c30b026016581e13c4fbe86473716b49aa5c9ab39c645df9dcd7416a63b1d05d00b03c92b618b5b3c3544938697e851430fa8f505a1ed1ecc56d78549f131b52a127cc48373956240dc6f8178bd5826f2bf5e3ceb5e84e7aca27ef771e0a5393d68382c0f70f73ecf6a6d6dc9c95861db0f50c2b409181eddca31933846f6106e98e9a9c7e991804ac37b9fdfc165b03b8b1b2e49d636fe38162ba4f402231d76c7dcbbadf5eb37460e6c276e3970f0dfdd86d64c4d3ec8eef0b40ba7306cfccc759acfd8c90390776ea063bae0c9611fa89b9c214987c2110703b761241c5dc4442b70fd0c66ecb8afe631b165e41c57a4e53f1aa2d68e3ca66ff2ca0179c5e773bccaa870409510e824b79648580dac1f8c0908593e68cd68d979d7aa1130825b36e77ec9cd60e49adf0cf925bcf710dc667c1ec53782aec55ca3c64ca0d0a0b47397fd6afd2d7e96a91973c1af4e77a75b2879aad40c1ed8399b56e34f5d436321fbb9027d347e2ba66191a71afca9111f67922d1273ee222ed3a89a03687a51663bfda85681c2c770f37fc5216551640bd6cea32812ced5ac14e6c51a615690f3fc80f9a90f9830d0110181f202123303e4b535c6e7ca6abc0cce8eff000040e1a1d35373a46485164748b8ed0d7dee8141c1e37394e6781949bafc4c6cff80422373f40464a5d6e70728d91aab4b8d3d5d6dddfe2f000001528374e",
+        "inference": false,
+        "generic_dht": false
+      },
+      "before": {
+        "schema_version": 2,
+        "providers": [
+          {
+            "provider_id": "9826ec765948b0803e6a8a69fb059cd3d1a95c3fd2914d05c177b3791823f2626ba6d3bb724c0837848143c7d32b2483",
+            "reachability": "direct",
+            "complete": false,
+            "last_seen": 1793913566285,
+            "direct": true,
+            "relayed": false
+          }
+        ]
+      },
+      "after": {
+        "schema_version": 2,
+        "providers": [
+          {
+            "provider_id": "9826ec765948b0803e6a8a69fb059cd3d1a95c3fd2914d05c177b3791823f2626ba6d3bb724c0837848143c7d32b2483",
+            "reachability": "relay",
+            "complete": true,
+            "last_seen": 1793913566286,
+            "direct": false,
+            "relayed": true
+          }
+        ]
+      },
+      "availability": {
+        "providers_total": 1,
+        "providers_complete": 1,
+        "providers_partial": 0,
+        "min_piece_sources": 0,
+        "pieces_with_0_sources": 0,
+        "pieces_with_1_source": 0,
+        "pieces_with_2_sources": 0,
+        "reconstructable": false,
+        "reconstructable_known": false,
+        "missing_piece_count": 0,
+        "fragile": false,
+        "class": "UNKNOWN",
+        "observed_provider_count": 1,
+        "global_complete": false,
+        "schema_version": 2,
+        "model_id": "54998490c65233537a8998825f8002385059aab3347a082f042d9ced5596ca81c550200d3cad4c13341d6596f5550fcb"
+      },
+      "peercount": {
+        "total": 1,
+        "complete": 1,
+        "partial": 0,
+        "reachable_direct": 0,
+        "reachable_relay": 1,
+        "observed_provider_count": 1,
+        "note": "this node's current network view; not a global census",
+        "schema_version": 2
+      },
+      "search": {
+        "schema_version": 3,
+        "query_id": "a98ecdd703dd4760",
+        "text": "",
+        "scope": "LOCAL",
+        "coverage": {
+          "local": true,
+          "connected_peers_queried": 0,
+          "index_peers_queried": 0,
+          "index_peers_configured": 0,
+          "routing_peers_queried": 0,
+          "responses_received": 0,
+          "timed_out": 0,
+          "complete": false,
+          "global_complete": false
+        },
+        "results": [
+          {
+            "schema_version": 3,
+            "model_id": "54998490c65233537a8998825f8002385059aab3347a082f042d9ced5596ca81c550200d3cad4c13341d6596f5550fcb",
+            "artifact_id": "95a49c10cef0929a32c7b894c8c9dcfbc7ebd81e3d35975a22d6a353ed4000152333e84586175c5baf6712ca29fe2409",
+            "uri": "btx://pq2jvcfyxx2ge4x75fnzp9lqqz8pg9n24nx3aqstcy9kww64vke2qu25pqp5726nqnxswkt9h4258uk64mfjp",
+            "name": "model.safetensors",
+            "aliases": [],
+            "publisher": {},
+            "family": "",
+            "architecture": "",
+            "parameters": 0,
+            "format": "",
+            "quantization": "",
+            "languages": [],
+            "tags": [],
+            "modalities": [],
+            "description": "",
+            "size_bytes": 1096,
+            "file_count": 0,
+            "published_at": 0,
+            "availability": {
+              "providers_total": 1,
+              "providers_complete": 1,
+              "providers_partial": 0,
+              "min_piece_sources": 0,
+              "pieces_with_0_sources": 0,
+              "pieces_with_1_source": 0,
+              "pieces_with_2_sources": 0,
+              "reconstructable": false,
+              "reconstructable_known": false,
+              "missing_piece_count": 0,
+              "fragile": false,
+              "class": "UNKNOWN",
+              "observed_provider_count": 1,
+              "global_complete": false
+            },
+            "local": {
+              "known": true,
+              "downloaded": true,
+              "partial": false,
+              "seeded": false,
+              "pinned": false,
+              "qualification": "NOT_RUN"
+            },
+            "release": {
+              "id": "",
+              "state": "PUBLIC",
+              "actions": [
+                "DOWNLOAD",
+                "KEEP",
+                "COPY_URI"
+              ]
+            },
+            "sources": 1,
+            "search": {
+              "score": 1,
+              "metadata_verified": false,
+              "provenance": [
+                "local_index"
+              ]
+            },
+            "share": {
+              "uri": "btx://pq2jvcfyxx2ge4x75fnzp9lqqz8pg9n24nx3aqstcy9kww64vke2qu25pqp5726nqnxswkt9h4258uk64mfjp",
+              "copy_text": "btx://pq2jvcfyxx2ge4x75fnzp9lqqz8pg9n24nx3aqstcy9kww64vke2qu25pqp5726nqnxswkt9h4258uk64mfjp",
+              "family": "",
+              "format": "",
+              "quantization": "",
+              "signed": false
+            },
+            "next_actions": [
+              "getmodelsharecard",
+              "getmodel FREE_ONLY",
+              "showmodel",
+              "automatic_spend_atoms stays 0"
+            ],
+            "result_type": "LOCAL_MODEL",
+            "lifecycle_state": "PUBLIC",
+            "actions": [
+              "DOWNLOAD",
+              "KEEP",
+              "COPY_URI"
+            ],
+            "downloadable_now": true,
+            "fundable_now": false,
+            "ciphertext_cacheable": false,
+            "entry": {
+              "schema_version": 3,
+              "model": {
+                "model_id": "54998490c65233537a8998825f8002385059aab3347a082f042d9ced5596ca81c550200d3cad4c13341d6596f5550fcb",
+                "artifact_id": "95a49c10cef0929a32c7b894c8c9dcfbc7ebd81e3d35975a22d6a353ed4000152333e84586175c5baf6712ca29fe2409",
+                "uri": "btx://pq2jvcfyxx2ge4x75fnzp9lqqz8pg9n24nx3aqstcy9kww64vke2qu25pqp5726nqnxswkt9h4258uk64mfjp",
+                "name": "model.safetensors",
+                "aliases": [],
+                "description": "",
+                "family": "",
+                "architecture": "",
+                "parameter_count": 0,
+                "format": "",
+                "quantization": "",
+                "languages": [],
+                "modalities": [],
+                "tags": [],
+                "size_bytes": 1096,
+                "published_at": 0
+              },
+              "publisher": {
+                "metadata_verified": false
+              },
+              "lifecycle": {
+                "state": "PUBLIC",
+                "public": true,
+                "downloadable_plaintext": true,
+                "ciphertext_available": false,
+                "consensus": false
+              },
+              "release": {
+                "id": "",
+                "state": "PUBLIC",
+                "actions": [
+                  "DOWNLOAD",
+                  "KEEP",
+                  "COPY_URI"
+                ]
+              },
+              "availability": {
+                "providers_total": 1,
+                "providers_complete": 1,
+                "providers_partial": 0,
+                "min_piece_sources": 0,
+                "pieces_with_0_sources": 0,
+                "pieces_with_1_source": 0,
+                "pieces_with_2_sources": 0,
+                "reconstructable": false,
+                "reconstructable_known": false,
+                "missing_piece_count": 0,
+                "fragile": false,
+                "class": "UNKNOWN",
+                "observed_provider_count": 1,
+                "global_complete": false
+              },
+              "local": {
+                "known": true,
+                "downloaded": true,
+                "partial": false,
+                "seeded": false,
+                "pinned": false,
+                "qualification": "NOT_RUN"
+              },
+              "search": {
+                "score": 1,
+                "metadata_verified": false,
+                "publisher_signed": false,
+                "locally_derived": true,
+                "provenance": [
+                  "local_index"
+                ]
+              },
+              "result_type": "LOCAL_MODEL",
+              "actions": [
+                "DOWNLOAD",
+                "KEEP",
+                "COPY_URI"
+              ],
+              "downloadable_now": true,
+              "fundable_now": false,
+              "ciphertext_cacheable": false,
+              "refund_available_locally": false,
+              "requires_wallet": false,
+              "requires_user_approval": false,
+              "automatic_spend_atoms": 0,
+              "sources_observed": 1,
+              "first_seen_at": 0,
+              "published_at": 0
+            },
+            "economy": {
+              "schema_version": 3,
+              "model": {
+                "model_id": "54998490c65233537a8998825f8002385059aab3347a082f042d9ced5596ca81c550200d3cad4c13341d6596f5550fcb",
+                "artifact_id": "95a49c10cef0929a32c7b894c8c9dcfbc7ebd81e3d35975a22d6a353ed4000152333e84586175c5baf6712ca29fe2409",
+                "uri": "btx://pq2jvcfyxx2ge4x75fnzp9lqqz8pg9n24nx3aqstcy9kww64vke2qu25pqp5726nqnxswkt9h4258uk64mfjp",
+                "name": "model.safetensors",
+                "aliases": [],
+                "description": "",
+                "family": "",
+                "architecture": "",
+                "parameter_count": 0,
+                "format": "",
+                "quantization": "",
+                "languages": [],
+                "modalities": [],
+                "tags": [],
+                "size_bytes": 1096,
+                "published_at": 0
+              },
+              "publisher": {
+                "metadata_verified": false
+              },
+              "lifecycle": {
+                "state": "PUBLIC",
+                "public": true,
+                "downloadable_plaintext": true,
+                "ciphertext_available": false,
+                "consensus": false
+              },
+              "release": {
+                "id": "",
+                "state": "PUBLIC",
+                "actions": [
+                  "DOWNLOAD",
+                  "KEEP",
+                  "COPY_URI"
+                ]
+              },
+              "availability": {
+                "providers_total": 1,
+                "providers_complete": 1,
+                "providers_partial": 0,
+                "min_piece_sources": 0,
+                "pieces_with_0_sources": 0,
+                "pieces_with_1_source": 0,
+                "pieces_with_2_sources": 0,
+                "reconstructable": false,
+                "reconstructable_known": false,
+                "missing_piece_count": 0,
+                "fragile": false,
+                "class": "UNKNOWN",
+                "observed_provider_count": 1,
+                "global_complete": false
+              },
+              "local": {
+                "known": true,
+                "downloaded": true,
+                "partial": false,
+                "seeded": false,
+                "pinned": false,
+                "qualification": "NOT_RUN"
+              },
+              "search": {
+                "score": 1,
+                "metadata_verified": false,
+                "publisher_signed": false,
+                "locally_derived": true,
+                "provenance": [
+                  "local_index"
+                ]
+              },
+              "result_type": "LOCAL_MODEL",
+              "actions": [
+                "DOWNLOAD",
+                "KEEP",
+                "COPY_URI"
+              ],
+              "downloadable_now": true,
+              "fundable_now": false,
+              "ciphertext_cacheable": false,
+              "refund_available_locally": false,
+              "requires_wallet": false,
+              "requires_user_approval": false,
+              "automatic_spend_atoms": 0,
+              "sources_observed": 1,
+              "first_seen_at": 0,
+              "published_at": 0
+            }
+          }
+        ],
+        "results_returned": 1,
+        "total_candidates_seen": 1,
+        "applied_filters": [],
+        "unsupported_filters": [],
+        "remote_count": 0,
+        "note": "current network view; not a complete global directory",
+        "automatic_spend_atoms": 0,
+        "next_actions": [
+          "getmodel FREE_ONLY",
+          "getmodeltransfers",
+          "automatic_spend_atoms stays 0"
+        ]
+      },
+      "rollback_refused": true,
+      "display_matches_latest": true
+    },
+    "candidate413_integration_exit": 0,
+    "final-baseline_exit": 201,
+    "final-candidate_exit": 0
+  },
+  "compiler": "c++ (Alpine 14.2.0) 14.2.0\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "retained_baseline_binary": "3cb44a7d3118e11e858633c9cba622bbbb73899ba5a711b762fd2f9b29a63123",
+  "input_hashes": {
+    "helper.cpp": "ba04496b8ea3d0e1370a31f316672f4d9f34dcb662219d223745f57101e209b7",
+    "probe.cpp": "460eae7ffa54efe88fae952638ac43942948d70bc2e54b7f486d4924908cb3a7",
+    "component.cpp": "0cd28dd6c16c2769d439b53804f49ed6772513ef50c6224e766f0ec6e4350543",
+    "integration.cpp": "09559fdfcc6e82b0b7b82d36e7bfa33d675990dfbaf949ccd12d5fc464e1428f"
+  },
+  "retained_libraries_after": {
+    "/tmp/btx-session2-helper-restart-current/build/lib/libbitcoin_crypto.a": "917c978e252b01872a0751d5f1a126863067943f112d2bd1d9e68271d8d7d30d",
+    "/tmp/btx-session2-helper-restart-current/build/lib/libbitcoin_clientversion.a": "b23f4888b7224d0faf59ae1746b58f45d4af9500f539ee56461bb2b37d245009",
+    "/tmp/btx-session2-helper-restart-current/build/lib/libbtx_matmul_backend.a": "0a330062034ecf2678fc175d18c8436b8fe6f5aa672b8992febc10b249efdb15",
+    "/tmp/btx-session2-helper-restart-current/build/lib/libbitcoinpqc.a": "b9b4714df271015e0afccc75bbeb68d683ca42fbcfb29e15b540f055889e11fc",
+    "/tmp/btx-session2-helper-restart-current/build/lib/libbitcoin_util.a": "24b9293ec45b5720a4da857c71675eb768908df84535e53b8ad6797b099dfd03",
+    "/tmp/btx-session2-helper-restart-current/build/lib/libbitcoin_consensus.a": "18a833ee2864c19bc72c9e212f13e5a432f5aae727ec5ce9fb06297bba1eb403",
+    "/tmp/btx-session2-helper-restart-current/build/lib/libbitcoin_modelnet.a": "0c0a9d70bd204dccf3531ded22faff7d24ff526346ecda95108bd0ec358bc4af",
+    "/tmp/btx-session2-helper-restart-current/build/lib/libbitcoin_shielded.a": "4b6b58b4a56fbffdadc6ab15e082d2b67849a5139c5cb0811d03f6378b3bee65",
+    "/tmp/btx-session2-helper-restart-current/build/lib/libbitcoin_common.a": "ffbe790e861f7bfd5d5353af8df3a081907e923c47ae490c0ee9ce2ded3ceb13",
+    "/tmp/btx-session2-helper-restart-current/build/lib/libbitcoin_db.a": "f78460654a731bf2085f49bec958ef8f1b23cecb538683c24b81aeccbb07d499",
+    "/tmp/btx-session2-helper-restart-current/build/src/univalue/libunivalue.a": "9898c1b37c85902907aec86c3d0a1870d3dd90901118efaa77a286829b40c5da",
+    "/tmp/btx-session2-helper-restart-current/build/src/secp256k1/lib/libsecp256k1.a": "ba4eb71082f3409cb204236bd2a2c0fe1c87170b6f3392fc86118ed3873b294a",
+    "/tmp/btx-session2-helper-restart-current/build/src/libleveldb.a": "b172fbdb96ea416ea74eb8624c2f7edd3616b43c597f3bb82339cb87dcf0f8f0",
+    "/tmp/btx-session2-helper-restart-current/build/src/libcrc32c.a": "47adce74905b2c44d5be92c286515307b08eacbaab8ca9483ca3a4b59cf37d07"
+  },
+  "retained_binary_after": "3cb44a7d3118e11e858633c9cba622bbbb73899ba5a711b762fd2f9b29a63123",
+  "complete": true,
+  "initial_component_sha256": "0cd28dd6c16c2769d439b53804f49ed6772513ef50c6224e766f0ec6e4350543",
+  "final_component_sha256": "f9476c8b96a628345145fc28d6104314f3ce0688b087d1cea0eec549d278ef81",
+  "final_case_qualified": true,
+  "standalone": {
+    "base": "666673a3153225ba264c7870e0e82e354df86765",
+    "method": "Whole helper translation unit overrides retained archive helper; other C++ source/headers identical",
+    "cases": {
+      "standalone-baseline": {
+        "source_sha256": "199a8b62dd524bf08d900913e671b5824a7de94f1c1c6f39f2c978476cc9b8f1",
+        "helper_object_sha256": "3078b7894d48cbc38776c7e541fcd87725f9403febeb4484e185fa4e350457ae",
+        "binary_sha256": "f352394bdb9768281921f279cfec8073201f71b3234450c894720c5d109ea650",
+        "exit": 201,
+        "binary_sha256_after": "f352394bdb9768281921f279cfec8073201f71b3234450c894720c5d109ea650"
+      },
+      "standalone-candidate": {
+        "source_sha256": "40c6f468a91cf1750130c1e7a9e0f879e4b4c111e7a32b2464b1de28d863facb",
+        "helper_object_sha256": "9faf37291d735e3d3c6eb329a91e04f709c1767bb32bff52e7a97887db0dd762",
+        "binary_sha256": "58e3b15bcdbe64eb34c3d41234327921d8c60614580b9f7a84606f13a0a78212",
+        "exit": 0,
+        "binary_sha256_after": "58e3b15bcdbe64eb34c3d41234327921d8c60614580b9f7a84606f13a0a78212"
+      }
+    },
+    "complete": true
+  },
+  "integrated_helper_object_sha256": "cd74102b7ac4310c582c7de61c1040b6058e8141577a4c29f7cdb08a1976d6a9",
+  "component_object_sha256": "5b6d2f06ba2f81435bb99c653f8e86d96d3616c3b1e8afe1902dd70f18048515"
+}
