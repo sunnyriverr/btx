@@ -1,0 +1,49 @@
+name: RPC help maintained test qualification
+on:
+  push:
+    branches: [codex/ci-rpc-help-acceptance]
+permissions:
+  contents: read
+jobs:
+  qualify:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    steps:
+      - name: Checkout owned acceptance scripts
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /contrib/devtools/rpc-help-acceptance/
+      - name: Checkout exact accepted product
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 666673a3153225ba264c7870e0e82e354df86765
+          path: rpc-help-product
+          persist-credentials: false
+      - name: Verify exact source and capacity
+        run: python3 contrib/devtools/rpc-help-acceptance/run.py preflight
+      - name: Install Linux prerequisites
+        run: python3 contrib/devtools/rpc-help-acceptance/run.py dependencies
+      - name: Build pinned OpenSSL
+        run: python3 contrib/devtools/rpc-help-acceptance/run.py openssl
+      - name: Configure wallet-enabled node
+        run: python3 contrib/devtools/rpc-help-acceptance/run.py configure
+      - name: Build current node and CLI
+        run: python3 contrib/devtools/rpc-help-acceptance/run.py build
+      - name: Run the same full RPC-help test before and after
+        run: python3 contrib/devtools/rpc-help-acceptance/run.py test
+      - name: Preserve evidence and clean owned runtime
+        if: always()
+        run: python3 contrib/devtools/rpc-help-acceptance/run.py finalize
+      - name: Retain qualification records
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: rpc-help-acceptance-records
+          path: rpc-help-results/
+          if-no-files-found: error
+          retention-days: 7
