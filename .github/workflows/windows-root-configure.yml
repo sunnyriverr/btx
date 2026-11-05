@@ -1,4 +1,4 @@
-name: Finish Windows cloud fixture runtime qualification
+name: Resume maintained native Windows unit target
 on:
   push:
     branches: [codex/ci-windows-root-configure]
@@ -8,7 +8,7 @@ jobs:
   configure:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: windows-2025
-    timeout-minutes: 60
+    timeout-minutes: 70
     env:
       BTX_NATIVE_ROOT: D:\btx-native-035
     steps:
@@ -95,7 +95,7 @@ jobs:
           path: |
             D:\btx-native-035\project-build
             D:\btx-native-035\vcpkg-installed
-          key: btx356-unit-fixtures-v1-10a2a99b071c588c457dfd7367541a6e3c531355e2490f918e66e4276d2093e6-41984877146
+          key: btx356-unit-fixtures-v1-fca0e76df0cc082f4a34cfae40c1c8d1ef8b0d784e91ae43ad27b8d75a0d5c61-41985603550
       - name: Require existing exact-profile checkpoint for restore proof
         shell: pwsh
         env:
@@ -112,9 +112,9 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/four.py prepare
+          python controls/contrib/devtools/windows-root-configure/full.py prepare
           exit /b %errorlevel%
-      - name: Incrementally rebuild changed byte fixture with maintained link closure
+      - name: Build the complete maintained Windows unit target
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -124,9 +124,9 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/four.py build
+          python controls/contrib/devtools/windows-root-configure/full.py build
           exit /b %errorlevel%
-      - name: Run selected maintained Windows safety and refusal controls
+      - name: Run the complete maintained Windows unit executable
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -136,7 +136,7 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/four.py run
+          python controls/contrib/devtools/windows-root-configure/full.py run
           exit /b %errorlevel%
       - name: Checkpoint only the exact candidate after execution
         if: always()
@@ -150,7 +150,7 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/four.py retain
+          python controls/contrib/devtools/windows-root-configure/full.py retain
           exit /b %errorlevel%
       - name: Preserve candidate objects under separate source-profile key
         if: always() && steps.retention.outcome == 'success' && steps.retention.outputs.checkpoint_valid == 'true'
