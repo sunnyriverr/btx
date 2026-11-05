@@ -18,10 +18,10 @@
 #include <modelnet/package_execute.h>
 #include <modelnet/transfer_session.h>
 #include <test/util/setup_common.h>
+#include <test/util/process.h>
 #include <test/modelnet_n02_idem.h>
 #include <univalue.h>
 #include <util/fs.h>
-#include <unistd.h>
 #include <util/strencodings.h>
 
 #include <boost/test/unit_test.hpp>
@@ -1092,7 +1092,12 @@ BOOST_AUTO_TEST_CASE(jit_api_priv_scale_journey_safety)
         BOOST_CHECK(modelnet::CapabilityCliUsage().find("--plan-id") != std::string::npos);
         std::atomic<bool> stop{true};
         const fs::path capd_dir = m_path_root / "capd-native";
-        const fs::path sock = fs::PathFromString(std::string("/tmp/btx-capd-") + std::to_string(::getpid()) + ".sock");
+#ifdef _WIN32
+        const fs::path sock = fs::path{fs::temp_directory_path()} / fs::PathFromString("btx-capd-" + std::to_string(test::ProcessId()) + ".sock");
+        BOOST_REQUIRE_MESSAGE(fs::PathToString(sock).size() < 100, "native capability socket path must fit sockaddr_un");
+#else
+        const fs::path sock = fs::PathFromString(std::string("/tmp/btx-capd-") + std::to_string(test::ProcessId()) + ".sock");
+#endif
         BOOST_CHECK_EQUAL(modelnet::RunCapabilityDaemon(capd_dir, sock, &stop), 0);
         BOOST_CHECK(!fs::exists(sock));
     }
