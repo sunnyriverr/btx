@@ -1,0 +1,378 @@
+{
+  "status": "PAIRED_PASS",
+  "commands": [
+    {
+      "label": "public-parent-fetch",
+      "command": [
+        "git",
+        "fetch",
+        "--no-tags",
+        "--depth=2",
+        "https://github.com/sunnyriverr/btx.git",
+        "4593f590eb711c6536a650a5ec7a29d4c50dbd37"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 4.01,
+      "log_sha256": "eea350859dce00dce49cb0768a271d766bbdca2733c8e324202460d36a42d0de",
+      "budget_stop": null
+    },
+    {
+      "label": "bundle-verify",
+      "command": [
+        "git",
+        "bundle",
+        "verify",
+        "D:\\btx-native-035\\evidence\\socket-source.bundle"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.0,
+      "log_sha256": "742c28e723a77bcf41a256196223106418e1089af74c5f3722f82afb3ff783df",
+      "budget_stop": null
+    },
+    {
+      "label": "bundle-fetch",
+      "command": [
+        "git",
+        "fetch",
+        "D:\\btx-native-035\\evidence\\socket-source.bundle",
+        "refs/heads/codex/fix-windows-capability-sockets-integration",
+        "refs/heads/codex/cache-capability-sockets-first-pair"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.0,
+      "log_sha256": "8a2e2230b311295d381264c8a90708f5c4977fa0ca678ee4c59933263d26449a",
+      "budget_stop": null
+    },
+    {
+      "label": "cached-checkout",
+      "command": [
+        "git",
+        "checkout",
+        "--detach",
+        "dfffd3031909b25e57d587fba757acff8334e81c"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.0,
+      "log_sha256": "8ad0badc65738db72a60b2206eea380dcac112216d85506d6a77350e0dcac6b7",
+      "budget_stop": null
+    },
+    {
+      "label": "baseline-checkout",
+      "command": [
+        "git",
+        "checkout",
+        "--detach",
+        "dce7a28fedeff6d64cd7e43d10de6fe799b7ae63"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.0,
+      "log_sha256": "814027084996aa914ad3835097962943ae889cdb8fdefd30a6eeb099f3e385dd",
+      "budget_stop": null
+    },
+    {
+      "label": "baseline-plan",
+      "command": [
+        "ninja",
+        "-C",
+        "D:\\btx-native-035\\project-build",
+        "-f",
+        "D:\\btx-native-035\\evidence\\sockets.ninja",
+        "-n",
+        "-d",
+        "explain",
+        "bin/windows_fixture_boundaries.exe"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.0,
+      "log_sha256": "71a3ada3945e83739a505e127e58f6bf594a1a7a82a60fc6072e776ded52813d",
+      "budget_stop": null
+    },
+    {
+      "label": "baseline-build",
+      "command": [
+        "ninja",
+        "-C",
+        "D:\\btx-native-035\\project-build",
+        "-f",
+        "D:\\btx-native-035\\evidence\\sockets.ninja",
+        "--verbose",
+        "-j",
+        "4",
+        "-k",
+        "1",
+        "bin/windows_fixture_boundaries.exe"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 18.01,
+      "log_sha256": "37d32b9bccbefcb0caafc3650132e891f916ba0024912cc491c4af876ff222de",
+      "budget_stop": null
+    },
+    {
+      "label": "baseline-case-0",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\windows_fixture_boundaries.exe",
+        "--run_test=modelnet_jit_journey_tests/jit_api_04_cli_verbs",
+        "--report_level=detailed",
+        "--log_level=test_suite",
+        "--",
+        "-testdatadir=D:\\cs42031320252b\\0\\node"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 3221226505,
+      "seconds": 2.0,
+      "log_sha256": "2493086582d00b99eb502b8c8a04d168552b4f7ca9158367e73a309ac6727004",
+      "budget_stop": null
+    },
+    {
+      "label": "candidate-checkout",
+      "command": [
+        "git",
+        "checkout",
+        "--detach",
+        "e8f454635e28e81dfae2ec5d3e3fdd97516d7eeb"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.0,
+      "log_sha256": "78cb84ccc012b11859efa03c21f9c3c96868dc02676380ccd7fafbcdf6c1df35",
+      "budget_stop": null
+    },
+    {
+      "label": "candidate-plan",
+      "command": [
+        "ninja",
+        "-C",
+        "D:\\btx-native-035\\project-build",
+        "-f",
+        "D:\\btx-native-035\\evidence\\sockets.ninja",
+        "-n",
+        "-d",
+        "explain",
+        "bin/windows_fixture_boundaries.exe"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.0,
+      "log_sha256": "475b4d058819b925fda00552d130e1d956973301a486767898ff857b5065aaf2",
+      "budget_stop": null
+    },
+    {
+      "label": "candidate-build",
+      "command": [
+        "ninja",
+        "-C",
+        "D:\\btx-native-035\\project-build",
+        "-f",
+        "D:\\btx-native-035\\evidence\\sockets.ninja",
+        "--verbose",
+        "-j",
+        "4",
+        "-k",
+        "1",
+        "bin/windows_fixture_boundaries.exe"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 8.0,
+      "log_sha256": "53342b92bfb9509d1b9cfcf8713cf9a377e24eb5250b66701a46bedb5dcbe6d2",
+      "budget_stop": null
+    },
+    {
+      "label": "candidate-case-0",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\windows_fixture_boundaries.exe",
+        "--run_test=modelnet_jit_journey_tests/jit_api_04_cli_verbs",
+        "--report_level=detailed",
+        "--log_level=test_suite",
+        "--",
+        "-testdatadir=D:\\cs42031320252c\\0\\node"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.19,
+      "log_sha256": "ab05dff6bb3ff43bc0780abfc09443c7ac8a3191be92171a0d00ad4e76e445b3",
+      "budget_stop": null
+    }
+  ],
+  "process_active": false,
+  "scope": "Native revised real-client readiness CLI pair only; unchanged first2 passing socket cases reused by exact product/test identities, not rerun",
+  "active_command": null,
+  "updated_utc": "2026-11-05T13:00:05.340875+00:00",
+  "restore": {
+    "restored": true,
+    "files_verified": 10769,
+    "source_timestamps_restored": 14169,
+    "previous_result": {
+      "status": "CANDIDATE_LINKED",
+      "full_unit": false,
+      "baseline_exit": [
+        201,
+        201,
+        3221226505
+      ],
+      "candidate_exit": [
+        0,
+        0,
+        201
+      ]
+    }
+  },
+  "actual_profile": {
+    "source": "666673a3153225ba264c7870e0e82e354df86765",
+    "tools": {
+      "clang-cl": {
+        "path": "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "sha256": "57e32b1ea2456f12f97bf802453171bbff12d56b2c486b4eca0c75343c0cda2c"
+      },
+      "cl": {
+        "path": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.EXE",
+        "sha256": "b0a1818ebae6da7f18230a84e76ce839212584ac4c2ab55b97a0d5268085da57"
+      },
+      "cmake": {
+        "path": "C:\\Program Files\\CMake\\bin\\cmake.EXE",
+        "sha256": "84935c0b7cb09c140de0d3b042d4e93e5fac4e6371e75bf28eae3d841f79dfb3"
+      },
+      "ninja": {
+        "path": "C:\\ProgramData\\Chocolatey\\bin\\ninja.EXE",
+        "sha256": "5142e84796e4bd57acb91ee19d30174d11bcca2b1a99d45a43251b9b1e6c32a9"
+      }
+    },
+    "args": [
+      "cmake",
+      "--debug-find-pkg=OpenSSL",
+      "--preset",
+      "windows-clangcl-static",
+      "-S",
+      "D:\\a\\btx\\btx\\btx",
+      "-B",
+      "D:\\btx-native-035\\project-build",
+      "-DBUILD_TESTS=ON",
+      "-DWITH_MODELNET=ON",
+      "-DVCPKG_MANIFEST_NO_DEFAULT_FEATURES=ON",
+      "-DVCPKG_MANIFEST_FEATURES=wallet;tests;zeromq",
+      "-DVCPKG_INSTALLED_DIR=D:\\btx-native-035\\vcpkg-installed",
+      "-DOPENSSL_ROOT_DIR=D:\\btx-native-035\\openssl-3.5.4-static",
+      "-DOPENSSL_USE_STATIC_LIBS=ON",
+      "-DOPENSSL_MSVC_STATIC_RT=ON",
+      "-DOPENSSL_INCLUDE_DIR=D:\\btx-native-035\\openssl-3.5.4-static\\include",
+      "-DOPENSSL_SSL_LIBRARY=D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib",
+      "-DOPENSSL_CRYPTO_LIBRARY=D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib",
+      "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+    ],
+    "environment": {
+      "ImageVersion": "20261030.294.1",
+      "VCToolsVersion": "14.51.36231",
+      "WindowsSDKVersion": "10.0.26100.0\\",
+      "INCLUDE": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\include;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\include;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Auxiliary\\VS\\include;C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.26100.0\\ucrt;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\um;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\shared;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\winrt;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\cppwinrt;C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\include\\um",
+      "LIB": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\lib\\x64;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x64;C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\lib\\um\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\lib\\10.0.26100.0\\ucrt\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\\\lib\\10.0.26100.0\\\\um\\x64",
+      "LIBPATH": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\lib\\x64;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x64;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x86\\store\\references;C:\\Program Files (x86)\\Windows Kits\\10\\UnionMetadata\\10.0.26100.0;C:\\Program Files (x86)\\Windows Kits\\10\\References\\10.0.26100.0;C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319",
+      "CL": null,
+      "_CL_": null
+    },
+    "controls": {
+      "runner.py": "73fea130e528e1034d508ec2ff1da76d710074792dc1af618ccb3a499e2f3f8b",
+      "checkpoint.py": "eb65c4501a306c92ea9e78a70c1932d00fa831d86ea302888c3eb9769b9c6ebb",
+      "checkpoint-selftest.py": "27d586dd8ba09eef10d5a4bbcb8b4ce6cb3480565ea0ee4f92c6cba4bb6d214a",
+      "dependency-identity.json": "f823d61237a287c704cada283764695a782fa001a725442122920d75ced8a4a5"
+    },
+    "openssl_files": {
+      "include/openssl/opensslv.h": "df513ae26e8baebbc641ba19f3d16f3e9ac0895cb092c81a39e1669f7fcb9c5c",
+      "lib/libssl.lib": "860ce6dd4edf55af8a82a958afb9bae9cd025f3ef7e263bcc266d79cdd5179e8",
+      "lib/libcrypto.lib": "f9385fc262485a1c779aa9a740ee3bde3025b9eb61b113e311024c9571899e12",
+      "bin/openssl.exe": "c63c66cb528c20dbd9f474679c8a19ea13d40f57c7f8efa4085ceb6dbe5c5552"
+    }
+  },
+  "host_transition": {},
+  "input_checkpoint_sha256": "3884327383a433dbd329a561beffc3b32b89ae9763a5b9eb52542cd8d2268f01",
+  "original_config": {
+    "build.ninja": "03abe6e53694a28502a2cb16ede803342a655fcb5a1be0f001936f7f4ef99d98",
+    "CMakeFiles/rules.ninja": "a709c8c906308b3b0e559455b365be3f65ddd519c9aea8c9de1ca7cc0c752e4b",
+    "CMakeCache.txt": "26177cbd305c3f6a56cbf2610dfa4851b053ec40f206536c17c3881cd687af34",
+    "compile_commands.json": "a991664401a33704ed75d27e3cd1ca79c61a52fff968fa16f131b28964a5853e"
+  },
+  "original_binary_sha256": "1740ff14816a12104c27eba73732132949256e6ad443150afbc1243efe1a5adf",
+  "graph_sha256": "1668babdcbe909b1078f89dfc4d3a9e87b19eee733abad9641d1aa109481e875",
+  "baseline_planned_steps": 10,
+  "baseline_build_exit": 0,
+  "baseline_binary_sha256": "44ada71910a01004f4b0d37f77b7f829bbae0d99d65c8c32557b9db93772972e",
+  "baseline_build_info": "#define BUILD_GIT_COMMIT \"dce7a28fedef\"\n#define BUILD_GIT_FULL_COMMIT \"dce7a28fedeff6d64cd7e43d10de6fe799b7ae63\"\n#define BUILD_GIT_DIRTY 0\n#define BUILD_GIT_SOURCE_TREE_FINGERPRINT \"09fee08ba5ccd0079eaaf099c58b94284a2e12be81be6e14032ca6d402644408\"\n",
+  "unit_data": "D:\\cs42031320252c",
+  "baseline_cases": [
+    {
+      "case": "modelnet_jit_journey_tests/jit_api_04_cli_verbs",
+      "exit": 3221226505,
+      "entered": true,
+      "pass": false,
+      "assertions": null,
+      "residual_temp_paths": [
+        {
+          "path": "btx-j04-8532.sock",
+          "attributes": 1056,
+          "bytes": 0
+        }
+      ],
+      "socket_entries": [
+        {
+          "path": "btx-j04-8532.sock",
+          "attributes": 1056,
+          "bytes": 0
+        }
+      ],
+      "owned_processes_after_case": []
+    }
+  ],
+  "baseline_processes_before_cleanup": [],
+  "owned_processes_after_execution": [],
+  "process_quiescence_confirmed": true,
+  "baseline_readonly_cleanup": [],
+  "baseline_owned_data_removed": true,
+  "candidate_planned_steps": 9,
+  "candidate_build_exit": 0,
+  "candidate_binary_sha256": "1819a536426c8ff744888805c142f2f134e1fb32697d31fef18575b7b6c979f9",
+  "candidate_build_info": "#define BUILD_GIT_COMMIT \"e8f454635e28\"\n#define BUILD_GIT_FULL_COMMIT \"e8f454635e28e81dfae2ec5d3e3fdd97516d7eeb\"\n#define BUILD_GIT_DIRTY 0\n#define BUILD_GIT_SOURCE_TREE_FINGERPRINT \"528b08ea0c36d3ed3104a32adb701c480d637de30dfd3f10c751a9fda269eaad\"\n",
+  "candidate_cases": [
+    {
+      "case": "modelnet_jit_journey_tests/jit_api_04_cli_verbs",
+      "exit": 0,
+      "entered": true,
+      "pass": true,
+      "assertions": [
+        140,
+        140
+      ],
+      "residual_temp_paths": [
+        {
+          "path": "btx-capability-ensure",
+          "attributes": 16,
+          "bytes": 0
+        },
+        {
+          "path": "btx-capability-ensure\\2172-0-1a41d681eed0e6a588ead3e1a152e701.st",
+          "attributes": 33,
+          "bytes": 70
+        }
+      ],
+      "socket_entries": [],
+      "owned_processes_after_case": []
+    }
+  ],
+  "candidate_processes_before_cleanup": [],
+  "candidate_readonly_cleanup": [
+    "0\\temp\\btx-capability-ensure\\2172-0-1a41d681eed0e6a588ead3e1a152e701.st"
+  ],
+  "candidate_owned_data_removed": true,
+  "checkpoint_capture": {
+    "files": 10769,
+    "bytes": 1671185146,
+    "manifest_sha256": "475e2b33c7bb19997f2eb92ba93bcef6fffebd539e2565647c8fc7f4c3bef700"
+  },
+  "objects_retained": 3837,
+  "checkpoint_key": "11423023ccc8120af4d4a08d2b6651440eb9cff5933a71f36f35008986a0884b"
+}

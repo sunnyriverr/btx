@@ -1,0 +1,94 @@
+{
+  "publication": {
+    "branch": "codex/fix-windows-capability-sockets",
+    "head": "80f7f2a30e7586a61eb9a1671e9abacb4028257e",
+    "tree": "fb965f461c04e950cac4104e3842552fb0cd106b",
+    "base": "666673a3153225ba264c7870e0e82e354df86765",
+    "files": [
+      "src/modelnet/capability_control.cpp",
+      "src/modelnet/capability_sdk.cpp",
+      "src/test/modelnet_jit_journey_tests.cpp",
+      "src/test/modelnet_jit_tests.cpp"
+    ],
+    "tested_source": "29d0fc8a973ff5ef92e51fa1da6ad5bab037b2d9",
+    "tested_tree": "2e43e982cbb0c50fe2400bffac911d22e9b2d43b",
+    "prerequisite_integration": "4593f590eb711c6536a650a5ec7a29d4c50dbd37",
+    "prerequisites": {
+      "411": {
+        "head": "362c36b2fda0f73741c06c4bcb090153fea38a08",
+        "state": "open",
+        "merged": false
+      },
+      "415": {
+        "head": "a75dc8f60207f979fdb6be81e5e81bc947258ae8",
+        "state": "open",
+        "merged": false
+      },
+      "417": {
+        "head": "3b453c7826e809c523855dd2f999a5da3f11e788",
+        "state": "open",
+        "merged": false
+      }
+    },
+    "credit": "Original copyright/source authorship retained. repch1c: #356 Windows audit; Jpp-matata: review/testing guidance. No independent ACK of this fix claimed."
+  },
+  "projection": {
+    "utc": "2026-11-05T13:12:06.484209+00:00",
+    "clean_branch": "refs/heads/codex/fix-windows-capability-sockets",
+    "clean_commit": "80f7f2a30e7586a61eb9a1671e9abacb4028257e",
+    "base": "666673a3153225ba264c7870e0e82e354df86765",
+    "clean_tree": "fb965f461c04e950cac4104e3842552fb0cd106b",
+    "files": [
+      "src/modelnet/capability_control.cpp",
+      "src/modelnet/capability_sdk.cpp",
+      "src/test/modelnet_jit_tests.cpp",
+      "src/test/modelnet_jit_journey_tests.cpp"
+    ],
+    "native_final_source": "29d0fc8a973ff5ef92e51fa1da6ad5bab037b2d9",
+    "native_final_tree": "2e43e982cbb0c50fe2400bffac911d22e9b2d43b",
+    "prerequisite_integration": "4593f590eb711c6536a650a5ec7a29d4c50dbd37",
+    "reconstructing_tested_tree_from_clean_files_and_prerequisite_integration": true,
+    "unchanged_first_pair_blobs": {
+      "src/modelnet/capability_control.cpp": "747a26f3fd78990b4a4d7959876afcceaa39257b",
+      "src/modelnet/capability_sdk.cpp": "e71d337ac3e64997900106a3d904acabcf813e1b",
+      "src/test/modelnet_jit_tests.cpp": "29c3989647facd97d8df5b884630084252af3f97"
+    },
+    "prerequisites": "Executed integration includes #411/#415/#417. Clean branch does not copy those changes; test::ProcessId header comes from #415. Full native build/unit qualification still open.",
+    "publication": false,
+    "after_only_native_run": 42032913033,
+    "unchanged_product_qualification_source": "e8f454635e28e81dfae2ec5d3e3fdd97516d7eeb",
+    "directory_entry_observation": "New CLI after-only assertion; no product delta"
+  },
+  "native_campaigns": [
+    {
+      "run": 42030285275,
+      "ci": "7075ddbeac1e5e29353bba0b3f84cac820aeecbc",
+      "sources": {
+        "cached_source": "e3d8b46c958168c53872e5042a0171ed91c96c9c",
+        "baseline_test": "e014b2f4acfed5d3d676942ad40d2111dcedf3bb",
+        "target": "dfffd3031909b25e57d587fba757acff8334e81c"
+      },
+      "after_only": false
+    },
+    {
+      "run": 42031320252,
+      "ci": "0ff81c724f443dea35cdf90c42bcfce82f7c18a2",
+      "sources": {
+        "cached_source": "dfffd3031909b25e57d587fba757acff8334e81c",
+        "baseline_test": "dce7a28fedeff6d64cd7e43d10de6fe799b7ae63",
+        "target": "e8f454635e28e81dfae2ec5d3e3fdd97516d7eeb"
+      },
+      "after_only": false
+    },
+    {
+      "run": 42032913033,
+      "ci": "2039a47ae7a948c858d056e3c48eee092986ba35",
+      "sources": {
+        "cached_source": "e8f454635e28e81dfae2ec5d3e3fdd97516d7eeb",
+        "baseline_test": "29d0fc8a973ff5ef92e51fa1da6ad5bab037b2d9",
+        "target": "29d0fc8a973ff5ef92e51fa1da6ad5bab037b2d9"
+      },
+      "after_only": true
+    }
+  ]
+}

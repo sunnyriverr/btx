@@ -1,0 +1,144 @@
+{
+  "utc": "2026-11-05T13:03:32.395899+00:00",
+  "verdict": "Focused native Windows socket repair qualified with before/after shutdown, refusal and legitimate CLI/natural socket cleanup evidence",
+  "cases": [
+    {
+      "case": "modelnet_jit_tests/jit_api_priv_scale_journey_safety",
+      "before_exit": 201,
+      "after_exit": 0,
+      "assertions": [
+        97,
+        97
+      ],
+      "native_run": 42030285275,
+      "no_owned_survivors": true,
+      "no_socket_entries_after_case": true
+    },
+    {
+      "case": "modelnet_jit_tests/capability_socket_failure_paths",
+      "before_exit": 201,
+      "after_exit": 0,
+      "assertions": [
+        11,
+        11
+      ],
+      "native_run": 42030285275,
+      "no_owned_survivors": true,
+      "no_socket_entries_after_case": true
+    },
+    {
+      "case": "modelnet_jit_journey_tests/jit_api_04_cli_verbs",
+      "before_exit": 3221226505,
+      "after_exit": 0,
+      "assertions": [
+        140,
+        140
+      ],
+      "native_run": 42031320252,
+      "no_owned_survivors": true,
+      "no_socket_entries_after_case": true,
+      "physical_cleanup_proof": "After-only141-check run42032913033 on identical product blobs; see cleanup.physical_entry_observation"
+    }
+  ],
+  "sources": {
+    "first_baseline": "e014b2f4acfed5d3d676942ad40d2111dcedf3bb",
+    "first_candidate": "dfffd3031909b25e57d587fba757acff8334e81c",
+    "final_baseline": "dce7a28fedeff6d64cd7e43d10de6fe799b7ae63",
+    "final_candidate": "e8f454635e28e81dfae2ec5d3e3fdd97516d7eeb"
+  },
+  "source_projection": {
+    "utc": "2026-11-05T13:12:06.484209+00:00",
+    "clean_branch": "refs/heads/codex/fix-windows-capability-sockets",
+    "clean_commit": "80f7f2a30e7586a61eb9a1671e9abacb4028257e",
+    "base": "666673a3153225ba264c7870e0e82e354df86765",
+    "clean_tree": "fb965f461c04e950cac4104e3842552fb0cd106b",
+    "files": [
+      "src/modelnet/capability_control.cpp",
+      "src/modelnet/capability_sdk.cpp",
+      "src/test/modelnet_jit_tests.cpp",
+      "src/test/modelnet_jit_journey_tests.cpp"
+    ],
+    "native_final_source": "29d0fc8a973ff5ef92e51fa1da6ad5bab037b2d9",
+    "native_final_tree": "2e43e982cbb0c50fe2400bffac911d22e9b2d43b",
+    "prerequisite_integration": "4593f590eb711c6536a650a5ec7a29d4c50dbd37",
+    "reconstructing_tested_tree_from_clean_files_and_prerequisite_integration": true,
+    "unchanged_first_pair_blobs": {
+      "src/modelnet/capability_control.cpp": "747a26f3fd78990b4a4d7959876afcceaa39257b",
+      "src/modelnet/capability_sdk.cpp": "e71d337ac3e64997900106a3d904acabcf813e1b",
+      "src/test/modelnet_jit_tests.cpp": "29c3989647facd97d8df5b884630084252af3f97"
+    },
+    "prerequisites": "Executed integration includes #411/#415/#417. Clean branch does not copy those changes; test::ProcessId header comes from #415. Full native build/unit qualification still open.",
+    "publication": false,
+    "after_only_native_run": 42032913033,
+    "unchanged_product_qualification_source": "e8f454635e28e81dfae2ec5d3e3fdd97516d7eeb",
+    "directory_entry_observation": "New CLI after-only assertion; no product delta"
+  },
+  "archives": [
+    {
+      "run": 42030285275,
+      "sha256": "0ea0dda14fa85cc7005f692b10365640dc000fb87950a49e543974202303be8f",
+      "bytes": 8008499
+    },
+    {
+      "run": 42031320252,
+      "sha256": "c6983b16102e985218e3c499667291c9d23fe1d3296db6afdafc144e0c6c20bb",
+      "bytes": 8006861
+    },
+    {
+      "run": 42032913033,
+      "sha256": "4a3188c6eef9dbe0f95e4c0bf46c302f89eb7928239891eb75d7ce6142565d84",
+      "bytes": 8001824
+    }
+  ],
+  "build_steps": {
+    "first": {
+      "baseline": 7,
+      "candidate": 9
+    },
+    "revised_cli": {
+      "baseline": 10,
+      "candidate": 9
+    }
+  },
+  "valid_control_failure_resolved": "Initial CLI Windows filesystem exists(liveAF_UNIX) failed; replaced by actual clientRPC readiness on both sides. Only revised CLI repeated; first2 test and product blobs unchanged.",
+  "cleanup": {
+    "socket_entry_and_daemon_exit_asserted_before_fallback": true,
+    "process_cleanup_forced": false,
+    "first_readonly_fixture_artifacts_removed_after_observation": [
+      "0\\temp\\btx-capability-ensure\\6380-0-c26d6d6edd8b6e277989c6d1ff050e9b.st"
+    ],
+    "final_readonly_fixture_artifacts_removed_after_observation": [
+      "0\\temp\\btx-capability-ensure\\2172-0-1a41d681eed0e6a588ead3e1a152e701.st"
+    ],
+    "all_owned_runtime_data_removed": true,
+    "physical_entry_observation": {
+      "native_run": 42032913033,
+      "source": "29d0fc8a973ff5ef92e51fa1da6ad5bab037b2d9",
+      "after_only": true,
+      "assertions": [
+        141,
+        141
+      ],
+      "observation": "Directory filenames enumerated before Join fallback, without following socket reparse point; no matching socket entry",
+      "socket_entries_after_case": [],
+      "processes_after_case": []
+    }
+  },
+  "limits": [
+    "Two matched scoped pairs plus after-only stronger directory-entry observation; no all-three-on-final-binary execution claim",
+    "Real Windows AF_UNIX and in-process daemon+native CLI entrypoint, toyCPU model fixtures; no external daemon spawning qualification",
+    "No descriptor leak counter, POSIX execution, full-unit or release claim"
+  ],
+  "cache": {
+    "utc": "2026-11-05T13:12:23.907397+00:00",
+    "id": 10059998657,
+    "key": "btx356-unit-fixtures-v1-e5050bc6a1ad12b12740b51a536d9354857b8bf45c646430f05d474aea3139bf-42032913033",
+    "source": "29d0fc8a973ff5ef92e51fa1da6ad5bab037b2d9",
+    "objects": 3837,
+    "checkpoint_sha256": "01eb31fc9b302260597582770c849120b6a5d53bb136410a65bba966d6451e8e",
+    "flat_profile": true,
+    "input_caches_preserved": true,
+    "reuse": "Fetch public4593 and local source.bundle, checkout cached29d0fc8a, then full catalog/profile/checkpoint verification before reuse. Earlier sourcee8f4 remains in bundle ancestry. Original full graph unchanged."
+  },
+  "publication": false
+}

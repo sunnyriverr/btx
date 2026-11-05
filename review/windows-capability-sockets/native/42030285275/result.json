@@ -1,0 +1,284 @@
+{
+  "base": "666673a3153225ba264c7870e0e82e354df86765",
+  "scope": "Actual stock native Windows btxd build/link; no test-source patch",
+  "status": "IN_PROGRESS",
+  "commands": [
+    {
+      "label": "cmake-version",
+      "command": [
+        "cmake",
+        "--version"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.05,
+      "timed_out": false,
+      "log_sha256": "30d9c504b2b91d7683a1b8d25f9f987cb24ff9f35fd553950540cd847f8e23de"
+    },
+    {
+      "label": "ninja-version",
+      "command": [
+        "ninja",
+        "--version"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.03,
+      "timed_out": false,
+      "log_sha256": "f7204ca4d4bbe623e6045a5088ac906c5e1966b4fd2a11af9d156bad3327526f"
+    },
+    {
+      "label": "clang-version",
+      "command": [
+        "clang-cl",
+        "--version"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.09,
+      "timed_out": false,
+      "log_sha256": "661974250fc5ed291000a9000c99466582a67ef96304a893526f7e46b7db492e"
+    },
+    {
+      "label": "cl-version",
+      "command": [
+        "cl",
+        "/Bv"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 2,
+      "seconds": 2.06,
+      "timed_out": false,
+      "log_sha256": "c540121e17c0d19751b1c744c4c70d492cea729394ebe2284c612f00b7339459"
+    },
+    {
+      "label": "openssl-version",
+      "command": [
+        "D:\\btx-native-035\\openssl-3.5.4-static\\bin\\openssl.exe",
+        "version",
+        "-a"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "9196358571592f94c5e7986c79fb831cb1113610de6ad2837b8e2148ab83c3c3"
+    },
+    {
+      "label": "vcpkg-clone",
+      "command": [
+        "git",
+        "clone",
+        "--no-checkout",
+        "https://github.com/microsoft/vcpkg.git",
+        "D:\\btx-native-035\\vcpkg"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 10.0,
+      "timed_out": false,
+      "log_sha256": "b7682cd35378ee73ea64ff25d41146492355a31d184aa23c9e2a7c1568d2aae4"
+    },
+    {
+      "label": "vcpkg-checkout",
+      "command": [
+        "git",
+        "-C",
+        "D:\\btx-native-035\\vcpkg",
+        "checkout",
+        "--detach",
+        "afa249f12f52ed8a3b919f195495ba8b330288d1"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 4.0,
+      "timed_out": false,
+      "log_sha256": "c7eb77dcf59b404e01015e50b293a2ac8af3c448f197b5001f654aab57dfa103"
+    },
+    {
+      "label": "vcpkg-bootstrap",
+      "command": [
+        "cmd",
+        "/c",
+        "D:\\btx-native-035\\vcpkg\\bootstrap-vcpkg.bat",
+        "-disableMetrics"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "a68ec968c9b75c704553d6e687a2987d7191c189c0209547e35abed030e9f045"
+    },
+    {
+      "label": "vcpkg-version",
+      "command": [
+        "D:\\btx-native-035\\vcpkg\\vcpkg.exe",
+        "version"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "bd34078a4a7278c80370e9685054a1503c151a671be7e6fdf893eb3a2b4e6cc6"
+    },
+    {
+      "label": "vcpkg-historical-blob-8ed2f86e",
+      "command": [
+        "git",
+        "-C",
+        "D:\\btx-native-035\\vcpkg",
+        "cat-file",
+        "-e",
+        "8ed2f86ee404263f5aa1f72f8f4f13ee44262b81"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "vcpkg-historical-blob-937a2198",
+      "command": [
+        "git",
+        "-C",
+        "D:\\btx-native-035\\vcpkg",
+        "cat-file",
+        "-e",
+        "937a2198387cb5c913e4feea170652651dd756ba"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "checkpoint-selftest",
+      "command": [
+        "C:\\hostedtoolcache\\windows\\Python\\3.12.10\\x64\\python.exe",
+        "D:\\a\\btx\\btx\\controls\\contrib\\devtools\\windows-root-configure\\checkpoint-selftest.py"
+      ],
+      "cwd": "D:\\btx-native-035",
+      "exit": 0,
+      "seconds": 2.0,
+      "timed_out": false,
+      "log_sha256": "42390c1d86342dd2389b8e08513fde13c1fb0f923935cd8add8ed2961867de56"
+    }
+  ],
+  "stages": {
+    "openssl": "COMPLETE",
+    "vcpkg": "COMPLETE",
+    "profile": "COMPLETE"
+  },
+  "product_fixes": [],
+  "whole_node_build_run": false,
+  "unit_test_execution": false,
+  "PR397_in_upstream": true,
+  "compiler_env": {
+    "VCToolsVersion": "14.51.36231",
+    "WindowsSDKVersion": "10.0.26100.0\\",
+    "ImageVersion": "20261030.294.1",
+    "PROCESSOR_ARCHITECTURE": "AMD64"
+  },
+  "job_started_epoch": 1793882950.3774579,
+  "updated_utc": "2026-11-05T12:50:07.493998+00:00",
+  "before_source_sha256": "33cf573e7d1e214fd117c746336a7a98ff917d7024bd29938c7affd35a605fb5",
+  "before_tracked_files": 14309,
+  "active_command": null,
+  "process_active": false,
+  "last_completed_command": "checkpoint-selftest",
+  "resolved_tools": {
+    "cl": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.EXE",
+    "clang-cl": "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+    "cmake": "C:\\Program Files\\CMake\\bin\\cmake.EXE",
+    "ninja": "C:\\ProgramData\\Chocolatey\\bin\\ninja.EXE",
+    "perl": "C:\\Strawberry\\perl\\bin\\perl.EXE",
+    "nasm": "C:\\Strawberry\\c\\bin\\nasm.EXE",
+    "nmake": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\nmake.EXE",
+    "dumpbin": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\dumpbin.EXE"
+  },
+  "openssl_cache_reused": true,
+  "openssl_files": {
+    "include/openssl/opensslv.h": "df513ae26e8baebbc641ba19f3d16f3e9ac0895cb092c81a39e1669f7fcb9c5c",
+    "lib/libssl.lib": "860ce6dd4edf55af8a82a958afb9bae9cd025f3ef7e263bcc266d79cdd5179e8",
+    "lib/libcrypto.lib": "f9385fc262485a1c779aa9a740ee3bde3025b9eb61b113e311024c9571899e12",
+    "bin/openssl.exe": "c63c66cb528c20dbd9f474679c8a19ea13d40f57c7f8efa4085ceb6dbe5c5552"
+  },
+  "openssl_source_sha256": "967311f84955316969bdb1d8d4b983718ef42338639c621ec4c34fddef355e99",
+  "openssl_prefix": "D:\\btx-native-035\\openssl-3.5.4-static",
+  "dependency_native_smoke_reused_from": "https://github.com/sunnyriverr/btx/actions/runs/41755903799",
+  "dependency_smoke_rerun": false,
+  "after_source_sha256": "33cf573e7d1e214fd117c746336a7a98ff917d7024bd29938c7affd35a605fb5",
+  "after_tracked_files": 14309,
+  "tracked_source_unchanged": true,
+  "vcpkg_commit": "afa249f12f52ed8a3b919f195495ba8b330288d1",
+  "vcpkg_executable_sha256": "191ee64b0887af80aad3eff6c5e888ab733d3ef2182885ed4747b4574c201834",
+  "vcpkg_promisor_remote": "",
+  "profile": {
+    "source": "666673a3153225ba264c7870e0e82e354df86765",
+    "tools": {
+      "clang-cl": {
+        "path": "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "sha256": "57e32b1ea2456f12f97bf802453171bbff12d56b2c486b4eca0c75343c0cda2c"
+      },
+      "cl": {
+        "path": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.EXE",
+        "sha256": "b0a1818ebae6da7f18230a84e76ce839212584ac4c2ab55b97a0d5268085da57"
+      },
+      "cmake": {
+        "path": "C:\\Program Files\\CMake\\bin\\cmake.EXE",
+        "sha256": "84935c0b7cb09c140de0d3b042d4e93e5fac4e6371e75bf28eae3d841f79dfb3"
+      },
+      "ninja": {
+        "path": "C:\\ProgramData\\Chocolatey\\bin\\ninja.EXE",
+        "sha256": "5142e84796e4bd57acb91ee19d30174d11bcca2b1a99d45a43251b9b1e6c32a9"
+      }
+    },
+    "args": [
+      "cmake",
+      "--debug-find-pkg=OpenSSL",
+      "--preset",
+      "windows-clangcl-static",
+      "-S",
+      "D:\\a\\btx\\btx\\btx",
+      "-B",
+      "D:\\btx-native-035\\project-build",
+      "-DBUILD_TESTS=ON",
+      "-DWITH_MODELNET=ON",
+      "-DVCPKG_MANIFEST_NO_DEFAULT_FEATURES=ON",
+      "-DVCPKG_MANIFEST_FEATURES=wallet;tests;zeromq",
+      "-DVCPKG_INSTALLED_DIR=D:\\btx-native-035\\vcpkg-installed",
+      "-DOPENSSL_ROOT_DIR=D:\\btx-native-035\\openssl-3.5.4-static",
+      "-DOPENSSL_USE_STATIC_LIBS=ON",
+      "-DOPENSSL_MSVC_STATIC_RT=ON",
+      "-DOPENSSL_INCLUDE_DIR=D:\\btx-native-035\\openssl-3.5.4-static\\include",
+      "-DOPENSSL_SSL_LIBRARY=D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib",
+      "-DOPENSSL_CRYPTO_LIBRARY=D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib",
+      "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+    ],
+    "environment": {
+      "ImageVersion": "20261030.294.1",
+      "VCToolsVersion": "14.51.36231",
+      "WindowsSDKVersion": "10.0.26100.0\\",
+      "INCLUDE": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\include;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\include;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Auxiliary\\VS\\include;C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.26100.0\\ucrt;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\um;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\shared;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\winrt;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\cppwinrt;C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\include\\um",
+      "LIB": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\lib\\x64;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x64;C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\lib\\um\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\lib\\10.0.26100.0\\ucrt\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\\\lib\\10.0.26100.0\\\\um\\x64",
+      "LIBPATH": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\lib\\x64;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x64;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x86\\store\\references;C:\\Program Files (x86)\\Windows Kits\\10\\UnionMetadata\\10.0.26100.0;C:\\Program Files (x86)\\Windows Kits\\10\\References\\10.0.26100.0;C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319",
+      "CL": null,
+      "_CL_": null
+    },
+    "controls": {
+      "runner.py": "73fea130e528e1034d508ec2ff1da76d710074792dc1af618ccb3a499e2f3f8b",
+      "checkpoint.py": "eb65c4501a306c92ea9e78a70c1932d00fa831d86ea302888c3eb9769b9c6ebb",
+      "checkpoint-selftest.py": "27d586dd8ba09eef10d5a4bbcb8b4ce6cb3480565ea0ee4f92c6cba4bb6d214a",
+      "dependency-identity.json": "f823d61237a287c704cada283764695a782fa001a725442122920d75ced8a4a5"
+    },
+    "openssl_files": {
+      "include/openssl/opensslv.h": "df513ae26e8baebbc641ba19f3d16f3e9ac0895cb092c81a39e1669f7fcb9c5c",
+      "lib/libssl.lib": "860ce6dd4edf55af8a82a958afb9bae9cd025f3ef7e263bcc266d79cdd5179e8",
+      "lib/libcrypto.lib": "f9385fc262485a1c779aa9a740ee3bde3025b9eb61b113e311024c9571899e12",
+      "bin/openssl.exe": "c63c66cb528c20dbd9f474679c8a19ea13d40f57c7f8efa4085ceb6dbe5c5552"
+    }
+  },
+  "checkpoint_key": "c5e688f330d725d795e28fb435e8dad20b663e03ff60eb53281fd9db1f479417"
+}

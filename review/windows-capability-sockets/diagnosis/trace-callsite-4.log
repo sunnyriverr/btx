@@ -1,0 +1,25 @@
+
+D:\btx-native-035\project-build\bin\windows_fixture_boundaries.exe:	file format coff-x86-64
+
+Disassembly of section .text:
+
+0000000140001000 <.text>:
+140268076: 48 81 fa 00 10 00 00        	cmpq	$0x1000, %rdx           # imm = 0x1000
+14026807d: 0f 82 e1 ed ff ff           	jb	0x140266e64 <.text+0x265e64>
+140268083: 4c 8b 41 f8                 	movq	-0x8(%rcx), %r8
+140268087: 48 83 c1 f8                 	addq	$-0x8, %rcx
+14026808b: 4c 29 c1                    	subq	%r8, %rcx
+14026808e: 48 83 f9 20                 	cmpq	$0x20, %rcx
+140268092: 0f 82 c2 ed ff ff           	jb	0x140266e5a <.text+0x265e5a>
+140268098: 0f 0b                       	ud2
+14026809a: 48 8b 8d 28 1a 00 00        	movq	0x1a28(%rbp), %rcx
+1402680a1: e8 5e 84 f5 01              	callq	0x1421c0504 <.text+0x21bf504>
+1402680a6: 48 83 bd e8 1a 00 00 10     	cmpq	$0x10, 0x1ae8(%rbp)
+1402680ae: 72 09                       	jb	0x1402680b9 <.text+0x2670b9>
+1402680b0: 48 8b 8d d0 1a 00 00        	movq	0x1ad0(%rbp), %rcx
+1402680b7: eb 07                       	jmp	0x1402680c0 <.text+0x2670c0>
+1402680b9: 48 8d 8d d0 1a 00 00        	leaq	0x1ad0(%rbp), %rcx
+1402680c0: 48 8b bd 38 1c 00 00        	movq	0x1c38(%rbp), %rdi
+1402680c7: e8 cc 03 f6 01              	callq	0x1421c8498 <.text+0x21c7498>
+1402680cc: 48 8d 8d b0 0f 00 00        	leaq	0xfb0(%rbp), %rcx
+1402680d3: e8 18 4c e1 ff              	callq	0x14007ccf0 <.text+0x7bcf0>
