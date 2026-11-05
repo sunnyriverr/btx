@@ -1,4 +1,4 @@
-name: Native Windows fixture boundary controls
+name: Native Windows optional helper lifecycle
 on:
   push:
     branches: [codex/ci-windows-root-configure]
@@ -95,7 +95,7 @@ jobs:
           path: |
             D:\btx-native-035\project-build
             D:\btx-native-035\vcpkg-installed
-          key: btx356-unit-fixtures-v1-994672c4fb2f7fe22f88a63faec875c7a70e47d7cc5a2e8ad483321d59423b45-41990045506
+          key: btx356-unit-fixtures-v1-690b1294aa60953f57ed210c9b612b76ba893d8012184a245b7bbb528346a6c9-41997202444
       - name: Require existing exact-profile checkpoint for restore proof
         shell: pwsh
         env:
@@ -112,9 +112,9 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/fixture.py prepare
+          python controls/contrib/devtools/windows-root-configure/lifecycle.py prepare
           exit /b %errorlevel%
-      - name: Compile and link selected maintained fixtures
+      - name: Relink exact cached native node
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -124,9 +124,9 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/fixture.py build
+          python controls/contrib/devtools/windows-root-configure/lifecycle.py build
           exit /b %errorlevel%
-      - name: Run maintained persistence and cloud controls
+      - name: Run optional helper lifecycle and policy controls
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -136,7 +136,7 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/fixture.py run
+          python controls/contrib/devtools/windows-root-configure/lifecycle.py run
           exit /b %errorlevel%
       - name: Checkpoint only the exact candidate after execution
         if: always()
@@ -150,7 +150,7 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/fixture.py retain
+          python controls/contrib/devtools/windows-root-configure/lifecycle.py retain
           exit /b %errorlevel%
       - name: Preserve candidate objects under separate source-profile key
         if: always() && steps.retention.outcome == 'success' && steps.retention.outputs.checkpoint_valid == 'true'
