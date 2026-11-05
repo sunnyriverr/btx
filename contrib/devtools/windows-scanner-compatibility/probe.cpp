@@ -46,7 +46,7 @@ void Put(const fs::path& p){std::ofstream f(p,std::ios::binary);f<<"go";f.close(
 void WaitPhase(const fs::path& root,const std::string& phase)
 {
     const auto start=GetTickCount64();
-    while(Read(root/L"phase.txt")!=phase){Check(GetTickCount64()-start<10000,"phase-timeout:"+phase);Sleep(5);}
+    while(Read(root/fs::path(L"phase.txt"))!=phase){Check(GetTickCount64()-start<10000,"phase-timeout:"+phase);Sleep(5);}
 }
 std::wstring FinalPath(HANDLE h)
 {
@@ -160,25 +160,25 @@ void Probe(const fs::path& root)
     const std::wstring fs_name(filesystem.data());std::cout<<"FILESYSTEM "<<std::string(fs_name.begin(),fs_name.end())<<std::endl;
     auto moving=HoldDirectory(root,L"moving"),doomed=HoldDirectory(root,L"doomed");
     auto initial=Scan(root);Check(initial.files.at(L"moving\\seed.bin")==3,"initial-size");Pass("initial-nested-enumeration");
-    Put(root/L"go.write");WaitPhase(root,"writer-open");
+    Put(root/fs::path(L"go.write"));WaitPhase(root,"writer-open");
     auto live=Scan(root);Check(live.files.at(L"live.bin")==4096,"live-handle-size");
     Pass("exclusive-writer-live-size","handle=4096 directory-record="+std::to_string(live.directory_lengths.at(L"live.bin")));
-    Handle reader(CreateFileW((root/L"live.bin").c_str(),GENERIC_READ,FILE_SHARE_READ,nullptr,OPEN_EXISTING,0,nullptr));
+    Handle reader(CreateFileW((root/fs::path(L"live.bin")).c_str(),GENERIC_READ,FILE_SHARE_READ,nullptr,OPEN_EXISTING,0,nullptr));
     Check(!reader.valid()&&GetLastError()==ERROR_SHARING_VIOLATION,"exclusive-writer-control");Pass("content-reader-sharing-control");
-    Put(root/L"go.rename");WaitPhase(root,"renamed");
+    Put(root/fs::path(L"go.rename"));WaitPhase(root,"renamed");
     const auto path=FinalPath(moving.h);Check(path.ends_with(L"\\moved"),"renamed-handle-path");
     Pass("directory-rename-with-monitor-handle");
     FILE_STANDARD_INFO deleted{};
     if(!GetFileInformationByHandleEx(doomed.h,FileStandardInfo,&deleted,sizeof(deleted)))Error("deleted-directory-info");
     Check(deleted.DeletePending!=FALSE,"directory-delete-pending");doomed.reset();
-    Check(Missing(root/L"doomed"),"directory-deleted");
-    Check(Missing(root/L"ephemeral.bin"),"file-deleted");Pass("directory-and-file-deletion");
+    Check(Missing(root/fs::path(L"doomed")),"directory-deleted");
+    Check(Missing(root/fs::path(L"ephemeral.bin")),"file-deleted");Pass("directory-and-file-deletion");
     moving.reset();auto renamed=Scan(root);
     Check(renamed.files.at(L"moved\\seed.bin")==3&&renamed.files.at(L"live.bin")==4096,"post-rename-sizes");
     Check(!renamed.files.contains(L"moving\\seed.bin"),"old-name-absent");Pass("post-rename-rescan");
-    Put(root/L"go.close");WaitPhase(root,"closed");auto closed=Scan(root);
-    Check(closed.files.at(L"live.bin")==4096&&Read(root/L"live.bin")==std::string(4096,'B'),"closed-content");
-    Pass("closed-file-content-and-size");root_handle.reset();Put(root/L"go.finish");
+    Put(root/fs::path(L"go.close"));WaitPhase(root,"closed");auto closed=Scan(root);
+    Check(closed.files.at(L"live.bin")==4096&&Read(root/fs::path(L"live.bin"))==std::string(4096,'B'),"closed-content");
+    Pass("closed-file-content-and-size");root_handle.reset();Put(root/fs::path(L"go.finish"));
 }
 int wmain(int argc,wchar_t** argv)
 {
@@ -186,7 +186,7 @@ int wmain(int argc,wchar_t** argv)
     modelnet::SwarmFilesystemJailRequest request;request.root=original;request.helper=helper;
     request.network_denied=true;request.max_wall_seconds=60;request.max_tree_bytes=4ULL*1024*1024;
     fs::path staged;std::string monitor_error;bool monitor_ok=false;
-    std::thread monitor([&]{try{staged=FindOwnedChildRoot();std::cout<<"STAGED_ROOT "<<staged.utf8string()<<std::endl;Probe(staged);monitor_ok=true;}catch(const std::exception& e){monitor_error=e.what();if(!staged.empty())try{Put(staged/L"abort");}catch(...){};}});
+    std::thread monitor([&]{try{staged=FindOwnedChildRoot();std::cout<<"STAGED_ROOT "<<staged.utf8string()<<std::endl;Probe(staged);monitor_ok=true;}catch(const std::exception& e){monitor_error=e.what();if(!staged.empty())try{Put(staged/fs::path(L"abort"));}catch(...){};}});
     std::string error,backend_exception;modelnet::SwarmFilesystemJailResult run;
     try{run=modelnet::SwarmRunFilesystemJail(request,error);}catch(const std::exception& e){backend_exception=e.what();}catch(...){backend_exception="unknown-backend-exception";}
     monitor.join();
@@ -197,7 +197,7 @@ int wmain(int argc,wchar_t** argv)
         Check(!staged.empty(),"staged-root-observed");Check(!fs::exists(staged),"owned-staged-root-cleanup");Pass("owned-staged-root-cleanup");
         Check(backend_exception.empty()&&monitor_ok,"monitor-feasibility-not-established");
         Check(run.launched&&run.jailed&&run.child_status==0&&run.code=="JAILED","native-worker-result");
-        Check(Read(original/L"result.txt")=="DONE"&&Read(original/L"live.bin")==std::string(4096,'B'),"published-output");Pass("real-backend-output");
+        Check(Read(original/fs::path(L"result.txt"))=="DONE"&&Read(original/fs::path(L"live.bin"))==std::string(4096,'B'),"published-output");Pass("real-backend-output");
         std::cout<<"VERDICT PASS"<<std::endl;return 0;
     }catch(const std::exception& e){std::cout<<"VERDICT NOT_FEASIBLE "<<e.what()<<std::endl;return 1;}
 }
