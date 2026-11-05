@@ -547,10 +547,14 @@ BOOST_AUTO_TEST_CASE(jit_api_04_cli_verbs)
     bool ready = false;
     const auto t0 = std::chrono::steady_clock::now();
     while (std::chrono::steady_clock::now() - t0 < std::chrono::seconds(8)) {
-        if (fs::exists(sock)) {
+        UniValue reply;
+        modelnet::CapabilityError error;
+        if (modelnet::CallCapabilityUnix(fs::PathToString(sock), "getbtxruntimecapabilities",
+                                        UniValue{UniValue::VOBJ}, reply, error)) {
             ready = true;
             break;
         }
+        if (daemon_result.load() != -1) break;
         std::this_thread::sleep_for(std::chrono::milliseconds(20));
     }
     BOOST_REQUIRE_MESSAGE(ready, "in-process capabilityd socket; daemon result=" + std::to_string(daemon_result.load()) + "; path=" + fs::PathToString(sock));
