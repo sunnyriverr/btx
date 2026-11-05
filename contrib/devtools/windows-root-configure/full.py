@@ -38,8 +38,9 @@ def configure():
  book=ROOT/'vcpkg-installed/vcpkg/compiler-file-hash-cache.json';shutil.copyfile(book,E/'compiler-file-hash-cache-before.json');R['status']='NORMAL_CONFIGURING';s.save();s.need('normal-cmake-regenerate',args,900);R['settings_after']=settings();R['settings_delta']=diff(R['settings_before'],R['settings_after']);R['configuration']={n:sha(BUILD/n)for n in R['original_config']};shutil.copyfile(book,E/'compiler-file-hash-cache-after.json')
  new={x['output']:x for x in json.loads((BUILD/'compile_commands.json').read_text())};sdk=[x for x in new.values()if x['file'].replace('\\','/').endswith('/src/test/util/sdk_process.cpp')and '/test_btx.dir/'in x['output'].replace('\\','/')];assert len(sdk)==1;R['sdk_helper_registration']=sdk
  added=sorted(new.keys()-old.keys());removed=sorted(old.keys()-new.keys());changed=[k for k in old.keys()&new.keys()if old[k]!=new[k]];assert not removed;assert all(new[k]['file'].replace('\\','/').endswith('/src/test/util/sdk_process.cpp')for k in added)
- def normal(cmd):return re.sub(r'(?<!\S)(-I|-imsvc|/I)("[^"\r\n]*"|[^\s]+)',lambda m:m.group(1)+m.group(2).replace('\\','/'),cmd)
- assert all({**old[k],'command':normal(old[k]['command'])}=={**new[k],'command':normal(new[k]['command'])}for k in changed),'Unexpected configure command delta'
+ def normal(cmd):return re.sub(r'(?<!\S)(-I|-imsvc|/I)(\s*)("[^"\r\n]*"|[^\s]+)',lambda m:m.group(1)+m.group(2)+m.group(3).replace('\\','/'),cmd)
+ unexpected=[{'before':old[k],'after':new[k]}for k in changed if {**old[k],'command':normal(old[k]['command'])}!={**new[k],'command':normal(new[k]['command'])}]
+ (E/'unexpected-command-delta.json').write_text(json.dumps({'count':len(unexpected),'first20':unexpected[:20]},indent=2)+'\n');R['unexpected_command_delta_count']=len(unexpected);s.save();assert not unexpected,'Unexpected configure command delta; diagnostic retained'
  R['command_delta']={'before':len(old),'after':len(new),'added':len(added),'removed':len(removed),'changed':len(changed),'all_old_changes_include_separators_only':True}
  for k,v in R['original_objects'].items():assert sha(ROOT/k)==v['sha256'],k
  for k,v in R['dependencies_before'].items():
