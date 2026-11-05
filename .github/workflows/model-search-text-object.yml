@@ -13,6 +13,10 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - name: Fetch exact comparison baseline
         run: git fetch --no-tags --depth=1 origin 666673a3153225ba264c7870e0e82e354df86765
+      - name: Install maintained Boost test dependency
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libboost-test-dev
       - name: Run maintained case before and after
         run: python3 contrib/devtools/model-search-text-object/run.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
