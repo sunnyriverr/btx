@@ -27,7 +27,7 @@
 #ifdef BTX_WINDOWS_ACCOUNTING_TEST
 // Only the native regression binary defines these; never a runtime option.
 namespace modelnet::windows_accounting_test {
-void AdjustCpu(HANDLE,const std::wstring&,bool&,LONGLONG&,LONGLONG&);
+void AdjustCpu(HANDLE,const std::wstring&,bool,bool&,LONGLONG&,LONGLONG&);
 void AdjustClock(const std::wstring&,bool&,ULONGLONG&);
 void AdjustTree(const std::wstring&,bool&,uint64_t&);
 }
@@ -434,7 +434,7 @@ SwarmConfineResult SwarmRunWindowsAppContainer(const SwarmConfineRequest& reques
             LONGLONG user=accounting.TotalUserTime.QuadPart,kernel=accounting.TotalKernelTime.QuadPart;
             ULONGLONG now=0;bool clock_ok=QueryUnbiasedInterruptTime(&now)!=0;
 #ifdef BTX_WINDOWS_ACCOUNTING_TEST
-            windows_accounting_test::AdjustCpu(job.value,profile.work.native(),cpu_ok,user,kernel);
+            windows_accounting_test::AdjustCpu(job.value,profile.work.native(),state==WAIT_OBJECT_0,cpu_ok,user,kernel);
             windows_accounting_test::AdjustClock(profile.work.native(),clock_ok,now);
 #endif
             const auto cpu=windows_accounting::EvaluateCpu(user,kernel,cpu_ticks);

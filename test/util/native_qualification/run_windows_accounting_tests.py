@@ -87,8 +87,11 @@ def main():
         case('production','policy',0,['POLICY PASS'])
         case('production','scanner',0,['SCANNER PASS'])
         case('fault','normal',0,['VERDICT PASS normal','started_observed=1','staged_missing=1','process_exited=1'])
-        for mode in faults:case('fault',mode,0,['VERDICT PASS '+mode,'started_observed=1','staged_missing=1',
-            'process_exited=1','RECOVERY after='+mode+' same_process=1','RECOVERY PASS '+mode])
+        for mode in faults:
+            required=['VERDICT PASS '+mode,'started_observed=1','staged_missing=1','process_exited=1',
+                'RECOVERY after='+mode+' same_process=1','RECOVERY PASS '+mode]
+            if mode=='final-cpu':required.append('FINAL_OBSERVATION completion_poll=1 process_signaled=1')
+            case('fault',mode,0,required)
         identities['binary_hashes_unchanged']=all(sha(out/n)==h for n,h in identities['binaries'].items())
         assert identities['binary_hashes_unchanged']
         identities['source_hashes_unchanged']=all(sha((ROOT if v=='candidate' else baseline)/n)==h

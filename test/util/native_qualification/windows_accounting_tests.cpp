@@ -252,7 +252,7 @@ void CheckScanner(const fs::path& root)
 // Only the backend compiled with BTX_WINDOWS_ACCOUNTING_TEST calls these.
 // No worker load or real OS counter is enlarged by a synthetic observation.
 namespace modelnet::windows_accounting_test {
-void AdjustCpu(HANDLE job, const std::wstring& root, bool& ok, LONGLONG& user, LONGLONG& kernel)
+void AdjustCpu(HANDLE job, const std::wstring& root, bool completion_observed, bool& ok, LONGLONG& user, LONGLONG& kernel)
 {
     CaptureWorkerProcess(job);
     const bool started = CaptureStarted(root);
@@ -265,8 +265,13 @@ void AdjustCpu(HANDLE job, const std::wstring& root, bool& ok, LONGLONG& user, L
         ++g_cpu_injections;
     } else if (g_mode == "final-cpu" && ExistsFile(root, L"finished.bin")) {
         JOBOBJECT_BASIC_ACCOUNTING_INFORMATION accounting{};
-        if (QueryInformationJobObject(job, JobObjectBasicAccountingInformation,
-                &accounting, sizeof(accounting), nullptr) != FALSE && accounting.ActiveProcesses == 0) {
+        const bool queried = QueryInformationJobObject(job, JobObjectBasicAccountingInformation,
+            &accounting, sizeof(accounting), nullptr) != FALSE;
+        const bool signaled = WorkerCaptured() && WaitForSingleObject(g_worker_process.handle, 0) == WAIT_OBJECT_0;
+        std::cout << "FINAL_OBSERVATION completion_poll=" << completion_observed
+            << " process_signaled=" << signaled << " job_query=" << queried
+            << " active_processes=" << accounting.ActiveProcesses << '\n';
+        if (completion_observed && signaled) {
             ok = true; user = 0; kernel = 7LL * 10000000;
             ++g_cpu_injections;
             g_final_exit_observed.store(true);
