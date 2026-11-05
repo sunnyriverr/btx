@@ -1,0 +1,207 @@
+{
+  "test_sha256": "d698b3cab134beabab20dad6e6b2b3fac28309c3ebafe902feaf8b8fac713ab7",
+  "records": [
+    {
+      "variant": "before",
+      "returncode": 1,
+      "pass": false,
+      "case_count": 8,
+      "checks": 154,
+      "failures": [
+        {
+          "case": "prior",
+          "check": "removes backup",
+          "pass": false,
+          "actual": {
+            "type": 1,
+            "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.prior.Prior"
+          },
+          "expected": null
+        },
+        {
+          "case": "repeated",
+          "check": "reinstall retains backup",
+          "pass": false,
+          "actual": {
+            "type": 1,
+            "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.repeated"
+          },
+          "expected": {
+            "type": 1,
+            "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.repeated.Prior"
+          }
+        },
+        {
+          "case": "repeated",
+          "check": "restores selected handler",
+          "pass": false,
+          "actual": {
+            "type": 1,
+            "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.repeated"
+          },
+          "expected": {
+            "type": 1,
+            "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.repeated.Prior"
+          }
+        },
+        {
+          "case": "repeated",
+          "check": "does not leave dangling owned default",
+          "pass": false,
+          "actual": true,
+          "expected": false
+        },
+        {
+          "case": "repeated",
+          "check": "removes backup",
+          "pass": false,
+          "actual": {
+            "type": 1,
+            "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.repeated"
+          },
+          "expected": null
+        },
+        {
+          "case": "later",
+          "check": "restores selected handler",
+          "pass": false,
+          "actual": {
+            "type": 1,
+            "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.later.Prior"
+          },
+          "expected": {
+            "type": 1,
+            "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.later.Later"
+          }
+        },
+        {
+          "case": "later",
+          "check": "removes backup",
+          "pass": false,
+          "actual": {
+            "type": 1,
+            "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.later.Prior"
+          },
+          "expected": null
+        },
+        {
+          "case": "clean",
+          "check": "removes backup",
+          "pass": false,
+          "actual": {
+            "type": 1,
+            "value": ""
+          },
+          "expected": null
+        },
+        {
+          "case": "self-backup",
+          "check": "leaves no prior handler",
+          "pass": false,
+          "actual": false,
+          "expected": true
+        },
+        {
+          "case": "self-backup",
+          "check": "does not leave dangling owned default",
+          "pass": false,
+          "actual": true,
+          "expected": false
+        },
+        {
+          "case": "self-backup",
+          "check": "removes backup",
+          "pass": false,
+          "actual": {
+            "type": 1,
+            "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.self-backup"
+          },
+          "expected": null
+        },
+        {
+          "case": "missing-backup",
+          "check": "install retains backup",
+          "pass": false,
+          "actual": {
+            "type": 1,
+            "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.missing-backup"
+          },
+          "expected": null
+        },
+        {
+          "case": "missing-backup",
+          "check": "leaves no prior handler",
+          "pass": false,
+          "actual": false,
+          "expected": true
+        },
+        {
+          "case": "missing-backup",
+          "check": "does not leave dangling owned default",
+          "pass": false,
+          "actual": true,
+          "expected": false
+        },
+        {
+          "case": "missing-backup",
+          "check": "removes backup",
+          "pass": false,
+          "actual": {
+            "type": 1,
+            "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.missing-backup"
+          },
+          "expected": null
+        },
+        {
+          "case": "later-self-backup",
+          "check": "restores selected handler",
+          "pass": false,
+          "actual": {
+            "type": 1,
+            "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.later-self-backup"
+          },
+          "expected": {
+            "type": 1,
+            "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.later-self-backup.Later"
+          }
+        },
+        {
+          "case": "later-self-backup",
+          "check": "does not leave dangling owned default",
+          "pass": false,
+          "actual": true,
+          "expected": false
+        },
+        {
+          "case": "later-self-backup",
+          "check": "removes backup",
+          "pass": false,
+          "actual": {
+            "type": 1,
+            "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.later-self-backup"
+          },
+          "expected": null
+        },
+        {
+          "case": "later-reinstall",
+          "check": "removes backup",
+          "pass": false,
+          "actual": {
+            "type": 1,
+            "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.later-reinstall.Later"
+          },
+          "expected": null
+        }
+      ]
+    },
+    {
+      "variant": "after",
+      "returncode": 0,
+      "pass": true,
+      "case_count": 8,
+      "checks": 154,
+      "failures": []
+    }
+  ],
+  "pass": true
+}

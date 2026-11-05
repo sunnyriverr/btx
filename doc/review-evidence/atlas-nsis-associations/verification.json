@@ -1,0 +1,738 @@
+{
+  "utc": "2026-11-05T07:47:25.474849+00:00",
+  "product": {
+    "head": "8b3a586085a31af68c74696fafffb1b540c04132",
+    "tree": "409a748829cd0b525fe4d09248c6a7321cfd4e58",
+    "base": "e70c81f03b76c5e62712ebb51dfaac7d41295af2",
+    "branch": "codex/fix-atlas-association-lifecycle",
+    "files": [
+      "gui/atlas/src-tauri/tauri.conf.json",
+      "gui/atlas/src-tauri/windows/association-hooks.nsh",
+      "gui/atlas/tests/nsis_associations.py"
+    ],
+    "patch_sha256": "af65cb8cb17fa759762ae0101609cd9ba28d0ffb057455db5bd7bd4e694de50e",
+    "source_path": "[local isolated checkout]"
+  },
+  "candidate_run": 41988968998,
+  "ci_head": "389a9d04dcf273a317dde4256e4358f68c6e6c88",
+  "baseline_run": 41985452016,
+  "acceptance_script_sha256": "60802feef8b830f52e6bb9f40ed05284cf1405a1184c31a50b4d86fda01e4850",
+  "profile": "Windows-2025Server-10.0.26100-SP0",
+  "candidate_installer_sha256": "4d9362f7103fed31ff4877979485a079259ff799fcdd5634796cc14ccaa34fbc",
+  "baseline_installer_sha256": "8df000ba197a46417dac4887bf895928feda08c00bb7453057bac9586968a8ac",
+  "embedded_app_sha256": "e058b70b7ddcfd28cb05cbf9b051e1598acfaff7bfde0a56e5f455500890d20f",
+  "reused_assets": {
+    "baseline_installer_sha256": "8df000ba197a46417dac4887bf895928feda08c00bb7453057bac9586968a8ac",
+    "baseline_embedded_sha256": "e058b70b7ddcfd28cb05cbf9b051e1598acfaff7bfde0a56e5f455500890d20f",
+    "restored_app_sha256": "23b4a5e1f4bab7ce348db39bd19207b5680a1ba342cd24ffe9220acc5c2b2252",
+    "runtime_sha256": "62863f0f0611a16ccf124b4f15650c3b66624504eba74d7cde1e2ae5d951249b",
+    "binary_recompiled": false
+  },
+  "source_files_audited": 230,
+  "baseline_restoration": [
+    {
+      "name": "prior default restoration",
+      "pass": true,
+      "expected": "AtlasProbe.13288dcd59b341a8b377f8101575338b.prior.Previous",
+      "actual": "AtlasProbe.13288dcd59b341a8b377f8101575338b.prior.Previous",
+      "dangling_atlas_class": false
+    },
+    {
+      "name": "reinstall default restoration",
+      "pass": false,
+      "expected": "AtlasProbe.13288dcd59b341a8b377f8101575338b.reinstall.Previous",
+      "actual": "BTX Model Resource",
+      "dangling_atlas_class": true
+    },
+    {
+      "name": "later default restoration",
+      "pass": false,
+      "expected": "AtlasProbe.13288dcd59b341a8b377f8101575338b.later.Later",
+      "actual": "AtlasProbe.13288dcd59b341a8b377f8101575338b.later.Previous",
+      "dangling_atlas_class": false
+    }
+  ],
+  "candidate_restoration": [
+    {
+      "name": "prior default restoration",
+      "pass": true,
+      "expected": "AtlasProbe.cd4e75e29e47485c9f5f739fd03f7681.prior.Previous",
+      "actual": "AtlasProbe.cd4e75e29e47485c9f5f739fd03f7681.prior.Previous",
+      "dangling_atlas_class": false
+    },
+    {
+      "name": "reinstall default restoration",
+      "pass": true,
+      "expected": "AtlasProbe.cd4e75e29e47485c9f5f739fd03f7681.reinstall.Previous",
+      "actual": "AtlasProbe.cd4e75e29e47485c9f5f739fd03f7681.reinstall.Previous",
+      "dangling_atlas_class": false
+    },
+    {
+      "name": "later default restoration",
+      "pass": true,
+      "expected": "AtlasProbe.cd4e75e29e47485c9f5f739fd03f7681.later.Later",
+      "actual": "AtlasProbe.cd4e75e29e47485c9f5f739fd03f7681.later.Later",
+      "dangling_atlas_class": false
+    }
+  ],
+  "ordinary_controls_before_after": [
+    139,
+    139
+  ],
+  "maintained_regression": {
+    "test_sha256": "d698b3cab134beabab20dad6e6b2b3fac28309c3ebafe902feaf8b8fac713ab7",
+    "records": [
+      {
+        "variant": "before",
+        "returncode": 1,
+        "pass": false,
+        "case_count": 8,
+        "checks": 154,
+        "failures": [
+          {
+            "case": "prior",
+            "check": "removes backup",
+            "pass": false,
+            "actual": {
+              "type": 1,
+              "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.prior.Prior"
+            },
+            "expected": null
+          },
+          {
+            "case": "repeated",
+            "check": "reinstall retains backup",
+            "pass": false,
+            "actual": {
+              "type": 1,
+              "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.repeated"
+            },
+            "expected": {
+              "type": 1,
+              "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.repeated.Prior"
+            }
+          },
+          {
+            "case": "repeated",
+            "check": "restores selected handler",
+            "pass": false,
+            "actual": {
+              "type": 1,
+              "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.repeated"
+            },
+            "expected": {
+              "type": 1,
+              "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.repeated.Prior"
+            }
+          },
+          {
+            "case": "repeated",
+            "check": "does not leave dangling owned default",
+            "pass": false,
+            "actual": true,
+            "expected": false
+          },
+          {
+            "case": "repeated",
+            "check": "removes backup",
+            "pass": false,
+            "actual": {
+              "type": 1,
+              "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.repeated"
+            },
+            "expected": null
+          },
+          {
+            "case": "later",
+            "check": "restores selected handler",
+            "pass": false,
+            "actual": {
+              "type": 1,
+              "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.later.Prior"
+            },
+            "expected": {
+              "type": 1,
+              "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.later.Later"
+            }
+          },
+          {
+            "case": "later",
+            "check": "removes backup",
+            "pass": false,
+            "actual": {
+              "type": 1,
+              "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.later.Prior"
+            },
+            "expected": null
+          },
+          {
+            "case": "clean",
+            "check": "removes backup",
+            "pass": false,
+            "actual": {
+              "type": 1,
+              "value": ""
+            },
+            "expected": null
+          },
+          {
+            "case": "self-backup",
+            "check": "leaves no prior handler",
+            "pass": false,
+            "actual": false,
+            "expected": true
+          },
+          {
+            "case": "self-backup",
+            "check": "does not leave dangling owned default",
+            "pass": false,
+            "actual": true,
+            "expected": false
+          },
+          {
+            "case": "self-backup",
+            "check": "removes backup",
+            "pass": false,
+            "actual": {
+              "type": 1,
+              "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.self-backup"
+            },
+            "expected": null
+          },
+          {
+            "case": "missing-backup",
+            "check": "install retains backup",
+            "pass": false,
+            "actual": {
+              "type": 1,
+              "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.missing-backup"
+            },
+            "expected": null
+          },
+          {
+            "case": "missing-backup",
+            "check": "leaves no prior handler",
+            "pass": false,
+            "actual": false,
+            "expected": true
+          },
+          {
+            "case": "missing-backup",
+            "check": "does not leave dangling owned default",
+            "pass": false,
+            "actual": true,
+            "expected": false
+          },
+          {
+            "case": "missing-backup",
+            "check": "removes backup",
+            "pass": false,
+            "actual": {
+              "type": 1,
+              "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.missing-backup"
+            },
+            "expected": null
+          },
+          {
+            "case": "later-self-backup",
+            "check": "restores selected handler",
+            "pass": false,
+            "actual": {
+              "type": 1,
+              "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.later-self-backup"
+            },
+            "expected": {
+              "type": 1,
+              "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.later-self-backup.Later"
+            }
+          },
+          {
+            "case": "later-self-backup",
+            "check": "does not leave dangling owned default",
+            "pass": false,
+            "actual": true,
+            "expected": false
+          },
+          {
+            "case": "later-self-backup",
+            "check": "removes backup",
+            "pass": false,
+            "actual": {
+              "type": 1,
+              "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.later-self-backup"
+            },
+            "expected": null
+          },
+          {
+            "case": "later-reinstall",
+            "check": "removes backup",
+            "pass": false,
+            "actual": {
+              "type": 1,
+              "value": "AtlasProbe.cb93df3b070a4947a361a775ca798e1e.later-reinstall.Later"
+            },
+            "expected": null
+          }
+        ]
+      },
+      {
+        "variant": "after",
+        "returncode": 0,
+        "pass": true,
+        "case_count": 8,
+        "checks": 154,
+        "failures": []
+      }
+    ],
+    "pass": true
+  },
+  "candidate_snapshots": [
+    {
+      "case": "prior",
+      "stage": "before",
+      "extension": {
+        "values": {
+          "": {
+            "type": 1,
+            "value": "AtlasProbe.cd4e75e29e47485c9f5f739fd03f7681.prior.Previous"
+          },
+          "UnrelatedFixture": {
+            "type": 1,
+            "value": "keep-cd4e75e29e47485c9f5f739fd03f7681"
+          }
+        },
+        "children": {
+          "UnrelatedChild": {
+            "values": {
+              "number": {
+                "type": 4,
+                "value": 711
+              }
+            },
+            "children": {}
+          }
+        }
+      },
+      "class_exists": false,
+      "files": {
+        "binary_exists": false,
+        "uninstaller_exists": false,
+        "install_dir_exists": false
+      }
+    },
+    {
+      "case": "prior",
+      "stage": "install1",
+      "extension": {
+        "values": {
+          "": {
+            "type": 1,
+            "value": "BTX Model Resource"
+          },
+          "UnrelatedFixture": {
+            "type": 1,
+            "value": "keep-cd4e75e29e47485c9f5f739fd03f7681"
+          },
+          "BTX Model Resource_backup": {
+            "type": 1,
+            "value": "AtlasProbe.cd4e75e29e47485c9f5f739fd03f7681.prior.Previous"
+          }
+        },
+        "children": {
+          "UnrelatedChild": {
+            "values": {
+              "number": {
+                "type": 4,
+                "value": 711
+              }
+            },
+            "children": {}
+          }
+        }
+      },
+      "class_exists": true,
+      "files": {
+        "binary_exists": true,
+        "uninstaller_exists": true,
+        "install_dir_exists": true
+      }
+    },
+    {
+      "case": "prior",
+      "stage": "after-uninstall",
+      "extension": {
+        "values": {
+          "": {
+            "type": 1,
+            "value": "AtlasProbe.cd4e75e29e47485c9f5f739fd03f7681.prior.Previous"
+          },
+          "UnrelatedFixture": {
+            "type": 1,
+            "value": "keep-cd4e75e29e47485c9f5f739fd03f7681"
+          }
+        },
+        "children": {
+          "UnrelatedChild": {
+            "values": {
+              "number": {
+                "type": 4,
+                "value": 711
+              }
+            },
+            "children": {}
+          }
+        }
+      },
+      "class_exists": false,
+      "files": {
+        "binary_exists": false,
+        "uninstaller_exists": false,
+        "install_dir_exists": false
+      }
+    },
+    {
+      "case": "prior",
+      "stage": "after-fixture-reset",
+      "extension": null,
+      "class_exists": false,
+      "files": {
+        "binary_exists": false,
+        "uninstaller_exists": false,
+        "install_dir_exists": false
+      }
+    },
+    {
+      "case": "reinstall",
+      "stage": "before",
+      "extension": {
+        "values": {
+          "": {
+            "type": 1,
+            "value": "AtlasProbe.cd4e75e29e47485c9f5f739fd03f7681.reinstall.Previous"
+          },
+          "UnrelatedFixture": {
+            "type": 1,
+            "value": "keep-cd4e75e29e47485c9f5f739fd03f7681"
+          }
+        },
+        "children": {
+          "UnrelatedChild": {
+            "values": {
+              "number": {
+                "type": 4,
+                "value": 711
+              }
+            },
+            "children": {}
+          }
+        }
+      },
+      "class_exists": false,
+      "files": {
+        "binary_exists": false,
+        "uninstaller_exists": false,
+        "install_dir_exists": false
+      }
+    },
+    {
+      "case": "reinstall",
+      "stage": "install1",
+      "extension": {
+        "values": {
+          "": {
+            "type": 1,
+            "value": "BTX Model Resource"
+          },
+          "UnrelatedFixture": {
+            "type": 1,
+            "value": "keep-cd4e75e29e47485c9f5f739fd03f7681"
+          },
+          "BTX Model Resource_backup": {
+            "type": 1,
+            "value": "AtlasProbe.cd4e75e29e47485c9f5f739fd03f7681.reinstall.Previous"
+          }
+        },
+        "children": {
+          "UnrelatedChild": {
+            "values": {
+              "number": {
+                "type": 4,
+                "value": 711
+              }
+            },
+            "children": {}
+          }
+        }
+      },
+      "class_exists": true,
+      "files": {
+        "binary_exists": true,
+        "uninstaller_exists": true,
+        "install_dir_exists": true
+      }
+    },
+    {
+      "case": "reinstall",
+      "stage": "install2",
+      "extension": {
+        "values": {
+          "": {
+            "type": 1,
+            "value": "BTX Model Resource"
+          },
+          "UnrelatedFixture": {
+            "type": 1,
+            "value": "keep-cd4e75e29e47485c9f5f739fd03f7681"
+          },
+          "BTX Model Resource_backup": {
+            "type": 1,
+            "value": "AtlasProbe.cd4e75e29e47485c9f5f739fd03f7681.reinstall.Previous"
+          }
+        },
+        "children": {
+          "UnrelatedChild": {
+            "values": {
+              "number": {
+                "type": 4,
+                "value": 711
+              }
+            },
+            "children": {}
+          }
+        }
+      },
+      "class_exists": true,
+      "files": {
+        "binary_exists": true,
+        "uninstaller_exists": true,
+        "install_dir_exists": true
+      }
+    },
+    {
+      "case": "reinstall",
+      "stage": "after-uninstall",
+      "extension": {
+        "values": {
+          "": {
+            "type": 1,
+            "value": "AtlasProbe.cd4e75e29e47485c9f5f739fd03f7681.reinstall.Previous"
+          },
+          "UnrelatedFixture": {
+            "type": 1,
+            "value": "keep-cd4e75e29e47485c9f5f739fd03f7681"
+          }
+        },
+        "children": {
+          "UnrelatedChild": {
+            "values": {
+              "number": {
+                "type": 4,
+                "value": 711
+              }
+            },
+            "children": {}
+          }
+        }
+      },
+      "class_exists": false,
+      "files": {
+        "binary_exists": false,
+        "uninstaller_exists": false,
+        "install_dir_exists": false
+      }
+    },
+    {
+      "case": "reinstall",
+      "stage": "after-fixture-reset",
+      "extension": null,
+      "class_exists": false,
+      "files": {
+        "binary_exists": false,
+        "uninstaller_exists": false,
+        "install_dir_exists": false
+      }
+    },
+    {
+      "case": "later",
+      "stage": "before",
+      "extension": {
+        "values": {
+          "": {
+            "type": 1,
+            "value": "AtlasProbe.cd4e75e29e47485c9f5f739fd03f7681.later.Previous"
+          },
+          "UnrelatedFixture": {
+            "type": 1,
+            "value": "keep-cd4e75e29e47485c9f5f739fd03f7681"
+          }
+        },
+        "children": {
+          "UnrelatedChild": {
+            "values": {
+              "number": {
+                "type": 4,
+                "value": 711
+              }
+            },
+            "children": {}
+          }
+        }
+      },
+      "class_exists": false,
+      "files": {
+        "binary_exists": false,
+        "uninstaller_exists": false,
+        "install_dir_exists": false
+      }
+    },
+    {
+      "case": "later",
+      "stage": "install1",
+      "extension": {
+        "values": {
+          "": {
+            "type": 1,
+            "value": "BTX Model Resource"
+          },
+          "UnrelatedFixture": {
+            "type": 1,
+            "value": "keep-cd4e75e29e47485c9f5f739fd03f7681"
+          },
+          "BTX Model Resource_backup": {
+            "type": 1,
+            "value": "AtlasProbe.cd4e75e29e47485c9f5f739fd03f7681.later.Previous"
+          }
+        },
+        "children": {
+          "UnrelatedChild": {
+            "values": {
+              "number": {
+                "type": 4,
+                "value": 711
+              }
+            },
+            "children": {}
+          }
+        }
+      },
+      "class_exists": true,
+      "files": {
+        "binary_exists": true,
+        "uninstaller_exists": true,
+        "install_dir_exists": true
+      }
+    },
+    {
+      "case": "later",
+      "stage": "later-registry-choice",
+      "extension": {
+        "values": {
+          "": {
+            "type": 1,
+            "value": "AtlasProbe.cd4e75e29e47485c9f5f739fd03f7681.later.Later"
+          },
+          "UnrelatedFixture": {
+            "type": 1,
+            "value": "keep-cd4e75e29e47485c9f5f739fd03f7681"
+          },
+          "BTX Model Resource_backup": {
+            "type": 1,
+            "value": "AtlasProbe.cd4e75e29e47485c9f5f739fd03f7681.later.Previous"
+          }
+        },
+        "children": {
+          "UnrelatedChild": {
+            "values": {
+              "number": {
+                "type": 4,
+                "value": 711
+              }
+            },
+            "children": {}
+          }
+        }
+      },
+      "class_exists": true,
+      "files": {
+        "binary_exists": true,
+        "uninstaller_exists": true,
+        "install_dir_exists": true
+      }
+    },
+    {
+      "case": "later",
+      "stage": "after-uninstall",
+      "extension": {
+        "values": {
+          "": {
+            "type": 1,
+            "value": "AtlasProbe.cd4e75e29e47485c9f5f739fd03f7681.later.Later"
+          },
+          "UnrelatedFixture": {
+            "type": 1,
+            "value": "keep-cd4e75e29e47485c9f5f739fd03f7681"
+          }
+        },
+        "children": {
+          "UnrelatedChild": {
+            "values": {
+              "number": {
+                "type": 4,
+                "value": 711
+              }
+            },
+            "children": {}
+          }
+        }
+      },
+      "class_exists": false,
+      "files": {
+        "binary_exists": false,
+        "uninstaller_exists": false,
+        "install_dir_exists": false
+      }
+    },
+    {
+      "case": "later",
+      "stage": "after-fixture-reset",
+      "extension": null,
+      "class_exists": false,
+      "files": {
+        "binary_exists": false,
+        "uninstaller_exists": false,
+        "install_dir_exists": false
+      }
+    }
+  ],
+  "artifact_sha256": "b68b74232a6277e6f5a0134432d244a372250f2c668a6636351ec1bb200f8506",
+  "package_artifact": [
+    {
+      "id": 13396399431,
+      "node_id": "MDg6QXJ0aWZhY3QxMzM5NjM5OTQzMQ==",
+      "name": "atlas-repair-package",
+      "size_in_bytes": 219921622,
+      "url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/13396399431",
+      "archive_download_url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/13396399431/zip",
+      "expired": false,
+      "digest": "sha256:0cad60f5f993c96ea4fe7645fdd6dd28d82c25dc11bca252ffb01e373a16c643",
+      "created_at": "2026-11-05T07:44:52Z",
+      "updated_at": "2026-11-05T07:44:52Z",
+      "expires_at": "2026-11-19T07:44:45Z",
+      "workflow_run": {
+        "id": 41988968998,
+        "repository_id": 1440653358,
+        "head_repository_id": 1440653358,
+        "head_branch": "codex/ci-atlas-association-repair",
+        "head_sha": "389a9d04dcf273a317dde4256e4358f68c6e6c88"
+      }
+    }
+  ],
+  "limitations": [
+    "Server2025/currentUser x64 NSIS only; later choice by direct registry, notWindowsSettings",
+    "noGUI/userchoice/actualopening/upgrade/Windows11/release qualification",
+    "same compiledbaseline application reused with exact fullhash reversal/repatch; notnewRustbuild",
+    "offlineprereq packaginginputhash matches baseline; not independently extracted candidateprereq or absent-runtime installation",
+    "original baseline after-build source audit not reached; candidate230source audit before/after completes"
+  ],
+  "qualified": true
+}
