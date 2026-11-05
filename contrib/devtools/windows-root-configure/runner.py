@@ -19,18 +19,24 @@ def run(label,command,cwd=ROOT,timeout=1800):
  log=E/(label+'.log');start=time.monotonic();timed_out=False;result['active_command']=label;save()
  with log.open('wb')as out:
   proc=subprocess.Popen(command,cwd=cwd,stdout=out,stderr=subprocess.STDOUT);result['process_active']=True;save()
-  while proc.poll()is None:
-   if time.monotonic()-start>timeout:
-    cleanup=subprocess.run(['taskkill','/PID',str(proc.pid),'/T','/F'],capture_output=True)
-    (E/(label+'-timeout-cleanup.log')).write_bytes(cleanup.stdout+cleanup.stderr);result['cleanup_confirmed']=cleanup.returncode==0
-    proc.wait(timeout=30);timed_out=True;break
-   if label in ['native-daemon-build','native-unit-build','native-unit-run']:
-    resources=host_resources();elapsed=int(time.monotonic()-start)
-    if resources['disk_free_bytes']<2*1024**3 or resources['available_ram_bytes']<1024**3:
-     cleanup=subprocess.run(['taskkill','/PID',str(proc.pid),'/T','/F'],capture_output=True);(E/(label+'-disk-stop.log')).write_bytes(cleanup.stdout+cleanup.stderr);result['cleanup_confirmed']=cleanup.returncode==0;proc.wait(timeout=30);result['resource_stop']='Hosted disk below2GiB or available RAM below1GiB';break
-    if elapsed//30>result.get('last_progress_bucket',-1):
-     result['last_progress_bucket']=elapsed//30;result.setdefault('build_resource_samples',[]).append({'seconds':elapsed,**resources});save();print('Daemon build elapsed',elapsed,'seconds; free disk',resources['disk_free_bytes'],'available RAM',resources['available_ram_bytes'],flush=True)
-   time.sleep(2)
+  try:
+   while proc.poll()is None:
+    if time.monotonic()-start>timeout:
+     cleanup=subprocess.run(['taskkill','/PID',str(proc.pid),'/T','/F'],capture_output=True)
+     (E/(label+'-timeout-cleanup.log')).write_bytes(cleanup.stdout+cleanup.stderr);result['cleanup_confirmed']=cleanup.returncode==0
+     proc.wait(timeout=30);timed_out=True;break
+    if label in ['native-daemon-build','native-unit-build','native-unit-run']:
+     resources=host_resources();elapsed=int(time.monotonic()-start)
+     if resources['disk_free_bytes']<2*1024**3 or resources['available_ram_bytes']<1024**3:
+      cleanup=subprocess.run(['taskkill','/PID',str(proc.pid),'/T','/F'],capture_output=True);(E/(label+'-disk-stop.log')).write_bytes(cleanup.stdout+cleanup.stderr);result['cleanup_confirmed']=cleanup.returncode==0;proc.wait(timeout=30);result['resource_stop']='Hosted disk below2GiB or available RAM below1GiB';break
+     if elapsed//30>result.get('last_progress_bucket',-1):
+      result['last_progress_bucket']=elapsed//30;result.setdefault('build_resource_samples',[]).append({'seconds':elapsed,**resources});save();print('Daemon build elapsed',elapsed,'seconds; free disk',resources['disk_free_bytes'],'available RAM',resources['available_ram_bytes'],flush=True)
+    time.sleep(2)
+  except BaseException:
+   cleanup=subprocess.run(['taskkill','/PID',str(proc.pid),'/T','/F'],capture_output=True)
+   result['cleanup_confirmed']=cleanup.returncode==0
+   (E/(label+'-exception-cleanup.log')).write_bytes(cleanup.stdout+cleanup.stderr)
+   proc.wait(timeout=30);result['process_active']=False;save();raise
  result['process_active']=False;result['active_command']=None
  result['commands'].append({'label':label,'command':command,'cwd':str(cwd),'exit':proc.returncode,'seconds':round(time.monotonic()-start,2),'timed_out':timed_out,'log_sha256':sha(log)});save();print(label,proc.returncode,log.read_text(errors='replace')[-6500:],flush=True)
  if result.get('resource_stop'):raise RuntimeError('Terminal disk stop')
@@ -91,6 +97,14 @@ def vcpkg():
  if promisor.stdout.strip().lower()=='true':raise RuntimeError('vcpkg still has partial-clone lazy fetching')
  for oid in ['8ed2f86ee404263f5aa1f72f8f4f13ee44262b81','937a2198387cb5c913e4feea170652651dd756ba']:
   need('vcpkg-historical-blob-'+oid[:8],['git','-C',str(tool),'cat-file','-e',oid],timeout=30)
+def host_resources():
+ import ctypes
+ class MemoryStatus(ctypes.Structure):
+  _fields_=[('length',ctypes.c_uint32),('load',ctypes.c_uint32)]+[(x,ctypes.c_uint64) for x in ['total_phys','avail_phys','total_page','avail_page','total_virtual','avail_virtual','avail_extended']]
+ memory=MemoryStatus();memory.length=ctypes.sizeof(memory);ok=ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(memory))
+ return {'disk_free_bytes':shutil.disk_usage(ROOT).free,'cpus':os.cpu_count(),'total_ram_bytes':memory.total_phys if ok else None,'available_ram_bytes':memory.avail_phys if ok else None}
+
+
 def configure_args():
  prefix=ROOT/'openssl-3.5.4-static'
  return ['cmake','--debug-find-pkg=OpenSSL','--preset','windows-clangcl-static','-S',str(SOURCE),'-B',str(ROOT/'project-build'),'-DBUILD_TESTS=ON','-DWITH_MODELNET=ON','-DVCPKG_MANIFEST_NO_DEFAULT_FEATURES=ON','-DVCPKG_MANIFEST_FEATURES=wallet;tests;zeromq','-DVCPKG_INSTALLED_DIR='+str(ROOT/'vcpkg-installed'),'-DOPENSSL_ROOT_DIR='+str(prefix),'-DOPENSSL_USE_STATIC_LIBS=ON','-DOPENSSL_MSVC_STATIC_RT=ON','-DOPENSSL_INCLUDE_DIR='+str(prefix/'include'),'-DOPENSSL_SSL_LIBRARY='+str(prefix/'lib/libssl.lib'),'-DOPENSSL_CRYPTO_LIBRARY='+str(prefix/'lib/libcrypto.lib'),'-DCMAKE_EXPORT_COMPILE_COMMANDS=ON']
