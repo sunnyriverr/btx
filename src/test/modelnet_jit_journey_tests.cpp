@@ -880,6 +880,11 @@ BOOST_AUTO_TEST_CASE(jit_api_04_cli_verbs)
     daemon.join();
     BOOST_CHECK_EQUAL(daemon_result.load(), 0);
     BOOST_CHECK_MESSAGE(!fs::exists(sock), "capability daemon must remove its socket on shutdown");
+    bool socket_entry_present = false;
+    for (const auto& entry : fs::directory_iterator{sock.parent_path()}) {
+        if (entry.path().filename().native() == sock.filename().native()) socket_entry_present = true;
+    }
+    BOOST_CHECK_MESSAGE(!socket_entry_present, "daemon socket directory entry must be gone before fallback cleanup");
 }
 
 BOOST_AUTO_TEST_SUITE_END()
