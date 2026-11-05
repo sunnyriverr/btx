@@ -20,6 +20,9 @@ FunctionEnd
 Section
   SetOutPath "$INSTDIR"
   !insertmacro APP_ASSOCIATE "${EXTENSION}" "${FILECLASS}" "Disposable association fixture" "$\"$INSTDIR\inert.exe$\",0" "Open with fixture" "$\"$INSTDIR\inert.exe$\" $\"%1$\""
+  ; A missing previous association sets NSIS's sticky error flag.
+  ; The check below belongs only to WriteUninstaller, not that earlier read.
+  ClearErrors
   WriteUninstaller "$INSTDIR\uninstall.exe"
   IfErrors 0 +2
     Abort "Uninstaller creation failed"
