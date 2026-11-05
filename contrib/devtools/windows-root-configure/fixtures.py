@@ -72,7 +72,17 @@ def controls():
 
 def pair():
     assert R['status']=='PAIRS_READY';rows=rows_for(I['env_targets']+I['opaque_targets']);(E/'fixture-generated-commands.json').write_text(json.dumps(dict(rows),indent=2)+'\n')
-    before=batch('fixture-before',rows)
+    baseline_file=P/'baseline/baseline-evidence.json';assert sha(baseline_file)==I['reused_baseline_sha256'];b=json.loads(baseline_file.read_text())
+    assert b['cached_source']==BASE and b['generated_inputs']==R['generated_inputs_before_pair']
+    assert b['source_catalog_canonical_sha256']==hashlib.sha256(json.dumps(R['source_catalog'],sort_keys=True,separators=(',',':')).encode()).hexdigest()
+    # Commands, compiler/SDK, source and every generated input match the saved
+    # actual baseline. A Ninja/image packaging change cannot alter these direct
+    # compiler invocations; all other profile differences are refused.
+    pd=differences(b['actual_profile'],R['actual_profile']);allowed=json.loads((P/'profile-transition.json').read_text())['allowed_differences'];assert not pd or pd==allowed
+    before=b['rows'];assert {n:r for n,r in rows}=={r['file']:r['command']for r in before}
+    for r in before:
+        f=P/'baseline'/r['log'];assert sha(f)==r['log_sha256'];shutil.copyfile(f,E/r['log'])
+    R['fixture-before']=before;R['reused_baseline']={'run':b['run'],'controls':b['controls'],'artifact':b['artifact'],'reason':b['reason'],'manifest_sha256':I['reused_baseline_sha256'],'new_baseline_compiler_commands':0};s.save()
     known=set(I['known_env_targets']+I['opaque_targets'])
     assert all(r['exit']==0 or (r['env_diagnostics'] if r['file'] in I['known_env_targets'] else r['opaque_diagnostics']) for r in before if r['file']in known),[(r['file'],r['exit'],r['env_diagnostics'],r['opaque_diagnostics'])for r in before if r['file']in known]
     R['extra_baseline_prerequisites']=[r for r in before if r['file']not in known and r['exit']!=0 and not r['env_diagnostics']];s.save()

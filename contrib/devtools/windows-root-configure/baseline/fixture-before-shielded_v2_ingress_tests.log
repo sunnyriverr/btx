@@ -1,0 +1,19 @@
+clang-cl: warning: argument unused during compilation: '/Zc:preprocessor' [-Wunused-command-line-argument]
+D:\a\btx\btx\btx\src\test\shielded_v2_ingress_tests.cpp(626,91): error: expected unqualified-id
+  626 |                                          output.encrypted_note.scan_domain == ScanDomain::OPAQUE;
+      |                                                                                           ^
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\wingdi.h(1875,29): note: expanded from macro 'OPAQUE'
+ 1875 | #define OPAQUE              2
+      |                             ^
+In file included from D:\a\btx\btx\btx\src\test\shielded_v2_ingress_tests.cpp:5:
+In file included from D:\a\btx\btx\btx\src\chainparams.h:9:
+In file included from D:\a\btx\btx\btx\src\kernel/chainparams.h:9:
+In file included from D:\a\btx\btx\btx\src\consensus/params.h:10:
+In file included from D:\a\btx\btx\btx\src\uint256.h:14:
+C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include\algorithm(1657,17): error: invalid argument type 'void' to unary expression
+ 1657 |             if (!_Pred(*_UFirst)) {
+      |                 ^~~~~~~~~~~~~~~~
+D:\a\btx\btx\btx\src\test\shielded_v2_ingress_tests.cpp(621,24): note: in instantiation of function template specialization 'std::all_of<std::_Vector_iterator<std::_Vector_val<std::_Simple_types<shielded::v2::V2SendOutputInput>>>, (lambda at D:\a\btx\btx\btx\src\test\shielded_v2_ingress_tests.cpp:621:5)>' requested here
+  621 |     BOOST_REQUIRE(std::all_of(fixture.input.reserve_outputs.begin(),
+      |                        ^
+2 errors generated.

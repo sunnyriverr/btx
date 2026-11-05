@@ -1,0 +1,42 @@
+clang-cl: warning: argument unused during compilation: '/Zc:preprocessor' [-Wunused-command-line-argument]
+D:\a\btx\btx\btx\src\test\modelnet_cuda_qual_tests.cpp(41,13): error: use of undeclared identifier 'setenv'; did you mean 'netent'?
+   41 |             setenv(m_key.c_str(), m_prev->c_str(), 1);
+      |             ^
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(249,9): note: 'netent' declared here
+  249 | struct  netent {
+      |         ^
+D:\a\btx\btx\btx\src\test\modelnet_cuda_qual_tests.cpp(43,13): error: use of undeclared identifier 'unsetenv'
+   43 |             unsetenv(m_key.c_str());
+      |             ^
+D:\a\btx\btx\btx\src\test\modelnet_cuda_qual_tests.cpp(46,31): error: use of undeclared identifier 'setenv'; did you mean 'netent'?
+   46 |     void Set(const char* v) { setenv(m_key.c_str(), v, 1); }
+      |                               ^
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsock2.h(249,9): note: 'netent' declared here
+  249 | struct  netent {
+      |         ^
+D:\a\btx\btx\btx\src\test\modelnet_cuda_qual_tests.cpp(47,20): error: use of undeclared identifier 'unsetenv'
+   47 |     void Unset() { unsetenv(m_key.c_str()); }
+      |                    ^
+D:\a\btx\btx\btx\src\test\modelnet_cuda_qual_tests.cpp(232,27): error: no member named 'chmod' in the global namespace
+  232 |     BOOST_REQUIRE_EQUAL(::chmod(fs::PathToString(worker).c_str(), 0755), 0);
+      |                         ~~^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(157,83): note: expanded from macro 'BOOST_REQUIRE_EQUAL'
+  157 |     ::boost::test_tools::tt_detail::equal_impl_frwd(), "", REQUIRE, CHECK_EQUAL, (L)(R) )
+      |                                                                                   ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(74,61): note: expanded from macro 'BOOST_TEST_TOOL_IMPL'
+   74 |         BOOST_JOIN( BOOST_TEST_TOOL_PASS_ARGS, frwd_type )( ARGS ) );           \
+      |                                                             ^~~~
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(57,57): note: expanded from macro 'BOOST_TEST_TOOL_PASS_ARGS0'
+   57 |     BOOST_PP_SEQ_FOR_EACH( BOOST_TEST_TOOL_PASS_ARG, _, ARGS )
+      |                                                         ^~~~
+note: (skipping 13 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/preprocessor/seq/elem.hpp(45,60): note: expanded from macro 'BOOST_PP_SEQ_ELEM_II'
+   45 | #    define BOOST_PP_SEQ_ELEM_II(im) BOOST_PP_SEQ_ELEM_III(im)
+      |                                                            ^~
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/preprocessor/seq/elem.hpp(46,41): note: expanded from macro 'BOOST_PP_SEQ_ELEM_III'
+   46 | #    define BOOST_PP_SEQ_ELEM_III(x, _) x
+      |                                         ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(53,49): note: expanded from macro 'BOOST_TEST_TOOL_PASS_ARG'
+   53 | #define BOOST_TEST_TOOL_PASS_ARG( r, _, arg ) , arg, BOOST_STRINGIZE( arg )
+      |                                                 ^~~
+5 errors generated.
