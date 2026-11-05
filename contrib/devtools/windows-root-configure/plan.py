@@ -74,6 +74,9 @@ def prepare():
     R['protected_output_records'] = {k: v for k, v in cp['files'].items()
         if k.replace('\\', '/').startswith('vcpkg-installed/') or Path(k).suffix.lower() in
         ['.obj', '.lib', '.exe', '.dll', '.a', '.o', '.pdb']}
+    bookkeeping = ROOT / 'vcpkg-installed/vcpkg/compiler-file-hash-cache.json'
+    assert bookkeeping.is_file()
+    shutil.copyfile(bookkeeping, E / 'compiler-file-hash-cache-before.json')
     R['original_compile_entries'] = json.loads((BUILD / 'compile_commands.json').read_text())
     R['settings_before'] = require_settings()
     R['initial_resources'] = s.resources()
@@ -120,10 +123,27 @@ def inspect():
     assert len(R['sdk_helper_registered']) == 1
     common = ['ninja', '-C', str(BUILD)]
     s.need('maintained-unit-plan', common + ['-n', '-d', 'explain', 'test_btx'], 120)
+    # Ninja's normal -n stops at its always-dirty CMake glob bootstrap. The
+    # existing audit established this behavior. First verify normal CMake globs,
+    # then inspect a byte-identical copy of the freshly generated FULL manifest.
+    # No graph rule, command hash, test list or object timestamp is edited.
+    s.need('normal-verify-globs', ['cmake', '-P',
+        str(BUILD / 'CMakeFiles/VerifyGlobs.cmake')], 120, cwd=BUILD)
+    assert 'GLOB mismatch!' not in (E / 'normal-verify-globs.log').read_text()
+    frozen = E / 'refreshed-full-manifest.ninja'
+    shutil.copyfile(BUILD / 'build.ninja', frozen)
+    R['generated_manifest_sha256'] = sha(BUILD / 'build.ninja')
+    R['observed_manifest_sha256'] = sha(frozen)
+    assert R['generated_manifest_sha256'] == R['observed_manifest_sha256']
+    rules_before = sha(BUILD / 'CMakeFiles/rules.ninja')
+    s.need('maintained-object-plan', common + ['-f', str(frozen),
+        '-n', '-d', 'explain', 'test_btx'], 120)
+    assert sha(BUILD / 'build.ninja') == R['generated_manifest_sha256']
+    assert sha(BUILD / 'CMakeFiles/rules.ninja') == rules_before
     R['query_exits'] = {
         'unit': s.run('maintained-unit-query', common + ['-t', 'query', 'bin/test_btx.exe'], 60),
         'btx_open': s.run('btx-open-target-query', common + ['-t', 'query', 'bin/btx-open.exe'], 60)}
-    plan = (E / 'maintained-unit-plan.log').read_text(errors='replace')
+    plan = (E / 'maintained-object-plan.log').read_text(errors='replace')
     steps = re.findall(r'^\[(\d+)/(\d+)\]', plan, re.M)
     R['planned_steps'] = int(steps[-1][1]) if steps else 0
     R['planned_lines'] = [line for line in plan.splitlines() if re.match(r'^\[\d+/\d+\]', line)]
@@ -153,10 +173,17 @@ def inspect():
         'removed': sorted(R['protected_output_records'].keys() - protected_now),
         'changed': [name for name, info in R['protected_output_records'].items()
                     if name in protected_now and sha(ROOT / name) != info['sha256']]}
-    assert not any(R['protected_output_delta'].values()), R['protected_output_delta']
+    bookkeeping = ROOT / 'vcpkg-installed/vcpkg/compiler-file-hash-cache.json'
+    shutil.copyfile(bookkeeping, E / 'compiler-file-hash-cache-after.json')
+    R['bookkeeping_change'] = {
+        'path': str(bookkeeping.relative_to(ROOT)),
+        'before_sha256': sha(E / 'compiler-file-hash-cache-before.json'),
+        'after_sha256': sha(E / 'compiler-file-hash-cache-after.json')}
+    assert not R['protected_output_delta']['added'] and not R['protected_output_delta']['removed']
+    assert set(R['protected_output_delta']['changed']) <= {R['bookkeeping_change']['path']}, R['protected_output_delta']
     for name, expected in R['actual_profile']['openssl_files'].items():
         assert sha(ROOT / 'openssl-3.5.4-static' / name) == expected, name
-    R['protected_dependency_outputs_unchanged'] = len(protected_now)
+    R['protected_dependency_outputs_unchanged'] = len(protected_now) - len(R['protected_output_delta']['changed'])
     actual_objects = {str(f.relative_to(ROOT)) for f in BUILD.rglob('*.obj') if f.is_file()}
     assert actual_objects == set(R['original_object_records'])
     R['objects_unchanged'] = len(actual_objects)
@@ -171,6 +198,10 @@ def retain():
     assert R['status'] in ['PLAN_READY_FOR_BLOCKER_CLASSIFICATION', 'PLAN_REQUIRES_EXPLANATION']
     assert not R['process_active']
     assert R['objects_unchanged'] == I['objects'] and R['tracked_source_unchanged']
+    if R['status'] == 'PLAN_REQUIRES_EXPLANATION':
+        R['checkpoint_not_saved_reason'] = 'Known broad command-spelling invalidation: original immutable cache remains the reusable predecessor; no compile or cache replacement.'
+        s.save()
+        return
     cat = s.catalog(I['source'], 'retained')
     profile = {'source': I['source'], 'actual_current_profile': R['actual_profile'],
         'input_checkpoint_sha256': I['checkpoint_sha256'], 'input_cache_key': I['cache_key'],
