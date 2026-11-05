@@ -1,0 +1,21 @@
+clang-cl: warning: argument unused during compilation: '/Zc:preprocessor' [-Wunused-command-line-argument]
+D:\a\btx\btx\btx\src\test\modelnet_cloud_tests.cpp(420,25): error: no member named 'GetObjectW' in 'modelnet::S3PieceStore'; did you mean 'GetObject'?
+  420 |     BOOST_REQUIRE(store.GetObject(modelnet::ObjectKeySourceFile("v1", art.Hex(), 0), 0, 16, head, err));
+      |                         ^~~~~~~~~
+      |                         GetObject
+C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\wingdi.h(5196,20): note: expanded from macro 'GetObject'
+ 5196 | #define GetObject  GetObjectW
+      |                    ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(85,6): note: expanded from macro 'BOOST_REQUIRE'
+   85 |     (P), BOOST_TEST_STRINGIZE( P ), REQUIRE, CHECK_PRED, _ )
+      |      ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(68,61): note: expanded from macro 'BOOST_TEST_TOOL_IMPL'
+   68 |         BOOST_JOIN( BOOST_TEST_TOOL_PASS_PRED, frwd_type )( P, ARGS ),          \
+      |                                                             ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(51,47): note: expanded from macro 'BOOST_TEST_TOOL_PASS_PRED2'
+   51 | #define BOOST_TEST_TOOL_PASS_PRED2( P, ARGS ) P
+      |                                               ^
+D:\a\btx\btx\btx\src\modelnet/s3_store.h(76,10): note: 'GetObject' declared here
+   76 |     bool GetObject(const std::string& key, uint64_t offset, uint64_t len,
+      |          ^
+1 error generated.

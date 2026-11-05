@@ -1,0 +1,22 @@
+clang-cl: warning: argument unused during compilation: '/Zc:preprocessor' [-Wunused-command-line-argument]
+D:\a\btx\btx\btx\src\test\lab_lifecycle_tests.cpp(57,41): error: no member named 'setenv' in the global namespace
+   57 |     void Point(const fs::path& dir) { ::setenv("BTX035_LAB_DIR", PathToString(dir).c_str(), 1); }
+      |                                       ~~^
+D:\a\btx\btx\btx\src\test\lab_lifecycle_tests.cpp(58,22): error: no member named 'unsetenv' in the global namespace; did you mean 'getenv'?
+   58 |     ~LabDirEnv() { ::unsetenv("BTX035_LAB_DIR"); }
+      |                    ~~^~~~~~~~
+      |                      getenv
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\stdlib.h(1184,28): note: 'getenv' declared here
+ 1184 |     _DCRTIMP char* __cdecl getenv(
+      |                            ^
+D:\a\btx\btx\btx\src\test\lab_lifecycle_tests.cpp(110,7): error: no member named 'unsetenv' in the global namespace; did you mean 'getenv'?
+  110 |     ::unsetenv("BTX035_LAB_DIR");
+      |     ~~^~~~~~~~
+      |       getenv
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\stdlib.h(1184,28): note: 'getenv' declared here
+ 1184 |     _DCRTIMP char* __cdecl getenv(
+      |                            ^
+D:\a\btx\btx\btx\src\test\lab_lifecycle_tests.cpp(112,7): error: no member named 'setenv' in the global namespace
+  112 |     ::setenv("BTX035_LAB_DIR", PathToString(dir).c_str(), 1);
+      |     ~~^
+4 errors generated.

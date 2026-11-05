@@ -1,0 +1,179 @@
+{
+  "packaged": [
+    "7d0c5882befc45a77da25df7e5b6817a24fd3132",
+    "e3e356cc4dc9b3925b81ededd12705a4c6bb4fc9",
+    "9c5b034cf928bd2a275049f93d59a89e9c173e62",
+    "a19d1a95116e3ef69560d1d9b84a58b7d7881f80",
+    "b69f04b5c25127264f6067e30cd624ca082c01cd"
+  ],
+  "originals": [
+    "dfa14c529bb15b62fc41df9cd23c4500518fde57",
+    "596d26ff62eea1afc6b8deb08face84f8492e060",
+    "35e1d08f02e216264c05daed31b9f2d46b01d226",
+    "090a6d3596394487a290a2b0e4f67da1da27c896",
+    "473a2a0bf8e528a977d07137712d6a1d6dfc8cf6",
+    "bc85ca3460bbf6b4699ea7faf1c6bee44b26f441",
+    "666302d007d9909faded1fddcd7fdd56fcb92bec",
+    "8a642b1ea7ed726fe527c9a6eb0f80a00da10d3f"
+  ],
+  "facts": {
+    "7d0c5882befc45a77da25df7e5b6817a24fd3132": {
+      "commit": "7d0c5882befc45a77da25df7e5b6817a24fd3132",
+      "parents": [
+        "362c36b2fda0f73741c06c4bcb090153fea38a08"
+      ],
+      "tree": "ec4adfe2c38298c16bf9e6847a93d9e01c666539",
+      "author_name": "Sunny River",
+      "author_email": "255313950+sunnyriverr@users.noreply.github.com",
+      "author_date": "2026-11-05T15:07:07+10:00",
+      "message": "test: use portable environment mutations in unit fixtures\n\nReuse the environment helper approach from #398 for the remaining\nMatMul and Modelnet test fixtures. Keep mutation ordering and checks.\n\nWindows prerequisite audit: repch1c and Jpp-matata (#356).\n\nSource-preserving packaging of dfa14c529bb15b62fc41df9cd23c4500518fde57.\n\n"
+    },
+    "e3e356cc4dc9b3925b81ededd12705a4c6bb4fc9": {
+      "commit": "e3e356cc4dc9b3925b81ededd12705a4c6bb4fc9",
+      "parents": [
+        "7d0c5882befc45a77da25df7e5b6817a24fd3132"
+      ],
+      "tree": "b7822d578f74b4dc9e2847338dece37f3170622e",
+      "author_name": "Sunny River",
+      "author_email": "255313950+sunnyriverr@users.noreply.github.com",
+      "author_date": "2026-11-05T15:07:07+10:00",
+      "message": "test: scope the Windows OPAQUE macro around shielded fixtures\n\nRetain the ScanDomain assertions and restore the incoming macro after\nthe affected test definitions. No production enum or Windows include changes.\n\nWindows prerequisite audit: repch1c and Jpp-matata (#356).\n\nSource-preserving packaging of 596d26ff62eea1afc6b8deb08face84f8492e060.\n\n"
+    },
+    "9c5b034cf928bd2a275049f93d59a89e9c173e62": {
+      "commit": "9c5b034cf928bd2a275049f93d59a89e9c173e62",
+      "parents": [
+        "e3e356cc4dc9b3925b81ededd12705a4c6bb4fc9"
+      ],
+      "tree": "8e91209526360ee2c4bb31888ec46746e039243b",
+      "author_name": "Sunny River",
+      "author_email": "255313950+sunnyriverr@users.noreply.github.com",
+      "author_date": "2026-11-05T07:05:38Z",
+      "message": "test: preserve native Windows fixture refusal and byte controls\n\nUse the existing supported native boundary for the Unix-only helper call,\nCUDA qualification setup and hosting file controls. Keep refusal/no-side-effect\nchecks and exact byte fixtures; POSIX paths are retained.\n\nConsolidates the tested non-cloud parts of 666302d0 and 35e1d08f.\nWindows prerequisite audit: repch1c and Jpp-matata (#356).\n\n"
+    },
+    "a19d1a95116e3ef69560d1d9b84a58b7d7881f80": {
+      "commit": "a19d1a95116e3ef69560d1d9b84a58b7d7881f80",
+      "parents": [
+        "9c5b034cf928bd2a275049f93d59a89e9c173e62"
+      ],
+      "tree": "71daa7ee9706292a8df1a339d0e5c67cc6185099",
+      "author_name": "Sunny River",
+      "author_email": "255313950+sunnyriverr@users.noreply.github.com",
+      "author_date": "2026-11-05T18:42:46+10:00",
+      "message": "test: keep Windows cloud-store interfaces and fixtures portable\n\nKeep the canonical GetObject interface across SDK include boundaries, with\nscoped macro restoration in tests. Preserve exact file-permission refusal;\nselected positive tests use supported ENV synthetic credentials and binary\nbyte fixtures without weakening streaming, hash or request-count checks.\n\nConsolidates the tested cloud parts of 666302d0, 35e1d08f, 8a642b1e and\n090a6d35. Other R2 PATH cases remain unqualified on Windows.\nWindows prerequisite audit: repch1c and Jpp-matata (#356).\n\n"
+    },
+    "b69f04b5c25127264f6067e30cd624ca082c01cd": {
+      "commit": "b69f04b5c25127264f6067e30cd624ca082c01cd",
+      "parents": [
+        "a19d1a95116e3ef69560d1d9b84a58b7d7881f80"
+      ],
+      "tree": "d860c05655a867235ca38e6e78d5b2431cc24a8f",
+      "author_name": "Sunny River",
+      "author_email": "255313950+sunnyriverr@users.noreply.github.com",
+      "author_date": "2026-11-05T18:42:46+10:00",
+      "message": "test: use the native process ID in filesystem fixtures\n\nSelect the real CRT or POSIX PID API in one test-only header. Keep all\npath expressions, filesystem assertions, descriptor checks and cleanup\nunchanged across the nine fixtures.\n\nWindows prerequisite audit: repch1c and Jpp-matata (#356).\n\nSource-preserving packaging of 473a2a0bf8e528a977d07137712d6a1d6dfc8cf6.\n\n"
+    },
+    "dfa14c529bb15b62fc41df9cd23c4500518fde57": {
+      "commit": "dfa14c529bb15b62fc41df9cd23c4500518fde57",
+      "parents": [
+        "666673a3153225ba264c7870e0e82e354df86765"
+      ],
+      "tree": "0f55b2f355bf977b1f1bc76ea27c693b4b581cad",
+      "author_name": "Sunny River",
+      "author_email": "255313950+sunnyriverr@users.noreply.github.com",
+      "author_date": "2026-11-05T15:07:07+10:00",
+      "message": "test: use portable environment mutations in unit fixtures\n\nReuse the environment helper approach from #398 for the remaining\nMatMul and Modelnet test fixtures. Keep mutation ordering and checks.\n\nWindows prerequisite audit: repch1c and Jpp-matata (#356).\n\n"
+    },
+    "596d26ff62eea1afc6b8deb08face84f8492e060": {
+      "commit": "596d26ff62eea1afc6b8deb08face84f8492e060",
+      "parents": [
+        "dfa14c529bb15b62fc41df9cd23c4500518fde57"
+      ],
+      "tree": "dc35a1ad3c6641f79dc8cf900c26a7d2e15038b7",
+      "author_name": "Sunny River",
+      "author_email": "255313950+sunnyriverr@users.noreply.github.com",
+      "author_date": "2026-11-05T15:07:07+10:00",
+      "message": "test: scope the Windows OPAQUE macro around shielded fixtures\n\nRetain the ScanDomain assertions and restore the incoming macro after\nthe affected test definitions. No production enum or Windows include changes.\n\nWindows prerequisite audit: repch1c and Jpp-matata (#356).\n\n"
+    },
+    "35e1d08f02e216264c05daed31b9f2d46b01d226": {
+      "commit": "35e1d08f02e216264c05daed31b9f2d46b01d226",
+      "parents": [
+        "666302d007d9909faded1fddcd7fdd56fcb92bec"
+      ],
+      "tree": "600b086062024d6281d665dd37d6caa843b86e7e",
+      "author_name": "Sunny River",
+      "author_email": "255313950+sunnyriverr@users.noreply.github.com",
+      "author_date": "2026-11-05T07:05:38Z",
+      "message": "test: use exact byte fixtures for Windows preservation controls\n\n"
+    },
+    "090a6d3596394487a290a2b0e4f67da1da27c896": {
+      "commit": "090a6d3596394487a290a2b0e4f67da1da27c896",
+      "parents": [
+        "8a642b1ea7ed726fe527c9a6eb0f80a00da10d3f"
+      ],
+      "tree": "71daa7ee9706292a8df1a339d0e5c67cc6185099",
+      "author_name": "Sunny River",
+      "author_email": "255313950+sunnyriverr@users.noreply.github.com",
+      "author_date": "2026-11-05T18:42:46+10:00",
+      "message": "test: keep Windows cloud fixture methods independent of SDK macros\n\nGuard the two confirmed late-include GetObject collisions. Preserve the\nR2 file-credential rejection and run its existing byte/hash/count oracle\nthrough the supported synthetic environment credential route on Windows.\nPOSIX operation checks and production permission policy are unchanged.\n\nWindows prerequisite audit: repch1c and Jpp-matata (#356).\n\n"
+    },
+    "473a2a0bf8e528a977d07137712d6a1d6dfc8cf6": {
+      "commit": "473a2a0bf8e528a977d07137712d6a1d6dfc8cf6",
+      "parents": [
+        "090a6d3596394487a290a2b0e4f67da1da27c896"
+      ],
+      "tree": "d860c05655a867235ca38e6e78d5b2431cc24a8f",
+      "author_name": "Sunny River",
+      "author_email": "255313950+sunnyriverr@users.noreply.github.com",
+      "author_date": "2026-11-05T18:42:46+10:00",
+      "message": "test: use the native process ID in filesystem fixtures\n\nSelect the real CRT or POSIX PID API in one test-only header. Keep all\npath expressions, filesystem assertions, descriptor checks and cleanup\nunchanged across the nine fixtures.\n\nWindows prerequisite audit: repch1c and Jpp-matata (#356).\n\n"
+    },
+    "bc85ca3460bbf6b4699ea7faf1c6bee44b26f441": {
+      "commit": "bc85ca3460bbf6b4699ea7faf1c6bee44b26f441",
+      "parents": [
+        "362c36b2fda0f73741c06c4bcb090153fea38a08"
+      ],
+      "tree": "b7822d578f74b4dc9e2847338dece37f3170622e",
+      "author_name": "Sunny River",
+      "author_email": "255313950+sunnyriverr@users.noreply.github.com",
+      "author_date": "2026-11-05T05:07:07Z",
+      "message": "test: compose known unit fixture prerequisites with PR411 for native acceptance\n\n"
+    },
+    "666302d007d9909faded1fddcd7fdd56fcb92bec": {
+      "commit": "666302d007d9909faded1fddcd7fdd56fcb92bec",
+      "parents": [
+        "bc85ca3460bbf6b4699ea7faf1c6bee44b26f441"
+      ],
+      "tree": "4275b5697c13a9afb9ca4fcd2fb845b43687f2b0",
+      "author_name": "Sunny River",
+      "author_email": "255313950+sunnyriverr@users.noreply.github.com",
+      "author_date": "2026-11-05T06:43:16Z",
+      "message": "test: integrate four Windows fixture corrections for native qualification\n\n"
+    },
+    "8a642b1ea7ed726fe527c9a6eb0f80a00da10d3f": {
+      "commit": "8a642b1ea7ed726fe527c9a6eb0f80a00da10d3f",
+      "parents": [
+        "35e1d08f02e216264c05daed31b9f2d46b01d226"
+      ],
+      "tree": "cf231ab9812d0758a3eea7d6cdb65eebc3857163",
+      "author_name": "Sunny River",
+      "author_email": "255313950+sunnyriverr@users.noreply.github.com",
+      "author_date": "2026-11-05T07:12:11Z",
+      "message": "test: qualify Windows cloud streaming with supported credential source\n\n"
+    },
+    "362c36b2fda0f73741c06c4bcb090153fea38a08": {
+      "commit": "362c36b2fda0f73741c06c4bcb090153fea38a08",
+      "parents": [
+        "666673a3153225ba264c7870e0e82e354df86765"
+      ],
+      "tree": "aa24182492cbf129c1efd99802ba014c2a53e086",
+      "author_name": "Sunny River",
+      "author_email": "255313950+sunnyriverr@users.noreply.github.com",
+      "author_date": "2026-11-05T13:15:44+10:00",
+      "message": "modelnet: guard POSIX runtime process APIs on native Windows\n\nKeep the common CPU fixture lifecycle available. Refuse unimplemented native\nWindows accelerated probes; preserve the existing POSIX loader, file checks\nand process checks. Do not introduce PID aliases or fake process success.\n\nFollow-up to the native Windows build audit in #356 by repch1c and\nJpp-matata; original runtime authorship remains in the upstream history.\n\n"
+    }
+  },
+  "packaged_vs_tested_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "actual_final_tree_equal": true,
+  "worktree_head": "473a2a0bf8e528a977d07137712d6a1d6dfc8cf6",
+  "worktree_porcelain": ""
+}

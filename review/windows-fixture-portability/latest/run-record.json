@@ -1,0 +1,695 @@
+{
+  "target": "473a2a0bf8e528a977d07137712d6a1d6dfc8cf6",
+  "cached_source": "8a642b1ea7ed726fe527c9a6eb0f80a00da10d3f",
+  "scope": "Native Windows selected11 maintained fixture object compile and13 case runtime; explicit component, not full test_btx or stock acceptance",
+  "commands": [
+    {
+      "label": "four-prerequisite-fetch",
+      "command": [
+        "git",
+        "-C",
+        "D:\\a\\btx\\btx\\btx",
+        "fetch",
+        "--no-tags",
+        "--depth=2",
+        "https://github.com/sunnyriverr/btx.git",
+        "362c36b2fda0f73741c06c4bcb090153fea38a08"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 4.0,
+      "log_sha256": "4421416ce4f88eb8437e0b8ec2e9c74f7865f0d41f4e8b0546a133a1729412b6",
+      "budget_stop": null
+    },
+    {
+      "label": "four-bundle-verify",
+      "command": [
+        "git",
+        "bundle",
+        "verify",
+        "D:\\btx-native-035\\evidence\\four-source.bundle"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.0,
+      "log_sha256": "e2492e6d4d674cebaeab7fbbdd163ae0d538e6d0068b471526f9da10e9fdd32c",
+      "budget_stop": null
+    },
+    {
+      "label": "four-bundle-fetch",
+      "command": [
+        "git",
+        "fetch",
+        "D:\\btx-native-035\\evidence\\four-source.bundle",
+        "refs/heads/codex/fix-windows-fixture-boundaries"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.0,
+      "log_sha256": "f06b3a856efdeb2a0a4f9e5c99cac34b9883c8ac9a30adacf3265e02c0befdda",
+      "budget_stop": null
+    },
+    {
+      "label": "four-cache-source",
+      "command": [
+        "git",
+        "checkout",
+        "--detach",
+        "8a642b1ea7ed726fe527c9a6eb0f80a00da10d3f"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.0,
+      "log_sha256": "4bfa1df6b426709ffb0a713276e4f95100966a534c06135eb5f3ffacef09111b",
+      "budget_stop": null
+    },
+    {
+      "label": "four-index-refresh",
+      "command": [
+        "git",
+        "update-index",
+        "--refresh"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.02,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "budget_stop": null
+    },
+    {
+      "label": "four-candidate-checkout",
+      "command": [
+        "git",
+        "checkout",
+        "--detach",
+        "473a2a0bf8e528a977d07137712d6a1d6dfc8cf6"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.0,
+      "log_sha256": "467b736477b754a8ee83ef0ac6e88a58009b19e1c025feea021bb483ea67ff05",
+      "budget_stop": null
+    },
+    {
+      "label": "four-plan",
+      "command": [
+        "ninja",
+        "-C",
+        "D:\\btx-native-035\\project-build",
+        "-f",
+        "D:\\btx-native-035\\evidence\\four.ninja",
+        "-d",
+        "explain",
+        "-n",
+        "bin/windows_fixture_boundaries.exe"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.12,
+      "log_sha256": "f63e69168bab8969fbf1bc03de335d46b022bce2613cf5559f3b97200f51f005",
+      "budget_stop": null
+    },
+    {
+      "label": "focused-build",
+      "command": [
+        "ninja",
+        "-C",
+        "D:\\btx-native-035\\project-build",
+        "-f",
+        "D:\\btx-native-035\\evidence\\four.ninja",
+        "--verbose",
+        "-j",
+        "4",
+        "-k",
+        "1",
+        "bin/windows_fixture_boundaries.exe"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 22.17,
+      "log_sha256": "2d6380943811d86bfee27158d52c352ebc7929f7fa0dfdfdfe094367f0520d82",
+      "budget_stop": null
+    },
+    {
+      "label": "four-component-inventory",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\windows_fixture_boundaries.exe",
+        "--list_content"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.09,
+      "log_sha256": "fc5cea5780ccc7d8de81b88333f19782335e7d7dfa0dff0644e292d1260b4031",
+      "budget_stop": null
+    },
+    {
+      "label": "four-case-0",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\windows_fixture_boundaries.exe",
+        "--run_test=swarm_node_tests/records_a_second_process_can_read",
+        "--report_level=detailed",
+        "--log_level=test_suite",
+        "--",
+        "-testdatadir=D:\\fb41997202444\\node"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.12,
+      "log_sha256": "7aafca9a6207dd01c426630ed3d88ed1899cdca36ba1c2469b192abaa95fe794",
+      "budget_stop": null
+    },
+    {
+      "label": "four-case-1",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\windows_fixture_boundaries.exe",
+        "--run_test=swarm_clearing_tests/persist_then_load_restores_balances",
+        "--report_level=detailed",
+        "--log_level=test_suite",
+        "--",
+        "-testdatadir=D:\\fb41997202444\\node"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.09,
+      "log_sha256": "b43cc352a98d8bf51f42c9aeca5c603fa47cd2982206ff0540c07e319c51c7d6",
+      "budget_stop": null
+    },
+    {
+      "label": "four-case-2",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\windows_fixture_boundaries.exe",
+        "--run_test=swarm_liquidity_tests/shared_capacity_reservations_persist",
+        "--report_level=detailed",
+        "--log_level=test_suite",
+        "--",
+        "-testdatadir=D:\\fb41997202444\\node"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.09,
+      "log_sha256": "aec4d7ffbfdbf1a932c11f7bf4cca91377d33e71213c678978dc9945eff678ee",
+      "budget_stop": null
+    },
+    {
+      "label": "four-case-3",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\windows_fixture_boundaries.exe",
+        "--run_test=swarm_live_tests/publish_keeps_four_bit_in_the_family_only",
+        "--report_level=detailed",
+        "--log_level=test_suite",
+        "--",
+        "-testdatadir=D:\\fb41997202444\\node"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.09,
+      "log_sha256": "4a91097a16f7b4a1e67db559774fc6254c845e7368b8e5c267a8ea4127b1ed8f",
+      "budget_stop": null
+    },
+    {
+      "label": "four-case-4",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\windows_fixture_boundaries.exe",
+        "--run_test=swarm_contract_tests/command_log_persists_vote_and_keeps_the_prefix",
+        "--report_level=detailed",
+        "--log_level=test_suite",
+        "--",
+        "-testdatadir=D:\\fb41997202444\\node"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.09,
+      "log_sha256": "9f4fed0d9ab0d8450577bc79eb1578db9352056095644250ecbfc3e9944b683d",
+      "budget_stop": null
+    },
+    {
+      "label": "four-case-5",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\windows_fixture_boundaries.exe",
+        "--run_test=swarm_mandate_tests/a_mandate_cannot_assign_more_than_collateral",
+        "--report_level=detailed",
+        "--log_level=test_suite",
+        "--",
+        "-testdatadir=D:\\fb41997202444\\node"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.09,
+      "log_sha256": "16bbeea9dcf257562dc601c453acaef4c5f9dfd85fa5e2b89b40f9a6370ad72a",
+      "budget_stop": null
+    },
+    {
+      "label": "four-case-6",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\windows_fixture_boundaries.exe",
+        "--run_test=swarm_appointment_tests/hashlock_remedy_writes_and_reads_back",
+        "--report_level=detailed",
+        "--log_level=test_suite",
+        "--",
+        "-testdatadir=D:\\fb41997202444\\node"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.11,
+      "log_sha256": "76fa093cde16e3dfc8dccbaa304b65fc2c4b7d654745f2f5a8c03b6d3d7b8b1c",
+      "budget_stop": null
+    },
+    {
+      "label": "four-case-7",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\windows_fixture_boundaries.exe",
+        "--run_test=swarm_cohortbook_tests/expiry_revoke_stale_epoch_replay_and_rejoin",
+        "--report_level=detailed",
+        "--log_level=test_suite",
+        "--",
+        "-testdatadir=D:\\fb41997202444\\node"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.09,
+      "log_sha256": "ccdcd47e9412fabcf1551aee9a3713b032280db45500661cedda92d2c87ba8e8",
+      "budget_stop": null
+    },
+    {
+      "label": "four-case-8",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\windows_fixture_boundaries.exe",
+        "--run_test=swarm_verify_tests/a_checkpoint_stays_closed_until_every_child_matches",
+        "--report_level=detailed",
+        "--log_level=test_suite",
+        "--",
+        "-testdatadir=D:\\fb41997202444\\node"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.09,
+      "log_sha256": "0e875517706a5349af642e3e91ef8a7f8779cdcc875bf70290481ba18e6a61d1",
+      "budget_stop": null
+    },
+    {
+      "label": "four-case-9",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\windows_fixture_boundaries.exe",
+        "--run_test=swarm_accept_tests/an_unmeasured_engine_is_not_advertised",
+        "--report_level=detailed",
+        "--log_level=test_suite",
+        "--",
+        "-testdatadir=D:\\fb41997202444\\node"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.11,
+      "log_sha256": "6518dd7dd28a0d611fa753476a36470c026f4aeda672ee8a1b91b9f1569c2e7b",
+      "budget_stop": null
+    },
+    {
+      "label": "four-case-10",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\windows_fixture_boundaries.exe",
+        "--run_test=modelnet_store2_tests/store2_02_tiered_miss_fills_local",
+        "--report_level=detailed",
+        "--log_level=test_suite",
+        "--",
+        "-testdatadir=D:\\fb41997202444\\node"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.09,
+      "log_sha256": "0adc25e61b87fac676395e04ef6401705dd873ed4b03fb31037be7336fb153ac",
+      "budget_stop": null
+    },
+    {
+      "label": "four-case-11",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\windows_fixture_boundaries.exe",
+        "--run_test=modelnet_store2_tests/store2_03_never_serve_unverified",
+        "--report_level=detailed",
+        "--log_level=test_suite",
+        "--",
+        "-testdatadir=D:\\fb41997202444\\node"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.09,
+      "log_sha256": "e5e280d922a5bfa2c25b56b6c64837b868f0e05c5143ae810c72c59cf22802a6",
+      "budget_stop": null
+    },
+    {
+      "label": "four-case-12",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\windows_fixture_boundaries.exe",
+        "--run_test=modelnet_r2_storage_tests/r2s_01_layout_identity_invariant_across_key_families",
+        "--report_level=detailed",
+        "--log_level=test_suite",
+        "--",
+        "-testdatadir=D:\\fb41997202444\\node"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.09,
+      "log_sha256": "1665316f5ae7af02e1adfad3b47b7bf914f9661018a602726a356c1f60ecb129",
+      "budget_stop": null
+    }
+  ],
+  "process_active": false,
+  "status": "FOCUSED_PASS",
+  "active_command": null,
+  "updated_utc": "2026-11-05T08:51:00.625685+00:00",
+  "restore": {
+    "restored": true,
+    "files_verified": 10750,
+    "source_timestamps_restored": 14166,
+    "previous_result": {
+      "status": "FULL_UNIT_BUILD_FAILURE",
+      "unit_build_exit": 1,
+      "unit_exit": null,
+      "unit_built": false,
+      "unit_invoked": false
+    }
+  },
+  "actual_profile": {
+    "source": "666673a3153225ba264c7870e0e82e354df86765",
+    "tools": {
+      "clang-cl": {
+        "path": "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "sha256": "57e32b1ea2456f12f97bf802453171bbff12d56b2c486b4eca0c75343c0cda2c"
+      },
+      "cl": {
+        "path": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.EXE",
+        "sha256": "b0a1818ebae6da7f18230a84e76ce839212584ac4c2ab55b97a0d5268085da57"
+      },
+      "cmake": {
+        "path": "C:\\Program Files\\CMake\\bin\\cmake.EXE",
+        "sha256": "84935c0b7cb09c140de0d3b042d4e93e5fac4e6371e75bf28eae3d841f79dfb3"
+      },
+      "ninja": {
+        "path": "C:\\ProgramData\\Chocolatey\\bin\\ninja.EXE",
+        "sha256": "6a4dd2358fccbb483729091586413cc2f2f74e72d329187f5a6b4cbba3c025ad"
+      }
+    },
+    "args": [
+      "cmake",
+      "--debug-find-pkg=OpenSSL",
+      "--preset",
+      "windows-clangcl-static",
+      "-S",
+      "D:\\a\\btx\\btx\\btx",
+      "-B",
+      "D:\\btx-native-035\\project-build",
+      "-DBUILD_TESTS=ON",
+      "-DWITH_MODELNET=ON",
+      "-DVCPKG_MANIFEST_NO_DEFAULT_FEATURES=ON",
+      "-DVCPKG_MANIFEST_FEATURES=wallet;tests;zeromq",
+      "-DVCPKG_INSTALLED_DIR=D:\\btx-native-035\\vcpkg-installed",
+      "-DOPENSSL_ROOT_DIR=D:\\btx-native-035\\openssl-3.5.4-static",
+      "-DOPENSSL_USE_STATIC_LIBS=ON",
+      "-DOPENSSL_MSVC_STATIC_RT=ON",
+      "-DOPENSSL_INCLUDE_DIR=D:\\btx-native-035\\openssl-3.5.4-static\\include",
+      "-DOPENSSL_SSL_LIBRARY=D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib",
+      "-DOPENSSL_CRYPTO_LIBRARY=D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib",
+      "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+    ],
+    "environment": {
+      "ImageVersion": "20261103.298.1",
+      "VCToolsVersion": "14.51.36231",
+      "WindowsSDKVersion": "10.0.26100.0\\",
+      "INCLUDE": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\include;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\include;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Auxiliary\\VS\\include;C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.26100.0\\ucrt;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\um;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\shared;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\winrt;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\cppwinrt;C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\include\\um",
+      "LIB": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\lib\\x64;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x64;C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\lib\\um\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\lib\\10.0.26100.0\\ucrt\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\\\lib\\10.0.26100.0\\\\um\\x64",
+      "LIBPATH": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\lib\\x64;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x64;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x86\\store\\references;C:\\Program Files (x86)\\Windows Kits\\10\\UnionMetadata\\10.0.26100.0;C:\\Program Files (x86)\\Windows Kits\\10\\References\\10.0.26100.0;C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319",
+      "CL": null,
+      "_CL_": null
+    },
+    "controls": {
+      "runner.py": "73fea130e528e1034d508ec2ff1da76d710074792dc1af618ccb3a499e2f3f8b",
+      "checkpoint.py": "eb65c4501a306c92ea9e78a70c1932d00fa831d86ea302888c3eb9769b9c6ebb",
+      "checkpoint-selftest.py": "27d586dd8ba09eef10d5a4bbcb8b4ce6cb3480565ea0ee4f92c6cba4bb6d214a",
+      "dependency-identity.json": "f823d61237a287c704cada283764695a782fa001a725442122920d75ced8a4a5"
+    },
+    "openssl_files": {
+      "include/openssl/opensslv.h": "df513ae26e8baebbc641ba19f3d16f3e9ac0895cb092c81a39e1669f7fcb9c5c",
+      "lib/libssl.lib": "860ce6dd4edf55af8a82a958afb9bae9cd025f3ef7e263bcc266d79cdd5179e8",
+      "lib/libcrypto.lib": "f9385fc262485a1c779aa9a740ee3bde3025b9eb61b113e311024c9571899e12",
+      "bin/openssl.exe": "c63c66cb528c20dbd9f474679c8a19ea13d40f57c7f8efa4085ceb6dbe5c5552"
+    }
+  },
+  "host_transition": {
+    "environment.ImageVersion": [
+      "20261030.294.1",
+      "20261103.298.1"
+    ],
+    "tools.ninja.sha256": [
+      "5142e84796e4bd57acb91ee19d30174d11bcca2b1a99d45a43251b9b1e6c32a9",
+      "6a4dd2358fccbb483729091586413cc2f2f74e72d329187f5a6b4cbba3c025ad"
+    ]
+  },
+  "original_config": {
+    "build.ninja": "03abe6e53694a28502a2cb16ede803342a655fcb5a1be0f001936f7f4ef99d98",
+    "CMakeFiles/rules.ninja": "a709c8c906308b3b0e559455b365be3f65ddd519c9aea8c9de1ca7cc0c752e4b",
+    "CMakeCache.txt": "26177cbd305c3f6a56cbf2610dfa4851b053ec40f206536c17c3881cd687af34",
+    "compile_commands.json": "a991664401a33704ed75d27e3cd1ca79c61a52fff968fa16f131b28964a5853e"
+  },
+  "same_generated_compile_entries": {
+    "swarm_node_tests.cpp": {
+      "directory": "D:/btx-native-035/project-build",
+      "command": "\"C:\\Program Files\\LLVM\\bin\\clang-cl.exe\"  /nologo -TP -DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_NO_USER_CONFIG -DBTX_REFERENCE_TEST_VECTORS_PATH=\\\"D:/a/btx/btx/btx/test/reference/shielded_test_vectors.json\\\" -DMODELNET_AHP_FIXTURE_DIR=\\\"D:/a/btx/btx/btx/src/test/data/agent-package\\\" -DMODELNET_B0_CODEC_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_b0_codec_vectors.json\\\" -DMODELNET_BOUNTY_VECTORS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/bounty/reference/golden-vectors.json\\\" -DMODELNET_BTXD_PATH=\\\"D:/btx-native-035/project-build/bin/btxd\\\" -DMODELNET_BTX_OPEN_PATH=\\\"D:/btx-native-035/project-build/bin/btx-open\\\" -DMODELNET_BTX_PACKAGE_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/btx-package-vectors\\\" -DMODELNET_CRL12_OPERATIONS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/operations-v1.2.json\\\" -DMODELNET_CRL12_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12-portal/index.html\\\" -DMODELNET_CRL12_SCHEMA_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\\\" -DMODELNET_HCP_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/hcp-portal/index.html\\\" -DMODELNET_MODELD_PATH=\\\"D:/btx-native-035/project-build/bin/btx-modeld\\\" -DMODELNET_V11_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_v11_vectors.json\\\" -DNOMINMAX -DUNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING -D_UNICODE -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:\\btx-native-035\\project-build\\src -ID:\\a\\btx\\btx\\btx\\src -ID:\\a\\btx\\btx\\btx\\src\\secp256k1\\include -ID:\\a\\btx\\btx\\btx\\src\\libbitcoinpqc\\include -ID:\\a\\btx\\btx\\btx\\src\\compat\\mingw -ID:\\a\\btx\\btx\\btx\\src\\univalue\\include -imsvcD:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\include -imsvcD:\\btx-native-035\\openssl-3.5.4-static\\include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -std:c++20 -MT /utf-8 /Zc:preprocessor /Zc:__cplusplus /sdl /W3 /wd4018 /wd4146 /wd4244 /wd4267 /wd4715 /wd4805 -Xclang -fopenmp /Fosrc\\test\\CMakeFiles\\test_btx.dir\\swarm_node_tests.cpp.obj /Fdsrc\\test\\CMakeFiles\\test_btx.dir\\ -c -- D:\\a\\btx\\btx\\btx\\src\\test\\swarm_node_tests.cpp ",
+      "file": "D:/a/btx/btx/btx/src/test/swarm_node_tests.cpp",
+      "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/swarm_node_tests.cpp.obj"
+    },
+    "swarm_clearing_tests.cpp": {
+      "directory": "D:/btx-native-035/project-build",
+      "command": "\"C:\\Program Files\\LLVM\\bin\\clang-cl.exe\"  /nologo -TP -DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_NO_USER_CONFIG -DBTX_REFERENCE_TEST_VECTORS_PATH=\\\"D:/a/btx/btx/btx/test/reference/shielded_test_vectors.json\\\" -DMODELNET_AHP_FIXTURE_DIR=\\\"D:/a/btx/btx/btx/src/test/data/agent-package\\\" -DMODELNET_B0_CODEC_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_b0_codec_vectors.json\\\" -DMODELNET_BOUNTY_VECTORS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/bounty/reference/golden-vectors.json\\\" -DMODELNET_BTXD_PATH=\\\"D:/btx-native-035/project-build/bin/btxd\\\" -DMODELNET_BTX_OPEN_PATH=\\\"D:/btx-native-035/project-build/bin/btx-open\\\" -DMODELNET_BTX_PACKAGE_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/btx-package-vectors\\\" -DMODELNET_CRL12_OPERATIONS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/operations-v1.2.json\\\" -DMODELNET_CRL12_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12-portal/index.html\\\" -DMODELNET_CRL12_SCHEMA_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\\\" -DMODELNET_HCP_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/hcp-portal/index.html\\\" -DMODELNET_MODELD_PATH=\\\"D:/btx-native-035/project-build/bin/btx-modeld\\\" -DMODELNET_V11_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_v11_vectors.json\\\" -DNOMINMAX -DUNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING -D_UNICODE -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:\\btx-native-035\\project-build\\src -ID:\\a\\btx\\btx\\btx\\src -ID:\\a\\btx\\btx\\btx\\src\\secp256k1\\include -ID:\\a\\btx\\btx\\btx\\src\\libbitcoinpqc\\include -ID:\\a\\btx\\btx\\btx\\src\\compat\\mingw -ID:\\a\\btx\\btx\\btx\\src\\univalue\\include -imsvcD:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\include -imsvcD:\\btx-native-035\\openssl-3.5.4-static\\include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -std:c++20 -MT /utf-8 /Zc:preprocessor /Zc:__cplusplus /sdl /W3 /wd4018 /wd4146 /wd4244 /wd4267 /wd4715 /wd4805 -Xclang -fopenmp /Fosrc\\test\\CMakeFiles\\test_btx.dir\\swarm_clearing_tests.cpp.obj /Fdsrc\\test\\CMakeFiles\\test_btx.dir\\ -c -- D:\\a\\btx\\btx\\btx\\src\\test\\swarm_clearing_tests.cpp ",
+      "file": "D:/a/btx/btx/btx/src/test/swarm_clearing_tests.cpp",
+      "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/swarm_clearing_tests.cpp.obj"
+    },
+    "swarm_liquidity_tests.cpp": {
+      "directory": "D:/btx-native-035/project-build",
+      "command": "\"C:\\Program Files\\LLVM\\bin\\clang-cl.exe\"  /nologo -TP -DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_NO_USER_CONFIG -DBTX_REFERENCE_TEST_VECTORS_PATH=\\\"D:/a/btx/btx/btx/test/reference/shielded_test_vectors.json\\\" -DMODELNET_AHP_FIXTURE_DIR=\\\"D:/a/btx/btx/btx/src/test/data/agent-package\\\" -DMODELNET_B0_CODEC_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_b0_codec_vectors.json\\\" -DMODELNET_BOUNTY_VECTORS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/bounty/reference/golden-vectors.json\\\" -DMODELNET_BTXD_PATH=\\\"D:/btx-native-035/project-build/bin/btxd\\\" -DMODELNET_BTX_OPEN_PATH=\\\"D:/btx-native-035/project-build/bin/btx-open\\\" -DMODELNET_BTX_PACKAGE_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/btx-package-vectors\\\" -DMODELNET_CRL12_OPERATIONS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/operations-v1.2.json\\\" -DMODELNET_CRL12_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12-portal/index.html\\\" -DMODELNET_CRL12_SCHEMA_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\\\" -DMODELNET_HCP_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/hcp-portal/index.html\\\" -DMODELNET_MODELD_PATH=\\\"D:/btx-native-035/project-build/bin/btx-modeld\\\" -DMODELNET_V11_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_v11_vectors.json\\\" -DNOMINMAX -DUNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING -D_UNICODE -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:\\btx-native-035\\project-build\\src -ID:\\a\\btx\\btx\\btx\\src -ID:\\a\\btx\\btx\\btx\\src\\secp256k1\\include -ID:\\a\\btx\\btx\\btx\\src\\libbitcoinpqc\\include -ID:\\a\\btx\\btx\\btx\\src\\compat\\mingw -ID:\\a\\btx\\btx\\btx\\src\\univalue\\include -imsvcD:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\include -imsvcD:\\btx-native-035\\openssl-3.5.4-static\\include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -std:c++20 -MT /utf-8 /Zc:preprocessor /Zc:__cplusplus /sdl /W3 /wd4018 /wd4146 /wd4244 /wd4267 /wd4715 /wd4805 -Xclang -fopenmp /Fosrc\\test\\CMakeFiles\\test_btx.dir\\swarm_liquidity_tests.cpp.obj /Fdsrc\\test\\CMakeFiles\\test_btx.dir\\ -c -- D:\\a\\btx\\btx\\btx\\src\\test\\swarm_liquidity_tests.cpp ",
+      "file": "D:/a/btx/btx/btx/src/test/swarm_liquidity_tests.cpp",
+      "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/swarm_liquidity_tests.cpp.obj"
+    },
+    "swarm_live_tests.cpp": {
+      "directory": "D:/btx-native-035/project-build",
+      "command": "\"C:\\Program Files\\LLVM\\bin\\clang-cl.exe\"  /nologo -TP -DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_NO_USER_CONFIG -DBTX_REFERENCE_TEST_VECTORS_PATH=\\\"D:/a/btx/btx/btx/test/reference/shielded_test_vectors.json\\\" -DMODELNET_AHP_FIXTURE_DIR=\\\"D:/a/btx/btx/btx/src/test/data/agent-package\\\" -DMODELNET_B0_CODEC_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_b0_codec_vectors.json\\\" -DMODELNET_BOUNTY_VECTORS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/bounty/reference/golden-vectors.json\\\" -DMODELNET_BTXD_PATH=\\\"D:/btx-native-035/project-build/bin/btxd\\\" -DMODELNET_BTX_OPEN_PATH=\\\"D:/btx-native-035/project-build/bin/btx-open\\\" -DMODELNET_BTX_PACKAGE_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/btx-package-vectors\\\" -DMODELNET_CRL12_OPERATIONS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/operations-v1.2.json\\\" -DMODELNET_CRL12_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12-portal/index.html\\\" -DMODELNET_CRL12_SCHEMA_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\\\" -DMODELNET_HCP_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/hcp-portal/index.html\\\" -DMODELNET_MODELD_PATH=\\\"D:/btx-native-035/project-build/bin/btx-modeld\\\" -DMODELNET_V11_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_v11_vectors.json\\\" -DNOMINMAX -DUNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING -D_UNICODE -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:\\btx-native-035\\project-build\\src -ID:\\a\\btx\\btx\\btx\\src -ID:\\a\\btx\\btx\\btx\\src\\secp256k1\\include -ID:\\a\\btx\\btx\\btx\\src\\libbitcoinpqc\\include -ID:\\a\\btx\\btx\\btx\\src\\compat\\mingw -ID:\\a\\btx\\btx\\btx\\src\\univalue\\include -imsvcD:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\include -imsvcD:\\btx-native-035\\openssl-3.5.4-static\\include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -std:c++20 -MT /utf-8 /Zc:preprocessor /Zc:__cplusplus /sdl /W3 /wd4018 /wd4146 /wd4244 /wd4267 /wd4715 /wd4805 -Xclang -fopenmp /Fosrc\\test\\CMakeFiles\\test_btx.dir\\swarm_live_tests.cpp.obj /Fdsrc\\test\\CMakeFiles\\test_btx.dir\\ -c -- D:\\a\\btx\\btx\\btx\\src\\test\\swarm_live_tests.cpp ",
+      "file": "D:/a/btx/btx/btx/src/test/swarm_live_tests.cpp",
+      "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/swarm_live_tests.cpp.obj"
+    },
+    "swarm_contract_tests.cpp": {
+      "directory": "D:/btx-native-035/project-build",
+      "command": "\"C:\\Program Files\\LLVM\\bin\\clang-cl.exe\"  /nologo -TP -DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_NO_USER_CONFIG -DBTX_REFERENCE_TEST_VECTORS_PATH=\\\"D:/a/btx/btx/btx/test/reference/shielded_test_vectors.json\\\" -DMODELNET_AHP_FIXTURE_DIR=\\\"D:/a/btx/btx/btx/src/test/data/agent-package\\\" -DMODELNET_B0_CODEC_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_b0_codec_vectors.json\\\" -DMODELNET_BOUNTY_VECTORS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/bounty/reference/golden-vectors.json\\\" -DMODELNET_BTXD_PATH=\\\"D:/btx-native-035/project-build/bin/btxd\\\" -DMODELNET_BTX_OPEN_PATH=\\\"D:/btx-native-035/project-build/bin/btx-open\\\" -DMODELNET_BTX_PACKAGE_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/btx-package-vectors\\\" -DMODELNET_CRL12_OPERATIONS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/operations-v1.2.json\\\" -DMODELNET_CRL12_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12-portal/index.html\\\" -DMODELNET_CRL12_SCHEMA_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\\\" -DMODELNET_HCP_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/hcp-portal/index.html\\\" -DMODELNET_MODELD_PATH=\\\"D:/btx-native-035/project-build/bin/btx-modeld\\\" -DMODELNET_V11_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_v11_vectors.json\\\" -DNOMINMAX -DUNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING -D_UNICODE -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:\\btx-native-035\\project-build\\src -ID:\\a\\btx\\btx\\btx\\src -ID:\\a\\btx\\btx\\btx\\src\\secp256k1\\include -ID:\\a\\btx\\btx\\btx\\src\\libbitcoinpqc\\include -ID:\\a\\btx\\btx\\btx\\src\\compat\\mingw -ID:\\a\\btx\\btx\\btx\\src\\univalue\\include -imsvcD:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\include -imsvcD:\\btx-native-035\\openssl-3.5.4-static\\include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -std:c++20 -MT /utf-8 /Zc:preprocessor /Zc:__cplusplus /sdl /W3 /wd4018 /wd4146 /wd4244 /wd4267 /wd4715 /wd4805 -Xclang -fopenmp /Fosrc\\test\\CMakeFiles\\test_btx.dir\\swarm_contract_tests.cpp.obj /Fdsrc\\test\\CMakeFiles\\test_btx.dir\\ -c -- D:\\a\\btx\\btx\\btx\\src\\test\\swarm_contract_tests.cpp ",
+      "file": "D:/a/btx/btx/btx/src/test/swarm_contract_tests.cpp",
+      "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/swarm_contract_tests.cpp.obj"
+    },
+    "swarm_gap_tests.cpp": {
+      "directory": "D:/btx-native-035/project-build",
+      "command": "\"C:\\Program Files\\LLVM\\bin\\clang-cl.exe\"  /nologo -TP -DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_NO_USER_CONFIG -DBTX_REFERENCE_TEST_VECTORS_PATH=\\\"D:/a/btx/btx/btx/test/reference/shielded_test_vectors.json\\\" -DMODELNET_AHP_FIXTURE_DIR=\\\"D:/a/btx/btx/btx/src/test/data/agent-package\\\" -DMODELNET_B0_CODEC_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_b0_codec_vectors.json\\\" -DMODELNET_BOUNTY_VECTORS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/bounty/reference/golden-vectors.json\\\" -DMODELNET_BTXD_PATH=\\\"D:/btx-native-035/project-build/bin/btxd\\\" -DMODELNET_BTX_OPEN_PATH=\\\"D:/btx-native-035/project-build/bin/btx-open\\\" -DMODELNET_BTX_PACKAGE_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/btx-package-vectors\\\" -DMODELNET_CRL12_OPERATIONS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/operations-v1.2.json\\\" -DMODELNET_CRL12_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12-portal/index.html\\\" -DMODELNET_CRL12_SCHEMA_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\\\" -DMODELNET_HCP_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/hcp-portal/index.html\\\" -DMODELNET_MODELD_PATH=\\\"D:/btx-native-035/project-build/bin/btx-modeld\\\" -DMODELNET_V11_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_v11_vectors.json\\\" -DNOMINMAX -DUNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING -D_UNICODE -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:\\btx-native-035\\project-build\\src -ID:\\a\\btx\\btx\\btx\\src -ID:\\a\\btx\\btx\\btx\\src\\secp256k1\\include -ID:\\a\\btx\\btx\\btx\\src\\libbitcoinpqc\\include -ID:\\a\\btx\\btx\\btx\\src\\compat\\mingw -ID:\\a\\btx\\btx\\btx\\src\\univalue\\include -imsvcD:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\include -imsvcD:\\btx-native-035\\openssl-3.5.4-static\\include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -std:c++20 -MT /utf-8 /Zc:preprocessor /Zc:__cplusplus /sdl /W3 /wd4018 /wd4146 /wd4244 /wd4267 /wd4715 /wd4805 -Xclang -fopenmp /Fosrc\\test\\CMakeFiles\\test_btx.dir\\swarm_gap_tests.cpp.obj /Fdsrc\\test\\CMakeFiles\\test_btx.dir\\ -c -- D:\\a\\btx\\btx\\btx\\src\\test\\swarm_gap_tests.cpp ",
+      "file": "D:/a/btx/btx/btx/src/test/swarm_gap_tests.cpp",
+      "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/swarm_gap_tests.cpp.obj"
+    },
+    "swarm_appointment_tests.cpp": {
+      "directory": "D:/btx-native-035/project-build",
+      "command": "\"C:\\Program Files\\LLVM\\bin\\clang-cl.exe\"  /nologo -TP -DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_NO_USER_CONFIG -DBTX_REFERENCE_TEST_VECTORS_PATH=\\\"D:/a/btx/btx/btx/test/reference/shielded_test_vectors.json\\\" -DMODELNET_AHP_FIXTURE_DIR=\\\"D:/a/btx/btx/btx/src/test/data/agent-package\\\" -DMODELNET_B0_CODEC_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_b0_codec_vectors.json\\\" -DMODELNET_BOUNTY_VECTORS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/bounty/reference/golden-vectors.json\\\" -DMODELNET_BTXD_PATH=\\\"D:/btx-native-035/project-build/bin/btxd\\\" -DMODELNET_BTX_OPEN_PATH=\\\"D:/btx-native-035/project-build/bin/btx-open\\\" -DMODELNET_BTX_PACKAGE_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/btx-package-vectors\\\" -DMODELNET_CRL12_OPERATIONS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/operations-v1.2.json\\\" -DMODELNET_CRL12_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12-portal/index.html\\\" -DMODELNET_CRL12_SCHEMA_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\\\" -DMODELNET_HCP_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/hcp-portal/index.html\\\" -DMODELNET_MODELD_PATH=\\\"D:/btx-native-035/project-build/bin/btx-modeld\\\" -DMODELNET_V11_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_v11_vectors.json\\\" -DNOMINMAX -DUNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING -D_UNICODE -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:\\btx-native-035\\project-build\\src -ID:\\a\\btx\\btx\\btx\\src -ID:\\a\\btx\\btx\\btx\\src\\secp256k1\\include -ID:\\a\\btx\\btx\\btx\\src\\libbitcoinpqc\\include -ID:\\a\\btx\\btx\\btx\\src\\compat\\mingw -ID:\\a\\btx\\btx\\btx\\src\\univalue\\include -imsvcD:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\include -imsvcD:\\btx-native-035\\openssl-3.5.4-static\\include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -std:c++20 -MT /utf-8 /Zc:preprocessor /Zc:__cplusplus /sdl /W3 /wd4018 /wd4146 /wd4244 /wd4267 /wd4715 /wd4805 -Xclang -fopenmp /Fosrc\\test\\CMakeFiles\\test_btx.dir\\swarm_appointment_tests.cpp.obj /Fdsrc\\test\\CMakeFiles\\test_btx.dir\\ -c -- D:\\a\\btx\\btx\\btx\\src\\test\\swarm_appointment_tests.cpp ",
+      "file": "D:/a/btx/btx/btx/src/test/swarm_appointment_tests.cpp",
+      "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/swarm_appointment_tests.cpp.obj"
+    },
+    "swarm_gate_tests.cpp": {
+      "directory": "D:/btx-native-035/project-build",
+      "command": "\"C:\\Program Files\\LLVM\\bin\\clang-cl.exe\"  /nologo -TP -DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_NO_USER_CONFIG -DBTX_REFERENCE_TEST_VECTORS_PATH=\\\"D:/a/btx/btx/btx/test/reference/shielded_test_vectors.json\\\" -DMODELNET_AHP_FIXTURE_DIR=\\\"D:/a/btx/btx/btx/src/test/data/agent-package\\\" -DMODELNET_B0_CODEC_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_b0_codec_vectors.json\\\" -DMODELNET_BOUNTY_VECTORS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/bounty/reference/golden-vectors.json\\\" -DMODELNET_BTXD_PATH=\\\"D:/btx-native-035/project-build/bin/btxd\\\" -DMODELNET_BTX_OPEN_PATH=\\\"D:/btx-native-035/project-build/bin/btx-open\\\" -DMODELNET_BTX_PACKAGE_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/btx-package-vectors\\\" -DMODELNET_CRL12_OPERATIONS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/operations-v1.2.json\\\" -DMODELNET_CRL12_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12-portal/index.html\\\" -DMODELNET_CRL12_SCHEMA_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\\\" -DMODELNET_HCP_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/hcp-portal/index.html\\\" -DMODELNET_MODELD_PATH=\\\"D:/btx-native-035/project-build/bin/btx-modeld\\\" -DMODELNET_V11_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_v11_vectors.json\\\" -DNOMINMAX -DUNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING -D_UNICODE -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:\\btx-native-035\\project-build\\src -ID:\\a\\btx\\btx\\btx\\src -ID:\\a\\btx\\btx\\btx\\src\\secp256k1\\include -ID:\\a\\btx\\btx\\btx\\src\\libbitcoinpqc\\include -ID:\\a\\btx\\btx\\btx\\src\\compat\\mingw -ID:\\a\\btx\\btx\\btx\\src\\univalue\\include -imsvcD:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\include -imsvcD:\\btx-native-035\\openssl-3.5.4-static\\include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -std:c++20 -MT /utf-8 /Zc:preprocessor /Zc:__cplusplus /sdl /W3 /wd4018 /wd4146 /wd4244 /wd4267 /wd4715 /wd4805 -Xclang -fopenmp /Fosrc\\test\\CMakeFiles\\test_btx.dir\\swarm_gate_tests.cpp.obj /Fdsrc\\test\\CMakeFiles\\test_btx.dir\\ -c -- D:\\a\\btx\\btx\\btx\\src\\test\\swarm_gate_tests.cpp ",
+      "file": "D:/a/btx/btx/btx/src/test/swarm_gate_tests.cpp",
+      "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/swarm_gate_tests.cpp.obj"
+    },
+    "swarm_accept_tests.cpp": {
+      "directory": "D:/btx-native-035/project-build",
+      "command": "\"C:\\Program Files\\LLVM\\bin\\clang-cl.exe\"  /nologo -TP -DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_NO_USER_CONFIG -DBTX_REFERENCE_TEST_VECTORS_PATH=\\\"D:/a/btx/btx/btx/test/reference/shielded_test_vectors.json\\\" -DMODELNET_AHP_FIXTURE_DIR=\\\"D:/a/btx/btx/btx/src/test/data/agent-package\\\" -DMODELNET_B0_CODEC_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_b0_codec_vectors.json\\\" -DMODELNET_BOUNTY_VECTORS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/bounty/reference/golden-vectors.json\\\" -DMODELNET_BTXD_PATH=\\\"D:/btx-native-035/project-build/bin/btxd\\\" -DMODELNET_BTX_OPEN_PATH=\\\"D:/btx-native-035/project-build/bin/btx-open\\\" -DMODELNET_BTX_PACKAGE_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/btx-package-vectors\\\" -DMODELNET_CRL12_OPERATIONS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/operations-v1.2.json\\\" -DMODELNET_CRL12_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12-portal/index.html\\\" -DMODELNET_CRL12_SCHEMA_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\\\" -DMODELNET_HCP_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/hcp-portal/index.html\\\" -DMODELNET_MODELD_PATH=\\\"D:/btx-native-035/project-build/bin/btx-modeld\\\" -DMODELNET_V11_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_v11_vectors.json\\\" -DNOMINMAX -DUNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING -D_UNICODE -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:\\btx-native-035\\project-build\\src -ID:\\a\\btx\\btx\\btx\\src -ID:\\a\\btx\\btx\\btx\\src\\secp256k1\\include -ID:\\a\\btx\\btx\\btx\\src\\libbitcoinpqc\\include -ID:\\a\\btx\\btx\\btx\\src\\compat\\mingw -ID:\\a\\btx\\btx\\btx\\src\\univalue\\include -imsvcD:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\include -imsvcD:\\btx-native-035\\openssl-3.5.4-static\\include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -std:c++20 -MT /utf-8 /Zc:preprocessor /Zc:__cplusplus /sdl /W3 /wd4018 /wd4146 /wd4244 /wd4267 /wd4715 /wd4805 -Xclang -fopenmp /Fosrc\\test\\CMakeFiles\\test_btx.dir\\swarm_accept_tests.cpp.obj /Fdsrc\\test\\CMakeFiles\\test_btx.dir\\ -c -- D:\\a\\btx\\btx\\btx\\src\\test\\swarm_accept_tests.cpp ",
+      "file": "D:/a/btx/btx/btx/src/test/swarm_accept_tests.cpp",
+      "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/swarm_accept_tests.cpp.obj"
+    },
+    "modelnet_store2_tests.cpp": {
+      "directory": "D:/btx-native-035/project-build",
+      "command": "\"C:\\Program Files\\LLVM\\bin\\clang-cl.exe\"  /nologo -TP -DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_NO_USER_CONFIG -DBTX_REFERENCE_TEST_VECTORS_PATH=\\\"D:/a/btx/btx/btx/test/reference/shielded_test_vectors.json\\\" -DMODELNET_AHP_FIXTURE_DIR=\\\"D:/a/btx/btx/btx/src/test/data/agent-package\\\" -DMODELNET_B0_CODEC_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_b0_codec_vectors.json\\\" -DMODELNET_BOUNTY_VECTORS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/bounty/reference/golden-vectors.json\\\" -DMODELNET_BTXD_PATH=\\\"D:/btx-native-035/project-build/bin/btxd\\\" -DMODELNET_BTX_OPEN_PATH=\\\"D:/btx-native-035/project-build/bin/btx-open\\\" -DMODELNET_BTX_PACKAGE_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/btx-package-vectors\\\" -DMODELNET_CRL12_OPERATIONS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/operations-v1.2.json\\\" -DMODELNET_CRL12_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12-portal/index.html\\\" -DMODELNET_CRL12_SCHEMA_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\\\" -DMODELNET_HCP_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/hcp-portal/index.html\\\" -DMODELNET_MODELD_PATH=\\\"D:/btx-native-035/project-build/bin/btx-modeld\\\" -DMODELNET_V11_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_v11_vectors.json\\\" -DNOMINMAX -DUNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING -D_UNICODE -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:\\btx-native-035\\project-build\\src -ID:\\a\\btx\\btx\\btx\\src -ID:\\a\\btx\\btx\\btx\\src\\secp256k1\\include -ID:\\a\\btx\\btx\\btx\\src\\libbitcoinpqc\\include -ID:\\a\\btx\\btx\\btx\\src\\compat\\mingw -ID:\\a\\btx\\btx\\btx\\src\\univalue\\include -imsvcD:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\include -imsvcD:\\btx-native-035\\openssl-3.5.4-static\\include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -std:c++20 -MT /utf-8 /Zc:preprocessor /Zc:__cplusplus /sdl /W3 /wd4018 /wd4146 /wd4244 /wd4267 /wd4715 /wd4805 -Xclang -fopenmp /Fosrc\\test\\CMakeFiles\\test_btx.dir\\modelnet_store2_tests.cpp.obj /Fdsrc\\test\\CMakeFiles\\test_btx.dir\\ -c -- D:\\a\\btx\\btx\\btx\\src\\test\\modelnet_store2_tests.cpp ",
+      "file": "D:/a/btx/btx/btx/src/test/modelnet_store2_tests.cpp",
+      "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/modelnet_store2_tests.cpp.obj"
+    },
+    "modelnet_r2_storage_tests.cpp": {
+      "directory": "D:/btx-native-035/project-build",
+      "command": "\"C:\\Program Files\\LLVM\\bin\\clang-cl.exe\"  /nologo -TP -DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_NO_USER_CONFIG -DBTX_REFERENCE_TEST_VECTORS_PATH=\\\"D:/a/btx/btx/btx/test/reference/shielded_test_vectors.json\\\" -DMODELNET_AHP_FIXTURE_DIR=\\\"D:/a/btx/btx/btx/src/test/data/agent-package\\\" -DMODELNET_B0_CODEC_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_b0_codec_vectors.json\\\" -DMODELNET_BOUNTY_VECTORS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/bounty/reference/golden-vectors.json\\\" -DMODELNET_BTXD_PATH=\\\"D:/btx-native-035/project-build/bin/btxd\\\" -DMODELNET_BTX_OPEN_PATH=\\\"D:/btx-native-035/project-build/bin/btx-open\\\" -DMODELNET_BTX_PACKAGE_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/btx-package-vectors\\\" -DMODELNET_CRL12_OPERATIONS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/operations-v1.2.json\\\" -DMODELNET_CRL12_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12-portal/index.html\\\" -DMODELNET_CRL12_SCHEMA_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\\\" -DMODELNET_HCP_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/hcp-portal/index.html\\\" -DMODELNET_MODELD_PATH=\\\"D:/btx-native-035/project-build/bin/btx-modeld\\\" -DMODELNET_V11_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_v11_vectors.json\\\" -DNOMINMAX -DUNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING -D_UNICODE -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:\\btx-native-035\\project-build\\src -ID:\\a\\btx\\btx\\btx\\src -ID:\\a\\btx\\btx\\btx\\src\\secp256k1\\include -ID:\\a\\btx\\btx\\btx\\src\\libbitcoinpqc\\include -ID:\\a\\btx\\btx\\btx\\src\\compat\\mingw -ID:\\a\\btx\\btx\\btx\\src\\univalue\\include -imsvcD:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\include -imsvcD:\\btx-native-035\\openssl-3.5.4-static\\include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -std:c++20 -MT /utf-8 /Zc:preprocessor /Zc:__cplusplus /sdl /W3 /wd4018 /wd4146 /wd4244 /wd4267 /wd4715 /wd4805 -Xclang -fopenmp /Fosrc\\test\\CMakeFiles\\test_btx.dir\\modelnet_r2_storage_tests.cpp.obj /Fdsrc\\test\\CMakeFiles\\test_btx.dir\\ -c -- D:\\a\\btx\\btx\\btx\\src\\test\\modelnet_r2_storage_tests.cpp ",
+      "file": "D:/a/btx/btx/btx/src/test/modelnet_r2_storage_tests.cpp",
+      "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/modelnet_r2_storage_tests.cpp.obj"
+    }
+  },
+  "four-before-library": {
+    "tool": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\dumpbin.EXE",
+    "tool_sha256": "357c989e1c926841df4e6e97c25a60b205b30110cd6db39bde8d81a627e48ebb",
+    "library_sha256": "4c924f0731642e0b8aedece02ba8a3229a59b254c0da20637aaea39db5fb529c",
+    "filtered_symbols": [
+      "  1267444 ?GetObject@S3PieceStore@modelnet@@UEAA_NAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@_K1AEAV?$vector@EV?$allocator@E@std@@@4@AEAV34@@Z"
+    ],
+    "full_stdout_sha256": "6fa71c189209d56d5b8745b06304255dba44b7f4ff4f4d2132d60d239243280a",
+    "seconds": 0.375
+  },
+  "source_delta": [
+    "src/test/modelnet_r2_storage_tests.cpp",
+    "src/test/modelnet_store2_tests.cpp",
+    "src/test/swarm_accept_tests.cpp",
+    "src/test/swarm_appointment_tests.cpp",
+    "src/test/swarm_clearing_tests.cpp",
+    "src/test/swarm_contract_tests.cpp",
+    "src/test/swarm_gap_tests.cpp",
+    "src/test/swarm_gate_tests.cpp",
+    "src/test/swarm_liquidity_tests.cpp",
+    "src/test/swarm_live_tests.cpp",
+    "src/test/swarm_node_tests.cpp",
+    "src/test/util/process.h"
+  ],
+  "component_objects": [
+    "src\\test\\CMakeFiles\\test_btx.dir\\main.cpp.obj",
+    "src\\test\\CMakeFiles\\test_btx.dir\\swarm_node_tests.cpp.obj",
+    "src\\test\\CMakeFiles\\test_btx.dir\\swarm_clearing_tests.cpp.obj",
+    "src\\test\\CMakeFiles\\test_btx.dir\\swarm_liquidity_tests.cpp.obj",
+    "src\\test\\CMakeFiles\\test_btx.dir\\swarm_live_tests.cpp.obj",
+    "src\\test\\CMakeFiles\\test_btx.dir\\swarm_contract_tests.cpp.obj",
+    "src\\test\\CMakeFiles\\test_btx.dir\\swarm_gap_tests.cpp.obj",
+    "src\\test\\CMakeFiles\\test_btx.dir\\swarm_appointment_tests.cpp.obj",
+    "src\\test\\CMakeFiles\\test_btx.dir\\swarm_gate_tests.cpp.obj",
+    "src\\test\\CMakeFiles\\test_btx.dir\\swarm_accept_tests.cpp.obj",
+    "src\\test\\CMakeFiles\\test_btx.dir\\modelnet_store2_tests.cpp.obj",
+    "src\\test\\CMakeFiles\\test_btx.dir\\modelnet_r2_storage_tests.cpp.obj",
+    "src\\test\\CMakeFiles\\test_btx.dir\\__\\lightwatch.cpp.obj",
+    "src\\test\\CMakeFiles\\test_btx.dir\\__\\wallet\\test\\init_test_fixture.cpp.obj",
+    "src\\test\\CMakeFiles\\test_btx.dir\\__\\wallet\\test\\wallet_test_fixture.cpp.obj"
+  ],
+  "component_link_block": "build bin\\windows_fixture_boundaries.exe: CXX_EXECUTABLE_LINKER__test_btx_Release src\\test\\CMakeFiles\\test_btx.dir\\main.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\swarm_node_tests.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\swarm_clearing_tests.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\swarm_liquidity_tests.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\swarm_live_tests.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\swarm_contract_tests.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\swarm_gap_tests.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\swarm_appointment_tests.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\swarm_gate_tests.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\swarm_accept_tests.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\modelnet_store2_tests.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\modelnet_r2_storage_tests.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\__\\lightwatch.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\__\\wallet\\test\\init_test_fixture.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\__\\wallet\\test\\wallet_test_fixture.cpp.obj | D$:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\event_extra.lib D$:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib D$:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib lib\\test_util.lib lib\\bitcoin_cli.lib lib\\bitcoin_node.lib lib\\bitcoin_wallet.lib D$:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\event_extra.lib D$:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\event_core.lib lib\\bitcoin_zmq.lib D$:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\libzmq-mt-s-4_3_5.lib lib\\bitcoin_shielded.lib lib\\bitcoin_modelnet.lib D$:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib D$:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib lib\\bitcoin_common.lib src\\univalue\\univalue.lib lib\\bitcoin_db.lib src\\leveldb.lib src\\crc32c.lib C$:\\Program$ Files\\Microsoft$ Visual$ Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x64\\libomp.lib lib\\btx_matmul_backend.lib lib\\bitcoin_consensus.lib lib\\bitcoin_util.lib lib\\bitcoin_clientversion.lib src\\secp256k1\\lib\\libsecp256k1.lib lib\\bitcoinpqc.lib lib\\bitcoin_crypto.lib C$:\\Program$ Files\\LLVM\\lib\\clang\\20\\lib\\windows\\clang_rt.builtins-x86_64.lib D$:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\sqlite3.lib || lib\\bitcoin_cli.lib lib\\bitcoin_clientversion.lib lib\\bitcoin_common.lib lib\\bitcoin_consensus.lib lib\\bitcoin_crypto.lib lib\\bitcoin_db.lib lib\\bitcoin_modelnet.lib lib\\bitcoin_node.lib lib\\bitcoin_shielded.lib lib\\bitcoin_util.lib lib\\bitcoin_wallet.lib lib\\bitcoin_zmq.lib lib\\bitcoinpqc.lib lib\\btx_matmul_backend.lib lib\\test_util.lib src\\crc32c.lib src\\leveldb.lib src\\secp256k1\\lib\\libsecp256k1.lib src\\univalue\\univalue.lib\n  CONFIG = Release\n  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -MT\n  LINK_FLAGS = /machine:x64 /INCREMENTAL:NO /subsystem:console /DYNAMICBASE /HIGHENTROPYVA /NXCOMPAT\n  LINK_LIBRARIES = D:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\event_extra.lib  D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib  D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib  lib\\test_util.lib  lib\\bitcoin_cli.lib  lib\\bitcoin_node.lib  lib\\bitcoin_wallet.lib  D:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\event_extra.lib  D:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\event_core.lib  shell32.lib  lib\\bitcoin_zmq.lib  D:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\libzmq-mt-s-4_3_5.lib  rpcrt4.lib  lib\\bitcoin_shielded.lib  lib\\bitcoin_modelnet.lib  D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib  D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib  crypt32.lib  lib\\bitcoin_common.lib  src\\univalue\\univalue.lib  lib\\bitcoin_db.lib  src\\leveldb.lib  src\\crc32c.lib  \"C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x64\\libomp.lib\"  lib\\btx_matmul_backend.lib  lib\\bitcoin_consensus.lib  lib\\bitcoin_util.lib  ws2_32.lib  iphlpapi.lib  lib\\bitcoin_clientversion.lib  src\\secp256k1\\lib\\libsecp256k1.lib  lib\\bitcoinpqc.lib  lib\\bitcoin_crypto.lib  \"C:\\Program Files\\LLVM\\lib\\clang\\20\\lib\\windows\\clang_rt.builtins-x86_64.lib\"  bcrypt.lib  userenv.lib  advapi32.lib  ole32.lib  D:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\sqlite3.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib\n  OBJECT_DIR = src\\test\\CMakeFiles\\test_btx.dir\n  POST_BUILD = C:\\Windows\\system32\\cmd.exe /C \"cd /D D:\\btx-native-035\\project-build\\src\\test && D:\\btx-native-035\\vcpkg\\vcpkg.exe z-applocal --target-binary=D:/btx-native-035/project-build/bin/windows_fixture_boundaries.exe --installed-bin-dir=D:/btx-native-035/vcpkg-installed/x64-windows-static/bin\"\n  PRE_LINK = cd .\n  TARGET_COMPILE_PDB = src\\test\\CMakeFiles\\test_btx.dir\\\n  TARGET_FILE = bin\\windows_fixture_boundaries.exe\n  TARGET_IMPLIB = lib\\windows_fixture_boundaries.lib\n  TARGET_PDB = bin\\windows_fixture_boundaries.pdb\n  TARGET_SUPPORT_DIR = src\\test\\CMakeFiles\\test_btx.dir\n  RSP_FILE = CMakeFiles\\windows_fixture_boundaries.rsp",
+  "graph_sha256": "ea1dba96f74308fef69a8a7356d1dadf766e132141b09a9b946e834d943f6a41",
+  "planned_steps": 17,
+  "initial_resources": {
+    "disk_free": 233462521856,
+    "available_ram": 13642489856,
+    "total_ram": 17174360064,
+    "cpus": 4
+  },
+  "samples": [
+    {
+      "command": "focused-build",
+      "seconds": 0,
+      "disk_free": 233462521856,
+      "available_ram": 13610315776,
+      "total_ram": 17174360064,
+      "cpus": 4
+    }
+  ],
+  "build_exit": 0,
+  "binary_sha256": "f7878539182f07ef0d1c9b4a479b740fc83e4f0de90c9902e22e958653cc612e",
+  "build_info": "#define BUILD_GIT_COMMIT \"473a2a0bf8e5\"\n#define BUILD_GIT_FULL_COMMIT \"473a2a0bf8e528a977d07137712d6a1d6dfc8cf6\"\n#define BUILD_GIT_DIRTY 0\n#define BUILD_GIT_SOURCE_TREE_FINGERPRINT \"3d84bad2b491a85974b7479ae37532c181cea2d99d6a641b9d4cf7bbd937ea20\"\n",
+  "four-after-library": {
+    "tool": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\dumpbin.EXE",
+    "tool_sha256": "357c989e1c926841df4e6e97c25a60b205b30110cd6db39bde8d81a627e48ebb",
+    "library_sha256": "4c924f0731642e0b8aedece02ba8a3229a59b254c0da20637aaea39db5fb529c",
+    "filtered_symbols": [
+      "  1267444 ?GetObject@S3PieceStore@modelnet@@UEAA_NAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@_K1AEAV?$vector@EV?$allocator@E@std@@@4@AEAV34@@Z"
+    ],
+    "full_stdout_sha256": "6fa71c189209d56d5b8745b06304255dba44b7f4ff4f4d2132d60d239243280a",
+    "seconds": 0.20299999999997453
+  },
+  "unit_data": "D:\\fb41997202444",
+  "cases": [
+    {
+      "case": "swarm_node_tests/records_a_second_process_can_read",
+      "exit": 0,
+      "cases_started": 1,
+      "new_scratch_paths": [],
+      "reported_pass": true
+    },
+    {
+      "case": "swarm_clearing_tests/persist_then_load_restores_balances",
+      "exit": 0,
+      "cases_started": 1,
+      "new_scratch_paths": [],
+      "reported_pass": true
+    },
+    {
+      "case": "swarm_liquidity_tests/shared_capacity_reservations_persist",
+      "exit": 0,
+      "cases_started": 1,
+      "new_scratch_paths": [],
+      "reported_pass": true
+    },
+    {
+      "case": "swarm_live_tests/publish_keeps_four_bit_in_the_family_only",
+      "exit": 0,
+      "cases_started": 1,
+      "new_scratch_paths": [],
+      "reported_pass": true
+    },
+    {
+      "case": "swarm_contract_tests/command_log_persists_vote_and_keeps_the_prefix",
+      "exit": 0,
+      "cases_started": 1,
+      "new_scratch_paths": [],
+      "reported_pass": true
+    },
+    {
+      "case": "swarm_mandate_tests/a_mandate_cannot_assign_more_than_collateral",
+      "exit": 0,
+      "cases_started": 1,
+      "new_scratch_paths": [],
+      "reported_pass": true
+    },
+    {
+      "case": "swarm_appointment_tests/hashlock_remedy_writes_and_reads_back",
+      "exit": 0,
+      "cases_started": 1,
+      "new_scratch_paths": [],
+      "reported_pass": true
+    },
+    {
+      "case": "swarm_cohortbook_tests/expiry_revoke_stale_epoch_replay_and_rejoin",
+      "exit": 0,
+      "cases_started": 1,
+      "new_scratch_paths": [],
+      "reported_pass": true
+    },
+    {
+      "case": "swarm_verify_tests/a_checkpoint_stays_closed_until_every_child_matches",
+      "exit": 0,
+      "cases_started": 1,
+      "new_scratch_paths": [],
+      "reported_pass": true
+    },
+    {
+      "case": "swarm_accept_tests/an_unmeasured_engine_is_not_advertised",
+      "exit": 0,
+      "cases_started": 1,
+      "new_scratch_paths": [],
+      "reported_pass": true
+    },
+    {
+      "case": "modelnet_store2_tests/store2_02_tiered_miss_fills_local",
+      "exit": 0,
+      "cases_started": 1,
+      "new_scratch_paths": [],
+      "reported_pass": true
+    },
+    {
+      "case": "modelnet_store2_tests/store2_03_never_serve_unverified",
+      "exit": 0,
+      "cases_started": 1,
+      "new_scratch_paths": [],
+      "reported_pass": true
+    },
+    {
+      "case": "modelnet_r2_storage_tests/r2s_01_layout_identity_invariant_across_key_families",
+      "exit": 0,
+      "cases_started": 1,
+      "new_scratch_paths": [],
+      "reported_pass": true
+    }
+  ],
+  "owned_processes_after_execution": [],
+  "process_quiescence_confirmed": true,
+  "checkpoint_capture": {
+    "files": 10762,
+    "bytes": 1661007593,
+    "manifest_sha256": "4c2cf014d550657a27b2df738a6f08e7ca895dfd669845f2851740eb78b9c625"
+  },
+  "objects_retained": 3830,
+  "checkpoint_key": "690b1294aa60953f57ed210c9b612b76ba893d8012184a245b7bbb528346a6c9"
+}

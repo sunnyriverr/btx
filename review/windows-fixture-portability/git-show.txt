@@ -1,0 +1,77 @@
+commit 7d0c5882befc45a77da25df7e5b6817a24fd3132
+Author:     Sunny River <255313950+sunnyriverr@users.noreply.github.com>
+AuthorDate: Thu Nov 5 15:07:07 2026 +1000
+Commit:     Sunny River <255313950+sunnyriverr@users.noreply.github.com>
+CommitDate: Thu Nov 5 19:01:08 2026 +1000
+
+    test: use portable environment mutations in unit fixtures
+    
+    Reuse the environment helper approach from #398 for the remaining
+    MatMul and Modelnet test fixtures. Keep mutation ordering and checks.
+    
+    Windows prerequisite audit: repch1c and Jpp-matata (#356).
+    
+    Source-preserving packaging of dfa14c529bb15b62fc41df9cd23c4500518fde57.
+
+commit e3e356cc4dc9b3925b81ededd12705a4c6bb4fc9
+Author:     Sunny River <255313950+sunnyriverr@users.noreply.github.com>
+AuthorDate: Thu Nov 5 15:07:07 2026 +1000
+Commit:     Sunny River <255313950+sunnyriverr@users.noreply.github.com>
+CommitDate: Thu Nov 5 19:01:08 2026 +1000
+
+    test: scope the Windows OPAQUE macro around shielded fixtures
+    
+    Retain the ScanDomain assertions and restore the incoming macro after
+    the affected test definitions. No production enum or Windows include changes.
+    
+    Windows prerequisite audit: repch1c and Jpp-matata (#356).
+    
+    Source-preserving packaging of 596d26ff62eea1afc6b8deb08face84f8492e060.
+
+commit 9c5b034cf928bd2a275049f93d59a89e9c173e62
+Author:     Sunny River <255313950+sunnyriverr@users.noreply.github.com>
+AuthorDate: Thu Nov 5 07:05:38 2026 +0000
+Commit:     Sunny River <255313950+sunnyriverr@users.noreply.github.com>
+CommitDate: Thu Nov 5 19:01:08 2026 +1000
+
+    test: preserve native Windows fixture refusal and byte controls
+    
+    Use the existing supported native boundary for the Unix-only helper call,
+    CUDA qualification setup and hosting file controls. Keep refusal/no-side-effect
+    checks and exact byte fixtures; POSIX paths are retained.
+    
+    Consolidates the tested non-cloud parts of 666302d0 and 35e1d08f.
+    Windows prerequisite audit: repch1c and Jpp-matata (#356).
+
+commit a19d1a95116e3ef69560d1d9b84a58b7d7881f80
+Author:     Sunny River <255313950+sunnyriverr@users.noreply.github.com>
+AuthorDate: Thu Nov 5 18:42:46 2026 +1000
+Commit:     Sunny River <255313950+sunnyriverr@users.noreply.github.com>
+CommitDate: Thu Nov 5 19:01:08 2026 +1000
+
+    test: keep Windows cloud-store interfaces and fixtures portable
+    
+    Keep the canonical GetObject interface across SDK include boundaries, with
+    scoped macro restoration in tests. Preserve exact file-permission refusal;
+    selected positive tests use supported ENV synthetic credentials and binary
+    byte fixtures without weakening streaming, hash or request-count checks.
+    
+    Consolidates the tested cloud parts of 666302d0, 35e1d08f, 8a642b1e and
+    090a6d35. Other R2 PATH cases remain unqualified on Windows.
+    Windows prerequisite audit: repch1c and Jpp-matata (#356).
+
+commit b69f04b5c25127264f6067e30cd624ca082c01cd
+Author:     Sunny River <255313950+sunnyriverr@users.noreply.github.com>
+AuthorDate: Thu Nov 5 18:42:46 2026 +1000
+Commit:     Sunny River <255313950+sunnyriverr@users.noreply.github.com>
+CommitDate: Thu Nov 5 19:01:08 2026 +1000
+
+    test: use the native process ID in filesystem fixtures
+    
+    Select the real CRT or POSIX PID API in one test-only header. Keep all
+    path expressions, filesystem assertions, descriptor checks and cleanup
+    unchanged across the nine fixtures.
+    
+    Windows prerequisite audit: repch1c and Jpp-matata (#356).
+    
+    Source-preserving packaging of 473a2a0bf8e528a977d07137712d6a1d6dfc8cf6.

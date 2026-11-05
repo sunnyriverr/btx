@@ -1,0 +1,164 @@
+clang-cl: warning: argument unused during compilation: '/Zc:preprocessor' [-Wunused-command-line-argument]
+D:\a\btx\btx\btx\src\test\modelnet_ahp_run_tests.cpp(412,35): error: no member named 'setenv' in the global namespace
+  412 |             BOOST_REQUIRE_EQUAL(::setenv(key, previous->c_str(), 1), 0);
+      |                                 ~~^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(157,83): note: expanded from macro 'BOOST_REQUIRE_EQUAL'
+  157 |     ::boost::test_tools::tt_detail::equal_impl_frwd(), "", REQUIRE, CHECK_EQUAL, (L)(R) )
+      |                                                                                   ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(74,61): note: expanded from macro 'BOOST_TEST_TOOL_IMPL'
+   74 |         BOOST_JOIN( BOOST_TEST_TOOL_PASS_ARGS, frwd_type )( ARGS ) );           \
+      |                                                             ^~~~
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(57,57): note: expanded from macro 'BOOST_TEST_TOOL_PASS_ARGS0'
+   57 |     BOOST_PP_SEQ_FOR_EACH( BOOST_TEST_TOOL_PASS_ARG, _, ARGS )
+      |                                                         ^~~~
+note: (skipping 13 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/preprocessor/seq/elem.hpp(45,60): note: expanded from macro 'BOOST_PP_SEQ_ELEM_II'
+   45 | #    define BOOST_PP_SEQ_ELEM_II(im) BOOST_PP_SEQ_ELEM_III(im)
+      |                                                            ^~
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/preprocessor/seq/elem.hpp(46,41): note: expanded from macro 'BOOST_PP_SEQ_ELEM_III'
+   46 | #    define BOOST_PP_SEQ_ELEM_III(x, _) x
+      |                                         ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(53,49): note: expanded from macro 'BOOST_TEST_TOOL_PASS_ARG'
+   53 | #define BOOST_TEST_TOOL_PASS_ARG( r, _, arg ) , arg, BOOST_STRINGIZE( arg )
+      |                                                 ^~~
+D:\a\btx\btx\btx\src\test\modelnet_ahp_run_tests.cpp(414,35): error: no member named 'unsetenv' in the global namespace; did you mean 'getenv'?
+  414 |             BOOST_REQUIRE_EQUAL(::unsetenv(key), 0);
+      |                                 ~~^~~~~~~~
+      |                                   getenv
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(157,83): note: expanded from macro 'BOOST_REQUIRE_EQUAL'
+  157 |     ::boost::test_tools::tt_detail::equal_impl_frwd(), "", REQUIRE, CHECK_EQUAL, (L)(R) )
+      |                                                                                   ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(74,61): note: expanded from macro 'BOOST_TEST_TOOL_IMPL'
+   74 |         BOOST_JOIN( BOOST_TEST_TOOL_PASS_ARGS, frwd_type )( ARGS ) );           \
+      |                                                             ^~~~
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(57,57): note: expanded from macro 'BOOST_TEST_TOOL_PASS_ARGS0'
+   57 |     BOOST_PP_SEQ_FOR_EACH( BOOST_TEST_TOOL_PASS_ARG, _, ARGS )
+      |                                                         ^~~~
+note: (skipping 13 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/preprocessor/seq/elem.hpp(45,60): note: expanded from macro 'BOOST_PP_SEQ_ELEM_II'
+   45 | #    define BOOST_PP_SEQ_ELEM_II(im) BOOST_PP_SEQ_ELEM_III(im)
+      |                                                            ^~
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/preprocessor/seq/elem.hpp(46,41): note: expanded from macro 'BOOST_PP_SEQ_ELEM_III'
+   46 | #    define BOOST_PP_SEQ_ELEM_III(x, _) x
+      |                                         ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(53,49): note: expanded from macro 'BOOST_TEST_TOOL_PASS_ARG'
+   53 | #define BOOST_TEST_TOOL_PASS_ARG( r, _, arg ) , arg, BOOST_STRINGIZE( arg )
+      |                                                 ^~~
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\stdlib.h(1184,28): note: 'getenv' declared here
+ 1184 |     _DCRTIMP char* __cdecl getenv(
+      |                            ^
+D:\a\btx\btx\btx\src\test\modelnet_ahp_run_tests.cpp(412,35): warning: 'putenv' is deprecated: The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _putenv. See online help for details. [-Wdeprecated-declarations]
+  412 |             BOOST_REQUIRE_EQUAL(::setenv(key, previous->c_str(), 1), 0);
+      |                                   ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\stdlib.h(1346,20): note: 'putenv' has been explicitly marked deprecated here
+ 1346 |     _Check_return_ _CRT_NONSTDC_DEPRECATE(_putenv)
+      |                    ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt.h(428,50): note: expanded from macro '_CRT_NONSTDC_DEPRECATE'
+  428 |         #define _CRT_NONSTDC_DEPRECATE(_NewName) _CRT_DEPRECATE_TEXT(             \
+      |                                                  ^
+C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include\vcruntime.h(348,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  348 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+D:\a\btx\btx\btx\src\test\modelnet_ahp_run_tests.cpp(420,27): error: no member named 'setenv' in the global namespace
+  420 |     BOOST_REQUIRE_EQUAL(::setenv("HF_TOKEN", "HF_TEST_SENTINEL", 1), 0);
+      |                         ~~^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(157,83): note: expanded from macro 'BOOST_REQUIRE_EQUAL'
+  157 |     ::boost::test_tools::tt_detail::equal_impl_frwd(), "", REQUIRE, CHECK_EQUAL, (L)(R) )
+      |                                                                                   ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(74,61): note: expanded from macro 'BOOST_TEST_TOOL_IMPL'
+   74 |         BOOST_JOIN( BOOST_TEST_TOOL_PASS_ARGS, frwd_type )( ARGS ) );           \
+      |                                                             ^~~~
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(57,57): note: expanded from macro 'BOOST_TEST_TOOL_PASS_ARGS0'
+   57 |     BOOST_PP_SEQ_FOR_EACH( BOOST_TEST_TOOL_PASS_ARG, _, ARGS )
+      |                                                         ^~~~
+note: (skipping 13 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/preprocessor/seq/elem.hpp(45,60): note: expanded from macro 'BOOST_PP_SEQ_ELEM_II'
+   45 | #    define BOOST_PP_SEQ_ELEM_II(im) BOOST_PP_SEQ_ELEM_III(im)
+      |                                                            ^~
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/preprocessor/seq/elem.hpp(46,41): note: expanded from macro 'BOOST_PP_SEQ_ELEM_III'
+   46 | #    define BOOST_PP_SEQ_ELEM_III(x, _) x
+      |                                         ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(53,49): note: expanded from macro 'BOOST_TEST_TOOL_PASS_ARG'
+   53 | #define BOOST_TEST_TOOL_PASS_ARG( r, _, arg ) , arg, BOOST_STRINGIZE( arg )
+      |                                                 ^~~
+D:\a\btx\btx\btx\src\test\modelnet_ahp_run_tests.cpp(421,27): error: no member named 'setenv' in the global namespace
+  421 |     BOOST_REQUIRE_EQUAL(::setenv("AWS_SECRET_ACCESS_KEY", "S3_TEST_SENTINEL", 1), 0);
+      |                         ~~^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(157,83): note: expanded from macro 'BOOST_REQUIRE_EQUAL'
+  157 |     ::boost::test_tools::tt_detail::equal_impl_frwd(), "", REQUIRE, CHECK_EQUAL, (L)(R) )
+      |                                                                                   ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(74,61): note: expanded from macro 'BOOST_TEST_TOOL_IMPL'
+   74 |         BOOST_JOIN( BOOST_TEST_TOOL_PASS_ARGS, frwd_type )( ARGS ) );           \
+      |                                                             ^~~~
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(57,57): note: expanded from macro 'BOOST_TEST_TOOL_PASS_ARGS0'
+   57 |     BOOST_PP_SEQ_FOR_EACH( BOOST_TEST_TOOL_PASS_ARG, _, ARGS )
+      |                                                         ^~~~
+note: (skipping 13 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/preprocessor/seq/elem.hpp(45,60): note: expanded from macro 'BOOST_PP_SEQ_ELEM_II'
+   45 | #    define BOOST_PP_SEQ_ELEM_II(im) BOOST_PP_SEQ_ELEM_III(im)
+      |                                                            ^~
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/preprocessor/seq/elem.hpp(46,41): note: expanded from macro 'BOOST_PP_SEQ_ELEM_III'
+   46 | #    define BOOST_PP_SEQ_ELEM_III(x, _) x
+      |                                         ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(53,49): note: expanded from macro 'BOOST_TEST_TOOL_PASS_ARG'
+   53 | #define BOOST_TEST_TOOL_PASS_ARG( r, _, arg ) , arg, BOOST_STRINGIZE( arg )
+      |                                                 ^~~
+D:\a\btx\btx\btx\src\test\modelnet_ahp_run_tests.cpp(422,27): error: no member named 'setenv' in the global namespace
+  422 |     BOOST_REQUIRE_EQUAL(::setenv("BTX_WALLET_SEED", "WALLET_TEST_SENTINEL", 1), 0);
+      |                         ~~^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(157,83): note: expanded from macro 'BOOST_REQUIRE_EQUAL'
+  157 |     ::boost::test_tools::tt_detail::equal_impl_frwd(), "", REQUIRE, CHECK_EQUAL, (L)(R) )
+      |                                                                                   ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(74,61): note: expanded from macro 'BOOST_TEST_TOOL_IMPL'
+   74 |         BOOST_JOIN( BOOST_TEST_TOOL_PASS_ARGS, frwd_type )( ARGS ) );           \
+      |                                                             ^~~~
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(57,57): note: expanded from macro 'BOOST_TEST_TOOL_PASS_ARGS0'
+   57 |     BOOST_PP_SEQ_FOR_EACH( BOOST_TEST_TOOL_PASS_ARG, _, ARGS )
+      |                                                         ^~~~
+note: (skipping 13 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/preprocessor/seq/elem.hpp(45,60): note: expanded from macro 'BOOST_PP_SEQ_ELEM_II'
+   45 | #    define BOOST_PP_SEQ_ELEM_II(im) BOOST_PP_SEQ_ELEM_III(im)
+      |                                                            ^~
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/preprocessor/seq/elem.hpp(46,41): note: expanded from macro 'BOOST_PP_SEQ_ELEM_III'
+   46 | #    define BOOST_PP_SEQ_ELEM_III(x, _) x
+      |                                         ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(53,49): note: expanded from macro 'BOOST_TEST_TOOL_PASS_ARG'
+   53 | #define BOOST_TEST_TOOL_PASS_ARG( r, _, arg ) , arg, BOOST_STRINGIZE( arg )
+      |                                                 ^~~
+In file included from D:\a\btx\btx\btx\src\test\modelnet_ahp_run_tests.cpp:19:
+In file included from D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/unit_test.hpp:18:
+In file included from D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/test_tools.hpp:46:
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/impl.hpp(107,17): error: comparison between pointer and integer ('char *' and 'int')
+  107 |     return left == right;
+      |            ~~~~ ^  ~~~~~
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/impl.hpp(130,16): note: in instantiation of function template specialization 'boost::test_tools::tt_detail::equal_impl<char *, int>' requested here
+  130 |         return equal_impl( left, right );
+      |                ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/impl.hpp(145,16): note: in instantiation of function template specialization 'boost::test_tools::tt_detail::equal_impl_frwd::call_impl<char *, int>' requested here
+  145 |         return call_impl( left, right, left_is_array() );
+      |                ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/impl.hpp(92,50): note: in instantiation of function template specialization 'boost::test_tools::tt_detail::equal_impl_frwd::operator()<char *, int>' requested here
+   92 | BOOST_PP_REPEAT( BOOST_TEST_MAX_PREDICATE_ARITY, IMPL_FRWD, _ )
+      |                                                  ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/preprocessor/repetition/repeat.hpp(30,26): note: expanded from macro 'BOOST_PP_REPEAT'
+   30 | # define BOOST_PP_REPEAT BOOST_PP_CAT(BOOST_PP_REPEAT_, BOOST_PP_AUTO_REC(BOOST_PP_REPEAT_P, 4))
+      |                          ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/preprocessor/cat.hpp(22,32): note: expanded from macro 'BOOST_PP_CAT'
+   22 | #    define BOOST_PP_CAT(a, b) BOOST_PP_CAT_I(a, b)
+      |                                ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/preprocessor/cat.hpp(29,34): note: expanded from macro 'BOOST_PP_CAT_I'
+   29 | #    define BOOST_PP_CAT_I(a, b) a ## b
+      |                                  ^
+<scratch space>(174,1): note: expanded from here
+  174 | BOOST_PP_REPEAT_1
+      | ^
+D:\a\btx\btx\btx\src\test\modelnet_ahp_run_tests.cpp(414,13): note: in instantiation of function template specialization 'boost::test_tools::tt_detail::check_frwd<boost::test_tools::tt_detail::equal_impl_frwd, char *, int>' requested here
+  414 |             BOOST_REQUIRE_EQUAL(::unsetenv(key), 0);
+      |             ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(156,45): note: expanded from macro 'BOOST_REQUIRE_EQUAL'
+  156 | #define BOOST_REQUIRE_EQUAL( L, R )         BOOST_TEST_TOOL_IMPL( 0, \
+      |                                             ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(67,47): note: expanded from macro 'BOOST_TEST_TOOL_IMPL'
+   67 |     BOOST_PP_IF( frwd_type, report_assertion, check_frwd ) (                    \
+      |                                               ^
+1 warning and 6 errors generated.

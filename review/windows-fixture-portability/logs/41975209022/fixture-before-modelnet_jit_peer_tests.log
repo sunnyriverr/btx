@@ -1,0 +1,21 @@
+clang-cl: warning: argument unused during compilation: '/Zc:preprocessor' [-Wunused-command-line-argument]
+D:\a\btx\btx\btx\src\test\modelnet_jit_peer_tests.cpp(62,20): error: no member named 'setenv' in the global namespace
+   62 |         if (had) ::setenv(key, old.c_str(), 1);
+      |                  ~~^
+D:\a\btx\btx\btx\src\test\modelnet_jit_peer_tests.cpp(63,16): error: no type named 'unsetenv' in the global namespace
+   63 |         else ::unsetenv(key);
+      |              ~~^
+D:\a\btx\btx\btx\src\test\modelnet_jit_peer_tests.cpp(330,11): error: no member named 'unsetenv' in the global namespace; did you mean 'getenv'?
+  330 |         ::unsetenv("BTX_NIXL_LIB");
+      |         ~~^~~~~~~~
+      |           getenv
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\stdlib.h(1184,28): note: 'getenv' declared here
+ 1184 |     _DCRTIMP char* __cdecl getenv(
+      |                            ^
+D:\a\btx\btx\btx\src\test\modelnet_jit_peer_tests.cpp(352,11): error: no member named 'setenv' in the global namespace
+  352 |         ::setenv("BTX_NIXL_LIB", "/proc/self/exe", 1);
+      |         ~~^
+D:\a\btx\btx\btx\src\test\modelnet_jit_peer_tests.cpp(367,11): error: no member named 'setenv' in the global namespace
+  367 |         ::setenv("BTX_NIXL_LIB", "/no/such/nixl-lib-btx-0348.so", 1);
+      |         ~~^
+5 errors generated.

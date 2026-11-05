@@ -1,0 +1,156 @@
+{
+  "utc": "2026-11-05T07:19:00.547641+00:00",
+  "status": "FOUR_KNOWN_COMPILER_BLOCKERS_AND_SELECTED_CONTROLS_QUALIFIED",
+  "base": "666673a3153225ba264c7870e0e82e354df86765",
+  "product_commit": "1d032199bf3bbf6126483ee5ff0f67f0bb68709e",
+  "integration": "8a642b1ea7ed726fe527c9a6eb0f80a00da10d3f",
+  "runs": [
+    {
+      "id": 41983219088,
+      "ci": "792bdb27734c3a14c5b866b76745db5aeb67f420",
+      "source": "666302d007d9909faded1fddcd7fdd56fcb92bec",
+      "binary_sha256": "d310c03fa49c1ec501d2126de6ac7e6507cfe9884be92d36db8f41aa258ee476",
+      "build_seconds": 48.7,
+      "steps": 19,
+      "profile_transition": {}
+    },
+    {
+      "id": 41984877146,
+      "ci": "d66b04f6688e6c6aa56aebba4ca63fa5cdaa5228",
+      "source": "35e1d08f02e216264c05daed31b9f2d46b01d226",
+      "binary_sha256": "46293041287a65976c9fdfca7902e0370c69d110b165f6ab185171ed7f8ed0f8",
+      "build_seconds": 22.25,
+      "steps": 7,
+      "profile_transition": {}
+    },
+    {
+      "id": 41985603550,
+      "ci": "9c0163031f5f041bb4f515b4e7c1422249b8911a",
+      "source": "8a642b1ea7ed726fe527c9a6eb0f80a00da10d3f",
+      "binary_sha256": "6d0e62e551580c7186153a1d4253e6dd0376d7e588ec0fbe4d2fcb8eb34dd452",
+      "build_seconds": 20.28,
+      "steps": 7,
+      "profile_transition": {
+        "environment.ImageVersion": [
+          "20261030.294.1",
+          "20261103.298.1"
+        ],
+        "tools.ninja.sha256": [
+          "5142e84796e4bd57acb91ee19d30174d11bcca2b1a99d45a43251b9b1e6c32a9",
+          "6a4dd2358fccbb483729091586413cc2f2f74e72d329187f5a6b4cbba3c025ad"
+        ]
+      }
+    }
+  ],
+  "cases": [
+    {
+      "case": "modelnet_tests/helper_unix_rpc_refuses_unsupported_platform",
+      "exit": 0,
+      "pass_report": true,
+      "assertions_passed": 5,
+      "assertions_total": 5
+    },
+    {
+      "case": "modelnet_cuda_qual_tests/qualify_runtime_mock_worker_gpu01",
+      "exit": 0,
+      "pass_report": true,
+      "assertions_passed": 14,
+      "assertions_total": 14
+    },
+    {
+      "case": "modelnet_hosting_tests/exportmodellink_writes_only_new_or_share_files",
+      "exit": 0,
+      "pass_report": true,
+      "assertions_passed": 19,
+      "assertions_total": 19
+    },
+    {
+      "case": "modelnet_hosting_tests/materialize_checkout_hardlinks_matching_source",
+      "exit": 0,
+      "pass_report": true,
+      "assertions_passed": 9,
+      "assertions_total": 9
+    },
+    {
+      "case": "modelnet_hosting_tests/loadmodel_hold_fake_cuda_loader_then_unload",
+      "exit": 0,
+      "pass_report": true,
+      "assertions_passed": 21,
+      "assertions_total": 21
+    },
+    {
+      "case": "modelnet_hosting_tests/generatemodel_compatible_fake_adapter",
+      "exit": 0,
+      "pass_report": true,
+      "assertions_passed": 14,
+      "assertions_total": 14
+    },
+    {
+      "case": "modelnet_hosting_tests/generatemodel_unknown_architecture_fail_closed",
+      "exit": 0,
+      "pass_report": true,
+      "assertions_passed": 11,
+      "assertions_total": 11
+    },
+    {
+      "case": "modelnet_hosting_tests/generatemodel_gguf_llama_cli",
+      "exit": 0,
+      "pass_report": true,
+      "assertions_passed": 14,
+      "assertions_total": 14
+    },
+    {
+      "case": "modelnet_hosting_tests/mldsa_tls_identity_is_minted_in_process_mode_0600",
+      "exit": 0,
+      "pass_report": true,
+      "assertions_passed": 14,
+      "assertions_total": 14
+    },
+    {
+      "case": "modelnet_cloud_tests/cloud_10_stream_put_over_8mib",
+      "exit": 0,
+      "pass_report": true,
+      "assertions_passed": 13,
+      "assertions_total": 13
+    }
+  ],
+  "passing_cases": 10,
+  "passing_assertions": 134,
+  "reused_identical_objects": [
+    {
+      "file": "src/test/modelnet_tests.cpp",
+      "run": 41983219088,
+      "object_sha256": "c7f5bea1910d2b80702d66014efd35a6ed97fde1f2daf8a50cbeada2fe09726b"
+    },
+    {
+      "file": "src/test/modelnet_cuda_qual_tests.cpp",
+      "run": 41983219088,
+      "object_sha256": "12fed63498e8b667452a87fcc008c4bb2a766462fdf04219339d0daf6279cd58"
+    },
+    {
+      "file": "src/test/modelnet_hosting_tests.cpp",
+      "run": 41984877146,
+      "object_sha256": "a4006bc81dcdbac0b017a5f9669edd38113c13442abf07fa6da0cf82667f7a56"
+    }
+  ],
+  "canonical_library_sha256": "4c924f0731642e0b8aedece02ba8a3229a59b254c0da20637aaea39db5fb529c",
+  "checkpoint_sha256": "58b26e52f59ca43d0538fb3d7b29c9523c141d34f882cb0017aabab3c06f7911",
+  "cache_receipt": "cloud-runtime/cache-receipt.json",
+  "objects_retained": 3393,
+  "full_test_btx_built": false,
+  "full_test_btx_run": false,
+  "all_ten_in_one_final_binary": false,
+  "source_entries_each": 14310,
+  "platform": "Native Windows Server2025 x64;clang-cl20.1.8/MSVC14.51.36231/SDK10.0.26100.0;Release/staticCRT;Modelnet/wallet/tests/ZMQ ON;GUI OFF",
+  "process_cleanup_verified": true,
+  "upstream_publication": false,
+  "remaining": "Full maintained Windows unit target/build/run and any actual further prerequisites remain unqualified; adjacent cloud callers/whole suite outside selected coverage.",
+  "resources": {
+    "execution_claims_released": true,
+    "components_released": true,
+    "retained_task": "windows_integrated_native_acceptance",
+    "retained_path": "<LOCAL_WORKSPACE>/work/btx-lanes/session-1/windows_integrated_native_acceptance/unit-fixture-portability",
+    "path_booking": "c0929e67-cf25-45a1-a853-d45a1a2b7d26",
+    "host_free_GiB_at_close": 1.52
+  }
+}

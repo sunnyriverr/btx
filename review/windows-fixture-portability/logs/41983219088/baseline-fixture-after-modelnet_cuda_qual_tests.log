@@ -1,0 +1,24 @@
+clang-cl: warning: argument unused during compilation: '/Zc:preprocessor' [-Wunused-command-line-argument]
+D:\a\btx\btx\btx\src\test\modelnet_cuda_qual_tests.cpp(233,27): error: no member named 'chmod' in the global namespace
+  233 |     BOOST_REQUIRE_EQUAL(::chmod(fs::PathToString(worker).c_str(), 0755), 0);
+      |                         ~~^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(157,83): note: expanded from macro 'BOOST_REQUIRE_EQUAL'
+  157 |     ::boost::test_tools::tt_detail::equal_impl_frwd(), "", REQUIRE, CHECK_EQUAL, (L)(R) )
+      |                                                                                   ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(74,61): note: expanded from macro 'BOOST_TEST_TOOL_IMPL'
+   74 |         BOOST_JOIN( BOOST_TEST_TOOL_PASS_ARGS, frwd_type )( ARGS ) );           \
+      |                                                             ^~~~
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(57,57): note: expanded from macro 'BOOST_TEST_TOOL_PASS_ARGS0'
+   57 |     BOOST_PP_SEQ_FOR_EACH( BOOST_TEST_TOOL_PASS_ARG, _, ARGS )
+      |                                                         ^~~~
+note: (skipping 13 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/preprocessor/seq/elem.hpp(45,60): note: expanded from macro 'BOOST_PP_SEQ_ELEM_II'
+   45 | #    define BOOST_PP_SEQ_ELEM_II(im) BOOST_PP_SEQ_ELEM_III(im)
+      |                                                            ^~
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/preprocessor/seq/elem.hpp(46,41): note: expanded from macro 'BOOST_PP_SEQ_ELEM_III'
+   46 | #    define BOOST_PP_SEQ_ELEM_III(x, _) x
+      |                                         ^
+D:\btx-native-035\vcpkg-installed\x64-windows-static\include\boost/test/tools/old/interface.hpp(53,49): note: expanded from macro 'BOOST_TEST_TOOL_PASS_ARG'
+   53 | #define BOOST_TEST_TOOL_PASS_ARG( r, _, arg ) , arg, BOOST_STRINGIZE( arg )
+      |                                                 ^~~
+1 error generated.
