@@ -146,7 +146,7 @@ fs::path FindOwnedChildRoot()
             if(!QueryFullProcessImageNameW(child.h,0,image.data(),&n))continue;
             fs::path executable(std::wstring(image.data(),n));const auto root=executable.parent_path();
             std::cout<<"CHILD_IMAGE_ROOT "<<root.utf8string()<<std::endl;
-            Check(root.filename()==L"work"&&root.parent_path().filename().wstring().starts_with(L"btx.native."),"owned-profile-layout");
+            Check(root.filename()==L"work"&&root.parent_path().filename()==L"AC"&&root.parent_path().parent_path().filename().wstring().starts_with(L"btx.native."),"owned-profile-layout");
             std::cout<<"OWNED_CHILD "<<entry.th32ProcessID<<std::endl;return root;
         }while(Process32NextW(list.h,&entry));Sleep(5);
     }
@@ -157,7 +157,7 @@ void Probe(const fs::path& root)
     WaitPhase(root,"ready");auto root_handle=OpenRoot(root);
     std::array<wchar_t,128> filesystem{};DWORD serial=0,component=0,flags=0;
     if(!GetVolumeInformationByHandleW(root_handle.h,nullptr,0,&serial,&component,&flags,filesystem.data(),static_cast<DWORD>(filesystem.size())))Error("volume-information");
-    const std::wstring fs_name(filesystem.data());std::cout<<"FILESYSTEM "<<std::string(fs_name.begin(),fs_name.end())<<std::endl;
+    const std::wstring fs_name(filesystem.data());std::cout<<"FILESYSTEM "<<fs::path(fs_name).utf8string()<<std::endl;
     auto moving=HoldDirectory(root,L"moving"),doomed=HoldDirectory(root,L"doomed");
     auto initial=Scan(root);Check(initial.files.at(L"moving\\seed.bin")==3,"initial-size");Pass("initial-nested-enumeration");
     Put(root/fs::path(L"go.write"));WaitPhase(root,"writer-open");
