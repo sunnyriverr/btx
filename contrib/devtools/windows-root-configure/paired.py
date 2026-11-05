@@ -22,7 +22,7 @@ def prepare():
  assert subprocess.check_output(['ninja','--version'],text=True).strip()=='1.13.2'
  bundle=E/'socket-source.bundle';bundle.write_bytes(base64.b64decode((P/'fixture-source.bundle.base64').read_text()));assert sha(bundle)==I['bundle_sha256']
  s.need('public-parent-fetch',['git','fetch','--no-tags','--depth=2','https://github.com/sunnyriverr/btx.git',I['public_parent']],120)
- s.need('bundle-verify',['git','bundle','verify',str(bundle)],60);s.need('bundle-fetch',['git','fetch',str(bundle),I['bundle_ref']],60)
+ s.need('bundle-verify',['git','bundle','verify',str(bundle)],60);s.need('bundle-fetch',['git','fetch',str(bundle),*I.get('bundle_refs',[I['bundle_ref']])],60)
  s.need('cached-checkout',['git','checkout','--detach',I['cached_source']],60)
  cat=s.catalog(I['cached_source'],'cached');assert cat==cp['source_catalog'];R['restore']=checkpoint.restore(ROOT,SOURCE,cp['profile'],cat);assert R['restore']['restored']
  R['actual_profile']=setup['profile'];R['host_transition']=d;R['input_checkpoint_sha256']=I['checkpoint_sha256']
