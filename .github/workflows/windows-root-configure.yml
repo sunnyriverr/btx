@@ -1,4 +1,4 @@
-name: Native Windows capability socket ownership pair
+name: Native Windows maintained unit build plan
 on:
   push:
     branches: [codex/ci-windows-root-configure]
@@ -8,7 +8,7 @@ jobs:
   configure:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: windows-2025
-    timeout-minutes: 30
+    timeout-minutes: 25
     env:
       BTX_NATIVE_ROOT: D:\btx-native-035
     steps:
@@ -95,14 +95,14 @@ jobs:
           path: |
             D:\btx-native-035\project-build
             D:\btx-native-035\vcpkg-installed
-          key: btx356-unit-fixtures-v1-11423023ccc8120af4d4a08d2b6651440eb9cff5933a71f36f35008986a0884b-42031320252
+          key: btx356-unit-fixtures-v1-e5050bc6a1ad12b12740b51a536d9354857b8bf45c646430f05d474aea3139bf-42032913033
       - name: Require existing exact-profile checkpoint for restore proof
         shell: pwsh
         env:
           MATCHED_CACHE: ${{ steps.project_restore.outputs.cache-matched-key }}
         run: |
           if (-not $env:MATCHED_CACHE) { throw "Restore proof requires an existing cache; refusing fresh rebuild" }
-      - name: Validate and resume the identical configured project
+      - name: Verify exact retained source objects and profile
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -112,9 +112,9 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/paired.py prepare
+          python controls/contrib/devtools/windows-root-configure/plan.py prepare
           exit /b %errorlevel%
-      - name: Build stronger socket cleanup observation on unchanged product
+      - name: Regenerate real project and inspect maintained unit plan
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -124,22 +124,9 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/paired.py after-build
+          python controls/contrib/devtools/windows-root-configure/plan.py inspect
           exit /b %errorlevel%
-      - name: Verify native directory entry is gone before fallback cleanup
-        shell: cmd
-        run: |
-          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
-          if not defined BTX_VS exit /b 2
-          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
-          if errorlevel 1 exit /b %errorlevel%
-          set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
-          set "CL="
-          set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/paired.py after-run
-          exit /b %errorlevel%
-      - name: Checkpoint only the exact candidate after execution
-        if: always()
+      - name: Retain separately regenerated graph with unchanged objects
         id: retention
         shell: cmd
         run: |
@@ -150,20 +137,20 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/paired.py retain
+          python controls/contrib/devtools/windows-root-configure/plan.py retain
           exit /b %errorlevel%
-      - name: Preserve candidate objects under separate source-profile key
-        if: always() && steps.retention.outcome == 'success' && steps.retention.outputs.checkpoint_valid == 'true'
+      - name: Preserve regenerated graph without replacing predecessor cache
+        if: steps.retention.outcome == 'success' && steps.retention.outputs.checkpoint_valid == 'true'
         uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
         with:
           path: |
             D:\btx-native-035\project-build
             D:\btx-native-035\vcpkg-installed
           key: btx356-unit-fixtures-v1-${{ steps.retention.outputs.checkpoint_key }}-${{ github.run_id }}
-      - name: Preserve original diagnostic records
+      - name: Preserve exact diagnostic records
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
-          name: native-windows-resumable-integration-records
+          name: native-windows-maintained-unit-plan
           path: D:\btx-native-035\evidence\
           retention-days: 14
