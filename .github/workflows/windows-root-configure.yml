@@ -95,9 +95,7 @@ jobs:
           path: |
             D:\btx-native-035\project-build
             D:\btx-native-035\vcpkg-installed
-          key: btx356-project-v2-${{ steps.project_profile.outputs.key }}-${{ github.run_id }}
-          restore-keys: |
-            btx356-project-v2-${{ steps.project_profile.outputs.key }}-
+          key: btx356-project-v2-c5e688f330d725d795e28fb435e8dad20b663e03ff60eb53281fd9db1f479417-41945111088
       - name: Require existing exact-profile checkpoint for restore proof
         shell: pwsh
         env:
@@ -114,7 +112,7 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/resume-verified.py
+          python controls/contrib/devtools/windows-root-configure/resume-compatible.py
           exit /b %errorlevel%
       - name: Qualify one cached compiler target and CPU lifecycle
         shell: cmd

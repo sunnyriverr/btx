@@ -1,0 +1,65 @@
+{
+  "source": "666673a3153225ba264c7870e0e82e354df86765",
+  "tools": {
+    "clang-cl": {
+      "path": "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+      "sha256": "57e32b1ea2456f12f97bf802453171bbff12d56b2c486b4eca0c75343c0cda2c"
+    },
+    "cl": {
+      "path": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.EXE",
+      "sha256": "b0a1818ebae6da7f18230a84e76ce839212584ac4c2ab55b97a0d5268085da57"
+    },
+    "cmake": {
+      "path": "C:\\Program Files\\CMake\\bin\\cmake.EXE",
+      "sha256": "84935c0b7cb09c140de0d3b042d4e93e5fac4e6371e75bf28eae3d841f79dfb3"
+    },
+    "ninja": {
+      "path": "C:\\ProgramData\\Chocolatey\\bin\\ninja.EXE",
+      "sha256": "5142e84796e4bd57acb91ee19d30174d11bcca2b1a99d45a43251b9b1e6c32a9"
+    }
+  },
+  "args": [
+    "cmake",
+    "--debug-find-pkg=OpenSSL",
+    "--preset",
+    "windows-clangcl-static",
+    "-S",
+    "D:\\a\\btx\\btx\\btx",
+    "-B",
+    "D:\\btx-native-035\\project-build",
+    "-DBUILD_TESTS=ON",
+    "-DWITH_MODELNET=ON",
+    "-DVCPKG_MANIFEST_NO_DEFAULT_FEATURES=ON",
+    "-DVCPKG_MANIFEST_FEATURES=wallet;tests;zeromq",
+    "-DVCPKG_INSTALLED_DIR=D:\\btx-native-035\\vcpkg-installed",
+    "-DOPENSSL_ROOT_DIR=D:\\btx-native-035\\openssl-3.5.4-static",
+    "-DOPENSSL_USE_STATIC_LIBS=ON",
+    "-DOPENSSL_MSVC_STATIC_RT=ON",
+    "-DOPENSSL_INCLUDE_DIR=D:\\btx-native-035\\openssl-3.5.4-static\\include",
+    "-DOPENSSL_SSL_LIBRARY=D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib",
+    "-DOPENSSL_CRYPTO_LIBRARY=D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib",
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+  ],
+  "environment": {
+    "ImageVersion": "20261030.294.1",
+    "VCToolsVersion": "14.51.36231",
+    "WindowsSDKVersion": "10.0.26100.0\\",
+    "INCLUDE": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\include;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\include;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Auxiliary\\VS\\include;C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.26100.0\\ucrt;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\um;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\shared;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\winrt;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\cppwinrt;C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\include\\um",
+    "LIB": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\lib\\x64;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x64;C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\lib\\um\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\lib\\10.0.26100.0\\ucrt\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\\\lib\\10.0.26100.0\\\\um\\x64",
+    "LIBPATH": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\lib\\x64;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x64;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x86\\store\\references;C:\\Program Files (x86)\\Windows Kits\\10\\UnionMetadata\\10.0.26100.0;C:\\Program Files (x86)\\Windows Kits\\10\\References\\10.0.26100.0;C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319",
+    "CL": null,
+    "_CL_": null
+  },
+  "controls": {
+    "runner.py": "73fea130e528e1034d508ec2ff1da76d710074792dc1af618ccb3a499e2f3f8b",
+    "checkpoint.py": "eb65c4501a306c92ea9e78a70c1932d00fa831d86ea302888c3eb9769b9c6ebb",
+    "checkpoint-selftest.py": "27d586dd8ba09eef10d5a4bbcb8b4ce6cb3480565ea0ee4f92c6cba4bb6d214a",
+    "dependency-identity.json": "f823d61237a287c704cada283764695a782fa001a725442122920d75ced8a4a5"
+  },
+  "openssl_files": {
+    "include/openssl/opensslv.h": "df513ae26e8baebbc641ba19f3d16f3e9ac0895cb092c81a39e1669f7fcb9c5c",
+    "lib/libssl.lib": "860ce6dd4edf55af8a82a958afb9bae9cd025f3ef7e263bcc266d79cdd5179e8",
+    "lib/libcrypto.lib": "f9385fc262485a1c779aa9a740ee3bde3025b9eb61b113e311024c9571899e12",
+    "bin/openssl.exe": "c63c66cb528c20dbd9f474679c8a19ea13d40f57c7f8efa4085ceb6dbe5c5552"
+  }
+}
