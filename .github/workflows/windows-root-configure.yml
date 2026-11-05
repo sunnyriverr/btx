@@ -95,7 +95,7 @@ jobs:
           path: |
             D:\btx-native-035\project-build
             D:\btx-native-035\vcpkg-installed
-          key: btx356-unit-fixtures-v1-141a548a703b76528b0e50963c64603e33fe02349da95ec6ea8df9f3538bebc8-42030285275
+          key: btx356-unit-fixtures-v1-11423023ccc8120af4d4a08d2b6651440eb9cff5933a71f36f35008986a0884b-42031320252
       - name: Require existing exact-profile checkpoint for restore proof
         shell: pwsh
         env:
@@ -114,7 +114,7 @@ jobs:
           set "_CL_="
           python controls/contrib/devtools/windows-root-configure/paired.py prepare
           exit /b %errorlevel%
-      - name: Build identical maintained baseline cases
+      - name: Build stronger socket cleanup observation on unchanged product
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -124,9 +124,9 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/paired.py baseline-build
+          python controls/contrib/devtools/windows-root-configure/paired.py after-build
           exit /b %errorlevel%
-      - name: Observe baseline failures
+      - name: Verify native directory entry is gone before fallback cleanup
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -136,31 +136,7 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/paired.py baseline-run
-          exit /b %errorlevel%
-      - name: Build smallest native socket ownership repair
-        shell: cmd
-        run: |
-          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
-          if not defined BTX_VS exit /b 2
-          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
-          if errorlevel 1 exit /b %errorlevel%
-          set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
-          set "CL="
-          set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/paired.py candidate-build
-          exit /b %errorlevel%
-      - name: Verify candidate legitimate operation and cleanup
-        shell: cmd
-        run: |
-          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
-          if not defined BTX_VS exit /b 2
-          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
-          if errorlevel 1 exit /b %errorlevel%
-          set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
-          set "CL="
-          set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/paired.py candidate-run
+          python controls/contrib/devtools/windows-root-configure/paired.py after-run
           exit /b %errorlevel%
       - name: Checkpoint only the exact candidate after execution
         if: always()

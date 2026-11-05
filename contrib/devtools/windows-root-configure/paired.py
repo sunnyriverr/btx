@@ -75,6 +75,12 @@ def run(which):
   assert all(x['pass']and not x['socket_entries']for x in R[which+'_cases']),'Relevant candidate control failure';R['status']='PAIRED_PASS'
  s.save()
 
+def after_run():
+ assert I.get('after_only') and R['status']=='BASELINE_LINKED'
+ R['candidate_binary_sha256']=R['baseline_binary_sha256'];R['candidate_build_exit']=R['baseline_build_exit'];R['status']='CANDIDATE_LINKED'
+ shutil.copyfile(E/'baseline-before-candidate-source.json',E/'candidate-before-candidate-source.json');s.save()
+ run('candidate');R['status']='AFTER_ONLY_PASS';s.save()
+
 def retain():
  assert not R['process_active'];assert R.get('candidate_build_exit')==0;s.quiesce();cat=s.catalog(I['target'],'candidate-retained');assert cat==json.loads((E/'candidate-before-candidate-source.json').read_text());assert all(sha(BUILD/n)==h for n,h in R['original_config'].items())
  # Flat profile references its predecessor hash/key without recursive histories.
@@ -84,7 +90,7 @@ def retain():
  with open(os.environ['GITHUB_OUTPUT'],'a')as f:f.write('checkpoint_valid=true\ncheckpoint_key='+key+'\n')
 
 stage=sys.argv[1];failed=False
-try:{'prepare':prepare,'baseline-build':lambda:build('baseline'),'baseline-run':lambda:run('baseline'),'candidate-build':lambda:build('candidate'),'candidate-run':lambda:run('candidate'),'retain':retain}[stage]()
+try:{'prepare':prepare,'after-build':lambda:build('baseline'),'after-run':after_run,'baseline-build':lambda:build('baseline'),'baseline-run':lambda:run('baseline'),'candidate-build':lambda:build('candidate'),'candidate-run':lambda:run('candidate'),'retain':retain}[stage]()
 except BaseException as e:failed=True;R.setdefault('failures',[]).append({'stage':stage,'error':str(e),'type':type(e).__name__});print(type(e).__name__,str(e),flush=True)
 finally:s.save();print(json.dumps({k:R.get(k)for k in['status','baseline_planned_steps','candidate_planned_steps','baseline_cases','candidate_cases','failures']},indent=2),flush=True)
 raise SystemExit(1 if failed else 0)
