@@ -965,14 +965,14 @@ BOOST_AUTO_TEST_CASE(exportmodellink_writes_only_new_or_share_files)
 
     // Any other existing file is left as it was.
     const fs::path notes = tmp / "notes.txt";
-    std::ofstream{notes} << "keep me\n";
+    std::ofstream{notes, std::ios::binary} << "keep me\n";
     BOOST_CHECK(!export_to(notes, code));
     BOOST_CHECK_EQUAL(code, "INVALID_PARAMETER");
     BOOST_CHECK_EQUAL(text_of(notes), "keep me\n");
 
     // A symlink is not followed, whether its target exists or not.
     const fs::path victim = tmp / "victim.txt";
-    std::ofstream{victim} << "keep me\n";
+    std::ofstream{victim, std::ios::binary} << "keep me\n";
     fs::create_symlink(victim, tmp / "to-victim.btx");
     BOOST_CHECK(!export_to(tmp / "to-victim.btx", code));
     BOOST_CHECK_EQUAL(text_of(victim), "keep me\n");
@@ -990,7 +990,7 @@ BOOST_AUTO_TEST_CASE(exportmodellink_writes_only_new_or_share_files)
     const fs::path directory = tmp / "directory.btx";
     fs::create_directory(directory);
     const fs::path retained = directory / "keep.txt";
-    std::ofstream{retained} << "keep me\n";
+    std::ofstream{retained, std::ios::binary} << "keep me\n";
     BOOST_CHECK(!export_to(directory, code));
     BOOST_CHECK_EQUAL(code, "INVALID_PARAMETER");
     BOOST_CHECK(fs::is_directory(directory));
