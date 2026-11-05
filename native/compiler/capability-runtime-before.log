@@ -1,0 +1,171 @@
+clang-cl: warning: argument unused during compilation: '/Zc:preprocessor' [-Wunused-command-line-argument]
+D:\a\btx\btx\btx\src\modelnet\capability_runtime.cpp(59,5): error: unknown type name 'pid_t'; did you mean 'uid_t'?
+   59 |     pid_t loader_pid{0};
+      |     ^~~~~
+      |     uid_t
+D:/a/btx/btx/btx/src/compat/mingw/posix_extra.h(122,22): note: 'uid_t' declared here
+  122 | typedef unsigned int uid_t;
+      |                      ^
+D:\a\btx\btx\btx\src\modelnet\capability_runtime.cpp(100,16): error: use of undeclared identifier 'popen'
+  100 |     FILE* fp = popen(cmd, "r");
+      |                ^
+D:\a\btx\btx\btx\src\modelnet\capability_runtime.cpp(105,20): error: use of undeclared identifier 'pclose'
+  105 |     const int rc = pclose(fp);
+      |                    ^
+D:\a\btx\btx\btx\src\modelnet\capability_runtime.cpp(339,71): error: unknown type name 'pid_t'; did you mean 'uid_t'?
+  339 | bool SpawnCudaLoaderHold(const fs::path& loader, const fs::path& dir, pid_t& pid_out, UniValue& json, std::string& err)
+      |                                                                       ^~~~~
+      |                                                                       uid_t
+D:/a/btx/btx/btx/src/compat/mingw/posix_extra.h(122,22): note: 'uid_t' declared here
+  122 | typedef unsigned int uid_t;
+      |                      ^
+D:\a\btx\btx\btx\src\modelnet\capability_runtime.cpp(355,11): error: unknown type name 'pid_t'; did you mean 'uid_t'?
+  355 |     const pid_t pid = fork();
+      |           ^~~~~
+      |           uid_t
+D:/a/btx/btx/btx/src/compat/mingw/posix_extra.h(122,22): note: 'uid_t' declared here
+  122 | typedef unsigned int uid_t;
+      |                      ^
+D:\a\btx\btx\btx\src\modelnet\capability_runtime.cpp(357,9): warning: 'close' is deprecated: The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _close. See online help for details. [-Wdeprecated-declarations]
+  357 |         close(pipefd[0]);
+      |         ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_io.h(460,28): note: 'close' has been explicitly marked deprecated here
+  460 |         _Check_return_opt_ _CRT_NONSTDC_DEPRECATE(_close)
+      |                            ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt.h(428,50): note: expanded from macro '_CRT_NONSTDC_DEPRECATE'
+  428 |         #define _CRT_NONSTDC_DEPRECATE(_NewName) _CRT_DEPRECATE_TEXT(             \
+      |                                                  ^
+C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include\vcruntime.h(348,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  348 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+D:\a\btx\btx\btx\src\modelnet\capability_runtime.cpp(358,9): warning: 'close' is deprecated: The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _close. See online help for details. [-Wdeprecated-declarations]
+  358 |         close(pipefd[1]);
+      |         ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_io.h(460,28): note: 'close' has been explicitly marked deprecated here
+  460 |         _Check_return_opt_ _CRT_NONSTDC_DEPRECATE(_close)
+      |                            ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt.h(428,50): note: expanded from macro '_CRT_NONSTDC_DEPRECATE'
+  428 |         #define _CRT_NONSTDC_DEPRECATE(_NewName) _CRT_DEPRECATE_TEXT(             \
+      |                                                  ^
+C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include\vcruntime.h(348,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  348 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+D:\a\btx\btx\btx\src\modelnet\capability_runtime.cpp(363,9): warning: 'close' is deprecated: The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _close. See online help for details. [-Wdeprecated-declarations]
+  363 |         close(pipefd[0]);
+      |         ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_io.h(460,28): note: 'close' has been explicitly marked deprecated here
+  460 |         _Check_return_opt_ _CRT_NONSTDC_DEPRECATE(_close)
+      |                            ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt.h(428,50): note: expanded from macro '_CRT_NONSTDC_DEPRECATE'
+  428 |         #define _CRT_NONSTDC_DEPRECATE(_NewName) _CRT_DEPRECATE_TEXT(             \
+      |                                                  ^
+C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include\vcruntime.h(348,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  348 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+D:\a\btx\btx\btx\src\modelnet\capability_runtime.cpp(364,29): error: use of undeclared identifier 'STDOUT_FILENO'
+  364 |         if (dup2(pipefd[1], STDOUT_FILENO) < 0) _exit(127);
+      |                             ^
+D:\a\btx\btx\btx\src\modelnet\capability_runtime.cpp(365,9): warning: 'close' is deprecated: The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _close. See online help for details. [-Wdeprecated-declarations]
+  365 |         close(pipefd[1]);
+      |         ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_io.h(460,28): note: 'close' has been explicitly marked deprecated here
+  460 |         _Check_return_opt_ _CRT_NONSTDC_DEPRECATE(_close)
+      |                            ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt.h(428,50): note: expanded from macro '_CRT_NONSTDC_DEPRECATE'
+  428 |         #define _CRT_NONSTDC_DEPRECATE(_NewName) _CRT_DEPRECATE_TEXT(             \
+      |                                                  ^
+C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include\vcruntime.h(348,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  348 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+D:\a\btx\btx\btx\src\modelnet\capability_runtime.cpp(369,9): warning: 'execv' is deprecated: The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _execv. See online help for details. [-Wdeprecated-declarations]
+  369 |         execv(loader_s.c_str(), const_cast<char* const*>(argv));
+      |         ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\process.h(280,9): note: 'execv' has been explicitly marked deprecated here
+  280 |         _CRT_NONSTDC_DEPRECATE(_execv)
+      |         ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt.h(428,50): note: expanded from macro '_CRT_NONSTDC_DEPRECATE'
+  428 |         #define _CRT_NONSTDC_DEPRECATE(_NewName) _CRT_DEPRECATE_TEXT(             \
+      |                                                  ^
+C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include\vcruntime.h(348,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  348 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+D:\a\btx\btx\btx\src\modelnet\capability_runtime.cpp(372,5): warning: 'close' is deprecated: The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _close. See online help for details. [-Wdeprecated-declarations]
+  372 |     close(pipefd[1]);
+      |     ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_io.h(460,28): note: 'close' has been explicitly marked deprecated here
+  460 |         _Check_return_opt_ _CRT_NONSTDC_DEPRECATE(_close)
+      |                            ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt.h(428,50): note: expanded from macro '_CRT_NONSTDC_DEPRECATE'
+  428 |         #define _CRT_NONSTDC_DEPRECATE(_NewName) _CRT_DEPRECATE_TEXT(             \
+      |                                                  ^
+C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include\vcruntime.h(348,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  348 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+D:\a\btx\btx\btx\src\modelnet\capability_runtime.cpp(376,23): warning: 'read' is deprecated: The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _read. See online help for details. [-Wdeprecated-declarations]
+  376 |     while ((nread = ::read(pipefd[0], buf, sizeof(buf))) > 0) {
+      |                       ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_io.h(524,9): note: 'read' has been explicitly marked deprecated here
+  524 |         _CRT_NONSTDC_DEPRECATE(_read)
+      |         ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt.h(428,50): note: expanded from macro '_CRT_NONSTDC_DEPRECATE'
+  428 |         #define _CRT_NONSTDC_DEPRECATE(_NewName) _CRT_DEPRECATE_TEXT(             \
+      |                                                  ^
+C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include\vcruntime.h(348,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  348 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+D:\a\btx\btx\btx\src\modelnet\capability_runtime.cpp(381,5): warning: 'close' is deprecated: The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _close. See online help for details. [-Wdeprecated-declarations]
+  381 |     close(pipefd[0]);
+      |     ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_io.h(460,28): note: 'close' has been explicitly marked deprecated here
+  460 |         _Check_return_opt_ _CRT_NONSTDC_DEPRECATE(_close)
+      |                            ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt.h(428,50): note: expanded from macro '_CRT_NONSTDC_DEPRECATE'
+  428 |         #define _CRT_NONSTDC_DEPRECATE(_NewName) _CRT_DEPRECATE_TEXT(             \
+      |                                                  ^
+C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include\vcruntime.h(348,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  348 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+D:\a\btx\btx\btx\src\modelnet\capability_runtime.cpp(420,29): warning: 'write' is deprecated: The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _write. See online help for details. [-Wdeprecated-declarations]
+  420 |         const ssize_t n = ::write(fd, verified.data() + off, verified.size() - off);
+      |                             ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_io.h(559,24): note: 'write' has been explicitly marked deprecated here
+  559 |         _Check_return_ _CRT_NONSTDC_DEPRECATE(_write)
+      |                        ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt.h(428,50): note: expanded from macro '_CRT_NONSTDC_DEPRECATE'
+  428 |         #define _CRT_NONSTDC_DEPRECATE(_NewName) _CRT_DEPRECATE_TEXT(             \
+      |                                                  ^
+C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include\vcruntime.h(348,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  348 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+D:\a\btx\btx\btx\src\modelnet\capability_runtime.cpp(424,15): warning: 'close' is deprecated: The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _close. See online help for details. [-Wdeprecated-declarations]
+  424 |             ::close(fd);
+      |               ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_io.h(460,28): note: 'close' has been explicitly marked deprecated here
+  460 |         _Check_return_opt_ _CRT_NONSTDC_DEPRECATE(_close)
+      |                            ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt.h(428,50): note: expanded from macro '_CRT_NONSTDC_DEPRECATE'
+  428 |         #define _CRT_NONSTDC_DEPRECATE(_NewName) _CRT_DEPRECATE_TEXT(             \
+      |                                                  ^
+C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include\vcruntime.h(348,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  348 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+D:\a\btx\btx\btx\src\modelnet\capability_runtime.cpp(430,11): warning: 'close' is deprecated: The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _close. See online help for details. [-Wdeprecated-declarations]
+  430 |     if (::close(fd) != 0) {
+      |           ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_io.h(460,28): note: 'close' has been explicitly marked deprecated here
+  460 |         _Check_return_opt_ _CRT_NONSTDC_DEPRECATE(_close)
+      |                            ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt.h(428,50): note: expanded from macro '_CRT_NONSTDC_DEPRECATE'
+  428 |         #define _CRT_NONSTDC_DEPRECATE(_NewName) _CRT_DEPRECATE_TEXT(             \
+      |                                                  ^
+C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include\vcruntime.h(348,47): note: expanded from macro '_CRT_DEPRECATE_TEXT'
+  348 | #define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+      |                                               ^
+D:\a\btx\btx\btx\src\modelnet\capability_runtime.cpp(537,17): error: unknown type name 'pid_t'; did you mean 'uid_t'?
+  537 |                 pid_t child = 0;
+      |                 ^~~~~
+      |                 uid_t
+D:/a/btx/btx/btx/src/compat/mingw/posix_extra.h(122,22): note: 'uid_t' declared here
+  122 | typedef unsigned int uid_t;
+      |                      ^
+11 warnings and 7 errors generated.
