@@ -1,28 +1,23 @@
 {
-  "base": "666673a3153225ba264c7870e0e82e354df86765",
-  "cached_source": "4593f590eb711c6536a650a5ec7a29d4c50dbd37",
-  "target": "e3d8b46c958168c53872e5042a0171ed91c96c9c",
-  "tree": "d8ed259185fa582ab9bd482a99f93371e042954e",
-  "changed": [
-    "src/test/modelnet_jit_journey_tests.cpp",
+  "cached_source": "e3d8b46c958168c53872e5042a0171ed91c96c9c",
+  "baseline_test": "e014b2f4acfed5d3d676942ad40d2111dcedf3bb",
+  "target": "dfffd3031909b25e57d587fba757acff8334e81c",
+  "tree": "0f903e664ee1512396505fa1bb5b8ad61089c514",
+  "branch": "codex/fix-windows-capability-sockets-integration",
+  "product_delta": [
+    "src/modelnet/capability_control.cpp",
+    "src/modelnet/capability_sdk.cpp"
+  ],
+  "test_delta": [
     "src/test/modelnet_jit_tests.cpp"
   ],
-  "files": [
-    "modelnet_jit_tests.cpp",
-    "modelnet_jit_journey_tests.cpp"
-  ],
-  "bundle_ref": "refs/heads/codex/test-windows-jit-fixtures",
-  "bundle_sha256": "1252b8328c8f71ec3ee7463aa6ae382bbd150cde8fe45088679f1dfdc420a4c5",
-  "checkpoint_sha256": "f7edc37eb49f6971fdc341ea1202dd66952c6a78bd1f2a42d5703ad71572558f",
-  "cache_key": "btx356-unit-fixtures-v1-b2225c9817bbf8d49e6174039df60405e35e458b7b8d1a5b4603f22daa7373b1-42010437780",
-  "runtime_cases": [
-    "modelnet_jit_tests/jit_api_priv_scale_journey_safety",
-    "modelnet_jit_journey_tests/jit_api_04_cli_verbs",
-    "modelnet_jit_journey_tests/jit_api_04_cli_schema",
-    "modelnet_jit_journey_tests/jit_journey_01_to_12"
-  ],
-  "scope": "Native Windows JIT fixture compiler and existing daemon/CLI diagnostic; no product change/full unit qualification",
-  "baseline": [
+  "bundle_sha256": "85d89feaba73932bbf0fc385d3bba59dcf20f7a3065aca44d9b0fb0be10e8fa0",
+  "public_parent": "4593f590eb711c6536a650a5ec7a29d4c50dbd37",
+  "bundle_ref": "refs/heads/codex/fix-windows-capability-sockets-integration",
+  "checkpoint_sha256": "3fa9e83e4bc4ea67e67b7f0f23ac7b2048ea89b0cd67467d58c9c15a9d2460de",
+  "cache_key": "btx356-unit-fixtures-v1-08d9a2087ee2f564c2ecfb81ffa79b61313c1c6c5e75e494df1c72bc2b6a9f3e-42017226198",
+  "cached_binary_sha256": "eb597dbe3f104cb67289e026cbf3703077e6f61a0e9842c97e652156723eb851",
+  "baseline_compile_entries": [
     {
       "file": "modelnet_jit_tests.cpp",
       "target": "src/test/CMakeFiles/test_btx.dir/modelnet_jit_tests.cpp.obj",
@@ -45,5 +40,12 @@
       },
       "present_before": false
     }
-  ]
+  ],
+  "component_link_block": "build bin\\windows_fixture_boundaries.exe: CXX_EXECUTABLE_LINKER__test_btx_Release src\\test\\CMakeFiles\\test_btx.dir\\main.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\modelnet_jit_tests.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\modelnet_jit_journey_tests.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\__\\lightwatch.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\__\\wallet\\test\\init_test_fixture.cpp.obj src\\test\\CMakeFiles\\test_btx.dir\\__\\wallet\\test\\wallet_test_fixture.cpp.obj | D$:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\event_extra.lib D$:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib D$:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib lib\\test_util.lib lib\\bitcoin_cli.lib lib\\bitcoin_node.lib lib\\bitcoin_wallet.lib D$:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\event_extra.lib D$:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\event_core.lib lib\\bitcoin_zmq.lib D$:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\libzmq-mt-s-4_3_5.lib lib\\bitcoin_shielded.lib lib\\bitcoin_modelnet.lib D$:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib D$:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib lib\\bitcoin_common.lib src\\univalue\\univalue.lib lib\\bitcoin_db.lib src\\leveldb.lib src\\crc32c.lib C$:\\Program$ Files\\Microsoft$ Visual$ Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x64\\libomp.lib lib\\btx_matmul_backend.lib lib\\bitcoin_consensus.lib lib\\bitcoin_util.lib lib\\bitcoin_clientversion.lib src\\secp256k1\\lib\\libsecp256k1.lib lib\\bitcoinpqc.lib lib\\bitcoin_crypto.lib C$:\\Program$ Files\\LLVM\\lib\\clang\\20\\lib\\windows\\clang_rt.builtins-x86_64.lib D$:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\sqlite3.lib || lib\\bitcoin_cli.lib lib\\bitcoin_clientversion.lib lib\\bitcoin_common.lib lib\\bitcoin_consensus.lib lib\\bitcoin_crypto.lib lib\\bitcoin_db.lib lib\\bitcoin_modelnet.lib lib\\bitcoin_node.lib lib\\bitcoin_shielded.lib lib\\bitcoin_util.lib lib\\bitcoin_wallet.lib lib\\bitcoin_zmq.lib lib\\bitcoinpqc.lib lib\\btx_matmul_backend.lib lib\\test_util.lib src\\crc32c.lib src\\leveldb.lib src\\secp256k1\\lib\\libsecp256k1.lib src\\univalue\\univalue.lib\n  CONFIG = Release\n  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -MT\n  LINK_FLAGS = /machine:x64 /INCREMENTAL:NO /subsystem:console /DYNAMICBASE /HIGHENTROPYVA /NXCOMPAT\n  LINK_LIBRARIES = D:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\event_extra.lib  D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib  D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib  lib\\test_util.lib  lib\\bitcoin_cli.lib  lib\\bitcoin_node.lib  lib\\bitcoin_wallet.lib  D:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\event_extra.lib  D:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\event_core.lib  shell32.lib  lib\\bitcoin_zmq.lib  D:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\libzmq-mt-s-4_3_5.lib  rpcrt4.lib  lib\\bitcoin_shielded.lib  lib\\bitcoin_modelnet.lib  D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib  D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib  crypt32.lib  lib\\bitcoin_common.lib  src\\univalue\\univalue.lib  lib\\bitcoin_db.lib  src\\leveldb.lib  src\\crc32c.lib  \"C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x64\\libomp.lib\"  lib\\btx_matmul_backend.lib  lib\\bitcoin_consensus.lib  lib\\bitcoin_util.lib  ws2_32.lib  iphlpapi.lib  lib\\bitcoin_clientversion.lib  src\\secp256k1\\lib\\libsecp256k1.lib  lib\\bitcoinpqc.lib  lib\\bitcoin_crypto.lib  \"C:\\Program Files\\LLVM\\lib\\clang\\20\\lib\\windows\\clang_rt.builtins-x86_64.lib\"  bcrypt.lib  userenv.lib  advapi32.lib  ole32.lib  D:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\sqlite3.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib\n  OBJECT_DIR = src\\test\\CMakeFiles\\test_btx.dir\n  POST_BUILD = C:\\Windows\\system32\\cmd.exe /C \"cd /D D:\\btx-native-035\\project-build\\src\\test && D:\\btx-native-035\\vcpkg\\vcpkg.exe z-applocal --target-binary=D:/btx-native-035/project-build/bin/windows_fixture_boundaries.exe --installed-bin-dir=D:/btx-native-035/vcpkg-installed/x64-windows-static/bin\"\n  PRE_LINK = cd .\n  TARGET_COMPILE_PDB = src\\test\\CMakeFiles\\test_btx.dir\\\n  TARGET_FILE = bin\\windows_fixture_boundaries.exe\n  TARGET_IMPLIB = lib\\windows_fixture_boundaries.lib\n  TARGET_PDB = bin\\windows_fixture_boundaries.pdb\n  TARGET_SUPPORT_DIR = src\\test\\CMakeFiles\\test_btx.dir\n  RSP_FILE = CMakeFiles\\windows_fixture_boundaries.rsp",
+  "cases": [
+    "modelnet_jit_tests/jit_api_priv_scale_journey_safety",
+    "modelnet_jit_tests/capability_socket_failure_paths",
+    "modelnet_jit_journey_tests/jit_api_04_cli_verbs"
+  ],
+  "scope": "Native Windows paired socket ownership repair; same maintained stopped-daemon, error refusals and legitimate CLI/natural cleanup cases; not full-unit or release qualification"
 }
