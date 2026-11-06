@@ -1,15 +1,15 @@
-"""Bounded fork-only supplied-parent PSBT acceptance; unchanged wallet-enabled product."""
+"""Bounded paired generatemodel CLI repair; same actual node/helper and maintained regression body."""
 from pathlib import Path
-import configparser,hashlib,json,os,platform,shutil,signal,stat,subprocess,sys,tarfile,threading,time,urllib.request
+import configparser,hashlib,json,os,platform,shutil,signal,stat,subprocess,sys,tarfile,threading,time,urllib.request,shlex
 BASE='666673a3153225ba264c7870e0e82e354df86765'; SSLVER='3.5.9'; SSLHASH='603f5602e2eef00d77fbd429d34dcd5822bb301757a1bc9cdb24c670f1eb859a'
-WORK=Path(os.environ['GITHUB_WORKSPACE']).resolve();PRODUCT=WORK/'p2mr-parent-product';OUT=WORK/'generate-cli-results';OUT.mkdir(exist_ok=True)
-TASK=WORK/'p2mr-parent-native';BUILD=TASK/'build';PREFIX=TASK/'openssl';RUNTIME=WORK/'generate-cli-runtime';FLOOR=2*1024**3
+WORK=Path(os.environ['GITHUB_WORKSPACE']).resolve();PRODUCT=WORK/'p2mr-parent-product';OUT=WORK/'generate-cli-repair-results';OUT.mkdir(exist_ok=True)
+TASK=WORK/'p2mr-parent-native';BUILD=TASK/'build';PREFIX=TASK/'openssl';RUNTIME=WORK/'generate-cli-repair-runtime';FLOOR=2*1024**3
 STATEFILE=OUT/'state.json';STATE=json.loads(STATEFILE.read_text()) if STATEFILE.exists() else {'base':BASE,'commands':[],'errors':[],'phases':{}}
 ENV=dict(os.environ,CC='gcc-13',CXX='g++-13',BTX_OPENSSL=str(PREFIX/'bin/openssl'),PKG_CONFIG_PATH=str(PREFIX/'lib/pkgconfig'),PYTHONPATH=str(PRODUCT/'test/functional'),CCACHE_DIR=str(TASK/'ccache'),CCACHE_BASEDIR=str(WORK),CCACHE_COMPILERCHECK='content',CCACHE_MAXSIZE='700M')
 NAMES=['btxd','btx-cli','btx-modeld']
 def save():STATEFILE.write_text(json.dumps(STATE,indent=2)+'\n')
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
-def command(args,label,cwd=None,timeout=300):
+def command(args,label,cwd=None,timeout=300,allowed=(0,)):
  print('START',label,flush=True);t=time.monotonic();stop=None
  with (OUT/(label+'.log')).open('wb') as f:
   p=subprocess.Popen([str(x) for x in args],cwd=cwd,env=ENV,stdout=f,stderr=subprocess.STDOUT,start_new_session=True)
@@ -29,8 +29,8 @@ def command(args,label,cwd=None,timeout=300):
    if time.monotonic()-last_report>=20:
     f.flush();tail=(OUT/(label+'.log')).read_text(errors='replace').splitlines();print(label+': '+(tail[-1] if tail else 'running'),flush=True);last_report=time.monotonic()
    time.sleep(1)
- STATE['commands'].append({'label':label,'args':[str(x) for x in args],'cwd':str(cwd),'returncode':p.returncode,'seconds':round(time.monotonic()-t,2),'stop':stop,'log':label+'.log'});save();print('END',label,p.returncode,stop,flush=True)
- if p.returncode or stop:raise RuntimeError(label+': '+str(p.returncode)+' '+str(stop))
+ STATE['commands'].append({'label':label,'args':[str(x) for x in args],'cwd':str(cwd),'returncode':p.returncode,'seconds':round(time.monotonic()-t,2),'stop':stop,'log':label+'.log','allowed':list(allowed)});save();print('END',label,p.returncode,stop,flush=True)
+ if p.returncode not in allowed or stop:raise RuntimeError(label+': '+str(p.returncode)+' '+str(stop))
  return OUT/(label+'.log')
 def audit(label):
  head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=PRODUCT,text=True).strip();assert head==BASE
@@ -49,7 +49,7 @@ def owned_processes():
   if not p.name.isdigit():continue
   try:
    exe=Path(os.readlink(p/'exe'))
-   if exe.parent!=BUILD/'bin' or exe.name not in NAMES:continue
+   if not ((exe.parent==BUILD/'bin' and exe.name in NAMES) or (exe.parent in [TASK/'generate-repair/baseline',TASK/'generate-repair/candidate'] and exe.name in ['btx-cli','convert-test'])):continue
    st=(p/'stat').read_text().rsplit(')',1)[1].split();rows.append({'pid':int(p.name),'exe':str(exe),'start_ticks':st[19],'ppid':int(st[1])})
   except (FileNotFoundError,ProcessLookupError,PermissionError):pass
  return rows
@@ -65,7 +65,7 @@ def collect_logs():
    if p.is_file() and p.name in ['test_framework.log','debug.log'] and p.stat().st_size<=10*1024**2:
     dest=OUT/'functional-logs'/p.relative_to(RUNTIME);dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(p,dest)
 
-HERE=WORK/'contrib/devtools/generate-cli'
+HERE=WORK/'contrib/devtools/generate-cli-repair'
 EXPECTED=json.loads((HERE/'expected-inputs.json').read_text())
 
 def preflight():
@@ -110,11 +110,79 @@ def build():
 
 def test():
  assert not RUNTIME.exists() and not owned_processes()
- RUNTIME.mkdir(mode=0o700)
- ENV['GENERATE_RUNTIME']=str(RUNTIME);ENV['GENERATE_RESULTS']=str(OUT)
- STATE['fixture_sha256']=sha(HERE/'case.py');save()
- command(['python3',HERE/'case.py','--configfile='+str(BUILD/'test/config.ini'),'--tmpdir='+str(RUNTIME/'node-test'),'--cachedir='+str(RUNTIME/'chain-cache'),'--portseed=42325','--nocleanup'],'node-cli-object-comparison',timeout=180)
- collect_logs();STATE['workflow_pass']=True;save();audit('after-test')
+ own=TASK/'generate-repair';own.mkdir()
+ case=HERE/'case.py';test_file=HERE/'candidate/src/test/rpc_tests.cpp';client=HERE/'candidate/src/rpc/client.cpp'
+ regression=(HERE/'regression.inc').read_text()
+ original=subprocess.check_output(['git','show',BASE+':src/rpc/client.cpp'],cwd=PRODUCT,text=True)
+ old_test=subprocess.check_output(['git','show',BASE+':src/test/rpc_tests.cpp'],cwd=PRODUCT,text=True)
+ assert client.read_text()==original.replace('    { "getmodel", 1, "mode", /*also_string=*/true },\n','    { "getmodel", 1, "mode", /*also_string=*/true },\n    { "generatemodel", 1, "opts" },\n')
+ assert test_file.read_text().replace(regression,'',1)==old_test
+ identity=json.loads((HERE/'code-identity.json').read_text())
+ assert sha(client)==identity['files']['src/rpc/client.cpp']['sha256']
+ assert sha(test_file)==identity['files']['src/test/rpc_tests.cpp']['sha256']
+ STATE['code_identity']=identity;STATE['case_sha256']=sha(case);STATE['regression_sha256']=hashlib.sha256(regression.encode()).hexdigest();save()
+ wrapper=own/'component.cpp'
+ wrapper.write_text('#define BOOST_TEST_MODULE generatemodel_cli_conversion\n#include <vector>\n#include <string>\n#include <stdexcept>\n#include <boost/test/included/unit_test.hpp>\n#include <rpc/client.h>\n#include <univalue.h>\n'+regression)
+ STATE['wrapper_sha256']=sha(wrapper)
+ command(['g++-13','-std=c++20','-O0','-I'+str(PRODUCT/'src'),'-I'+str(PRODUCT/'src/univalue/include'),'-c',wrapper,'-o',own/'component.o'],'compile-maintained-regression',timeout=180)
+ unit_object_hash=sha(own/'component.o')
+ unit_libs=list(BUILD.rglob('libunivalue.a'));assert len(unit_libs)==1
+ entries=json.loads((BUILD/'compile_commands.json').read_text())
+ found=[x for x in entries if Path(x['file'])==PRODUCT/'src/rpc/client.cpp'];assert len(found)==1
+ entry=found[0];assert Path(entry['directory'])==BUILD
+ compiler=shlex.split(entry['command']);assert compiler.count(entry['file'])==1 and compiler.count('-o')==1
+ link_lines=subprocess.check_output(['ninja','-C',BUILD,'-t','commands','btx-cli'],text=True).splitlines()
+ links=[line for line in link_lines if ' -o bin/btx-cli ' in line];assert len(links)==1
+ cli_link=links[0];assert cli_link.count('lib/libbitcoin_cli.a')==1
+ archives=list(BUILD.rglob('*.a'));archive_before={str(p.relative_to(BUILD)):sha(p) for p in archives}
+ cli_lib=BUILD/'lib/libbitcoin_cli.a'
+ members=subprocess.check_output(['ar','t',cli_lib],text=True).splitlines();assert members.count('client.cpp.o')==1
+ member_hashes={name:hashlib.sha256(subprocess.check_output(['ar','p',cli_lib,name])).hexdigest() for name in members}
+ STATE['unit_pair']={};STATE['cli_pair']={};STATE['archive_members_before']=member_hashes
+ STATE['compiler_command']=compiler;STATE['cli_link_command']=cli_link;save()
+ for name,source in [('baseline',PRODUCT/'src/rpc/client.cpp'),('candidate',client)]:
+  output=own/name;output.mkdir()
+  args=list(compiler);args[args.index(entry['file'])]=str(source);args[args.index('-o')+1]=str(output/'client.cpp.o')
+  if '-MF' in args:args[args.index('-MF')+1]=str(output/'client.cpp.o.d')
+  command(args,'compile-converter-'+name,cwd=BUILD,timeout=90)
+  command(['g++-13',own/'component.o',output/'client.cpp.o',unit_libs[0],'-pthread','-o',output/'convert-test'],'link-unit-'+name,timeout=60)
+  binary_hash=sha(output/'convert-test')
+  command([output/'convert-test','--report_level=detailed','--log_level=test_suite'],'unit-'+name,timeout=60,allowed=(201,) if name=='baseline' else (0,))
+  assert sha(own/'component.o')==unit_object_hash and sha(output/'convert-test')==binary_hash
+  STATE['unit_pair'][name]={'exit':STATE['commands'][-1]['returncode'],'binary_sha256':binary_hash,'same_test_object_sha256':unit_object_hash,'converter_source_sha256':sha(source),'converter_object_sha256':sha(output/'client.cpp.o')};save()
+  archive=output/'libbitcoin_cli.a';shutil.copyfile(cli_lib,archive)
+  command(['ar','r',archive,output/'client.cpp.o'],'replace-archive-converter-'+name,timeout=30)
+  assert subprocess.check_output(['ar','t',archive],text=True).splitlines()==members
+  actual={member:hashlib.sha256(subprocess.check_output(['ar','p',archive,member])).hexdigest() for member in members}
+  assert set(actual)==set(member_hashes) and all(actual[m]==member_hashes[m] for m in members if m!='client.cpp.o')
+  assert actual['client.cpp.o']==sha(output/'client.cpp.o')
+  link=cli_link.replace('lib/libbitcoin_cli.a',shlex.quote(str(archive))).replace(' -o bin/btx-cli ',' -o '+shlex.quote(str(output/'btx-cli'))+' ')
+  command(['/bin/sh','-c',link],'link-cli-'+name,cwd=BUILD,timeout=90)
+  STATE['cli_pair'][name]={'sha256':sha(output/'btx-cli'),'archive_sha256':sha(archive),'archive_members':actual};save()
+ assert {str(p.relative_to(BUILD)):sha(p) for p in archives}==archive_before
+ STATE['original_archives_unchanged_before_workflows']=True
+ RUNTIME.mkdir(mode=0o700);STATE['workflow_pair']={};save()
+ for name in ['baseline','candidate']:
+  run_dir=RUNTIME/name;run_dir.mkdir(mode=0o700);results=OUT/name;results.mkdir()
+  ENV['GENERATE_RUNTIME']=str(run_dir);ENV['GENERATE_RESULTS']=str(results);ENV['GENERATE_CLI_BINARY']=str(own/name/'btx-cli')
+  before=sha(own/name/'btx-cli');assert before==STATE['cli_pair'][name]['sha256'] and sha(case)==STATE['case_sha256']
+  command(['python3',case,'--configfile='+str(BUILD/'test/config.ini'),'--tmpdir='+str(run_dir/'node-test'),'--cachedir='+str(run_dir/'chain-cache'),'--portseed=42325','--nocleanup'],'workflow-'+name,timeout=180,allowed=(1,) if name=='baseline' else (0,))
+  observed=json.loads((results/'observations.json').read_text())
+  assert observed['guards_complete'] and observed['node_rpc_shutdown_complete']
+  assert observed['helper_returncode']==0 and not observed['helper_socket_after_stop']
+  assert len(observed['cli'])==2 and len(observed['invalid_cli'])==10
+  assert all(x['returncode']!=0 and not x['adapter_delta'] for x in observed['invalid_cli'])
+  assert observed['acceptance_pass']==(name=='candidate')
+  assert all(x['passed']==(name=='candidate') for x in observed['requirements'])
+  if name=='baseline':
+   assert all(x['returncode']==3 and 'error code: -3' in x['stderr'] and not x['adapter_delta'] for x in observed['cli'])
+   assert 'Functional CLI requirements failed:' in (OUT/('workflow-'+name+'.log')).read_text()
+  assert sha(own/name/'btx-cli')==before and not owned_processes()
+  STATE['workflow_pair'][name]={'exit':STATE['commands'][-1]['returncode'],'acceptance_pass':observed['acceptance_pass'],'requirements':observed['requirements'],'guards_complete':True,'invalid_controls':10,'node_rpc_shutdown_complete':True,'cli_sha256_before_after':before,'same_case_sha256':sha(case)};save()
+ assert {str(p.relative_to(BUILD)):sha(p) for p in archives}==archive_before
+ assert all(sha(BUILD/'bin'/n)==STATE['binaries'][n]['sha256'] for n in NAMES)
+ STATE['original_archives_and_binaries_unchanged']=True
+ STATE['workflow_pass']=True;STATE['paired_proof_pass']=True;save();collect_logs();audit('after-test')
 
 def finalize():
  collect_logs();before=owned_processes();actions=[]

@@ -34,7 +34,8 @@ class GenerateCliObservation(BitcoinTestFramework):
     def run_test(self):
         out = Path(os.environ['GENERATE_RESULTS'])
         build = Path(self.config['environment']['BUILDDIR'])
-        records = {'scope': 'Actual unchanged CLI, node and helper; synthetic model and fake local generation adapter. No real model inference.',
+        cli_binary = Path(os.environ['GENERATE_CLI_BINARY'])
+        records = {'scope': 'Actual selected baseline/candidate CLI; unchanged node/helper; synthetic model and fake local generation adapter. No real model inference.',
                    'cli': [], 'raw': [], 'adapter_requests': []}
         observations = out / 'observations.json'
         adapter_log = self.root / 'adapter.jsonl'
@@ -100,7 +101,7 @@ class GenerateCliObservation(BitcoinTestFramework):
                 observations.write_text(json.dumps(records, indent=2, default=record_decimal) + '\n')
                 return row
 
-            cli_prefix = [str(build / 'bin/btx-cli'), '-regtest',
+            cli_prefix = [str(cli_binary), '-regtest',
                           '-datadir=' + str(self.nodes[0].datadir_path),
                           '-conf=' + str(self.nodes[0].bitcoinconf), '-rpcclienttimeout=15']
             cli_control = subprocess.run(cli_prefix + ['getblockchaininfo'], capture_output=True, text=True, timeout=20)
@@ -108,10 +109,10 @@ class GenerateCliObservation(BitcoinTestFramework):
             assert json.loads(cli_control.stdout)['bestblockhash'] == records['node_before']['bestblockhash']
             records['cli_connection_control'] = {'returncode': 0, 'chain': json.loads(cli_control.stdout)['chain']}
 
-            def cli(label, named=False):
+            def cli(label, named=False, text=opts_text):
                 args = list(cli_prefix)
-                args += (['-named', 'generatemodel', 'id=' + identifier, 'opts=' + opts_text] if named
-                         else ['generatemodel', identifier, opts_text])
+                args += (['-named', 'generatemodel', 'id=' + identifier, 'opts=' + text] if named
+                         else ['generatemodel', identifier, text])
                 before = len(requests())
                 completed = subprocess.run(args, capture_output=True, text=True, timeout=20)
                 row = {'label': label, 'args': args, 'returncode': completed.returncode,
@@ -136,7 +137,15 @@ class GenerateCliObservation(BitcoinTestFramework):
 
             cli('documented-positional')
             cli('documented-named', True)
-            raw('raw-string-observation', opts_text)
+            records['invalid_cli'] = []
+            for invalid in ['[]', 'true', '7', '{', 'plain prompt']:
+                for named in [False, True]:
+                    row = cli('invalid-options', named, invalid)
+                    records['cli'].pop()
+                    records['invalid_cli'].append(row)
+                    assert row['returncode'] != 0 and not row['adapter_delta']
+            string_control = raw('raw-string-observation', opts_text)
+            assert string_control['error']['code'] == -3 and not string_control['adapter_delta']
             # A final legitimate request proves the diagnostic did not wedge the helper.
             after = raw('raw-object-after-cli', opts)
             assert after['error'] is None and after['result']['text'] == 'echo:hello-btx'
@@ -150,7 +159,7 @@ class GenerateCliObservation(BitcoinTestFramework):
                 assert error.error['code'] == -32601
                 records['wallet_rpc_disabled'] = error.error
             records['adapter_requests'] = requests()
-            records['outcome'] = 'Valid object controls passed; CLI observations collected without assuming their failure mechanism.'
+            records['guards_complete'] = True
             self.log.info('Real node/helper object controls passed; both CLI outcomes recorded; node responsive at genesis')
         finally:
             if helper is not None:
@@ -161,7 +170,24 @@ class GenerateCliObservation(BitcoinTestFramework):
             helper_stream.close()
             records['adapter_requests'] = [json.loads(line) for line in adapter_log.read_text().splitlines()] if adapter_log.exists() else []
             records['helper_socket_after_stop'] = self.sock.exists()
+            self.stop_nodes()
+            records['node_rpc_shutdown_complete'] = True
             observations.write_text(json.dumps(records, indent=2, default=record_decimal) + '\n')
+
+        requirements = []
+        for row in records['cli']:
+            value = json.loads(row['stdout']) if row['returncode'] == 0 else {}
+            passed = (row['returncode'] == 0 and value.get('text') == 'echo:hello-btx'
+                      and value.get('backend') == 'fake' and value.get('generated') is True
+                      and value.get('automatic_spend_atoms') == 0
+                      and value.get('remote_inference') is False
+                      and value.get('network_server') is False
+                      and row['adapter_delta'] == [{'prompt': 'hello-btx', 'max_new_tokens': 8}])
+            requirements.append({'label': row['label'], 'passed': passed})
+        records['requirements'] = requirements
+        records['acceptance_pass'] = len(requirements) == 2 and all(x['passed'] for x in requirements)
+        observations.write_text(json.dumps(records, indent=2, default=record_decimal) + '\n')
+        assert records['acceptance_pass'], 'Functional CLI requirements failed: ' + ', '.join(x['label'] for x in requirements if not x['passed'])
 
 
 if __name__ == '__main__':

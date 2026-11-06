@@ -1,4 +1,4 @@
-name: Generatemodel real node CLI observation
+name: Generatemodel CLI paired repair
 on:
   push:
     branches: [codex/ci-p2mr-external-parent]
@@ -16,7 +16,7 @@ jobs:
           persist-credentials: false
           sparse-checkout-cone-mode: false
           sparse-checkout: |
-            /contrib/devtools/generate-cli/
+            /contrib/devtools/generate-cli-repair/
       - name: Checkout unchanged accepted product
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -25,7 +25,7 @@ jobs:
           path: p2mr-parent-product
           persist-credentials: false
       - name: Verify source identity and capacity
-        run: python3 contrib/devtools/generate-cli/run.py preflight
+        run: python3 contrib/devtools/generate-cli-repair/run.py preflight
       - name: Restore verified session-owned build inputs
         uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
         with:
@@ -33,19 +33,19 @@ jobs:
           key: btx-p2mr-external-parent-v1-666673a3-ubuntu24-gcc13-O1-walletON-modelnetON-ssl359
           fail-on-cache-miss: true
       - name: Install matching Linux prerequisites
-        run: python3 contrib/devtools/generate-cli/run.py dependencies
+        run: python3 contrib/devtools/generate-cli-repair/run.py dependencies
       - name: Verify binaries and build only maintained helper target
-        run: python3 contrib/devtools/generate-cli/run.py build
-      - name: Compare CLI with real object request on disposable node
-        run: python3 contrib/devtools/generate-cli/run.py test
+        run: python3 contrib/devtools/generate-cli-repair/run.py build
+      - name: Prove maintained unit and real node fail before pass after
+        run: python3 contrib/devtools/generate-cli-repair/run.py test
       - name: Retain records and clean owned runtime
         if: always()
-        run: python3 contrib/devtools/generate-cli/run.py finalize
+        run: python3 contrib/devtools/generate-cli-repair/run.py finalize
       - name: Upload bounded observation records
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
-          name: generate-cli-observation
-          path: generate-cli-results/
+          name: generate-cli-repair-records
+          path: generate-cli-repair-results/
           if-no-files-found: error
           retention-days: 7
