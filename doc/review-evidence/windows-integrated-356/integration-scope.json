@@ -1,0 +1,158 @@
+{
+  "utc": "2026-11-06T06:50:11.575948+00:00",
+  "accepted_base": "666673a3153225ba264c7870e0e82e354df86765",
+  "tested_source": "4609dde66f1da8023927196a55b6332dbcbeff3e",
+  "tree": "a504cc26ddcbad20bf1acbac498daa9d48e7e332",
+  "commits": [
+    {
+      "sha": "4609dde66f1da8023927196a55b6332dbcbeff3e",
+      "subject": "test: use Windows CRT pipe functions in AHP compatibility fixture"
+    },
+    {
+      "sha": "a504fc8512b45d44e2b92d03f59a363458527232",
+      "subject": "test: scope FIFO archive fixture to POSIX"
+    },
+    {
+      "sha": "64c248b17d89c73467d431eabe060f6407a16847",
+      "subject": "test: port remaining native Windows fixtures"
+    },
+    {
+      "sha": "0bc4625be266d9cf0975d85ea9a4aed4e325c7a9",
+      "subject": "modelnet: preserve document bytes when extracting on Windows"
+    },
+    {
+      "sha": "f410081e1d4a377ba5ff9147a77736c7221ce155",
+      "subject": "test: preserve native Windows fixture contracts and Unix-only helper scope"
+    },
+    {
+      "sha": "29d0fc8a973ff5ef92e51fa1da6ad5bab037b2d9",
+      "subject": "test: observe native socket entry removal before fallback cleanup"
+    },
+    {
+      "sha": "e8f454635e28e81dfae2ec5d3e3fdd97516d7eeb",
+      "subject": "modelnet: own capability sockets with native socket handles"
+    },
+    {
+      "sha": "dce7a28fedeff6d64cd7e43d10de6fe799b7ae63",
+      "subject": "test: wait for capability daemon readiness through its native client"
+    },
+    {
+      "sha": "e014b2f4acfed5d3d676942ad40d2111dcedf3bb",
+      "subject": "test: cover capability socket refusal cleanup"
+    },
+    {
+      "sha": "e3d8b46c958168c53872e5042a0171ed91c96c9c",
+      "subject": "test: use native Windows paths in JIT fixtures"
+    },
+    {
+      "sha": "4593f590eb711c6536a650a5ec7a29d4c50dbd37",
+      "subject": "test: launch SDK parity scripts with native arguments"
+    },
+    {
+      "sha": "473a2a0bf8e528a977d07137712d6a1d6dfc8cf6",
+      "subject": "test: use the native process ID in filesystem fixtures"
+    },
+    {
+      "sha": "090a6d3596394487a290a2b0e4f67da1da27c896",
+      "subject": "test: keep Windows cloud fixture methods independent of SDK macros"
+    },
+    {
+      "sha": "8a642b1ea7ed726fe527c9a6eb0f80a00da10d3f",
+      "subject": "test: qualify Windows cloud streaming with supported credential source"
+    },
+    {
+      "sha": "35e1d08f02e216264c05daed31b9f2d46b01d226",
+      "subject": "test: use exact byte fixtures for Windows preservation controls"
+    },
+    {
+      "sha": "666302d007d9909faded1fddcd7fdd56fcb92bec",
+      "subject": "test: integrate four Windows fixture corrections for native qualification"
+    },
+    {
+      "sha": "bc85ca3460bbf6b4699ea7faf1c6bee44b26f441",
+      "subject": "test: compose known unit fixture prerequisites with PR411 for native acceptance"
+    },
+    {
+      "sha": "362c36b2fda0f73741c06c4bcb090153fea38a08",
+      "subject": "modelnet: guard POSIX runtime process APIs on native Windows"
+    }
+  ],
+  "changed_files": [
+    "src/modelnet/capability_control.cpp",
+    "src/modelnet/capability_runtime.cpp",
+    "src/modelnet/capability_sdk.cpp",
+    "src/modelnet/package_documents.cpp",
+    "src/modelnet/piece_store.h",
+    "src/test/CMakeLists.txt",
+    "src/test/lab_lifecycle_tests.cpp",
+    "src/test/matmul_backend_capabilities_tests.cpp",
+    "src/test/matmul_matrix_tests.cpp",
+    "src/test/matmul_mining_tests.cpp",
+    "src/test/matmul_v4_backend_determinism_tests.cpp",
+    "src/test/matmul_v4_bmx4_tests.cpp",
+    "src/test/matmul_v4_lt_tests.cpp",
+    "src/test/matmul_v4_rc_accel_policy_tests.cpp",
+    "src/test/matmul_v4_rc_air_quotient_tests.cpp",
+    "src/test/matmul_v4_rc_datacenter_tests.cpp",
+    "src/test/matmul_v4_rc_freivalds_sampled_tests.cpp",
+    "src/test/matmul_v4_rc_gkr_tests.cpp",
+    "src/test/matmul_v4_rc_sm100_isolation_tests.cpp",
+    "src/test/matmul_v4_rc_sm120_native_capability_tests.cpp",
+    "src/test/miner_tests.cpp",
+    "src/test/modelnet_035_disk_tests.cpp",
+    "src/test/modelnet_035_wan_endpoint_tests.cpp",
+    "src/test/modelnet_ahp_api_tests.cpp",
+    "src/test/modelnet_ahp_comp_tests.cpp",
+    "src/test/modelnet_ahp_doc_tests.cpp",
+    "src/test/modelnet_ahp_journey_tests.cpp",
+    "src/test/modelnet_ahp_run_tests.cpp",
+    "src/test/modelnet_bridge_tests.cpp",
+    "src/test/modelnet_cloud_tests.cpp",
+    "src/test/modelnet_cr12_desktop_tests.cpp",
+    "src/test/modelnet_cr12_sdk_tests.cpp",
+    "src/test/modelnet_cr12_ux_tests.cpp",
+    "src/test/modelnet_cuda_qual_tests.cpp",
+    "src/test/modelnet_firstrun_tests.cpp",
+    "src/test/modelnet_hcp_priv_port_ops_tests.cpp",
+    "src/test/modelnet_hosting_tests.cpp",
+    "src/test/modelnet_jit_journey_tests.cpp",
+    "src/test/modelnet_jit_peer_tests.cpp",
+    "src/test/modelnet_jit_tests.cpp",
+    "src/test/modelnet_pq1_worker_share_tests.cpp",
+    "src/test/modelnet_r2_storage_tests.cpp",
+    "src/test/modelnet_records_cache_tests.cpp",
+    "src/test/modelnet_retrieve_peer_reply_tests.cpp",
+    "src/test/modelnet_store2_tests.cpp",
+    "src/test/modelnet_tests.cpp",
+    "src/test/modelnet_unique_todo_tests.cpp",
+    "src/test/modelnet_v11_remaining_tests.cpp",
+    "src/test/prf03_tests.cpp",
+    "src/test/prf05_tests.cpp",
+    "src/test/recovery_exit_chain_tests.cpp",
+    "src/test/shielded_mempool_tests.cpp",
+    "src/test/shielded_v2_bundle_tests.cpp",
+    "src/test/shielded_v2_ingress_tests.cpp",
+    "src/test/shielded_v2_proof_tests.cpp",
+    "src/test/shielded_v2_send_tests.cpp",
+    "src/test/shielded_validation_checks_tests.cpp",
+    "src/test/swarm_accept_tests.cpp",
+    "src/test/swarm_appointment_tests.cpp",
+    "src/test/swarm_clearing_tests.cpp",
+    "src/test/swarm_confine_tests.cpp",
+    "src/test/swarm_contract_tests.cpp",
+    "src/test/swarm_fsjail_tests.cpp",
+    "src/test/swarm_gap_tests.cpp",
+    "src/test/swarm_gate_tests.cpp",
+    "src/test/swarm_liquidity_tests.cpp",
+    "src/test/swarm_live_tests.cpp",
+    "src/test/swarm_node_tests.cpp",
+    "src/test/txvalidation_tests.cpp",
+    "src/test/util/environment.h",
+    "src/test/util/process.h",
+    "src/test/util/sdk_process.cpp",
+    "src/test/util/sdk_process.h",
+    "src/test/util/shielded_v2_egress_fixture.h"
+  ],
+  "stat": "src/modelnet/capability_control.cpp                |  17 +-\n src/modelnet/capability_runtime.cpp                |  23 +++\n src/modelnet/capability_sdk.cpp                    |  13 +-\n src/modelnet/package_documents.cpp                 |   7 +-\n src/modelnet/piece_store.h                         |   5 +\n src/test/CMakeLists.txt                            |  15 +-\n src/test/lab_lifecycle_tests.cpp                   |  11 +-\n src/test/matmul_backend_capabilities_tests.cpp     |  77 ++++-----\n src/test/matmul_matrix_tests.cpp                   |   9 +-\n src/test/matmul_mining_tests.cpp                   |   7 +-\n src/test/matmul_v4_backend_determinism_tests.cpp   |   9 +-\n src/test/matmul_v4_bmx4_tests.cpp                  |   9 +-\n src/test/matmul_v4_lt_tests.cpp                    |  35 ++--\n src/test/matmul_v4_rc_accel_policy_tests.cpp       |  31 ++--\n src/test/matmul_v4_rc_air_quotient_tests.cpp       |   5 +-\n src/test/matmul_v4_rc_datacenter_tests.cpp         |  47 +++---\n src/test/matmul_v4_rc_freivalds_sampled_tests.cpp  |  13 +-\n src/test/matmul_v4_rc_gkr_tests.cpp                |  51 +++---\n src/test/matmul_v4_rc_sm100_isolation_tests.cpp    |   9 +-\n .../matmul_v4_rc_sm120_native_capability_tests.cpp |  19 ++-\n src/test/miner_tests.cpp                           |  10 ++\n src/test/modelnet_035_disk_tests.cpp               |  51 +++---\n src/test/modelnet_035_wan_endpoint_tests.cpp       |   2 +\n src/test/modelnet_ahp_api_tests.cpp                |   9 +-\n src/test/modelnet_ahp_comp_tests.cpp               |   8 +\n src/test/modelnet_ahp_doc_tests.cpp                |  94 +++++++++--\n src/test/modelnet_ahp_journey_tests.cpp            |   9 +-\n src/test/modelnet_ahp_run_tests.cpp                |  11 +-\n src/test/modelnet_bridge_tests.cpp                 |   9 +-\n src/test/modelnet_cloud_tests.cpp                  |  34 +++-\n src/test/modelnet_cr12_desktop_tests.cpp           |  72 ++------\n src/test/modelnet_cr12_sdk_tests.cpp               | 105 +++++-------\n src/test/modelnet_cr12_ux_tests.cpp                |  47 +-----\n src/test/modelnet_cuda_qual_tests.cpp              |  26 ++-\n src/test/modelnet_firstrun_tests.cpp               |   9 +-\n src/test/modelnet_hcp_priv_port_ops_tests.cpp      |  51 +-----\n src/test/modelnet_hosting_tests.cpp                | 184 +++++++++++++++++----\n src/test/modelnet_jit_journey_tests.cpp            |  38 ++++-\n src/test/modelnet_jit_peer_tests.cpp               |  13 +-\n src/test/modelnet_jit_tests.cpp                    |  36 +++-\n src/test/modelnet_pq1_worker_share_tests.cpp       |   7 +\n src/test/modelnet_r2_storage_tests.cpp             |  27 ++-\n src/test/modelnet_records_cache_tests.cpp          |   5 +\n src/test/modelnet_retrieve_peer_reply_tests.cpp    |  24 +++\n src/test/modelnet_store2_tests.cpp                 |  10 ++\n src/test/modelnet_tests.cpp                        |  24 ++-\n src/test/modelnet_unique_todo_tests.cpp            |  96 ++++++++++-\n src/test/modelnet_v11_remaining_tests.cpp          |   9 +-\n src/test/prf03_tests.cpp                           |   7 +-\n src/test/prf05_tests.cpp                           |   7 +-\n src/test/recovery_exit_chain_tests.cpp             |  10 ++\n src/test/shielded_mempool_tests.cpp                |  10 ++\n src/test/shielded_v2_bundle_tests.cpp              |  10 ++\n src/test/shielded_v2_ingress_tests.cpp             |  10 ++\n src/test/shielded_v2_proof_tests.cpp               |  10 ++\n src/test/shielded_v2_send_tests.cpp                |  10 ++\n src/test/shielded_validation_checks_tests.cpp      |  10 ++\n src/test/swarm_accept_tests.cpp                    |   4 +-\n src/test/swarm_appointment_tests.cpp               |   4 +-\n src/test/swarm_clearing_tests.cpp                  |   4 +-\n src/test/swarm_confine_tests.cpp                   |  42 ++++-\n src/test/swarm_contract_tests.cpp                  |   4 +-\n src/test/swarm_fsjail_tests.cpp                    |  40 ++++-\n src/test/swarm_gap_tests.cpp                       |   4 +-\n src/test/swarm_gate_tests.cpp                      |   6 +-\n src/test/swarm_liquidity_tests.cpp                 |   4 +-\n src/test/swarm_live_tests.cpp                      |   4 +-\n src/test/swarm_node_tests.cpp                      |   4 +-\n src/test/txvalidation_tests.cpp                    |  10 ++\n src/test/util/environment.h                        |  76 +++++++++\n src/test/util/process.h                            |  27 +++\n src/test/util/sdk_process.cpp                      |  68 ++++++++\n src/test/util/sdk_process.h                        |  22 +++\n src/test/util/shielded_v2_egress_fixture.h         |  10 ++\n 74 files changed, 1311 insertions(+), 538 deletions(-)",
+  "source_mutated_during_resume": false
+}

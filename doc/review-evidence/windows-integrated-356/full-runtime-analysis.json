@@ -1,0 +1,109 @@
+{
+  "utc": "2026-11-06T07:33:10.272246+00:00",
+  "announced_cases": 15377,
+  "entered_case_events": 1693,
+  "left_case_events": 1692,
+  "left_does_not_establish_pass": true,
+  "last_incomplete_case": "matmul_v4_rc_air_episode_tests/honest_compact_accepts_and_measures_toy",
+  "failure_cases": {
+    "lightwatch_tests/lightwatch_file_cut_at_a_line_end_is_refused": [
+      "critical check v1.rfind(\"btx-lightwatch 2\\n\", 0) == 0U has failed [18446744073709551615 != 0]"
+    ],
+    "matmul_verify_worker_tests/stop_drains_queue_without_completions": [
+      "check completions.load() == 1 has failed [3 != 1]",
+      "check retryable_cleanups.load() == kJobs - 1 has failed [1 != 3]",
+      "check completions.load() == 2 has failed [4 != 2]"
+    ],
+    "matmul_v4_rc_tests/rc_strict_independent_same_digest_rejects_false_header": [
+      "critical check rc::RegisterRCExactReplayAlternateProvider({ .backend = alternate_backend, .provider = \"test:independent-oracle-b\", .capability = alternate_capability, }) has failed"
+    ],
+    "matmul_v4_rc_tests/rc_strict_bounded_attempts_do_not_exhaust_untried_provider_readiness": [
+      "critical check rc::RegisterRCExactReplayAlternateProvider({ .backend = backend, .provider = name, .capability = capability, }) has failed"
+    ]
+  },
+  "failure_case_count": 4,
+  "failure_lines": 6,
+  "longest_completed_cases": [
+    {
+      "test": "matmul_v4_rc_gkr_tests/gkr_v7_defeats_independent_malicious",
+      "seconds": 232.547527
+    },
+    {
+      "test": "matmul_v4_rc_gkr_v7_soundness_tests/gkr_v7_genuine_defeats_independent_malicious_episode",
+      "seconds": 104.412097
+    },
+    {
+      "test": "coins_tests/coins_cache_simulation_test",
+      "seconds": 74.443107
+    },
+    {
+      "test": "matmul_v4_rc_freivalds_sampled_tests/frvs_sublinearity_flat_in_layers",
+      "seconds": 56.330551
+    },
+    {
+      "test": "matmul_v4_rc_gkr_tests/gkr_forge_ab_opening_rejects",
+      "seconds": 49.298594
+    },
+    {
+      "test": "matmul_v4_rc_gkr_tests/gkr_m7_a_flip_claim_or_sumcheck_rejects",
+      "seconds": 48.91894
+    },
+    {
+      "test": "matmul_v4_rc_gkr_tests/gkr_forge_table_multiplicity_rejects",
+      "seconds": 48.627041
+    },
+    {
+      "test": "matmul_v4_rc_gkr_tests/gkr_m7_f_mutate_trace_fri_rejects",
+      "seconds": 48.521302
+    },
+    {
+      "test": "matmul_v4_rc_gkr_tests/gkr_indep_malicious_fabricated_trace_accepted_gap_g2",
+      "seconds": 48.498273
+    },
+    {
+      "test": "matmul_v4_rc_gkr_tests/gkr_m7_d_wrong_pow_bind_or_digest_rejects",
+      "seconds": 48.094426
+    },
+    {
+      "test": "matmul_v4_rc_freivalds_sampled_tests/frvs_residual_unsampled_tamper_passes",
+      "seconds": 42.247718
+    },
+    {
+      "test": "matmul_v4_rc_gkr_tests/gkr_v7_section9_forgery_list_rejected",
+      "seconds": 40.069787
+    },
+    {
+      "test": "kawpow_tests/kawpow_hash_epoch_switch_multithreaded",
+      "seconds": 28.985707
+    },
+    {
+      "test": "matmul_v4_rc_datacenter_tests/rc_dc_carrier_binds_block_target_not_share_target",
+      "seconds": 27.864775
+    },
+    {
+      "test": "kawpow_tests/kawpow_hash_epoch_switch_deterministic",
+      "seconds": 26.579257
+    }
+  ],
+  "module_summary_present": false,
+  "runtime_seconds": 2700.61,
+  "stop_reason": "TIME_BUDGET",
+  "cleanup_verified": true,
+  "binary_sha256": "c2d4e9fdd24c74699a9c559234cce371bfcf8e93bb22a7c9ac27050fd7837dfb",
+  "binaries": {
+    "btxd": "f62547e27d65247b5a85a6fbd30c99f41bdd278af67896327e2a71bf548eb507",
+    "btx-cli": "e3b8fc29f1412d5213803ba857b13fbef1c8c9c71d1212d904ed8ca23c0faa74",
+    "btx-tx": "646a2c6144153f2b1b3466b35b4ea1d8654091f01540f9cab049e0b134f44d62",
+    "btx-util": "d60158bd2bafb868b37e7a4ee80c6d4ebf4d61acd911dee0d3e42c5f6c43085d",
+    "btx-open": "254811c414f8cc5f4f666de41d8261918b3b8c21ccec45807d998292904ba950",
+    "btx-modeld": "090bf0ab5644299188612b8d7e5ed7bdcd59876a13dfa4671bca7fbb19f4e3b5",
+    "test_btx": "c2d4e9fdd24c74699a9c559234cce371bfcf8e93bb22a7c9ac27050fd7837dfb"
+  },
+  "object_files": {
+    "input": 5885,
+    "unchanged_bytes": 5884,
+    "changed_bytes": 1,
+    "new": 0,
+    "absent_from_successor": []
+  }
+}

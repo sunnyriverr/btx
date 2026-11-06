@@ -1,0 +1,198 @@
+{
+  "utc": "2026-11-06T07:32:55.336841+00:00",
+  "run": 42175854206,
+  "ci": "0c6e1d5eea723d0a418e3f8db09c23bdea1d5ccb",
+  "source": "4609dde66f1da8023927196a55b6332dbcbeff3e",
+  "tree": "a504cc26ddcbad20bf1acbac498daa9d48e7e332",
+  "native_status": "MAINTAINED_UNIT_RUNNING_BUDGET_STOP",
+  "archive_sha256": "ff04a8a55c7c17f8862a94520a4fb010b69314a69c564a315cdad35f9aa99489",
+  "archive_bytes": 9229517,
+  "command_logs_verified": 15,
+  "restore": {
+    "restored": true,
+    "files_verified": 12836,
+    "source_timestamps_restored": 14169,
+    "previous_result": {
+      "status": "AHP_PIPE_FIXTURE_PASS",
+      "full_unit_qualified": false
+    }
+  },
+  "planned_steps": 13,
+  "command_invalidations": 0,
+  "build_exit": 0,
+  "unit_built": true,
+  "unit_invoked": true,
+  "unit_exit": null,
+  "unit_cases_announced": null,
+  "unit_cases_completed": null,
+  "failures": [
+    {
+      "stage": "run",
+      "type": "RuntimeError",
+      "error": "candidate-unit-run stopped: TIME_BUDGET"
+    },
+    {
+      "stage": "verdict",
+      "type": "AssertionError",
+      "error": "MAINTAINED_UNIT_RUNNING_BUDGET_STOP"
+    }
+  ],
+  "actual_profile": {
+    "source": "666673a3153225ba264c7870e0e82e354df86765",
+    "tools": {
+      "clang-cl": {
+        "path": "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "sha256": "57e32b1ea2456f12f97bf802453171bbff12d56b2c486b4eca0c75343c0cda2c"
+      },
+      "cl": {
+        "path": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.EXE",
+        "sha256": "b0a1818ebae6da7f18230a84e76ce839212584ac4c2ab55b97a0d5268085da57"
+      },
+      "cmake": {
+        "path": "C:\\Program Files\\CMake\\bin\\cmake.EXE",
+        "sha256": "84935c0b7cb09c140de0d3b042d4e93e5fac4e6371e75bf28eae3d841f79dfb3"
+      },
+      "ninja": {
+        "path": "C:\\ProgramData\\Chocolatey\\bin\\ninja.EXE",
+        "sha256": "6a4dd2358fccbb483729091586413cc2f2f74e72d329187f5a6b4cbba3c025ad"
+      }
+    },
+    "args": [
+      "cmake",
+      "--debug-find-pkg=OpenSSL",
+      "--preset",
+      "windows-clangcl-static",
+      "-S",
+      "D:\\a\\btx\\btx\\btx",
+      "-B",
+      "D:\\btx-native-035\\project-build",
+      "-DBUILD_TESTS=ON",
+      "-DWITH_MODELNET=ON",
+      "-DVCPKG_MANIFEST_NO_DEFAULT_FEATURES=ON",
+      "-DVCPKG_MANIFEST_FEATURES=wallet;tests;zeromq",
+      "-DVCPKG_INSTALLED_DIR=D:\\btx-native-035\\vcpkg-installed",
+      "-DOPENSSL_ROOT_DIR=D:\\btx-native-035\\openssl-3.5.4-static",
+      "-DOPENSSL_USE_STATIC_LIBS=ON",
+      "-DOPENSSL_MSVC_STATIC_RT=ON",
+      "-DOPENSSL_INCLUDE_DIR=D:\\btx-native-035\\openssl-3.5.4-static\\include",
+      "-DOPENSSL_SSL_LIBRARY=D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib",
+      "-DOPENSSL_CRYPTO_LIBRARY=D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib",
+      "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+    ],
+    "environment": {
+      "ImageVersion": "20261103.298.1",
+      "VCToolsVersion": "14.51.36231",
+      "WindowsSDKVersion": "10.0.26100.0\\",
+      "INCLUDE": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\include;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\include;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Auxiliary\\VS\\include;C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.26100.0\\ucrt;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\um;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\shared;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\winrt;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\cppwinrt;C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\include\\um",
+      "LIB": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\lib\\x64;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x64;C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\lib\\um\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\lib\\10.0.26100.0\\ucrt\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\\\lib\\10.0.26100.0\\\\um\\x64",
+      "LIBPATH": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\lib\\x64;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x64;C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\lib\\x86\\store\\references;C:\\Program Files (x86)\\Windows Kits\\10\\UnionMetadata\\10.0.26100.0;C:\\Program Files (x86)\\Windows Kits\\10\\References\\10.0.26100.0;C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319",
+      "CL": null,
+      "_CL_": null
+    },
+    "controls": {
+      "runner.py": "73fea130e528e1034d508ec2ff1da76d710074792dc1af618ccb3a499e2f3f8b",
+      "checkpoint.py": "eb65c4501a306c92ea9e78a70c1932d00fa831d86ea302888c3eb9769b9c6ebb",
+      "checkpoint-selftest.py": "27d586dd8ba09eef10d5a4bbcb8b4ce6cb3480565ea0ee4f92c6cba4bb6d214a",
+      "dependency-identity.json": "f823d61237a287c704cada283764695a782fa001a725442122920d75ced8a4a5"
+    },
+    "openssl_files": {
+      "include/openssl/opensslv.h": "df513ae26e8baebbc641ba19f3d16f3e9ac0895cb092c81a39e1669f7fcb9c5c",
+      "lib/libssl.lib": "860ce6dd4edf55af8a82a958afb9bae9cd025f3ef7e263bcc266d79cdd5179e8",
+      "lib/libcrypto.lib": "f9385fc262485a1c779aa9a740ee3bde3025b9eb61b113e311024c9571899e12",
+      "bin/openssl.exe": "c63c66cb528c20dbd9f474679c8a19ea13d40f57c7f8efa4085ceb6dbe5c5552"
+    }
+  },
+  "profile_transition": {
+    "environment.ImageVersion": [
+      "20261030.294.1",
+      "20261103.298.1"
+    ],
+    "tools.ninja.sha256": [
+      "5142e84796e4bd57acb91ee19d30174d11bcca2b1a99d45a43251b9b1e6c32a9",
+      "6a4dd2358fccbb483729091586413cc2f2f74e72d329187f5a6b4cbba3c025ad"
+    ]
+  },
+  "budget_stops": [
+    {
+      "label": "candidate-unit-run",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\test_btx.exe",
+        "--log_level=test_suite",
+        "--report_level=detailed",
+        "--catch_system_errors=yes",
+        "--",
+        "-testdatadir=D:\\bu42175854206"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 1,
+      "seconds": 2700.61,
+      "log_sha256": "168db31f894bd578737c96fec2303c8d9e2e911f0c08e9ab3f3ccbd9f4fd9aeb",
+      "budget_stop": "TIME_BUDGET"
+    }
+  ],
+  "stock_or_release_qualification": false,
+  "upstream_posted": false,
+  "checkpoint": {
+    "sha256": "69908d56ab6965f5058b21097f64a29cb339eda125b816f699ad9e1be6c7dc53",
+    "key": "7d2ea620c2b04cd463796c5cc8a55d46c3ece379ab4dbbf8b9aee3f638d71082",
+    "objects": 5885,
+    "configuration": {
+      "build.ninja": "0d0453e53f8dae408b454a5e53a93c43b3d9bbd3979361658c8770cf24195974",
+      "CMakeFiles/rules.ninja": "3d929b6f6f0ed70152c09375c622c502c7c8ecdc1d8ec7a044511d272667dfd5",
+      "CMakeCache.txt": "140a3420b3bfd140038ff644a0ea6ab09d0f4de54968e78d177ef51d92561f61",
+      "compile_commands.json": "5d33b0eed53d00d62cb9146402ef11803ccbb156eb02c890d2050550c272f9ef"
+    },
+    "retention_verified": true
+  },
+  "object_files": {
+    "input": 5885,
+    "unchanged_bytes": 5884,
+    "changed_bytes": 1,
+    "new": 0,
+    "absent_from_successor": []
+  },
+  "runtime_record": {
+    "label": "candidate-unit-run",
+    "command": [
+      "D:\\btx-native-035\\project-build\\bin\\test_btx.exe",
+      "--log_level=test_suite",
+      "--report_level=detailed",
+      "--catch_system_errors=yes",
+      "--",
+      "-testdatadir=D:\\bu42175854206"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 1,
+    "seconds": 2700.61,
+    "log_sha256": "168db31f894bd578737c96fec2303c8d9e2e911f0c08e9ab3f3ccbd9f4fd9aeb",
+    "budget_stop": "TIME_BUDGET"
+  },
+  "last_unit_events": [
+    "Leaving test case \"air_construction2_composition_polynomial\"",
+    "Entering test case \"air_construction3_fixed_reference_vector\"",
+    "Leaving test case \"air_construction3_fixed_reference_vector\"",
+    "Entering test case \"air_separation_bound_numbers\"",
+    "Leaving test case \"air_separation_bound_numbers\"",
+    "Entering test case \"air_tiletree_binding_and_tamper\"",
+    "Leaving test case \"air_tiletree_binding_and_tamper\"",
+    "Leaving test suite \"matmul_v4_rc_gkr_air_tests\"",
+    "Entering test suite \"matmul_v4_rc_air_episode_tests\"",
+    "Entering test case \"accept_factorization_matches_accept_poly\"",
+    "Leaving test case \"accept_factorization_matches_accept_poly\"",
+    "Entering test case \"honest_compact_accepts_and_measures_toy\""
+  ],
+  "module_summary": null,
+  "runtime_diagnostic_count": 6,
+  "first_runtime_diagnostics": [
+    "D:/a/btx/btx/btx/src/test/lightwatch_tests.cpp(440): fatal error: in \"lightwatch_tests/lightwatch_file_cut_at_a_line_end_is_refused\": critical check v1.rfind(\"btx-lightwatch 2\\n\", 0) == 0U has failed [18446744073709551615 != 0]",
+    "D:/a/btx/btx/btx/src/test/matmul_verify_worker_tests.cpp(1337): error: in \"matmul_verify_worker_tests/stop_drains_queue_without_completions\": check completions.load() == 1 has failed [3 != 1]",
+    "D:/a/btx/btx/btx/src/test/matmul_verify_worker_tests.cpp(1338): error: in \"matmul_verify_worker_tests/stop_drains_queue_without_completions\": check retryable_cleanups.load() == kJobs - 1 has failed [1 != 3]",
+    "D:/a/btx/btx/btx/src/test/matmul_verify_worker_tests.cpp(1352): error: in \"matmul_verify_worker_tests/stop_drains_queue_without_completions\": check completions.load() == 2 has failed [4 != 2]",
+    "D:/a/btx/btx/btx/src/test/matmul_v4_rc_tests.cpp(2030): fatal error: in \"matmul_v4_rc_tests/rc_strict_independent_same_digest_rejects_false_header\": critical check rc::RegisterRCExactReplayAlternateProvider({ .backend = alternate_backend, .provider = \"test:independent-oracle-b\", .capability = alternate_capability, }) has failed",
+    "D:/a/btx/btx/btx/src/test/matmul_v4_rc_tests.cpp(2239): fatal error: in \"matmul_v4_rc_tests/rc_strict_bounded_attempts_do_not_exhaust_untried_provider_readiness\": critical check rc::RegisterRCExactReplayAlternateProvider({ .backend = backend, .provider = name, .capability = capability, }) has failed"
+  ],
+  "runtime_log_sha256": "168db31f894bd578737c96fec2303c8d9e2e911f0c08e9ab3f3ccbd9f4fd9aeb",
+  "runtime_data_removed": true,
+  "owned_processes_before_retention": [],
+  "verdict": "Full maintained build PASS; unit invocation incomplete or failed \u2014 inspect actual runtime result"
+}
