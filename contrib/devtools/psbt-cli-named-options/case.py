@@ -2,6 +2,7 @@
 from pathlib import Path
 import hashlib,json,os,subprocess
 from test_framework.test_framework import BitcoinTestFramework
+from test_framework.address import program_to_witness
 from test_framework.psbt import PSBT,PSBT_GLOBAL_UNSIGNED_TX
 class NamedOptionsTest(BitcoinTestFramework):
  def set_test_params(self):
@@ -26,8 +27,12 @@ class NamedOptionsTest(BitcoinTestFramework):
   node.createwallet(wallet_name=wallet_name,disable_private_keys=True,blank=True,descriptors=True,load_on_startup=False)
   wallet=node.get_wallet_rpc(wallet_name);before=wallet.getwalletinfo();assert before['private_keys_enabled'] is False and before['txcount']==0
   rec['wallet_before']={k:before[k] for k in ['walletname','private_keys_enabled','txcount']}
-  # Unknown external input, zero-value data output: no funding or chain activity.
-  psbt=node.createpsbt([{'txid':'11'*32,'vout':0,'sequence':4294967293}],[{'data':'425458'}],0)
+  # Valid BTX P2MR output and unknown input; this PSBT is never funded or sent.
+  destination=program_to_witness(2,bytes.fromhex('22'*32))
+  info=node.validateaddress(destination);assert info['isvalid'] and info['witness_version']==2
+  rec['destination']={'address':destination,'witness_version':info['witness_version'],'scriptPubKey':info['scriptPubKey']}
+  psbt=node.createpsbt([{'txid':'11'*32,'vout':0,'sequence':4294967293}],{destination:'0.00000100'},0)
+  decoded=node.decodepsbt(psbt)['tx'];assert decoded['vout'][0]['scriptPubKey']['hex']=='5220'+'22'*32
   original=PSBT.from_base64(psbt);raw=original.g.map[PSBT_GLOBAL_UNSIGNED_TX];assert len(original.i)==1 and not original.i[0].map
   rec['input_psbt']=psbt;rec['unsigned_tx_hex']=raw.hex();rec['unsigned_tx_sha256']=hashlib.sha256(raw).hexdigest()
   prefix=[str(build/'bin/btx-cli'),'-regtest','-datadir='+str(node.datadir_path),'-conf='+str(node.bitcoinconf),'-rpcwallet='+wallet_name,'-rpcclienttimeout=15','-named','walletprocesspsbt','psbt='+psbt]
