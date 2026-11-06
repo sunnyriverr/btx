@@ -1,6 +1,6 @@
 """Focused maintained Windows fixture objects; never a full-unit acceptance claim."""
 from pathlib import Path
-import base64, hashlib, json, os, re, shutil, subprocess, sys, time
+import base64, hashlib, json, os, re, shutil, stat, subprocess, sys, time
 import checkpoint
 import integration_support as s
 
@@ -88,6 +88,22 @@ def build_component(label, files):
     return path
 
 
+def remove_owned_root(root):
+    root = Path(root)
+    assert root.parent == Path('D:/rb' + os.environ['GITHUB_RUN_ID'])
+    def readonly_file(function, filename, exc_info):
+        error = exc_info[1]
+        path = Path(filename)
+        assert path.resolve().is_relative_to(root.resolve())
+        if not isinstance(error, PermissionError) or path.stat().st_mode & stat.S_IWRITE:
+            raise error
+        R.setdefault('readonly_cleanup', []).append(str(path))
+        os.chmod(path, stat.S_IREAD | stat.S_IWRITE)
+        function(filename)
+    shutil.rmtree(root, onerror=readonly_file)
+    assert not root.exists()
+
+
 def run_cases(label, exe, cases, expect_pass):
     assert not s.owned_processes()
     data = Path('D:/rb' + os.environ['GITHUB_RUN_ID']) / label
@@ -113,7 +129,10 @@ def run_cases(label, exe, cases, expect_pass):
             s.save()
             assert row['cases_started'] > 0 and not row['owned_processes'], row
             if expect_pass:
-                assert code == 0 and '*** No errors detected' in text, row
+                completion = re.search(r'Test module "Bitcoin Core Test Suite" has passed with:\s+(\d+) test cases? out of (\d+) passed', text)
+                row['cases_completed'] = int(completion.group(1)) if completion else 0
+                s.save()
+                assert code == 0 and completion and row['cases_completed'] == row['cases_started'], row
             else:
                 assert code != 0 and any('fs::exists' in x for x in row['fatal']), row
     finally:
@@ -122,8 +141,7 @@ def run_cases(label, exe, cases, expect_pass):
                 os.environ.pop(key, None)
             else:
                 os.environ[key] = value
-    shutil.rmtree(data)
-    assert not data.exists()
+    remove_owned_root(data)
     R.setdefault('removed_roots', []).append(str(data))
     s.save()
 
@@ -186,11 +204,27 @@ def baseline():
     s.save()
     R['baseline_commands_unchanged'] = config_hashes() == R['original_configuration']
     assert R['baseline_commands_unchanged']
-    exe = build_component('baseline_paths', I['baseline_path_files'])
-    run_cases('baseline_paths', exe, I['baseline_path_cases'], False)
-    assert s.catalog(I['base'], 'base-after') == R['base_catalog']
+    runtime = I['path_before_reuse']
+    assert runtime['source'] == I['base']
+    assert runtime['configuration'] == R['original_configuration']
+    assert not diff(runtime['actual_profile'], R['actual_profile'])
+    assert runtime['source_unchanged_before_after']
+    assert [x['selector'] for x in runtime['records']] == I['baseline_path_cases']
+    assert all(x['exit'] != 0 and any('fs::exists' in e for e in x['fatal']) for x in runtime['records'])
+    R['runtime'] = {'baseline_paths': runtime['records']}
+    R['path_before_reused'] = runtime
     R['status'] = 'BASELINE_REPRODUCED'
     s.save()
+
+
+def object_target(row):
+    output = row['output'].replace('\\', '/')
+    prefix = str(BUILD).replace('\\', '/').rstrip('/') + '/'
+    if output.startswith(prefix):
+        output = output[len(prefix):]
+    assert output.startswith('src/test/CMakeFiles/test_btx.dir/')
+    assert '..' not in output.split('/')
+    return output
 
 
 def candidate():
@@ -241,15 +275,16 @@ def candidate():
     for name, row in R['dependencies'].items():
         if not name.replace('\\', '/').endswith('compiler-file-hash-cache.json'):
             assert sha(ROOT / name) == row['sha256']
-    preflight = ['ninja', '-C', str(BUILD), '-n', '-d', 'explain'] + [x['output'] for x in I['compiler_cohort']]
+    preflight = ['ninja', '-C', str(BUILD), '-n', '-d', 'explain'] + [object_target(x) for x in I['compiler_cohort']]
     s.need('candidate-compiler-plan', preflight, 120)
     plan = (E / 'candidate-compiler-plan.log').read_text(errors='replace')
     steps = re.findall(r'^\[(\d+)/(\d+)\]', plan, re.M)
     assert steps and int(steps[-1][1]) <= 220, 'Unexpected compiler-cohort rebuild'
     for row in I['compiler_cohort']:
         label = 'candidate-' + Path(row['source']).stem
-        s.need(label, ['ninja', '-C', str(BUILD), '-v', row['output']], 300)
-        R.setdefault('compile_after', []).append({'source': row['source'], 'output': row['output'], 'sha256': sha(BUILD / row['output'])})
+        target = object_target(row)
+        s.need(label, ['ninja', '-C', str(BUILD), '-v', target], 300)
+        R.setdefault('compile_after', []).append({'source': row['source'], 'output': target, 'sha256': sha(BUILD / target)})
         s.save()
     exe = build_component('candidate_batch', I['path_files'] + [Path(x['source']).name for x in I['compiler_cohort']])
     run_cases('candidate_paths', exe, I['path_cases'] + I['launch_controls'], True)
@@ -280,7 +315,7 @@ def retain():
         path = Path(name)
         assert path.parent.name == 'rb' + os.environ['GITHUB_RUN_ID']
         if path.exists():
-            shutil.rmtree(path)
+            remove_owned_root(path)
         assert not path.exists()
     profile = {'source': R['source'], 'actual_current_profile': R['actual_profile'],
         'configuration': config, 'scope': I['scope'], 'input_cache_key': I['cache_key'],
