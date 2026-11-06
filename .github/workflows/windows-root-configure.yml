@@ -1,11 +1,11 @@
-name: Native Windows cloud R2 prerequisite observation
+name: Native Windows cloud R2 fixture paired repair
 permissions:
   contents: read
 jobs:
   configure:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: windows-2025
-    timeout-minutes: 15
+    timeout-minutes: 25
     env:
       BTX_NATIVE_ROOT: D:\btx-native-035
     steps:
@@ -174,8 +174,8 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Confirm actual cloud R2 error with unchanged saved binary
-      id: cloud_observe
+    - name: Reuse hash-verified21-case Windows baseline
+      id: cases
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
         Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
@@ -193,12 +193,60 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/cloud_observe.py run
+        python controls/contrib/devtools/windows-root-configure/cloud_repair.py baseline
 
         exit /b %errorlevel%
 
         '
-    - name: Verify unchanged cache and cleanup
+    - name: Build only two affected fixture objects and maintained unit link
+      id: fixture_build
+      shell: cmd
+      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
+        Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
+        -property installationPath`) do set "BTX_VS=%%i"
+
+        if not defined BTX_VS exit /b 2
+
+        call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+
+        if errorlevel 1 exit /b %errorlevel%
+
+        set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
+
+        set "CL="
+
+        set "_CL_="
+
+        python controls/contrib/devtools/windows-root-configure/cloud_repair.py build
+
+        exit /b %errorlevel%
+
+        '
+    - name: Run same21 cases and scoped environment restoration controls
+      id: fixture_run
+      shell: cmd
+      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
+        Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
+        -property installationPath`) do set "BTX_VS=%%i"
+
+        if not defined BTX_VS exit /b 2
+
+        call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+
+        if errorlevel 1 exit /b %errorlevel%
+
+        set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
+
+        set "CL="
+
+        set "_CL_="
+
+        python controls/contrib/devtools/windows-root-configure/cloud_repair.py run
+
+        exit /b %errorlevel%
+
+        '
+    - name: Verify native outcomes cleanup and exact successor cache
       id: verification
       if: always() && steps.prepare.outcome == 'success'
       shell: cmd
@@ -218,16 +266,27 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/cloud_observe.py retain
+        python controls/contrib/devtools/windows-root-configure/cloud_repair.py retain
 
         exit /b %errorlevel%
 
         '
+    - name: Save verified candidate unit objects and binary
+      if: always() && steps.verification.outputs.checkpoint_valid == 'true'
+      uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
+      with:
+        path: 'D:\btx-native-035\project-build
+
+          D:\btx-native-035\vcpkg-installed
+
+          '
+        key: btx356-cloudfixtures-v1-${{ steps.verification.outputs.checkpoint_key
+          }}-${{ github.run_id }}
     - name: Preserve native maintained target records
       if: always()
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
       with:
-        name: native-windows-cloud-r2-observation
+        name: native-windows-cloud-r2-repair
         path: D:\btx-native-035\evidence\
         retention-days: 14
 'on':
