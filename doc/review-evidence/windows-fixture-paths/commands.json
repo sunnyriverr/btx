@@ -1,0 +1,156 @@
+{
+  "baseline": [
+    {
+      "label": "baseline-three",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\test_btx.exe",
+        "--run_test=modelnet_authz_tests/encrypted_release_plaintext_not_served_while_not_downloadable:modelnet_file_stream_tests/whole_file_fallback_keeps_a_piece_and_does_not_wait_out_the_deadline:modelnet_hosting_tests/removemodel_checks_in_use_before_unpin_and_deletes_the_directory",
+        "--log_level=test_suite",
+        "--report_level=detailed",
+        "--report_format=XML",
+        "--report_sink=D:\\btx-native-035\\evidence\\baseline-three.xml",
+        "--catch_system_errors=yes",
+        "--",
+        "-testdatadir=S:/f"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 201,
+      "seconds": 2.3,
+      "log_sha256": "c1cbdef030e613f212463ee1c99df686ef37f07018c12eadf9c7bc7678fbb20d",
+      "budget_stop": null
+    },
+    {
+      "label": "fixture-unit-plan",
+      "command": [
+        "ninja",
+        "-C",
+        "D:\\btx-native-035\\project-build",
+        "-n",
+        "-d",
+        "explain",
+        "test_btx"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.45,
+      "log_sha256": "6cfe9366a1dfd7761212650dadd9598e6594a1481e3f8ddf94c3933d4763d152",
+      "budget_stop": null
+    }
+  ],
+  "candidate": [
+    {
+      "label": "fixture-unit-plan",
+      "command": [
+        "ninja",
+        "-C",
+        "D:\\btx-native-035\\project-build",
+        "-f",
+        "D:\\btx-native-035\\evidence\\fixture-verified.ninja",
+        "-n",
+        "-d",
+        "explain",
+        "test_btx"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.64,
+      "log_sha256": "371385db29830816885d7a65ffd818611b4d034b05a36d76437cf8b9ef1a2c47",
+      "budget_stop": null
+    },
+    {
+      "label": "fixture-unit-build",
+      "command": [
+        "ninja",
+        "-C",
+        "D:\\btx-native-035\\project-build",
+        "-f",
+        "D:\\btx-native-035\\evidence\\fixture-verified.ninja",
+        "-j",
+        "4",
+        "-k",
+        "1",
+        "test_btx"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 14.62,
+      "log_sha256": "b02eb6e4470da9b067121f4c22527d7cbda08ea4ed07c97e88654561ad38c67b",
+      "budget_stop": null
+    },
+    {
+      "label": "same-name-lock-refusal",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\test_btx.exe",
+        "--run_test=modelnet_authz_tests/encrypted_release_plaintext_not_served_while_not_downloadable",
+        "--log_level=test_suite",
+        "--report_level=detailed",
+        "--report_format=XML",
+        "--report_sink=D:\\btx-native-035\\evidence\\same-name-lock-refusal.xml",
+        "--catch_system_errors=yes",
+        "--",
+        "-testdatadir=S:/f"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 3221226356,
+      "seconds": 2.59,
+      "log_sha256": "c248257eabd9891b7b2cdd07ab79d9ca112371a7539eab3a3de765fae6494c7f",
+      "budget_stop": null
+    },
+    {
+      "label": "different-name-isolation",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\test_btx.exe",
+        "--run_test=modelnet_file_stream_tests/whole_file_fallback_keeps_a_piece_and_does_not_wait_out_the_deadline",
+        "--log_level=test_suite",
+        "--report_level=detailed",
+        "--report_format=XML",
+        "--report_sink=D:\\btx-native-035\\evidence\\different-name-isolation.xml",
+        "--catch_system_errors=yes",
+        "--",
+        "-testdatadir=S:/f"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.58,
+      "log_sha256": "96317dcd58ac98cc05f27b9bcb6c7ef1337bb796a7235be7f349c93cd172eec2",
+      "budget_stop": null
+    },
+    {
+      "label": "candidate-three",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\test_btx.exe",
+        "--run_test=modelnet_authz_tests/encrypted_release_plaintext_not_served_while_not_downloadable:modelnet_file_stream_tests/whole_file_fallback_keeps_a_piece_and_does_not_wait_out_the_deadline:modelnet_hosting_tests/removemodel_checks_in_use_before_unpin_and_deletes_the_directory",
+        "--log_level=test_suite",
+        "--report_level=detailed",
+        "--report_format=XML",
+        "--report_sink=D:\\btx-native-035\\evidence\\candidate-three.xml",
+        "--catch_system_errors=yes",
+        "--",
+        "-testdatadir=S:/f"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.61,
+      "log_sha256": "3ca7b748d305a6d25dfd2ccc10ea7e752049b23f0aedaffbd0df045ea964bf9b",
+      "budget_stop": null
+    },
+    {
+      "label": "default-temp-control",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\test_btx.exe",
+        "--run_test=modelnet_authz_tests/encrypted_release_plaintext_not_served_while_not_downloadable",
+        "--log_level=test_suite",
+        "--report_level=detailed",
+        "--report_format=XML",
+        "--report_sink=D:\\btx-native-035\\evidence\\default-temp-control.xml",
+        "--catch_system_errors=yes",
+        "--"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.59,
+      "log_sha256": "366b826f8a63ccc81803aa54747134476c5abfd9406fe166500f63e5a961abca",
+      "budget_stop": null
+    }
+  ]
+}

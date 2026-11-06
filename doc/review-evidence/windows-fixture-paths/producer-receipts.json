@@ -1,0 +1,100 @@
+{
+  "baseline": {
+    "run": 42212786159,
+    "ci": "7e8fc27317f1ef0ad254da938ec044ec685831ae",
+    "archive": {
+      "utc": "2026-11-06T11:52:20.153808+00:00",
+      "run": 42212786159,
+      "archive_sha256": "fb18807ad275f3a2c8e5608dd3d6b475a3340c45da2e1dfa680232f61917d68e",
+      "archive_bytes": 6935295,
+      "verification_mode": "ZIP-backed; no large raw extraction"
+    }
+  },
+  "candidate": {
+    "run": 42214724275,
+    "ci": "bf286e19d49b7c1a284047992289ec93b361ab01",
+    "archive": {
+      "utc": "2026-11-06T12:09:06.599116+00:00",
+      "run": 42214724275,
+      "archive_sha256": "f7aae306380c060cf6b23aec1c95d429a276a21416023e1b223d1c3a4d6fa513",
+      "archive_bytes": 10147363,
+      "verification_mode": "ZIP-backed; no large raw extraction"
+    }
+  },
+  "native_profile": {
+    "os": "Windows Server 2025 x64",
+    "compiler": "clang-cl20.1.8",
+    "environment": {
+      "ImageVersion": "20261030.294.1",
+      "VCToolsVersion": "14.51.36231",
+      "WindowsSDKVersion": "10.0.26100.0\\"
+    },
+    "tools": {
+      "clang-cl": {
+        "path": "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+        "sha256": "57e32b1ea2456f12f97bf802453171bbff12d56b2c486b4eca0c75343c0cda2c"
+      },
+      "cl": {
+        "path": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.EXE",
+        "sha256": "b0a1818ebae6da7f18230a84e76ce839212584ac4c2ab55b97a0d5268085da57"
+      },
+      "cmake": {
+        "path": "C:\\Program Files\\CMake\\bin\\cmake.EXE",
+        "sha256": "84935c0b7cb09c140de0d3b042d4e93e5fac4e6371e75bf28eae3d841f79dfb3"
+      },
+      "ninja": {
+        "path": "C:\\ProgramData\\Chocolatey\\bin\\ninja.EXE",
+        "sha256": "5142e84796e4bd57acb91ee19d30174d11bcca2b1a99d45a43251b9b1e6c32a9"
+      }
+    },
+    "features": {
+      "BUILD_GUI:BOOL": "OFF",
+      "BUILD_TESTS:BOOL": "ON",
+      "ENABLE_WALLET:BOOL": "ON",
+      "WITH_MODELNET:BOOL": "ON",
+      "WITH_ZMQ:BOOL": "ON"
+    }
+  },
+  "inherited_controls": {
+    "ci_parent": "4d1a3c30a4a86ca571b2b2577b21442d6c6d40bf",
+    "verified": {
+      "full.py": {
+        "git_blob": "d7e93906ed814412c5b426c4fbcd03182e9168e4",
+        "sha256": "ae9d41da3d30c16ff9ddae8b4f7891d3521bf16af95ef730abcb0cf4c0509074"
+      },
+      "runner.py": {
+        "git_blob": "9ebe941c70126a9c1bcfccbe40f7e1fc07a6fb61",
+        "sha256": "73fea130e528e1034d508ec2ff1da76d710074792dc1af618ccb3a499e2f3f8b"
+      },
+      "checkpoint.py": {
+        "git_blob": "2e08da18305dff73b6339d3a9584647cfc72ca9b",
+        "sha256": "eb65c4501a306c92ea9e78a70c1932d00fa831d86ea302888c3eb9769b9c6ebb"
+      },
+      "integration_support.py": {
+        "git_blob": "6f22f77846818a4f01b1b5f23f5ce34d2519b485",
+        "sha256": "3ed56aab4b5f8072d370462bf40716f6d85a19f66e41519ed0e92ff2543568d1"
+      },
+      "profile-transition.json": {
+        "git_blob": "f6748bcd487418806c69f672b78a919e387b9b03",
+        "sha256": "4197e3169a81f8362779da175d9dc82d869933965f7333761038407d38b0c880"
+      },
+      "maintained-inputs.json": {
+        "git_blob": "999e039802665d654624635f88a90e48f92f6400",
+        "sha256": "ea50887eb29ee941790044372ae97e2f12f6176aabf1a8dbbfb448725165f739"
+      },
+      "maintained-source.bundle.base64": {
+        "git_blob": "607459b0bf105567ba4ace7b556a6d75b08e6e67",
+        "sha256": "6ae1c0cc58c6ba30c8d1dd8588c998c431e775be83b6a2438b79c14ba529b352"
+      },
+      "job_tree.py": {
+        "git_blob": "246a9f845fb7b232a87184153ae477e8e36f22b3",
+        "sha256": "801ab483fe151f355e097e3d8905d83a1273e38720fba0a8acdf93b44cbdc31d"
+      },
+      "batch_results.py": {
+        "git_blob": "17f0951069882cc8d5b28b8f91b3bcd89ca8742c",
+        "sha256": "03b36c3f869f6ae67f85a086fb54a526220c36dfbb9951391fd76b6093a17882"
+      }
+    }
+  },
+  "execution_note": "Baseline failed three cases in pilot. Candidate job reused that exact binary/source/inventory/selector proof. Initial ordinary Ninja dry-run stopped at manifest bootstrap before compilation; candidate uses original maintained graph via a byte-identical manifest copy, with configuration/source-delta guards."
+}
