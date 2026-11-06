@@ -40,14 +40,20 @@ def one(label,selector,traced):
 def baseline():
  tree=contained();assert R['status']=='RESTORED_VERIFIED' and not s.owned_processes();assert sha(s.BUILD/'bin/test_btx.exe')==I['binary_sha256'];s.need('cloud-before-inventory',[str(s.BUILD/'bin/test_btx.exe'),'--list_content'],30);R['baseline_inventory_sha256']=sha(s.E/'cloud-before-inventory.log')
  entries=json.loads((s.BUILD/'compile_commands.json').read_text());matches=[x for x in entries if x['file'].replace('\\','/').endswith('/src/modelnet/s3_client.cpp')];assert len(matches)==1;R['s3_compile_command']=matches[0];obj=Path(matches[0]['output']);obj=obj if obj.is_absolute() else s.BUILD/obj;R['s3_object_path']=str(obj);s.need('original-s3-symbols',['dumpbin','/symbols',str(obj)],60);s.need('original-unit-imports',['dumpbin','/imports',str(s.BUILD/'bin/test_btx.exe')],60)
- excerpts=[]
+ excerpts=[];checked=[];headers=[]
  for folder in os.environ['INCLUDE'].split(';'):
-  h=Path(folder)/'io.h'
-  if h.exists():
-   lines=h.read_text(errors='replace').splitlines()
-   for n,line in enumerate(lines):
-    if re.search(r'\b_?close\s*\(',line):excerpts.extend([str(h)+':'+str(n+1)]+lines[max(0,n-3):n+3])
- (s.E/'native-close-declarations.txt').write_text('\n'.join(excerpts)+'\n');assert excerpts
+  for name in ['io.h','corecrt_io.h']:
+   headers.append(Path(folder.strip().strip('"'))/name)
+ for root in [Path(os.environ.get('UniversalCRTSdkDir','C:/Program Files (x86)/Windows Kits/10'))/'Include',Path('C:/Program Files (x86)/Windows Kits/10/Include')]:
+  if root.exists():
+   for version in root.iterdir():
+    for name in ['io.h','corecrt_io.h']:headers.append(version/'ucrt'/name)
+ for h in dict.fromkeys(headers):
+  if not h.is_file():continue
+  checked.append(str(h));lines=h.read_text(errors='replace').splitlines()
+  for n,line in enumerate(lines):
+   if re.search(r'\b_?close\s*\(',line):excerpts.extend([str(h)+':'+str(n+1)]+lines[max(0,n-3):n+3])
+ (s.E/'native-close-declarations.txt').write_text('\n'.join(excerpts)+'\n');(s.E/'native-close-header-discovery.json').write_text(json.dumps({'checked_headers':checked,'declarations_found':bool(excerpts),'scope':'Auxiliary SDK declarations; original object symbol and runtime brackets are authoritative'},indent=2)+'\n')
  mapped()
  try:
   for n,selector in enumerate(I['cases']):one('before-'+str(n),selector,False)
