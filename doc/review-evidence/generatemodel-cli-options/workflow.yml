@@ -1,0 +1,51 @@
+name: Generatemodel CLI paired repair
+on:
+  push:
+    branches: [codex/ci-p2mr-external-parent]
+permissions:
+  contents: read
+jobs:
+  observe:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout isolated diagnostic scripts
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /contrib/devtools/generate-cli-repair/
+      - name: Checkout unchanged accepted product
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 666673a3153225ba264c7870e0e82e354df86765
+          path: p2mr-parent-product
+          persist-credentials: false
+      - name: Verify source identity and capacity
+        run: python3 contrib/devtools/generate-cli-repair/run.py preflight
+      - name: Restore verified session-owned build inputs
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
+        with:
+          path: p2mr-parent-native
+          key: btx-p2mr-external-parent-v1-666673a3-ubuntu24-gcc13-O1-walletON-modelnetON-ssl359
+          fail-on-cache-miss: true
+      - name: Install matching Linux prerequisites
+        run: python3 contrib/devtools/generate-cli-repair/run.py dependencies
+      - name: Verify binaries and build only maintained helper target
+        run: python3 contrib/devtools/generate-cli-repair/run.py build
+      - name: Prove maintained unit and real node fail before pass after
+        run: python3 contrib/devtools/generate-cli-repair/run.py test
+      - name: Retain records and clean owned runtime
+        if: always()
+        run: python3 contrib/devtools/generate-cli-repair/run.py finalize
+      - name: Upload bounded observation records
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: generate-cli-repair-records
+          path: generate-cli-repair-results/
+          if-no-files-found: error
+          retention-days: 7

@@ -1,0 +1,918 @@
+{
+  "scope": "Actual selected baseline/candidate CLI; unchanged node/helper; synthetic model and fake local generation adapter. No real model inference.",
+  "cli": [
+    {
+      "label": "documented-positional",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/baseline/btx-cli",
+        "-regtest",
+        "-datadir=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0",
+        "-conf=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0/bitcoin.conf",
+        "-rpcclienttimeout=15",
+        "generatemodel",
+        "72af579842da7579719a345a0ac65358562f4bf2254ffee83301c3d13a9269b97c669caf1efcac31fe6d22d2bf390d1c",
+        "{\"prompt\":\"hello-btx\",\"max_new_tokens\":8}"
+      ],
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "error code: -3\nerror message:\nWrong type passed:\n{\n    \"Position 2 (opts)\": \"JSON value of type string is not of expected type object\"\n}\n",
+      "adapter_delta": []
+    },
+    {
+      "label": "documented-named",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/baseline/btx-cli",
+        "-regtest",
+        "-datadir=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0",
+        "-conf=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0/bitcoin.conf",
+        "-rpcclienttimeout=15",
+        "-named",
+        "generatemodel",
+        "id=72af579842da7579719a345a0ac65358562f4bf2254ffee83301c3d13a9269b97c669caf1efcac31fe6d22d2bf390d1c",
+        "opts={\"prompt\":\"hello-btx\",\"max_new_tokens\":8}"
+      ],
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "error code: -3\nerror message:\nWrong type passed:\n{\n    \"Position 2 (opts)\": \"JSON value of type string is not of expected type object\"\n}\n",
+      "adapter_delta": []
+    }
+  ],
+  "raw": [
+    {
+      "label": "raw-object-positional",
+      "params": [
+        "72af579842da7579719a345a0ac65358562f4bf2254ffee83301c3d13a9269b97c669caf1efcac31fe6d22d2bf390d1c",
+        {
+          "prompt": "hello-btx",
+          "max_new_tokens": 8
+        }
+      ],
+      "result": {
+        "schema_version": 2,
+        "model_id": "72af579842da7579719a345a0ac65358562f4bf2254ffee83301c3d13a9269b97c669caf1efcac31fe6d22d2bf390d1c",
+        "artifact_id": "413cfb562e1576147a1dfc3ae4d80c9a656bf8ea77378556d58a090cc5f631029ba99cb5b9dc1da40e6c32b28f4c3292",
+        "path": "/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/catalog/checkout/413cfb562e1576147a1dfc3ae4d80c9a656bf8ea77378556d58a090cc5f631029ba99cb5b9dc1da40e6c32b28f4c3292",
+        "compatible": true,
+        "generated": true,
+        "local_generate": true,
+        "inference": false,
+        "remote_inference": false,
+        "network_server": false,
+        "architecture": "LlamaForCausalLM",
+        "execution_profile": 0,
+        "automatic_spend_atoms": 0,
+        "text": "echo:hello-btx",
+        "backend": "fake",
+        "adapter": {
+          "ok": true,
+          "generated": true,
+          "text": "echo:hello-btx",
+          "backend": "fake"
+        },
+        "next_actions": [
+          "generatemodel",
+          "unloadmodel",
+          "automatic_spend_atoms stays 0"
+        ],
+        "note": "Local one-shot generate. Not a network inference server. CUDA smoke is not this RPC."
+      },
+      "error": null,
+      "adapter_delta": [
+        {
+          "prompt": "hello-btx",
+          "max_new_tokens": 8
+        }
+      ]
+    },
+    {
+      "label": "raw-object-named",
+      "params": {
+        "id": "72af579842da7579719a345a0ac65358562f4bf2254ffee83301c3d13a9269b97c669caf1efcac31fe6d22d2bf390d1c",
+        "opts": {
+          "prompt": "hello-btx",
+          "max_new_tokens": 8
+        }
+      },
+      "result": {
+        "schema_version": 2,
+        "model_id": "72af579842da7579719a345a0ac65358562f4bf2254ffee83301c3d13a9269b97c669caf1efcac31fe6d22d2bf390d1c",
+        "artifact_id": "413cfb562e1576147a1dfc3ae4d80c9a656bf8ea77378556d58a090cc5f631029ba99cb5b9dc1da40e6c32b28f4c3292",
+        "path": "/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/catalog/checkout/413cfb562e1576147a1dfc3ae4d80c9a656bf8ea77378556d58a090cc5f631029ba99cb5b9dc1da40e6c32b28f4c3292",
+        "compatible": true,
+        "generated": true,
+        "local_generate": true,
+        "inference": false,
+        "remote_inference": false,
+        "network_server": false,
+        "architecture": "LlamaForCausalLM",
+        "execution_profile": 0,
+        "automatic_spend_atoms": 0,
+        "text": "echo:hello-btx",
+        "backend": "fake",
+        "adapter": {
+          "ok": true,
+          "generated": true,
+          "text": "echo:hello-btx",
+          "backend": "fake"
+        },
+        "next_actions": [
+          "generatemodel",
+          "unloadmodel",
+          "automatic_spend_atoms stays 0"
+        ],
+        "note": "Local one-shot generate. Not a network inference server. CUDA smoke is not this RPC."
+      },
+      "error": null,
+      "adapter_delta": [
+        {
+          "prompt": "hello-btx",
+          "max_new_tokens": 8
+        }
+      ]
+    },
+    {
+      "label": "raw-string-observation",
+      "value": "{\"prompt\":\"hello-btx\",\"max_new_tokens\":8}",
+      "error": {
+        "code": -3,
+        "message": "Wrong type passed:\n{\n    \"Position 2 (opts)\": \"JSON value of type string is not of expected type object\"\n}"
+      },
+      "adapter_delta": []
+    },
+    {
+      "label": "raw-object-after-cli",
+      "params": [
+        "72af579842da7579719a345a0ac65358562f4bf2254ffee83301c3d13a9269b97c669caf1efcac31fe6d22d2bf390d1c",
+        {
+          "prompt": "hello-btx",
+          "max_new_tokens": 8
+        }
+      ],
+      "result": {
+        "schema_version": 2,
+        "model_id": "72af579842da7579719a345a0ac65358562f4bf2254ffee83301c3d13a9269b97c669caf1efcac31fe6d22d2bf390d1c",
+        "artifact_id": "413cfb562e1576147a1dfc3ae4d80c9a656bf8ea77378556d58a090cc5f631029ba99cb5b9dc1da40e6c32b28f4c3292",
+        "path": "/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/catalog/checkout/413cfb562e1576147a1dfc3ae4d80c9a656bf8ea77378556d58a090cc5f631029ba99cb5b9dc1da40e6c32b28f4c3292",
+        "compatible": true,
+        "generated": true,
+        "local_generate": true,
+        "inference": false,
+        "remote_inference": false,
+        "network_server": false,
+        "architecture": "LlamaForCausalLM",
+        "execution_profile": 0,
+        "automatic_spend_atoms": 0,
+        "text": "echo:hello-btx",
+        "backend": "fake",
+        "adapter": {
+          "ok": true,
+          "generated": true,
+          "text": "echo:hello-btx",
+          "backend": "fake"
+        },
+        "next_actions": [
+          "generatemodel",
+          "unloadmodel",
+          "automatic_spend_atoms stays 0"
+        ],
+        "note": "Local one-shot generate. Not a network inference server. CUDA smoke is not this RPC."
+      },
+      "error": null,
+      "adapter_delta": [
+        {
+          "prompt": "hello-btx",
+          "max_new_tokens": 8
+        }
+      ]
+    }
+  ],
+  "adapter_requests": [
+    {
+      "prompt": "hello-btx",
+      "max_new_tokens": 8
+    },
+    {
+      "prompt": "hello-btx",
+      "max_new_tokens": 8
+    },
+    {
+      "prompt": "hello-btx",
+      "max_new_tokens": 8
+    }
+  ],
+  "helper_args": [
+    "/home/runner/work/btx/btx/p2mr-parent-native/build/bin/btx-modeld",
+    "-modeldir=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/catalog",
+    "-modelrpcsocket=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/helper.sock",
+    "-modelstorage=16MiB",
+    "-modelhost=0",
+    "-modelseed=off",
+    "-modelfollowpeers=0",
+    "-modellandiscovery=0",
+    "-modelnatpmp=0",
+    "-pwcchain=regtest"
+  ],
+  "helper_ready": {
+    "schema_version": 2,
+    "enabled": false,
+    "helper_ready": true,
+    "pq1_ready": true,
+    "error": "",
+    "openssl": "OpenSSL 3.5.9 29 Sep 2026",
+    "transport": "pq1",
+    "quic": false,
+    "evaluated_transport": {
+      "utp": "NONSHIPPING",
+      "quic": false,
+      "content_defined_dedup": "NONSHIPPING",
+      "erasure_64_80": "NONSHIPPING",
+      "catalog_10m": "NOT_RUN",
+      "btx_torrentd_process": false
+    },
+    "group": "MLKEM768",
+    "cipher": "TLS_AES_256_GCM_SHA384",
+    "sigalg": "mldsa44",
+    "max_send_fragment": 512,
+    "resumption": false,
+    "early_data": false,
+    "retrieval_default": "FREE_ONLY",
+    "automatic_spend_atoms": 0,
+    "quota_bytes": 16777216,
+    "used_bytes": 0,
+    "storage_mode": "FIXED",
+    "storage_target_bytes": 16777216,
+    "storage_effective_quota_bytes": 16777216,
+    "storage_used_bytes": 0,
+    "storage_pinned_bytes": 0,
+    "storage_reclaimable_bytes": 0,
+    "filesystem_capacity_bytes": 0,
+    "filesystem_available_bytes": 0,
+    "filesystem_reserve_bytes": 0,
+    "seed_mode": "off",
+    "demand_seed": false,
+    "preserve_rare": false,
+    "follow_configured_peers": false,
+    "public_host_reachable": false,
+    "advertised_host": false,
+    "delivery": {
+      "capability": "FULL_FILE_STREAM_V1",
+      "random_piece_access": true,
+      "sequential_file_stream": true,
+      "direct_file_seed": false,
+      "local_piece_complete": false,
+      "origin_file_complete": false
+    },
+    "origin_diversity": {
+      "p2p_complete_providers": 0,
+      "p2p_partial_providers": 0,
+      "independent_netgroups": 0,
+      "cloud_origins": 0,
+      "origin_assisted": false,
+      "reconstructable_without_origin": false,
+      "reconstructable_without_this_node": false,
+      "note": "cloud front-ends sharing one bucket are one origin"
+    },
+    "cloud_amplification": {
+      "logical_btx_pieces": 0,
+      "cloud_source_objects": 0,
+      "estimated_cloud_gets_per_cold_full_retrieval": 0,
+      "piece_object_equivalent_gets": 0,
+      "layout": "SOURCE_FILES"
+    },
+    "origin_stampede": {
+      "window_ms": 60000,
+      "max_per_peer": 8,
+      "max_per_netgroup": 16,
+      "errors_to_open": 8,
+      "circuit_open_ms": 60000,
+      "circuits_open": 0,
+      "tracked_peers": 0,
+      "automatic_spend_atoms": 0
+    },
+    "nat_limited": true,
+    "nat_status": "disabled",
+    "relay_status": "off",
+    "peers_connected": 0,
+    "native_participation": {
+      "schema": "BTX/NativeParticipation/1",
+      "network": "regtest",
+      "lan_enabled": false,
+      "lan_error": "",
+      "hint_count": 0,
+      "authenticated_peers": 0,
+      "peer_observations": [],
+      "shared_model_families": [],
+      "acquired_models": 0,
+      "automatic_spend_atoms": "0",
+      "release_qualified": false
+    },
+    "providers_known": 0,
+    "min_rarity": 0,
+    "rare_pieces_1_source": 0,
+    "rare_pieces_2_sources": 0,
+    "active_piece_requests": 0,
+    "duplicate_endgame_requests": 0,
+    "current_endgame": false,
+    "partial_seeded_pieces": 0,
+    "bytes_served_while_partial": 0,
+    "pex_records_received": 0,
+    "pex_records_accepted": 0,
+    "reachability_state": "UNKNOWN",
+    "direct_ipv4": "",
+    "direct_ipv6": "",
+    "mapped_endpoint": "",
+    "external_observations": 0,
+    "relay_reservations": {
+      "reservations": 0,
+      "forwarded_bytes": 0,
+      "active_forwarded": 0,
+      "automatic_spend_atoms": 0
+    },
+    "active_relay": "",
+    "routing_table_size": 0,
+    "provider_cache_size": 0,
+    "bootstrap_peers": 0,
+    "bootstrap_dependency": true,
+    "network_epoch": 0,
+    "last_provider_lookup": 0,
+    "provider_records_found": 0,
+    "hole_punch_attempts": 0,
+    "hole_punch_successes": 0,
+    "relay_bytes": 0,
+    "direct_bytes": 0,
+    "classical_fallback": false,
+    "upload_limit": 0,
+    "active_transfers": 0,
+    "helper_managed_by_btxd": false,
+    "helper_state": "READY",
+    "helper_pid": 3567,
+    "helper_restart_count": 0,
+    "propagation": {
+      "schema_version": 2,
+      "seed": "off",
+      "seed_upon_download": false,
+      "seed_upon_download_opt_in": false,
+      "preserve_rare": false,
+      "follow_configured_peers": false,
+      "allow_encrypted": false,
+      "storage_quota_bytes": 16777216,
+      "upload_bps": 0,
+      "giveback_ratio": 1,
+      "automatic_spend_atoms": 0,
+      "retrieval_default": "FREE_ONLY",
+      "demand_propagation": false,
+      "preservation_propagation": false,
+      "peer_follow_propagation": false,
+      "release_propagation": false,
+      "unsolicited_fetch": "bounded FREE_ONLY acquisition follows strict-PQ1 same-chain catalog contacts from configured peers, expiring PEX, and enabled private-LAN discovery when follow_peers, seed=auto and storage>0; unverified public advertisements do not authorize acquisition or execution"
+    },
+    "capabilities": {
+      "schema_version": 2,
+      "protocol": 2,
+      "uri": true,
+      "importmodel": true,
+      "hostmodel": true,
+      "checkmodelsetup": true,
+      "previewmodelimport": true,
+      "getmodelsharecard": true,
+      "getmodeltransfers": true,
+      "setmodelalias": true,
+      "scanmodelwatch": true,
+      "getmodelwatchstatus": true,
+      "showmodel": true,
+      "exportmodellink": true,
+      "exportmodelpath": true,
+      "loadmodel": true,
+      "unloadmodel": true,
+      "generatemodel": true,
+      "getmodelhostprofile": true,
+      "unhostmodel": true,
+      "removemodel": true,
+      "removemodelalias": true,
+      "openmodelshare": true,
+      "seedmodel": true,
+      "listmodels": true,
+      "getmodelmanifest": true,
+      "qualifymodel": true,
+      "getmodel_free_only": true,
+      "pq1_http": true,
+      "piece_wire": "application/octet-stream",
+      "paid_retrieval": true,
+      "paid_chain_verify": false,
+      "paid_funding_rpc": true,
+      "signed_free_grant": true,
+      "release_campaign_rpc": true,
+      "buildmodelhtlcclaim": true,
+      "htlc_reuse": "0.34.6 htlc_sha256 / buildhtlcclaim / buildhtlcrefund",
+      "remote_inference": false,
+      "cuda_qualification": true,
+      "browser_bridge": false,
+      "node_model_index": true,
+      "searchmodels": true,
+      "decentralized_search": true,
+      "automatic_spend_atoms": 0,
+      "full_file_stream_v1": true,
+      "subpiece_v1": true,
+      "package_v1": true,
+      "erasure_preservation_v1": true,
+      "query_summary_v1": true,
+      "index_reconcile_v1": true,
+      "metadata_gossip_v1": true,
+      "safety_advisory_v1": true,
+      "origin_offer_v1": true,
+      "lan_discovery_v1": true,
+      "selective_files_v1": true,
+      "capabilities": [
+        {
+          "name": "FULL_FILE_STREAM_V1",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "SUBPIECE_V1",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "SELECTIVE_FILES_V1",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "ORIGIN_OFFER_V1",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "FULL_ORIGIN_INGEST_V1",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "ERASURE_PRESERVATION_V1",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "QUERY_SUMMARY_V1",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "INDEX_RECONCILE_V1",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "METADATA_GOSSIP_V1",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "PACKAGE_V1",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "BTXPKG_CORE_V2",
+          "min": 2,
+          "max": 2
+        },
+        {
+          "name": "AGENT_HANDOFF_V1",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "BTXPKG_CORE_V3",
+          "min": 3,
+          "max": 3
+        },
+        {
+          "name": "CAPABILITY_HANDOFF_V1",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "LAN_DISCOVERY_V1",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "SAFETY_ADVISORY_V1",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "quic": false,
+      "utp": "NONSHIPPING",
+      "btx_torrentd_process": false,
+      "cloud_attached_storage": false,
+      "direct_cloud_seed": false,
+      "model_event_journal": true,
+      "subscription_mandate": true,
+      "demand_seed_default": true,
+      "preserve_rare": true,
+      "follow_configured_peers_default": true,
+      "unsolicited_fetch_default": false,
+      "native_lan_free_acquisition": true,
+      "acquisition_requires": "strict PQ1, matching chain, verified bytes, positive quota, follow_peers and seed=auto",
+      "extension_version": 257,
+      "features": 127,
+      "http": [
+        "POST /hello",
+        "POST /query",
+        "POST /records/get",
+        "POST /records/announce",
+        "GET /manifests/{id}",
+        "POST /availability",
+        "POST /quotes",
+        "POST /transfers/{id}/payment",
+        "GET /transfers/{id}/pieces/{file}/{piece}",
+        "GET /files/{artifact}/{file}",
+        "POST /releases/{id}/pledges",
+        "POST /releases/{id}/rounds",
+        "POST /releases/{id}/signatures",
+        "POST /ext/caps",
+        "POST /ext/resolve",
+        "POST /ext/objects/get",
+        "POST /ext/objects/announce",
+        "POST /ext/free/grant",
+        "POST /ext/receipts",
+        "POST /ext/pex",
+        "POST /ext/rendezvous",
+        "POST /ext/relay/connect",
+        "POST /ext/autonat/probe",
+        "POST /ext/autonat/report",
+        "POST /ext/relay/reserve",
+        "POST /ext/holepunch",
+        "POST /ext/providers/put",
+        "POST /ext/providers/get",
+        "POST /ext/search",
+        "POST /ext/feed"
+      ]
+    },
+    "http_workers": 8,
+    "unix_workers": 2,
+    "http_queue": 32,
+    "unix_queue": 16,
+    "inflight_pieces": 8,
+    "inbound_per_netgroup": 8,
+    "transfer_timeout_ms": 600000,
+    "inbound_connections": 0,
+    "outbound_connections": 0,
+    "peer_pin": "TOFU tls_spki_hash D384(BTX/TransportKey/v2, DER_SPKI)",
+    "htlc": "reuses final 0.34.6 htlc_sha256 / buildhtlcclaim / buildhtlcrefund",
+    "node_model_index": true,
+    "search_ttl_default": 2,
+    "search_ttl_max": 4,
+    "search_monetary_coupling": false,
+    "identity_ready": true,
+    "identity_id": "1380fdd68068865b373c77dd1c7759f397483170fb74efa86deefcbc0742f2298bcc3af5cacf5117d4104507e8738d8a",
+    "identity_label": "local publisher",
+    "identity_wallet_key": false,
+    "ready_to_host": true,
+    "watch_dir": "",
+    "next_actions": [
+      "hostmodel <path>  # pin, sign search card, demand-seed",
+      "searchmodels {\"scope\":\"LOCAL\"}",
+      "getmodeltransfers",
+      "automatic_spend_atoms stays 0"
+    ],
+    "quota": 16777216,
+    "pq1": true,
+    "remaining_bytes": 16777216,
+    "profile": "custom",
+    "profile_host_mode": "off",
+    "cloud_optional": true,
+    "cloud_layout_sentence": "Cloud backing is optional. R2 AUTO stores one SOURCE_FILES object per original file and streams it; 4 MiB pieces remain the swarm unit.",
+    "r2_auto_sentence": "R2 AUTO is SOURCE_FILES + STREAM_FILE. PIECE_OBJECTS is an explicit override and is refused on R2 without allow_request_heavy_cloud_layout.",
+    "one_liner": "hostmodel <path>"
+  },
+  "node_before": {
+    "chain": "regtest",
+    "blocks": 0,
+    "headers": 0,
+    "behind_best_header": 0,
+    "is_stale": false,
+    "competing_heavier_header": false,
+    "header_extends_tip": true,
+    "better_work_twin_blocked_by_local_commitment": false,
+    "bestblockhash": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360",
+    "bits": "207fffff",
+    "target": "7fffff0000000000000000000000000000000000000000000000000000000000",
+    "difficulty": {
+      "decimal": "4.656542373906925E-10"
+    },
+    "time": 1296688602,
+    "mediantime": 1296688602,
+    "verificationprogress": 1,
+    "initialblockdownload": true,
+    "matmulvalidationmode": "consensus",
+    "discovery_relay": false,
+    "chain_oracle": true,
+    "matmul_pow": {
+      "stall_recovery_height": 2147483647,
+      "stall_recovery_active": false,
+      "rejected_divergent_pow_headers": 0
+    },
+    "chainwork": "0000000000000000000000000000000000000000000000000000000000000002",
+    "validationepoch": 1,
+    "invalidmarksclearedonupgrade": 0,
+    "size_on_disk": 395,
+    "pruned": false,
+    "shielded_retention": {
+      "profile": "full_commitment_index",
+      "retain_shielded_commitment_index": true,
+      "snapshot_target_bytes": 2642412320,
+      "snapshot_target_days": 7,
+      "snapshot_target_blocks": 6720,
+      "snapshot_target_spacing_seconds": 90
+    },
+    "snapshot_sync": {
+      "active": false,
+      "background_validation_in_progress": false
+    },
+    "warnings": []
+  },
+  "imported": {
+    "schema_version": 2,
+    "uri": "btx://pqw2h40xzzmf6hjuv6x3dq43jntptz7jljy48la6pnq8pazw5jdxuhce5u4u00etp3lekj954l8yx3cuymjn4",
+    "model_id": "72af579842da7579719a345a0ac65358562f4bf2254ffee83301c3d13a9269b97c669caf1efcac31fe6d22d2bf390d1c",
+    "artifact_id": "413cfb562e1576147a1dfc3ae4d80c9a656bf8ea77378556d58a090cc5f631029ba99cb5b9dc1da40e6c32b28f4c3292",
+    "admission": "PINNED",
+    "qualification": "structure only; not usefulness, safety, or alignment",
+    "seeded": false,
+    "pinned": true,
+    "propagation": "local_only",
+    "search_published": false,
+    "signed_metadata": false,
+    "format": "safetensors",
+    "family": "",
+    "quantization": "",
+    "share": {
+      "uri": "btx://pqw2h40xzzmf6hjuv6x3dq43jntptz7jljy48la6pnq8pazw5jdxuhce5u4u00etp3lekj954l8yx3cuymjn4",
+      "copy_text": "btx://pqw2h40xzzmf6hjuv6x3dq43jntptz7jljy48la6pnq8pazw5jdxuhce5u4u00etp3lekj954l8yx3cuymjn4 format=safetensors",
+      "family": "",
+      "format": "safetensors",
+      "quantization": "",
+      "signed": false,
+      "size_bytes": 96,
+      "file_count": 2
+    },
+    "next_actions": [
+      "searchmodels {\"scope\":\"LOCAL\"}",
+      "getmodelsharecard btx://pqw2h40xzzmf6hjuv6x3dq43jntptz7jljy48la6pnq8pazw5jdxuhce5u4u00etp3lekj954l8yx3cuymjn4",
+      "getmodeltransfers",
+      "automatic_spend_atoms stays 0"
+    ],
+    "automatic_spend_atoms": 0,
+    "cloud_uploaded": false
+  },
+  "cli_connection_control": {
+    "returncode": 0,
+    "chain": "regtest"
+  },
+  "invalid_cli": [
+    {
+      "label": "invalid-options",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/baseline/btx-cli",
+        "-regtest",
+        "-datadir=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0",
+        "-conf=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0/bitcoin.conf",
+        "-rpcclienttimeout=15",
+        "generatemodel",
+        "72af579842da7579719a345a0ac65358562f4bf2254ffee83301c3d13a9269b97c669caf1efcac31fe6d22d2bf390d1c",
+        "[]"
+      ],
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "error code: -3\nerror message:\nWrong type passed:\n{\n    \"Position 2 (opts)\": \"JSON value of type string is not of expected type object\"\n}\n",
+      "adapter_delta": []
+    },
+    {
+      "label": "invalid-options",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/baseline/btx-cli",
+        "-regtest",
+        "-datadir=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0",
+        "-conf=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0/bitcoin.conf",
+        "-rpcclienttimeout=15",
+        "-named",
+        "generatemodel",
+        "id=72af579842da7579719a345a0ac65358562f4bf2254ffee83301c3d13a9269b97c669caf1efcac31fe6d22d2bf390d1c",
+        "opts=[]"
+      ],
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "error code: -3\nerror message:\nWrong type passed:\n{\n    \"Position 2 (opts)\": \"JSON value of type string is not of expected type object\"\n}\n",
+      "adapter_delta": []
+    },
+    {
+      "label": "invalid-options",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/baseline/btx-cli",
+        "-regtest",
+        "-datadir=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0",
+        "-conf=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0/bitcoin.conf",
+        "-rpcclienttimeout=15",
+        "generatemodel",
+        "72af579842da7579719a345a0ac65358562f4bf2254ffee83301c3d13a9269b97c669caf1efcac31fe6d22d2bf390d1c",
+        "true"
+      ],
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "error code: -3\nerror message:\nWrong type passed:\n{\n    \"Position 2 (opts)\": \"JSON value of type string is not of expected type object\"\n}\n",
+      "adapter_delta": []
+    },
+    {
+      "label": "invalid-options",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/baseline/btx-cli",
+        "-regtest",
+        "-datadir=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0",
+        "-conf=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0/bitcoin.conf",
+        "-rpcclienttimeout=15",
+        "-named",
+        "generatemodel",
+        "id=72af579842da7579719a345a0ac65358562f4bf2254ffee83301c3d13a9269b97c669caf1efcac31fe6d22d2bf390d1c",
+        "opts=true"
+      ],
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "error code: -3\nerror message:\nWrong type passed:\n{\n    \"Position 2 (opts)\": \"JSON value of type string is not of expected type object\"\n}\n",
+      "adapter_delta": []
+    },
+    {
+      "label": "invalid-options",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/baseline/btx-cli",
+        "-regtest",
+        "-datadir=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0",
+        "-conf=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0/bitcoin.conf",
+        "-rpcclienttimeout=15",
+        "generatemodel",
+        "72af579842da7579719a345a0ac65358562f4bf2254ffee83301c3d13a9269b97c669caf1efcac31fe6d22d2bf390d1c",
+        "7"
+      ],
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "error code: -3\nerror message:\nWrong type passed:\n{\n    \"Position 2 (opts)\": \"JSON value of type string is not of expected type object\"\n}\n",
+      "adapter_delta": []
+    },
+    {
+      "label": "invalid-options",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/baseline/btx-cli",
+        "-regtest",
+        "-datadir=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0",
+        "-conf=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0/bitcoin.conf",
+        "-rpcclienttimeout=15",
+        "-named",
+        "generatemodel",
+        "id=72af579842da7579719a345a0ac65358562f4bf2254ffee83301c3d13a9269b97c669caf1efcac31fe6d22d2bf390d1c",
+        "opts=7"
+      ],
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "error code: -3\nerror message:\nWrong type passed:\n{\n    \"Position 2 (opts)\": \"JSON value of type string is not of expected type object\"\n}\n",
+      "adapter_delta": []
+    },
+    {
+      "label": "invalid-options",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/baseline/btx-cli",
+        "-regtest",
+        "-datadir=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0",
+        "-conf=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0/bitcoin.conf",
+        "-rpcclienttimeout=15",
+        "generatemodel",
+        "72af579842da7579719a345a0ac65358562f4bf2254ffee83301c3d13a9269b97c669caf1efcac31fe6d22d2bf390d1c",
+        "{"
+      ],
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "error code: -3\nerror message:\nWrong type passed:\n{\n    \"Position 2 (opts)\": \"JSON value of type string is not of expected type object\"\n}\n",
+      "adapter_delta": []
+    },
+    {
+      "label": "invalid-options",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/baseline/btx-cli",
+        "-regtest",
+        "-datadir=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0",
+        "-conf=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0/bitcoin.conf",
+        "-rpcclienttimeout=15",
+        "-named",
+        "generatemodel",
+        "id=72af579842da7579719a345a0ac65358562f4bf2254ffee83301c3d13a9269b97c669caf1efcac31fe6d22d2bf390d1c",
+        "opts={"
+      ],
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "error code: -3\nerror message:\nWrong type passed:\n{\n    \"Position 2 (opts)\": \"JSON value of type string is not of expected type object\"\n}\n",
+      "adapter_delta": []
+    },
+    {
+      "label": "invalid-options",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/baseline/btx-cli",
+        "-regtest",
+        "-datadir=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0",
+        "-conf=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0/bitcoin.conf",
+        "-rpcclienttimeout=15",
+        "generatemodel",
+        "72af579842da7579719a345a0ac65358562f4bf2254ffee83301c3d13a9269b97c669caf1efcac31fe6d22d2bf390d1c",
+        "plain prompt"
+      ],
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "error code: -3\nerror message:\nWrong type passed:\n{\n    \"Position 2 (opts)\": \"JSON value of type string is not of expected type object\"\n}\n",
+      "adapter_delta": []
+    },
+    {
+      "label": "invalid-options",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/baseline/btx-cli",
+        "-regtest",
+        "-datadir=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0",
+        "-conf=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test/node0/bitcoin.conf",
+        "-rpcclienttimeout=15",
+        "-named",
+        "generatemodel",
+        "id=72af579842da7579719a345a0ac65358562f4bf2254ffee83301c3d13a9269b97c669caf1efcac31fe6d22d2bf390d1c",
+        "opts=plain prompt"
+      ],
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "error code: -3\nerror message:\nWrong type passed:\n{\n    \"Position 2 (opts)\": \"JSON value of type string is not of expected type object\"\n}\n",
+      "adapter_delta": []
+    }
+  ],
+  "node_after": {
+    "chain": "regtest",
+    "blocks": 0,
+    "headers": 0,
+    "behind_best_header": 0,
+    "is_stale": false,
+    "competing_heavier_header": false,
+    "header_extends_tip": true,
+    "better_work_twin_blocked_by_local_commitment": false,
+    "bestblockhash": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360",
+    "bits": "207fffff",
+    "target": "7fffff0000000000000000000000000000000000000000000000000000000000",
+    "difficulty": {
+      "decimal": "4.656542373906925E-10"
+    },
+    "time": 1296688602,
+    "mediantime": 1296688602,
+    "verificationprogress": 1,
+    "initialblockdownload": true,
+    "matmulvalidationmode": "consensus",
+    "discovery_relay": false,
+    "chain_oracle": true,
+    "matmul_pow": {
+      "stall_recovery_height": 2147483647,
+      "stall_recovery_active": false,
+      "rejected_divergent_pow_headers": 0
+    },
+    "chainwork": "0000000000000000000000000000000000000000000000000000000000000002",
+    "validationepoch": 1,
+    "invalidmarksclearedonupgrade": 0,
+    "size_on_disk": 395,
+    "pruned": false,
+    "shielded_retention": {
+      "profile": "full_commitment_index",
+      "retain_shielded_commitment_index": true,
+      "snapshot_target_bytes": 2642412320,
+      "snapshot_target_days": 7,
+      "snapshot_target_blocks": 6720,
+      "snapshot_target_spacing_seconds": 90
+    },
+    "snapshot_sync": {
+      "active": false,
+      "background_validation_in_progress": false
+    },
+    "warnings": []
+  },
+  "wallet_rpc_disabled": {
+    "code": -32601,
+    "message": "Method not found"
+  },
+  "guards_complete": true,
+  "helper_returncode": 0,
+  "helper_socket_after_stop": false,
+  "node_rpc_shutdown_complete": true,
+  "requirements": [
+    {
+      "label": "documented-positional",
+      "passed": false
+    },
+    {
+      "label": "documented-named",
+      "passed": false
+    }
+  ],
+  "acceptance_pass": false
+}

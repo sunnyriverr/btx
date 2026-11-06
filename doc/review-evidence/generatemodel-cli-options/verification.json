@@ -1,0 +1,159 @@
+{
+  "utc": "2026-11-06T05:59:53.874003+00:00",
+  "verdict": "Qualified scoped generatemodel CLI opts repair with identical maintained regression body and real-node/helper workflow before/after.",
+  "base": "666673a3153225ba264c7870e0e82e354df86765",
+  "candidate": "fae706ce2bb521984646baddf0f550ebeeb394d1",
+  "tree": "b56cc1562334914e8ff6edc44dd62742def3b469",
+  "files": {
+    "src/rpc/client.cpp": {
+      "blob": "894b24f6d1997869c2ba61c8adcf73bfe5cf12b2",
+      "sha256": "5b80266e680cd808d1ff732aae3d397a0036511a077f7b674b743270e45bc2d9"
+    },
+    "src/test/rpc_tests.cpp": {
+      "blob": "2feaa9977640d8cf7b29af075ad7158ffae76adc",
+      "sha256": "7225dda9ae1d98a5990798bfa56557f16028aa17907d260f47efd189d0cbcb00"
+    }
+  },
+  "run": 42170969509,
+  "fixture": "16c3707b0b0754b2f3c1eabe7828d8253c3d7eb6",
+  "platform": "Native Ubuntu24.04 x86_64, GCC13.3, CMake3.31.6, static OpenSSL3.5.9; wallet+Modelnet compiledON.",
+  "compilation_scope": "Actual maintained compiler command for converters at-O1; exact maintained regression body in standalone Boost wrapper at-O0; copied CLI archives and shared maintained link command, not full test_btx/new full node build.",
+  "unit": {
+    "same_object_sha256": "43271475500f974cd9629d0feaf039d226e9e49a985fda34f2113cf14c3487bf",
+    "same_body_sha256": "2d852ade3a33a958bc2d96dc8eba4ba310cf9ba774a6957dc69f8e393e0d3012",
+    "baseline_exit": 201,
+    "baseline_passed": 20,
+    "baseline_failed": 26,
+    "candidate_exit": 0,
+    "candidate_passed": 46,
+    "testcases": 2
+  },
+  "functional": {
+    "same_case_sha256": "0377a69ba13a2cb7b33256fc0275b090a75699c3a0e26430982b76db2b04e6f9",
+    "baseline_exit": 1,
+    "baseline_failed_requirements": 2,
+    "baseline_error": -3,
+    "candidate_exit": 0,
+    "candidate_passed_requirements": 2,
+    "invalid_controls_per_variant": 10,
+    "raw_object_controls_per_variant": 3,
+    "raw_string_rejected_both": true,
+    "exact_adapter_input": {
+      "prompt": "hello-btx",
+      "max_new_tokens": 8
+    },
+    "both_nodes_shutdown_before_evaluation": true
+  },
+  "unit_pair": {
+    "baseline": {
+      "exit": 201,
+      "binary_sha256": "5d0a92b4577c473b304d8f18e81d36a8d9d26b92c265336e5f35db48475ff65e",
+      "same_test_object_sha256": "43271475500f974cd9629d0feaf039d226e9e49a985fda34f2113cf14c3487bf",
+      "converter_source_sha256": "113bb045e9c22f1989d573c306b114020d56d969fd4899237cc7161342576cbf",
+      "converter_object_sha256": "c54a86fdce8758065a1e77ffbddb45b292678d6a72edbf8c9a418900a3844f3b"
+    },
+    "candidate": {
+      "exit": 0,
+      "binary_sha256": "663846d94836703cf5a0bf99dba98cf1ce8eca3f865c52e207c7854689d42fb5",
+      "same_test_object_sha256": "43271475500f974cd9629d0feaf039d226e9e49a985fda34f2113cf14c3487bf",
+      "converter_source_sha256": "5b80266e680cd808d1ff732aae3d397a0036511a077f7b674b743270e45bc2d9",
+      "converter_object_sha256": "d88f5f292cb2c9d39c1d654c4c24c7d38c99075ed6597dd957ed7749bd566d61"
+    }
+  },
+  "cli_pair": {
+    "baseline": {
+      "sha256": "f59a0377fc9f800e945572c63fead70f450bd14d783fb4a89a2ad2a830fbeafa",
+      "archive_sha256": "ea250d9190795abae2d789ea25d2adc9fd6f96b5038988b095d58584de6eccb3",
+      "archive_members": {
+        "stdin.cpp.o": "18e1592a46e2506c859c232c547f3e6c70a4dfd072e94952675d875b4997398d",
+        "lightwatch.cpp.o": "715eccfedc0178c55b33ac3d5aeb9aa94a4adbc65d843498965068362cbb9dd4",
+        "client.cpp.o": "c54a86fdce8758065a1e77ffbddb45b292678d6a72edbf8c9a418900a3844f3b"
+      }
+    },
+    "candidate": {
+      "sha256": "52a23513e692fc73fb7239bb00518c4979ee84b3ea4a673c146bb27ced0c1e35",
+      "archive_sha256": "4fbd1b46bc78d0bc418db0c89b03da26af720631b4bdf8e9b3c32194d760a8f0",
+      "archive_members": {
+        "stdin.cpp.o": "18e1592a46e2506c859c232c547f3e6c70a4dfd072e94952675d875b4997398d",
+        "lightwatch.cpp.o": "715eccfedc0178c55b33ac3d5aeb9aa94a4adbc65d843498965068362cbb9dd4",
+        "client.cpp.o": "d88f5f292cb2c9d39c1d654c4c24c7d38c99075ed6597dd957ed7749bd566d61"
+      }
+    }
+  },
+  "workflow_pair": {
+    "baseline": {
+      "exit": 1,
+      "acceptance_pass": false,
+      "requirements": [
+        {
+          "label": "documented-positional",
+          "passed": false
+        },
+        {
+          "label": "documented-named",
+          "passed": false
+        }
+      ],
+      "guards_complete": true,
+      "invalid_controls": 10,
+      "node_rpc_shutdown_complete": true,
+      "cli_sha256_before_after": "f59a0377fc9f800e945572c63fead70f450bd14d783fb4a89a2ad2a830fbeafa",
+      "same_case_sha256": "0377a69ba13a2cb7b33256fc0275b090a75699c3a0e26430982b76db2b04e6f9"
+    },
+    "candidate": {
+      "exit": 0,
+      "acceptance_pass": true,
+      "requirements": [
+        {
+          "label": "documented-positional",
+          "passed": true
+        },
+        {
+          "label": "documented-named",
+          "passed": true
+        }
+      ],
+      "guards_complete": true,
+      "invalid_controls": 10,
+      "node_rpc_shutdown_complete": true,
+      "cli_sha256_before_after": "52a23513e692fc73fb7239bb00518c4979ee84b3ea4a673c146bb27ced0c1e35",
+      "same_case_sha256": "0377a69ba13a2cb7b33256fc0275b090a75699c3a0e26430982b76db2b04e6f9"
+    }
+  },
+  "node_helper_and_original_libraries_unchanged": true,
+  "source_audits": {
+    "source-after-build.json": {
+      "files": 14309,
+      "sha256": "c8497991392e27c28ffe00a22284413fb2863f1b9474a4a191dc95a11e5be2e0",
+      "all_tree_blobs_modes_verified": true,
+      "mismatches": []
+    },
+    "source-after-test.json": {
+      "files": 14309,
+      "sha256": "c8497991392e27c28ffe00a22284413fb2863f1b9474a4a191dc95a11e5be2e0",
+      "all_tree_blobs_modes_verified": true,
+      "mismatches": []
+    },
+    "source-before.json": {
+      "files": 14309,
+      "sha256": "c8497991392e27c28ffe00a22284413fb2863f1b9474a4a191dc95a11e5be2e0",
+      "all_tree_blobs_modes_verified": true,
+      "mismatches": []
+    },
+    "source-final.json": {
+      "files": 14309,
+      "sha256": "c8497991392e27c28ffe00a22284413fb2863f1b9474a4a191dc95a11e5be2e0",
+      "all_tree_blobs_modes_verified": true,
+      "mismatches": []
+    }
+  },
+  "artifact_id": 13481605429,
+  "artifact_sha256": "eae6a2e374b6f0d2010747de3db171577e632e666e80d7e46dc8ba022b307442",
+  "artifact_expires": "2026-11-13T05:53:36Z",
+  "real_LLM_or_GPU": false,
+  "fake_adapter": true,
+  "full_suite_or_other_platforms": false,
+  "upstream_posted": false,
+  "code_branch_pushed": false,
+  "internal_review": "RESULT-REVIEW.md; artifact/source review only, no extra native execution."
+}

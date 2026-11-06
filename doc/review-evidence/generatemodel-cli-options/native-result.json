@@ -1,0 +1,716 @@
+{
+  "base": "666673a3153225ba264c7870e0e82e354df86765",
+  "commands": [
+    {
+      "label": "apt-update",
+      "args": [
+        "sudo",
+        "apt-get",
+        "-o",
+        "Acquire::http::Timeout=30",
+        "-o",
+        "Acquire::https::Timeout=30",
+        "-o",
+        "Acquire::Retries=1",
+        "update"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 5.0,
+      "stop": null,
+      "log": "apt-update.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "apt-install",
+      "args": [
+        "sudo",
+        "apt-get",
+        "-o",
+        "Acquire::http::Timeout=30",
+        "-o",
+        "Acquire::https::Timeout=30",
+        "-o",
+        "Acquire::Retries=1",
+        "install",
+        "-y",
+        "--no-install-recommends",
+        "g++-13",
+        "ninja-build",
+        "pkgconf",
+        "libevent-dev",
+        "libboost-dev",
+        "libsqlite3-dev",
+        "libzmq3-dev",
+        "ccache"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 9.0,
+      "stop": null,
+      "log": "apt-install.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "gcc-version",
+      "args": [
+        "g++-13",
+        "--version"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "gcc-version.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "cmake-version",
+      "args": [
+        "cmake",
+        "--version"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.01,
+      "stop": null,
+      "log": "cmake-version.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "dependency-versions",
+      "args": [
+        "dpkg-query",
+        "-W",
+        "g++-13",
+        "libboost-dev",
+        "libevent-dev",
+        "libsqlite3-dev",
+        "libzmq3-dev",
+        "ninja-build",
+        "ccache"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "dependency-versions.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "ldd-node",
+      "args": [
+        "ldd",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build/bin/btxd"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "ldd-node.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "ldd-cli",
+      "args": [
+        "ldd",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build/bin/btx-cli"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "ldd-cli.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "cached-configure",
+      "args": [
+        "cmake",
+        "-S",
+        "/home/runner/work/btx/btx/p2mr-parent-product",
+        "-B",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 2.0,
+      "stop": null,
+      "log": "cached-configure.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "helper-build-plan",
+      "args": [
+        "ninja",
+        "-C",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build",
+        "-n",
+        "btx-modeld"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "helper-build-plan.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "helper-target-build",
+      "args": [
+        "cmake",
+        "--build",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build",
+        "--target",
+        "btx-modeld",
+        "--parallel",
+        "2"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 6.0,
+      "stop": null,
+      "log": "helper-target-build.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "compile-maintained-regression",
+      "args": [
+        "g++-13",
+        "-std=c++20",
+        "-O0",
+        "-I/home/runner/work/btx/btx/p2mr-parent-product/src",
+        "-I/home/runner/work/btx/btx/p2mr-parent-product/src/univalue/include",
+        "-c",
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/component.cpp",
+        "-o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/component.o"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 7.0,
+      "stop": null,
+      "log": "compile-maintained-regression.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "compile-converter-baseline",
+      "args": [
+        "/usr/bin/g++-13",
+        "-I/home/runner/work/btx/btx/p2mr-parent-native/build/src",
+        "-I/home/runner/work/btx/btx/p2mr-parent-product/src",
+        "-I/home/runner/work/btx/btx/p2mr-parent-product/src/univalue/include",
+        "-O1",
+        "-std=c++20",
+        "-fPIC",
+        "-fno-extended-identifiers",
+        "-fdebug-prefix-map=/home/runner/work/btx/btx/p2mr-parent-product/src=.",
+        "-fmacro-prefix-map=/home/runner/work/btx/btx/p2mr-parent-product/src=.",
+        "-fstack-reuse=none",
+        "-Wall",
+        "-Wextra",
+        "-Wformat",
+        "-Wformat-security",
+        "-Wvla",
+        "-Wredundant-decls",
+        "-Wdate-time",
+        "-Wduplicated-branches",
+        "-Wduplicated-cond",
+        "-Wlogical-op",
+        "-Wimplicit-fallthrough",
+        "-Wbidi-chars=any",
+        "-Wundef",
+        "-Woverloaded-virtual",
+        "-Wsuggest-override",
+        "-Wno-unused-parameter",
+        "-U_FORTIFY_SOURCE",
+        "-D_FORTIFY_SOURCE=3",
+        "-Wstack-protector",
+        "-fstack-protector-all",
+        "-fcf-protection=full",
+        "-fstack-clash-protection",
+        "-o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/baseline/client.cpp.o",
+        "-c",
+        "/home/runner/work/btx/btx/p2mr-parent-product/src/rpc/client.cpp"
+      ],
+      "cwd": "/home/runner/work/btx/btx/p2mr-parent-native/build",
+      "returncode": 0,
+      "seconds": 3.0,
+      "stop": null,
+      "log": "compile-converter-baseline.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "link-unit-baseline",
+      "args": [
+        "g++-13",
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/component.o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/baseline/client.cpp.o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build/src/univalue/libunivalue.a",
+        "-pthread",
+        "-o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/baseline/convert-test"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "link-unit-baseline.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "unit-baseline",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/baseline/convert-test",
+        "--report_level=detailed",
+        "--log_level=test_suite"
+      ],
+      "cwd": "None",
+      "returncode": 201,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "unit-baseline.log",
+      "allowed": [
+        201
+      ]
+    },
+    {
+      "label": "replace-archive-converter-baseline",
+      "args": [
+        "ar",
+        "r",
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/baseline/libbitcoin_cli.a",
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/baseline/client.cpp.o"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "replace-archive-converter-baseline.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "link-cli-baseline",
+      "args": [
+        "/bin/sh",
+        "-c",
+        ": && /usr/bin/g++-13 -O1 -Wl,--unresolved-symbols=ignore-in-shared-libs \"-Wl,--enable-new-dtags,-rpath,\\$ORIGIN/../lib\" -Wl,-z,stack-size=8388608 -fstack-reuse=none -fstack-protector-all -fcf-protection=full -fstack-clash-protection -Wl,-z,relro -Wl,-z,now -Wl,-z,separate-code -fPIE -pie -Wl,--dependency-file=src/CMakeFiles/btx-cli.dir/link.d src/CMakeFiles/btx-cli.dir/bitcoin-cli.cpp.o -o /home/runner/work/btx/btx/p2mr-parent-native/generate-repair/baseline/btx-cli  /home/runner/work/btx/btx/p2mr-parent-native/generate-repair/baseline/libbitcoin_cli.a  -Wl,--start-group  lib/libbitcoin_common.a  lib/libbitcoin_shielded.a  lib/libbitcoin_db.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a  -Wl,--end-group  /usr/lib/x86_64-linux-gnu/libevent_core.so  /usr/lib/x86_64-linux-gnu/libevent_extra.so  lib/libbitcoin_common.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so  /usr/lib/x86_64-linux-gnu/libpthread.a  lib/libbitcoin_db.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a && cd /home/runner/work/btx/btx/p2mr-parent-native/build/src && /usr/local/bin/cmake -E rm -f /home/runner/work/btx/btx/p2mr-parent-native/build/bin/bitcoin-cli && /usr/local/bin/cmake -E create_symlink btx-cli /home/runner/work/btx/btx/p2mr-parent-native/build/bin/bitcoin-cli"
+      ],
+      "cwd": "/home/runner/work/btx/btx/p2mr-parent-native/build",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "link-cli-baseline.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "compile-converter-candidate",
+      "args": [
+        "/usr/bin/g++-13",
+        "-I/home/runner/work/btx/btx/p2mr-parent-native/build/src",
+        "-I/home/runner/work/btx/btx/p2mr-parent-product/src",
+        "-I/home/runner/work/btx/btx/p2mr-parent-product/src/univalue/include",
+        "-O1",
+        "-std=c++20",
+        "-fPIC",
+        "-fno-extended-identifiers",
+        "-fdebug-prefix-map=/home/runner/work/btx/btx/p2mr-parent-product/src=.",
+        "-fmacro-prefix-map=/home/runner/work/btx/btx/p2mr-parent-product/src=.",
+        "-fstack-reuse=none",
+        "-Wall",
+        "-Wextra",
+        "-Wformat",
+        "-Wformat-security",
+        "-Wvla",
+        "-Wredundant-decls",
+        "-Wdate-time",
+        "-Wduplicated-branches",
+        "-Wduplicated-cond",
+        "-Wlogical-op",
+        "-Wimplicit-fallthrough",
+        "-Wbidi-chars=any",
+        "-Wundef",
+        "-Woverloaded-virtual",
+        "-Wsuggest-override",
+        "-Wno-unused-parameter",
+        "-U_FORTIFY_SOURCE",
+        "-D_FORTIFY_SOURCE=3",
+        "-Wstack-protector",
+        "-fstack-protector-all",
+        "-fcf-protection=full",
+        "-fstack-clash-protection",
+        "-o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/candidate/client.cpp.o",
+        "-c",
+        "/home/runner/work/btx/btx/contrib/devtools/generate-cli-repair/candidate/src/rpc/client.cpp"
+      ],
+      "cwd": "/home/runner/work/btx/btx/p2mr-parent-native/build",
+      "returncode": 0,
+      "seconds": 3.0,
+      "stop": null,
+      "log": "compile-converter-candidate.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "link-unit-candidate",
+      "args": [
+        "g++-13",
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/component.o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/candidate/client.cpp.o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build/src/univalue/libunivalue.a",
+        "-pthread",
+        "-o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/candidate/convert-test"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "link-unit-candidate.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "unit-candidate",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/candidate/convert-test",
+        "--report_level=detailed",
+        "--log_level=test_suite"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "unit-candidate.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "replace-archive-converter-candidate",
+      "args": [
+        "ar",
+        "r",
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/candidate/libbitcoin_cli.a",
+        "/home/runner/work/btx/btx/p2mr-parent-native/generate-repair/candidate/client.cpp.o"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "replace-archive-converter-candidate.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "link-cli-candidate",
+      "args": [
+        "/bin/sh",
+        "-c",
+        ": && /usr/bin/g++-13 -O1 -Wl,--unresolved-symbols=ignore-in-shared-libs \"-Wl,--enable-new-dtags,-rpath,\\$ORIGIN/../lib\" -Wl,-z,stack-size=8388608 -fstack-reuse=none -fstack-protector-all -fcf-protection=full -fstack-clash-protection -Wl,-z,relro -Wl,-z,now -Wl,-z,separate-code -fPIE -pie -Wl,--dependency-file=src/CMakeFiles/btx-cli.dir/link.d src/CMakeFiles/btx-cli.dir/bitcoin-cli.cpp.o -o /home/runner/work/btx/btx/p2mr-parent-native/generate-repair/candidate/btx-cli  /home/runner/work/btx/btx/p2mr-parent-native/generate-repair/candidate/libbitcoin_cli.a  -Wl,--start-group  lib/libbitcoin_common.a  lib/libbitcoin_shielded.a  lib/libbitcoin_db.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a  -Wl,--end-group  /usr/lib/x86_64-linux-gnu/libevent_core.so  /usr/lib/x86_64-linux-gnu/libevent_extra.so  lib/libbitcoin_common.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so  /usr/lib/x86_64-linux-gnu/libpthread.a  lib/libbitcoin_db.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a && cd /home/runner/work/btx/btx/p2mr-parent-native/build/src && /usr/local/bin/cmake -E rm -f /home/runner/work/btx/btx/p2mr-parent-native/build/bin/bitcoin-cli && /usr/local/bin/cmake -E create_symlink btx-cli /home/runner/work/btx/btx/p2mr-parent-native/build/bin/bitcoin-cli"
+      ],
+      "cwd": "/home/runner/work/btx/btx/p2mr-parent-native/build",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "link-cli-candidate.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "workflow-baseline",
+      "args": [
+        "python3",
+        "/home/runner/work/btx/btx/contrib/devtools/generate-cli-repair/case.py",
+        "--configfile=/home/runner/work/btx/btx/p2mr-parent-native/build/test/config.ini",
+        "--tmpdir=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/node-test",
+        "--cachedir=/home/runner/work/btx/btx/generate-cli-repair-runtime/baseline/chain-cache",
+        "--portseed=42325",
+        "--nocleanup"
+      ],
+      "cwd": "None",
+      "returncode": 1,
+      "seconds": 2.0,
+      "stop": null,
+      "log": "workflow-baseline.log",
+      "allowed": [
+        1
+      ]
+    },
+    {
+      "label": "workflow-candidate",
+      "args": [
+        "python3",
+        "/home/runner/work/btx/btx/contrib/devtools/generate-cli-repair/case.py",
+        "--configfile=/home/runner/work/btx/btx/p2mr-parent-native/build/test/config.ini",
+        "--tmpdir=/home/runner/work/btx/btx/generate-cli-repair-runtime/candidate/node-test",
+        "--cachedir=/home/runner/work/btx/btx/generate-cli-repair-runtime/candidate/chain-cache",
+        "--portseed=42325",
+        "--nocleanup"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 2.0,
+      "stop": null,
+      "log": "workflow-candidate.log",
+      "allowed": [
+        0
+      ]
+    }
+  ],
+  "errors": [],
+  "phases": {
+    "preflight": "pass",
+    "dependencies": "pass",
+    "build": "pass",
+    "test": "pass"
+  },
+  "runner": {
+    "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+    "run_id": "42170969509",
+    "fixture_head": "16c3707b0b0754b2f3c1eabe7828d8253c3d7eb6"
+  },
+  "source_before": {
+    "head": "666673a3153225ba264c7870e0e82e354df86765",
+    "files": 14309,
+    "manifest_sha256": "c8497991392e27c28ffe00a22284413fb2863f1b9474a4a191dc95a11e5be2e0"
+  },
+  "restored_binaries": {
+    "btxd": {
+      "path": "/home/runner/work/btx/btx/p2mr-parent-native/build/bin/btxd",
+      "sha256": "4ad63b64f6d6bab34f5ba92518dc8955ee2e263e0daa4d739f27ec868fce0ae1",
+      "bytes": 56599104
+    },
+    "btx-cli": {
+      "path": "/home/runner/work/btx/btx/p2mr-parent-native/build/bin/btx-cli",
+      "sha256": "b71061e57a9224d86ef2f17da1914f3b68ffe91b696282151c0aba9e12caa5b8",
+      "bytes": 18961888
+    }
+  },
+  "retained_cache_id": 10096149671,
+  "planned_helper_steps": [
+    "[0/2] Re-checking globbed directories...",
+    "[1/2] Re-running CMake..."
+  ],
+  "binaries": {
+    "btxd": {
+      "sha256": "4ad63b64f6d6bab34f5ba92518dc8955ee2e263e0daa4d739f27ec868fce0ae1",
+      "bytes": 56599104
+    },
+    "btx-cli": {
+      "sha256": "b71061e57a9224d86ef2f17da1914f3b68ffe91b696282151c0aba9e12caa5b8",
+      "bytes": 18961888
+    },
+    "btx-modeld": {
+      "sha256": "62e2a47bb52507615129820aeda4e54aeac4d8744419d12833ffa148dbc88df3",
+      "bytes": 33682184
+    }
+  },
+  "source_after-build": {
+    "head": "666673a3153225ba264c7870e0e82e354df86765",
+    "files": 14309,
+    "manifest_sha256": "c8497991392e27c28ffe00a22284413fb2863f1b9474a4a191dc95a11e5be2e0"
+  },
+  "code_identity": {
+    "utc": "2026-11-06T05:49:00.687204+00:00",
+    "base": "666673a3153225ba264c7870e0e82e354df86765",
+    "branch": "refs/heads/codex/fix-generatemodel-cli-options",
+    "commit": "fae706ce2bb521984646baddf0f550ebeeb394d1",
+    "tree": "b56cc1562334914e8ff6edc44dd62742def3b469",
+    "files": {
+      "src/rpc/client.cpp": {
+        "blob": "894b24f6d1997869c2ba61c8adcf73bfe5cf12b2",
+        "sha256": "5b80266e680cd808d1ff732aae3d397a0036511a077f7b674b743270e45bc2d9"
+      },
+      "src/test/rpc_tests.cpp": {
+        "blob": "2feaa9977640d8cf7b29af075ad7158ffae76adc",
+        "sha256": "7225dda9ae1d98a5990798bfa56557f16028aa17907d260f47efd189d0cbcb00"
+      }
+    },
+    "numstat": "1\t0\tsrc/rpc/client.cpp\n37\t0\tsrc/test/rpc_tests.cpp\n",
+    "head_real_index_dirty_work_preserved": true,
+    "pushed": false,
+    "credit": "Existing Bitcoin/BTX copyright retained; new fix/test from our RPC-help and real-node reproduction. Existing helper fixture source credited in report; no invented co-authorship."
+  },
+  "case_sha256": "0377a69ba13a2cb7b33256fc0275b090a75699c3a0e26430982b76db2b04e6f9",
+  "regression_sha256": "2d852ade3a33a958bc2d96dc8eba4ba310cf9ba774a6957dc69f8e393e0d3012",
+  "wrapper_sha256": "c66625a0133a71e9ba064bf130160e8b16d8ddbca11c395839344af76d6aad47",
+  "unit_pair": {
+    "baseline": {
+      "exit": 201,
+      "binary_sha256": "5d0a92b4577c473b304d8f18e81d36a8d9d26b92c265336e5f35db48475ff65e",
+      "same_test_object_sha256": "43271475500f974cd9629d0feaf039d226e9e49a985fda34f2113cf14c3487bf",
+      "converter_source_sha256": "113bb045e9c22f1989d573c306b114020d56d969fd4899237cc7161342576cbf",
+      "converter_object_sha256": "c54a86fdce8758065a1e77ffbddb45b292678d6a72edbf8c9a418900a3844f3b"
+    },
+    "candidate": {
+      "exit": 0,
+      "binary_sha256": "663846d94836703cf5a0bf99dba98cf1ce8eca3f865c52e207c7854689d42fb5",
+      "same_test_object_sha256": "43271475500f974cd9629d0feaf039d226e9e49a985fda34f2113cf14c3487bf",
+      "converter_source_sha256": "5b80266e680cd808d1ff732aae3d397a0036511a077f7b674b743270e45bc2d9",
+      "converter_object_sha256": "d88f5f292cb2c9d39c1d654c4c24c7d38c99075ed6597dd957ed7749bd566d61"
+    }
+  },
+  "cli_pair": {
+    "baseline": {
+      "sha256": "f59a0377fc9f800e945572c63fead70f450bd14d783fb4a89a2ad2a830fbeafa",
+      "archive_sha256": "ea250d9190795abae2d789ea25d2adc9fd6f96b5038988b095d58584de6eccb3",
+      "archive_members": {
+        "stdin.cpp.o": "18e1592a46e2506c859c232c547f3e6c70a4dfd072e94952675d875b4997398d",
+        "lightwatch.cpp.o": "715eccfedc0178c55b33ac3d5aeb9aa94a4adbc65d843498965068362cbb9dd4",
+        "client.cpp.o": "c54a86fdce8758065a1e77ffbddb45b292678d6a72edbf8c9a418900a3844f3b"
+      }
+    },
+    "candidate": {
+      "sha256": "52a23513e692fc73fb7239bb00518c4979ee84b3ea4a673c146bb27ced0c1e35",
+      "archive_sha256": "4fbd1b46bc78d0bc418db0c89b03da26af720631b4bdf8e9b3c32194d760a8f0",
+      "archive_members": {
+        "stdin.cpp.o": "18e1592a46e2506c859c232c547f3e6c70a4dfd072e94952675d875b4997398d",
+        "lightwatch.cpp.o": "715eccfedc0178c55b33ac3d5aeb9aa94a4adbc65d843498965068362cbb9dd4",
+        "client.cpp.o": "d88f5f292cb2c9d39c1d654c4c24c7d38c99075ed6597dd957ed7749bd566d61"
+      }
+    }
+  },
+  "archive_members_before": {
+    "stdin.cpp.o": "18e1592a46e2506c859c232c547f3e6c70a4dfd072e94952675d875b4997398d",
+    "lightwatch.cpp.o": "715eccfedc0178c55b33ac3d5aeb9aa94a4adbc65d843498965068362cbb9dd4",
+    "client.cpp.o": "97e55aa30fa896c24592b6b8c3b63301d1be61329af45cba107a6a13b4a5bfb3"
+  },
+  "compiler_command": [
+    "/usr/bin/g++-13",
+    "-I/home/runner/work/btx/btx/p2mr-parent-native/build/src",
+    "-I/home/runner/work/btx/btx/p2mr-parent-product/src",
+    "-I/home/runner/work/btx/btx/p2mr-parent-product/src/univalue/include",
+    "-O1",
+    "-std=c++20",
+    "-fPIC",
+    "-fno-extended-identifiers",
+    "-fdebug-prefix-map=/home/runner/work/btx/btx/p2mr-parent-product/src=.",
+    "-fmacro-prefix-map=/home/runner/work/btx/btx/p2mr-parent-product/src=.",
+    "-fstack-reuse=none",
+    "-Wall",
+    "-Wextra",
+    "-Wformat",
+    "-Wformat-security",
+    "-Wvla",
+    "-Wredundant-decls",
+    "-Wdate-time",
+    "-Wduplicated-branches",
+    "-Wduplicated-cond",
+    "-Wlogical-op",
+    "-Wimplicit-fallthrough",
+    "-Wbidi-chars=any",
+    "-Wundef",
+    "-Woverloaded-virtual",
+    "-Wsuggest-override",
+    "-Wno-unused-parameter",
+    "-U_FORTIFY_SOURCE",
+    "-D_FORTIFY_SOURCE=3",
+    "-Wstack-protector",
+    "-fstack-protector-all",
+    "-fcf-protection=full",
+    "-fstack-clash-protection",
+    "-o",
+    "src/CMakeFiles/bitcoin_cli.dir/rpc/client.cpp.o",
+    "-c",
+    "/home/runner/work/btx/btx/p2mr-parent-product/src/rpc/client.cpp"
+  ],
+  "cli_link_command": ": && /usr/bin/g++-13 -O1 -Wl,--unresolved-symbols=ignore-in-shared-libs \"-Wl,--enable-new-dtags,-rpath,\\$ORIGIN/../lib\" -Wl,-z,stack-size=8388608 -fstack-reuse=none -fstack-protector-all -fcf-protection=full -fstack-clash-protection -Wl,-z,relro -Wl,-z,now -Wl,-z,separate-code -fPIE -pie -Wl,--dependency-file=src/CMakeFiles/btx-cli.dir/link.d src/CMakeFiles/btx-cli.dir/bitcoin-cli.cpp.o -o bin/btx-cli  lib/libbitcoin_cli.a  -Wl,--start-group  lib/libbitcoin_common.a  lib/libbitcoin_shielded.a  lib/libbitcoin_db.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a  -Wl,--end-group  /usr/lib/x86_64-linux-gnu/libevent_core.so  /usr/lib/x86_64-linux-gnu/libevent_extra.so  lib/libbitcoin_common.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so  /usr/lib/x86_64-linux-gnu/libpthread.a  lib/libbitcoin_db.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a && cd /home/runner/work/btx/btx/p2mr-parent-native/build/src && /usr/local/bin/cmake -E rm -f /home/runner/work/btx/btx/p2mr-parent-native/build/bin/bitcoin-cli && /usr/local/bin/cmake -E create_symlink btx-cli /home/runner/work/btx/btx/p2mr-parent-native/build/bin/bitcoin-cli",
+  "original_archives_unchanged_before_workflows": true,
+  "workflow_pair": {
+    "baseline": {
+      "exit": 1,
+      "acceptance_pass": false,
+      "requirements": [
+        {
+          "label": "documented-positional",
+          "passed": false
+        },
+        {
+          "label": "documented-named",
+          "passed": false
+        }
+      ],
+      "guards_complete": true,
+      "invalid_controls": 10,
+      "node_rpc_shutdown_complete": true,
+      "cli_sha256_before_after": "f59a0377fc9f800e945572c63fead70f450bd14d783fb4a89a2ad2a830fbeafa",
+      "same_case_sha256": "0377a69ba13a2cb7b33256fc0275b090a75699c3a0e26430982b76db2b04e6f9"
+    },
+    "candidate": {
+      "exit": 0,
+      "acceptance_pass": true,
+      "requirements": [
+        {
+          "label": "documented-positional",
+          "passed": true
+        },
+        {
+          "label": "documented-named",
+          "passed": true
+        }
+      ],
+      "guards_complete": true,
+      "invalid_controls": 10,
+      "node_rpc_shutdown_complete": true,
+      "cli_sha256_before_after": "52a23513e692fc73fb7239bb00518c4979ee84b3ea4a673c146bb27ced0c1e35",
+      "same_case_sha256": "0377a69ba13a2cb7b33256fc0275b090a75699c3a0e26430982b76db2b04e6f9"
+    }
+  },
+  "original_archives_and_binaries_unchanged": true,
+  "workflow_pass": true,
+  "paired_proof_pass": true,
+  "source_after-test": {
+    "head": "666673a3153225ba264c7870e0e82e354df86765",
+    "files": 14309,
+    "manifest_sha256": "c8497991392e27c28ffe00a22284413fb2863f1b9474a4a191dc95a11e5be2e0"
+  },
+  "cleanup": {
+    "before": [],
+    "signals": [],
+    "remaining": [],
+    "runtime_removed": true
+  },
+  "source_final": {
+    "head": "666673a3153225ba264c7870e0e82e354df86765",
+    "files": 14309,
+    "manifest_sha256": "c8497991392e27c28ffe00a22284413fb2863f1b9474a4a191dc95a11e5be2e0"
+  },
+  "qualification_pass": true
+}
