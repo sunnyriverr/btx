@@ -1,5 +1,5 @@
 from pathlib import Path
-import importlib.util,json,os,sys,time
+import functools,importlib.util,json,os,sys,time
 ROOT=Path(os.environ['GITHUB_WORKSPACE']);HERE=Path(__file__).parent;PRODUCT=ROOT/'p2mr-parent-product';OUT=ROOT/'rpc-help-live-results';variant=os.environ['RPC_VARIANT'];events=[]
 sys.path.insert(0,str(PRODUCT/'test/functional'))
 spec=importlib.util.spec_from_file_location('qualified_help',HERE/(variant+'.py'));m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
@@ -12,6 +12,7 @@ cls.set_test_params=params
 for name in ['test_client_conversion_table','test_argument_names','test_categories','dump_help','wallet_help']:
  if not hasattr(cls,name):continue
  original=getattr(cls,name)
+ @functools.wraps(original)
  def wrapped(self,original=original,name=name):
   item={'name':name,'start':time.time()};events.append(item)
   try:

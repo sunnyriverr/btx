@@ -123,7 +123,7 @@ class HelpRpcTest(BitcoinTestFramework):
             components.append('Modelnet')
 
         if self.is_wallet_compiled():
-            components.append('Wallet')
+            components.extend(['Bridge', 'Shielded', 'Wallet'])
 
         if self.is_external_signer_compiled():
             components.append('Signer')
