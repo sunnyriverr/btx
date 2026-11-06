@@ -1,0 +1,90 @@
+{
+  "variant": "baseline",
+  "method_sha256": "9a23ebbf5d528f041440d1b3acd5a8d3f833419fb4128db5513a73c77adf684e",
+  "wrapper_calls": [
+    {
+      "args": [
+        "/usr/bin/python3",
+        "/home/runner/work/btx/btx/p2mr-parent-product/contrib/modelnet/btx-model",
+        "--socket",
+        "/home/runner/work/btx/btx/rpc-help-live-runtime/baseline/helper.sock",
+        "--json",
+        "mirror",
+        "--query",
+        "wrapper-selector",
+        "--keep-latest",
+        "3",
+        "--min-independent-origins",
+        "2"
+      ],
+      "exit": 1,
+      "stdout": "{\n  \"schema_version\": 2,\n  \"ok\": false,\n  \"available\": false,\n  \"error\": \"setmodelmirror: INVALID_PARAMETER: idempotency_key required\",\n  \"automatic_spend_atoms\": 0\n}\n",
+      "stderr": ""
+    }
+  ],
+  "helper_calls": [
+    {
+      "method": "setmodelmirror",
+      "params": [
+        {
+          "query": "retained-selector",
+          "keep_latest": 1,
+          "automatic_spend_atoms": 0,
+          "idempotency_key": "mirror-sentinel-regression"
+        }
+      ],
+      "result": {
+        "jsonrpc": "1.0",
+        "id": "profile-native",
+        "result": {
+          "selectors": [
+            {
+              "publisher_id": "",
+              "collection_id": "",
+              "query": "retained-selector",
+              "keep_latest": 1,
+              "min_independent_origins": 1,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 1,
+          "automatic_spend_atoms": 0,
+          "schema_version": 1,
+          "role": "node",
+          "mirror_privilege": false,
+          "consensus": false,
+          "search_authority": false,
+          "profile": "custom",
+          "preserve_rare": false,
+          "fetch_fails_below_min": false,
+          "note": "mirror is a local keep/follow policy, not a monetary or consensus privilege",
+          "publisher_id": "",
+          "collection_id": "",
+          "query": "retained-selector",
+          "keep_latest": 1,
+          "applied": true
+        },
+        "error": null
+      }
+    }
+  ],
+  "method_pass": false,
+  "error": "('{\\n  \"schema_version\": 2,\\n  \"ok\": false,\\n  \"available\": false,\\n  \"error\": \"setmodelmirror: INVALID_PARAMETER: idempotency_key required\",\\n  \"automatic_spend_atoms\": 0\\n}\\n', '')",
+  "helper_exit": 0,
+  "node_stopped": true,
+  "socket_remaining": false,
+  "saved_mirror": {
+    "selectors": [
+      {
+        "publisher_id": "",
+        "collection_id": "",
+        "query": "retained-selector",
+        "keep_latest": 1,
+        "min_independent_origins": 1,
+        "automatic_spend_atoms": 0
+      }
+    ],
+    "min_independent_origins": 1,
+    "automatic_spend_atoms": 0
+  }
+}

@@ -1,0 +1,474 @@
+{
+  "base": "666673a3153225ba264c7870e0e82e354df86765",
+  "fixture": "1647dbee1e3dd0cb7d75dca95b7702cdae0dbc70",
+  "commands": [
+    {
+      "args": [
+        "sudo",
+        "apt-get",
+        "-o",
+        "Acquire::Retries=1",
+        "update"
+      ],
+      "label": "apt-update",
+      "rc": 0,
+      "seconds": 4.773097296000003
+    },
+    {
+      "args": [
+        "sudo",
+        "apt-get",
+        "install",
+        "-y",
+        "--no-install-recommends",
+        "libevent-dev",
+        "libsqlite3-dev",
+        "libzmq3-dev",
+        "g++-13",
+        "ninja-build",
+        "pkgconf",
+        "libboost-dev",
+        "ccache"
+      ],
+      "label": "apt-install",
+      "rc": 0,
+      "seconds": 9.682301605000006
+    },
+    {
+      "args": [
+        "ldd",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build/bin/btxd"
+      ],
+      "label": "ldd",
+      "rc": 0,
+      "seconds": 0.007215999999999667
+    },
+    {
+      "args": [
+        "cmake",
+        "-S",
+        "/home/runner/work/btx/btx/p2mr-parent-product",
+        "-B",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build"
+      ],
+      "label": "cached-configure",
+      "rc": 0,
+      "seconds": 1.4662764060000057
+    },
+    {
+      "args": [
+        "ninja",
+        "-C",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build",
+        "-n",
+        "btx-modeld"
+      ],
+      "label": "helper-build-plan",
+      "rc": 0,
+      "seconds": 0.0635146010000085
+    },
+    {
+      "args": [
+        "cmake",
+        "--build",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build",
+        "--target",
+        "btx-modeld",
+        "--parallel",
+        "2"
+      ],
+      "label": "helper-only-build",
+      "rc": 0,
+      "seconds": 5.976291083999996
+    },
+    {
+      "args": [
+        "python3",
+        "/home/runner/work/btx/btx/contrib/devtools/mirror-wrapper-repair/case.py",
+        "--configfile=/home/runner/work/btx/btx/rpc-help-live-results/functional-config.ini",
+        "--tmpdir=/home/runner/work/btx/btx/rpc-help-live-runtime/baseline-node",
+        "--cachedir=/home/runner/work/btx/btx/rpc-help-live-runtime/baseline-cache",
+        "--portseed=42800",
+        "--nocleanup"
+      ],
+      "label": "mirror-baseline",
+      "rc": 1,
+      "seconds": 1.1153416340000035
+    },
+    {
+      "args": [
+        "python3",
+        "/home/runner/work/btx/btx/contrib/devtools/mirror-wrapper-repair/case.py",
+        "--configfile=/home/runner/work/btx/btx/rpc-help-live-results/functional-config.ini",
+        "--tmpdir=/home/runner/work/btx/btx/rpc-help-live-runtime/candidate-node",
+        "--cachedir=/home/runner/work/btx/btx/rpc-help-live-runtime/candidate-cache",
+        "--portseed=42801",
+        "--nocleanup"
+      ],
+      "label": "mirror-candidate",
+      "rc": 0,
+      "seconds": 1.1656033360000038
+    }
+  ],
+  "audit_before": [
+    "0953d899b20eab172c3376071ffc4761df34d59822e08d9a95a8edad911bb857",
+    14309
+  ],
+  "binaries_before": {
+    "btxd": "4ad63b64f6d6bab34f5ba92518dc8955ee2e263e0daa4d739f27ec868fce0ae1",
+    "btx-cli": "b71061e57a9224d86ef2f17da1914f3b68ffe91b696282151c0aba9e12caa5b8",
+    "btx-modeld": "62e2a47bb52507615129820aeda4e54aeac4d8744419d12833ffa148dbc88df3"
+  },
+  "config_overlay": "Existing generated config plus verified CMakeCache WITH_MODELNET=ON as explicit ENABLE_MODELNET=true; root config generation already qualified locally, no root reconfigure/build.",
+  "pair": {
+    "baseline": {
+      "variant": "baseline",
+      "method_sha256": "9a23ebbf5d528f041440d1b3acd5a8d3f833419fb4128db5513a73c77adf684e",
+      "wrapper_calls": [
+        {
+          "args": [
+            "/usr/bin/python3",
+            "/home/runner/work/btx/btx/p2mr-parent-product/contrib/modelnet/btx-model",
+            "--socket",
+            "/home/runner/work/btx/btx/rpc-help-live-runtime/baseline/helper.sock",
+            "--json",
+            "mirror",
+            "--query",
+            "wrapper-selector",
+            "--keep-latest",
+            "3",
+            "--min-independent-origins",
+            "2"
+          ],
+          "exit": 1,
+          "stdout": "{\n  \"schema_version\": 2,\n  \"ok\": false,\n  \"available\": false,\n  \"error\": \"setmodelmirror: INVALID_PARAMETER: idempotency_key required\",\n  \"automatic_spend_atoms\": 0\n}\n",
+          "stderr": ""
+        }
+      ],
+      "helper_calls": [
+        {
+          "method": "setmodelmirror",
+          "params": [
+            {
+              "query": "retained-selector",
+              "keep_latest": 1,
+              "automatic_spend_atoms": 0,
+              "idempotency_key": "mirror-sentinel-regression"
+            }
+          ],
+          "result": {
+            "jsonrpc": "1.0",
+            "id": "profile-native",
+            "result": {
+              "selectors": [
+                {
+                  "publisher_id": "",
+                  "collection_id": "",
+                  "query": "retained-selector",
+                  "keep_latest": 1,
+                  "min_independent_origins": 1,
+                  "automatic_spend_atoms": 0
+                }
+              ],
+              "min_independent_origins": 1,
+              "automatic_spend_atoms": 0,
+              "schema_version": 1,
+              "role": "node",
+              "mirror_privilege": false,
+              "consensus": false,
+              "search_authority": false,
+              "profile": "custom",
+              "preserve_rare": false,
+              "fetch_fails_below_min": false,
+              "note": "mirror is a local keep/follow policy, not a monetary or consensus privilege",
+              "publisher_id": "",
+              "collection_id": "",
+              "query": "retained-selector",
+              "keep_latest": 1,
+              "applied": true
+            },
+            "error": null
+          }
+        }
+      ],
+      "method_pass": false,
+      "error": "('{\\n  \"schema_version\": 2,\\n  \"ok\": false,\\n  \"available\": false,\\n  \"error\": \"setmodelmirror: INVALID_PARAMETER: idempotency_key required\",\\n  \"automatic_spend_atoms\": 0\\n}\\n', '')",
+      "helper_exit": 0,
+      "node_stopped": true,
+      "socket_remaining": false,
+      "saved_mirror": {
+        "selectors": [
+          {
+            "publisher_id": "",
+            "collection_id": "",
+            "query": "retained-selector",
+            "keep_latest": 1,
+            "min_independent_origins": 1,
+            "automatic_spend_atoms": 0
+          }
+        ],
+        "min_independent_origins": 1,
+        "automatic_spend_atoms": 0
+      }
+    },
+    "candidate": {
+      "variant": "candidate",
+      "method_sha256": "9a23ebbf5d528f041440d1b3acd5a8d3f833419fb4128db5513a73c77adf684e",
+      "wrapper_calls": [
+        {
+          "args": [
+            "/usr/bin/python3",
+            "/home/runner/work/btx/btx/p2mr-parent-product/contrib/modelnet/btx-model",
+            "--socket",
+            "/home/runner/work/btx/btx/rpc-help-live-runtime/candidate/helper.sock",
+            "--json",
+            "mirror",
+            "--query",
+            "wrapper-selector",
+            "--keep-latest",
+            "3",
+            "--min-independent-origins",
+            "2"
+          ],
+          "exit": 0,
+          "stdout": "{\n  \"schema_version\": 2,\n  \"kind\": \"model_mirror\",\n  \"client\": \"btx-model\",\n  \"client_version\": \"0.35.0rc1\",\n  \"released\": false,\n  \"ok\": true,\n  \"available\": true,\n  \"method\": \"setmodelmirror\",\n  \"error\": null,\n  \"publisher_id\": \"\",\n  \"collection_id\": \"\",\n  \"query\": \"wrapper-selector\",\n  \"keep_latest\": 3,\n  \"min_independent_origins\": 2,\n  \"profile\": \"custom\",\n  \"result\": {\n    \"selectors\": [\n      {\n        \"publisher_id\": \"\",\n        \"collection_id\": \"\",\n        \"query\": \"retained-selector\",\n        \"keep_latest\": 1,\n        \"min_independent_origins\": 1,\n        \"automatic_spend_atoms\": 0\n      },\n      {\n        \"publisher_id\": \"\",\n        \"collection_id\": \"\",\n        \"query\": \"wrapper-selector\",\n        \"keep_latest\": 3,\n        \"min_independent_origins\": 2,\n        \"automatic_spend_atoms\": 0\n      }\n    ],\n    \"min_independent_origins\": 2,\n    \"automatic_spend_atoms\": 0,\n    \"schema_version\": 1,\n    \"role\": \"node\",\n    \"mirror_privilege\": false,\n    \"consensus\": false,\n    \"search_authority\": false,\n    \"profile\": \"custom\",\n    \"preserve_rare\": false,\n    \"fetch_fails_below_min\": false,\n    \"note\": \"mirror is a local keep/follow policy, not a monetary or consensus privilege\",\n    \"publisher_id\": \"\",\n    \"collection_id\": \"\",\n    \"query\": \"wrapper-selector\",\n    \"keep_latest\": 3,\n    \"applied\": true\n  },\n  \"note\": \"mirror policy is local config, not a monetary privilege and not consensus. It never auto-spends. 0.35.0rc1; fails closed if helper lacks method\",\n  \"next_actions\": [\n    \"profile show\",\n    \"follow publisher <id>\"\n  ],\n  \"automatic_spend_atoms\": 0\n}\n",
+          "stderr": ""
+        },
+        {
+          "args": [
+            "/usr/bin/python3",
+            "/home/runner/work/btx/btx/p2mr-parent-product/contrib/modelnet/btx-model",
+            "--socket",
+            "/home/runner/work/btx/btx/rpc-help-live-runtime/candidate/helper.sock",
+            "--json",
+            "mirror",
+            "--query",
+            "wrapper-selector",
+            "--keep-latest",
+            "3",
+            "--min-independent-origins",
+            "2",
+            "--idempotency-key",
+            "mirror-wrapper-replay-regression"
+          ],
+          "exit": 0,
+          "stdout": "{\n  \"schema_version\": 2,\n  \"kind\": \"model_mirror\",\n  \"client\": \"btx-model\",\n  \"client_version\": \"0.35.0rc1\",\n  \"released\": false,\n  \"ok\": true,\n  \"available\": true,\n  \"method\": \"setmodelmirror\",\n  \"error\": null,\n  \"publisher_id\": \"\",\n  \"collection_id\": \"\",\n  \"query\": \"wrapper-selector\",\n  \"keep_latest\": 3,\n  \"min_independent_origins\": 2,\n  \"profile\": \"custom\",\n  \"result\": {\n    \"selectors\": [\n      {\n        \"publisher_id\": \"\",\n        \"collection_id\": \"\",\n        \"query\": \"retained-selector\",\n        \"keep_latest\": 1,\n        \"min_independent_origins\": 1,\n        \"automatic_spend_atoms\": 0\n      },\n      {\n        \"publisher_id\": \"\",\n        \"collection_id\": \"\",\n        \"query\": \"wrapper-selector\",\n        \"keep_latest\": 3,\n        \"min_independent_origins\": 2,\n        \"automatic_spend_atoms\": 0\n      }\n    ],\n    \"min_independent_origins\": 2,\n    \"automatic_spend_atoms\": 0,\n    \"schema_version\": 1,\n    \"role\": \"node\",\n    \"mirror_privilege\": false,\n    \"consensus\": false,\n    \"search_authority\": false,\n    \"profile\": \"custom\",\n    \"preserve_rare\": false,\n    \"fetch_fails_below_min\": false,\n    \"note\": \"mirror is a local keep/follow policy, not a monetary or consensus privilege\",\n    \"publisher_id\": \"\",\n    \"collection_id\": \"\",\n    \"query\": \"wrapper-selector\",\n    \"keep_latest\": 3,\n    \"applied\": true\n  },\n  \"note\": \"mirror policy is local config, not a monetary privilege and not consensus. It never auto-spends. 0.35.0rc1; fails closed if helper lacks method\",\n  \"next_actions\": [\n    \"profile show\",\n    \"follow publisher <id>\"\n  ],\n  \"automatic_spend_atoms\": 0\n}\n",
+          "stderr": ""
+        },
+        {
+          "args": [
+            "/usr/bin/python3",
+            "/home/runner/work/btx/btx/p2mr-parent-product/contrib/modelnet/btx-model",
+            "--socket",
+            "/home/runner/work/btx/btx/rpc-help-live-runtime/candidate/helper.sock",
+            "--json",
+            "mirror",
+            "--query",
+            "wrapper-selector",
+            "--keep-latest",
+            "3",
+            "--min-independent-origins",
+            "2",
+            "--idempotency-key",
+            "mirror-wrapper-replay-regression"
+          ],
+          "exit": 0,
+          "stdout": "{\n  \"schema_version\": 2,\n  \"kind\": \"model_mirror\",\n  \"client\": \"btx-model\",\n  \"client_version\": \"0.35.0rc1\",\n  \"released\": false,\n  \"ok\": true,\n  \"available\": true,\n  \"method\": \"setmodelmirror\",\n  \"error\": null,\n  \"publisher_id\": \"\",\n  \"collection_id\": \"\",\n  \"query\": \"wrapper-selector\",\n  \"keep_latest\": 3,\n  \"min_independent_origins\": 2,\n  \"profile\": \"custom\",\n  \"result\": {\n    \"selectors\": [\n      {\n        \"publisher_id\": \"\",\n        \"collection_id\": \"\",\n        \"query\": \"retained-selector\",\n        \"keep_latest\": 1,\n        \"min_independent_origins\": 1,\n        \"automatic_spend_atoms\": 0\n      },\n      {\n        \"publisher_id\": \"\",\n        \"collection_id\": \"\",\n        \"query\": \"wrapper-selector\",\n        \"keep_latest\": 3,\n        \"min_independent_origins\": 2,\n        \"automatic_spend_atoms\": 0\n      }\n    ],\n    \"min_independent_origins\": 2,\n    \"automatic_spend_atoms\": 0,\n    \"schema_version\": 1,\n    \"role\": \"node\",\n    \"mirror_privilege\": false,\n    \"consensus\": false,\n    \"search_authority\": false,\n    \"profile\": \"custom\",\n    \"preserve_rare\": false,\n    \"fetch_fails_below_min\": false,\n    \"note\": \"mirror is a local keep/follow policy, not a monetary or consensus privilege\",\n    \"publisher_id\": \"\",\n    \"collection_id\": \"\",\n    \"query\": \"wrapper-selector\",\n    \"keep_latest\": 3,\n    \"applied\": true\n  },\n  \"note\": \"mirror policy is local config, not a monetary privilege and not consensus. It never auto-spends. 0.35.0rc1; fails closed if helper lacks method\",\n  \"next_actions\": [\n    \"profile show\",\n    \"follow publisher <id>\"\n  ],\n  \"automatic_spend_atoms\": 0\n}\n",
+          "stderr": ""
+        },
+        {
+          "args": [
+            "/usr/bin/python3",
+            "/home/runner/work/btx/btx/p2mr-parent-product/contrib/modelnet/btx-model",
+            "--socket",
+            "/home/runner/work/btx/btx/rpc-help-live-runtime/candidate/helper.sock",
+            "--json",
+            "mirror",
+            "--query",
+            "wrapper-selector",
+            "--keep-latest",
+            "4",
+            "--min-independent-origins",
+            "2",
+            "--idempotency-key",
+            "mirror-wrapper-replay-regression"
+          ],
+          "exit": 1,
+          "stdout": "{\n  \"schema_version\": 2,\n  \"ok\": false,\n  \"available\": false,\n  \"error\": \"setmodelmirror: IDEMPOTENCY_CONFLICT: idempotency conflict\",\n  \"automatic_spend_atoms\": 0\n}\n",
+          "stderr": ""
+        },
+        {
+          "args": [
+            "/usr/bin/python3",
+            "/home/runner/work/btx/btx/p2mr-parent-product/contrib/modelnet/btx-model",
+            "--socket",
+            "/home/runner/work/btx/btx/rpc-help-live-runtime/candidate/helper.sock",
+            "--json",
+            "mirror"
+          ],
+          "exit": 0,
+          "stdout": "{\n  \"schema_version\": 2,\n  \"kind\": \"model_mirror\",\n  \"client\": \"btx-model\",\n  \"client_version\": \"0.35.0rc1\",\n  \"released\": false,\n  \"ok\": true,\n  \"available\": true,\n  \"method\": \"getmodelmirror\",\n  \"error\": null,\n  \"publisher_id\": null,\n  \"collection_id\": null,\n  \"query\": null,\n  \"keep_latest\": null,\n  \"min_independent_origins\": 2,\n  \"profile\": \"custom\",\n  \"result\": {\n    \"selectors\": [\n      {\n        \"publisher_id\": \"\",\n        \"collection_id\": \"\",\n        \"query\": \"retained-selector\",\n        \"keep_latest\": 1,\n        \"min_independent_origins\": 1,\n        \"automatic_spend_atoms\": 0\n      },\n      {\n        \"publisher_id\": \"\",\n        \"collection_id\": \"\",\n        \"query\": \"wrapper-selector\",\n        \"keep_latest\": 3,\n        \"min_independent_origins\": 2,\n        \"automatic_spend_atoms\": 0\n      }\n    ],\n    \"min_independent_origins\": 2,\n    \"automatic_spend_atoms\": 0,\n    \"schema_version\": 1,\n    \"role\": \"node\",\n    \"mirror_privilege\": false,\n    \"consensus\": false,\n    \"search_authority\": false,\n    \"profile\": \"custom\",\n    \"preserve_rare\": false,\n    \"fetch_fails_below_min\": false,\n    \"note\": \"mirror is a local keep/follow policy, not a monetary or consensus privilege\"\n  },\n  \"note\": \"mirror policy is local config, not a monetary privilege and not consensus. It never auto-spends. 0.35.0rc1; fails closed if helper lacks method\",\n  \"next_actions\": [\n    \"profile show\",\n    \"follow publisher <id>\"\n  ],\n  \"automatic_spend_atoms\": 0\n}\n",
+          "stderr": ""
+        },
+        {
+          "args": [
+            "/usr/bin/python3",
+            "/home/runner/work/btx/btx/p2mr-parent-product/contrib/modelnet/btx-model",
+            "--socket",
+            "/home/runner/work/btx/btx/rpc-help-live-runtime/candidate/helper.sock",
+            "--json",
+            "mirror",
+            "--query",
+            "bad",
+            "--idempotency-key",
+            ""
+          ],
+          "exit": 2,
+          "stdout": "{\n  \"schema_version\": 2,\n  \"ok\": false,\n  \"available\": false,\n  \"error\": \"--idempotency-key requires a nonempty key and a mirror update\",\n  \"automatic_spend_atoms\": 0\n}\n",
+          "stderr": ""
+        },
+        {
+          "args": [
+            "/usr/bin/python3",
+            "/home/runner/work/btx/btx/p2mr-parent-product/contrib/modelnet/btx-model",
+            "--socket",
+            "/home/runner/work/btx/btx/rpc-help-live-runtime/candidate/helper.sock",
+            "--json",
+            "mirror",
+            "--idempotency-key",
+            "read-only"
+          ],
+          "exit": 2,
+          "stdout": "{\n  \"schema_version\": 2,\n  \"ok\": false,\n  \"available\": false,\n  \"error\": \"--idempotency-key requires a nonempty key and a mirror update\",\n  \"automatic_spend_atoms\": 0\n}\n",
+          "stderr": ""
+        }
+      ],
+      "helper_calls": [
+        {
+          "method": "setmodelmirror",
+          "params": [
+            {
+              "query": "retained-selector",
+              "keep_latest": 1,
+              "automatic_spend_atoms": 0,
+              "idempotency_key": "mirror-sentinel-regression"
+            }
+          ],
+          "result": {
+            "jsonrpc": "1.0",
+            "id": "profile-native",
+            "result": {
+              "selectors": [
+                {
+                  "publisher_id": "",
+                  "collection_id": "",
+                  "query": "retained-selector",
+                  "keep_latest": 1,
+                  "min_independent_origins": 1,
+                  "automatic_spend_atoms": 0
+                }
+              ],
+              "min_independent_origins": 1,
+              "automatic_spend_atoms": 0,
+              "schema_version": 1,
+              "role": "node",
+              "mirror_privilege": false,
+              "consensus": false,
+              "search_authority": false,
+              "profile": "custom",
+              "preserve_rare": false,
+              "fetch_fails_below_min": false,
+              "note": "mirror is a local keep/follow policy, not a monetary or consensus privilege",
+              "publisher_id": "",
+              "collection_id": "",
+              "query": "retained-selector",
+              "keep_latest": 1,
+              "applied": true
+            },
+            "error": null
+          }
+        },
+        {
+          "method": "setmodelmirror",
+          "params": [
+            {
+              "query": "missing-key",
+              "keep_latest": 2
+            }
+          ],
+          "result": {
+            "jsonrpc": "1.0",
+            "id": "profile-native",
+            "result": null,
+            "error": {
+              "code": "INVALID_PARAMETER",
+              "message": "idempotency_key required",
+              "schema_version": 2
+            }
+          }
+        },
+        {
+          "method": "setmodelmirror",
+          "params": [
+            {
+              "query": "no-spend",
+              "keep_latest": 2,
+              "automatic_spend_atoms": 1,
+              "idempotency_key": "mirror-nonzero-spend-regression"
+            }
+          ],
+          "result": {
+            "jsonrpc": "1.0",
+            "id": "profile-native",
+            "result": null,
+            "error": {
+              "code": "INVALID_PARAMETER",
+              "message": "automatic_spend_atoms must remain 0",
+              "schema_version": 2
+            }
+          }
+        }
+      ],
+      "method_pass": true,
+      "helper_exit": 0,
+      "node_stopped": true,
+      "socket_remaining": false,
+      "saved_mirror": {
+        "selectors": [
+          {
+            "publisher_id": "",
+            "collection_id": "",
+            "query": "retained-selector",
+            "keep_latest": 1,
+            "min_independent_origins": 1,
+            "automatic_spend_atoms": 0
+          },
+          {
+            "publisher_id": "",
+            "collection_id": "",
+            "query": "wrapper-selector",
+            "keep_latest": 3,
+            "min_independent_origins": 2,
+            "automatic_spend_atoms": 0
+          }
+        ],
+        "min_independent_origins": 2,
+        "automatic_spend_atoms": 0
+      }
+    }
+  },
+  "binaries_after": {
+    "btxd": "4ad63b64f6d6bab34f5ba92518dc8955ee2e263e0daa4d739f27ec868fce0ae1",
+    "btx-cli": "b71061e57a9224d86ef2f17da1914f3b68ffe91b696282151c0aba9e12caa5b8",
+    "btx-modeld": "62e2a47bb52507615129820aeda4e54aeac4d8744419d12833ffa148dbc88df3"
+  },
+  "audit_after": [
+    "0953d899b20eab172c3376071ffc4761df34d59822e08d9a95a8edad911bb857",
+    14309
+  ],
+  "qualification_pass": true,
+  "cleanup_before": [],
+  "cleanup_signals": [],
+  "cleanup_remaining": [],
+  "runtime_removed": true
+}

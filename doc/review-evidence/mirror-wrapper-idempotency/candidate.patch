@@ -1,0 +1,120 @@
+--- a/contrib/modelnet/btx-model
++++ b/contrib/modelnet/btx-model
+@@ -21,6 +21,7 @@
+ import json
+ import math
+ import os
++import secrets
+ import socket
+ import sys
+ from typing import Any
+@@ -2338,7 +2339,7 @@
+ 
+ 
+ def cmd_mirror(sock: str, args: list[str]) -> None:
+-    opts, pos = _take_opts(args, {"--publisher", "--keep-latest", "--collection", "--query", "--min-independent-origins"})
++    opts, pos = _take_opts(args, {"--publisher", "--keep-latest", "--collection", "--query", "--min-independent-origins", "--idempotency-key"})
+     if pos:
+         _die("mirror takes no positional arguments (use --publisher / --keep-latest)", 2)
+     publisher = str(opts.get("--publisher") or "").strip() or None
+@@ -2357,8 +2358,13 @@
+         if min_origins is None or min_origins < 1:
+             _die("mirror --min-independent-origins requires an integer >= 1", 2)
+     mutating = any(v is not None for v in (publisher, collection, query, keep_latest, min_origins))
++    key = opts.get("--idempotency-key")
++    if key is not None and (not key.strip() or not mutating):
++        _die("--idempotency-key requires a nonempty key and a mirror update", 2)
+     if mutating:
++        key = key if key is not None else secrets.token_hex(16)
+         payload = {
++            "idempotency_key": key,
+             "publisher_id": publisher,
+             "collection_id": collection,
+             "query": query,
+--- a/test/functional/feature_swarm_profile_overrides.py
++++ b/test/functional/feature_swarm_profile_overrides.py
+@@ -55,6 +55,58 @@
+     def ready(self):
+         self.wait_until(lambda: self.nodes[0].getmodelnetworkinfo().get("helper_ready") is True, timeout=60)
+ 
++    def test_mirror_cli(self):
++        cli = Path(self.config["environment"]["SRCDIR"]) / "contrib/modelnet/btx-model"
++        prefix = [sys.executable, str(cli), "--socket", str(self.socket_path), "--json", "mirror"]
++        policy_file = self.modeldir / "mirror.json"
++
++        def invoke(args):
++            return subprocess.run(prefix + args, capture_output=True, text=True, timeout=30)
++
++        sentinel = {"query": "retained-selector", "keep_latest": 1,
++                    "automatic_spend_atoms": 0, "idempotency_key": "mirror-sentinel-regression"}
++        assert not self.helper("setmodelmirror", [sentinel]).get("error")
++        args = ["--query", "wrapper-selector", "--keep-latest", "3", "--min-independent-origins", "2"]
++        result = invoke(args)
++        assert result.returncode == 0, (result.stdout, result.stderr)
++        stored = json.loads(policy_file.read_text())
++        assert any(s["query"] == "retained-selector" and s["keep_latest"] == 1 for s in stored["selectors"])
++        assert any(s["query"] == "wrapper-selector" and s["keep_latest"] == 3 for s in stored["selectors"])
++        assert_equal(stored["automatic_spend_atoms"], 0)
++        assert_equal(stored["min_independent_origins"], 2)
++
++        keyed = args + ["--idempotency-key", "mirror-wrapper-replay-regression"]
++        result = invoke(keyed)
++        assert result.returncode == 0, (result.stdout, result.stderr)
++        saved = policy_file.read_bytes()
++        # A replay must not rewrite policy, even with identical contents.
++        os.utime(policy_file, ns=(1700000000000000000, 1700000000000000000))
++        stamp = policy_file.stat().st_mtime_ns
++        result = invoke(keyed)
++        assert result.returncode == 0, (result.stdout, result.stderr)
++        assert_equal(policy_file.read_bytes(), saved)
++        assert_equal(policy_file.stat().st_mtime_ns, stamp)
++        conflict = list(keyed)
++        conflict[conflict.index("--keep-latest") + 1] = "4"
++        result = invoke(conflict)
++        assert result.returncode != 0 and "idempotency conflict" in result.stdout.lower(), (result.stdout, result.stderr)
++        assert_equal(policy_file.read_bytes(), saved)
++        assert_equal(policy_file.stat().st_mtime_ns, stamp)
++        result = invoke([])
++        assert result.returncode == 0, (result.stdout, result.stderr)
++        assert_equal(policy_file.read_bytes(), saved)
++        assert_equal(policy_file.stat().st_mtime_ns, stamp)
++        for bad_args in (["--query", "bad", "--idempotency-key", ""], ["--idempotency-key", "read-only"]):
++            assert invoke(bad_args).returncode == 2
++            assert_equal(policy_file.read_bytes(), saved)
++        for bad, reason in (({"query": "missing-key", "keep_latest": 2}, "idempotency_key required"),
++                            ({"query": "no-spend", "keep_latest": 2, "automatic_spend_atoms": 1,
++                              "idempotency_key": "mirror-nonzero-spend-regression"}, "automatic_spend_atoms")):
++            reply = self.helper("setmodelmirror", [bad])
++            assert reply.get("error") and reason in json.dumps(reply), reply
++            assert_equal(policy_file.read_bytes(), saved)
++        assert_equal(self.nodes[0].getblockcount(), 0)
++
+     def run_test(self):
+         self.ready()
+         node = self.nodes[0]
+@@ -79,6 +131,7 @@
+             reply = self.helper("setmodelprofile", [{"profile": "custom", **changes}])
+             assert reply.get("error"), reply
+             assert_equal(policy_file.read_bytes(), original)
++        self.test_mirror_cli()
+         self.restart_node(0)
+         self.ready()
+         assert_equal(node.getmodelnetworkinfo()["quota_bytes"], 8 * 1024 ** 2)
+--- a/doc/modelnet/mirroring.md
++++ b/doc/modelnet/mirroring.md
+@@ -92,6 +92,15 @@
+ replace BTX identity or BTX signatures. Keep the monetary plane unchanged:
+ mirrors store no wallet secrets and money stays on `btxd`.
+ 
++### Retrying a mirror update
++
++Each mutating `btx-model mirror` invocation creates a fresh request key. For a
++retry after an uncertain result, choose `--idempotency-key KEY` on the original
++command and reuse the same key with the same arguments. Changed arguments need
++a new key; conflicting reuse is refused. Inspection without update options
++remains read-only. The helper's replay cache lasts for its process lifetime;
++this does not promise replay protection across a helper restart.
++
+ ## Cloud is optional
+ 
+ A mirror may use local disk only. Attaching R2/S3 is optional backing, not
