@@ -36,6 +36,14 @@ def run(label,cmd,timeout,cwd=SOURCE):
                                 match=re.findall(r'\[(\d+)/(\d+)\]',tail);s['log_bytes']=size
                                 if match:s['last_ninja_step']='/'.join(match[-1])
                             except OSError:pass
+                        if label=='candidate-unit-run':
+                            try:
+                                with log.open('rb')as progress:
+                                    progress.seek(0,2);size=progress.tell();progress.seek(max(0,size-16384));tail=progress.read().decode(errors='replace')
+                                entered=re.findall(r'Entering test (?:case|suite) "([^"\r\n]+)"',tail)
+                                s['log_bytes']=size
+                                if entered:s['last_boost_test']=entered[-1]
+                            except OSError:pass
                         R.setdefault('samples',[]).append({'command':label,'seconds':round(elapsed),**s});save();print(label,round(elapsed),s,flush=True)
                 if reason:
                     z=subprocess.run(['taskkill','/PID',str(proc.pid),'/T','/F'],capture_output=True);(E/(label+'-cleanup.log')).write_bytes(z.stdout+z.stderr)

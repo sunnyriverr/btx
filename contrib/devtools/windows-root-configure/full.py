@@ -57,12 +57,21 @@ def build():
  assert R['status']=='NORMAL_CONFIGURED' and R.get('configuration_validated');os.environ.update(VCPKG_ROOT=str(ROOT/'vcpkg'),VCPKG_DISABLE_METRICS='1',VCPKG_MAX_CONCURRENCY='2',VCPKG_BINARY_SOURCES='clear;files,'+str(ROOT/'binary-cache')+',readwrite');targets=['btxd','btx-cli','btx-tx','btx-util','btx-open','btx-modeld','test_btx'];R['maintained_targets']=targets
  s.need('normal-verify-globs',['cmake','-P',str(BUILD/'CMakeFiles/VerifyGlobs.cmake')],120,cwd=BUILD);assert 'GLOB mismatch!'not in(E/'normal-verify-globs.log').read_text();manifest=E/'observed-full-manifest.ninja';shutil.copyfile(BUILD/'build.ninja',manifest);assert sha(manifest)==R['configuration']['build.ninja'];s.need('full-unit-plan',['ninja','-C',str(BUILD),'-f',str(manifest),'-n','-d','explain']+targets,120)
  text=(E/'full-unit-plan.log').read_text(errors='replace');m=re.findall(r'^\[(\d+)/(\d+)\]',text,re.M);R['planned_steps']=int(m[-1][1])if m else 0;R['planned_command_invalidations']=text.count('ninja explain: command line changed for ');assert 0<R['planned_steps']<=I['max_build_steps'],R['planned_steps'];assert R['planned_command_invalidations']<=I['max_command_invalidations'],R['planned_command_invalidations'];assert 'stored deps info out of date'not in text;assert 'Re-running CMake'not in text and 'Re-checking globbed'not in text
- R['status']='MAINTAINED_BUILDING';R['compilation_invoked']=True;s.save();code=s.run('candidate-unit-build',['cmake','--build',str(BUILD),'--target']+targets+['--verbose','--parallel','4','--','-k','1'],I['build_budget_seconds']);R['unit_build_exit']=code
+ R['status']='MAINTAINED_BUILDING';R['compilation_invoked']=True;s.save();code=s.run('candidate-unit-build',['cmake','--build',str(BUILD),'--target']+targets+['--verbose','--parallel','4','--','-k','0'],I['build_budget_seconds']);R['unit_build_exit']=code
  if code:R['status']='MAINTAINED_BUILD_FAILURE';s.save();raise RuntimeError('Actual maintained compiler/link blocker; no unit runtime inferred')
  names=['btxd','btx-cli','btx-tx','btx-util','btx-open','btx-modeld','test_btx'];R['binaries']={n:sha(BUILD/'bin'/(n+'.exe'))for n in names};R['unit_binary_sha256']=R['binaries']['test_btx'];R['unit_built']=True;R['build_info']=(BUILD/'src/bitcoin-build-info.h').read_text();assert I['source'][:7]in R['build_info']and re.search(r'BUILD_GIT_DIRTY\s+0',R['build_info']);exe=BUILD/'bin/test_btx.exe';s.need('unit-imports',['dumpbin','/dependents',str(exe)],60);s.need('unit-inventory',[str(exe),'--list_content'],180);s.need('node-version',[str(BUILD/'bin/btxd.exe'),'-version'],30);R['status']='MAINTAINED_LINKED';s.save()
 
 def run():
- assert R['status']=='MAINTAINED_LINKED';assert not s.owned_processes();exe=BUILD/'bin/test_btx.exe';assert sha(exe)==R['unit_binary_sha256'];data=Path('D:/bu'+os.environ['GITHUB_RUN_ID']);assert not data.exists();data.mkdir();R['unit_data']=str(data);temp=data/'tmp';temp.mkdir();R['prior_temp_environment']={k:os.environ.get(k) for k in ['TMP','TEMP']};R['unit_temp_environment']={'TMP':str(temp),'TEMP':str(temp)};os.environ.update(R['unit_temp_environment']);R['unit_invoked']=True;R['status']='MAINTAINED_UNIT_RUNNING';s.save()
+ assert R['status']=='MAINTAINED_LINKED';assert not s.owned_processes();exe=BUILD/'bin/test_btx.exe';assert sha(exe)==R['unit_binary_sha256'];data=Path('D:/bu'+os.environ['GITHUB_RUN_ID']);assert not data.exists();data.mkdir();R['unit_data']=str(data);temp=data/'tmp';temp.mkdir();R['prior_temp_environment']={k:os.environ.get(k) for k in ['TMP','TEMP']};R['unit_temp_environment']={'TMP':str(temp),'TEMP':str(temp)};os.environ.update(R['unit_temp_environment']);# Reuse the actual prerequisite environment qualified by the AHP fixture.
+ bash=Path('C:/Program Files/Git/bin/bash.exe');assert bash.is_file()
+ R['prior_probe_environment']={k:os.environ.get(k)for k in ['PATH','CXX']}
+ os.environ['PATH']=str(bash.parent)+os.pathsep+os.environ['PATH'];os.environ['CXX']='clang++'
+ R['script_environment']={'bash':str(bash),'CXX':'clang++'}
+ s.need('unit-bash-version',[str(bash),'--version'],30)
+ s.need('unit-cmd-bash-resolution',['cmd','/d','/c','where bash'],30)
+ assert Path((E/'unit-cmd-bash-resolution.log').read_text().splitlines()[0]).resolve()==bash.resolve()
+ s.need('unit-probe-compiler',['clang++','--version'],30)
+ R['unit_invoked']=True;R['status']='MAINTAINED_UNIT_RUNNING';s.save()
  code=s.run('candidate-unit-run',[str(exe),'--log_level=test_suite','--report_level=detailed','--catch_system_errors=yes','--','-testdatadir='+str(data)],I['unit_budget_seconds']);R['unit_exit']=code;text=(E/'candidate-unit-run.log').read_text(errors='replace');m=re.search(r'Running (\d+) test cases?',text);R['unit_cases_announced']=int(m.group(1))if m else 0;R['unit_case_count_is_not_completion']=True;assert sha(exe)==R['unit_binary_sha256'];completion=re.search(r'Test module "Bitcoin Core Test Suite" has passed with:\s+(\d+) test cases? out of (\d+) passed',text);R['unit_cases_completed']=int(completion.group(1))if completion else 0;R['status']='MAINTAINED_UNIT_PASS'if code==0 and R['unit_cases_announced']>0 and R['unit_cases_completed']==R['unit_cases_announced'] else'MAINTAINED_UNIT_FAILURE';s.save()
  if R['status']!='MAINTAINED_UNIT_PASS':raise RuntimeError('Full unit invocation failed; preserve detailed evidence')
 
@@ -99,7 +108,7 @@ except BaseException as ex:
  print(type(ex).__name__,str(ex),flush=True)
 finally:
  if stage=='run':
-  for key,value in R.get('prior_temp_environment',{}).items():
+  for key,value in {**R.get('prior_temp_environment',{}),**R.get('prior_probe_environment',{})}.items():
    if value is None:os.environ.pop(key,None)
    else:os.environ[key]=value
  s.save();print(json.dumps({k:R.get(k)for k in ['status','planned_steps','unit_built','unit_invoked','unit_build_exit','unit_exit','failures']},indent=2),flush=True)
