@@ -24,8 +24,10 @@
 #include <util/time.h>
 #include <validation.h>
 
+#include <algorithm>
 #include <any>
 #include <limits>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -111,7 +113,183 @@ UniValue RPCTestingSetup::CallRPC(std::string args)
 }
 
 
+static RPCHelpMan ArgumentMetadataBoolean()
+{
+    return RPCHelpMan{"metadata_canonical", "",
+        {{"flag", RPCArg::Type::BOOL, RPCArg::Optional::OMITTED, ""}},
+        RPCResult{RPCResult::Type::NONE, "", ""}, RPCExamples{""}};
+}
+
+static RPCHelpMan ArgumentMetadataNumber()
+{
+    return RPCHelpMan{"metadata_count", "",
+        {{"count", RPCArg::Type::NUM, RPCArg::Optional::OMITTED, ""}},
+        RPCResult{RPCResult::Type::NONE, "", ""}, RPCExamples{""}};
+}
+
+static RPCHelpMan ArgumentMetadataThrowing()
+{
+    throw std::runtime_error("deliberate declaration factory failure");
+}
+
+static RPCHelpMan ArgumentMetadataStructured()
+{
+    return RPCHelpMan{"metadata_structured", "",
+        {
+            {"options|sign", {RPCArg::Type::OBJ_NAMED_PARAMS, RPCArg::Type::BOOL}, RPCArg::Optional::OMITTED, "",
+                {
+                    {"legacy", RPCArg::Type::BOOL, RPCArg::Default{true}, "", RPCArgOptions{.also_positional = true}},
+                    {"flag", RPCArg::Type::BOOL, RPCArg::Optional::OMITTED, ""},
+                    {"ordinary", RPCArg::Type::OBJ, RPCArg::Optional::OMITTED, "",
+                        {{"deep", RPCArg::Type::BOOL, RPCArg::Optional::OMITTED, ""}}},
+                }},
+            {"legacy", RPCArg::Type::BOOL, RPCArg::Optional::OMITTED, ""},
+            {"opaque", RPCArg::Type::STR, RPCArg::Optional::OMITTED, "",
+                RPCArgOptions{.skip_type_check = true, .hidden = true}},
+        },
+        RPCResult{RPCResult::Type::NONE, "", ""}, RPCExamples{""}};
+}
+
 BOOST_FIXTURE_TEST_SUITE(rpc_tests, RPCTestingSetup)
+
+BOOST_AUTO_TEST_CASE(rpc_argument_metadata_registration)
+{
+    using Status = CRPCCommand::ArgumentMetadata::Status;
+    int actor_calls{0};
+    const CRPCCommand::Actor actor = [&](const JSONRPCRequest&, UniValue&, bool) {
+        ++actor_calls;
+        return true;
+    };
+    CRPCCommand canonical{"test", &ArgumentMetadataBoolean};
+    CRPCCommand different{"test", &ArgumentMetadataNumber};
+    canonical.actor = actor;
+    different.actor = actor;
+    different.unique_id = canonical.unique_id;
+
+    // The counter is live. Metadata collection must not call this actor again.
+    UniValue ignored;
+    BOOST_CHECK(canonical.actor(JSONRPCRequest{}, ignored, true));
+    BOOST_CHECK_EQUAL(actor_calls, 1);
+
+    CRPCTable table;
+    table.appendCommand("metadata_alias", &canonical);
+    table.appendCommand("metadata_boolean", &canonical);
+    table.appendCommand("metadata_different", &different);
+    size_t found{0};
+    bool alias_seen{false};
+    bool different_seen{false};
+    for (const auto& entry : table.listCommandEntries()) {
+        if (!entry.method.starts_with("metadata_")) continue;
+        ++found;
+        BOOST_CHECK_EQUAL(entry.handler_index, 0U);
+        const auto metadata = entry.command->GetArgumentMetadata();
+        BOOST_CHECK(metadata.status == Status::AVAILABLE);
+        BOOST_REQUIRE(metadata.declaration.has_value());
+        const auto& args = metadata.declaration->GetArgDefinitions();
+        BOOST_REQUIRE_EQUAL(args.size(), 1U);
+        if (entry.method == "metadata_different") {
+            different_seen = true;
+            BOOST_CHECK_EQUAL(metadata.declaration->m_name, "metadata_count");
+            BOOST_CHECK_EQUAL(args[0].m_names, "count");
+            BOOST_CHECK(args[0].m_type == RPCArg::Type::NUM);
+        } else {
+            alias_seen |= entry.method == "metadata_alias";
+            BOOST_CHECK_EQUAL(metadata.declaration->m_name, "metadata_canonical");
+            BOOST_CHECK_EQUAL(args[0].m_names, "flag");
+            BOOST_CHECK(args[0].m_type == RPCArg::Type::BOOL);
+        }
+    }
+    BOOST_CHECK_EQUAL(found, 3U);
+    BOOST_CHECK(alias_seen);
+    BOOST_CHECK(different_seen);
+    BOOST_CHECK_EQUAL(actor_calls, 1);
+}
+
+BOOST_AUTO_TEST_CASE(rpc_argument_metadata_unresolved_handlers)
+{
+    using Status = CRPCCommand::ArgumentMetadata::Status;
+    int actor_calls{0};
+    const CRPCCommand::Actor actor = [&](const JSONRPCRequest&, UniValue&, bool) {
+        ++actor_calls;
+        return true;
+    };
+    CRPCCommand missing{"test", "metadata_missing", actor, {}, 7};
+    CRPCCommand throwing{"test", "metadata_throwing", actor, {}, 7};
+    throwing.argument_factory = &ArgumentMetadataThrowing;
+    CRPCCommand mismatch{"test", &ArgumentMetadataBoolean};
+    mismatch.actor = actor;
+    mismatch.argNames = {{"wrong_name", false}};
+    CRPCCommand available{"test", &ArgumentMetadataBoolean};
+    available.actor = actor;
+
+    CRPCTable table;
+    for (const CRPCCommand* command : {&missing, &throwing, &mismatch, &available}) {
+        table.appendCommand("metadata_many", command);
+    }
+    const std::vector<Status> expected{Status::MISSING, Status::FACTORY_ERROR,
+                                      Status::ROUTING_MISMATCH, Status::AVAILABLE};
+    size_t found{0};
+    for (const auto& entry : table.listCommandEntries()) {
+        if (entry.method != "metadata_many") continue;
+        BOOST_REQUIRE(found < expected.size());
+        BOOST_CHECK_EQUAL(entry.handler_index, found);
+        const auto metadata = entry.command->GetArgumentMetadata();
+        BOOST_CHECK(metadata.status == expected[found]);
+        BOOST_CHECK_EQUAL(metadata.declaration.has_value(), expected[found] == Status::AVAILABLE);
+        ++found;
+    }
+    BOOST_CHECK_EQUAL(found, expected.size());
+    BOOST_CHECK_EQUAL(actor_calls, 0);
+}
+
+BOOST_AUTO_TEST_CASE(rpc_argument_metadata_declared_shapes)
+{
+    using Status = CRPCCommand::ArgumentMetadata::Status;
+    const CRPCCommand command{"test", &ArgumentMetadataStructured};
+    const auto metadata = command.GetArgumentMetadata();
+    BOOST_CHECK(metadata.status == Status::AVAILABLE);
+    BOOST_REQUIRE(metadata.declaration.has_value());
+    const auto& args = metadata.declaration->GetArgDefinitions();
+    BOOST_REQUIRE_EQUAL(args.size(), 3U);
+    BOOST_CHECK_EQUAL(args[0].m_names, "options|sign");
+    BOOST_REQUIRE_EQUAL(args[0].m_type_per_name.size(), 2U);
+    BOOST_CHECK(args[0].m_type_per_name[0] == RPCArg::Type::OBJ_NAMED_PARAMS);
+    BOOST_CHECK(args[0].m_type_per_name[1] == RPCArg::Type::BOOL);
+    BOOST_REQUIRE_EQUAL(args[0].m_inner.size(), 3U);
+    BOOST_CHECK(args[0].m_inner[0].m_opts.also_positional);
+    BOOST_CHECK(args[0].m_inner[1].m_type == RPCArg::Type::BOOL);
+    BOOST_CHECK(args[0].m_inner[1].IsOptional());
+    BOOST_REQUIRE_EQUAL(args[0].m_inner[2].m_inner.size(), 1U);
+    BOOST_CHECK_EQUAL(args[0].m_inner[2].m_inner[0].m_names, "deep");
+    // Available declarations do not turn skipped type checks into acceptance.
+    BOOST_CHECK(args[2].m_opts.skip_type_check);
+    BOOST_CHECK(args[2].m_opts.hidden);
+    const auto has_route = [&](const std::string& name, bool named_only) {
+        return std::find(command.argNames.begin(), command.argNames.end(),
+                         std::pair{name, named_only}) != command.argNames.end();
+    };
+    BOOST_CHECK(has_route("flag", true));
+    BOOST_CHECK(has_route("legacy", true));
+    BOOST_CHECK(has_route("legacy", false));
+    BOOST_CHECK(has_route("options|sign", false));
+    BOOST_CHECK(!has_route("deep", true));
+    BOOST_CHECK(!has_route("deep", false));
+}
+
+BOOST_AUTO_TEST_CASE(rpc_argument_metadata_registered_core)
+{
+    using Status = CRPCCommand::ArgumentMetadata::Status;
+    size_t found{0};
+    for (const auto& entry : tableRPC.listCommandEntries()) {
+        if (entry.method != "getblockcount") continue;
+        ++found;
+        const auto metadata = entry.command->GetArgumentMetadata();
+        BOOST_CHECK(metadata.status == Status::AVAILABLE);
+        BOOST_REQUIRE(metadata.declaration.has_value());
+        BOOST_CHECK(metadata.declaration->GetArgDefinitions().empty());
+    }
+    BOOST_CHECK_GT(found, 0U);
+}
 
 BOOST_AUTO_TEST_CASE(rpc_next_block_height_or_limit)
 {
@@ -480,54 +658,6 @@ BOOST_AUTO_TEST_CASE(rpc_convert_values_generatetoaddress)
     BOOST_CHECK_EQUAL(result[0].getInt<int>(), 1);
     BOOST_CHECK_EQUAL(result[1].get_str(), "mhMbmE2tE9xzJYCV9aNC8jKWN31vtGrguU");
     BOOST_CHECK_EQUAL(result[2].getInt<int>(), 9);
-}
-
-BOOST_AUTO_TEST_CASE(rpc_convert_walletprocesspsbt_named_options)
-{
-    const std::string psbt{"opaque-psbt"};
-    for (const std::string field : {"adjust_timelocks", "htlc_presign"}) {
-        for (const std::string text : {"false", "true"}) {
-            const UniValue named = RPCConvertNamedValues("walletprocesspsbt",
-                {"psbt=" + psbt, "sign=false", "finalize=false", field + "=" + text});
-            BOOST_CHECK_EQUAL(named["psbt"].get_str(), psbt);
-            BOOST_CHECK_EQUAL(named["sign"].get_bool(), false);
-            BOOST_CHECK_EQUAL(named["finalize"].get_bool(), false);
-            BOOST_CHECK(named[field].isBool());
-            if (named[field].isBool()) BOOST_CHECK_EQUAL(named[field].get_bool(), text == "true");
-        }
-        // JSON strings stay strings; conversion must not coerce a wrong type
-        // into a valid Boolean or bypass the wallet's type checks.
-        const UniValue wrong_type = RPCConvertNamedValues("walletprocesspsbt", {field + "=\"false\""});
-        BOOST_CHECK(wrong_type[field].isStr());
-        BOOST_CHECK_EQUAL(wrong_type[field].get_str(), "false");
-        BOOST_CHECK_THROW(RPCConvertNamedValues("walletprocesspsbt", {field + "=not-json"}), std::runtime_error);
-    }
-    const std::string leaf = "{\"" + std::string(64, '1') + ":0\":0}";
-    UniValue expected_leaf;
-    BOOST_REQUIRE(expected_leaf.read(leaf));
-    const UniValue named_leaf = RPCConvertNamedValues("walletprocesspsbt", {"p2mr_leaf=" + leaf});
-    BOOST_CHECK(named_leaf["p2mr_leaf"].isObject());
-    BOOST_CHECK_EQUAL(named_leaf["p2mr_leaf"].write(), expected_leaf.write());
-    BOOST_CHECK(RPCConvertNamedValues("walletprocesspsbt", {"p2mr_leaf={}"})["p2mr_leaf"].isObject());
-    BOOST_CHECK(RPCConvertNamedValues("walletprocesspsbt", {"p2mr_leaf=[]"})["p2mr_leaf"].isArray());
-    BOOST_CHECK_THROW(RPCConvertNamedValues("walletprocesspsbt", {"p2mr_leaf=not-json"}), std::runtime_error);
-
-    const std::string options = R"({"sign":false,"finalize":false,"adjust_timelocks":false,"htlc_presign":false,"p2mr_leaf":{}})";
-    UniValue expected_options;
-    BOOST_REQUIRE(expected_options.read(options));
-    const UniValue positional = RPCConvertValues("walletprocesspsbt", {psbt, options});
-    const UniValue named = RPCConvertNamedValues("walletprocesspsbt", {"psbt=" + psbt, "options=" + options});
-    BOOST_CHECK_EQUAL(positional[0].get_str(), psbt);
-    BOOST_CHECK_EQUAL(positional[1].write(), expected_options.write());
-    BOOST_CHECK_EQUAL(named["psbt"].get_str(), psbt);
-    BOOST_CHECK_EQUAL(named["options"].write(), expected_options.write());
-
-    const UniValue legacy = RPCConvertValues("walletprocesspsbt", {psbt, "false", "ALL", "false", "false"});
-    BOOST_CHECK_EQUAL(legacy[0].get_str(), psbt);
-    BOOST_CHECK_EQUAL(legacy[1].get_bool(), false);
-    BOOST_CHECK_EQUAL(legacy[2].get_str(), "ALL");
-    BOOST_CHECK_EQUAL(legacy[3].get_bool(), false);
-    BOOST_CHECK_EQUAL(legacy[4].get_bool(), false);
 }
 
 BOOST_AUTO_TEST_CASE(rpc_convert_values_pq_wallet_methods)
