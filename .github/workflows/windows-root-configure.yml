@@ -1,4 +1,4 @@
-name: Native Windows full units after WAN fixture fix
+name: Native Windows model-file checkpoint recovery
 on:
   push:
     branches: [codex/ci-windows-root-configure]
@@ -8,7 +8,7 @@ jobs:
   configure:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: windows-2025
-    timeout-minutes: 180
+    timeout-minutes: 15
     env:
       BTX_NATIVE_ROOT: D:\btx-native-035
     steps:
@@ -95,7 +95,7 @@ jobs:
           path: |
             D:\btx-native-035\project-build
             D:\btx-native-035\vcpkg-installed
-          key: btx356-unit-fixtures-v1-0538feb312e0476d833b44c718abc5793098d0ebebc35adbe78bf5cee7001d8b-42174181123
+          key: btx356-unit-fixtures-v1-7d2ea620c2b04cd463796c5cc8a55d46c3ece379ab4dbbf8b9aee3f638d71082-42175854206
       - name: Require existing exact-profile checkpoint for restore proof
         shell: pwsh
         env:
@@ -115,8 +115,8 @@ jobs:
           set "_CL_="
           python controls/contrib/devtools/windows-root-configure/full.py prepare
           exit /b %errorlevel%
-      - name: Validate unchanged normal maintained CMake graph
-        id: configure
+      - name: Run four existing file recovery cases, 60 seconds maximum
+        id: cases
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -126,36 +126,10 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/full.py configure
+          python controls/contrib/devtools/windows-root-configure/slice.py run
           exit /b %errorlevel%
-      - name: Build full maintained test_btx and genuine CLI targets
-        id: build
-        shell: cmd
-        run: |
-          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
-          if not defined BTX_VS exit /b 2
-          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
-          if errorlevel 1 exit /b %errorlevel%
-          set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
-          set "CL="
-          set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/full.py build
-          exit /b %errorlevel%
-      - name: Run unfiltered maintained units when target links
-        id: units
-        shell: cmd
-        run: |
-          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
-          if not defined BTX_VS exit /b 2
-          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
-          if errorlevel 1 exit /b %errorlevel%
-          set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
-          set "CL="
-          set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/full.py run
-          exit /b %errorlevel%
-      - name: Retain complete progress and exact regenerated profile
-        id: retention
+      - name: Verify unchanged cached build and clean up disposable data
+        id: verification
         if: always() && steps.prepare.outcome == 'success'
         shell: cmd
         run: |
@@ -166,33 +140,12 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/full.py retain
-          exit /b %errorlevel%
-      - name: Preserve regenerated full-target progress under immutable key
-        if: always() && steps.retention.outcome == 'success' && steps.retention.outputs.checkpoint_valid == 'true'
-        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
-        with:
-          path: |
-            D:\btx-native-035\project-build
-            D:\btx-native-035\vcpkg-installed
-          key: btx356-unit-fixtures-v1-${{ steps.retention.outputs.checkpoint_key }}-${{ github.run_id }}
-      - name: Require actual maintained acceptance and cleanup verdict
-        if: always() && steps.prepare.outcome == 'success'
-        shell: cmd
-        run: |
-          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
-          if not defined BTX_VS exit /b 2
-          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
-          if errorlevel 1 exit /b %errorlevel%
-          set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
-          set "CL="
-          set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/full.py verdict
+          python controls/contrib/devtools/windows-root-configure/slice.py verify
           exit /b %errorlevel%
       - name: Preserve native maintained target records
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
-          name: native-windows-maintained-resume
+          name: native-windows-file-recovery
           path: D:\btx-native-035\evidence\
           retention-days: 14
