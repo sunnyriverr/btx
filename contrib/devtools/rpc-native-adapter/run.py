@@ -218,7 +218,11 @@ def run_case(label, selector, negative=False):
     text = command([BUILD / 'bin/test_btx', '--run_test=' + selector,
                     '--report_level=detailed', '--log_level=test_suite'], label,
                    timeout=180, allowed=(201,) if negative else (0,))
-    assert 'No errors detected' in text if not negative else 'AVAILABLE' in text
+    if negative:
+        assert 'Test module "Bitcoin Core Test Suite" has failed with:' in text
+        assert 'AVAILABLE' in text
+    else:
+        assert 'Test module "Bitcoin Core Test Suite" has passed with:' in text
     STATE.setdefault('case_results', {})[label] = {'selector': selector,
         'exit': STATE['commands'][-1]['exit'], 'binary_sha256': sha(BUILD / 'bin/test_btx')}
     save()
