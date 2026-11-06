@@ -86,7 +86,8 @@ def build():
  for name,want in EXPECTED['openssl']['files'].items():assert sha(PREFIX/name)==want, 'OpenSSL cache differs'
  STATE['restored_binaries']=EXPECTED['binaries'];STATE['retained_cache_id']=EXPECTED['cache_id'];save()
  cache=(BUILD/'CMakeCache.txt').read_text()
- for wanted in ['ENABLE_WALLET:BOOL=ON','WITH_MODELNET:BOOL=ON','CMAKE_CXX_FLAGS_RELEASE:STRING=-O1 -DNDEBUG']:
+ assert sha(BUILD/'CMakeCache.txt')==EXPECTED['cmake_cache_sha256'], 'Restored CMake cache differs'
+ for wanted in ['ENABLE_WALLET:BOOL=ON','WITH_MODELNET:BOOL=ON','CMAKE_CXX_FLAGS_RELEASE:STRING='+EXPECTED['actual_cxx_release_flags']]:
   assert wanted in cache,wanted
  command(['ldd',BUILD/'bin/btxd'],'ldd-node',timeout=30)
  command(['ldd',BUILD/'bin/btx-cli'],'ldd-cli',timeout=30)
