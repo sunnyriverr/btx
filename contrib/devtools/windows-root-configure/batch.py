@@ -95,25 +95,33 @@ def run_cases(label, exe, cases, expect_pass):
     R.setdefault('runtime_roots', []).append(str(data))
     temp = data / 'tmp'
     temp.mkdir()
+    previous_temp = {key: os.environ.get(key) for key in ['TMP', 'TEMP']}
     os.environ['TMP'] = os.environ['TEMP'] = str(temp)
-    for idx, selector in enumerate(cases):
-        key = label + '-' + str(idx)
-        code = s.run(key, [str(exe), '--run_test=' + selector, '--report_level=detailed',
-            '--log_level=test_suite', '--', '-testdatadir=' + str(data / ('node' + str(idx)))], 180)
-        text = (E / (key + '.log')).read_text(errors='replace')
-        count = re.search(r'Running (\d+) test cases?', text)
-        row = {'selector': selector, 'exit': code,
-            'cases_started': int(count.group(1)) if count else 0,
-            'binary_sha256': sha(exe), 'owned_processes': s.owned_processes(),
-            'assertions': re.findall(r'(\d+) assertions? out of (\d+) passed', text),
-            'fatal': [x for x in text.splitlines() if 'fatal error:' in x or 'error: in ' in x]}
-        R.setdefault('runtime', {}).setdefault(label, []).append(row)
-        s.save()
-        assert row['cases_started'] > 0 and not row['owned_processes'], row
-        if expect_pass:
-            assert code == 0 and '*** No errors detected' in text, row
-        else:
-            assert code != 0 and any('fs::exists' in x for x in row['fatal']), row
+    try:
+        for idx, selector in enumerate(cases):
+            key = label + '-' + str(idx)
+            code = s.run(key, [str(exe), '--run_test=' + selector, '--report_level=detailed',
+                '--log_level=test_suite', '--', '-testdatadir=' + str(data / ('node' + str(idx)))], 180)
+            text = (E / (key + '.log')).read_text(errors='replace')
+            count = re.search(r'Running (\d+) test cases?', text)
+            row = {'selector': selector, 'exit': code,
+                'cases_started': int(count.group(1)) if count else 0,
+                'binary_sha256': sha(exe), 'owned_processes': s.owned_processes(),
+                'assertions': re.findall(r'(\d+) assertions? out of (\d+) passed', text),
+                'fatal': [x for x in text.splitlines() if 'fatal error:' in x or 'error: in ' in x]}
+            R.setdefault('runtime', {}).setdefault(label, []).append(row)
+            s.save()
+            assert row['cases_started'] > 0 and not row['owned_processes'], row
+            if expect_pass:
+                assert code == 0 and '*** No errors detected' in text, row
+            else:
+                assert code != 0 and any('fs::exists' in x for x in row['fatal']), row
+    finally:
+        for key, value in previous_temp.items():
+            if value is None:
+                os.environ.pop(key, None)
+            else:
+                os.environ[key] = value
     shutil.rmtree(data)
     assert not data.exists()
     R.setdefault('removed_roots', []).append(str(data))
@@ -147,6 +155,12 @@ def prepare():
     cache = (BUILD / 'CMakeCache.txt').read_text()
     for flag in ['WITH_MODELNET:BOOL=ON', 'BUILD_TESTS:BOOL=ON', 'ENABLE_WALLET:BOOL=ON', 'WITH_ZMQ:BOOL=ON']:
         assert flag in cache
+    table = json.loads((BUILD / 'compile_commands.json').read_text())
+    R['compiler_entries'] = []
+    for row in I['compiler_cohort']:
+        matches = [x for x in table if x['file'].replace('\\', '/').endswith('/' + row['source']) and '/test_btx.dir/' in x['output'].replace('\\', '/')]
+        assert len(matches) == 1
+        R['compiler_entries'].append(matches[0])
     shutil.copyfile(BUILD / 'compile_commands.json', E / 'baseline-compile-commands.json')
     R['source'] = I['base']
     R['status'] = 'BASE_VERIFIED'
@@ -170,7 +184,8 @@ def baseline():
         errors = [x for x in text.splitlines() if 'error:' in x or 'fatal error' in x]
         R.setdefault('compile_before', []).append({'source': row['source'], 'output': row['output'], 'exit': code, 'errors': errors})
         s.save()
-        assert code != 0 and errors, 'Baseline compiler discriminator missing'
+        expected = ['S_IRUSR', 'S_IWUSR', 'S_IXUSR'] if 'swarm_' in row['source'] else ['arpa/inet.h']
+        assert code != 0 and errors and any(token in '\n'.join(errors) for token in expected), 'Intended baseline compiler discriminator missing'
     R['baseline_commands_unchanged'] = config_hashes() == R['original_configuration']
     assert R['baseline_commands_unchanged']
     exe = build_component('baseline_paths', I['path_files'])
@@ -211,6 +226,7 @@ def candidate():
             lambda m: m.group(1) + m.group(2) + m.group(3).replace('\\', '/'), cmd)
     unexpected = [k for k in old if {**old[k], 'command': normalize(old[k]['command'])} !=
                   {**new[k], 'command': normalize(new[k]['command'])}]
+    R['command_delta_count'] = sum(old[k] != new[k] for k in old)
     R['unexpected_commands'] = unexpected
     s.save()
     assert not unexpected
