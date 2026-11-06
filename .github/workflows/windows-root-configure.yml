@@ -1,4 +1,4 @@
-name: Native Windows cloud R2 fixture paired repair
+name: Native Windows cloud R2 compiled cache recovery
 permissions:
   contents: read
 jobs:
@@ -222,7 +222,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Run same21 cases and scoped environment restoration controls
+    - name: Record existing exact-source runtime without repeating cases
       id: fixture_run
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -241,7 +241,7 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/cloud_repair.py run
+        python controls/contrib/devtools/windows-root-configure/cloud_repair.py attest
 
         exit /b %errorlevel%
 
@@ -286,7 +286,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
       with:
-        name: native-windows-cloud-r2-repair
+        name: native-windows-cloud-r2-cache-retention
         path: D:\btx-native-035\evidence\
         retention-days: 14
 'on':
