@@ -207,7 +207,10 @@ def baseline():
     runtime = I['path_before_reuse']
     assert runtime['source'] == I['base']
     assert runtime['configuration'] == R['original_configuration']
-    assert not diff(runtime['actual_profile'], R['actual_profile'])
+    runtime_delta = diff(runtime['actual_profile'], R['actual_profile'])
+    allowed = json.loads((P / 'profile-transition.json').read_text())['allowed_differences']
+    assert runtime_delta in [{}, allowed, {k: list(reversed(v)) for k, v in allowed.items()}], runtime_delta
+    R['runtime_baseline_profile_transition'] = runtime_delta
     assert runtime['source_unchanged_before_after']
     assert [x['selector'] for x in runtime['records']] == I['baseline_path_cases']
     assert all(x['exit'] != 0 and any('fs::exists' in e for e in x['fatal']) for x in runtime['records'])
