@@ -47,18 +47,9 @@ try:
  with configpath.open('w') as f:config.write(f)
  state['config_overlay']='Existing generated config plus verified CMakeCache WITH_MODELNET=ON as explicit ENABLE_MODELNET=true; root config generation already qualified locally, no root reconfigure/build.'
  R.mkdir(mode=0o700)
- for i,variant in enumerate(['baseline','candidate']):
-  env['RPC_VARIANT']=variant
-  command(['python3',HERE/'case.py','--configfile='+str(configpath),'--tmpdir='+str(R/variant),'--cachedir='+str(R/(variant+'-cache')),'--portseed='+str(42600+i),'--nocleanup'],'test-'+variant,allowed=(1,),timeout=240)
-  stages=json.loads((O/(variant+'-stages.json')).read_text());state[variant]=stages;assert stages[0]['name']=='test_client_conversion_table' and stages[0]['result']=='fail'
-  assert 'RPC client conversion table' in stages[0]['error']
-  if variant=='baseline':assert len(stages)==1
-  else:
-   assert [s['name'] for s in stages]==['test_client_conversion_table','test_argument_names','test_categories','dump_help','wallet_help']
-   assert ast.literal_eval(stages[0]['error'].split('mismatch!\n',1)[1])==ast.literal_eval(state['baseline'][0]['error'].split('mismatch!\n',1)[1])
-   assert all(s['result']=='pass' for s in stages[2:]),stages
-  assert not processes(),'Owned processes remain after framework cleanup'
-  save()
+ command(['python3',HERE/'case.py','--configfile='+str(configpath),'--tmpdir='+str(R/'node'),'--cachedir='+str(R/'chain-cache'),'--portseed=42700','--nocleanup'],'configuration-observation',timeout=240)
+ observed=json.loads((O/'observations.json').read_text());assert observed['controls_pass'] and observed['node_rpc_shutdown_complete'] and observed['socket_removed']
+ assert not processes()
  state['binaries_after']={n:sha(B/'bin'/n) for n in expected['binaries']};assert state['binaries_after']==state['binaries_before'];state['audit_after']=audit();assert state['audit_after']==state['audit_before'];state['qualification_pass']=True
 except Exception as e:state['error']=repr(e);raise
 finally:
