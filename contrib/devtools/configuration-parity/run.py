@@ -1,7 +1,7 @@
 from pathlib import Path
 import ast,os,json,hashlib,subprocess,configparser,signal,shutil,stat,time,sys
 W=Path(os.environ['GITHUB_WORKSPACE']);HERE=Path(__file__).parent;P=W/'p2mr-parent-product';T=W/'p2mr-parent-native';B=T/'build';O=W/'rpc-help-live-results';O.mkdir(exist_ok=True);R=W/'rpc-help-live-runtime';BASE='666673a3153225ba264c7870e0e82e354df86765'
-state={'base':BASE,'fixture':os.environ['GITHUB_SHA'],'commands':[]};expected=json.loads((HERE/'expected.json').read_text());env=dict(os.environ,BTX_OPENSSL=str(T/'openssl/bin/openssl'),PYTHONDONTWRITEBYTECODE='1')
+state={'base':BASE,'fixture':os.environ['GITHUB_SHA'],'commands':[]};expected=json.loads((HERE/'expected.json').read_text());env=dict(os.environ,BTX_OPENSSL=str(T/'openssl/bin/openssl'),PYTHONDONTWRITEBYTECODE='1',PYTHONPATH=str(P/'test/functional'))
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def save(): (O/'result.json').write_text(json.dumps(state,indent=2))
 def command(args,label,allowed=(0,),timeout=240):
