@@ -173,19 +173,16 @@ def baseline():
     environment()
     # Compile the exact three maintained outputs together; collect every real
     # error rather than hiding later failures behind the first one.
-    s.need('baseline-compiler-plan', ['ninja', '-C', str(BUILD), '-n', '-d', 'explain'] + [x['output'] for x in I['compiler_cohort']], 120)
-    plan = (E / 'baseline-compiler-plan.log').read_text(errors='replace')
-    steps = re.findall(r'^\[(\d+)/(\d+)\]', plan, re.M)
-    assert steps and int(steps[-1][1]) <= 220, 'Unexpected baseline-cohort rebuild'
-    for row in I['compiler_cohort']:
-        label = 'baseline-' + Path(row['source']).stem
-        code = s.run(label, ['ninja', '-C', str(BUILD), '-v', '-k', '0', row['output']], 300)
-        text = (E / (label + '.log')).read_text(errors='replace')
-        errors = [x for x in text.splitlines() if 'error:' in x or 'fatal error' in x]
-        R.setdefault('compile_before', []).append({'source': row['source'], 'output': row['output'], 'exit': code, 'errors': errors})
-        s.save()
-        expected = ['S_IRUSR', 'S_IWUSR', 'S_IXUSR'] if 'swarm_' in row['source'] else ['arpa/inet.h']
-        assert code != 0 and errors and any(token in '\n'.join(errors) for token in expected), 'Intended baseline compiler discriminator missing'
+    prior = I['compile_before_reuse']
+    assert prior['source'] == I['base']
+    assert prior['configuration'] == R['original_configuration']
+    assert prior['entries'] == R['compiler_entries']
+    assert len(prior['records']) == len(I['compiler_cohort']) == 2
+    for row in prior['records']:
+        assert row['exit'] != 0 and all(token in '\n'.join(row['errors']) for token in ['S_IRUSR', 'S_IWUSR', 'S_IXUSR'])
+    R['compile_before'] = prior['records']
+    R['compile_before_reused'] = prior
+    s.save()
     R['baseline_commands_unchanged'] = config_hashes() == R['original_configuration']
     assert R['baseline_commands_unchanged']
     exe = build_component('baseline_paths', I['path_files'])

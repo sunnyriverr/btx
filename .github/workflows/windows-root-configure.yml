@@ -95,14 +95,14 @@ jobs:
           path: |
             D:\btx-native-035\project-build
             D:\btx-native-035\vcpkg-installed
-          key: btx356-unit-fixtures-v1-660ba68b89c2484ae995c2a32e7835b6c30fb03116566991772ac36886860ca2-42115687712
+          key: btx356-unit-fixtures-v1-d70624475d4658144d33be712a3342d6559912b1fde74c264f1e363b8768536d-42144419403
       - name: Require existing exact-profile checkpoint for restore proof
         shell: pwsh
         env:
           MATCHED_CACHE: ${{ steps.project_restore.outputs.cache-matched-key }}
         run: |
           if (-not $env:MATCHED_CACHE) { throw "Restore proof requires an existing cache; refusing fresh rebuild" }
-      - name: Verify retained3922 objects and exact integrated baseline
+      - name: Verify retained3923 objects and exact integrated baseline
         id: prepare
         shell: cmd
         run: |
@@ -115,7 +115,7 @@ jobs:
           set "_CL_="
           python controls/contrib/devtools/windows-root-configure/batch.py prepare
           exit /b %errorlevel%
-      - name: Prove three compiler barriers and four existing path failures
+      - name: Reuse proven permission compiler negatives and prove four path failures
         id: baseline
         shell: cmd
         run: |
