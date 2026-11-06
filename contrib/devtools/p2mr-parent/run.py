@@ -65,9 +65,11 @@ def collect_logs():
    if p.is_file() and p.name in ['test_framework.log','debug.log'] and p.stat().st_size<=10*1024**2:
     dest=OUT/'functional-logs'/p.relative_to(RUNTIME);dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(p,dest)
 def dependencies():
+ assert shutil.which('cmake'), 'Expected runner CMake unavailable'
+ command(['cmake','--version'],'cmake-preinstalled',timeout=30)
  command(['sudo','apt-get','update'],'apt-update',timeout=300)
- command(['sudo','apt-get','install','-y','--no-install-recommends','build-essential','gcc-13','g++-13','cmake','ninja-build','pkgconf','python3','libevent-dev','libboost-dev','libsqlite3-dev','libzmq3-dev','ccache'],'apt-install',timeout=600)
- command(['dpkg-query','-W','gcc-13','g++-13','cmake','ninja-build','python3','libevent-dev','libboost-dev','libsqlite3-dev','libzmq3-dev','ccache'],'dependency-versions',timeout=30)
+ command(['sudo','apt-get','-o','Acquire::http::Timeout=30','-o','Acquire::https::Timeout=30','-o','Acquire::Retries=1','install','-y','--no-install-recommends','build-essential','gcc-13','g++-13','ninja-build','pkgconf','python3','libevent-dev','libboost-dev','libsqlite3-dev','libzmq3-dev','ccache'],'apt-install',timeout=600)
+ command(['dpkg-query','-W','gcc-13','g++-13','ninja-build','python3','libevent-dev','libboost-dev','libsqlite3-dev','libzmq3-dev','ccache'],'dependency-versions',timeout=30)
 def openssl():
  inputs={'source':SSLHASH,'compiler':sha(Path(shutil.which('gcc-13')).resolve()),'glibc':subprocess.check_output(['getconf','GNU_LIBC_VERSION'],text=True).strip(),'profile':'linux-x86_64 no-shared no-tests no-docs -fPIC'}
  if (PREFIX/'inputs.json').is_file():
