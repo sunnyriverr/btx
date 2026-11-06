@@ -1,6 +1,7 @@
 """Observe actual CLI -> btxd -> real helper, with an explicitly fake generate adapter."""
 from pathlib import Path
 import hashlib
+from decimal import Decimal
 import json
 import os
 import socket
@@ -10,6 +11,14 @@ import time
 
 from test_framework.test_framework import BitcoinTestFramework
 from test_framework.authproxy import JSONRPCException
+
+
+def record_decimal(value):
+    # AuthServiceProxy retains fractional JSON numbers as Decimal. Preserve the
+    # exact text and type in diagnostic records; do not round financial data.
+    if isinstance(value, Decimal):
+        return {'decimal': str(value)}
+    raise TypeError('Unsupported observation value: ' + type(value).__name__)
 
 
 class GenerateCliObservation(BitcoinTestFramework):
@@ -88,7 +97,7 @@ class GenerateCliObservation(BitcoinTestFramework):
                     row = {'label': label, 'value': value, 'error': error.error}
                 row['adapter_delta'] = requests()[before:]
                 records['raw'].append(row)
-                observations.write_text(json.dumps(records, indent=2) + '\n')
+                observations.write_text(json.dumps(records, indent=2, default=record_decimal) + '\n')
                 return row
 
             cli_prefix = [str(build / 'bin/btx-cli'), '-regtest',
@@ -109,7 +118,7 @@ class GenerateCliObservation(BitcoinTestFramework):
                        'stdout': completed.stdout, 'stderr': completed.stderr,
                        'adapter_delta': requests()[before:]}
                 records['cli'].append(row)
-                observations.write_text(json.dumps(records, indent=2) + '\n')
+                observations.write_text(json.dumps(records, indent=2, default=record_decimal) + '\n')
                 return row
 
             for label, named in [('raw-object-positional', False), ('raw-object-named', True)]:
@@ -152,7 +161,7 @@ class GenerateCliObservation(BitcoinTestFramework):
             helper_stream.close()
             records['adapter_requests'] = [json.loads(line) for line in adapter_log.read_text().splitlines()] if adapter_log.exists() else []
             records['helper_socket_after_stop'] = self.sock.exists()
-            observations.write_text(json.dumps(records, indent=2) + '\n')
+            observations.write_text(json.dumps(records, indent=2, default=record_decimal) + '\n')
 
 
 if __name__ == '__main__':
