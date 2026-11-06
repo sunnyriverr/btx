@@ -82,9 +82,12 @@ def qualify():
     os.environ['CXX'] = 'clang++'
     R['script_environment'] = {'bash': str(bashdir / 'bash.exe'), 'CXX': 'clang++',
                                'script_sha256': sha(SOURCE / 'contrib/modelnet/check-with-modelnet-off.sh')}
-    s.need('bash-prerequisite', ['bash', '--version'], 30)
+    s.need('bash-prerequisite', [str(bashdir / 'bash.exe'), '--version'], 30)
+    s.need('cmd-bash-resolution', ['cmd', '/d', '/c', 'where bash'], 30)
+    resolved = (E / 'cmd-bash-resolution.log').read_text().splitlines()[0]
+    assert Path(resolved).resolve() == (bashdir / 'bash.exe').resolve()
     s.need('probe-compiler-prerequisite', ['clang++', '--version'], 30)
-    s.need('bash-tool-prerequisites', ['bash', '-c', 'command -v bash awk grep mktemp clang++; type mapfile'], 30)
+    s.need('bash-tool-prerequisites', [str(bashdir / 'bash.exe'), '-c', 'command -v bash awk grep mktemp clang++; type mapfile'], 30)
     rows = json.loads((BUILD / 'compile_commands.json').read_text())
     entries = [x for x in rows if x['file'].replace('\\', '/').endswith('/' + I['file'])
                and '/test_btx.dir/' in x['output'].replace('\\', '/')]
