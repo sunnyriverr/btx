@@ -9,7 +9,7 @@ class ConfigurationParity(BitcoinTestFramework):
   self.extra_args=[['-disablewallet','-modelnet=0','-modelbind=off','-modelrpcsocket='+str(self.sock),'-dnsseed=0','-discover=0','-networkactive=0']]
  def run_test(self):
   W=Path(os.environ['GITHUB_WORKSPACE']);O=W/'rpc-help-live-results';build=Path(self.config['environment']['BUILDDIR']);product=Path(self.config['environment']['SRCDIR']);catalog=self.root/'catalog';catalog.mkdir();rec={'calls':[],'snapshots':{},'helper_exits':[]};helper=None;stream=(O/'helper.log').open('wb')
-  args=[str(build/'bin/btx-modeld'),'-modeldir='+str(catalog),'-modelrpcsocket='+str(self.sock),'-modelstorage=16MiB','-modelbind=off','-modelhost=0','-modelseed=off','-modelfollowpeers=0','-modellandiscovery=0','-modelnatpmp=0','-pwcchain=regtest']
+  args=[str(build/'bin/btx-modeld'),'-modeldir='+str(catalog),'-modelrpcsocket='+str(self.sock),'-modelstorage=16MiB','-modelhost=0','-modelseed=off','-modelfollowpeers=0','-modellandiscovery=0','-modelnatpmp=0','-pwcchain=regtest']
   prefix=[str(build/'bin/btx-cli'),'-regtest','-datadir='+str(self.nodes[0].datadir_path),'-conf='+str(self.nodes[0].bitcoinconf),'-rpcclienttimeout=15']
   wrapper=[sys.executable,str(product/'contrib/modelnet/btx-model'),'--socket',str(self.sock),'--json']
   def save(): (O/'observations.json').write_text(json.dumps(rec,indent=2))

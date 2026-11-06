@@ -33,14 +33,26 @@ def processes():
 try:
  assert shutil.disk_usage(W).free>2*1024**3
  state['audit_before']=audit();assert not processes()
- for n,e in expected['binaries'].items():assert sha(B/'bin'/n)==e['sha256'],n
+ for n,e in expected['binaries'].items():
+  if n!='btx-modeld':assert sha(B/'bin'/n)==e['sha256'],n
  assert sha(B/'CMakeCache.txt')==expected['cmake_cache_sha256']
  for n,want in expected['openssl']['files'].items():assert sha(T/'openssl'/n)==want
- state['binaries_before']={n:sha(B/'bin'/n) for n in expected['binaries']}
+ state['binaries_before']={n:sha(B/'bin'/n) for n in expected['binaries'] if n!='btx-modeld'}
  cache=(B/'CMakeCache.txt').read_text();assert 'ENABLE_WALLET:BOOL=ON' in cache and 'WITH_MODELNET:BOOL=ON' in cache
  command(['sudo','apt-get','-o','Acquire::Retries=1','update'],'apt-update')
- command(['sudo','apt-get','install','-y','--no-install-recommends','libevent-dev','libsqlite3-dev','libzmq3-dev'],'apt-install')
+ command(['sudo','apt-get','install','-y','--no-install-recommends','libevent-dev','libsqlite3-dev','libzmq3-dev','g++-13','ninja-build','pkgconf','libboost-dev','ccache'],'apt-install')
  command(['ldd',B/'bin/btxd'],'ldd')
+ env.update(CC='gcc-13',CXX='g++-13',CCACHE_DIR=str(T/'ccache'),CCACHE_BASEDIR=str(W),CCACHE_COMPILERCHECK='content',PKG_CONFIG_PATH=str(T/'openssl/lib/pkgconfig'))
+ for name in subprocess.check_output(['git','ls-tree','-r','--name-only','-z',BASE],cwd=P).split(b'\0'):
+  if name:os.utime(P/os.fsdecode(name),(1700000000,1700000000),follow_symlinks=False)
+ command(['cmake','-S',P,'-B',B],'cached-configure',timeout=120)
+ command(['ninja','-C',B,'-n','btx-modeld'],'helper-build-plan',timeout=60)
+ steps=[x for x in (O/'helper-build-plan.log').read_text().splitlines() if x.startswith('[')]
+ assert len(steps)<=12,'Unexpected helper rebuild footprint'
+ command(['cmake','--build',B,'--target','btx-modeld','--parallel','2'],'helper-only-build',timeout=240)
+ assert sha(B/'bin/btx-modeld')==expected['binaries']['btx-modeld']['sha256']
+ state['binaries_before']['btx-modeld']=sha(B/'bin/btx-modeld');save()
+
  config=configparser.ConfigParser();config.read(B/'test/config.ini');assert config.getboolean('components','ENABLE_WALLET');assert Path(config['environment']['SRCDIR'])==P
  config['components']['ENABLE_MODELNET']='true'
  configpath=O/'functional-config.ini'
