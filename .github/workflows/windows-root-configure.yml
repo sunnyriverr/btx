@@ -1,4 +1,4 @@
-name: Native Windows model-file checkpoint recovery
+name: Native Windows pending unit batches
 on:
   push:
     branches: [codex/ci-windows-root-configure]
@@ -8,7 +8,7 @@ jobs:
   configure:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: windows-2025
-    timeout-minutes: 15
+    timeout-minutes: 40
     env:
       BTX_NATIVE_ROOT: D:\btx-native-035
     steps:
@@ -115,7 +115,7 @@ jobs:
           set "_CL_="
           python controls/contrib/devtools/windows-root-configure/full.py prepare
           exit /b %errorlevel%
-      - name: Run four existing file recovery cases, 60 seconds maximum
+      - name: Run pending maintained suites with bounded checkpoints
         id: cases
         shell: cmd
         run: |
@@ -126,7 +126,7 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/slice.py run
+          python controls/contrib/devtools/windows-root-configure/batches.py run
           exit /b %errorlevel%
       - name: Verify unchanged cached build and clean up disposable data
         id: verification
@@ -140,12 +140,12 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/slice.py verify
+          python controls/contrib/devtools/windows-root-configure/batches.py verify
           exit /b %errorlevel%
       - name: Preserve native maintained target records
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
-          name: native-windows-file-recovery
+          name: native-windows-unit-batches
           path: D:\btx-native-035\evidence\
           retention-days: 14
