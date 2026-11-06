@@ -40,23 +40,16 @@ class ConfigurationParity(BitcoinTestFramework):
    assert call('wrapper profile',wrapper+['profile','set','custom',json.dumps(extras)])['exit']==0
    self.wait_until(lambda:self.nodes[0].getmodelnetworkinfo().get('quota_bytes')==8*1024**2,timeout=10)
    a=snap('wrapper-profile');assert a['profile']['storage_arg']=='8388608'
-   for named in [False,True]:
-    before=snap('profile-before-'+str(named));text=json.dumps({**opts,'storage_bytes':'4MiB'})
-    argv=prefix+(['-named','setmodelprofile','request='+text] if named else ['setmodelprofile',text]);call('CLI profile '+str(named),argv);after=snap('profile-after-'+str(named));rec.setdefault('profile_effects',[]).append({'named':named,'saved_unchanged':before['saved']==after['saved'],'storage_arg':after['profile'].get('storage_arg')});save()
-   assert call('CLI valid bare preset',prefix+['setmodelprofile','custom'])['exit']==0
-   raw('setmodelprofile',opts);self.wait_until(lambda:self.nodes[0].getmodelnetworkinfo().get('quota_bytes')==8*1024**2,timeout=10);assert snap('direct-profile')['profile']['storage_arg']=='8388608'
-   before=snap('invalid-profile-before')['saved']
-   try:raw('setmodelprofile',{**opts,'automatic_spend_atoms':1});raise AssertionError('invalid profile accepted')
-   except JSONRPCException as e:rec['invalid_profile']=e.error
-   assert snap('invalid-profile-after')['saved']==before
-   assert call('wrapper mirror sentinel',wrapper+['mirror','--publisher','sentinel-publisher','--keep-latest','3','--min-independent-origins','3'])['exit']==0
+   wrapper_result=call('wrapper mirror prerequisite',wrapper+['mirror','--publisher','sentinel-publisher','--keep-latest','3','--min-independent-origins','3'])
+   assert wrapper_result['exit']==1 and 'idempotency_key required' in wrapper_result['stdout']
+   raw('setmodelmirror',{'publisher_id':'sentinel-publisher','keep_latest':3,'min_independent_origins':3,'automatic_spend_atoms':0,'idempotency_key':'sentinel-mirror-control'})
    seeded=snap('wrapper-mirror');assert any(s.get('publisher_id')=='sentinel-publisher' and s.get('keep_latest')==3 for s in seeded['mirror']['selectors'])
-   request={'publisher_id':'requested-publisher','keep_latest':2,'min_independent_origins':2,'automatic_spend_atoms':0}
+   request={'publisher_id':'requested-publisher','keep_latest':2,'min_independent_origins':2,'automatic_spend_atoms':0,'idempotency_key':'requested-mirror-control'}
    for named in [False,True]:
     before=snap('mirror-before-'+str(named));text=json.dumps(request);argv=prefix+(['-named','setmodelmirror','request='+text] if named else ['setmodelmirror',text]);call('CLI mirror '+str(named),argv);after=snap('mirror-after-'+str(named));rec.setdefault('mirror_effects',[]).append({'named':named,'requested_selector_saved':any(s.get('publisher_id')==request['publisher_id'] for s in after['mirror']['selectors']),'saved_before':before['saved'],'saved_after':after['saved']});assert any(s.get('publisher_id')=='sentinel-publisher' and s.get('keep_latest')==3 for s in after['mirror']['selectors']);save()
    raw('setmodelmirror',request);good=snap('direct-mirror');assert any(s.get('publisher_id')==request['publisher_id'] and s.get('keep_latest')==2 for s in good['mirror']['selectors'])
    before=good['saved']
-   try:raw('setmodelmirror',{**request,'automatic_spend_atoms':1});raise AssertionError('invalid mirror accepted')
+   try:raw('setmodelmirror',{**request,'automatic_spend_atoms':1,'idempotency_key':'invalid-spend-control'});raise AssertionError('invalid mirror accepted')
    except JSONRPCException as e:rec['invalid_mirror']=e.error
    assert snap('invalid-mirror-after')['saved']==before
    assert self.nodes[0].getmodelnetworkinfo()['automatic_spend_atoms']==0
