@@ -1,0 +1,305 @@
+{
+  "baseline": [
+    {
+      "wallet": true,
+      "injected": [],
+      "visited": [
+        "test_client_conversion_table",
+        "test_categories",
+        "dump_help",
+        "wallet_help"
+      ],
+      "error": null,
+      "acceptance": false
+    },
+    {
+      "wallet": false,
+      "injected": [],
+      "visited": [
+        "test_client_conversion_table",
+        "test_categories",
+        "dump_help"
+      ],
+      "error": null,
+      "acceptance": false
+    },
+    {
+      "wallet": true,
+      "injected": [
+        "test_client_conversion_table"
+      ],
+      "visited": [
+        "test_client_conversion_table"
+      ],
+      "error": "injected test_client_conversion_table",
+      "acceptance": false
+    },
+    {
+      "wallet": true,
+      "injected": [
+        "test_argument_names"
+      ],
+      "visited": [
+        "test_client_conversion_table",
+        "test_categories",
+        "dump_help",
+        "wallet_help"
+      ],
+      "error": null,
+      "acceptance": false
+    },
+    {
+      "wallet": true,
+      "injected": [
+        "test_categories"
+      ],
+      "visited": [
+        "test_client_conversion_table",
+        "test_categories"
+      ],
+      "error": "injected test_categories",
+      "acceptance": false
+    },
+    {
+      "wallet": true,
+      "injected": [
+        "dump_help"
+      ],
+      "visited": [
+        "test_client_conversion_table",
+        "test_categories",
+        "dump_help"
+      ],
+      "error": "injected dump_help",
+      "acceptance": false
+    },
+    {
+      "wallet": true,
+      "injected": [
+        "wallet_help"
+      ],
+      "visited": [
+        "test_client_conversion_table",
+        "test_categories",
+        "dump_help",
+        "wallet_help"
+      ],
+      "error": "injected wallet_help",
+      "acceptance": false
+    },
+    {
+      "wallet": true,
+      "injected": [
+        "test_client_conversion_table",
+        "test_argument_names"
+      ],
+      "visited": [
+        "test_client_conversion_table"
+      ],
+      "error": "injected test_client_conversion_table",
+      "acceptance": false
+    }
+  ],
+  "candidate": [
+    {
+      "wallet": true,
+      "injected": [],
+      "visited": [
+        "test_client_conversion_table",
+        "test_argument_names",
+        "test_categories",
+        "dump_help",
+        "wallet_help"
+      ],
+      "error": null,
+      "acceptance": true
+    },
+    {
+      "wallet": false,
+      "injected": [],
+      "visited": [
+        "test_client_conversion_table",
+        "test_argument_names",
+        "test_categories",
+        "dump_help"
+      ],
+      "error": null,
+      "acceptance": true
+    },
+    {
+      "wallet": true,
+      "injected": [
+        "test_client_conversion_table"
+      ],
+      "visited": [
+        "test_client_conversion_table",
+        "test_argument_names",
+        "test_categories",
+        "dump_help",
+        "wallet_help"
+      ],
+      "error": "RPC help checks failed:\ncall: injected test_client_conversion_table",
+      "acceptance": true
+    },
+    {
+      "wallet": true,
+      "injected": [
+        "test_argument_names"
+      ],
+      "visited": [
+        "test_client_conversion_table",
+        "test_argument_names",
+        "test_categories",
+        "dump_help",
+        "wallet_help"
+      ],
+      "error": "RPC help checks failed:\ncall: injected test_argument_names",
+      "acceptance": true
+    },
+    {
+      "wallet": true,
+      "injected": [
+        "test_categories"
+      ],
+      "visited": [
+        "test_client_conversion_table",
+        "test_argument_names",
+        "test_categories",
+        "dump_help",
+        "wallet_help"
+      ],
+      "error": "RPC help checks failed:\ncall: injected test_categories",
+      "acceptance": true
+    },
+    {
+      "wallet": true,
+      "injected": [
+        "dump_help"
+      ],
+      "visited": [
+        "test_client_conversion_table",
+        "test_argument_names",
+        "test_categories",
+        "dump_help",
+        "wallet_help"
+      ],
+      "error": "RPC help checks failed:\ncall: injected dump_help",
+      "acceptance": true
+    },
+    {
+      "wallet": true,
+      "injected": [
+        "wallet_help"
+      ],
+      "visited": [
+        "test_client_conversion_table",
+        "test_argument_names",
+        "test_categories",
+        "dump_help",
+        "wallet_help"
+      ],
+      "error": "RPC help checks failed:\ncall: injected wallet_help",
+      "acceptance": true
+    },
+    {
+      "wallet": true,
+      "injected": [
+        "test_client_conversion_table",
+        "test_argument_names"
+      ],
+      "visited": [
+        "test_client_conversion_table",
+        "test_argument_names",
+        "test_categories",
+        "dump_help",
+        "wallet_help"
+      ],
+      "error": "RPC help checks failed:\ncall: injected test_client_conversion_table\ncall: injected test_argument_names",
+      "acceptance": true
+    }
+  ],
+  "controls": [
+    {
+      "name": "exact categories Modelnet=True",
+      "pass": true,
+      "expected_failure_observed": false,
+      "error": null
+    },
+    {
+      "name": "wrong categories rejected Modelnet=True",
+      "pass": true,
+      "expected_failure_observed": true,
+      "error": "not(['Blockchain', 'Bridge', 'Control', 'Mining', 'Network', 'Rawtransactions', 'Shielded', 'Stats', 'Util', 'Wallet'] == ['Blockchain', 'Bridge', 'Control', 'Mining', 'Modelnet', 'Network', 'Rawtransactions', 'Shielded', 'Stats', 'Util', 'Wallet'])"
+    },
+    {
+      "name": "exact categories Modelnet=False",
+      "pass": true,
+      "expected_failure_observed": false,
+      "error": null
+    },
+    {
+      "name": "wrong categories rejected Modelnet=False",
+      "pass": true,
+      "expected_failure_observed": true,
+      "error": "not(['Blockchain', 'Bridge', 'Control', 'Mining', 'Modelnet', 'Network', 'Rawtransactions', 'Shielded', 'Stats', 'Util', 'Wallet'] == ['Blockchain', 'Bridge', 'Control', 'Mining', 'Network', 'Rawtransactions', 'Shielded', 'Stats', 'Util', 'Wallet'])"
+    },
+    {
+      "name": "argument-name mismatch retained",
+      "pass": true,
+      "expected_failure_observed": true,
+      "error": "WARNING: conversion mismatch for argument named query ([('searchmodels', True), ('resolveresource', False)])"
+    },
+    {
+      "name": "client/server mismatch retained",
+      "pass": true,
+      "expected_failure_observed": true,
+      "error": "RPC client conversion table (/Users/wildwood/Documents/Playground/work/btx-lanes/session-2/rpc-help-acceptance-restore/full-acceptance-plan/repair/fixture/src/rpc/client.cpp) and RPC server named arguments mismatch!\n{('z_sendtoaddress', 6, 'verbose'), ('createwallet', 4, 'avoid_reuse'), ('acceptcomputejobresult', 0, 'request'), ('z_sendtoaddress', 5, 'fee'), ('exportbtxbundle', 0, 'request'), ('solvematmulservicechallenge', 3, 'solver_threads'), ('createmodelrelease', 0, 'body'), ('addnode', 2, 'v2transport'), ('listsinceblock', 4, 'include_change'), ('importpubkey', 2, 'rescan'), ('createexchangebatch', 0, 'outputs'), ('listmodelidentities', 0, 'request'), ('psbtbumpfee', 1, 'original_change_index'), ('sweeptoself', 0, 'fee_rate'), ('getmodel', 1, 'mode'), ('z_mergenotes', 1, 'fee'), ('waitforblockheight', 0, 'height'), ('send', 4, 'inputs'), ('z_listunspent', 1, 'maxconf'), ('gettransaction', 1, 'include_watchonly'), ('getblock', 1, 'verbose'), ('getmatmulservicechallengeprofile', 8, 'solver_parallelism'), ('bumpfee', 1, 'fee_rate'), ('bridge_buildverifierset', 1, 'options'), ('bridge_buildaggregatesettlement', 1, 'aggregate'), ('sendmany', 8, 'fee_rate'), ('walletcreatefundedpsbt', 3, 'solving_data'), ('verifymatmulserviceproof', 0, 'challenge'), ('getreceivedbyaddress', 1, 'minconf'), ('fundrawtransaction', 1, 'includeWatching'), ('getorphantxs', 0, 'verbosity'), ('getevaluatedtransport', 0, 'request'), ('buildhtlcrefund', 5, 'allow_non_htlc_tree'), ('gettxoutproof', 2, 'options'), ('issuematmulservicechallengeprofile', 7, 'min_solve_time_s'), ('sendall', 4, 'solving_data'), ('wakebtxcapability', 0, 'request'), ('bridge_buildproofanchor', 2, 'options'), ('z_gettotalbalance', 0, 'minconf'), ('fundrawtransaction', 1, 'max_tx_weight'), ('gettxoutsetinfo', 1, 'hash_or_height'), ('getmempoolinfo', 0, 'with_fee_histogram'), ('backupwalletbundlearchive', 3, 'include_viewing_keys'), ('exportmodelindex', 0, 'query'), ('resolvebtxcapability', 0, 'request'), ('getblockheader', 1, 'verbose'), ('getcomputeaccessgrant', 0, 'request'), ('reconcilemodelindex', 0, 'request'), ('solvematmulservicechallenge', 0, 'challenge'), ('setprunelock', 1, 'lock_info'), ('addpeeraddress', 1, 'port'), ('bridge_importpending', 2, 'vout'), ('settorrentsourcepolicy', 0, 'request'), ('send', 4, 'options'), ('getmatmulservicechallengeplan', 3, 'propagation_overhead_s'), ('joinpsbts', 0, 'txs'), ('getmodeldedupinfo', 0, 'request'), ('z_importviewingkey', 4, 'start_height'), ('createconsolidationtx', 1, 'options'), ('sleepbtxcapability', 0, 'request'), ('bridge_buildrefund', 2, 'vout'), ('listsinceblock', 2, 'include_watchonly'), ('descriptorprocesspsbt', 2, 'options'), ('getmatmulservicechallenge', 9, 'min_solve_time_s'), ('importcomputeaccessgrant', 0, 'request'), ('listmempooltransactions', 1, 'verbose'), ('setresourcegovernorpolicy', 0, 'policy'), ('submitpackage', 1, 'maxfeerate'), ('z_mergenotes', 0, 'max_notes'), ('bridge_estimatecapacity', 1, 'options'), ('mockscheduler', 0, 'delta_time'), ('fundrawtransaction', 1, 'subtractFeeFromOutputs'), ('fundrawtransaction', 1, 'include_unsafe'), ('getmempoolinfo', 0, 'fee_histogram'), ('createconsolidationtx', 0, 'change_address'), ('send', 3, 'fee_rate'), ('z_sendmany', 3, 'conf_target'), ('getblockhash', 0, 'height'), ('bridge_buildproverbenchmark', 0, 'profiles'), ('addmultisigaddress', 0, 'nrequired'), ('z_shieldfunds', 2, 'fee'), ('getmatmulservicechallenge', 3, 'target_solve_time_s'), ('walletprocesspsbt', 1, 'sign'), ('getsigningdigests', 0, 'package'), ('importmodel', 1, 'options'), ('sendmany', 6, 'conf_target'), ('listreceivedbylabel', 0, 'minconf'), ('getbalanceatheight', 0, 'height'), ('verifybtxpackage', 0, 'request'), ('z_sendtoaddress', 1, 'amount'), ('send', 4, 'lock_unspents'), ('hostmodel', 1, 'options'), ('importbtxpackage', 0, 'request'), ('gethdkeys', 0, 'active_only'), ('signbountyaward', 0, 'options'), ('sendtoaddress', 6, 'conf_target'), ('bridge_signbatchauthorization', 2, 'authorization'), ('addpeeraddress', 2, 'tried'), ('utxoupdatepsbt', 1, 'descriptors'), ('send', 4, 'include_watching'), ('cancelmodelimport', 0, 'request'), ('preparemodelerasure', 0, 'request'), ('descriptorprocesspsbt', 2, 'bip32derivs'), ('z_sendmany', 2, 'subtractfeefromamount'), ('getmodelbulkstatus', 0, 'request'), ('walletcreatefundedpsbt', 3, 'includeWatching'), ('getbtxpackagedocument', 0, 'request'), ('gettxspendingprevout', 0, 'outputs'), ('revokesubscriptionmandate', 0, 'request'), ('z_sendmany', 0, 'amounts'), ('sendrawtransaction', 1, 'maxfeerate'), ('psbtbumpfee', 1, 'require_replacable'), ('fundrawtransaction', 1, 'lockUnspents'), ('getmatmulservicechallenge', 5, 'validation_overhead_s'), ('createmultisig', 2, 'options'), ('importbtxlock', 0, 'request'), ('decoderawtransaction', 1, 'iswitness'), ('converttopsbt', 1, 'permitsigdata'), ('bridge_planout', 3, 'amount'), ('walletcreatefundedpsbt', 3, 'max_tx_weight'), ('getdescriptoractivity', 2, 'include_mempool'), ('getmatmulservicechallengeplan', 1, 'objective_value'), ('deriveaddresses', 2, 'require_checksum'), ('fundrawtransaction', 1, 'input_weights'), ('bridge_buildproofartifact', 1, 'artifact'), ('planmodelstoragemigration', 0, 'request'), ('getmodelmirrorstatus', 0, 'request'), ('getbtxresidency', 0, 'request'), ('getcomputebalance', 0, 'request'), ('inspectbtxtensormap', 0, 'request'), ('gethcpreadiness', 0, 'request'), ('importdescriptors', 0, 'requests'), ('pledgemodelrelease', 1, 'amount_atoms'), ('getmatmulchallengeprofile', 4, 'solver_duty_cycle_pct'), ('combinepsbt', 0, 'txs'), ('descriptorprocesspsbt', 2, 'prevtxs'), ('preparebountyfunding', 0, 'options'), ('listreceivedbylabel', 2, 'include_watchonly'), ('unloadwallet', 1, 'load_on_startup'), ('sendtoaddress', 4, 'subtractfeefromamount'), ('z_listreceivedbyaddress', 0, 'minconf'), ('getrawmempool', 1, 'mempool_sequence'), ('listcomputeoffers', 0, 'request'), ('createwallet', 2, 'blank'), ('send', 1, 'conf_target'), ('bridge_builddataartifact', 1, 'artifact'), ('bridge_buildproofprofile', 0, 'profile'), ('getnetworkhashps', 1, 'height'), ('getmodelcapabilities', 0, 'request'), ('getmatmulservicechallengeprofile', 5, 'solve_time_multiplier'), ('importcomputejobresult', 0, 'request'), ('prioritisetransaction', 2, 'fee_delta'), ('walletcreatefundedpsbt', 3, 'add_inputs'), ('getdescriptoractivity', 0, 'blockhashes'), ('createwallet', 7, 'external_signer'), ('getblocklocations', 1, 'nblocks'), ('fundrawtransaction', 1, 'feeRate'), ('planconsolidation', 0, 'options'), ('stop', 0, 'wait'), ('testmempoolaccept', 1, 'maxfeerate'), ('bridge_recoverpending', 2, 'force'), ('getsubscriptionmandate', 0, 'request'), ('walletcreatefundedpsbt', 3, 'include_unsafe'), ('getmatmulchallengeprofile', 0, 'target_solve_time_s'), ('buildhtlcclaim', 1, 'prevout'), ('mockvalidationepoch', 1, 'strip_manual'), ('importaddress', 2, 'rescan'), ('verifycomputeaccessgrant', 0, 'request'), ('prepareexternalsign', 1, 'options'), ('getnetworkhashps', 0, 'nblocks'), ('importhcpstate', 0, 'request'), ('sethcpreporting', 0, 'request'), ('reorgbountychain', 0, 'request'), ('submitpackage', 2, 'maxburnamount'), ('scanblocks', 5, 'filter_false_positives'), ('testmempoolaccept', 2, 'ignore_rejects'), ('waitforblockheight', 1, 'timeout'), ('listdepositutxos', 0, 'options'), ('bridge_buildhybridanchor', 3, 'options'), ('getmatmulservicechallengeprofile', 7, 'difficulty_window_blocks'), ('walletpassphrase', 1, 'timeout'), ('mockvalidationepoch', 2, 'strip_undo'), ('walletcreatefundedpsbt', 4, 'bip32derivs'), ('setnetworkactive', 0, 'state'), ('bridge_buildproofanchor', 1, 'proof_receipts'), ('getmatmulchallengeprofile', 2, 'propagation_overhead_s'), ('listtransactions', 2, 'skip'), ('createwallet', 5, 'descriptors'), ('estimaterawfee', 1, 'threshold'), ('listunspent', 4, 'maximumAmount'), ('addpqmultisigaddress', 3, 'sort'), ('send', 4, 'conf_target'), ('send', 4, 'maxconf'), ('buildmodelhtlcrefund', 0, 'options'), ('getcomputejobresult', 0, 'request'), ('listunspent', 4, 'query_options'), ('psbtbumpfee', 1, 'outputs'), ('createmultisig', 0, 'nrequired'), ('createmodelidentity', 0, 'label'), ('seedlabmodelchannel', 0, 'request'), ('gethcpconnectorstatus', 0, 'request'), ('solvecomputequalification', 0, 'challenge'), ('fundrawtransaction', 1, 'minconf'), ('fundrawtransaction', 1, 'replaceable'), ('listunspent', 1, 'maxconf'), ('issuecomputereceipt', 0, 'request'), ('walletcreatefundedpsbt', 3, 'lockUnspents'), ('buildhtlcrefund', 1, 'prevout'), ('getbtxcapability', 0, 'request'), ('signmodelfunding', 1, 'options'), ('removemodelstorage', 0, 'request'), ('executebtxacquisition', 0, 'request'), ('pairhcpdevice', 0, 'request'), ('addminingpeermeshnode', 1, 'persistent'), ('importmempool', 1, 'options'), ('listreceivedbyaddress', 4, 'include_immature_coinbase'), ('preparemodelfunding', 1, 'options'), ('accepthcphandoff', 0, 'request'), ('psbtbumpfee', 1, 'conf_target'), ('exportmodelrecovery', 1, 'options'), ('issuematmulservicechallengeprofile', 11, 'difficulty_window_blocks'), ('bridge_planin', 3, 'options'), ('exporthcpstate', 0, 'request'), ('simulaterawtransaction', 0, 'rawtxs'), ('importdepositpool', 0, 'entries'), ('verifymatmulserviceproofs', 1, 'lookup_local_status'), ('walletprocesspsbt', 3, 'bip32derivs'), ('puthcplocalitysources', 0, 'request'), ('listunspent', 4, 'minimumSumAmount'), ('bridge_buildaggregateartifactbundle', 1, 'bundle'), ('gettxout', 2, 'include_mempool'), ('listtransactions', 3, 'include_watchonly'), ('clearmintedattestation', 0, 'height'), ('sweeptoself', 0, 'include_unsafe'), ('setban', 3, 'absolute'), ('refreshminingpeermesh', 2, 'v2transport'), ('listtransactions', 1, 'count'), ('fundrawtransaction', 2, 'iswitness'), ('createpsbt', 0, 'inputs'), ('walletcreatefundedpsbt', 3, 'feeRate'), ('buildhtlcclaim', 5, 'options'), ('planbtxcapability', 0, 'request'), ('verifymatmulserviceproofs', 0, 'proofs'), ('fundrawtransaction', 1, 'segwit_inputs_only'), ('exportbtxlock', 0, 'request'), ('ensurehcplocal', 0, 'request'), ('estimaterawfee', 0, 'conf_target'), ('createpsbt', 3, 'replaceable'), ('publishmodelsearchrecord', 1, 'metadata'), ('bridge_signbatchreceipt', 2, 'options'), ('submitmodelfunding', 1, 'options'), ('importdescriptors', 2, 'pq_master_seeds'), ('setmodelswarmhealer', 0, 'request'), ('issuematmulservicechallengeprofile', 12, 'solver_parallelism'), ('sendmany', 2, 'minconf'), ('sendall', 4, 'send_max'), ('removemodelindex', 0, 'endpoint'), ('getcomputesigningidentity', 0, 'request'), ('listmatmulservicechallengeprofiles', 2, 'min_solve_time_s'), ('createwallet', 1, 'disable_private_keys'), ('finalizeexternalsign', 1, 'signatures'), ('lockunspent', 1, 'transactions'), ('updatemodelsearchrecord', 1, 'patch'), ('addpqmultisigaddress', 1, 'keys'), ('createrawtransaction', 1, 'outputs'), ('walletcreatefundedpsbt', 0, 'inputs'), ('z_listunspent', 2, 'include_watchonly'), ('exportbountyrecovery', 0, 'request'), ('issuecomputequalification', 4, 'max_elapsed_ms'), ('z_shieldcoinbase', 1, 'fee'), ('bridge_buildrefund', 6, 'enforce_timeout'), ('bridge_buildshieldtx', 2, 'vout'), ('enrollhcpprovider', 0, 'request'), ('loadwallet', 1, 'load_on_startup'), ('getreceivedbyaddress', 2, 'include_immature_coinbase'), ('getreceivedbylabel', 1, 'minconf'), ('browsemodels', 0, 'query'), ('getsourcepolicy', 0, 'request'), ('walletcreatefundedpsbt', 3, 'minconf'), ('walletcreatefundedpsbt', 3, 'replaceable'), ('getctvtemplatehash', 1, 'nIn'), ('fundrawtransaction', 1, 'changePosition'), ('getblockcount', 0, 'verbose'), ('send', 4, 'locktime'), ('importmulti', 0, 'requests'), ('getcomputeagreement', 0, 'request'), ('issuecomputeaccessgrant', 0, 'request'), ('addmultisigaddress', 1, 'keys'), ('importmatmulattestations', 0, 'attestations'), ('sendall', 4, 'minconf'), ('sendall', 4, 'replaceable'), ('estimateconsolidationfee', 0, 'options'), ('getblockfrompeer', 1, 'peer_id'), ('bridge_buildshieldedstateprofile', 0, 'state_profile'), ('addmultisigaddress', 2, 'options'), ('getmempooldescendants', 1, 'verbose'), ('listsinceblock', 3, 'include_removed'), ('maxmempool', 0, 'megabytes'), ('applyhcpwalletless', 0, 'request'), ('listmodelsearchrecords', 0, 'query'), ('upgradewallet', 0, 'version'), ('utxoupdatepsbt', 2, 'prevtxs'), ('verifycomputequalification', 1, 'response'), ('getbalance', 3, 'avoid_reuse'), ('sendmany', 9, 'verbose'), ('createwallet', 6, 'load_on_startup'), ('addpqmultisigaddress', 0, 'nrequired'), ('getmatmulservicechallengeplan', 5, 'difficulty_window_blocks'), ('getmatmulservicechallengeplan', 7, 'max_solve_time_s'), ('z_getnewaddress', 0, 'account'), ('bridge_buildshieldtx', 3, 'amount'), ('importmodelindex', 0, 'snapshot'), ('getsubscriptionactivity', 0, 'request'), ('listmatmulservicechallengeprofiles', 1, 'propagation_overhead_s'), ('bridge_buildhybridanchor', 2, 'proof_receipts'), ('z_importviewingkey', 3, 'rescan'), ('getmodelioexecutor', 0, 'request'), ('psbtbumpfee', 1, 'options'), ('getdescriptoractivity', 1, 'scanobjects'), ('searchmodels', 0, 'query'), ('getbtxpackagecapabilities', 0, 'request'), ('bridge_importpending', 3, 'amount'), ('gettorrentsourcestatus', 0, 'request'), ('bridge_buildproofcompressiontarget', 1, 'options'), ('getmodeloriginoffer', 0, 'request'), ('createpsbt', 2, 'locktime'), ('sendmsgtopeer', 0, 'peer_id'), ('inspectbountyaward', 0, 'options'), ('getmatmulservicechallengeprofile', 4, 'max_solve_time_s'), ('pausebackgroundwork', 0, 'duration'), ('keypoolrefill', 0, 'newsize'), ('send', 4, 'add_inputs'), ('sendrawtransaction', 3, 'ignore_rejects'), ('buildhtlcclaim', 4, 'fee'), ('sendmany', 5, 'replaceable'), ('getbtxcapabilityevents', 0, 'request'), ('send', 4, 'include_unsafe'), ('getmodelfileselection', 0, 'request'), ('getcomputejob', 0, 'request'), ('bridge_buildrefund', 3, 'amount'), ('searchcollections', 0, 'query'), ('issuecomputequalification', 3, 'expires_in_s'), ('generateblock', 1, 'transactions'), ('submitbountyrefund', 0, 'options'), ('sendall', 0, 'recipients'), ('z_sendtoaddress', 7, 'conf_target'), ('redeemcomputequalification', 0, 'challenge'), ('send', 4, 'fee_rate'), ('addmodelstorage', 0, 'request'), ('testmodelstorage', 0, 'request'), ('buildhtlcclaim', 5, 'allow_unconfirmed_funding'), ('submitcomputejobresult', 0, 'request'), ('getblockstats', 0, 'hash_or_height'), ('z_sendtoaddress', 4, 'subtractfeefromamount'), ('getmodeldirectory', 0, 'query'), ('getmatmulservicechallenge', 6, 'propagation_overhead_s'), ('sweeptoself', 0, 'minconf'), ('deriveexchangeaddress', 1, 'options'), ('listunspent', 3, 'include_unsafe'), ('sendall', 4, 'inputs'), ('bridge_submitshieldtx', 2, 'vout'), ('removeminingpeermeshnode', 1, 'disconnect'), ('bridge_signbatchauthorization', 3, 'options'), ('bridge_submitunshieldtx', 2, 'vout'), ('send', 4, 'change_position'), ('bridge_planbatchout', 2, 'payouts'), ('walletprocesspsbt', 4, 'finalize'), ('bumpfee', 1, 'replaceable'), ('bridge_buildproofclaim', 1, 'options'), ('gettransaction', 2, 'verbose'), ('logging', 0, 'include'), ('walletcreatefundedpsbt', 3, 'changePosition'), ('buildmodelhtlcclaim', 0, 'options'), ('hcphandle', 0, 'request'), ('walletprocesspsbt', 1, 'options'), ('buildhtlcrefund', 4, 'fee'), ('getmodeloriginstatus', 0, 'request'), ('sendall', 4, 'add_to_wallet'), ('waitforblock', 1, 'timeout'), ('dumptxoutset', 1, 'format'), ('bridge_buildbatchcommitment', 2, 'options'), ('generateblock', 2, 'submit'), ('issuematmulservicechallengeprofile', 8, 'max_solve_time_s'), ('psbtbumpfee', 1, 'fee_rate'), ('createmultisig', 1, 'keys'), ('scanblocks', 3, 'stop_height'), ('getcomputeoffer', 0, 'request'), ('bridge_planout', 4, 'options'), ('bridge_buildunshieldtx', 4, 'options'), ('verifychain', 1, 'nblocks'), ('sethcplocalgrant', 0, 'request'), ('getchaintxstats', 0, 'nblocks'), ('bumpfee', 1, 'original_change_index'), ('listcomputereceipts', 0, 'request'), ('executemodelstoragemigration', 0, 'request'), ('fetchattestedutxosnapshot', 3, 'peer_id'), ('walletcreatefundedpsbt', 3, 'subtractFeeFromOutputs'), ('importprivkey', 2, 'rescan'), ('importaddress', 3, 'p2sh'), ('issuematmulservicechallengeprofile', 9, 'solve_time_multiplier'), ('createexchangebatch', 1, 'options'), ('restorewalletbundle', 2, 'load_on_startup'), ('getmatmulservicechallengeplan', 9, 'solver_duty_cycle_pct'), ('sweepprivkeys', 0, 'privkeys'), ('listunspent', 0, 'minconf'), ('walletprocesspsbt', 1, 'bip32derivs'), ('descriptorprocesspsbt', 3, 'bip32derivs'), ('bridge_decryptviewgrant', 0, 'view_grant'), ('requestmodelorigin', 0, 'request'), ('verifychain', 0, 'checklevel'), ('issuecomputequalification', 2, 'episode_count'), ('finalizepsbt', 1, 'extract'), ('getrecentreleases', 0, 'query'), ('z_shieldcoinbase', 2, 'limit'), ('inspectmodelstorage', 0, 'request'), ('z_shieldcoinbase', 3, 'conf_target'), ('planbtxclientinstall', 0, 'request'), ('inspectbountytransaction', 0, 'options'), ('send', 4, 'solving_data'), ('fundrawtransaction', 1, 'conf_target'), ('fundrawtransaction', 1, 'maxconf'), ('getmatmulservicechallenge', 4, 'expires_in_s'), ('bridge_submitrebalancetx', 1, 'reserve_outputs'), ('sendtoaddress', 1, 'amount'), ('submitmatmulattestations', 0, 'attestations'), ('bridge_submitshieldtx', 3, 'amount'), ('inspectbtxpackage', 0, 'request'), ('quotecomputeaccess', 0, 'request'), ('getblockstats', 1, 'stats'), ('getmempoolancestors', 1, 'verbose'), ('getbtxttctrace', 0, 'request'), ('getmatmulservicechallengeprofile', 1, 'validation_overhead_s'), ('sendall', 4, 'lock_unspents'), ('listcomputeagreements', 0, 'request'), ('z_sendmany', 1, 'fee'), ('buildhtlcclaim', 5, 'allow_late_claim'), ('importmodeltrust', 0, 'peers'), ('gettxoutproof', 2, 'prove_witness'), ('bridge_submitunshieldtx', 3, 'amount'), ('refreshminingpeermesh', 0, 'include_defaults'), ('sendall', 4, 'include_watching'), ('exportbtxpackage', 0, 'request'), ('issuematmulservicechallengeprofile', 5, 'validation_overhead_s'), ('validatesubpiece', 0, 'request'), ('converttopsbt', 2, 'iswitness'), ('fetchattestedutxosnapshot', 4, 'timeout_ms'), ('rescanblockchain', 1, 'stop_height'), ('importmempool', 1, 'use_current_time'), ('listsinceblock', 1, 'target_confirmations'), ('importdescriptors', 1, 'seeds'), ('z_listunspent', 0, 'minconf'), ('sendall', 1, 'conf_target'), ('setfeerate', 0, 'amount'), ('setmodelpolicy', 0, 'policy'), ('repairmodel', 0, 'request'), ('bridge_submitrebalancetx', 2, 'options'), ('gettxout', 1, 'n'), ('buildhtlcrefund', 3, 'locktime'), ('getmatmulservicechallenge', 11, 'solver_parallelism'), ('getblocktemplate', 0, 'template_request'), ('preparereorg', 1, 'max_disconnect'), ('revokehcpdevice', 0, 'request'), ('sethdseed', 0, 'newkeypool'), ('signrawtransactionwithkey', 1, 'privkeys'), ('cancelbtxcapability', 0, 'request'), ('previewhcpprovider', 0, 'request'), ('createbtxpackage', 0, 'request'), ('lockunspent', 0, 'unlock'), ('executemodelerasure', 0, 'request'), ('bridge_buildrefund', 5, 'fee'), ('bridge_prunearchive', 0, 'options'), ('bridge_planbatchin', 3, 'options'), ('sendall', 3, 'fee_rate'), ('bridge_submitrebalancetx', 0, 'reserve_deltas'), ('finalizeexternalsign', 0, 'package'), ('resumemodelimport', 0, 'request'), ('setmodelrule', 0, 'rule'), ('getbtxruntimecapabilities', 0, 'request'), ('verifycomputequalification', 0, 'challenge'), ('getmatmulservicechallengeprofile', 9, 'solver_duty_cycle_pct'), ('settxfee', 0, 'amount'), ('setmodelstoragepolicy', 0, 'request'), ('importcomputejob', 0, 'request'), ('importmulti', 1, 'options'), ('bridge_buildbatchstatement', 1, 'leaves'), ('listunspent', 4, 'minimumAmount'), ('solvecomputequalification', 2, 'time_budget_ms'), ('setscriptthreadsenabled', 0, 'state'), ('listmatmulservicechallengeprofiles', 7, 'solver_parallelism'), ('listunspent', 4, 'maximumCount'), ('gethdkeys', 0, 'options'), ('preparebountyaward', 0, 'options'), ('bumpfee', 1, 'require_replacable'), ('createmultisig', 2, 'sort'), ('sweeptoself', 0, 'lock_unspents'), ('bridge_estimatestateretention', 1, 'options'), ('combinerawtransaction', 0, 'txs'), ('createwalletdescriptor', 1, 'internal'), ('generatetoaddress', 0, 'nblocks'), ('bridge_buildproofpolicy', 0, 'descriptors'), ('bridge_buildbatchcommitment', 1, 'leaves'), ('bridge_buildstateretentionpolicy', 0, 'retention_policy'), ('verifytxoutproof', 1, 'options'), ('sweepprivkeys', 0, 'options'), ('getbalance', 2, 'include_watchonly'), ('listcomputejobs', 0, 'request'), ('listunspent', 2, 'addresses'), ('walletcreatefundedpsbt', 3, 'conf_target'), ('walletcreatefundedpsbt', 3, 'maxconf'), ('bridge_estimatecapacity', 0, 'footprint'), ('getbtxacquisition', 0, 'request'), ('planbtxruntime', 0, 'request'), ('listmatmulservicechallengeprofiles', 3, 'max_solve_time_s'), ('getdescriptorinfo', 1, 'allow_op_success'), ('getmodelobjectlayout', 0, 'request'), ('setwalletflag', 1, 'value'), ('testmempoolaccept', 0, 'rawtxs'), ('gettxoutproof', 0, 'txids'), ('importdepositpool', 1, 'options'), ('createwalletdescriptor', 1, 'options'), ('walletprocesspsbt', 1, 'finalize'), ('sendall', 4, 'conf_target'), ('sendall', 4, 'maxconf'), ('getmatmulservicechallengeprofile', 3, 'min_solve_time_s'), ('send', 4, 'max_tx_weight'), ('sendmany', 1, 'amounts'), ('getreceivedbylabel', 2, 'include_immature_coinbase'), ('getmodelimport', 0, 'request'), ('fundrawtransaction', 1, 'options'), ('mockvalidationepoch', 0, 'epoch'), ('backupwalletbundle', 2, 'include_viewing_keys'), ('listmodelstorage', 0, 'request'), ('sendtoaddress', 8, 'avoid_reuse'), ('send', 4, 'add_to_wallet'), ('prefetchbtxcapability', 0, 'request'), ('issuematmulservicechallengeprofile', 13, 'solver_duty_cycle_pct'), ('prioritisetransaction', 1, 'priority_delta'), ('getmultipartjournal', 0, 'request'), ('listdescriptors', 0, 'private'), ('removemodelrule', 0, 'index'), ('descriptorprocesspsbt', 4, 'finalize'), ('restorewalletbundle', 3, 'rescan'), ('importmodelpeers', 0, 'peers'), ('sendmany', 4, 'subtractfeefrom'), ('bridge_estimatestategrowth', 1, 'options'), ('getcomputeoffersforresource', 0, 'request'), ('gethdkeys', 0, 'private'), ('issuecomputeagreement', 0, 'request'), ('minthcphandoff', 0, 'request'), ('verifytxoutproof', 1, 'verify_witness'), ('importmempool', 1, 'apply_unbroadcast_set'), ('preparemodelfunding', 0, 'release_id'), ('waitfornewblock', 0, 'timeout'), ('setbootstrapdistributor', 0, 'request'), ('clearmintedattestation', 1, 'end_height'), ('addminingpeermeshnode', 2, 'try_now'), ('setmodeluploadpolicy', 0, 'request'), ('disconnectnode', 1, 'nodeid'), ('exportmodelrecovery', 0, 'release_id'), ('getmatmulservicechallengeplan', 2, 'validation_overhead_s'), ('send', 4, 'subtract_fee_from_outputs'), ('send', 0, 'outputs'), ('getmodeltransfermetrics', 0, 'request'), ('getmatmulservicechallengeplan', 6, 'min_solve_time_s'), ('listreceivedbylabel', 1, 'include_empty'), ('sendall', 4, 'psbt'), ('getmodeloriginhealth', 0, 'request'), ('bridge_decryptviewgrant', 2, 'expected'), ('bumpfee', 1, 'outputs'), ('revokemodelservice', 0, 'body'), ('getdescriptorinfo', 1, 'options'), ('bridge_buildproofreceipt', 1, 'proof_receipt'), ('solvematmulservicechallenge', 1, 'max_tries'), ('listmatmulservicechallengeprofiles', 4, 'solve_time_multiplier'), ('bridge_buildshieldtx', 4, 'options'), ('getmatmulservicechallengeprofile', 2, 'propagation_overhead_s'), ('fundrawtransaction', 1, 'add_inputs'), ('querymodelsummary', 0, 'request'), ('bridge_buildproofpolicy', 1, 'options'), ('getdifficultyhealth', 0, 'window_blocks'), ('generatetodescriptor', 0, 'num_blocks'), ('lockunspent', 2, 'persistent'), ('createcomputejob', 0, 'request'), ('sweeptoself', 0, 'maxconf'), ('solvematmulservicechallenge', 2, 'time_budget_ms'), ('bridge_buildunshieldtx', 2, 'vout'), ('bridge_importpending', 4, 'options'), ('gettrendingmodels', 0, 'query'), ('restorewallet', 2, 'load_on_startup'), ('addmodelindex', 0, 'endpoint'), ('bridge_buildproversample', 0, 'sample'), ('fundrawtransaction', 1, 'fee_rate'), ('importcomputeagreement', 0, 'request'), ('planbtxacquisition', 0, 'request'), ('bridge_buildhybridanchor', 1, 'receipts'), ('setmodeldiscoverypolicy', 0, 'request'), ('preparebountyclaim', 0, 'options'), ('buildcomputepassport', 0, 'samples'), ('bumpfee', 1, 'conf_target'), ('listreceivedbyaddress', 1, 'include_empty'), ('getblockfrompeer', 1, 'nodeid'), ('getrawtransaction', 1, 'verbosity'), ('bridge_planbatchin', 2, 'leaves'), ('refreshminingpeermesh', 1, 'include_added'), ('bridge_buildbatchstatement', 2, 'options'), ('preparebountyrefund', 0, 'options'), ('walletcreatefundedpsbt', 2, 'locktime'), ('simulaterawtransaction', 1, 'include_watchonly'), ('getmodelresidency', 0, 'request'), ('importmodelcontacts', 0, 'peers'), ('logging', 1, 'exclude'), ('getmodellandiscovery', 0, 'request'), ('planbtxcapabilityupdate', 0, 'request'), ('getmatmulservicechallenge', 8, 'difficulty_window_blocks'), ('getmatmulservicechallenge', 10, 'max_solve_time_s'), ('pruneblockchain', 0, 'height'), ('listreceivedbyaddress', 0, 'minconf'), ('bridge_buildproverprofile', 0, 'samples'), ('walletcreatefundedpsbt', 3, 'options'), ('sendtoaddress', 9, 'fee_rate'), ('scantxoutset', 1, 'scanobjects'), ('bridge_buildproofadapter', 0, 'adapter'), ('listreceivedbylabel', 3, 'include_immature_coinbase'), ('generatetodescriptor', 2, 'maxtries'), ('getmodeluploadinfo', 0, 'request'), ('signrawtransactionwithwallet', 1, 'prevtxs'), ('signbountyrefund', 0, 'options'), ('redeemmatmulserviceproofs', 0, 'proofs'), ('scanblocks', 2, 'start_height'), ('listmatmulservicechallengeprofiles', 0, 'validation_overhead_s'), ('issuematmulservicechallengeprofile', 6, 'propagation_overhead_s'), ('sendall', 4, 'options'), ('sendtoaddress', 5, 'replaceable'), ('sendall', 4, 'locktime'), ('createrawtransaction', 3, 'replaceable'), ('cancelbtxacquisition', 0, 'request'), ('addconnection', 2, 'v2transport'), ('createpsbt', 1, 'outputs'), ('getblockfileinfo', 0, 'file_number'), ('delegatemodelservice', 0, 'body'), ('finalizeexternalsign', 2, 'options'), ('createcomputeoffer', 0, 'request'), ('dumptxoutset', 2, 'format'), ('offerattestedutxosnapshot', 2, 'chunk_size'), ('z_listreceivedbyaddress', 1, 'include_watchonly'), ('bridge_buildverifierset', 0, 'attestors'), ('getmodelroutingstatus', 0, 'request'), ('getmatmulchallengeprofile', 3, 'solver_parallelism'), ('importmulti', 1, 'rescan'), ('listmatmulservicechallengeprofiles', 6, 'difficulty_window_blocks'), ('deriveaddresses', 2, 'allow_op_success'), ('createsubscriptionmandate', 0, 'request'), ('scanblocks', 5, 'options'), ('getnewmodels', 0, 'query'), ('verifycomputereceipt', 0, 'request'), ('redeemmatmulserviceproof', 0, 'challenge'), ('estimatesmartfee', 0, 'conf_target'), ('sendall', 4, 'preferred_pq_algo'), ('importmempool', 1, 'apply_fee_delta_priority'), ('simulaterawtransaction', 1, 'options'), ('listmempooltransactions', 0, 'start_sequence'), ('bridge_submitshieldtx', 4, 'options'), ('redeemcomputequalification', 1, 'response'), ('createrawtransaction', 0, 'inputs'), ('getblock', 1, 'verbosity'), ('switchbtxcapability', 0, 'request'), ('restorewalletbundlearchive', 3, 'load_on_startup'), ('preparefundmodelrelease', 1, 'amount_atoms'), ('reservesubscriptionmandate', 0, 'request'), ('planhcplocal', 0, 'request'), ('bridge_submitunshieldtx', 4, 'options'), ('dumptxoutset', 2, 'rollback'), ('bridge_buildunshieldtx', 3, 'amount'), ('bridge_listarchive', 0, 'options'), ('getmodelfundingsettlement', 1, 'options'), ('getmatmulservicechallengeplan', 8, 'solver_parallelism'), ('getmodelerasurehealth', 0, 'request'), ('sendtoaddress', 10, 'verbose'), ('fundrawtransaction', 1, 'solving_data'), ('walletcreatefundedpsbt', 3, 'fee_rate'), ('listmatmulservicechallengeprofiles', 8, 'solver_duty_cycle_pct'), ('addmultisigaddress', 2, 'sort'), ('scanblocks', 1, 'scanobjects'), ('executemodelimport', 0, 'request'), ('getmatmulchallengeprofile', 1, 'validation_overhead_s'), ('gettxoutsetinfo', 2, 'use_index'), ('hcphealth', 0, 'request'), ('listunspent', 4, 'include_immature_coinbase'), ('sendall', 4, 'fee_rate'), ('observebountychain', 0, 'request'), ('send', 4, 'minconf'), ('sweeptoself', 0, 'options'), ('z_shieldfunds', 0, 'amount'), ('send', 4, 'replaceable'), ('bridge_planbatchout', 3, 'options'), ('rescanblockchain', 0, 'start_height'), ('releasebtxcapability', 0, 'request'), ('importbountyrecovery', 0, 'request'), ('exportwalletbundle', 2, 'birthday'), ('getsimilarmodels', 0, 'query'), ('getrawtransaction', 1, 'verbose'), ('bridge_planin', 2, 'amount'), ('setban', 2, 'bantime'), ('addminingpeermeshnode', 3, 'v2transport'), ('signbountyfunding', 0, 'options'), ('getmatmulservicechallenge', 12, 'solver_duty_cycle_pct'), ('bumpfee', 1, 'options'), ('setmocktime', 0, 'timestamp'), ('verifymatmulserviceproof', 3, 'lookup_local_status'), ('deriveaddresses', 2, 'options'), ('getbalance', 1, 'minconf'), ('createrawtransaction', 2, 'locktime'), ('getnodeaddresses', 0, 'count'), ('importcomputeoffer', 0, 'request'), ('signrawtransactionwithkey', 2, 'prevtxs'), ('issuematmulservicechallengeprofile', 4, 'expires_in_s'), ('searchpublishers', 0, 'query'), ('getbootstrapstatus', 0, 'request'), ('deriveaddresses', 1, 'range'), ('bridge_buildexternalanchor', 1, 'receipts'), ('sendrawtransaction', 2, 'maxburnamount'), ('getdepositstatus', 1, 'vout'), ('walletcreatefundedpsbt', 1, 'outputs'), ('descriptorprocesspsbt', 1, 'descriptors'), ('dumptxoutset', 2, 'options'), ('getcomputereceipt', 0, 'request'), ('deriveexchangeaddress', 0, 'index'), ('listreceivedbyaddress', 2, 'include_watchonly'), ('dumptxoutset', 2, 'show_header'), ('prepareexternalsign', 0, 'package'), ('psbtbumpfee', 1, 'replaceable'), ('submitpackage', 0, 'package'), ('ensurebtxcapability', 0, 'request'), ('submitbountyaward', 0, 'options'), ('importwalletbundle', 1, 'rescan'), ('bridge_buildexternalanchor', 2, 'options'), ('publishmodelimport', 0, 'request'), ('importcomputereceipt', 0, 'request'), ('generatetoaddress', 2, 'maxtries'), ('descriptorprocesspsbt', 2, 'finalize'), ('send', 4, 'psbt'), ('getrawmempool', 0, 'verbose'), ('bridge_recoverpending', 1, 'vout'), ('z_getbalance', 0, 'minconf')}"
+    },
+    {
+      "name": "wallet help across restart",
+      "pass": true,
+      "expected_failure_observed": false,
+      "error": null
+    },
+    {
+      "name": "wallet signature regression after restart rejected",
+      "pass": true,
+      "expected_failure_observed": true,
+      "error": ""
+    },
+    {
+      "name": "real help-dump method writes help",
+      "pass": true,
+      "expected_failure_observed": false,
+      "error": null
+    },
+    {
+      "name": "missing wallet category rejected: Bridge",
+      "pass": true,
+      "expected_failure_observed": true,
+      "error": "not(['Blockchain', 'Control', 'Mining', 'Modelnet', 'Network', 'Rawtransactions', 'Shielded', 'Stats', 'Util', 'Wallet'] == ['Blockchain', 'Bridge', 'Control', 'Mining', 'Modelnet', 'Network', 'Rawtransactions', 'Shielded', 'Stats', 'Util', 'Wallet'])"
+    },
+    {
+      "name": "missing wallet category rejected: Shielded",
+      "pass": true,
+      "expected_failure_observed": true,
+      "error": "not(['Blockchain', 'Bridge', 'Control', 'Mining', 'Modelnet', 'Network', 'Rawtransactions', 'Stats', 'Util', 'Wallet'] == ['Blockchain', 'Bridge', 'Control', 'Mining', 'Modelnet', 'Network', 'Rawtransactions', 'Shielded', 'Stats', 'Util', 'Wallet'])"
+    },
+    {
+      "name": "walletOFF categories Modelnet=True",
+      "pass": true,
+      "expected_failure_observed": false,
+      "error": null
+    },
+    {
+      "name": "walletOFF categories Modelnet=False",
+      "pass": true,
+      "expected_failure_observed": false,
+      "error": null
+    },
+    {
+      "name": "KeyboardInterrupt propagates",
+      "pass": true
+    }
+  ]
+}

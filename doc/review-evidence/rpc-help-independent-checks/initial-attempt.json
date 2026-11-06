@@ -1,0 +1,71 @@
+{
+  "base": "666673a3153225ba264c7870e0e82e354df86765",
+  "fixture": "83f8d89375e64662ec92af8216133da82d36f70e",
+  "commands": [
+    {
+      "args": [
+        "sudo",
+        "apt-get",
+        "-o",
+        "Acquire::Retries=1",
+        "update"
+      ],
+      "label": "apt-update",
+      "rc": 0,
+      "seconds": 5.376268458000027
+    },
+    {
+      "args": [
+        "sudo",
+        "apt-get",
+        "install",
+        "-y",
+        "--no-install-recommends",
+        "libevent-dev",
+        "libsqlite3-dev",
+        "libzmq3-dev"
+      ],
+      "label": "apt-install",
+      "rc": 0,
+      "seconds": 9.285469281000019
+    },
+    {
+      "args": [
+        "ldd",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build/bin/btxd"
+      ],
+      "label": "ldd",
+      "rc": 0,
+      "seconds": 0.03141933000000563
+    },
+    {
+      "args": [
+        "python3",
+        "/home/runner/work/btx/btx/contrib/devtools/rpc-help-live/case.py",
+        "--configfile=/home/runner/work/btx/btx/rpc-help-live-results/functional-config.ini",
+        "--tmpdir=/home/runner/work/btx/btx/rpc-help-live-runtime/baseline",
+        "--cachedir=/home/runner/work/btx/btx/rpc-help-live-runtime/baseline-cache",
+        "--portseed=42600",
+        "--nocleanup"
+      ],
+      "label": "test-baseline",
+      "rc": 1,
+      "seconds": 0.5147533660000363
+    }
+  ],
+  "audit_before": [
+    "0953d899b20eab172c3376071ffc4761df34d59822e08d9a95a8edad911bb857",
+    14309
+  ],
+  "binaries_before": {
+    "btxd": "4ad63b64f6d6bab34f5ba92518dc8955ee2e263e0daa4d739f27ec868fce0ae1",
+    "btx-cli": "b71061e57a9224d86ef2f17da1914f3b68ffe91b696282151c0aba9e12caa5b8"
+  },
+  "config_overlay": "Existing generated config plus verified CMakeCache WITH_MODELNET=ON as explicit ENABLE_MODELNET=true; root config generation already qualified locally, no root reconfigure/build.",
+  "error": "FileNotFoundError(2, 'No such file or directory')",
+  "cleanup_before": [],
+  "cleanup_signals": [],
+  "cleanup_remaining": [],
+  "runtime_removed": true,
+  "qualification_pass": false
+}
