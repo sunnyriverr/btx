@@ -24,7 +24,7 @@ def run(label,cmd,timeout,cwd=SOURCE):
             while proc.poll() is None:
                 elapsed=time.monotonic()-start
                 if elapsed>timeout:reason='TIME_BUDGET'
-                if label in ['candidate-node-build','candidate-unit-build','candidate-unit-run','focused-build']:
+                if label not in ['base-fetch','base-checkout','bundle-verify','bundle-fetch','candidate-checkout']:
                     s=resources()
                     if s['disk_free']<2*1024**3 or s['available_ram']<1024**3:reason='RESOURCE_BUDGET'
                     if int(elapsed)//30>bucket:
