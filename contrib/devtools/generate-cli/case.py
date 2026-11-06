@@ -19,7 +19,7 @@ class GenerateCliObservation(BitcoinTestFramework):
         self.root = Path(os.environ['GENERATE_RUNTIME'])
         self.sock = self.root / 'helper.sock'
         self.extra_args = [['-disablewallet', '-modelnet=0', '-modelbind=off',
-                            '-modelrpcsocket=' + str(self.sock), '-listen=0',
+                            '-modelrpcsocket=' + str(self.sock),
                             '-dnsseed=0', '-discover=0', '-networkactive=0']]
 
     def run_test(self):
