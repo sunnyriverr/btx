@@ -1,0 +1,28 @@
+2026-11-06T12:02:07.267000Z TestFramework (INFO): PRNG seed is: 4056533177845149115
+2026-11-06T12:02:07.267000Z TestFramework (DEBUG): Setting up network thread
+2026-11-06T12:02:07.268000Z TestFramework (INFO): Initializing test directory /home/runner/work/btx/btx/psbt-named-repair-runtime/baseline/node-test
+2026-11-06T12:02:07.269000Z TestFramework.node0 (DEBUG): bitcoind started, waiting for RPC to come up
+2026-11-06T12:02:07.522000Z TestFramework.node0 (DEBUG): RPC successfully started
+2026-11-06T12:02:07.608000Z TestFramework.node0 (DEBUG): Stopping node
+2026-11-06T12:02:07.709000Z TestFramework.node0 (DEBUG): Node stopped
+2026-11-06T12:02:07.710000Z TestFramework (ERROR): Unexpected exception
+Traceback (most recent call last):
+  File "/home/runner/work/btx/btx/p2mr-parent-product/test/functional/test_framework/test_framework.py", line 142, in main
+    self.run_test()
+  File "/home/runner/work/btx/btx/contrib/devtools/psbt-named-repair/case.py", line 16, in run_test
+    try:self.observe()
+        ^^^^^^^^^^^^^^
+  File "/home/runner/work/btx/btx/contrib/devtools/psbt-named-repair/case.py", line 85, in observe
+    assert rec['acceptance_pass'],'Named PSBT CLI requirements failed: '+str([x['label'] for x in rec['requirements'] if not x['passed']])
+           ~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: Named PSBT CLI requirements failed: ['named option accepted adjust_timelocks', 'named option accepted htlc_presign', 'named option accepted p2mr_leaf', 'named presign reaches existing safety guard']
+2026-11-06T12:02:07.711000Z TestFramework (DEBUG): Closing down network thread
+2026-11-06T12:02:07.761000Z TestFramework (INFO): Not stopping nodes as test failed. The dangling processes will be cleaned up later.
+2026-11-06T12:02:07.761000Z TestFramework (WARNING): Not cleaning up dir /home/runner/work/btx/btx/psbt-named-repair-runtime/baseline/node-test
+2026-11-06T12:02:07.761000Z TestFramework (ERROR): Test failed. Test logging available at /home/runner/work/btx/btx/psbt-named-repair-runtime/baseline/node-test/test_framework.log
+2026-11-06T12:02:07.761000Z TestFramework (ERROR): 
+2026-11-06T12:02:07.761000Z TestFramework (ERROR): Hint: Call /home/runner/work/btx/btx/p2mr-parent-product/test/functional/combine_logs.py '/home/runner/work/btx/btx/psbt-named-repair-runtime/baseline/node-test' to consolidate all logs
+2026-11-06T12:02:07.761000Z TestFramework (ERROR): 
+2026-11-06T12:02:07.761000Z TestFramework (ERROR): If this failure happened unexpectedly or intermittently, please file a bug and provide a link or upload of the combined log.
+2026-11-06T12:02:07.761000Z TestFramework (ERROR): https://github.com/btxchain/btx/issues
+2026-11-06T12:02:07.762000Z TestFramework (ERROR): 
