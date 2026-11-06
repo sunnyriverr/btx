@@ -59,9 +59,19 @@ try:
  with configpath.open('w') as f:config.write(f)
  state['config_overlay']='Existing generated config plus verified CMakeCache WITH_MODELNET=ON as explicit ENABLE_MODELNET=true; root config generation already qualified locally, no root reconfigure/build.'
  R.mkdir(mode=0o700)
- command(['python3',HERE/'case.py','--configfile='+str(configpath),'--tmpdir='+str(R/'node'),'--cachedir='+str(R/'chain-cache'),'--portseed=42700','--nocleanup'],'configuration-observation',timeout=240)
- observed=json.loads((O/'observations.json').read_text());assert observed['controls_pass'] and observed['node_rpc_shutdown_complete'] and observed['socket_removed']
- assert not processes()
+ wrapper=P/'contrib/modelnet/btx-model';original=wrapper.read_bytes();state['pair']={}
+ try:
+  for variant in ['baseline','candidate']:
+   if variant=='candidate':wrapper.write_bytes((HERE/'candidate-wrapper.py').read_bytes())
+   env['MIRROR_VARIANT']=variant
+   command(['python3',HERE/'case.py','--configfile='+str(configpath),'--tmpdir='+str(R/(variant+'-node')),'--cachedir='+str(R/(variant+'-cache')),'--portseed='+str(42800+(variant=='candidate')),'--nocleanup'],'mirror-'+variant,allowed=(1,) if variant=='baseline' else (0,),timeout=150)
+   obs=json.loads((O/(variant+'-observations.json')).read_text())
+   assert obs['method_pass']==(variant=='candidate')
+   assert obs['node_stopped'] and obs['helper_exit']==0 and not obs['socket_remaining'] and not processes()
+   if variant=='baseline':assert 'idempotency_key required' in (O/'mirror-baseline.log').read_text()
+   state['pair'][variant]=obs;save()
+ finally:wrapper.write_bytes(original)
+ assert state['pair']['baseline']['method_sha256']==state['pair']['candidate']['method_sha256']
  state['binaries_after']={n:sha(B/'bin'/n) for n in expected['binaries']};assert state['binaries_after']==state['binaries_before'];state['audit_after']=audit();assert state['audit_after']==state['audit_before'];state['qualification_pass']=True
 except Exception as e:state['error']=repr(e);raise
 finally:
