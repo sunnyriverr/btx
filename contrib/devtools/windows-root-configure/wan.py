@@ -27,6 +27,21 @@ def plan(label, manifest, target, limit):
     s.save()
     assert 0 < count <= limit, ('Unexpected broad rebuild', label, count)
     assert 'Re-running CMake' not in text and 'stored deps info out of date' not in text
+    if label.endswith('-object'):
+        expected = {
+            'Generating bitcoin-build-info.h',
+            'Building CXX object src/CMakeFiles/bitcoin_clientversion.dir/clientversion.cpp.obj',
+            'Building CXX object src/CMakeFiles/bitcoin_common.dir/matmul/matmul_v4_rc_production_canary.cpp.obj',
+            'Building CXX object src/CMakeFiles/bitcoin_common.dir/matmul/matmul_v4_rc_production_golden_manifest.cpp.obj',
+            'Building CXX object ' + TARGET,
+            'Linking CXX static library lib/bitcoin_clientversion.lib',
+            'Linking CXX static library lib/bitcoin_common.lib',
+            'Linking CXX executable bin/btxd.exe',
+            'Linking CXX executable bin/btx-modeld.exe',
+            'Linking CXX executable bin/btx-open.exe',
+        }
+        observed = re.findall(r'^\[\d+/\d+\] (.+)', text, re.M)
+        assert observed and all(x.replace('\\', '/').strip() in expected for x in observed), observed
     return cmd
 
 
@@ -71,7 +86,7 @@ def qualify():
     manifest = E / 'normal-maintained.ninja'
     shutil.copyfile(BUILD / 'build.ninja', manifest)
     assert sha(manifest) == R['configuration']['build.ninja']
-    cmd = plan('baseline-object', manifest, TARGET, 5)
+    cmd = plan('baseline-object', manifest, TARGET, 12)
     code = s.run('baseline-object', cmd + ['--verbose', '-j', '1', TARGET], 300)
     log = (E / 'baseline-object.log').read_text(errors='replace')
     R['baseline_object_exit'] = code
@@ -91,7 +106,7 @@ def qualify():
     assert sha(SOURCE / I['file']) == I['candidate_sha256']
     assert config() == R['configuration'] and sha(manifest) == R['configuration']['build.ninja']
     assert json.loads((BUILD / 'compile_commands.json').read_text()) == rows
-    cmd = plan('candidate-object', manifest, TARGET, 5)
+    cmd = plan('candidate-object', manifest, TARGET, 12)
     s.need('candidate-object', cmd + ['--verbose', '-j', '1', TARGET], 300)
     R['candidate_object_sha256'] = sha(BUILD / TARGET)
     R['candidate_object_exit'] = 0
