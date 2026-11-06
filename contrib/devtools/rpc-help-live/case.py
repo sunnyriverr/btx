@@ -7,7 +7,7 @@ cls=m.HelpRpcTest
 original_params=cls.set_test_params
 # Help metadata requires no mined chain or external service. Same fixture on both variants.
 def params(self):
- original_params(self);self.setup_clean_chain=True;self.extra_args=[['-modelnet=0','-listen=0','-dnsseed=0','-discover=0']]
+ original_params(self);self.setup_clean_chain=True;self.extra_args=[['-modelnet=0','-connect=0','-dnsseed=0','-discover=0']]
 cls.set_test_params=params
 for name in ['test_client_conversion_table','test_argument_names','test_categories','dump_help','wallet_help']:
  if not hasattr(cls,name):continue
