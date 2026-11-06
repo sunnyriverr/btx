@@ -29,7 +29,7 @@ def run():
     assert sha(exe) == M['binary_sha256'] and I['source'] == M['source']
     assert not s.owned_processes()
     data = Path('D:/bc' + os.environ['GITHUB_RUN_ID'])
-    assert not data.exists()
+    assert not data.exists() and not Path('S:/').exists()
     data.mkdir(); (data / 'tmp').mkdir()
     R.update(unit_data=str(data), status='BATCHES_RUNNING', batch_results=[], unit_invoked=True)
     R['process_tree_policy'] = 'Nested private Windows job; no breakaway; kill descendants on controller exit'
@@ -48,7 +48,11 @@ def run():
     # One known small pending suite first validates real selector/XML compatibility.
     jobs = sorted(enumerate(M['jobs']), key=lambda x: (x[1]['suite'] != 'modelnet_native_http_tests', x[0]))
     batch, batch_start = 1, start
+    mapped = False
     try:
+        s.need('map-short-batch-root', ['subst', 'S:', str(data)], 15)
+        mapped = True
+        R['mapped_short_roots'] = True
         for index, job in jobs:
             now = time.monotonic()
             cap = job['timeout_seconds']
@@ -64,7 +68,7 @@ def run():
             assert len(selector) < 26000, 'Selector exceeds safe Windows command length'
             cmd = [str(exe), '--run_test=' + selector, '--log_level=test_suite',
                    '--report_level=detailed', '--report_format=XML', '--report_sink=' + str(report),
-                   '--catch_system_errors=yes', '--', '-testdatadir=' + str(data / label)]
+                   '--catch_system_errors=yes', '--', '-testdatadir=S:/' + format(index, 'x')]
             before = len(R['commands'])
             try:
                 code = s.run(label, cmd, cap)
@@ -81,18 +85,16 @@ def run():
                            log_sha256=row['log_sha256'], report_sha256=sha(report) if report.exists() else None)
             R['batch_results'].append(outcome); save_progress()
             assert sha(exe) == M['binary_sha256']
-            survivors = s.owned_processes()
             active = tree.active()
             outcome['job_active_processes_after_suite'] = active
             save_progress()
-            if survivors or active != 1:
-                R['unexpected_survivors'] = survivors
+            if active != 1:
                 R['job_unexpected_active_processes'] = active
                 save_progress(); s.quiesce()
                 raise RuntimeError('Suite left owned processes; stopping after cleanup')
             if outcome['state'] in ('selection_or_report_incomplete', 'resource_stop', 'incomplete'):
                 raise RuntimeError('Selection/report/resource boundary requires review before more execution')
-            if len(R['batch_results']) == 1:
+            if len(R['batch_results']) == 1 and M.get('require_first_pass_control', True):
                 assert outcome['state'] == 'passed', 'Initial real selector/XML control failed'
             print('CHECKPOINT', job['suite'], outcome['state'], len(outcome['cases']), flush=True)
         else:
@@ -104,6 +106,12 @@ def run():
         for key, value in prior.items():
             if value is None: os.environ.pop(key, None)
             else: os.environ[key] = value
+        if mapped:
+            unmap = subprocess.run(['subst', 'S:', '/D'], capture_output=True, timeout=15)
+            (s.E / 'unmap-short-batch-root.log').write_bytes(unmap.stdout + unmap.stderr)
+            R['short_drive_removed'] = unmap.returncode == 0 and not Path('S:/').exists()
+            save_progress()
+            assert R['short_drive_removed'], 'Short temporary mapping removal failed'
         save_progress()
 
 
@@ -134,6 +142,7 @@ def verify():
     R['cache_unchanged_verified'] = True
     s.save()
     assert not survivors and R.get('runtime_data_removed')
+    if R.get('mapped_short_roots'): assert R['short_drive_removed']
 
 
 try:

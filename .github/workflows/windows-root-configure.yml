@@ -1,4 +1,4 @@
-name: Native Windows temporary path control
+name: Native Windows path-affected fixture retest
 on:
   push:
     branches: [codex/ci-windows-root-configure]
@@ -115,7 +115,7 @@ jobs:
           set "_CL_="
           python controls/contrib/devtools/windows-root-configure/full.py prepare
           exit /b %errorlevel%
-      - name: Compare identical unit case at long and short temporary paths
+      - name: Retest39 explicit path-diagnostic cases with short roots
         id: cases
         shell: cmd
         run: |
@@ -126,7 +126,7 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           set "CL="
           set "_CL_="
-          python controls/contrib/devtools/windows-root-configure/path_control.py
+          python controls/contrib/devtools/windows-root-configure/batches.py run
           exit /b %errorlevel%
       - name: Verify unchanged cached build and clean up disposable data
         id: verification
@@ -146,6 +146,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
-          name: native-windows-path-control
+          name: native-windows-path-retest
           path: D:\btx-native-035\evidence\
           retention-days: 14
