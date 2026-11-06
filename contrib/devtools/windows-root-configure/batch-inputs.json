@@ -12,8 +12,8 @@
   ],
   "bundle_ref": "HEAD",
   "bundle_sha256": "8c15f259deef951c46a0aee0dde917211ca92a08b045f6f92b9c0841359f79e2",
-  "cache_key": "btx356-unit-fixtures-v1-d70624475d4658144d33be712a3342d6559912b1fde74c264f1e363b8768536d-42144419403",
-  "checkpoint_sha256": "a4dfe8cda1feef1856bf92d975b687b7b045562d48e7c75b1055678229d1baef",
+  "cache_key": "btx356-unit-fixtures-v1-fa09b76c6d9ee95b6d2609002ad414dc27d0f339596f88248465a558dfaa9ae6-42145455158",
+  "checkpoint_sha256": "d098017984a6f27b4d0d2903755aa00bcd9fb1435ef491b0d2a1763403d284bd",
   "objects": 3923,
   "compiler_cohort": [
     {
@@ -44,11 +44,21 @@
         151
       ],
       "boundary": "Unix shell-helper permission call is unguarded; later platform-specific chmod calls already guarded"
+    },
+    {
+      "source": "src/test/modelnet_ahp_api_tests.cpp",
+      "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/modelnet_ahp_api_tests.cpp.obj",
+      "object_present": false,
+      "sha256": "69189852a1de03a6540df0b830000c389330fdf835a299854f4f3f274468fbbe"
+    },
+    {
+      "source": "src/test/modelnet_ahp_journey_tests.cpp",
+      "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/modelnet_ahp_journey_tests.cpp.obj",
+      "object_present": false,
+      "sha256": "88e86b38118fbe2818dcdbbe5c21ad195846253c478804023da5f364d2913f93"
     }
   ],
   "path_files": [
-    "modelnet_ahp_api_tests.cpp",
-    "modelnet_ahp_journey_tests.cpp",
     "modelnet_b0_remaining_tests.cpp",
     "modelnet_jit_journey_tests.cpp",
     "modelnet_ahp_doc_tests.cpp",
@@ -101,6 +111,24 @@
           "D:/a/btx/btx/btx/src/test/swarm_fsjail_tests.cpp(144,51): error: use of undeclared identifier 'S_IWUSR'",
           "D:/a/btx/btx/btx/src/test/swarm_fsjail_tests.cpp(144,61): error: use of undeclared identifier 'S_IXUSR'"
         ]
+      },
+      {
+        "source": "src/test/modelnet_ahp_api_tests.cpp",
+        "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/modelnet_ahp_api_tests.cpp.obj",
+        "exit": 1,
+        "errors": [
+          "D:/a/btx/btx/btx/src/test/modelnet_ahp_api_tests.cpp(240,16): error: use of undeclared identifier 'popen'",
+          "D:/a/btx/btx/btx/src/test/modelnet_ahp_api_tests.cpp(247,20): error: use of undeclared identifier 'pclose'"
+        ]
+      },
+      {
+        "source": "src/test/modelnet_ahp_journey_tests.cpp",
+        "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/modelnet_ahp_journey_tests.cpp.obj",
+        "exit": 1,
+        "errors": [
+          "D:/a/btx/btx/btx/src/test/modelnet_ahp_journey_tests.cpp(324,16): error: use of undeclared identifier 'popen'",
+          "D:/a/btx/btx/btx/src/test/modelnet_ahp_journey_tests.cpp(331,20): error: use of undeclared identifier 'pclose'"
+        ]
       }
     ],
     "entries": [
@@ -115,7 +143,40 @@
         "command": "\"C:\\Program Files\\LLVM\\bin\\clang-cl.exe\"  /nologo -TP -DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_NO_USER_CONFIG -DBTX_REFERENCE_TEST_VECTORS_PATH=\\\"D:/a/btx/btx/btx/test/reference/shielded_test_vectors.json\\\" -DMODELNET_AHP_FIXTURE_DIR=\\\"D:/a/btx/btx/btx/src/test/data/agent-package\\\" -DMODELNET_B0_CODEC_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_b0_codec_vectors.json\\\" -DMODELNET_BOUNTY_VECTORS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/bounty/reference/golden-vectors.json\\\" -DMODELNET_BTXD_PATH=\\\"D:/btx-native-035/project-build/bin/btxd\\\" -DMODELNET_BTX_OPEN_PATH=\\\"D:/btx-native-035/project-build/bin/btx-open\\\" -DMODELNET_BTX_PACKAGE_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/btx-package-vectors\\\" -DMODELNET_CRL12_OPERATIONS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/operations-v1.2.json\\\" -DMODELNET_CRL12_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12-portal/index.html\\\" -DMODELNET_CRL12_SCHEMA_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\\\" -DMODELNET_HCP_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/hcp-portal/index.html\\\" -DMODELNET_MODELD_PATH=\\\"D:/btx-native-035/project-build/bin/btx-modeld\\\" -DMODELNET_V11_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_v11_vectors.json\\\" -DNOMINMAX -DUNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING -D_UNICODE -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:/btx-native-035/project-build/src -ID:/a/btx/btx/btx/src -ID:/a/btx/btx/btx/src/secp256k1/include -ID:/a/btx/btx/btx/src/libbitcoinpqc/include -ID:/a/btx/btx/btx/src/compat/mingw -ID:/a/btx/btx/btx/src/univalue/include -imsvcD:/btx-native-035/vcpkg-installed/x64-windows-static/include -imsvcD:/btx-native-035/openssl-3.5.4-static/include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -std:c++20 -MT /utf-8 /Zc:preprocessor /Zc:__cplusplus /sdl /W3 /wd4018 /wd4146 /wd4244 /wd4267 /wd4715 /wd4805 -Xclang -fopenmp /Fosrc\\test\\CMakeFiles\\test_btx.dir\\swarm_fsjail_tests.cpp.obj /Fdsrc\\test\\CMakeFiles\\test_btx.dir\\ -c -- D:\\a\\btx\\btx\\btx\\src\\test\\swarm_fsjail_tests.cpp ",
         "file": "D:/a/btx/btx/btx/src/test/swarm_fsjail_tests.cpp",
         "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/swarm_fsjail_tests.cpp.obj"
+      },
+      {
+        "directory": "D:/btx-native-035/project-build",
+        "command": "\"C:\\Program Files\\LLVM\\bin\\clang-cl.exe\"  /nologo -TP -DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_NO_USER_CONFIG -DBTX_REFERENCE_TEST_VECTORS_PATH=\\\"D:/a/btx/btx/btx/test/reference/shielded_test_vectors.json\\\" -DMODELNET_AHP_FIXTURE_DIR=\\\"D:/a/btx/btx/btx/src/test/data/agent-package\\\" -DMODELNET_B0_CODEC_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_b0_codec_vectors.json\\\" -DMODELNET_BOUNTY_VECTORS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/bounty/reference/golden-vectors.json\\\" -DMODELNET_BTXD_PATH=\\\"D:/btx-native-035/project-build/bin/btxd\\\" -DMODELNET_BTX_OPEN_PATH=\\\"D:/btx-native-035/project-build/bin/btx-open\\\" -DMODELNET_BTX_PACKAGE_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/btx-package-vectors\\\" -DMODELNET_CRL12_OPERATIONS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/operations-v1.2.json\\\" -DMODELNET_CRL12_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12-portal/index.html\\\" -DMODELNET_CRL12_SCHEMA_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\\\" -DMODELNET_HCP_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/hcp-portal/index.html\\\" -DMODELNET_MODELD_PATH=\\\"D:/btx-native-035/project-build/bin/btx-modeld\\\" -DMODELNET_V11_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_v11_vectors.json\\\" -DNOMINMAX -DUNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING -D_UNICODE -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:/btx-native-035/project-build/src -ID:/a/btx/btx/btx/src -ID:/a/btx/btx/btx/src/secp256k1/include -ID:/a/btx/btx/btx/src/libbitcoinpqc/include -ID:/a/btx/btx/btx/src/compat/mingw -ID:/a/btx/btx/btx/src/univalue/include -imsvcD:/btx-native-035/vcpkg-installed/x64-windows-static/include -imsvcD:/btx-native-035/openssl-3.5.4-static/include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -std:c++20 -MT /utf-8 /Zc:preprocessor /Zc:__cplusplus /sdl /W3 /wd4018 /wd4146 /wd4244 /wd4267 /wd4715 /wd4805 -Xclang -fopenmp /Fosrc\\test\\CMakeFiles\\test_btx.dir\\modelnet_ahp_api_tests.cpp.obj /Fdsrc\\test\\CMakeFiles\\test_btx.dir\\ -c -- D:\\a\\btx\\btx\\btx\\src\\test\\modelnet_ahp_api_tests.cpp ",
+        "file": "D:/a/btx/btx/btx/src/test/modelnet_ahp_api_tests.cpp",
+        "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/modelnet_ahp_api_tests.cpp.obj"
+      },
+      {
+        "directory": "D:/btx-native-035/project-build",
+        "command": "\"C:\\Program Files\\LLVM\\bin\\clang-cl.exe\"  /nologo -TP -DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_NO_USER_CONFIG -DBTX_REFERENCE_TEST_VECTORS_PATH=\\\"D:/a/btx/btx/btx/test/reference/shielded_test_vectors.json\\\" -DMODELNET_AHP_FIXTURE_DIR=\\\"D:/a/btx/btx/btx/src/test/data/agent-package\\\" -DMODELNET_B0_CODEC_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_b0_codec_vectors.json\\\" -DMODELNET_BOUNTY_VECTORS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/bounty/reference/golden-vectors.json\\\" -DMODELNET_BTXD_PATH=\\\"D:/btx-native-035/project-build/bin/btxd\\\" -DMODELNET_BTX_OPEN_PATH=\\\"D:/btx-native-035/project-build/bin/btx-open\\\" -DMODELNET_BTX_PACKAGE_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/btx-package-vectors\\\" -DMODELNET_CRL12_OPERATIONS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/operations-v1.2.json\\\" -DMODELNET_CRL12_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12-portal/index.html\\\" -DMODELNET_CRL12_SCHEMA_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\\\" -DMODELNET_HCP_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/hcp-portal/index.html\\\" -DMODELNET_MODELD_PATH=\\\"D:/btx-native-035/project-build/bin/btx-modeld\\\" -DMODELNET_V11_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_v11_vectors.json\\\" -DNOMINMAX -DUNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING -D_UNICODE -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:/btx-native-035/project-build/src -ID:/a/btx/btx/btx/src -ID:/a/btx/btx/btx/src/secp256k1/include -ID:/a/btx/btx/btx/src/libbitcoinpqc/include -ID:/a/btx/btx/btx/src/compat/mingw -ID:/a/btx/btx/btx/src/univalue/include -imsvcD:/btx-native-035/vcpkg-installed/x64-windows-static/include -imsvcD:/btx-native-035/openssl-3.5.4-static/include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -std:c++20 -MT /utf-8 /Zc:preprocessor /Zc:__cplusplus /sdl /W3 /wd4018 /wd4146 /wd4244 /wd4267 /wd4715 /wd4805 -Xclang -fopenmp /Fosrc\\test\\CMakeFiles\\test_btx.dir\\modelnet_ahp_journey_tests.cpp.obj /Fdsrc\\test\\CMakeFiles\\test_btx.dir\\ -c -- D:\\a\\btx\\btx\\btx\\src\\test\\modelnet_ahp_journey_tests.cpp ",
+        "file": "D:/a/btx/btx/btx/src/test/modelnet_ahp_journey_tests.cpp",
+        "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/modelnet_ahp_journey_tests.cpp.obj"
       }
-    ]
-  }
+    ],
+    "additional_native_archive": {
+      "run": 42145455158,
+      "sha256": "caa42407fc5b96597de9eb69fb769e18c70e28a02b138c2724b9262609851bd9",
+      "source": "0bc4625be266d9cf0975d85ea9a4aed4e325c7a9",
+      "configuration": {
+        "build.ninja": "59d099086339ae39e2ffe6c4704866c703f239229a078b533f18563db6b22121",
+        "CMakeFiles/rules.ninja": "3d929b6f6f0ed70152c09375c622c502c7c8ecdc1d8ec7a044511d272667dfd5",
+        "CMakeCache.txt": "140a3420b3bfd140038ff644a0ea6ab09d0f4de54968e78d177ef51d92561f61",
+        "compile_commands.json": "096e03d28c8ab34c7a4898a83fb61920e34448c47c207a45e2c4e802d8dcba05"
+      }
+    }
+  },
+  "baseline_path_files": [
+    "modelnet_b0_remaining_tests.cpp",
+    "modelnet_jit_journey_tests.cpp",
+    "modelnet_ahp_doc_tests.cpp",
+    "modelnet_registry_independence_tests.cpp"
+  ],
+  "baseline_path_cases": [
+    "modelnet_b0_remaining_tests/uri_12_btx_open_preview_binary_present",
+    "modelnet_jit_journey_tests/jit_api_04_cli_schema"
+  ]
 }

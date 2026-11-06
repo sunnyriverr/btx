@@ -95,7 +95,7 @@ jobs:
           path: |
             D:\btx-native-035\project-build
             D:\btx-native-035\vcpkg-installed
-          key: btx356-unit-fixtures-v1-d70624475d4658144d33be712a3342d6559912b1fde74c264f1e363b8768536d-42144419403
+          key: btx356-unit-fixtures-v1-fa09b76c6d9ee95b6d2609002ad414dc27d0f339596f88248465a558dfaa9ae6-42145455158
       - name: Require existing exact-profile checkpoint for restore proof
         shell: pwsh
         env:
@@ -115,7 +115,7 @@ jobs:
           set "_CL_="
           python controls/contrib/devtools/windows-root-configure/batch.py prepare
           exit /b %errorlevel%
-      - name: Reuse proven permission compiler negatives and prove four path failures
+      - name: Reuse four proven compiler negatives and prove two path failures
         id: baseline
         shell: cmd
         run: |

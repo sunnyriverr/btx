@@ -177,16 +177,17 @@ def baseline():
     assert prior['source'] == I['base']
     assert prior['configuration'] == R['original_configuration']
     assert prior['entries'] == R['compiler_entries']
-    assert len(prior['records']) == len(I['compiler_cohort']) == 2
+    assert len(prior['records']) == len(I['compiler_cohort']) == 4
     for row in prior['records']:
-        assert row['exit'] != 0 and all(token in '\n'.join(row['errors']) for token in ['S_IRUSR', 'S_IWUSR', 'S_IXUSR'])
+        expected = ['S_IRUSR', 'S_IWUSR', 'S_IXUSR'] if 'swarm_' in row['source'] else ['popen', 'pclose']
+        assert row['exit'] != 0 and all(token in '\n'.join(row['errors']) for token in expected)
     R['compile_before'] = prior['records']
     R['compile_before_reused'] = prior
     s.save()
     R['baseline_commands_unchanged'] = config_hashes() == R['original_configuration']
     assert R['baseline_commands_unchanged']
-    exe = build_component('baseline_paths', I['path_files'])
-    run_cases('baseline_paths', exe, I['path_cases'], False)
+    exe = build_component('baseline_paths', I['baseline_path_files'])
+    run_cases('baseline_paths', exe, I['baseline_path_cases'], False)
     assert s.catalog(I['base'], 'base-after') == R['base_catalog']
     R['status'] = 'BASELINE_REPRODUCED'
     s.save()
