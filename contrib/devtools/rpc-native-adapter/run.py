@@ -178,9 +178,17 @@ def configure():
 
 def build(label):
     plan = command(['ninja', '-C', BUILD, '-n', 'test_btx'], 'plan-' + label, timeout=60)
-    assert 'rpc_tests.cpp' in plan or label != 'candidate'
-    counts = [int(x) for x in re.findall(r'^\[\d+/(\d+)\]', plan, re.MULTILINE)]
-    assert not counts or max(counts) <= 1200, 'Unexpectedly broad native build plan'
+    # A dry run can stop at CMake's mandatory glob/regeneration edge. Inspect
+    # the generated transitive graph too; do not mistake that edge for a full
+    # compilation plan or disable source-roster verification.
+    graph = command(['ninja', '-C', BUILD, '-t', 'commands', 'test_btx'],
+                    'command-graph-' + label, timeout=60)
+    lines = graph.splitlines()
+    assert len(lines) <= 1200, 'Unexpectedly broad native command graph'
+    for name in TEST_SOURCES:
+        matches = [line for line in lines if str(PRODUCT / name) in line
+                   and 'test_btx.dir' in line and ' -c ' in line]
+        assert len(matches) == 1, (name, 'Missing or duplicated maintained translation unit')
     command(['cmake', '--build', BUILD, '--target', 'test_btx', '-j2'], 'build-' + label, timeout=1500)
     STATE.setdefault('binaries', {})[label] = {'sha256': sha(BUILD / 'bin/test_btx')}
     save()
