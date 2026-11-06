@@ -19,7 +19,7 @@ See [test log](supplied-parent-psbt.log), [native result and commands](native-re
 
 ## Executed build and entry point
 
-Ubuntu24.04 x86_64, GCC13.3, Release/O1/NDEBUG, CMake3.31.6, hash-pinned OpenSSL3.5.9. The maintained root `btxd` and `btx-cli` targets built with wallet and Modelnet **compiled ON**. The testcase runs Modelnet OFF, txindex ON, with the existing wallet-only regtest MatMul-height knobs from `wallet_p2mr_multiparty_psbt.py`. Its setup uses the Modelnet command-line switches available in that declared build profile. **WITH_MODELNET=OFF builds were not qualified.**
+Ubuntu24.04 x86_64, GCC13.3, Release/-O1 (C++ assertions retained), CMake3.31.6, hash-pinned OpenSSL3.5.9. The maintained root `btxd` and `btx-cli` targets built with wallet and Modelnet **compiled ON**. The testcase runs Modelnet OFF, txindex ON, with the existing wallet-only regtest MatMul-height knobs from `wallet_p2mr_multiparty_psbt.py`. Its setup uses the Modelnet command-line switches available in that declared build profile. **WITH_MODELNET=OFF builds were not qualified.**
 
 Actually executed fixture: `e3448966863a11539e743b9925a83915235740d5` ([workflow](https://github.com/sunnyriverr/btx/blob/e3448966863a11539e743b9925a83915235740d5/.github/workflows/p2mr-parent.yml), [runner](https://github.com/sunnyriverr/btx/blob/e3448966863a11539e743b9925a83915235740d5/contrib/devtools/p2mr-parent/run.py)). Identical copies are here as `workflow.yml` and `run.py`. It checks out exact product `666673a3153225ba264c7870e0e82e354df86765`, builds the targets, invokes the case with explicit config/fresh directories and verifies cleanup.
 
