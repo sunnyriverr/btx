@@ -286,7 +286,10 @@ BOOST_AUTO_TEST_CASE(rpc_argument_metadata_registered_core)
         const auto metadata = entry.command->GetArgumentMetadata();
         BOOST_CHECK(metadata.status == Status::AVAILABLE);
         BOOST_REQUIRE(metadata.declaration.has_value());
-        BOOST_CHECK(metadata.declaration->GetArgDefinitions().empty());
+        const auto& args = metadata.declaration->GetArgDefinitions();
+        BOOST_REQUIRE_EQUAL(args.size(), 1U);
+        BOOST_CHECK_EQUAL(args[0].m_names, "verbose");
+        BOOST_CHECK(args[0].m_type == RPCArg::Type::BOOL);
     }
     BOOST_CHECK_GT(found, 0U);
 }
