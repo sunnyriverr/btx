@@ -1,0 +1,1070 @@
+{
+  "base": "666673a3153225ba264c7870e0e82e354df86765",
+  "commands": [
+    {
+      "label": "apt-update",
+      "args": [
+        "sudo",
+        "apt-get",
+        "-o",
+        "Acquire::http::Timeout=30",
+        "-o",
+        "Acquire::https::Timeout=30",
+        "-o",
+        "Acquire::Retries=1",
+        "update"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 5.0,
+      "stop": null,
+      "log": "apt-update.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "apt-install",
+      "args": [
+        "sudo",
+        "apt-get",
+        "-o",
+        "Acquire::http::Timeout=30",
+        "-o",
+        "Acquire::https::Timeout=30",
+        "-o",
+        "Acquire::Retries=1",
+        "install",
+        "-y",
+        "--no-install-recommends",
+        "g++-13",
+        "ninja-build",
+        "pkgconf",
+        "libevent-dev",
+        "libboost-dev",
+        "libsqlite3-dev",
+        "libzmq3-dev",
+        "ccache"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 13.0,
+      "stop": null,
+      "log": "apt-install.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "gcc-version",
+      "args": [
+        "g++-13",
+        "--version"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "gcc-version.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "cmake-version",
+      "args": [
+        "cmake",
+        "--version"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "cmake-version.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "dependency-versions",
+      "args": [
+        "dpkg-query",
+        "-W",
+        "g++-13",
+        "libboost-dev",
+        "libevent-dev",
+        "libsqlite3-dev",
+        "libzmq3-dev",
+        "ninja-build",
+        "ccache"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "dependency-versions.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "ldd-node",
+      "args": [
+        "ldd",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build/bin/btxd"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "ldd-node.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "ldd-cli",
+      "args": [
+        "ldd",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build/bin/btx-cli"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "ldd-cli.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "cached-configure",
+      "args": [
+        "cmake",
+        "-S",
+        "/home/runner/work/btx/btx/p2mr-parent-product",
+        "-B",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "cached-configure.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "helper-build-plan",
+      "args": [
+        "ninja",
+        "-C",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build",
+        "-n",
+        "btx-modeld"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "helper-build-plan.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "helper-target-build",
+      "args": [
+        "cmake",
+        "--build",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build",
+        "--target",
+        "btx-modeld",
+        "--parallel",
+        "2"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 4.0,
+      "stop": null,
+      "log": "helper-target-build.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "compile-maintained-regression",
+      "args": [
+        "g++-13",
+        "-std=c++20",
+        "-O0",
+        "-I/home/runner/work/btx/btx/p2mr-parent-product/src",
+        "-I/home/runner/work/btx/btx/p2mr-parent-product/src/univalue/include",
+        "-c",
+        "/home/runner/work/btx/btx/p2mr-parent-native/operator-repair/component.cpp",
+        "-o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/operator-repair/component.o"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 5.0,
+      "stop": null,
+      "log": "compile-maintained-regression.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "compile-converter-baseline",
+      "args": [
+        "/usr/bin/g++-13",
+        "-I/home/runner/work/btx/btx/p2mr-parent-native/build/src",
+        "-I/home/runner/work/btx/btx/p2mr-parent-product/src",
+        "-I/home/runner/work/btx/btx/p2mr-parent-product/src/univalue/include",
+        "-O1",
+        "-std=c++20",
+        "-fPIC",
+        "-fno-extended-identifiers",
+        "-fdebug-prefix-map=/home/runner/work/btx/btx/p2mr-parent-product/src=.",
+        "-fmacro-prefix-map=/home/runner/work/btx/btx/p2mr-parent-product/src=.",
+        "-fstack-reuse=none",
+        "-Wall",
+        "-Wextra",
+        "-Wformat",
+        "-Wformat-security",
+        "-Wvla",
+        "-Wredundant-decls",
+        "-Wdate-time",
+        "-Wduplicated-branches",
+        "-Wduplicated-cond",
+        "-Wlogical-op",
+        "-Wimplicit-fallthrough",
+        "-Wbidi-chars=any",
+        "-Wundef",
+        "-Woverloaded-virtual",
+        "-Wsuggest-override",
+        "-Wno-unused-parameter",
+        "-U_FORTIFY_SOURCE",
+        "-D_FORTIFY_SOURCE=3",
+        "-Wstack-protector",
+        "-fstack-protector-all",
+        "-fcf-protection=full",
+        "-fstack-clash-protection",
+        "-o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/operator-repair/baseline/client.cpp.o",
+        "-c",
+        "/home/runner/work/btx/btx/p2mr-parent-product/src/rpc/client.cpp"
+      ],
+      "cwd": "/home/runner/work/btx/btx/p2mr-parent-native/build",
+      "returncode": 0,
+      "seconds": 3.0,
+      "stop": null,
+      "log": "compile-converter-baseline.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "link-unit-baseline",
+      "args": [
+        "g++-13",
+        "/home/runner/work/btx/btx/p2mr-parent-native/operator-repair/component.o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/operator-repair/baseline/client.cpp.o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build/src/univalue/libunivalue.a",
+        "-pthread",
+        "-o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/operator-repair/baseline/convert-test"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "link-unit-baseline.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "unit-baseline",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/operator-repair/baseline/convert-test",
+        "--report_level=detailed",
+        "--log_level=test_suite"
+      ],
+      "cwd": "None",
+      "returncode": 201,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "unit-baseline.log",
+      "allowed": [
+        201
+      ]
+    },
+    {
+      "label": "replace-archive-converter-baseline",
+      "args": [
+        "ar",
+        "r",
+        "/home/runner/work/btx/btx/p2mr-parent-native/operator-repair/baseline/libbitcoin_cli.a",
+        "/home/runner/work/btx/btx/p2mr-parent-native/operator-repair/baseline/client.cpp.o"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "replace-archive-converter-baseline.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "link-cli-baseline",
+      "args": [
+        "/bin/sh",
+        "-c",
+        ": && /usr/bin/g++-13 -O1 -Wl,--unresolved-symbols=ignore-in-shared-libs \"-Wl,--enable-new-dtags,-rpath,\\$ORIGIN/../lib\" -Wl,-z,stack-size=8388608 -fstack-reuse=none -fstack-protector-all -fcf-protection=full -fstack-clash-protection -Wl,-z,relro -Wl,-z,now -Wl,-z,separate-code -fPIE -pie -Wl,--dependency-file=src/CMakeFiles/btx-cli.dir/link.d src/CMakeFiles/btx-cli.dir/bitcoin-cli.cpp.o -o /home/runner/work/btx/btx/p2mr-parent-native/operator-repair/baseline/btx-cli  /home/runner/work/btx/btx/p2mr-parent-native/operator-repair/baseline/libbitcoin_cli.a  -Wl,--start-group  lib/libbitcoin_common.a  lib/libbitcoin_shielded.a  lib/libbitcoin_db.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a  -Wl,--end-group  /usr/lib/x86_64-linux-gnu/libevent_core.so  /usr/lib/x86_64-linux-gnu/libevent_extra.so  lib/libbitcoin_common.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so  /usr/lib/x86_64-linux-gnu/libpthread.a  lib/libbitcoin_db.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a && cd /home/runner/work/btx/btx/p2mr-parent-native/build/src && /usr/local/bin/cmake -E rm -f /home/runner/work/btx/btx/p2mr-parent-native/build/bin/bitcoin-cli && /usr/local/bin/cmake -E create_symlink btx-cli /home/runner/work/btx/btx/p2mr-parent-native/build/bin/bitcoin-cli"
+      ],
+      "cwd": "/home/runner/work/btx/btx/p2mr-parent-native/build",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "link-cli-baseline.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "compile-converter-candidate",
+      "args": [
+        "/usr/bin/g++-13",
+        "-I/home/runner/work/btx/btx/p2mr-parent-native/build/src",
+        "-I/home/runner/work/btx/btx/p2mr-parent-product/src",
+        "-I/home/runner/work/btx/btx/p2mr-parent-product/src/univalue/include",
+        "-O1",
+        "-std=c++20",
+        "-fPIC",
+        "-fno-extended-identifiers",
+        "-fdebug-prefix-map=/home/runner/work/btx/btx/p2mr-parent-product/src=.",
+        "-fmacro-prefix-map=/home/runner/work/btx/btx/p2mr-parent-product/src=.",
+        "-fstack-reuse=none",
+        "-Wall",
+        "-Wextra",
+        "-Wformat",
+        "-Wformat-security",
+        "-Wvla",
+        "-Wredundant-decls",
+        "-Wdate-time",
+        "-Wduplicated-branches",
+        "-Wduplicated-cond",
+        "-Wlogical-op",
+        "-Wimplicit-fallthrough",
+        "-Wbidi-chars=any",
+        "-Wundef",
+        "-Woverloaded-virtual",
+        "-Wsuggest-override",
+        "-Wno-unused-parameter",
+        "-U_FORTIFY_SOURCE",
+        "-D_FORTIFY_SOURCE=3",
+        "-Wstack-protector",
+        "-fstack-protector-all",
+        "-fcf-protection=full",
+        "-fstack-clash-protection",
+        "-o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/operator-repair/candidate/client.cpp.o",
+        "-c",
+        "/home/runner/work/btx/btx/contrib/devtools/operator-cli-repair/candidate/src/rpc/client.cpp"
+      ],
+      "cwd": "/home/runner/work/btx/btx/p2mr-parent-native/build",
+      "returncode": 0,
+      "seconds": 3.0,
+      "stop": null,
+      "log": "compile-converter-candidate.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "link-unit-candidate",
+      "args": [
+        "g++-13",
+        "/home/runner/work/btx/btx/p2mr-parent-native/operator-repair/component.o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/operator-repair/candidate/client.cpp.o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build/src/univalue/libunivalue.a",
+        "-pthread",
+        "-o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/operator-repair/candidate/convert-test"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "link-unit-candidate.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "unit-candidate",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/operator-repair/candidate/convert-test",
+        "--report_level=detailed",
+        "--log_level=test_suite"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "unit-candidate.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "replace-archive-converter-candidate",
+      "args": [
+        "ar",
+        "r",
+        "/home/runner/work/btx/btx/p2mr-parent-native/operator-repair/candidate/libbitcoin_cli.a",
+        "/home/runner/work/btx/btx/p2mr-parent-native/operator-repair/candidate/client.cpp.o"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "replace-archive-converter-candidate.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "link-cli-candidate",
+      "args": [
+        "/bin/sh",
+        "-c",
+        ": && /usr/bin/g++-13 -O1 -Wl,--unresolved-symbols=ignore-in-shared-libs \"-Wl,--enable-new-dtags,-rpath,\\$ORIGIN/../lib\" -Wl,-z,stack-size=8388608 -fstack-reuse=none -fstack-protector-all -fcf-protection=full -fstack-clash-protection -Wl,-z,relro -Wl,-z,now -Wl,-z,separate-code -fPIE -pie -Wl,--dependency-file=src/CMakeFiles/btx-cli.dir/link.d src/CMakeFiles/btx-cli.dir/bitcoin-cli.cpp.o -o /home/runner/work/btx/btx/p2mr-parent-native/operator-repair/candidate/btx-cli  /home/runner/work/btx/btx/p2mr-parent-native/operator-repair/candidate/libbitcoin_cli.a  -Wl,--start-group  lib/libbitcoin_common.a  lib/libbitcoin_shielded.a  lib/libbitcoin_db.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a  -Wl,--end-group  /usr/lib/x86_64-linux-gnu/libevent_core.so  /usr/lib/x86_64-linux-gnu/libevent_extra.so  lib/libbitcoin_common.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so  /usr/lib/x86_64-linux-gnu/libpthread.a  lib/libbitcoin_db.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a && cd /home/runner/work/btx/btx/p2mr-parent-native/build/src && /usr/local/bin/cmake -E rm -f /home/runner/work/btx/btx/p2mr-parent-native/build/bin/bitcoin-cli && /usr/local/bin/cmake -E create_symlink btx-cli /home/runner/work/btx/btx/p2mr-parent-native/build/bin/bitcoin-cli"
+      ],
+      "cwd": "/home/runner/work/btx/btx/p2mr-parent-native/build",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "link-cli-candidate.log",
+      "allowed": [
+        0
+      ]
+    },
+    {
+      "label": "workflow-baseline",
+      "args": [
+        "python3",
+        "/home/runner/work/btx/btx/contrib/devtools/operator-cli-repair/case.py",
+        "--configfile=/home/runner/work/btx/btx/p2mr-parent-native/build/test/config.ini",
+        "--tmpdir=/home/runner/work/btx/btx/operator-cli-repair-runtime/baseline/node-test",
+        "--cachedir=/home/runner/work/btx/btx/operator-cli-repair-runtime/baseline/chain-cache",
+        "--portseed=42728",
+        "--nocleanup"
+      ],
+      "cwd": "None",
+      "returncode": 1,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "workflow-baseline.log",
+      "allowed": [
+        1
+      ]
+    },
+    {
+      "label": "workflow-candidate",
+      "args": [
+        "python3",
+        "/home/runner/work/btx/btx/contrib/devtools/operator-cli-repair/case.py",
+        "--configfile=/home/runner/work/btx/btx/p2mr-parent-native/build/test/config.ini",
+        "--tmpdir=/home/runner/work/btx/btx/operator-cli-repair-runtime/candidate/node-test",
+        "--cachedir=/home/runner/work/btx/btx/operator-cli-repair-runtime/candidate/chain-cache",
+        "--portseed=42728",
+        "--nocleanup"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "workflow-candidate.log",
+      "allowed": [
+        0
+      ]
+    }
+  ],
+  "errors": [],
+  "phases": {
+    "preflight": "pass",
+    "dependencies": "pass",
+    "build": "pass",
+    "test": "pass",
+    "finalize": "pass"
+  },
+  "runner": {
+    "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+    "run_id": "42199048312",
+    "fixture_head": "c64ee32f1868fc97e83292f962e0aed9ad44d86f"
+  },
+  "source_before": {
+    "head": "666673a3153225ba264c7870e0e82e354df86765",
+    "files": 14309,
+    "manifest_sha256": "c8497991392e27c28ffe00a22284413fb2863f1b9474a4a191dc95a11e5be2e0"
+  },
+  "restored_binaries": {
+    "btxd": {
+      "path": "/home/runner/work/btx/btx/p2mr-parent-native/build/bin/btxd",
+      "sha256": "4ad63b64f6d6bab34f5ba92518dc8955ee2e263e0daa4d739f27ec868fce0ae1",
+      "bytes": 56599104
+    },
+    "btx-cli": {
+      "path": "/home/runner/work/btx/btx/p2mr-parent-native/build/bin/btx-cli",
+      "sha256": "b71061e57a9224d86ef2f17da1914f3b68ffe91b696282151c0aba9e12caa5b8",
+      "bytes": 18961888
+    },
+    "btx-modeld": {
+      "sha256": "62e2a47bb52507615129820aeda4e54aeac4d8744419d12833ffa148dbc88df3"
+    }
+  },
+  "retained_cache_id": 10096149671,
+  "planned_helper_steps": [
+    "[0/2] Re-checking globbed directories...",
+    "[1/2] Re-running CMake..."
+  ],
+  "binaries": {
+    "btxd": {
+      "sha256": "4ad63b64f6d6bab34f5ba92518dc8955ee2e263e0daa4d739f27ec868fce0ae1",
+      "bytes": 56599104
+    },
+    "btx-cli": {
+      "sha256": "b71061e57a9224d86ef2f17da1914f3b68ffe91b696282151c0aba9e12caa5b8",
+      "bytes": 18961888
+    },
+    "btx-modeld": {
+      "sha256": "62e2a47bb52507615129820aeda4e54aeac4d8744419d12833ffa148dbc88df3",
+      "bytes": 33682184
+    }
+  },
+  "source_after-build": {
+    "head": "666673a3153225ba264c7870e0e82e354df86765",
+    "files": 14309,
+    "manifest_sha256": "c8497991392e27c28ffe00a22284413fb2863f1b9474a4a191dc95a11e5be2e0"
+  },
+  "code_identity": {
+    "base": "666673a3153225ba264c7870e0e82e354df86765",
+    "commit": "06de33dea361e2d2ea612d9ffa13f2134b4d9845",
+    "files": {
+      "src/rpc/client.cpp": {
+        "sha256": "d6b7fa38402e4fc5ad1649e9f9ba7fe2aaab30c64f021f66e55b4a5c46477500",
+        "bytes": 40254
+      },
+      "src/test/rpc_tests.cpp": {
+        "sha256": "e920d60c473bd880301d071b113e60b82a8b831f87a76edb2384d69f063a03ee",
+        "bytes": 66867
+      }
+    },
+    "tree": "e9846e9d1e930dbfc67436db6cbb0624077f4731",
+    "branch": "codex/fix-model-operator-cli-objects",
+    "pushed": false
+  },
+  "case_sha256": "8dea062709d904f67bf2b22300cbb72abe334ec3198e27e7b14b08503b5c174a",
+  "regression_sha256": "2f0633ff418ef615d01782f698e75985db18c51b3f1dc2471c1a1345bc521555",
+  "wrapper_sha256": "a0731f6c956db15b62acfbdee8161a62bee7c45aea9b73753e594ebeb269e00c",
+  "unit_pair": {
+    "baseline": {
+      "exit": 201,
+      "binary_sha256": "8e15afebe9d19c600e26778b254a27b6e0622cdea300122507ec90d034a0a1d7",
+      "same_test_object_sha256": "ae224bd2f83d2c2b6943ed8440f08e4cde11f340e874712b2ca13e98b9d2bea1",
+      "converter_source_sha256": "113bb045e9c22f1989d573c306b114020d56d969fd4899237cc7161342576cbf",
+      "converter_object_sha256": "c54a86fdce8758065a1e77ffbddb45b292678d6a72edbf8c9a418900a3844f3b"
+    },
+    "candidate": {
+      "exit": 0,
+      "binary_sha256": "8116c870ac7b3de4300576bb4ebbf0741198e7a5bd442d2d613f6092854c15a0",
+      "same_test_object_sha256": "ae224bd2f83d2c2b6943ed8440f08e4cde11f340e874712b2ca13e98b9d2bea1",
+      "converter_source_sha256": "d6b7fa38402e4fc5ad1649e9f9ba7fe2aaab30c64f021f66e55b4a5c46477500",
+      "converter_object_sha256": "ba2087a911aa68edb5a831832d56b8efaaab18d6306f88337c8fc95f9da8ae52"
+    }
+  },
+  "cli_pair": {
+    "baseline": {
+      "sha256": "f59a0377fc9f800e945572c63fead70f450bd14d783fb4a89a2ad2a830fbeafa",
+      "archive_sha256": "ea250d9190795abae2d789ea25d2adc9fd6f96b5038988b095d58584de6eccb3",
+      "archive_members": {
+        "stdin.cpp.o": "18e1592a46e2506c859c232c547f3e6c70a4dfd072e94952675d875b4997398d",
+        "lightwatch.cpp.o": "715eccfedc0178c55b33ac3d5aeb9aa94a4adbc65d843498965068362cbb9dd4",
+        "client.cpp.o": "c54a86fdce8758065a1e77ffbddb45b292678d6a72edbf8c9a418900a3844f3b"
+      }
+    },
+    "candidate": {
+      "sha256": "7df7bf028340208b3b76f35dba4b64e10e9663c71707d1450684947a059392db",
+      "archive_sha256": "efb711cb8498bd9db3ab525aa4c25e9dd2b30d392569d2ecb7174fa616d24fc7",
+      "archive_members": {
+        "stdin.cpp.o": "18e1592a46e2506c859c232c547f3e6c70a4dfd072e94952675d875b4997398d",
+        "lightwatch.cpp.o": "715eccfedc0178c55b33ac3d5aeb9aa94a4adbc65d843498965068362cbb9dd4",
+        "client.cpp.o": "ba2087a911aa68edb5a831832d56b8efaaab18d6306f88337c8fc95f9da8ae52"
+      }
+    }
+  },
+  "archive_members_before": {
+    "stdin.cpp.o": "18e1592a46e2506c859c232c547f3e6c70a4dfd072e94952675d875b4997398d",
+    "lightwatch.cpp.o": "715eccfedc0178c55b33ac3d5aeb9aa94a4adbc65d843498965068362cbb9dd4",
+    "client.cpp.o": "97e55aa30fa896c24592b6b8c3b63301d1be61329af45cba107a6a13b4a5bfb3"
+  },
+  "compiler_command": [
+    "/usr/bin/g++-13",
+    "-I/home/runner/work/btx/btx/p2mr-parent-native/build/src",
+    "-I/home/runner/work/btx/btx/p2mr-parent-product/src",
+    "-I/home/runner/work/btx/btx/p2mr-parent-product/src/univalue/include",
+    "-O1",
+    "-std=c++20",
+    "-fPIC",
+    "-fno-extended-identifiers",
+    "-fdebug-prefix-map=/home/runner/work/btx/btx/p2mr-parent-product/src=.",
+    "-fmacro-prefix-map=/home/runner/work/btx/btx/p2mr-parent-product/src=.",
+    "-fstack-reuse=none",
+    "-Wall",
+    "-Wextra",
+    "-Wformat",
+    "-Wformat-security",
+    "-Wvla",
+    "-Wredundant-decls",
+    "-Wdate-time",
+    "-Wduplicated-branches",
+    "-Wduplicated-cond",
+    "-Wlogical-op",
+    "-Wimplicit-fallthrough",
+    "-Wbidi-chars=any",
+    "-Wundef",
+    "-Woverloaded-virtual",
+    "-Wsuggest-override",
+    "-Wno-unused-parameter",
+    "-U_FORTIFY_SOURCE",
+    "-D_FORTIFY_SOURCE=3",
+    "-Wstack-protector",
+    "-fstack-protector-all",
+    "-fcf-protection=full",
+    "-fstack-clash-protection",
+    "-o",
+    "src/CMakeFiles/bitcoin_cli.dir/rpc/client.cpp.o",
+    "-c",
+    "/home/runner/work/btx/btx/p2mr-parent-product/src/rpc/client.cpp"
+  ],
+  "cli_link_command": ": && /usr/bin/g++-13 -O1 -Wl,--unresolved-symbols=ignore-in-shared-libs \"-Wl,--enable-new-dtags,-rpath,\\$ORIGIN/../lib\" -Wl,-z,stack-size=8388608 -fstack-reuse=none -fstack-protector-all -fcf-protection=full -fstack-clash-protection -Wl,-z,relro -Wl,-z,now -Wl,-z,separate-code -fPIE -pie -Wl,--dependency-file=src/CMakeFiles/btx-cli.dir/link.d src/CMakeFiles/btx-cli.dir/bitcoin-cli.cpp.o -o bin/btx-cli  lib/libbitcoin_cli.a  -Wl,--start-group  lib/libbitcoin_common.a  lib/libbitcoin_shielded.a  lib/libbitcoin_db.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a  -Wl,--end-group  /usr/lib/x86_64-linux-gnu/libevent_core.so  /usr/lib/x86_64-linux-gnu/libevent_extra.so  lib/libbitcoin_common.a  src/univalue/libunivalue.a  lib/libbtx_matmul_backend.a  /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so  /usr/lib/x86_64-linux-gnu/libpthread.a  lib/libbitcoin_db.a  lib/libbitcoin_consensus.a  lib/libbitcoin_util.a  lib/libbitcoin_clientversion.a  lib/libbitcoinpqc.a  src/secp256k1/lib/libsecp256k1.a  lib/libbitcoin_crypto.a  src/libleveldb.a  src/libcrc32c.a && cd /home/runner/work/btx/btx/p2mr-parent-native/build/src && /usr/local/bin/cmake -E rm -f /home/runner/work/btx/btx/p2mr-parent-native/build/bin/bitcoin-cli && /usr/local/bin/cmake -E create_symlink btx-cli /home/runner/work/btx/btx/p2mr-parent-native/build/bin/bitcoin-cli",
+  "original_archives_unchanged_before_workflows": true,
+  "workflow_pair": {
+    "baseline": {
+      "exit": 1,
+      "acceptance_pass": false,
+      "requirements": [
+        {
+          "label": "profile object saved False",
+          "passed": false
+        },
+        {
+          "label": "profile object saved True",
+          "passed": false
+        },
+        {
+          "label": "mirror object saved False",
+          "passed": false
+        },
+        {
+          "label": "keyed replay accepted False",
+          "passed": false
+        },
+        {
+          "label": "key conflict reason False",
+          "passed": false
+        },
+        {
+          "label": "mirror object saved True",
+          "passed": false
+        },
+        {
+          "label": "keyed replay accepted True",
+          "passed": false
+        },
+        {
+          "label": "key conflict reason True",
+          "passed": false
+        },
+        {
+          "label": "specific rejection setmodelprofileautomatic_spend_atomsFalse",
+          "passed": false
+        },
+        {
+          "label": "specific rejection setmodelmirroridempotency_key requiredFalse",
+          "passed": true
+        },
+        {
+          "label": "specific rejection setmodelmirrorautomatic_spend_atoms must remain 0False",
+          "passed": false
+        },
+        {
+          "label": "specific rejection setmodelprofileautomatic_spend_atomsTrue",
+          "passed": false
+        },
+        {
+          "label": "specific rejection setmodelmirroridempotency_key requiredTrue",
+          "passed": true
+        },
+        {
+          "label": "specific rejection setmodelmirrorautomatic_spend_atoms must remain 0True",
+          "passed": false
+        }
+      ],
+      "controls_complete": true,
+      "controls": [
+        {
+          "label": "bare custom accepted False",
+          "passed": true
+        },
+        {
+          "label": "bare custom accepted True",
+          "passed": true
+        },
+        {
+          "label": "failed profile preserves files False",
+          "passed": true
+        },
+        {
+          "label": "direct profile and quota False",
+          "passed": true
+        },
+        {
+          "label": "failed profile preserves files True",
+          "passed": true
+        },
+        {
+          "label": "direct profile and quota True",
+          "passed": true
+        },
+        {
+          "label": "failed mirror preserves files False",
+          "passed": true
+        },
+        {
+          "label": "sentinel preserved False",
+          "passed": true
+        },
+        {
+          "label": "replay never rewrites False",
+          "passed": true
+        },
+        {
+          "label": "conflict preserves files False",
+          "passed": true
+        },
+        {
+          "label": "failed mirror preserves files True",
+          "passed": true
+        },
+        {
+          "label": "sentinel preserved True",
+          "passed": true
+        },
+        {
+          "label": "replay never rewrites True",
+          "passed": true
+        },
+        {
+          "label": "conflict preserves files True",
+          "passed": true
+        },
+        {
+          "label": "invalid refused setmodelprofileFalse",
+          "passed": true
+        },
+        {
+          "label": "invalid preserves files setmodelprofileFalse",
+          "passed": true
+        },
+        {
+          "label": "invalid refused setmodelmirrorFalse",
+          "passed": true
+        },
+        {
+          "label": "invalid preserves files setmodelmirrorFalse",
+          "passed": true
+        },
+        {
+          "label": "invalid refused setmodelmirrorFalse",
+          "passed": true
+        },
+        {
+          "label": "invalid preserves files setmodelmirrorFalse",
+          "passed": true
+        },
+        {
+          "label": "invalid refused setmodelprofileTrue",
+          "passed": true
+        },
+        {
+          "label": "invalid preserves files setmodelprofileTrue",
+          "passed": true
+        },
+        {
+          "label": "invalid refused setmodelmirrorTrue",
+          "passed": true
+        },
+        {
+          "label": "invalid preserves files setmodelmirrorTrue",
+          "passed": true
+        },
+        {
+          "label": "invalid refused setmodelmirrorTrue",
+          "passed": true
+        },
+        {
+          "label": "invalid preserves files setmodelmirrorTrue",
+          "passed": true
+        },
+        {
+          "label": "direct refusal automatic_spend_atoms",
+          "passed": true
+        },
+        {
+          "label": "direct refusal preserves files automatic_spend_atoms",
+          "passed": true
+        },
+        {
+          "label": "direct refusal idempotency_key required",
+          "passed": true
+        },
+        {
+          "label": "direct refusal preserves files idempotency_key required",
+          "passed": true
+        },
+        {
+          "label": "direct refusal automatic_spend_atoms must remain 0",
+          "passed": true
+        },
+        {
+          "label": "direct refusal preserves files automatic_spend_atoms must remain 0",
+          "passed": true
+        },
+        {
+          "label": "read-only preserves files",
+          "passed": true
+        },
+        {
+          "label": "zero spend and unchanged chain",
+          "passed": true
+        }
+      ],
+      "node_rpc_shutdown_complete": true,
+      "cli_sha256_before_after": "f59a0377fc9f800e945572c63fead70f450bd14d783fb4a89a2ad2a830fbeafa",
+      "same_case_sha256": "8dea062709d904f67bf2b22300cbb72abe334ec3198e27e7b14b08503b5c174a"
+    },
+    "candidate": {
+      "exit": 0,
+      "acceptance_pass": true,
+      "requirements": [
+        {
+          "label": "profile object saved False",
+          "passed": true
+        },
+        {
+          "label": "profile object saved True",
+          "passed": true
+        },
+        {
+          "label": "mirror object saved False",
+          "passed": true
+        },
+        {
+          "label": "keyed replay accepted False",
+          "passed": true
+        },
+        {
+          "label": "key conflict reason False",
+          "passed": true
+        },
+        {
+          "label": "mirror object saved True",
+          "passed": true
+        },
+        {
+          "label": "keyed replay accepted True",
+          "passed": true
+        },
+        {
+          "label": "key conflict reason True",
+          "passed": true
+        },
+        {
+          "label": "specific rejection setmodelprofileautomatic_spend_atomsFalse",
+          "passed": true
+        },
+        {
+          "label": "specific rejection setmodelmirroridempotency_key requiredFalse",
+          "passed": true
+        },
+        {
+          "label": "specific rejection setmodelmirrorautomatic_spend_atoms must remain 0False",
+          "passed": true
+        },
+        {
+          "label": "specific rejection setmodelprofileautomatic_spend_atomsTrue",
+          "passed": true
+        },
+        {
+          "label": "specific rejection setmodelmirroridempotency_key requiredTrue",
+          "passed": true
+        },
+        {
+          "label": "specific rejection setmodelmirrorautomatic_spend_atoms must remain 0True",
+          "passed": true
+        }
+      ],
+      "controls_complete": true,
+      "controls": [
+        {
+          "label": "bare custom accepted False",
+          "passed": true
+        },
+        {
+          "label": "bare custom accepted True",
+          "passed": true
+        },
+        {
+          "label": "direct profile and quota False",
+          "passed": true
+        },
+        {
+          "label": "direct profile and quota True",
+          "passed": true
+        },
+        {
+          "label": "sentinel preserved False",
+          "passed": true
+        },
+        {
+          "label": "replay never rewrites False",
+          "passed": true
+        },
+        {
+          "label": "conflict preserves files False",
+          "passed": true
+        },
+        {
+          "label": "sentinel preserved True",
+          "passed": true
+        },
+        {
+          "label": "replay never rewrites True",
+          "passed": true
+        },
+        {
+          "label": "conflict preserves files True",
+          "passed": true
+        },
+        {
+          "label": "invalid refused setmodelprofileFalse",
+          "passed": true
+        },
+        {
+          "label": "invalid preserves files setmodelprofileFalse",
+          "passed": true
+        },
+        {
+          "label": "invalid refused setmodelmirrorFalse",
+          "passed": true
+        },
+        {
+          "label": "invalid preserves files setmodelmirrorFalse",
+          "passed": true
+        },
+        {
+          "label": "invalid refused setmodelmirrorFalse",
+          "passed": true
+        },
+        {
+          "label": "invalid preserves files setmodelmirrorFalse",
+          "passed": true
+        },
+        {
+          "label": "invalid refused setmodelprofileTrue",
+          "passed": true
+        },
+        {
+          "label": "invalid preserves files setmodelprofileTrue",
+          "passed": true
+        },
+        {
+          "label": "invalid refused setmodelmirrorTrue",
+          "passed": true
+        },
+        {
+          "label": "invalid preserves files setmodelmirrorTrue",
+          "passed": true
+        },
+        {
+          "label": "invalid refused setmodelmirrorTrue",
+          "passed": true
+        },
+        {
+          "label": "invalid preserves files setmodelmirrorTrue",
+          "passed": true
+        },
+        {
+          "label": "direct refusal automatic_spend_atoms",
+          "passed": true
+        },
+        {
+          "label": "direct refusal preserves files automatic_spend_atoms",
+          "passed": true
+        },
+        {
+          "label": "direct refusal idempotency_key required",
+          "passed": true
+        },
+        {
+          "label": "direct refusal preserves files idempotency_key required",
+          "passed": true
+        },
+        {
+          "label": "direct refusal automatic_spend_atoms must remain 0",
+          "passed": true
+        },
+        {
+          "label": "direct refusal preserves files automatic_spend_atoms must remain 0",
+          "passed": true
+        },
+        {
+          "label": "read-only preserves files",
+          "passed": true
+        },
+        {
+          "label": "zero spend and unchanged chain",
+          "passed": true
+        }
+      ],
+      "node_rpc_shutdown_complete": true,
+      "cli_sha256_before_after": "7df7bf028340208b3b76f35dba4b64e10e9663c71707d1450684947a059392db",
+      "same_case_sha256": "8dea062709d904f67bf2b22300cbb72abe334ec3198e27e7b14b08503b5c174a"
+    }
+  },
+  "original_archives_and_binaries_unchanged": true,
+  "workflow_pass": true,
+  "paired_proof_pass": true,
+  "source_after-test": {
+    "head": "666673a3153225ba264c7870e0e82e354df86765",
+    "files": 14309,
+    "manifest_sha256": "c8497991392e27c28ffe00a22284413fb2863f1b9474a4a191dc95a11e5be2e0"
+  },
+  "cleanup": {
+    "before": [],
+    "signals": [],
+    "remaining": [],
+    "runtime_removed": true
+  },
+  "source_final": {
+    "head": "666673a3153225ba264c7870e0e82e354df86765",
+    "files": 14309,
+    "manifest_sha256": "c8497991392e27c28ffe00a22284413fb2863f1b9474a4a191dc95a11e5be2e0"
+  },
+  "qualification_pass": true
+}

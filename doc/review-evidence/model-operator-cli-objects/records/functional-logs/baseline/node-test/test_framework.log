@@ -1,0 +1,25 @@
+2026-11-06T09:59:29.202000Z TestFramework (INFO): PRNG seed is: 9164669400992317049
+2026-11-06T09:59:29.202000Z TestFramework (DEBUG): Setting up network thread
+2026-11-06T09:59:29.203000Z TestFramework (INFO): Initializing test directory /home/runner/work/btx/btx/operator-cli-repair-runtime/baseline/node-test
+2026-11-06T09:59:29.203000Z TestFramework.node0 (DEBUG): bitcoind started, waiting for RPC to come up
+2026-11-06T09:59:29.456000Z TestFramework.node0 (DEBUG): RPC successfully started
+2026-11-06T09:59:29.818000Z TestFramework.node0 (DEBUG): Stopping node
+2026-11-06T09:59:29.919000Z TestFramework.node0 (DEBUG): Node stopped
+2026-11-06T09:59:29.920000Z TestFramework (ERROR): Unexpected exception
+Traceback (most recent call last):
+  File "/home/runner/work/btx/btx/p2mr-parent-product/test/functional/test_framework/test_framework.py", line 142, in main
+    self.run_test()
+  File "/home/runner/work/btx/btx/contrib/devtools/operator-cli-repair/case.py", line 72, in run_test
+    assert rec['acceptance_pass'],'Operator CLI requirements failed: '+str([x['label'] for x in rec['requirements'] if not x['passed']])
+           ~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: Operator CLI requirements failed: ['profile object saved False', 'profile object saved True', 'mirror object saved False', 'keyed replay accepted False', 'key conflict reason False', 'mirror object saved True', 'keyed replay accepted True', 'key conflict reason True', 'specific rejection setmodelprofileautomatic_spend_atomsFalse', 'specific rejection setmodelmirrorautomatic_spend_atoms must remain 0False', 'specific rejection setmodelprofileautomatic_spend_atomsTrue', 'specific rejection setmodelmirrorautomatic_spend_atoms must remain 0True']
+2026-11-06T09:59:29.921000Z TestFramework (DEBUG): Closing down network thread
+2026-11-06T09:59:29.971000Z TestFramework (INFO): Not stopping nodes as test failed. The dangling processes will be cleaned up later.
+2026-11-06T09:59:29.971000Z TestFramework (WARNING): Not cleaning up dir /home/runner/work/btx/btx/operator-cli-repair-runtime/baseline/node-test
+2026-11-06T09:59:29.971000Z TestFramework (ERROR): Test failed. Test logging available at /home/runner/work/btx/btx/operator-cli-repair-runtime/baseline/node-test/test_framework.log
+2026-11-06T09:59:29.971000Z TestFramework (ERROR): 
+2026-11-06T09:59:29.972000Z TestFramework (ERROR): Hint: Call /home/runner/work/btx/btx/p2mr-parent-product/test/functional/combine_logs.py '/home/runner/work/btx/btx/operator-cli-repair-runtime/baseline/node-test' to consolidate all logs
+2026-11-06T09:59:29.972000Z TestFramework (ERROR): 
+2026-11-06T09:59:29.972000Z TestFramework (ERROR): If this failure happened unexpectedly or intermittently, please file a bug and provide a link or upload of the combined log.
+2026-11-06T09:59:29.972000Z TestFramework (ERROR): https://github.com/btxchain/btx/issues
+2026-11-06T09:59:29.972000Z TestFramework (ERROR): 

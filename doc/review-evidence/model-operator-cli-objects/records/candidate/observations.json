@@ -1,0 +1,1644 @@
+{
+  "cli": [
+    {
+      "label": "bare preset",
+      "method": "setmodelprofile",
+      "request": "custom",
+      "named": false,
+      "returncode": 0,
+      "stdout": "{\n  \"schema_version\": 1,\n  \"profile\": \"custom\",\n  \"relay\": false,\n  \"index\": false,\n  \"host_mode\": \"off\",\n  \"storage_arg\": \"auto\",\n  \"auto_cap_bytes\": 0,\n  \"upload_bps\": 0,\n  \"follow_peers\": true,\n  \"preserve_rare\": false,\n  \"seed\": \"auto\",\n  \"automatic_spend_atoms\": 0,\n  \"applied\": true,\n  \"runtime_apply\": \"QUEUED\",\n  \"note\": \"saved; helper loop applies storage and role policy on its next iteration; no execution or payment grant\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "bare preset",
+      "method": "setmodelprofile",
+      "request": "custom",
+      "named": true,
+      "returncode": 0,
+      "stdout": "{\n  \"schema_version\": 1,\n  \"profile\": \"custom\",\n  \"relay\": false,\n  \"index\": false,\n  \"host_mode\": \"off\",\n  \"storage_arg\": \"auto\",\n  \"auto_cap_bytes\": 0,\n  \"upload_bps\": 0,\n  \"follow_peers\": true,\n  \"preserve_rare\": false,\n  \"seed\": \"auto\",\n  \"automatic_spend_atoms\": 0,\n  \"applied\": true,\n  \"runtime_apply\": \"QUEUED\",\n  \"note\": \"saved; helper loop applies storage and role policy on its next iteration; no execution or payment grant\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "object profile",
+      "method": "setmodelprofile",
+      "request": {
+        "profile": "custom",
+        "storage_bytes": "4MiB",
+        "follow_peers": false,
+        "seed": "off",
+        "upload_bps": "1MiB",
+        "preserve_rare": false
+      },
+      "named": false,
+      "returncode": 0,
+      "stdout": "{\n  \"schema_version\": 1,\n  \"profile\": \"custom\",\n  \"relay\": false,\n  \"index\": false,\n  \"host_mode\": \"off\",\n  \"storage_arg\": \"4194304\",\n  \"auto_cap_bytes\": 0,\n  \"upload_bps\": 1048576,\n  \"follow_peers\": false,\n  \"preserve_rare\": false,\n  \"seed\": \"off\",\n  \"automatic_spend_atoms\": 0,\n  \"applied\": true,\n  \"runtime_apply\": \"QUEUED\",\n  \"note\": \"saved; helper loop applies storage and role policy on its next iteration; no execution or payment grant\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "object profile",
+      "method": "setmodelprofile",
+      "request": {
+        "profile": "custom",
+        "storage_bytes": "6MiB",
+        "follow_peers": false,
+        "seed": "off",
+        "upload_bps": "1MiB",
+        "preserve_rare": false
+      },
+      "named": true,
+      "returncode": 0,
+      "stdout": "{\n  \"schema_version\": 1,\n  \"profile\": \"custom\",\n  \"relay\": false,\n  \"index\": false,\n  \"host_mode\": \"off\",\n  \"storage_arg\": \"6291456\",\n  \"auto_cap_bytes\": 0,\n  \"upload_bps\": 1048576,\n  \"follow_peers\": false,\n  \"preserve_rare\": false,\n  \"seed\": \"off\",\n  \"automatic_spend_atoms\": 0,\n  \"applied\": true,\n  \"runtime_apply\": \"QUEUED\",\n  \"note\": \"saved; helper loop applies storage and role policy on its next iteration; no execution or payment grant\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "object mirror",
+      "method": "setmodelmirror",
+      "request": {
+        "publisher_id": "cli-False",
+        "keep_latest": 2,
+        "min_independent_origins": 2,
+        "automatic_spend_atoms": 0,
+        "idempotency_key": "retry=key/False"
+      },
+      "named": false,
+      "returncode": 0,
+      "stdout": "{\n  \"selectors\": [\n    {\n      \"publisher_id\": \"sentinel\",\n      \"collection_id\": \"\",\n      \"query\": \"\",\n      \"keep_latest\": 3,\n      \"min_independent_origins\": 3,\n      \"automatic_spend_atoms\": 0\n    },\n    {\n      \"publisher_id\": \"cli-False\",\n      \"collection_id\": \"\",\n      \"query\": \"\",\n      \"keep_latest\": 2,\n      \"min_independent_origins\": 2,\n      \"automatic_spend_atoms\": 0\n    }\n  ],\n  \"min_independent_origins\": 2,\n  \"automatic_spend_atoms\": 0,\n  \"schema_version\": 1,\n  \"role\": \"node\",\n  \"mirror_privilege\": false,\n  \"consensus\": false,\n  \"search_authority\": false,\n  \"profile\": \"custom\",\n  \"preserve_rare\": false,\n  \"fetch_fails_below_min\": false,\n  \"note\": \"mirror is a local keep/follow policy, not a monetary or consensus privilege\",\n  \"publisher_id\": \"cli-False\",\n  \"collection_id\": \"\",\n  \"query\": \"\",\n  \"keep_latest\": 2,\n  \"applied\": true\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "mirror replay",
+      "method": "setmodelmirror",
+      "request": {
+        "publisher_id": "cli-False",
+        "keep_latest": 2,
+        "min_independent_origins": 2,
+        "automatic_spend_atoms": 0,
+        "idempotency_key": "retry=key/False"
+      },
+      "named": false,
+      "returncode": 0,
+      "stdout": "{\n  \"selectors\": [\n    {\n      \"publisher_id\": \"sentinel\",\n      \"collection_id\": \"\",\n      \"query\": \"\",\n      \"keep_latest\": 3,\n      \"min_independent_origins\": 3,\n      \"automatic_spend_atoms\": 0\n    },\n    {\n      \"publisher_id\": \"cli-False\",\n      \"collection_id\": \"\",\n      \"query\": \"\",\n      \"keep_latest\": 2,\n      \"min_independent_origins\": 2,\n      \"automatic_spend_atoms\": 0\n    }\n  ],\n  \"min_independent_origins\": 2,\n  \"automatic_spend_atoms\": 0,\n  \"schema_version\": 1,\n  \"role\": \"node\",\n  \"mirror_privilege\": false,\n  \"consensus\": false,\n  \"search_authority\": false,\n  \"profile\": \"custom\",\n  \"preserve_rare\": false,\n  \"fetch_fails_below_min\": false,\n  \"note\": \"mirror is a local keep/follow policy, not a monetary or consensus privilege\",\n  \"publisher_id\": \"cli-False\",\n  \"collection_id\": \"\",\n  \"query\": \"\",\n  \"keep_latest\": 2,\n  \"applied\": true\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "mirror conflicting reuse",
+      "method": "setmodelmirror",
+      "request": {
+        "publisher_id": "cli-False",
+        "keep_latest": 7,
+        "min_independent_origins": 2,
+        "automatic_spend_atoms": 0,
+        "idempotency_key": "retry=key/False"
+      },
+      "named": false,
+      "returncode": 8,
+      "stdout": "",
+      "stderr": "error code: -8\nerror message:\nIDEMPOTENCY_CONFLICT: idempotency conflict\n"
+    },
+    {
+      "label": "object mirror",
+      "method": "setmodelmirror",
+      "request": {
+        "publisher_id": "cli-True",
+        "keep_latest": 2,
+        "min_independent_origins": 2,
+        "automatic_spend_atoms": 0,
+        "idempotency_key": "retry=key/True"
+      },
+      "named": true,
+      "returncode": 0,
+      "stdout": "{\n  \"selectors\": [\n    {\n      \"publisher_id\": \"sentinel\",\n      \"collection_id\": \"\",\n      \"query\": \"\",\n      \"keep_latest\": 3,\n      \"min_independent_origins\": 3,\n      \"automatic_spend_atoms\": 0\n    },\n    {\n      \"publisher_id\": \"cli-False\",\n      \"collection_id\": \"\",\n      \"query\": \"\",\n      \"keep_latest\": 2,\n      \"min_independent_origins\": 2,\n      \"automatic_spend_atoms\": 0\n    },\n    {\n      \"publisher_id\": \"cli-True\",\n      \"collection_id\": \"\",\n      \"query\": \"\",\n      \"keep_latest\": 2,\n      \"min_independent_origins\": 2,\n      \"automatic_spend_atoms\": 0\n    }\n  ],\n  \"min_independent_origins\": 2,\n  \"automatic_spend_atoms\": 0,\n  \"schema_version\": 1,\n  \"role\": \"node\",\n  \"mirror_privilege\": false,\n  \"consensus\": false,\n  \"search_authority\": false,\n  \"profile\": \"custom\",\n  \"preserve_rare\": false,\n  \"fetch_fails_below_min\": false,\n  \"note\": \"mirror is a local keep/follow policy, not a monetary or consensus privilege\",\n  \"publisher_id\": \"cli-True\",\n  \"collection_id\": \"\",\n  \"query\": \"\",\n  \"keep_latest\": 2,\n  \"applied\": true\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "mirror replay",
+      "method": "setmodelmirror",
+      "request": {
+        "publisher_id": "cli-True",
+        "keep_latest": 2,
+        "min_independent_origins": 2,
+        "automatic_spend_atoms": 0,
+        "idempotency_key": "retry=key/True"
+      },
+      "named": true,
+      "returncode": 0,
+      "stdout": "{\n  \"selectors\": [\n    {\n      \"publisher_id\": \"sentinel\",\n      \"collection_id\": \"\",\n      \"query\": \"\",\n      \"keep_latest\": 3,\n      \"min_independent_origins\": 3,\n      \"automatic_spend_atoms\": 0\n    },\n    {\n      \"publisher_id\": \"cli-False\",\n      \"collection_id\": \"\",\n      \"query\": \"\",\n      \"keep_latest\": 2,\n      \"min_independent_origins\": 2,\n      \"automatic_spend_atoms\": 0\n    },\n    {\n      \"publisher_id\": \"cli-True\",\n      \"collection_id\": \"\",\n      \"query\": \"\",\n      \"keep_latest\": 2,\n      \"min_independent_origins\": 2,\n      \"automatic_spend_atoms\": 0\n    }\n  ],\n  \"min_independent_origins\": 2,\n  \"automatic_spend_atoms\": 0,\n  \"schema_version\": 1,\n  \"role\": \"node\",\n  \"mirror_privilege\": false,\n  \"consensus\": false,\n  \"search_authority\": false,\n  \"profile\": \"custom\",\n  \"preserve_rare\": false,\n  \"fetch_fails_below_min\": false,\n  \"note\": \"mirror is a local keep/follow policy, not a monetary or consensus privilege\",\n  \"publisher_id\": \"cli-True\",\n  \"collection_id\": \"\",\n  \"query\": \"\",\n  \"keep_latest\": 2,\n  \"applied\": true\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "mirror conflicting reuse",
+      "method": "setmodelmirror",
+      "request": {
+        "publisher_id": "cli-True",
+        "keep_latest": 7,
+        "min_independent_origins": 2,
+        "automatic_spend_atoms": 0,
+        "idempotency_key": "retry=key/True"
+      },
+      "named": true,
+      "returncode": 8,
+      "stdout": "",
+      "stderr": "error code: -8\nerror message:\nIDEMPOTENCY_CONFLICT: idempotency conflict\n"
+    },
+    {
+      "label": "invalid automatic_spend_atoms",
+      "method": "setmodelprofile",
+      "request": {
+        "profile": "custom",
+        "storage_bytes": "8MiB",
+        "follow_peers": false,
+        "seed": "off",
+        "upload_bps": "1MiB",
+        "preserve_rare": false,
+        "automatic_spend_atoms": 1
+      },
+      "named": false,
+      "returncode": 8,
+      "stdout": "",
+      "stderr": "error code: -8\nerror message:\nINVALID_PARAMETER: automatic_spend_atoms must remain zero\n"
+    },
+    {
+      "label": "invalid idempotency_key required",
+      "method": "setmodelmirror",
+      "request": {
+        "publisher_id": "invalid-no-key",
+        "keep_latest": 5
+      },
+      "named": false,
+      "returncode": 8,
+      "stdout": "",
+      "stderr": "error code: -8\nerror message:\nINVALID_PARAMETER: idempotency_key required\n"
+    },
+    {
+      "label": "invalid automatic_spend_atoms must remain 0",
+      "method": "setmodelmirror",
+      "request": {
+        "publisher_id": "invalid-spend",
+        "keep_latest": 5,
+        "automatic_spend_atoms": 1,
+        "idempotency_key": "spend-False"
+      },
+      "named": false,
+      "returncode": 8,
+      "stdout": "",
+      "stderr": "error code: -8\nerror message:\nINVALID_PARAMETER: automatic_spend_atoms must remain 0\n"
+    },
+    {
+      "label": "invalid automatic_spend_atoms",
+      "method": "setmodelprofile",
+      "request": {
+        "profile": "custom",
+        "storage_bytes": "8MiB",
+        "follow_peers": false,
+        "seed": "off",
+        "upload_bps": "1MiB",
+        "preserve_rare": false,
+        "automatic_spend_atoms": 1
+      },
+      "named": true,
+      "returncode": 8,
+      "stdout": "",
+      "stderr": "error code: -8\nerror message:\nINVALID_PARAMETER: automatic_spend_atoms must remain zero\n"
+    },
+    {
+      "label": "invalid idempotency_key required",
+      "method": "setmodelmirror",
+      "request": {
+        "publisher_id": "invalid-no-key",
+        "keep_latest": 5
+      },
+      "named": true,
+      "returncode": 8,
+      "stdout": "",
+      "stderr": "error code: -8\nerror message:\nINVALID_PARAMETER: idempotency_key required\n"
+    },
+    {
+      "label": "invalid automatic_spend_atoms must remain 0",
+      "method": "setmodelmirror",
+      "request": {
+        "publisher_id": "invalid-spend",
+        "keep_latest": 5,
+        "automatic_spend_atoms": 1,
+        "idempotency_key": "spend-True"
+      },
+      "named": true,
+      "returncode": 8,
+      "stdout": "",
+      "stderr": "error code: -8\nerror message:\nINVALID_PARAMETER: automatic_spend_atoms must remain 0\n"
+    },
+    {
+      "label": "read-only profile",
+      "method": "getmodelprofile",
+      "request": null,
+      "named": false,
+      "returncode": 0,
+      "stdout": "{\n  \"schema_version\": 1,\n  \"profile\": \"custom\",\n  \"relay\": false,\n  \"index\": false,\n  \"host_mode\": \"off\",\n  \"storage_arg\": \"6291456\",\n  \"auto_cap_bytes\": 0,\n  \"upload_bps\": 1048576,\n  \"follow_peers\": false,\n  \"preserve_rare\": false,\n  \"seed\": \"off\",\n  \"automatic_spend_atoms\": 0,\n  \"note\": \"preset only; no monetary, search, consensus, or bounty privilege\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "read-only mirror",
+      "method": "getmodelmirror",
+      "request": null,
+      "named": false,
+      "returncode": 0,
+      "stdout": "{\n  \"selectors\": [\n    {\n      \"publisher_id\": \"sentinel\",\n      \"collection_id\": \"\",\n      \"query\": \"\",\n      \"keep_latest\": 3,\n      \"min_independent_origins\": 3,\n      \"automatic_spend_atoms\": 0\n    },\n    {\n      \"publisher_id\": \"cli-False\",\n      \"collection_id\": \"\",\n      \"query\": \"\",\n      \"keep_latest\": 2,\n      \"min_independent_origins\": 2,\n      \"automatic_spend_atoms\": 0\n    },\n    {\n      \"publisher_id\": \"cli-True\",\n      \"collection_id\": \"\",\n      \"query\": \"\",\n      \"keep_latest\": 2,\n      \"min_independent_origins\": 2,\n      \"automatic_spend_atoms\": 0\n    }\n  ],\n  \"min_independent_origins\": 2,\n  \"automatic_spend_atoms\": 0,\n  \"schema_version\": 1,\n  \"role\": \"node\",\n  \"mirror_privilege\": false,\n  \"consensus\": false,\n  \"search_authority\": false,\n  \"profile\": \"custom\",\n  \"preserve_rare\": false,\n  \"fetch_fails_below_min\": false,\n  \"note\": \"mirror is a local keep/follow policy, not a monetary or consensus privilege\"\n}\n",
+      "stderr": ""
+    }
+  ],
+  "requirements": [
+    {
+      "label": "profile object saved False",
+      "passed": true
+    },
+    {
+      "label": "profile object saved True",
+      "passed": true
+    },
+    {
+      "label": "mirror object saved False",
+      "passed": true
+    },
+    {
+      "label": "keyed replay accepted False",
+      "passed": true
+    },
+    {
+      "label": "key conflict reason False",
+      "passed": true
+    },
+    {
+      "label": "mirror object saved True",
+      "passed": true
+    },
+    {
+      "label": "keyed replay accepted True",
+      "passed": true
+    },
+    {
+      "label": "key conflict reason True",
+      "passed": true
+    },
+    {
+      "label": "specific rejection setmodelprofileautomatic_spend_atomsFalse",
+      "passed": true
+    },
+    {
+      "label": "specific rejection setmodelmirroridempotency_key requiredFalse",
+      "passed": true
+    },
+    {
+      "label": "specific rejection setmodelmirrorautomatic_spend_atoms must remain 0False",
+      "passed": true
+    },
+    {
+      "label": "specific rejection setmodelprofileautomatic_spend_atomsTrue",
+      "passed": true
+    },
+    {
+      "label": "specific rejection setmodelmirroridempotency_key requiredTrue",
+      "passed": true
+    },
+    {
+      "label": "specific rejection setmodelmirrorautomatic_spend_atoms must remain 0True",
+      "passed": true
+    }
+  ],
+  "controls": [
+    {
+      "label": "bare custom accepted False",
+      "passed": true
+    },
+    {
+      "label": "bare custom accepted True",
+      "passed": true
+    },
+    {
+      "label": "direct profile and quota False",
+      "passed": true
+    },
+    {
+      "label": "direct profile and quota True",
+      "passed": true
+    },
+    {
+      "label": "sentinel preserved False",
+      "passed": true
+    },
+    {
+      "label": "replay never rewrites False",
+      "passed": true
+    },
+    {
+      "label": "conflict preserves files False",
+      "passed": true
+    },
+    {
+      "label": "sentinel preserved True",
+      "passed": true
+    },
+    {
+      "label": "replay never rewrites True",
+      "passed": true
+    },
+    {
+      "label": "conflict preserves files True",
+      "passed": true
+    },
+    {
+      "label": "invalid refused setmodelprofileFalse",
+      "passed": true
+    },
+    {
+      "label": "invalid preserves files setmodelprofileFalse",
+      "passed": true
+    },
+    {
+      "label": "invalid refused setmodelmirrorFalse",
+      "passed": true
+    },
+    {
+      "label": "invalid preserves files setmodelmirrorFalse",
+      "passed": true
+    },
+    {
+      "label": "invalid refused setmodelmirrorFalse",
+      "passed": true
+    },
+    {
+      "label": "invalid preserves files setmodelmirrorFalse",
+      "passed": true
+    },
+    {
+      "label": "invalid refused setmodelprofileTrue",
+      "passed": true
+    },
+    {
+      "label": "invalid preserves files setmodelprofileTrue",
+      "passed": true
+    },
+    {
+      "label": "invalid refused setmodelmirrorTrue",
+      "passed": true
+    },
+    {
+      "label": "invalid preserves files setmodelmirrorTrue",
+      "passed": true
+    },
+    {
+      "label": "invalid refused setmodelmirrorTrue",
+      "passed": true
+    },
+    {
+      "label": "invalid preserves files setmodelmirrorTrue",
+      "passed": true
+    },
+    {
+      "label": "direct refusal automatic_spend_atoms",
+      "passed": true
+    },
+    {
+      "label": "direct refusal preserves files automatic_spend_atoms",
+      "passed": true
+    },
+    {
+      "label": "direct refusal idempotency_key required",
+      "passed": true
+    },
+    {
+      "label": "direct refusal preserves files idempotency_key required",
+      "passed": true
+    },
+    {
+      "label": "direct refusal automatic_spend_atoms must remain 0",
+      "passed": true
+    },
+    {
+      "label": "direct refusal preserves files automatic_spend_atoms must remain 0",
+      "passed": true
+    },
+    {
+      "label": "read-only preserves files",
+      "passed": true
+    },
+    {
+      "label": "zero spend and unchanged chain",
+      "passed": true
+    }
+  ],
+  "snapshots": {
+    "profile-before-False": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "8388608",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "73dd7269df938111696aafc6db831fbd66d20e1c42adb6f45c024a3af6610050",
+        "mtime_ns": 1793959170582340133
+      }
+    },
+    "profile-before-True": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "4194304",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "858001435275daaa52a441caaf334841966be9618bfa5ccd55fdb34c0c1e346a",
+        "mtime_ns": 1793959170590827829
+      }
+    },
+    "mirror-before-False": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 3,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "4090e4fe51389587f62c79de66525b75ab393ebd98f79d8824dc91eebc644b77",
+        "mtime_ns": 1793959170601923954
+      }
+    },
+    "replay-before-False": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-False",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 2,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "cdf3f13bda6f50aa1664d4313ae57e7dab6bfc9b4d98aa7ea91cbc2efb8e51c1",
+        "mtime_ns": 1000000000
+      }
+    },
+    "replay-after-False": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-False",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 2,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "cdf3f13bda6f50aa1664d4313ae57e7dab6bfc9b4d98aa7ea91cbc2efb8e51c1",
+        "mtime_ns": 1000000000
+      }
+    },
+    "conflict-after-False": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-False",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 2,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "cdf3f13bda6f50aa1664d4313ae57e7dab6bfc9b4d98aa7ea91cbc2efb8e51c1",
+        "mtime_ns": 1000000000
+      }
+    },
+    "mirror-before-True": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-False",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 2,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "cdf3f13bda6f50aa1664d4313ae57e7dab6bfc9b4d98aa7ea91cbc2efb8e51c1",
+        "mtime_ns": 1000000000
+      }
+    },
+    "replay-before-True": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-False",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-True",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 2,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "7b4af8117a4908ab588cd21bfafb5bb6e6179092f2a3c045653a991e0c79f528",
+        "mtime_ns": 1000000000
+      }
+    },
+    "replay-after-True": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-False",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-True",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 2,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "7b4af8117a4908ab588cd21bfafb5bb6e6179092f2a3c045653a991e0c79f528",
+        "mtime_ns": 1000000000
+      }
+    },
+    "conflict-after-True": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-False",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-True",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 2,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "7b4af8117a4908ab588cd21bfafb5bb6e6179092f2a3c045653a991e0c79f528",
+        "mtime_ns": 1000000000
+      }
+    },
+    "invalid-cli-before": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-False",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-True",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 2,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "7b4af8117a4908ab588cd21bfafb5bb6e6179092f2a3c045653a991e0c79f528",
+        "mtime_ns": 1000000000
+      }
+    },
+    "invalid-after-11": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-False",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-True",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 2,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "7b4af8117a4908ab588cd21bfafb5bb6e6179092f2a3c045653a991e0c79f528",
+        "mtime_ns": 1000000000
+      }
+    },
+    "invalid-after-12": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-False",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-True",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 2,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "7b4af8117a4908ab588cd21bfafb5bb6e6179092f2a3c045653a991e0c79f528",
+        "mtime_ns": 1000000000
+      }
+    },
+    "invalid-after-13": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-False",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-True",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 2,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "7b4af8117a4908ab588cd21bfafb5bb6e6179092f2a3c045653a991e0c79f528",
+        "mtime_ns": 1000000000
+      }
+    },
+    "invalid-after-14": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-False",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-True",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 2,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "7b4af8117a4908ab588cd21bfafb5bb6e6179092f2a3c045653a991e0c79f528",
+        "mtime_ns": 1000000000
+      }
+    },
+    "invalid-after-15": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-False",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-True",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 2,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "7b4af8117a4908ab588cd21bfafb5bb6e6179092f2a3c045653a991e0c79f528",
+        "mtime_ns": 1000000000
+      }
+    },
+    "invalid-after-16": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-False",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-True",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 2,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "7b4af8117a4908ab588cd21bfafb5bb6e6179092f2a3c045653a991e0c79f528",
+        "mtime_ns": 1000000000
+      }
+    },
+    "before-direct-automatic_spend_atoms": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-False",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-True",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 2,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "7b4af8117a4908ab588cd21bfafb5bb6e6179092f2a3c045653a991e0c79f528",
+        "mtime_ns": 1000000000
+      }
+    },
+    "after-direct-automatic_spend_atoms": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-False",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-True",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 2,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "7b4af8117a4908ab588cd21bfafb5bb6e6179092f2a3c045653a991e0c79f528",
+        "mtime_ns": 1000000000
+      }
+    },
+    "before-direct-idempotency_key required": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-False",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-True",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 2,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "7b4af8117a4908ab588cd21bfafb5bb6e6179092f2a3c045653a991e0c79f528",
+        "mtime_ns": 1000000000
+      }
+    },
+    "after-direct-idempotency_key required": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-False",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-True",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 2,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "7b4af8117a4908ab588cd21bfafb5bb6e6179092f2a3c045653a991e0c79f528",
+        "mtime_ns": 1000000000
+      }
+    },
+    "before-direct-automatic_spend_atoms must remain 0": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-False",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-True",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 2,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "7b4af8117a4908ab588cd21bfafb5bb6e6179092f2a3c045653a991e0c79f528",
+        "mtime_ns": 1000000000
+      }
+    },
+    "after-direct-automatic_spend_atoms must remain 0": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-False",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-True",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 2,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "7b4af8117a4908ab588cd21bfafb5bb6e6179092f2a3c045653a991e0c79f528",
+        "mtime_ns": 1000000000
+      }
+    },
+    "readonly-before": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-False",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-True",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 2,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "7b4af8117a4908ab588cd21bfafb5bb6e6179092f2a3c045653a991e0c79f528",
+        "mtime_ns": 1000000000
+      }
+    },
+    "readonly-after": {
+      "operator_profile.json": {
+        "json": {
+          "schema_version": 1,
+          "profile": "custom",
+          "relay": false,
+          "index": false,
+          "host_mode": "off",
+          "storage_arg": "6291456",
+          "auto_cap_bytes": 0,
+          "upload_bps": 1048576,
+          "follow_peers": false,
+          "preserve_rare": false,
+          "seed": "off"
+        },
+        "sha256": "c70adba16fbad521382dce68a4bc42097402d301fc8e615b4060b144f9e9f8d9",
+        "mtime_ns": 1793959170599581773
+      },
+      "mirror.json": {
+        "json": {
+          "selectors": [
+            {
+              "publisher_id": "sentinel",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 3,
+              "min_independent_origins": 3,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-False",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            },
+            {
+              "publisher_id": "cli-True",
+              "collection_id": "",
+              "query": "",
+              "keep_latest": 2,
+              "min_independent_origins": 2,
+              "automatic_spend_atoms": 0
+            }
+          ],
+          "min_independent_origins": 2,
+          "automatic_spend_atoms": 0
+        },
+        "sha256": "7b4af8117a4908ab588cd21bfafb5bb6e6179092f2a3c045653a991e0c79f528",
+        "mtime_ns": 1000000000
+      }
+    }
+  },
+  "controls_complete": true,
+  "acceptance_pass": true,
+  "helper_returncode": 0,
+  "node_rpc_shutdown_complete": true,
+  "helper_socket_after_stop": false
+}
