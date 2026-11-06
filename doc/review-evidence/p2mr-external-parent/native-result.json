@@ -1,0 +1,411 @@
+{
+  "base": "666673a3153225ba264c7870e0e82e354df86765",
+  "commands": [
+    {
+      "label": "cmake-version",
+      "args": [
+        "cmake",
+        "--version"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 2.05,
+      "stop": null,
+      "log": "cmake-version.log"
+    },
+    {
+      "label": "python-version",
+      "args": [
+        "python3",
+        "--version"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "python-version.log"
+    },
+    {
+      "label": "gcc-version",
+      "args": [
+        "g++-13",
+        "--version"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.04,
+      "stop": null,
+      "log": "gcc-version.log"
+    },
+    {
+      "label": "cmake-preinstalled",
+      "args": [
+        "cmake",
+        "--version"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "cmake-preinstalled.log"
+    },
+    {
+      "label": "apt-update",
+      "args": [
+        "sudo",
+        "apt-get",
+        "update"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 6.0,
+      "stop": null,
+      "log": "apt-update.log"
+    },
+    {
+      "label": "apt-install",
+      "args": [
+        "sudo",
+        "apt-get",
+        "-o",
+        "Acquire::http::Timeout=30",
+        "-o",
+        "Acquire::https::Timeout=30",
+        "-o",
+        "Acquire::Retries=1",
+        "install",
+        "-y",
+        "--no-install-recommends",
+        "build-essential",
+        "gcc-13",
+        "g++-13",
+        "ninja-build",
+        "pkgconf",
+        "python3",
+        "libevent-dev",
+        "libboost-dev",
+        "libsqlite3-dev",
+        "libzmq3-dev",
+        "ccache"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 414.08,
+      "stop": null,
+      "log": "apt-install.log"
+    },
+    {
+      "label": "dependency-versions",
+      "args": [
+        "dpkg-query",
+        "-W",
+        "gcc-13",
+        "g++-13",
+        "ninja-build",
+        "python3",
+        "libevent-dev",
+        "libboost-dev",
+        "libsqlite3-dev",
+        "libzmq3-dev",
+        "ccache"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "dependency-versions.log"
+    },
+    {
+      "label": "openssl-configure",
+      "args": [
+        "perl",
+        "Configure",
+        "linux-x86_64",
+        "--prefix=/home/runner/work/btx/btx/p2mr-parent-native/openssl",
+        "--libdir=lib",
+        "no-shared",
+        "no-tests",
+        "no-docs",
+        "-fPIC"
+      ],
+      "cwd": "/home/runner/work/btx/btx/p2mr-parent-native/openssl-3.5.9",
+      "returncode": 0,
+      "seconds": 7.0,
+      "stop": null,
+      "log": "openssl-configure.log"
+    },
+    {
+      "label": "openssl-build",
+      "args": [
+        "make",
+        "-j2"
+      ],
+      "cwd": "/home/runner/work/btx/btx/p2mr-parent-native/openssl-3.5.9",
+      "returncode": 0,
+      "seconds": 87.02,
+      "stop": null,
+      "log": "openssl-build.log"
+    },
+    {
+      "label": "openssl-install",
+      "args": [
+        "make",
+        "install_sw"
+      ],
+      "cwd": "/home/runner/work/btx/btx/p2mr-parent-native/openssl-3.5.9",
+      "returncode": 0,
+      "seconds": 2.0,
+      "stop": null,
+      "log": "openssl-install.log"
+    },
+    {
+      "label": "openssl-version",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/openssl/bin/openssl",
+        "version",
+        "-a"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "openssl-version.log"
+    },
+    {
+      "label": "openssl-kem",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/openssl/bin/openssl",
+        "list",
+        "-kem-algorithms"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "openssl-kem.log"
+    },
+    {
+      "label": "openssl-signatures",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/openssl/bin/openssl",
+        "list",
+        "-signature-algorithms"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "openssl-signatures.log"
+    },
+    {
+      "label": "root-configure",
+      "args": [
+        "cmake",
+        "-S",
+        "/home/runner/work/btx/btx/p2mr-parent-product",
+        "-B",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build",
+        "-G",
+        "Ninja",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_C_COMPILER=gcc-13",
+        "-DCMAKE_CXX_COMPILER=g++-13",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+        "-DCMAKE_C_FLAGS_RELEASE=-O1 -DNDEBUG",
+        "-DCMAKE_CXX_FLAGS_RELEASE=-O1 -DNDEBUG",
+        "-DBUILD_DAEMON=ON",
+        "-DBUILD_CLI=ON",
+        "-DBUILD_UTIL=ON",
+        "-DWITH_MODELNET=ON",
+        "-DBUILD_GUI=OFF",
+        "-DENABLE_WALLET=ON",
+        "-DBUILD_TESTS=OFF",
+        "-DBUILD_BENCH=OFF",
+        "-DBUILD_TX=OFF",
+        "-DBUILD_FUZZ_BINARY=OFF",
+        "-DWITH_CCACHE=ON",
+        "-DCMAKE_C_COMPILER_LAUNCHER=ccache",
+        "-DCMAKE_CXX_COMPILER_LAUNCHER=ccache",
+        "-DWITH_SQLITE=ON",
+        "-DWITH_ZMQ=ON",
+        "-DOPENSSL_USE_STATIC_LIBS=ON",
+        "-DOPENSSL_ROOT_DIR=/home/runner/work/btx/btx/p2mr-parent-native/openssl",
+        "-DOPENSSL_INCLUDE_DIR=/home/runner/work/btx/btx/p2mr-parent-native/openssl/include",
+        "-DOPENSSL_SSL_LIBRARY=/home/runner/work/btx/btx/p2mr-parent-native/openssl/lib/libssl.a",
+        "-DOPENSSL_CRYPTO_LIBRARY=/home/runner/work/btx/btx/p2mr-parent-native/openssl/lib/libcrypto.a"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 18.0,
+      "stop": null,
+      "log": "root-configure.log"
+    },
+    {
+      "label": "root-build-plan",
+      "args": [
+        "ninja",
+        "-C",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build",
+        "-n",
+        "btxd",
+        "btx-cli"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "root-build-plan.log"
+    },
+    {
+      "label": "root-build",
+      "args": [
+        "cmake",
+        "--build",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build",
+        "--target",
+        "btxd",
+        "btx-cli",
+        "--parallel",
+        "2"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1663.36,
+      "stop": null,
+      "log": "root-build.log"
+    },
+    {
+      "label": "ldd-btxd",
+      "args": [
+        "ldd",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build/bin/btxd"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "ldd-btxd.log"
+    },
+    {
+      "label": "ldd-btx-cli",
+      "args": [
+        "ldd",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build/bin/btx-cli"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "ldd-btx-cli.log"
+    },
+    {
+      "label": "ccache-stats",
+      "args": [
+        "ccache",
+        "--show-stats"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 1.0,
+      "stop": null,
+      "log": "ccache-stats.log"
+    },
+    {
+      "label": "supplied-parent-psbt",
+      "args": [
+        "python3",
+        "/home/runner/work/btx/btx/contrib/devtools/p2mr-parent/wallet_p2mr_external_parent.py",
+        "--configfile=/home/runner/work/btx/btx/p2mr-parent-native/build/test/config.ini",
+        "--tmpdir=/home/runner/work/btx/btx/p2mr-parent-runtime/case",
+        "--cachedir=/home/runner/work/btx/btx/p2mr-parent-runtime/cache",
+        "--portseed=41931",
+        "--nocleanup"
+      ],
+      "cwd": "None",
+      "returncode": 0,
+      "seconds": 8.0,
+      "stop": null,
+      "log": "supplied-parent-psbt.log"
+    }
+  ],
+  "errors": [],
+  "phases": {
+    "preflight": "pass",
+    "dependencies": "pass",
+    "openssl": "pass",
+    "configure": "pass",
+    "build": "pass",
+    "test": "pass"
+  },
+  "runner": {
+    "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+    "cpu": 4,
+    "run_id": "42146725797",
+    "fixture_head": "e3448966863a11539e743b9925a83915235740d5"
+  },
+  "source_before": {
+    "head": "666673a3153225ba264c7870e0e82e354df86765",
+    "files": 14309,
+    "manifest_sha256": "c8497991392e27c28ffe00a22284413fb2863f1b9474a4a191dc95a11e5be2e0"
+  },
+  "openssl": {
+    "version": "3.5.9",
+    "source_sha256": "603f5602e2eef00d77fbd429d34dcd5822bb301757a1bc9cdb24c670f1eb859a",
+    "prefix": "/home/runner/work/btx/btx/p2mr-parent-native/openssl",
+    "files": {
+      "bin/openssl": "9dc41ee8282d192a1e79c300d5ecfe902bb1bb4bfc9f594e0aab6b0ac92b2782",
+      "lib/libssl.a": "f355167951857505b5b0305fd2e8ea8f224fa29d780211175d32767b07234727",
+      "lib/libcrypto.a": "7c081f992c18a6f2f6a735385e58250ccd67c4e8094bb508c1f20346f882503f",
+      "include/openssl/opensslv.h": "9647fc99758cf83e3bcf11ae310894fd4911ad62bff22d8213a614df89cfedda"
+    }
+  },
+  "binaries": {
+    "btxd": {
+      "path": "/home/runner/work/btx/btx/p2mr-parent-native/build/bin/btxd",
+      "sha256": "4ad63b64f6d6bab34f5ba92518dc8955ee2e263e0daa4d739f27ec868fce0ae1",
+      "bytes": 56599104
+    },
+    "btx-cli": {
+      "path": "/home/runner/work/btx/btx/p2mr-parent-native/build/bin/btx-cli",
+      "sha256": "b71061e57a9224d86ef2f17da1914f3b68ffe91b696282151c0aba9e12caa5b8",
+      "bytes": 18961888
+    }
+  },
+  "source_after-build": {
+    "head": "666673a3153225ba264c7870e0e82e354df86765",
+    "files": 14309,
+    "manifest_sha256": "c8497991392e27c28ffe00a22284413fb2863f1b9474a4a191dc95a11e5be2e0"
+  },
+  "test_identity": {
+    "harness_sha256": "8341a31754471e79851468db0cc18788f8507c9388046f6dc78f9e060b7c69cd",
+    "source": "666673a3153225ba264c7870e0e82e354df86765",
+    "wallet": true,
+    "product_changes": false,
+    "profile": "wallet-only regtest, accepted multiparty test MatMul knobs; no validation acceptance claim"
+  },
+  "required_markers": {
+    "utxoupdatepsbt: exact spent output supplied, wallet signed and finalized": true,
+    "descriptorprocesspsbt: exact spent output supplied, wallet signed and finalized": true,
+    "Both supplied-parent routes passed; parent and child confirmed": true,
+    "Tests successful": true
+  },
+  "workflow_pass": true,
+  "source_after-test": {
+    "head": "666673a3153225ba264c7870e0e82e354df86765",
+    "files": 14309,
+    "manifest_sha256": "c8497991392e27c28ffe00a22284413fb2863f1b9474a4a191dc95a11e5be2e0"
+  },
+  "cleanup": {
+    "before": [],
+    "signals": [],
+    "remaining": [],
+    "owned_runtime_removed": true
+  },
+  "source_final": {
+    "head": "666673a3153225ba264c7870e0e82e354df86765",
+    "files": 14309,
+    "manifest_sha256": "c8497991392e27c28ffe00a22284413fb2863f1b9474a4a191dc95a11e5be2e0"
+  },
+  "final_free_bytes": 90931761152,
+  "qualification_pass": true
+}
