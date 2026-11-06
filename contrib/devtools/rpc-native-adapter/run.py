@@ -184,7 +184,12 @@ def build(label):
     graph = command(['ninja', '-C', BUILD, '-t', 'commands', 'test_btx'],
                     'command-graph-' + label, timeout=60)
     lines = graph.splitlines()
-    assert len(lines) <= 1200, 'Unexpectedly broad native command graph'
+    # The transitive graph includes thousands of PQ/backend dependency edges;
+    # bound the executable's own compilation roster, not all cached prerequisites.
+    test_commands = [line for line in lines if 'test_btx.dir' in line and ' -c ' in line]
+    assert len(test_commands) == len(TEST_SOURCES), 'Unexpected test executable source roster'
+    STATE.setdefault('build_graph_sizes', {})[label] = len(lines)
+    save()
     for name in TEST_SOURCES:
         matches = [line for line in lines if str(PRODUCT / name) in line
                    and 'test_btx.dir' in line and ' -c ' in line]
