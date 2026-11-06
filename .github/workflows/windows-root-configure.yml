@@ -165,7 +165,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Same three cases fail on cached baseline
+    - name: Verify preserved three-case baseline failures by identity
       id: cases
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64

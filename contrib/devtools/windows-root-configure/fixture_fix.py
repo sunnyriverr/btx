@@ -55,6 +55,18 @@ def baseline():
     R['baseline_inventory_sha256'] = sha(s.E / 'baseline-fixture-inventory.log')
     R['unit_data'] = 'D:/fp' + os.environ['GITHUB_RUN_ID']; s.save()
     assert not Path(R['unit_data']).exists()
+    if I.get('reuse_baseline'):
+        prior = I['reuse_baseline']
+        assert R['baseline_inventory_sha256'] == prior['inventory_sha256']
+        assert prior['binary_sha256'] == I['baseline_binary_sha256']
+        assert prior['source'] == I['integration_base']
+        assert prior['selectors'] == CASES
+        assert prior['result']['state'] == 'failed'
+        assert all(prior['result']['cases'][k]['result'] in ('failed', 'aborted') for k in CASES)
+        R.setdefault('fixture_cases', {})['baseline-three'] = prior['result']
+        R['baseline_reused_from_run'] = prior['run']
+        R['baseline_verified'] = True; R['status'] = 'BASELINE_THREE_FAIL'; s.save()
+        return
     mapped()
     try:
         result, log = cases('baseline-three', CASES)
@@ -89,7 +101,14 @@ def build():
     entries = json.loads((s.BUILD / 'compile_commands.json').read_text())
     R['fixture_compile_commands'] = [x for x in entries if x['file'].replace('\\', '/').endswith('/src/test/util/setup_common.cpp')]
     assert len(R['fixture_compile_commands']) == 1
-    s.need('fixture-unit-plan', ['ninja', '-C', str(s.BUILD), '-n', '-d', 'explain', 'test_btx'], 60)
+    # Existing verified-resume recipe: byte-identical manifest/rules, no new
+    # CMake input or file-list change. Only the one existing C++ file differs.
+    manifest = s.E / 'fixture-verified.ninja'
+    shutil.copyfile(s.BUILD / 'build.ninja', manifest)
+    assert sha(manifest) == R['original_config']['build.ninja']
+    R['frozen_manifest_sha256'] = sha(manifest)
+    common = ['ninja', '-C', str(s.BUILD), '-f', str(manifest)]
+    s.need('fixture-unit-plan', common + ['-n', '-d', 'explain', 'test_btx'], 60)
     plan = (s.E / 'fixture-unit-plan.log').read_text(errors='replace')
     steps = re.findall(r'^\[(\d+)/(\d+)\]', plan, re.M)
     R['fixture_planned_steps'] = int(steps[-1][1]) if steps else 0
@@ -98,7 +117,7 @@ def build():
     R['fixture_planned_objects'] = re.findall(r'Building CXX object ([^\r\n]+\.obj)', plan)
     assert any('setup_common.cpp.obj' in x for x in R['fixture_planned_objects'])
     R['status'] = 'FIXTURE_BUILDING'; s.save()
-    s.need('fixture-unit-build', ['cmake', '--build', str(s.BUILD), '--target', 'test_btx', '--parallel', '4', '--', '-k', '1'], 900)
+    s.need('fixture-unit-build', common + ['-j', '4', '-k', '1', 'test_btx'], 900)
     for name, value in R['original_config'].items(): assert sha(s.BUILD / name) == value, name
     R['candidate_binary_sha256'] = sha(s.BUILD / 'bin/test_btx.exe')
     assert R['candidate_binary_sha256'] != I['baseline_binary_sha256']
