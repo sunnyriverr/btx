@@ -1,0 +1,584 @@
+{
+  "commands": [
+    {
+      "label": "apt-update",
+      "args": [
+        "sudo",
+        "apt-get",
+        "-o",
+        "Acquire::Retries=1",
+        "update"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 8.0
+    },
+    {
+      "label": "apt-install",
+      "args": [
+        "sudo",
+        "apt-get",
+        "install",
+        "-y",
+        "--no-install-recommends",
+        "g++-13",
+        "ninja-build",
+        "pkgconf",
+        "libevent-dev",
+        "libboost-dev",
+        "libsqlite3-dev",
+        "libzmq3-dev",
+        "ccache"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 15.0
+    },
+    {
+      "label": "compiler",
+      "args": [
+        "g++-13",
+        "--version"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 1.01
+    },
+    {
+      "label": "configure-current",
+      "args": [
+        "cmake",
+        "-S",
+        "/home/runner/work/btx/btx/p2mr-parent-product",
+        "-B",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build",
+        "-DBUILD_TESTS=ON",
+        "-DCMAKE_CXX_COMPILER_LAUNCHER=ccache",
+        "-DCMAKE_C_COMPILER_LAUNCHER=ccache"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 5.01
+    },
+    {
+      "label": "package-node-version",
+      "args": [
+        "/home/runner/work/btx/btx/identity-label-package/btx-0.34.16/bin/btxd",
+        "-version"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 1.0
+    },
+    {
+      "label": "package-features",
+      "args": [
+        "/home/runner/work/btx/btx/identity-label-package/btx-0.34.16/bin/btxd",
+        "-help-debug"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 1.0
+    },
+    {
+      "label": "plan-baseline",
+      "args": [
+        "ninja",
+        "-C",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build",
+        "-n",
+        "btx-cli"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 1.0
+    },
+    {
+      "label": "graph-baseline",
+      "args": [
+        "ninja",
+        "-C",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build",
+        "-t",
+        "commands",
+        "btx-cli"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 1.0
+    },
+    {
+      "label": "build-baseline",
+      "args": [
+        "cmake",
+        "--build",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build",
+        "--target",
+        "btx-cli",
+        "-j2"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 23.0
+    },
+    {
+      "label": "cli-version-baseline",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/identity-label-repair/baseline/btx-cli",
+        "-version"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 1.0
+    },
+    {
+      "label": "cli-ldd-baseline",
+      "args": [
+        "ldd",
+        "/home/runner/work/btx/btx/p2mr-parent-native/identity-label-repair/baseline/btx-cli"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 1.0
+    },
+    {
+      "label": "compile-maintained-unit-body",
+      "args": [
+        "g++-13",
+        "-std=c++20",
+        "-O0",
+        "-I/home/runner/work/btx/btx/p2mr-parent-product/src",
+        "-I/home/runner/work/btx/btx/p2mr-parent-product/src/univalue/include",
+        "-c",
+        "/home/runner/work/btx/btx/p2mr-parent-native/identity-label-repair/unit.cpp",
+        "-o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/identity-label-repair/unit.o"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 5.0
+    },
+    {
+      "label": "link-unit-baseline",
+      "args": [
+        "g++-13",
+        "/home/runner/work/btx/btx/p2mr-parent-native/identity-label-repair/unit.o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/identity-label-repair/baseline/client.cpp.o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build/src/univalue/libunivalue.a",
+        "-pthread",
+        "-o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/identity-label-repair/baseline/unit"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 1.0
+    },
+    {
+      "label": "unit-baseline",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/identity-label-repair/baseline/unit",
+        "--run_test=rpc_tests/rpc_convert_model_identity_labels_are_literal",
+        "--color_output=no",
+        "--log_level=message",
+        "--report_level=detailed",
+        "--report_format=XML",
+        "--report_sink=/home/runner/work/btx/btx/identity-label-repair-results/unit-baseline.xml"
+      ],
+      "cwd": "None",
+      "exit": 201,
+      "seconds": 1.0
+    },
+    {
+      "label": "workflow-baseline",
+      "args": [
+        "python3",
+        "/home/runner/work/btx/btx/contrib/devtools/identity-label-repair/case.py",
+        "--configfile=/home/runner/work/btx/btx/identity-label-repair-results/functional-config.ini",
+        "--tmpdir=/home/runner/work/btx/btx/identity-label-pair/baseline/node-test",
+        "--cachedir=/home/runner/work/btx/btx/identity-label-pair/baseline/chain-cache",
+        "--portseed=43418",
+        "--nocleanup"
+      ],
+      "cwd": "None",
+      "exit": 1,
+      "seconds": 2.0
+    },
+    {
+      "label": "plan-candidate",
+      "args": [
+        "ninja",
+        "-C",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build",
+        "-n",
+        "btx-cli"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 1.0
+    },
+    {
+      "label": "graph-candidate",
+      "args": [
+        "ninja",
+        "-C",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build",
+        "-t",
+        "commands",
+        "btx-cli"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 1.0
+    },
+    {
+      "label": "build-candidate",
+      "args": [
+        "cmake",
+        "--build",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build",
+        "--target",
+        "btx-cli",
+        "-j2"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 3.0
+    },
+    {
+      "label": "cli-version-candidate",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/identity-label-repair/candidate/btx-cli",
+        "-version"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 1.0
+    },
+    {
+      "label": "cli-ldd-candidate",
+      "args": [
+        "ldd",
+        "/home/runner/work/btx/btx/p2mr-parent-native/identity-label-repair/candidate/btx-cli"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 1.0
+    },
+    {
+      "label": "link-unit-candidate",
+      "args": [
+        "g++-13",
+        "/home/runner/work/btx/btx/p2mr-parent-native/identity-label-repair/unit.o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/identity-label-repair/candidate/client.cpp.o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/build/src/univalue/libunivalue.a",
+        "-pthread",
+        "-o",
+        "/home/runner/work/btx/btx/p2mr-parent-native/identity-label-repair/candidate/unit"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 1.0
+    },
+    {
+      "label": "unit-candidate",
+      "args": [
+        "/home/runner/work/btx/btx/p2mr-parent-native/identity-label-repair/candidate/unit",
+        "--run_test=rpc_tests/rpc_convert_model_identity_labels_are_literal",
+        "--color_output=no",
+        "--log_level=message",
+        "--report_level=detailed",
+        "--report_format=XML",
+        "--report_sink=/home/runner/work/btx/btx/identity-label-repair-results/unit-candidate.xml"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 1.0
+    },
+    {
+      "label": "workflow-candidate",
+      "args": [
+        "python3",
+        "/home/runner/work/btx/btx/contrib/devtools/identity-label-repair/case.py",
+        "--configfile=/home/runner/work/btx/btx/identity-label-repair-results/functional-config.ini",
+        "--tmpdir=/home/runner/work/btx/btx/identity-label-pair/candidate/node-test",
+        "--cachedir=/home/runner/work/btx/btx/identity-label-pair/candidate/chain-cache",
+        "--portseed=43418",
+        "--nocleanup"
+      ],
+      "cwd": "None",
+      "exit": 0,
+      "seconds": 2.0
+    }
+  ],
+  "phases": {
+    "preflight": "pass",
+    "dependencies": "pass",
+    "prepare": "pass",
+    "baseline": "pass",
+    "test": "pass",
+    "finalize": "pass"
+  },
+  "errors": [],
+  "runner": {
+    "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+    "run": "42368730374",
+    "fixture": "239e30b24820950204052036b0310fbd77896dd1",
+    "candidate": "10f3a3bdc126c54e8fcb282afe9b4e5aceb78f7f"
+  },
+  "source": "0ac06fd23b4a62038963fb29f1c77ab26d7a1346",
+  "case_sha256": "e1a92f283cfce663b6dac03fed100c8b16c1f3b09438ff03794af167a285d24b",
+  "source_audits": {
+    "baseline-before": {
+      "variant": "baseline",
+      "files": 14661,
+      "sha256": "f1d8a340d1095f97bda376d1c34b52aba5be7ea3af80bdce4f1e5c8ff808d7bf"
+    },
+    "baseline-after": {
+      "variant": "baseline",
+      "files": 14661,
+      "sha256": "f1d8a340d1095f97bda376d1c34b52aba5be7ea3af80bdce4f1e5c8ff808d7bf"
+    },
+    "candidate-before": {
+      "variant": "candidate",
+      "files": 14661,
+      "sha256": "828abc7cf1c5206526ef1c8044a9a46290bbda20492b1333e359441431741975"
+    },
+    "candidate-after": {
+      "variant": "candidate",
+      "files": 14661,
+      "sha256": "828abc7cf1c5206526ef1c8044a9a46290bbda20492b1333e359441431741975"
+    }
+  },
+  "cache": {
+    "id": 10096149671,
+    "save": false,
+    "matched_key": "btx-p2mr-external-parent-v1-666673a3-ubuntu24-gcc13-O1-walletON-modelnetON-ssl359",
+    "hit": "true"
+  },
+  "asset": {
+    "id": 720210208,
+    "bytes": 158893635,
+    "sha256": "58657765b5ac41252c44913f56c61247b781149fd21ed79374aedade67805ba1",
+    "source_mapping": "Numair published replacement for0ac; producerbuildnotindependentlyreproduced"
+  },
+  "package_root": "/home/runner/work/btx/btx/identity-label-package/btx-0.34.16",
+  "package_files_before": {
+    "bin/btx-atlas": "201dab79662cc04b86ce0c03b0feb2d98cf90a126cb78114fff78eae9646979f",
+    "bin/btx-capability": "a8ad38dc27686e61b0f52eb52ec0181a5491f1bff75bebf02028bb0487756bfe",
+    "bin/btx-util": "2dac87d4810117962a6abd0614baa36e2a8140be98c125d8ce6157f6c858c4bc",
+    "bin/btx-modeld": "1b647231a5f9abfef7845e91d2a740159633b0a67b24ca5bbe5fb6d614e14136",
+    "bin/btx-guardd": "f36f8b35dcea2eea60bf2f2d7531a7945f03fcb5987b20674b6c5df401cfc01e",
+    "bin/btx-open": "338c3b8dcf5027ea9a9e6222b1bf5443f657f477d6c21ff0692b72778c71d3fb",
+    "bin/btx-capabilityd": "0bc1432f34f096e247a54b3ba83719e2247822d8821926a5ba9d76172d820b1f",
+    "bin/btx-security": "606fb6a66f0f98c61a0fbb3fe7c9320877d83aa54ad96fae148078286fcd4d2f",
+    "bin/btxd": "bdd9273c2dcbf804a717e16bdcc4c08288f16c31cde59726f01924178487cb83",
+    "bin/btx-hosted": "e5e620eb3effd38873d71afd37ad12036ef49feeb1a2e3d6f4f3483421209f72",
+    "bin/btx-native-qualify": "747af0af78c2beea94807396e48ecfd9b40b6fa20f64d6f00436bdb2dd54bd03",
+    "bin/btx-hcpd": "7b7f198e9afda754b56be268fcbf786fc440469b3b64e84dd0f42929b0d3625c",
+    "bin/btx-cli": "2e1c1d30cca4bb6eba4f7ecca02f133a7fe0abbe668640e0e29d2040d2dad49a",
+    "bin/btx-modelcheck": "fe2bc241d7ba068e338659151b7e5f81830abbdab38e313436836e2ff480343a",
+    "bin/btx-qt": "d77fa1eb4bc95dee50c260ba40a1e3a5f27d6157a3fc1eaddc485af2476644f3",
+    "bin/btx-matmul-backend-info": "087368d1cf7d7f6f4844bc272695088b4cd8bf282878588f2789e805c579b4f4",
+    "bin/btx-wallet": "e4d3a37ea4852fc7ac53b169289ffdea10ce748ce600c660af9a95818f90a3c8",
+    "bin/btx-tx": "c9d5733c3f06abf9b06be74a0629494ee2b6e7baba8569f341d7e2426c03ee75",
+    "lib/libkrb5support.so.0": "644b5fd508b401aff1b820a18a71475140e95fbf60ed5484ec2d8d702543d507",
+    "lib/libpcre2-16.so.0": "87dc49d7f3d564e8b72b04bb3b16886bcd4cc64989a21c5660539ced9c064107",
+    "lib/libcrypto.so.3": "5385f0436ac2e284ba8c5fb1488874057c29c04be72dea32add832694f381e28",
+    "lib/libicui18n.so.78": "8efe25edff0963d2478d56d9be8be950534e234d42bcae7d9e128321a20d8ad5",
+    "lib/libqrencode.so.4": "929297963811541146aa42c9a3a5c8eb5c199987634acaf584af9e0f58a75645",
+    "lib/libxcb-image.so.0": "fced4dd7c6f01bd8074b78626b90334e1e2684931843426107952cb10d78bc9c",
+    "lib/libQt6Core.so.6": "37f096cc0c5f9a1a90ff17885a16c8387cc386908be4cf893fe47cf1ebf2e639",
+    "lib/libxcb-xinput.so.0": "cc7c755f764cd22e898b84e0044f1485fa3faa86a75a8beb7292f7f73c16dcd7",
+    "lib/libssl.so.3": "63b47f444efa588e291e9b650a5ba2ab02f856356f2d50f13a2e477db9119e09",
+    "lib/libQt5Core.so.5": "e0cd9babf129d369c67d5fe757b6c73948678cf6f1bf906f378af8ede401a3ae",
+    "lib/libQt5Widgets.so.5": "4f08465ea95539fc82eb8ccb04aca7409090c70741eb65ff067c3faf0f9bfa48",
+    "lib/libgomp.so.1": "3544133a430a6e09ac72a9c76ddccd886f667979418257b2c9b5aca3b6e9fd52",
+    "lib/libQt5Gui.so.5": "388ade02676099556e23c85fdea0865ed040f78c310501988e66c1bb555f14d4",
+    "lib/libharfbuzz.so.0": "13491e418e3e1d887fb8e3b4dcef2625fb46ff895cf1174491163037c749fd35",
+    "lib/libzmq.so.5": "1697a11a1bf136957e1eff8954b4630d76ff44e76ab1d8e9988446472f9db41d",
+    "lib/libxcb-sync.so.1": "7f6de318747b2aaf68445bc868c1d9eb9486e155fd72ae938fad1c0184a9cc8c",
+    "lib/libevent_core-2.1.so.7": "b9bae4dd42040bab5cb918ac934e8c445444c2519e6959adcb5e481b2a0ef8ba",
+    "lib/libxcb-icccm.so.4": "45d2183acfd1d50d42d14fef64a82bddf09196991707723b291c66b3593735c3",
+    "lib/libbrotlidec.so.1": "917563d87279b3f0cbf9f9aceadb93191f39eced1805ff60b41f6da4827354a7",
+    "lib/libxcb-randr.so.0": "22480b8cdad3c347d9f55ebaac5a8bde48dbbb7ff0553409cf290326d15fff5e",
+    "lib/libevent_pthreads-2.1.so.7": "9bdfea19f80223a140839d0ff56fb63bd2bb1cf9b7d5ae2d928532f235a91d82",
+    "lib/libxcb-keysyms.so.1": "63882db6041658306d36a80e71eadbae63c77ce2869e46a39d5d71927220b521",
+    "lib/libkeyutils.so.1": "6dc3918271f753e7fbcad94b1be915aa6bf6891d919b8584b8399d269128938c",
+    "lib/libfontconfig.so.1": "97109bb276d3e1f131c97459c2231e502b475d671051265aad4b729d359dbeb9",
+    "lib/libpng16.so.16": "f29bf0d88c7dd6d36ebfd3f653ca7a797c322792787305d2065f56a688871356",
+    "lib/libdbus-1.so.3": "e8cfadd95fea9d507a0bcc6e88aeb5d9eda32f49ad98c81b6bc5e6720e1c5db5",
+    "lib/libsqlite3.so.0": "aab0d93396554931975ed7ef7919d835124a531a838b079dc726629564e97218",
+    "lib/libxcb-cursor.so.0": "3836270fb4b22f42a9f6c8a748b4c0b31a8a2d54980d15cfd7f35bbfad27d378",
+    "lib/libbsd.so.0": "d5d03eca7cac947a441c98b574a5f2cf78c0a8ee5b2a105973278b44ee6010cd",
+    "lib/libxcb-xkb.so.1": "8fd6485f18ca538d13287407229877b576da5adfe7d064b1aca94c229fb9add7",
+    "lib/libpcre2-8.so.0": "5a616ae1bc8a4e6343dfd5c1f191760141d39ac0ec748dc4197f9422d17b7b07",
+    "lib/libk5crypto.so.3": "34b61c761827717f2fe67a971bbf9b64f5a9837f3069f3f3e47fbb30a602d49a",
+    "lib/libX11-xcb.so.1": "1e877cbd4a1fed18ca2c7df42858a61716b22e153aa0cb6d229080a72c7c672b",
+    "lib/libdouble-conversion.so.3": "01be25fbf6bd3af6fd0d6837dc8550421c9755e6b2f53750cc8e96ab239f5f6d",
+    "lib/libmd4c.so.0": "e36a1d226914d0c9a22396d526c91607b46459b03c8aacd5b66938604980466e",
+    "lib/libicuuc.so.78": "e163492531961b1bd25cf813704e48e31f93c394b0b6610e844eb2a8fe5aa07c",
+    "lib/libbrotlicommon.so.1": "8f42a818a977cac20784b98b074245805b700a40f47868bb8ca5281be536dfc1",
+    "lib/libevent_extra-2.1.so.7": "14a013230feb543584bf0a4bce6a2475a9c920bafb5a7a9593735b5d1287d9b5",
+    "lib/libpgm-5.3.so.0": "372bde5e93106d144f75b8aff63fcee5719e1bee19cf1df5d1cdd45ce10ae2db",
+    "lib/libgraphite2.so.3": "934015dc2d232e0de3c953a809e2feb854e66f0adc14e676222a43065a6159a7",
+    "lib/libb2.so.1": "b88167eb71ad0323fb1083cbb7576e9a0b5e16478617a800d689bca30a7b74b9",
+    "lib/libQt5Network.so.5": "df2ff797979e770bc8e0cd8dead1581b48248219b88107d04e95055ef75d4a21",
+    "lib/libicudata.so.78": "925329c3a8fffbdaea1fb221a128f1e00f72901b22ed233d3a422bb4f7216b92",
+    "lib/libQt6Gui.so.6": "26454386907ae8a0338ba24f729e9ed420e53864c809e1153bd1651f9e1312b9",
+    "lib/libexpat.so.1": "cb729aeafddff37b94d43a6705646ee1966d2caa294619904f4170c68732341d",
+    "lib/libxcb-xfixes.so.0": "7de43ee3bf5fdd40aa7144c0a5e269a3f13ab09e2a06958905d150dd16db7dbc",
+    "lib/libxcb-render.so.0": "880c080b6c59f62f2d8d2c3adfb802b46e6e1fad5a69deca0dae1a0043c9a84a",
+    "lib/libxcb-render-util.so.0": "20db7b6aac0d37a7d89d61b9a5109a653577fbc4e519b2295c84c63bd329f039",
+    "lib/libxcb-shm.so.0": "1c12cebd300f2c6a2d681d4cfb818385fda1348ceac72c964668947ac6b03da2",
+    "lib/libsodium.so.23": "0c9d710f2cd7c5d827efedb92919c981449d13f80c1107a3298e819e2c7847e8",
+    "lib/libuuid.so.1": "1cc699a5bf097b27a549c1a2c0470f4088e56849dac351e5c5c8186fd3e9f661",
+    "lib/libmd.so.0": "ff7248d82be5ed08a1380ca202deb5b99bcfc79ae976c3ef144ee81300ab5be8",
+    "lib/libbz2.so.1.0": "d5d2d0289bae3313d4a7f12f88fbac5c8bc95309fff86de9dfcdac3ac177214e",
+    "lib/libz.so.1": "0403c15b8bdf55fbf2df7b2bf87c86a7c825c46e690286d56a9145d8bc51e1c2",
+    "lib/libfreetype.so.6": "3f98918817fdc4a2f9b69fafa95fb41cec9ebb85b6704cb862644e07799893ca",
+    "lib/libgcc_s.so.1": "ac903a620332aaf31b4386abaac0be9292c331220296a9046bc151445490d0cb",
+    "lib/libQt6XcbQpa.so.6": "a42417b68cfe26d1e8463fd8f6b78e0f529ca7e4afd2932c3f57d5183a3fbf1d",
+    "lib/libzstd.so.1": "97467a719f4b2325b4d143d421d3fc6090f6401aeeb8f021b00f11ef6f693b75",
+    "lib/libcom_err.so.2": "f116236dd0bf25c44bebb49fc0138ff3e77de8b10982303e706d413f23c0732a",
+    "lib/libQt6DBus.so.6": "01873bdc3d52736354e3a952c74b13b936bcaaf0ce45d05cfe946f92e064e467",
+    "lib/libsystemd.so.0": "56be1542c44acbae3668ebf90613344221c6a3f68b691ef2dc016a78586d08da",
+    "lib/libstdc++.so.6": "baf74dcdb7d662cb5554440e2d72116b8f2ac6c7e73023650a15d4502e1df4e1",
+    "lib/libnorm.so.1": "9ec0f4e7965fb688cace296a86328927a851ca1401bb79f000cba66703501d49",
+    "lib/libglib-2.0.so.0": "05da1237605b41ec596baacf12871098bcb298a2668849a24331a2e621e2a53b",
+    "lib/libQt5DBus.so.5": "10216a11a0ccc0171eda5f5e44ad7240ca698e462e520a5e8599579f47af16ba",
+    "lib/libxcb-shape.so.0": "72b2aeb6fb3a30c9999d05d014986c4849776ec782b01a84a2c92ae343d2a211",
+    "lib/libatomic.so.1": "79d080ccbd00f698b7ca5d4225e45ab12671f40c2908367cb9b2a184b69217c1",
+    "lib/libgssapi_krb5.so.2": "175763583eb1b6f0a6ddafa26a39537a6ac599c6977063d20bc3bbcf5922de4a",
+    "lib/libkrb5.so.3": "04a1c12a7850e07a9f90b1830289c81ca16d729e121dfafba8abfe63087ff91c",
+    "lib/libxcb-util.so.1": "51879b801918788b1036da6b28c6ad5d17d1cfd114f23f692dc173681196c870",
+    "libexec/btx-atlas.real": "cf8775e42c1b23650c1790fedf4d9220095c36c37594cdc1161b008917095373",
+    "libexec/btx-tx.real": "e18397b59d9bf2e20dbd05c8aa87538dba758646ba035f8886ba43e30af5791b",
+    "libexec/btx-matmul-backend-info.real": "bfa11d339745771219890b026cb0b592c05776c689da140deb6745a847c4279f",
+    "libexec/btx-modelcheck.real": "e150daca80d5bb67697748ec81e7df36173318db3c5406b2abc5952a2291231c",
+    "libexec/btxd.real": "ed409fe89d645bc80a0294f6029d08ac2038412c034b9b10cdcbdd5c4ce92417",
+    "libexec/btx-qt.real": "39ac17c363c031e7095363fbe484ec0b9fdcc5720a92825c4be71ac1390d5524",
+    "libexec/btx-cli.real": "a1ca075b92359b3314e595314ebf47d10ed1d974f5337acd6021f42b1076483a",
+    "libexec/qt.conf": "0bf2aa51849282729026fa0d747b9ff3ae4ef507d485bd8febb6c2b7a7fac19a",
+    "libexec/btx-capabilityd.real": "8f30fd07427de128923508586b988898bcedd716f38bad2ca8919ee2b86fe258",
+    "libexec/btx-open.real": "935e34bdb5eade8b5cb7cb2c8b6fea48de54017c528eca18f2c8e48bd40a0ec4",
+    "libexec/btx-guardd.real": "ede4ca9e7cb6e2855345489321989a12f64cd1c0277c448e587c6e8cbcb864b2",
+    "libexec/btx-wallet.real": "a40386d946332b81a33b57a2a759762632bc994a0634a3ef72d816ca94df9382",
+    "libexec/btx-hcpd.real": "306ccd901ca298750988672597fb7973fb3b370f73e317fa8137ea43bcdb6fe3",
+    "libexec/btx-util.real": "c8b20f566bde3ffac56285dc1266bc161e9d1ee9f61922fa09832ebeb91fb667",
+    "libexec/btx-modeld.real": "b040572701c38362ce583f22ade316cfa3a714f5b2ec1aeafd3cd919674700f7",
+    "libexec/btx-hosted.real": "ff0603bb88d000b63d7bdfbf62ebe1e2307cc961bd802e8d8692feb0db3d85c6",
+    "libexec/btx-capability.real": "1e74921e8f000a6180bc6eac0940ffb802c47da3b1f8958f66255786c9370598",
+    "libexec/btx-native-qualify.real": "b53ef714b4a4897ec21618fd430d290cd482fd143e61e8c6d453884ae41d9e27",
+    "libexec/btx-security.real": "bcffd9356c2ae8080bf5f50a8da024c8b5b5d71cf89ab9308178def3a5a1c9a0",
+    "doc/btx-download-and-go.md": "8ec89e26d40b33346ee8abf303e68bc27b2e5de57efb1f1672ddc43f65b5ea99",
+    "lib/qt6/plugins/platforms/libqxcb.so": "4423268befaef570824d4310cb6fd785edc05337f3abbe5596237d62d39cc1a6",
+    "contrib/modelnet/btx-model": "fcd696b1da01e8ea3acc5f60b61d4c592b10fc5956b6d8221b3b43765508ed9c",
+    "contrib/mining/live-mining-loop.sh": "cbefa5225341d7e935851219a8d8dc6e0c3c333b8ca10d9e12adaafac8050280",
+    "contrib/mining/stop-live-mining.sh": "4432de8457f767a445adca08e42c762df4beae6738a4611b5ce8011fefca688b",
+    "contrib/mining/README.md": "e4d0a51bbd735cc2b171bdcffca7d31bbbbf393ee4a2c15315beb4dbe288bee5",
+    "contrib/mining/start-live-mining.sh": "767e83c6494c29e3ba895023e6609882ceab48f0d7b568e8b04ecc55e578abcd",
+    "contrib/mining/backup-wallet.sh": "bffa7a14900c9c6177b867c48f5e90a59c43e8b77ea722f2f19f43eeab9ee929",
+    "contrib/faststart/service-faststart.sh": "451c6cad377f5a4d3f2491da7317d3febaa2f527202f8846ddc8e4f116367054",
+    "contrib/faststart/snapshot-manifest.example.json": "e81d7dff074ba70e73f6b1c484552437b79c03b485e0eca0f593f40f3320194c",
+    "contrib/faststart/README.md": "3cd1f2bbb0404ac5bd76cdfc59a9443ebadb5394bde2d8a31fdd8a45c1241c83",
+    "contrib/faststart/miner-faststart.sh": "d81b03cfaf93f5ee652ac1d7b1332c096916ab92584fda508abfc57ce4dd3129",
+    "contrib/faststart/btx-faststart.py": "130f74f4663978488972c6f47fefad972b47ff8cbef5f15106e102f6932c852e",
+    "contrib/faststart/btx-agent-setup.py": "fcdebb8452a42f5b61609f368de67b36796e2adde1724304ed72ba9d10665584",
+    "contrib/modelnet/recipes/registry-live-wan-hf-config.json": "93941942c234ce3f4f47688e91c5603fd073200b0afd32e15bc5a56fbad21a8b",
+    "doc/release-notes/release-notes-0.34.11.md": "d62c45a965df43d9dbde87809acc5b2320f401daabd2b0ab7830015f3e2bd2be",
+    "doc/release-notes/release-notes-0.34.9.md": "b3c0c6a11408c78a4e98065109e55eafaf6008b91e8f42c78edaddb928da2b6f",
+    "doc/release-notes/release-notes-0.34.10.md": "dd33c4532c97926df1acfee05b36a93c60ff8d2ee943857238ed0f4bb473e58d",
+    "doc/release-notes/release-notes-0.34.9-dev.md": "9bc6c66e17f8e8b5f1111d222988350b95884e1ef7e12d2f4739a9271ad3f4b8",
+    "doc/modelnet/registry-independence.md": "cd139c1d073281ebbfdcc4086846e714248ffe08c7d0df1371a8153fa1ec57ad"
+  },
+  "cli_pair": {
+    "baseline": {
+      "sha256": "44747c822bb5d90f5d302dbae00eb09bbf057065bd6bfc76798503fbeeaa9f58",
+      "client_object": "98e6765d9fad7de456a4c07701f6e69124d077d4df7de6661fb0cb753045eca4"
+    },
+    "candidate": {
+      "sha256": "d0376c3de8ee1c8428322dd5967545d8e429cfdc59a34a8438006639c1c1a518",
+      "client_object": "f919c0101bb5e3de403746a8ba63370a5e2a79c892ae15d158f8b436707ab18a"
+    }
+  },
+  "same_unit_object_sha256": "96a3759912c391f7d6acad98d37464917826d93f73e99cb238d706ce69bf5332",
+  "same_univalue_archive_sha256": "bbdb2bef8ac9d0a5816d2f4729125afaf726da9f3e0015619be43c4c4cffbe89",
+  "unit_pair": {
+    "baseline": {
+      "exit": 201,
+      "report": {
+        "name": "rpc_convert_model_identity_labels_are_literal",
+        "result": "failed",
+        "assertions_passed": "30",
+        "assertions_failed": "24",
+        "warnings_failed": "0",
+        "expected_failures": "0"
+      },
+      "binary_sha256": "9f14d3e1fb47a2197c76b250da6fdfdca72026df5ce4e3d0d4449ad8f2ae177f",
+      "same_unit_object_sha256": "96a3759912c391f7d6acad98d37464917826d93f73e99cb238d706ce69bf5332"
+    },
+    "candidate": {
+      "exit": 0,
+      "report": {
+        "name": "rpc_convert_model_identity_labels_are_literal",
+        "result": "passed",
+        "assertions_passed": "76",
+        "assertions_failed": "0",
+        "warnings_failed": "0",
+        "expected_failures": "0"
+      },
+      "binary_sha256": "f9dc239b17efd7b8ddfedf6a9c2afbda1e98517e132712a26994fdf770accad8",
+      "same_unit_object_sha256": "96a3759912c391f7d6acad98d37464917826d93f73e99cb238d706ce69bf5332"
+    }
+  },
+  "workflow_pair": {
+    "baseline": {
+      "exit": 1,
+      "case_sha256": "e1a92f283cfce663b6dac03fed100c8b16c1f3b09438ff03794af167a285d24b",
+      "acceptance_pass": false,
+      "failed_requirements": 18,
+      "controls_complete": true,
+      "cli_sha256": "44747c822bb5d90f5d302dbae00eb09bbf057065bd6bfc76798503fbeeaa9f58"
+    },
+    "candidate": {
+      "exit": 0,
+      "case_sha256": "e1a92f283cfce663b6dac03fed100c8b16c1f3b09438ff03794af167a285d24b",
+      "acceptance_pass": true,
+      "failed_requirements": 0,
+      "controls_complete": true,
+      "cli_sha256": "d0376c3de8ee1c8428322dd5967545d8e429cfdc59a34a8438006639c1c1a518"
+    }
+  },
+  "archives_before_candidate": {
+    "lib/libbitcoin_db.a": "c84319954624d02e68f262df6888279d058a82dc7269f085e8b9fbb9b186c3eb",
+    "lib/libbitcoin_modelnet.a": "43757aab80f341a475ef92b46e056a0e70bd7ce993011dc8d66ac8fb396bfbf4",
+    "lib/libbitcoinpqc.a": "6d6fcdf2b90acb26d915e888e1720d0742c207f3df904aca7ee0495b631f9e86",
+    "lib/libbitcoin_zmq.a": "d94473406ba795c70136bd8e53c42a4e47638a3f357f161ab25030750c68d695",
+    "lib/libbitcoin_consensus.a": "4f95a9906dbcbb6721494667f751782f4b9b9befeb622d124c41d66d6d5aaf72",
+    "lib/libbitcoin_common.a": "0db8444cf7b62d9fe0779e3830d7ef587a52fe1396635371312eff04fb7415cc",
+    "lib/libbitcoin_crypto.a": "d38b749198083d302811f71e8617b5208c6be26e6e486f97309527aea8fd3ed8",
+    "lib/libbitcoin_shielded.a": "6c798abb71508f5c6eeaa4a4cab17f21f212709053a4461b463a6fdc5ec2bd0a",
+    "lib/libbitcoin_clientversion.a": "a1c84265d1cc5a725ce40cbc0e296361f4658de80012c991d7f3fae904adbc9e",
+    "lib/libbitcoin_util.a": "0c291622abc1a44859a103bf9a879c828dcd9cc4d0d9dfd70148117520758212",
+    "lib/libbtx_matmul_backend.a": "4c2c2c17ea244d88ee254e758d04bd74d5995727278973cf585b7dc26648cdbb",
+    "lib/libbitcoin_node.a": "ff0e2c781bb826765f93355898746ebf3a2b8ff36ec8af2d8bbc5047f1e1cf1a",
+    "lib/libbitcoin_wallet.a": "71f5d2a369360b901ed3fb1a23abb158cb559436e95ebbbbc18644ed8f7c1d9d",
+    "lib/libbitcoin_cli.a": "17fa42d08cf9297565c57a8616524de05fb53de1df69940907ef7846dc9fb4c6",
+    "src/libleveldb.a": "117f3c1b909b38a06271e96dc7679f0dd67adc2c4c3eccfc1887da12d6aaa949",
+    "src/libcrc32c.a": "bf0f080a59a3cba130613c2bdac9d129df96c95564e7889ed76477b9d54b8cac",
+    "src/univalue/libunivalue.a": "bbdb2bef8ac9d0a5816d2f4729125afaf726da9f3e0015619be43c4c4cffbe89",
+    "src/secp256k1/lib/libsecp256k1.a": "4805bb6f61b71799a9efc92662eabe00f6ef7d98aa215b5b74bb10122bde58b8"
+  },
+  "changed_archives_for_candidate": [
+    "lib/libbitcoin_cli.a"
+  ],
+  "paired_proof_pass": true,
+  "full_test_btx_or_full_suite": false,
+  "cleanup": {
+    "before": [],
+    "remaining": [],
+    "runtime_removed": true,
+    "original_remote_cache_saved": false
+  },
+  "qualified": true
+}

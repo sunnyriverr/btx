@@ -1,0 +1,101 @@
+
+Configuring secp256k1 subtree...
+
+
+secp256k1 configure summary
+===========================
+Build artifacts:
+  library type ........................ Static
+Optional modules:
+  ECDH ................................ OFF
+  ECDSA pubkey recovery ............... ON
+  extrakeys ........................... ON
+  schnorrsig .......................... ON
+  musig ............................... OFF
+  ElligatorSwift ...................... ON
+Parameters:
+  ecmult window size .................. 15
+  ecmult gen table size ............... 86 KiB
+Optional features:
+  assembly ............................ x86_64
+  external callbacks .................. OFF
+Optional binaries:
+  benchmark ........................... OFF
+  noverify_tests ...................... ON
+  tests ............................... ON
+  exhaustive tests .................... ON
+  ctime_tests ......................... OFF
+  examples ............................ OFF
+
+Cross compiling ....................... FALSE
+Valgrind .............................. OFF
+Preprocessor defined macros ........... ENABLE_MODULE_ELLSWIFT=1 ENABLE_MODULE_SCHNORRSIG=1 ENABLE_MODULE_EXTRAKEYS=1 ENABLE_MODULE_RECOVERY=1 ECMULT_WINDOW_SIZE=15 COMB_BLOCKS=43 COMB_TEETH=6 USE_ASM_X86_64=1
+C compiler ............................ GNU 13.3.0, /usr/bin/gcc-13
+CFLAGS ................................ 
+Compile options ....................... -pedantic -Wall -Wcast-align -Wcast-align=strict -Wextra -Wnested-externs -Wno-long-long -Wno-overlength-strings -Wno-unused-function -Wshadow -Wstrict-prototypes -Wundef
+Build type:
+ - CMAKE_BUILD_TYPE ................... Release
+ - CFLAGS ............................. -O2 -g 
+ - LDFLAGS for executables ............ 
+ - LDFLAGS for shared libraries ....... 
+
+
+Configuring libbitcoinpqc subtree...
+-- Configuring libbitcoinpqc with SPHINCS+ variant: ref
+-- Found SQLite3: /usr/include (found version "3.45.1")
+-- Performing Test BTX_HAVE_STATIC_TEST_PROBE
+-- Performing Test BTX_HAVE_STATIC_TEST_PROBE - Success
+
+
+Configure summary
+=================
+Executables:
+  btxd (legacy target: bitcoind) ...... ON
+  btx-qt (GUI) ........................ OFF
+  btx-cli ............................. ON
+  libbtxconsensus (legacy: libbitcoinconsensus) OFF
+  btx-tx .............................. OFF
+  btx-util ............................ ON
+  btx-wallet .......................... OFF
+  btx-chainstate (experimental) ....... OFF
+  libbtxkernel (experimental) ......... OFF
+Optional features:
+  wallet support ...................... ON
+  native model network ............... ON
+   - OpenSSL .......................... 3.5.9
+   - descriptor wallets (SQLite) ...... ON
+   - legacy wallets (Berkeley DB) ..... OFF
+  external signer ..................... ON
+  tor subprocess ...................... ON
+  port mapping using UPnP ............. OFF
+  ZeroMQ .............................. ON
+   - linkage .......................... shared:pkg-config
+  Libevent linkage .................... shared:pkg-config
+  USDT tracing ........................ OFF
+  QR code (GUI) ....................... OFF
+  DBus (GUI) .......................... OFF
+Tests:
+  test_btx (legacy target: test_bitcoin) .... ON
+  test_btx-qt ........................ OFF
+  bench_btx (legacy target: bench_bitcoin) ... OFF
+  fuzz binary ......................... OFF
+
+Cross compiling ....................... FALSE
+C++ compiler .......................... GNU 13.3.0, /usr/bin/g++-13
+CMAKE_BUILD_TYPE ...................... Release
+Preprocessor defined macros ........... 
+C++ compiler flags .................... -O1 -std=c++20 -fPIC -fno-extended-identifiers -fdebug-prefix-map=/home/runner/work/btx/btx/p2mr-parent-product/src=. -fmacro-prefix-map=/home/runner/work/btx/btx/p2mr-parent-product/src=. -fstack-reuse=none -Wall -Wextra -Wformat -Wformat-security -Wvla -Wredundant-decls -Wdate-time -Wduplicated-branches -Wduplicated-cond -Wlogical-op -Wimplicit-fallthrough -Wbidi-chars=any -Wundef $<$<COMPILE_LANGUAGE:CXX>:-Woverloaded-virtual> $<$<COMPILE_LANGUAGE:OBJCXX>:-Woverloaded-virtual> $<$<COMPILE_LANGUAGE:CXX>:-Wsuggest-override> $<$<COMPILE_LANGUAGE:OBJCXX>:-Wsuggest-override> -Wno-unused-parameter -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3 -Wstack-protector -fstack-protector-all -fcf-protection=full -fstack-clash-protection
+Linker flags .......................... -O1 -Wl,-z,stack-size=8388608 -fstack-reuse=none -fstack-protector-all -fcf-protection=full -fstack-clash-protection -Wl,-z,relro -Wl,-z,now -Wl,-z,separate-code -fPIE -pie
+
+NOTE: The summary above may not exactly match the final applied build flags
+      if any additional CMAKE_* or environment variables have been modified.
+      To see the exact flags applied, build with the --verbose option.
+
+Attempt to harden executables ......... ON
+Treat compiler warnings as errors ..... OFF
+Use ccache for compiling .............. ON
+
+
+-- Configuring done (3.5s)
+-- Generating done (0.5s)
+-- Build files have been written to: /home/runner/work/btx/btx/p2mr-parent-native/build

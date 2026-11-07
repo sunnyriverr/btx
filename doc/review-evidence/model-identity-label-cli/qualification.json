@@ -1,0 +1,119 @@
+{
+  "candidate": "10f3a3bdc126c54e8fcb282afe9b4e5aceb78f7f",
+  "base": "0ac06fd23b4a62038963fb29f1c77ab26d7a1346",
+  "run": 42368730374,
+  "fixture": "239e30b24820950204052036b0310fbd77896dd1",
+  "qualified": true,
+  "source_audits": {
+    "baseline-before": {
+      "files": 14661,
+      "all_blobs_verified": true,
+      "variant": "baseline",
+      "sha256": "f1d8a340d1095f97bda376d1c34b52aba5be7ea3af80bdce4f1e5c8ff808d7bf"
+    },
+    "baseline-after": {
+      "files": 14661,
+      "all_blobs_verified": true,
+      "variant": "baseline",
+      "sha256": "f1d8a340d1095f97bda376d1c34b52aba5be7ea3af80bdce4f1e5c8ff808d7bf"
+    },
+    "candidate-before": {
+      "files": 14661,
+      "all_blobs_verified": true,
+      "variant": "candidate",
+      "sha256": "828abc7cf1c5206526ef1c8044a9a46290bbda20492b1333e359441431741975"
+    },
+    "candidate-after": {
+      "files": 14661,
+      "all_blobs_verified": true,
+      "variant": "candidate",
+      "sha256": "828abc7cf1c5206526ef1c8044a9a46290bbda20492b1333e359441431741975"
+    }
+  },
+  "unit": {
+    "baseline": {
+      "name": "rpc_convert_model_identity_labels_are_literal",
+      "result": "failed",
+      "assertions_passed": "30",
+      "assertions_failed": "24",
+      "warnings_failed": "0",
+      "expected_failures": "0"
+    },
+    "candidate": {
+      "name": "rpc_convert_model_identity_labels_are_literal",
+      "result": "passed",
+      "assertions_passed": "76",
+      "assertions_failed": "0",
+      "warnings_failed": "0",
+      "expected_failures": "0"
+    }
+  },
+  "workflow": {
+    "baseline": {
+      "exit": 1,
+      "requirements": 20,
+      "failed": 18,
+      "controls": 27,
+      "before_count": 1,
+      "after_count": 9,
+      "accepted_with_wrong_label": [
+        {
+          "named": false,
+          "argument": "null",
+          "actual": ""
+        },
+        {
+          "named": false,
+          "argument": "\"quoted\"",
+          "actual": "quoted"
+        },
+        {
+          "named": true,
+          "argument": "null",
+          "actual": ""
+        },
+        {
+          "named": true,
+          "argument": "\"quoted\"",
+          "actual": "quoted"
+        }
+      ]
+    },
+    "candidate": {
+      "exit": 0,
+      "requirements": 20,
+      "failed": 0,
+      "controls": 27,
+      "before_count": 1,
+      "after_count": 23,
+      "accepted_with_wrong_label": []
+    }
+  },
+  "cli_binaries": {
+    "baseline": {
+      "sha256": "44747c822bb5d90f5d302dbae00eb09bbf057065bd6bfc76798503fbeeaa9f58",
+      "client_object": "98e6765d9fad7de456a4c07701f6e69124d077d4df7de6661fb0cb753045eca4"
+    },
+    "candidate": {
+      "sha256": "d0376c3de8ee1c8428322dd5967545d8e429cfdc59a34a8438006639c1c1a518",
+      "client_object": "f919c0101bb5e3de403746a8ba63370a5e2a79c892ae15d158f8b436707ab18a"
+    }
+  },
+  "same_unit_object_sha256": "96a3759912c391f7d6acad98d37464917826d93f73e99cb238d706ce69bf5332",
+  "same_univalue_archive_sha256": "bbdb2bef8ac9d0a5816d2f4729125afaf726da9f3e0015619be43c4c4cffbe89",
+  "same_case_sha256": "e1a92f283cfce663b6dac03fed100c8b16c1f3b09438ff03794af167a285d24b",
+  "backend_asset": {
+    "id": 720210208,
+    "bytes": 158893635,
+    "sha256": "58657765b5ac41252c44913f56c61247b781149fd21ed79374aedade67805ba1",
+    "source_mapping": "Numair published replacement for0ac; producerbuildnotindependentlyreproduced"
+  },
+  "backend_binaries": {
+    "btxd": "ed409fe89d645bc80a0294f6029d08ac2038412c034b9b10cdcbdd5c4ce92417",
+    "btx-modeld": "b040572701c38362ce583f22ade316cfa3a714f5b2ec1aeafd3cd919674700f7"
+  },
+  "evidence_archive_sha256": "cd8a02b585d37e46ce1c7c29f7ea6c19f3df3b05ad026a38c2609478d4945e02",
+  "runtime_removed": true,
+  "cache_saved": false,
+  "full_test_btx_or_full_suite": false
+}
