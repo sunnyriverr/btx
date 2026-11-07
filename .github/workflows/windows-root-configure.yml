@@ -1,11 +1,11 @@
-name: Native Windows current full build and units
+name: Native Windows corrected fixture batch and units
 permissions:
   contents: read
 jobs:
   configure:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: windows-2025
-    timeout-minutes: 180
+    timeout-minutes: 65
     env:
       BTX_NATIVE_ROOT: D:\btx-native-035
     steps:
@@ -136,7 +136,7 @@ jobs:
           D:\btx-native-035\vcpkg-installed
 
           '
-        key: btx356-s3cleanup-v1-8ac8ea813b9630b168003f71dcbc3449f81828ffe7a9ce1035cb99706fc8b08b-42348955391
+        key: btx356-currentfull-v1-c2aac5e307cff28a271a7af261339fc153b212ea63b5088b73b32aa5937d3fd1-42367406159
     - name: Require existing exact-profile checkpoint for restore proof
       shell: pwsh
       env:
@@ -144,7 +144,7 @@ jobs:
       run: 'if (-not $env:MATCHED_CACHE) { throw "Restore proof requires an existing cache; refusing fresh rebuild" }
 
         '
-    - name: Verify and restore exactc660 source profile and5885cachedobjects
+    - name: Verify current-command5881-object checkpoint and exact08b2 source
       id: prepare
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -210,7 +210,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Resume full normal maintained Windows build
+    - name: Resume only four corrected fixtures and affected links
       id: build
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -338,7 +338,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
       with:
-        name: native-windows-current-full-resume
+        name: native-windows-four-fixture-resume
         path: D:\btx-native-035\evidence\
         retention-days: 14
 'on':
