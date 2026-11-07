@@ -42,7 +42,8 @@ def configure():
  R['command_delta']={'before':len(oldcmd),'after':len(newcmd),'added':sorted(newcmd.keys()-oldcmd.keys()),'removed':sorted(oldcmd.keys()-newcmd.keys()),'changed_count':len(changed),'changed_unit_count':sum('/test_btx.dir/' in k.replace('\\','/') for k in changed)};examples=[{'output':k,'before':oldcmd[k],'after':newcmd[k]} for k in changed];(s.E/'compile-command-deltas.json').write_text(json.dumps(examples,indent=2)+'\n');R['selected_commands']={}
  for suffix in I['selected_sources']:
   match=[v for v in new if v['file'].replace('\\','/').endswith('/'+suffix) and '/test_btx.dir/' in v['output'].replace('\\','/')];assert len(match)==1,(suffix,len(match));v=match[0];output=Path(v['output']);output=output if output.is_absolute() else s.BUILD/output;rel=str(output.relative_to(s.BUILD)).replace('\\','/');R['selected_commands'][suffix]={'entry':v,'target':rel,'object_exists_before':output.is_file(),'object_mtime_ns_before':output.stat().st_mtime_ns if output.exists() else None,'object_sha256_before':sha(output) if output.is_file() else None}
- baseline=json.loads((P/'baseline-selected-commands.json').read_text());assert {k:v['entry'] for k,v in R['selected_commands'].items()}==baseline;R['same_generated_commands_as_baseline']=True
+ assert oldcmd==newcmd, 'Compatible cache command closure differs; refuse global rebuild'
+ R['same_generated_commands_as_compatible_cache']=True
  for name,item in R['original_objects'].items():assert sha(s.ROOT/name)==item['sha256'],name
  verify_dependencies()
  assert s.catalog(I['target'],'current-configured')==cat;R['status']='CURRENT_NORMAL_CONFIGURED';s.save();assert tree.active()==1
@@ -57,7 +58,7 @@ def plans():
  assert s.catalog(I['target'],'current-plan-source')==R['current_source_catalog']
  manifest=s.E/'observed-current-manifest.ninja';shutil.copyfile(s.BUILD/'build.ninja',manifest);assert sha(manifest)==R['current_configuration']['build.ninja'];R['current_observed_manifest']={'path':str(manifest),'sha256':sha(manifest),'normal_current_configure':True,'old_cached_manifest_used':False};s.save()
  R['current_plans']={}
- for label,targets in [('node',['btxd']),('full',['btxd','btx-cli','btx-tx','btx-util','btx-open','btx-modeld','test_btx']),('selected',[x['target'] for x in R['selected_commands'].values()])]:
+ for label,targets in [('full',['btxd','btx-cli','btx-tx','btx-util','btx-open','btx-modeld','test_btx'])]:
   code=s.run('current-'+label+'-plan',['ninja','-C',str(s.BUILD),'-f',str(manifest),'-n','-d','explain']+targets,120);text=(s.E/('current-'+label+'-plan.log')).read_text(errors='replace');actions=re.findall(r'^\[\d+/\d+\] (.*)',text,re.M);objects=[a.removeprefix('Building CXX object ').replace('\\','/') for a in actions if a.startswith('Building CXX object ')];R['current_plans'][label]={'exit':code,'actions':actions,'steps':len(actions),'objects':objects,'command_invalidations':text.count('ninja explain: command line changed for ')};s.save();assert code==0,'Actual current graph planning failed'
   if label=='selected':
    allowed={'Generating bitcoin-build-info.h','Re-checking globbed directories...'};bad=[a for a in actions if not a.startswith('Building CXX object ') and a not in allowed];assert not bad,('Non-object actions would expand diagnostic',bad);assert 0<len(actions)<=I['max_selected_steps'] and len(objects)<=I['max_selected_objects'];assert set(objects)==set(targets),(objects,targets)
