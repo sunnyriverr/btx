@@ -28,18 +28,19 @@
 #include <modelnet/pq1_runtime.h>
 #include <thread>
 #include <chrono>
-#include <unistd.h>
 #include <protocol.h>
 #include <univalue.h>
 #include <util/fs.h>
 #include <util/strencodings.h>
 
 #include <boost/test/unit_test.hpp>
+#include <test/util/environment.h>
 
 #include <crypto/common.h>
 #include <crypto/sha384.h>
 #include <fstream>
 #ifndef WIN32
+#include <unistd.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/un.h>
@@ -715,8 +716,8 @@ BOOST_AUTO_TEST_CASE(pq19_openssl_conf_cannot_weaken_pq1)
             << "Ciphersuites = TLS_AES_128_GCM_SHA256\n"
             << "SignatureAlgorithms = ECDSA+SHA256:ed25519\n";
     }
-    BOOST_REQUIRE_EQUAL(setenv("OPENSSL_CONF", fs::PathToString(conf).c_str(), 1), 0);
-    BOOST_REQUIRE_EQUAL(setenv("OPENSSL_MODULES", "/nonexistent-btx-pq19-modules", 1), 0);
+    BOOST_REQUIRE_EQUAL(test::SetEnv("OPENSSL_CONF", fs::PathToString(conf).c_str()), 0);
+    BOOST_REQUIRE_EQUAL(test::SetEnv("OPENSSL_MODULES", "/nonexistent-btx-pq19-modules"), 0);
     std::string err;
     BOOST_REQUIRE_MESSAGE(modelnet::Pq1HostileConfCannotWeaken(err), err);
     BOOST_CHECK(modelnet::Pq1OpenSslEnvIsClean());
@@ -1021,6 +1022,7 @@ BOOST_AUTO_TEST_CASE(modelnet_rpc_table_constructs)
     RegisterModelNetRPCCommands(table);
 }
 
+#ifndef WIN32
 BOOST_AUTO_TEST_CASE(helper_stop_interrupts_accept_loop)
 {
     const fs::path tmp = m_args.GetDataDirBase() / "modeld-stop";
@@ -1112,7 +1114,6 @@ BOOST_AUTO_TEST_CASE(helper_unix_rpc_survives_peer_hup)
     join();
 }
 
-#ifndef WIN32
 BOOST_AUTO_TEST_CASE(unix_rpc_listen_path_hashes_overlong)
 {
     const std::string longp = "/tmp/" + std::string(120, 'a') + "/modeld.sock";
@@ -1248,6 +1249,21 @@ BOOST_AUTO_TEST_CASE(helper_unix_rpc_connects_when_datadir_path_is_too_long)
         throw;
     }
     join();
+}
+#else
+BOOST_AUTO_TEST_CASE(helper_unix_rpc_refuses_unsupported_platform)
+{
+    // The accepted Windows helper has no Unix RPC transport. Do not fake a
+    // socket or wait for a listener that the implementation explicitly refuses.
+    const fs::path socket_path = m_args.GetDataDirBase() / "unsupported-modeld.sock";
+    BOOST_REQUIRE(!fs::exists(socket_path));
+    UniValue params(UniValue::VARR);
+    UniValue result;
+    std::string err;
+    BOOST_CHECK(!modelnet::CallUnixRpc(socket_path, "getmodelnetworkinfo", params, result, err));
+    BOOST_CHECK_EQUAL(err, "helper Unix RPC is not supported on this platform");
+    BOOST_CHECK(result.isNull());
+    BOOST_CHECK(!fs::exists(socket_path));
 }
 #endif
 

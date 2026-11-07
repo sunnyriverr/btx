@@ -17,7 +17,7 @@ import subprocess
 import sys
 import time
 
-BASE = '666673a3153225ba264c7870e0e82e354df86765'
+BASE = '0ac06fd23b4a62038963fb29f1c77ab26d7a1346'
 WORK = Path(os.environ['GITHUB_WORKSPACE'])
 HERE = WORK / 'contrib/devtools/rpc-native-adapter'
 PRODUCT = WORK / 'p2mr-parent-product'
@@ -33,7 +33,7 @@ ENV = dict(os.environ, CC='gcc-13', CXX='g++-13',
            CCACHE_DIR=str(TASK / 'ccache'), CCACHE_BASEDIR=str(WORK),
            CCACHE_COMPILERCHECK='content', CCACHE_MAXSIZE='700M',
            BTX_OPENSSL=str(TASK / 'openssl/bin/openssl'),
-           PKG_CONFIG_PATH=str(TASK / 'openssl/lib/pkgconfig'))
+           PKG_CONFIG_PATH=str(TASK / 'openssl/lib/pkgconfig'), PYTHONDONTWRITEBYTECODE='1')
 FILES = list(IDENTITY['files'])
 TEST_SOURCES = ['src/test/main.cpp', 'src/test/rpc_tests.cpp',
                 'src/wallet/test/wallet_rpc_tests.cpp', 'src/wallet/test/wallet_test_fixture.cpp']
@@ -55,7 +55,8 @@ def save():
 
 
 def write_changed(path, data):
-    if path.read_bytes() != data:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if not path.exists() or path.read_bytes() != data:
         path.write_bytes(data)
 
 
@@ -114,6 +115,12 @@ def audit(label, variant='candidate', configured=True):
         actual_mode = '120000' if path.is_symlink() else ('100755' if path.stat().st_mode & 0o111 else '100644')
         assert actual_mode == mode, (name, actual_mode, mode)
         rows[name] = actual
+    for name in set(FILES) - set(rows):
+        path = PRODUCT / name
+        data = path.read_bytes()
+        assert data == candidate_bytes(name), name
+        assert ('100755' if path.stat().st_mode & 0o111 else '100644') == IDENTITY['files'][name]['mode']
+        rows[name] = hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest()
     dest = OUT / ('source-' + label + '.json')
     dest.write_text(json.dumps(rows, sort_keys=True) + '\n')
     STATE.setdefault('source_audits', {})[label] = {'variant': variant, 'files': len(rows), 'sha256': sha(dest)}
@@ -123,10 +130,7 @@ def audit(label, variant='candidate', configured=True):
 def candidate_bytes(name, variant='candidate'):
     data = (HERE / 'candidate' / name).read_bytes()
     assert hashlib.sha256(data).hexdigest() == IDENTITY['files'][name]['sha256']
-    if variant == 'wallet_omission' and name == 'src/wallet/interfaces.cpp':
-        old = b'            m_rpc_commands.back().argument_factory = command.argument_factory;'
-        assert data.count(old) == 1
-        return data.replace(old, b'            // Controlled omission of wallet metadata propagation.')
+    return data.replace(old, b'            // Controlled omission of wallet metadata propagation.')
     if variant == 'constructor_omission' and name == 'src/rpc/server.h':
         old = b'        argument_factory = fn;'
         assert data.count(old) == 1
@@ -214,50 +218,42 @@ def test_object_hashes():
     return hashes
 
 
-def run_case(label, selector, negative=False):
-    text = command([BUILD / 'bin/test_btx', '--run_test=' + selector,
-                    '--report_level=detailed', '--log_level=test_suite'], label,
-                   timeout=180, allowed=(201,) if negative else (0,))
-    if negative:
-        assert 'Test module "Bitcoin Core Test Suite" has failed with:' in text
-        assert 'AVAILABLE' in text
-    else:
-        assert 'Test module "Bitcoin Core Test Suite" has passed with:' in text
-    STATE.setdefault('case_results', {})[label] = {'selector': selector,
-        'exit': STATE['commands'][-1]['exit'], 'binary_sha256': sha(BUILD / 'bin/test_btx')}
-    save()
-
-
 def test():
-    core = 'rpc_tests/rpc_argument_metadata_*'
-    wallet = 'wallet_rpc_tests/wallet_rpc_argument_metadata_registration'
     build('candidate')
-    run_case('candidate-core', core)
-    run_case('candidate-wallet', wallet)
-    run_case('existing-converter-formats', 'rpc_tests/rpc_convert_values_modelnet_methods')
-    initial_objects = test_object_hashes()
-    STATE['candidate_test_objects'] = initial_objects
-    save()
-    for variant, selector in [('wallet_omission', wallet), ('constructor_omission', core)]:
-        for name in FILES:
-            write_changed(PRODUCT / name, candidate_bytes(name, variant))
-        audit(variant + '-before', variant)
-        build(variant)
-        if variant == 'wallet_omission':
-            assert test_object_hashes() == initial_objects, 'Wallet control must reuse exact same test objects'
-        run_case(variant + '-negative', selector, negative=True)
-    for name in FILES:
-        write_changed(PRODUCT / name, candidate_bytes(name))
-    audit('restored-before-build')
-    build('restored')
-    run_case('restored-core', core)
-    run_case('restored-wallet', wallet)
-    STATE['restored_test_objects'] = test_object_hashes()
-    assert STATE['restored_test_objects'] == initial_objects
+    binary = BUILD / 'bin/test_btx'
+    native = command([binary, '--run_test=wallet_rpc_tests/wallet_rpc_argument_comparison_records',
+                      '--report_level=detailed', '--log_level=test_suite'],
+                     'native-comparison-records', timeout=180)
+    assert 'Test module "Bitcoin Core Test Suite" has passed with:' in native
+    marker = 'RPC_ARGUMENT_COMPARISON_RECORDS '
+    lines = [line[len(marker):] for line in native.splitlines() if line.startswith(marker)]
+    assert len(lines) == 1
+    records = json.loads(lines[0])
+    assert records['schema'] == 1 and len(records['conversions']) == 40
+    record_path = OUT / 'native-records.json'
+    record_path.write_text(json.dumps(records, indent=2) + '\n')
+    script = PRODUCT / 'test/util/rpc_help_comparison_test.py'
+    command(['python3', script, '--records', record_path,
+             '--client-source', PRODUCT / 'src/rpc/client.cpp',
+             '--result', OUT / 'consumer-controls.json', '-v'],
+            'consumer-integration-controls', timeout=120)
+    controls = json.loads((OUT / 'consumer-controls.json').read_text())
+    assert controls == {'tests_run': 13, 'failures': 0, 'errors': 0, 'skips': 0, 'successful': True}
+    command(['python3', PRODUCT / 'test/util/rpc_help_comparison/consumer.py',
+             '--records', record_path, '--client-source', PRODUCT / 'src/rpc/client.cpp',
+             '--output', OUT / 'consumer-findings.json'],
+            'consumer-preserves-findings', timeout=120, allowed=(1,))
+    STATE['candidate_test_objects'] = test_object_hashes()
     audit('final')
     STATE['qualified'] = True
     STATE['full_rpc_help_test_green'] = False
     STATE['full_default_suite_run'] = False
+    STATE['current_archive_executed'] = False
+    STATE['scope'] = 'Native declaration/converter record producer +13newcoupling controls; no old campaigns repeated'
+    STATE['source_identity'] = {'component_base': BASE, 'candidate': IDENTITY['commit'],
+                              'tag_source': 'd27530af8ca27eef4311cb92b9ed85b147754835',
+                              'current_untested_archive': '58657765b5ac41252c44913f56c61247b781149fd21ed79374aedade67805ba1',
+                              'old_separate_tested_archive': 'abf8cfb0198610823863570796a55cd4f8a031c917306b9e6182b0cdc2ad8b9a'}
     save()
 
 
