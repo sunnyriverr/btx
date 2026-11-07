@@ -1,6 +1,6 @@
-"""Current accepted Windows configure/plan/three-object diagnosis, no repair/run/cache-save."""
+"""Same current generated targets after the retained two-file fixture repair; no full build/runtime/cache-save."""
 from pathlib import Path
-import json,os,re,subprocess,shutil,sys
+import json,os,re,subprocess,shutil,sys,base64
 import checkpoint
 import integration_support as s
 from job_tree import ProcessTree
@@ -25,7 +25,7 @@ def verify_dependencies():
 
 def configure():
  tree=ProcessTree();assert R['status']=='RESTORED_VERIFIED' and not s.owned_processes();assert sha(s.BUILD/'bin/test_btx.exe')==I['cached_binary_sha256'];R['node_binaries_before']={n:sha(s.BUILD/'bin'/(n+'.exe')) for n in I['binaries']};R['cached_commands']=json.loads((s.BUILD/'compile_commands.json').read_text());shutil.copyfile(s.BUILD/'compile_commands.json',s.E/'cached-compile-commands.json')
- s.need('current-fetch',['git','fetch','--no-tags','--depth=2','https://github.com/btxchain/btx.git',I['target']],180);s.need('current-checkout',['git','checkout','--detach',I['target']],60);cat=s.catalog(I['target'],'current-before');old=R['source_catalog'];R['current_source_catalog']=cat;added=sorted(cat['files'].keys()-old['files'].keys());removed=sorted(old['files'].keys()-cat['files'].keys());assert added==I['added_files'] and removed==I['removed_files'],(added,removed);delta=sorted(k for k in cat['files'].keys()|old['files'].keys() if cat['files'].get(k)!=old['files'].get(k));assert delta==I['source_delta'];R['current_source_delta']=delta;R['current_added_files']=added;R['current_removed_files']=removed
+ s.need('current-fetch',['git','fetch','--no-tags','--depth=2','https://github.com/btxchain/btx.git',I['base']],180);bundle=s.E/'fixture-candidate.bundle';bundle.write_bytes(base64.b64decode((P/'candidate.bundle.base64').read_text()));assert sha(bundle)==I['bundle_sha256'];s.need('candidate-bundle-verify',['git','bundle','verify',str(bundle)],60);s.need('candidate-bundle-fetch',['git','fetch',str(bundle),I['bundle_ref']],60);s.need('current-checkout',['git','checkout','--detach',I['target']],60);assert subprocess.check_output(['git','rev-parse','HEAD^{tree}'],cwd=s.SOURCE,text=True).strip()==I['candidate_tree'];cat=s.catalog(I['target'],'current-before');old=R['source_catalog'];R['current_source_catalog']=cat;added=sorted(cat['files'].keys()-old['files'].keys());removed=sorted(old['files'].keys()-cat['files'].keys());assert added==I['added_files'] and removed==I['removed_files'],(added,removed);delta=sorted(k for k in cat['files'].keys()|old['files'].keys() if cat['files'].get(k)!=old['files'].get(k));assert delta==I['source_delta'];R['current_source_delta']=delta;R['current_added_files']=added;R['current_removed_files']=removed
  for name in ['vcpkg.json','CMakeLists.txt']:assert cat['files'][name]==old['files'][name],name
  R['settings_before']=settings();args=R['actual_profile']['args'];assert args[0]=='cmake' and '-DWITH_MODELNET=ON' in args and '-DBUILD_TESTS=ON' in args
  os.environ.update(VCPKG_ROOT=str(s.ROOT/'vcpkg'),VCPKG_DISABLE_METRICS='1',VCPKG_MAX_CONCURRENCY='2',VCPKG_BINARY_SOURCES='clear;files,'+str(s.ROOT/'binary-cache')+',read')
@@ -42,6 +42,7 @@ def configure():
  R['command_delta']={'before':len(oldcmd),'after':len(newcmd),'added':sorted(newcmd.keys()-oldcmd.keys()),'removed':sorted(oldcmd.keys()-newcmd.keys()),'changed_count':len(changed),'changed_unit_count':sum('/test_btx.dir/' in k.replace('\\','/') for k in changed)};examples=[{'output':k,'before':oldcmd[k],'after':newcmd[k]} for k in changed];(s.E/'compile-command-deltas.json').write_text(json.dumps(examples,indent=2)+'\n');R['selected_commands']={}
  for suffix in I['selected_sources']:
   match=[v for v in new if v['file'].replace('\\','/').endswith('/'+suffix) and '/test_btx.dir/' in v['output'].replace('\\','/')];assert len(match)==1,(suffix,len(match));v=match[0];output=Path(v['output']);output=output if output.is_absolute() else s.BUILD/output;rel=str(output.relative_to(s.BUILD)).replace('\\','/');R['selected_commands'][suffix]={'entry':v,'target':rel,'object_exists_before':output.is_file(),'object_mtime_ns_before':output.stat().st_mtime_ns if output.exists() else None,'object_sha256_before':sha(output) if output.is_file() else None}
+ baseline=json.loads((P/'baseline-selected-commands.json').read_text());assert {k:v['entry'] for k,v in R['selected_commands'].items()}==baseline;R['same_generated_commands_as_baseline']=True
  for name,item in R['original_objects'].items():assert sha(s.ROOT/name)==item['sha256'],name
  verify_dependencies()
  assert s.catalog(I['target'],'current-configured')==cat;R['status']='CURRENT_NORMAL_CONFIGURED';s.save();assert tree.active()==1
@@ -71,12 +72,11 @@ def compile_selected():
  for name,item in R['selected_commands'].items():
   obj=s.BUILD/item['target'];R['selected_object_results'][name]={'target':item['target'],'exists_after':obj.is_file(),'sha256_after':sha(obj) if obj.is_file() else None,'mtime_ns_after':obj.stat().st_mtime_ns if obj.is_file() else None,'command':item['entry']['command']}
  failures=[line for line in text.splitlines() if line.startswith('FAILED:')];R['compiler_error_lines']=[line for line in text.splitlines() if re.search(r'\berror(?: [A-Z]+\d+)?:',line)];R['failed_action_lines']=failures
- expected={'src/test/modelnet_035_wan_endpoint_tests.cpp':['mkfifo'],'src/test/modelnet_ahp_comp_tests.cpp':['popen','pclose']}
- for name,words in expected.items():
-  assert any(Path(name).name+'.obj' in line for line in failures),(name,failures)
-  for word in words:assert any(Path(name).name in line and word in line and 'error' in line for line in text.splitlines()),(name,word)
- positive=I['positive_source'];item=R['selected_object_results'][positive];assert item['exists_after'] and item['mtime_ns_after']!=R['selected_commands'][positive]['object_mtime_ns_before'];assert not any(Path(positive).name+'.obj' in line for line in failures);assert code!=0
- R['status']='CURRENT_UNIT_COMPILER_BLOCKERS_CONFIRMED';s.save();assert tree.active()==1
+ assert code==0 and not failures and not R['compiler_error_lines'],(code,failures,R['compiler_error_lines'])
+ for name,item in R['selected_object_results'].items():
+  assert item['exists_after'] and item['mtime_ns_after']!=R['selected_commands'][name]['object_mtime_ns_before'],name
+ R['same_targets_pass_after']=True
+ R['status']='CURRENT_FIXTURE_REPAIR_OBJECTS_PASS';s.save();assert tree.active()==1
 
 def finish():
  assert not R['process_active'];R['owned_processes_before_cleanup']=s.owned_processes();s.quiesce();assert not R['owned_processes_before_cleanup'];assert s.catalog(I['target'],'current-after')==R['current_source_catalog'];assert not subprocess.check_output(['git','diff','--name-only'],cwd=s.SOURCE,text=True).strip()
@@ -88,7 +88,7 @@ def finish():
  R['cache_object_observation']={'input_count':len(R['original_objects']),'present':len(R['original_objects'])-len(missing),'missing_after_selected_failed_compile':missing,'changed_payloads':changed};allowed={v['target'].replace('\\','/') for v in R.get('selected_commands',{}).values()};assert all(x.replace('\\','/').removeprefix('project-build/') in allowed for x in missing+changed)
  for name,h in R['node_binaries_before'].items():assert sha(s.BUILD/'bin'/(name+'.exe'))==h,name
  verify_dependencies()
- R['node_binaries_unchanged']=True;R['dependencies_unchanged_except_compiler_hash_cache']=True;R['current_source_unchanged']=True;R['unit_invoked']=False;R['node_invoked']=False;R['project_cache_saved']=False;R['cleanup_verified']=True;R['diagnostic_complete']=R['status'] in ['CURRENT_CONFIGURE_BLOCKER_CAPTURED','CURRENT_UNIT_COMPILER_BLOCKERS_CONFIRMED'];s.save();assert R['diagnostic_complete'],R['status']
+ R['node_binaries_unchanged']=True;R['dependencies_unchanged_except_compiler_hash_cache']=True;R['current_source_unchanged']=True;R['unit_invoked']=False;R['node_invoked']=False;R['project_cache_saved']=False;R['cleanup_verified']=True;R['diagnostic_complete']=R['status']=='CURRENT_FIXTURE_REPAIR_OBJECTS_PASS';s.save();assert R['diagnostic_complete'],R['status']
 try:{'configure':configure,'plans':plans,'compile':compile_selected,'finish':finish}[sys.argv[1]]()
 except BaseException as e:R.setdefault('prerequisite_failures',[]).append({'stage':sys.argv[1],'type':type(e).__name__,'error':str(e)});s.save();raise
 finally:s.save()

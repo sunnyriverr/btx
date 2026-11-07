@@ -1,4 +1,4 @@
-name: Native Windows current-source prerequisite diagnosis
+name: Native Windows current fixture portability verification
 permissions:
   contents: read
 jobs:
@@ -182,7 +182,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Configure exact current d522 source with the retained dependencies
+    - name: Configure current fixture candidate with the retained dependencies
       id: cases
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -207,7 +207,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Inspect normal node full-unit and three-object plans
+    - name: Inspect current generated plans and gate three-object compile
       id: fixture_build
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -232,7 +232,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Compile only two suspect fixtures and one positive control
+    - name: Compile corrected fixtures and the same positive control
       id: fixture_run
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -287,7 +287,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
       with:
-        name: native-windows-current-prerequisites
+        name: native-windows-current-fixture-repair
         path: D:\btx-native-035\evidence\
         retention-days: 14
 'on':
