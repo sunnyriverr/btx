@@ -50,9 +50,14 @@ def plans():
  tree=ProcessTree()
  if R['status']=='CURRENT_CONFIGURE_BLOCKER_CAPTURED':return
  assert R['status']=='CURRENT_NORMAL_CONFIGURED';s.need('current-verify-globs',['cmake','-P',str(s.BUILD/'CMakeFiles/VerifyGlobs.cmake')],120,cwd=s.BUILD);assert 'GLOB mismatch!' not in (s.E/'current-verify-globs.log').read_text()
+ # Same documented observation method as full.py build(): only the freshly
+ # configured CURRENT graph is copied; its recipe/rules/source are verified.
+ for name,h in R['current_configuration'].items():assert sha(s.BUILD/name)==h,name
+ assert s.catalog(I['target'],'current-plan-source')==R['current_source_catalog']
+ manifest=s.E/'observed-current-manifest.ninja';shutil.copyfile(s.BUILD/'build.ninja',manifest);assert sha(manifest)==R['current_configuration']['build.ninja'];R['current_observed_manifest']={'path':str(manifest),'sha256':sha(manifest),'normal_current_configure':True,'old_cached_manifest_used':False};s.save()
  R['current_plans']={}
  for label,targets in [('node',['btxd']),('full',['btxd','btx-cli','btx-tx','btx-util','btx-open','btx-modeld','test_btx']),('selected',[x['target'] for x in R['selected_commands'].values()])]:
-  code=s.run('current-'+label+'-plan',['ninja','-C',str(s.BUILD),'-n','-d','explain']+targets,120);text=(s.E/('current-'+label+'-plan.log')).read_text(errors='replace');actions=re.findall(r'^\[\d+/\d+\] (.*)',text,re.M);objects=[a.removeprefix('Building CXX object ').replace('\\','/') for a in actions if a.startswith('Building CXX object ')];R['current_plans'][label]={'exit':code,'actions':actions,'steps':len(actions),'objects':objects,'command_invalidations':text.count('ninja explain: command line changed for ')};s.save();assert code==0,'Actual current graph planning failed'
+  code=s.run('current-'+label+'-plan',['ninja','-C',str(s.BUILD),'-f',str(manifest),'-n','-d','explain']+targets,120);text=(s.E/('current-'+label+'-plan.log')).read_text(errors='replace');actions=re.findall(r'^\[\d+/\d+\] (.*)',text,re.M);objects=[a.removeprefix('Building CXX object ').replace('\\','/') for a in actions if a.startswith('Building CXX object ')];R['current_plans'][label]={'exit':code,'actions':actions,'steps':len(actions),'objects':objects,'command_invalidations':text.count('ninja explain: command line changed for ')};s.save();assert code==0,'Actual current graph planning failed'
   if label=='selected':
    allowed={'Generating bitcoin-build-info.h','Re-checking globbed directories...'};bad=[a for a in actions if not a.startswith('Building CXX object ') and a not in allowed];assert not bad,('Non-object actions would expand diagnostic',bad);assert 0<len(actions)<=I['max_selected_steps'] and len(objects)<=I['max_selected_objects'];assert set(objects)==set(targets),(objects,targets)
  R['status']='CURRENT_PLANS_CAPTURED';s.save();assert tree.active()==1
@@ -60,7 +65,9 @@ def plans():
 def compile_selected():
  tree=ProcessTree()
  if R['status']=='CURRENT_CONFIGURE_BLOCKER_CAPTURED':return
- assert R['status']=='CURRENT_PLANS_CAPTURED';targets=[x['target'] for x in R['selected_commands'].values()];code=s.run('current-selected-compile',['ninja','-C',str(s.BUILD),'-j','2','-k','0']+targets,600);text=(s.E/'current-selected-compile.log').read_text(errors='replace');R['selected_compile_exit']=code;R['selected_object_results']={}
+ assert R['status']=='CURRENT_PLANS_CAPTURED';targets=[x['target'] for x in R['selected_commands'].values()];manifest=Path(R['current_observed_manifest']['path']);assert sha(manifest)==R['current_configuration']['build.ninja']
+ for name,h in R['current_configuration'].items():assert sha(s.BUILD/name)==h,name
+ code=s.run('current-selected-compile',['ninja','-C',str(s.BUILD),'-f',str(manifest),'-j','2','-k','0']+targets,600);text=(s.E/'current-selected-compile.log').read_text(errors='replace');R['selected_compile_exit']=code;R['selected_object_results']={}
  for name,item in R['selected_commands'].items():
   obj=s.BUILD/item['target'];R['selected_object_results'][name]={'target':item['target'],'exists_after':obj.is_file(),'sha256_after':sha(obj) if obj.is_file() else None,'mtime_ns_after':obj.stat().st_mtime_ns if obj.is_file() else None,'command':item['entry']['command']}
  failures=[line for line in text.splitlines() if line.startswith('FAILED:')];R['compiler_error_lines']=[line for line in text.splitlines() if re.search(r'\berror(?: [A-Z]+\d+)?:',line)];R['failed_action_lines']=failures
