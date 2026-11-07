@@ -1,0 +1,984 @@
+diff --git a/src/modelnet/s3_client.cpp b/src/modelnet/s3_client.cpp
+index 68a798f26..34f90b0f6 100644
+--- a/src/modelnet/s3_client.cpp
++++ b/src/modelnet/s3_client.cpp
+@@ -381,6 +381,16 @@ void ApplySocketTimeouts(int fd, int timeout_ms)
+     (void)setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv));
+ }
+ 
++// Winsock SOCKETs are not CRT file descriptors, even when stored as int.
++void CloseS3Socket(int fd)
++{
++#ifdef WIN32
++    ::closesocket(static_cast<SOCKET>(fd));
++#else
++    ::close(fd);
++#endif
++}
++
+ bool ConnectTcp(const ParsedS3Endpoint& ep, bool allow_http_loopback, bool allow_link_local, int& fd_out, std::string& err)
+ {
+     fd_out = -1;
+@@ -440,13 +450,13 @@ bool ConnectTcp(const ParsedS3Endpoint& ep, bool allow_http_loopback, bool allow
+         const int cr = ::connect(fd, ai->ai_addr, ai->ai_addrlen);
+         if (cr != 0 && errno != EINPROGRESS && errno != EINTR) {
+             last = "https connect failed";
+-            ::close(fd);
++            CloseS3Socket(fd);
+             continue;
+         }
+         std::string werr;
+         if (!WaitFd(fd, POLLOUT, kS3HttpsTimeoutMs, werr)) {
+             last = werr.empty() ? "https connect failed" : werr;
+-            ::close(fd);
++            CloseS3Socket(fd);
+             continue;
+         }
+         int soerr = 0;
+@@ -454,7 +464,7 @@ bool ConnectTcp(const ParsedS3Endpoint& ep, bool allow_http_loopback, bool allow
+         getsockopt(fd, SOL_SOCKET, SO_ERROR, &soerr, &slen);
+         if (soerr != 0) {
+             last = "https connect failed";
+-            ::close(fd);
++            CloseS3Socket(fd);
+             continue;
+         }
+         if (flags >= 0) fcntl(fd, F_SETFL, flags & ~O_NONBLOCK);
+@@ -720,7 +730,7 @@ bool PerformS3Http(const S3ClientConfig& cfg, SigV4Request req, Span<const unsig
+         if (!OpensslHandshake(fd, ep.host, ctx, ssl, err)) {
+             ssl.reset();
+             ctx.reset();
+-            ::close(fd);
++            CloseS3Socket(fd);
+             return false;
+         }
+     }
+@@ -729,7 +739,7 @@ bool PerformS3Http(const S3ClientConfig& cfg, SigV4Request req, Span<const unsig
+         ssl.reset();
+         ctx.reset();
+         if (fd >= 0) {
+-            ::close(fd);
++            CloseS3Socket(fd);
+             fd = -1;
+         }
+     };
+diff --git a/src/test/CMakeLists.txt b/src/test/CMakeLists.txt
+index 9e800d9c4..a56654a8b 100644
+--- a/src/test/CMakeLists.txt
++++ b/src/test/CMakeLists.txt
+@@ -2615,10 +2615,9 @@ if(WITH_MODELNET)
+   target_compile_definitions(test_btx PRIVATE
+     MODELNET_V11_VECTORS_PATH=\"${PROJECT_SOURCE_DIR}/src/test/data/modelnet_v11_vectors.json\"
+     MODELNET_B0_CODEC_VECTORS_PATH=\"${PROJECT_SOURCE_DIR}/src/test/data/modelnet_b0_codec_vectors.json\"
+-    MODELNET_BTX_OPEN_PATH=\"${CMAKE_BINARY_DIR}/bin/btx-open\"
++    MODELNET_BTX_OPEN_PATH=\"$<TARGET_FILE:btx-open>\"
+     MODELNET_BOUNTY_VECTORS_PATH=\"${PROJECT_SOURCE_DIR}/contrib/modelnet/bounty/reference/golden-vectors.json\"
+-    MODELNET_MODELD_PATH=\"${CMAKE_BINARY_DIR}/bin/btx-modeld\"
+-    MODELNET_BTXD_PATH=\"${CMAKE_BINARY_DIR}/bin/btxd\"
++    MODELNET_MODELD_PATH=\"$<TARGET_FILE:btx-modeld>\"
+     MODELNET_AHP_FIXTURE_DIR=\"${PROJECT_SOURCE_DIR}/src/test/data/agent-package\"
+     MODELNET_BTX_PACKAGE_VECTORS_PATH=\"${PROJECT_SOURCE_DIR}/src/test/data/btx-package-vectors\"
+     MODELNET_HCP_PORTAL_PATH=\"${PROJECT_SOURCE_DIR}/contrib/modelnet/hcp-portal/index.html\"
+@@ -2626,6 +2625,15 @@ if(WITH_MODELNET)
+     MODELNET_CRL12_SCHEMA_PATH=\"${PROJECT_SOURCE_DIR}/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\"
+     MODELNET_CRL12_OPERATIONS_PATH=\"${PROJECT_SOURCE_DIR}/contrib/modelnet/crl12/schemas/operations-v1.2.json\"
+   )
++  # Use the configured executables, including the platform suffix and output directory.
++  add_dependencies(test_btx btx-open btx-modeld)
++  if(TARGET btxd)
++    target_compile_definitions(test_btx PRIVATE MODELNET_BTXD_PATH=\"$<TARGET_FILE:btxd>\")
++    add_dependencies(test_btx btxd)
++  else()
++    target_compile_definitions(test_btx PRIVATE
++      MODELNET_BTXD_PATH=\"${CMAKE_BINARY_DIR}/bin/btxd${CMAKE_EXECUTABLE_SUFFIX}\")
++  endif()
+   set_property(SOURCE modelnet_ahp_comp_tests.cpp APPEND PROPERTY COMPILE_DEFINITIONS
+     "MODELNET_OFF_CHECK_SCRIPT=\"${PROJECT_SOURCE_DIR}/contrib/modelnet/check-with-modelnet-off.sh\"")
+   set(_modelnet_b0_spec "/home/administrator/Documents/btx-0.34.7-spec-ref/BTX_0.34.7_Model_Network_v1.1/baseline/BTX_0.34.7_PQ_Native_Model_Network_Specification.md")
+diff --git a/src/test/modelnet_035_wan_endpoint_tests.cpp b/src/test/modelnet_035_wan_endpoint_tests.cpp
+index 406a1ba64..7d0e3e763 100644
+--- a/src/test/modelnet_035_wan_endpoint_tests.cpp
++++ b/src/test/modelnet_035_wan_endpoint_tests.cpp
+@@ -509,6 +509,7 @@ BOOST_AUTO_TEST_CASE(portable_archive_entries)
+     BOOST_CHECK_EQUAL(err, "BTX035_PATH_UNSAFE");
+     BOOST_CHECK_EQUAL(FileText(kept), "keep-me");
+ 
++#ifndef _WIN32
+     const fs::path devdir = m_path_root / "wan-dev";
+     BOOST_REQUIRE(fs::create_directories(devdir));
+     const fs::path node = devdir / "node";
+@@ -517,6 +518,7 @@ BOOST_AUTO_TEST_CASE(portable_archive_entries)
+     BOOST_CHECK(!roll.WritePortableArchive(devdir, devtar, err));
+     BOOST_CHECK_EQUAL(err, "BTX035_PATH_UNSAFE");
+     BOOST_CHECK(!fs::exists(devtar));
++#endif
+ 
+     const fs::path link_root = m_path_root / "tree-link";
+     fs::create_symlink(tree, link_root);
+diff --git a/src/test/modelnet_ahp_api_tests.cpp b/src/test/modelnet_ahp_api_tests.cpp
+index 585d890cd..f0e7a60e6 100644
+--- a/src/test/modelnet_ahp_api_tests.cpp
++++ b/src/test/modelnet_ahp_api_tests.cpp
+@@ -10,6 +10,7 @@
+ #include <modelnet/http_bridge.h>
+ #include <modelnet/package_acquisition.h>
+ #include <modelnet/package_core.h>
++#include <test/util/sdk_process.h>
+ #include <test/util/setup_common.h>
+ #include <test/modelnet_n02_idem.h>
+ #include <univalue.h>
+@@ -68,7 +69,7 @@ std::string HelperErr(bool ok, const UniValue& result, const std::string& code)
+     return {};
+ }
+ 
+-#ifdef MODELNET_BTX_OPEN_PATH
++#if defined(MODELNET_BTX_OPEN_PATH) && !defined(WIN32)
+ std::string ShellQuote(const std::string& s)
+ {
+     std::string q = "'";
+@@ -235,16 +236,20 @@ BOOST_AUTO_TEST_CASE(ahp_api_04_plan_execute_cancel_acquisition)
+     BOOST_REQUIRE(fixture.find("btx://") == std::string::npos);
+     BOOST_REQUIRE(fixture.ends_with(".btx") || fixture.ends_with(".BTX"));
+     // One argv: the unsigned .btx path. Not a shell of mixed URI+file.
++    std::string out;
++#ifdef WIN32
++    const int rc = sdk_test::Spawn({MODELNET_BTX_OPEN_PATH, fixture}, out, false);
++#else
+     const std::string cmd = ShellQuote(MODELNET_BTX_OPEN_PATH) + " " + ShellQuote(fixture);
+     BOOST_REQUIRE(cmd.find("btx://") == std::string::npos);
+     FILE* fp = popen(cmd.c_str(), "r");
+     BOOST_REQUIRE(fp);
+-    std::string out;
+     char buf[4096];
+     while (fgets(buf, sizeof(buf), fp) != nullptr) {
+         out.append(buf);
+     }
+     const int rc = pclose(fp);
++#endif
+     BOOST_REQUIRE_EQUAL(rc, 0);
+     const bool inspect_fields = out.find("core_version") != std::string::npos ||
+                                 out.find("documents") != std::string::npos ||
+diff --git a/src/test/modelnet_ahp_comp_tests.cpp b/src/test/modelnet_ahp_comp_tests.cpp
+index 6abfceda4..0370c0deb 100644
+--- a/src/test/modelnet_ahp_comp_tests.cpp
++++ b/src/test/modelnet_ahp_comp_tests.cpp
+@@ -232,12 +232,20 @@ BOOST_AUTO_TEST_CASE(ahp_comp_05_modelnet_disabled_build)
+     BOOST_REQUIRE_MESSAGE(!script.empty() && fs::exists(script),
+                           "missing contrib/modelnet/check-with-modelnet-off.sh");
+     const std::string cmd = "bash " + fs::PathToString(script) + " 2>&1";
++#ifdef _WIN32
++    FILE* pipe = _popen(cmd.c_str(), "r");
++#else
+     FILE* pipe = popen(cmd.c_str(), "r");
++#endif
+     BOOST_REQUIRE(pipe);
+     std::string out;
+     char buf[512];
+     while (fgets(buf, sizeof(buf), pipe) != nullptr) out.append(buf);
++#ifdef _WIN32
++    const int status = _pclose(pipe);
++#else
+     const int status = pclose(pipe);
++#endif
+     BOOST_TEST_MESSAGE(out);
+     BOOST_REQUIRE_EQUAL(status, 0);
+     BOOST_CHECK(out.find("WITH_MODELNET=OFF is the monetary-only build") != std::string::npos);
+diff --git a/src/test/modelnet_ahp_journey_tests.cpp b/src/test/modelnet_ahp_journey_tests.cpp
+index 85b38845b..f1b2c3b62 100644
+--- a/src/test/modelnet_ahp_journey_tests.cpp
++++ b/src/test/modelnet_ahp_journey_tests.cpp
+@@ -14,6 +14,7 @@
+ #include <modelnet/package_documents.h>
+ #include <modelnet/package_economy.h>
+ #include <modelnet/package_install.h>
++#include <test/util/sdk_process.h>
+ #include <test/util/setup_common.h>
+ #include <univalue.h>
+ #include <util/fs.h>
+@@ -82,7 +83,7 @@ bool JsonHasAccountKey(const UniValue& v)
+     return false;
+ }
+ 
+-#ifdef MODELNET_BTX_OPEN_PATH
++#if defined(MODELNET_BTX_OPEN_PATH) && !defined(WIN32)
+ std::string ShellQuote(const std::string& s)
+ {
+     std::string q = "'";
+@@ -320,15 +321,19 @@ BOOST_AUTO_TEST_CASE(ahp_j08_offline_and_cancellation)
+     BOOST_TEST_MESSAGE(std::string("AHP-J08 btx-open binary: ") + MODELNET_BTX_OPEN_PATH);
+     BOOST_REQUIRE(fs::exists(fs::PathFromString(MODELNET_BTX_OPEN_PATH)));
+     const std::string fixture = fs::PathToString(Fixture("model-agent.btx"));
++    std::string out;
++#ifdef WIN32
++    const int rc = sdk_test::Spawn({MODELNET_BTX_OPEN_PATH, fixture}, out, false);
++#else
+     const std::string cmd = ShellQuote(MODELNET_BTX_OPEN_PATH) + " " + ShellQuote(fixture);
+     FILE* fp = popen(cmd.c_str(), "r");
+     BOOST_REQUIRE(fp);
+-    std::string out;
+     char buf[4096];
+     while (fgets(buf, sizeof(buf), fp) != nullptr) {
+         out.append(buf);
+     }
+     const int rc = pclose(fp);
++#endif
+     BOOST_REQUIRE_EQUAL(rc, 0);
+     BOOST_CHECK(out.find("action=preview-only") != std::string::npos);
+     BOOST_CHECK(out.find("agents_md_write=false") != std::string::npos);
+diff --git a/src/test/modelnet_cloud_tests.cpp b/src/test/modelnet_cloud_tests.cpp
+index 5c2754fd4..9d27b1419 100644
+--- a/src/test/modelnet_cloud_tests.cpp
++++ b/src/test/modelnet_cloud_tests.cpp
+@@ -42,6 +42,7 @@
+ #include <test/modelnet_n02_idem.h>
+ #include <univalue.h>
+ #include <util/fs.h>
++#include <util/sock.h>
+ 
+ #include <boost/test/unit_test.hpp>
+ #include <test/util/environment.h>
+@@ -50,6 +51,7 @@
+ #include <cstdlib>
+ #include <cstring>
+ #include <fstream>
++#include <future>
+ #include <string>
+ #include <vector>
+ 
+@@ -93,6 +95,36 @@ modelnet::CloudStoreConfig BaseCfg(const fs::path& creds, const std::string& end
+     return c;
+ }
+ 
++// Positive Windows fixtures use the supported ENV source. Keep BaseCfg's PATH
++// source available for permission-refusal checks; never relax product policy.
++class ScopedCloudCredentials
++{
++#ifdef WIN32
++    test::ScopedEnvVar m_credentials{"BTX_TEST_CLOUD_FIXTURE_CREDS",
++        (std::string{"aws_access_key_id="} + kAccess +
++         "\naws_secret_access_key=" + kSecret + "\n").c_str()};
++#endif
++
++public:
++    modelnet::CloudStoreConfig Config(const fs::path& creds, const std::string& endpoint = "https://acct.r2.cloudflarestorage.com") const
++    {
++        auto cfg = BaseCfg(creds, endpoint);
++#ifdef WIN32
++        cfg.s3.creds = {modelnet::CredentialRefKind::ENV, "BTX_TEST_CLOUD_FIXTURE_CREDS"};
++#endif
++        return cfg;
++    }
++
++    std::string RpcRef(const fs::path& creds) const
++    {
++#ifdef WIN32
++        return "env:BTX_TEST_CLOUD_FIXTURE_CREDS";
++#else
++        return fs::PathToString(creds);
++#endif
++    }
++};
++
+ void NoSecrets(const UniValue& v, const std::string& access, const std::string& secret)
+ {
+     const std::string dump = v.write();
+@@ -109,10 +141,98 @@ modelnet::Digest48 ArtifactFill(unsigned char b)
+     return d;
+ }
+ 
++
++// Exercise the real transport and wait for peer EOF, not just a successful
++// response. The loopback server and all waits are bounded on both platforms.
++void CheckS3SocketCleanup(bool reject_tls)
++{
++    const SOCKET handle = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
++    BOOST_REQUIRE(handle != INVALID_SOCKET);
++    Sock listener{handle};
++    sockaddr_in addr{};
++    addr.sin_family = AF_INET;
++    addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
++    BOOST_REQUIRE_EQUAL(listener.Bind(reinterpret_cast<sockaddr*>(&addr), sizeof(addr)), 0);
++    BOOST_REQUIRE_EQUAL(listener.Listen(1), 0);
++    socklen_t addr_len = sizeof(addr);
++    BOOST_REQUIRE_EQUAL(listener.GetSockName(reinterpret_cast<sockaddr*>(&addr), &addr_len), 0);
++    BOOST_REQUIRE(listener.SetNonBlocking());
++    const std::vector<unsigned char> payload{'b', 't', 'x', 0, 255};
++    auto server = std::async(std::launch::async, [&] {
++        const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds{5};
++        auto ready = [&](const Sock& sock) {
++            const auto remaining = std::chrono::duration_cast<std::chrono::milliseconds>(deadline - std::chrono::steady_clock::now());
++            Sock::Event occurred{0};
++            return remaining.count() > 0 && sock.Wait(remaining, Sock::RECV, &occurred) && (occurred & Sock::RECV);
++        };
++        if (!ready(listener)) return false;
++        auto peer = listener.Accept(nullptr, nullptr);
++        if (!peer || !peer->SetNonBlocking()) return false;
++        std::string request;
++        char buf[4096];
++        if (!reject_tls) {
++            while (request.find("\r\n\r\n") == std::string::npos) {
++                if (!ready(*peer)) return false;
++                const auto n = peer->Recv(buf, sizeof(buf), 0);
++                if (n <= 0) return false;
++                request.append(buf, n);
++                if (request.size() > 65536) return false;
++            }
++            if (request.find("GET /btx-models/loopback-object HTTP/1.1\r\n") != 0) return false;
++        }
++        CThreadInterrupt interrupt;
++        std::string response = reject_tls ? "HTTP/1.1 400 Bad Request\r\nContent-Length: 0\r\nConnection: close\r\n\r\n" :
++            "HTTP/1.1 200 OK\r\nContent-Length: 5\r\nConnection: close\r\n\r\n";
++        if (!reject_tls) response.append(reinterpret_cast<const char*>(payload.data()), payload.size());
++        peer->SendComplete(Span<const unsigned char>{reinterpret_cast<const unsigned char*>(response.data()), response.size()}, std::chrono::seconds{5}, interrupt);
++        // Keep the server socket open: only the client's cleanup can yield EOF.
++        size_t drained = 0;
++        while (ready(*peer)) {
++            const auto n = peer->Recv(buf, sizeof(buf), 0);
++            if (n == 0) return true;
++            if (n < 0) {
++#ifdef WIN32
++                const bool reset = WSAGetLastError() == WSAECONNRESET;
++#else
++                const bool reset = errno == ECONNRESET;
++#endif
++                // Failed TLS can close with unread plaintext. A reset still
++                // proves peer teardown; successful HTTP must yield clean EOF.
++                return reject_tls && reset;
++            }
++            if ((drained += n) > 65536) return false;
++        }
++        return false;
++    });
++    test::ScopedEnvVar credentials{"BTX_TEST_S3_SOCKET_CREDS", "aws_access_key_id=fixture-access\naws_secret_access_key=fixture-secret\n"};
++    modelnet::S3ClientConfig cfg;
++    cfg.endpoint = std::string{reject_tls ? "https://127.0.0.1:" : "http://127.0.0.1:"} + std::to_string(ntohs(addr.sin_port));
++    cfg.bucket = "btx-models";
++    cfg.region = "auto";
++    cfg.use_fake = false;
++    cfg.allow_http_loopback = !reject_tls;
++    cfg.creds = {modelnet::CredentialRefKind::ENV, "BTX_TEST_S3_SOCKET_CREDS"};
++    modelnet::S3Client client;
++    std::string err;
++    BOOST_REQUIRE_MESSAGE(client.Init(cfg, err), err);
++    BOOST_CHECK(!client.UsesFake());
++    std::vector<unsigned char> got;
++    const bool ok = client.Get("loopback-object", got, err);
++    if (reject_tls) {
++        BOOST_CHECK(!ok);
++        BOOST_CHECK_EQUAL(err, "https handshake failed");
++    } else {
++        BOOST_CHECK_MESSAGE(ok, err);
++        BOOST_CHECK(got == payload);
++    }
++    BOOST_CHECK(server.get());
++}
++
+ } // namespace
+ 
+ BOOST_AUTO_TEST_CASE(cloud_01_sigv4_put_get_fakes3)
+ {
++    const ScopedCloudCredentials credentials;
+     modelnet::SigV4Request req;
+     req.method = "GET";
+     req.canonical_uri = "/test.txt";
+@@ -133,7 +253,7 @@ BOOST_AUTO_TEST_CASE(cloud_01_sigv4_put_get_fakes3)
+     WriteCreds(creds, kAccess, kSecret, true);
+     modelnet::S3Client client;
+     std::string err;
+-    BOOST_REQUIRE(client.Init(BaseCfg(creds).s3, err));
++    BOOST_REQUIRE_MESSAGE(client.Init(credentials.Config(creds).s3, err), err);
+     const std::vector<unsigned char> body{'b', 't', 'x'};
+     BOOST_REQUIRE(client.Put("v1/artifacts/aa/files/0", body, err));
+     std::vector<unsigned char> got;
+@@ -147,11 +267,12 @@ BOOST_AUTO_TEST_CASE(cloud_01_sigv4_put_get_fakes3)
+ 
+ BOOST_AUTO_TEST_CASE(cloud_02_head_range_path_style)
+ {
++    const ScopedCloudCredentials credentials;
+     const fs::path creds = m_path_root / "cloud-02-creds";
+     WriteCreds(creds, kAccess, kSecret, true);
+     modelnet::S3Client client;
+     std::string err;
+-    BOOST_REQUIRE(client.Init(BaseCfg(creds).s3, err));
++    BOOST_REQUIRE_MESSAGE(client.Init(credentials.Config(creds).s3, err), err);
+     std::vector<unsigned char> body(32, 0x11);
+     BOOST_REQUIRE(client.Put("obj", body, err));
+     uint64_t size = 0;
+@@ -178,20 +299,26 @@ BOOST_AUTO_TEST_CASE(cloud_03_creds_0600_env_never_in_json)
+     const fs::path good = m_path_root / "cloud-03-good";
+     WriteCreds(good, kAccess, kSecret, true);
+     cfg.creds.value = fs::PathToString(good);
+-    BOOST_REQUIRE(client.Init(cfg, err));
++#ifdef WIN32
++    // Windows attributes cannot express owner-only POSIX file permissions.
++    BOOST_CHECK(!client.Init(cfg, err));
++    BOOST_CHECK_EQUAL(err, "credential file must be mode 0600");
++#else
++    BOOST_REQUIRE_MESSAGE(client.Init(cfg, err), err);
+     NoSecrets(client.HealthJson(), kAccess, kSecret);
+     NoSecrets(client.ConfigJson(), kAccess, kSecret);
++#endif
+ 
+     const char* env_name = "BTX_TEST_CLOUD_CREDS_C";
+     const std::string body = std::string("aws_access_key_id=") + kAccess + "\naws_secret_access_key=" + kSecret + "\n";
+-    BOOST_REQUIRE_EQUAL(test::SetEnv(env_name, body.c_str()), 0);
++    test::ScopedEnvVar credentials{env_name, body.c_str()};
+     modelnet::S3Client env_client;
+     auto env_cfg = cfg;
+     env_cfg.creds.kind = modelnet::CredentialRefKind::ENV;
+     env_cfg.creds.value = env_name;
+-    BOOST_REQUIRE(env_client.Init(env_cfg, err));
++    BOOST_REQUIRE_MESSAGE(env_client.Init(env_cfg, err), err);
+     NoSecrets(env_client.HealthJson(), kAccess, kSecret);
+-    test::UnsetEnv(env_name);
++    NoSecrets(env_client.ConfigJson(), kAccess, kSecret);
+ }
+ 
+ BOOST_AUTO_TEST_CASE(cloud_04_reject_file_unix_gopher)
+@@ -233,11 +360,12 @@ BOOST_AUTO_TEST_CASE(cloud_06_redact_cloud_secrets)
+ 
+ BOOST_AUTO_TEST_CASE(cloud_07_cloud_object_store_source_files)
+ {
++    const ScopedCloudCredentials credentials;
+     const fs::path creds = m_path_root / "cloud-07-creds";
+     WriteCreds(creds, kAccess, kSecret, true);
+-    modelnet::S3PieceStore store{BaseCfg(creds)};
++    modelnet::S3PieceStore store{credentials.Config(creds)};
+     std::string err;
+-    BOOST_REQUIRE(store.Init(err));
++    BOOST_REQUIRE_MESSAGE(store.Init(err), err);
+     BOOST_CHECK_EQUAL(modelnet::CloudObjectLayoutName(store.Layout()), "SOURCE_FILES");
+     const auto art = ArtifactFill(0xab);
+     const fs::path src = m_path_root / "cloud-07.bin";
+@@ -256,9 +384,10 @@ BOOST_AUTO_TEST_CASE(cloud_07_cloud_object_store_source_files)
+ 
+ BOOST_AUTO_TEST_CASE(cloud_07b_cloud_object_store_piece_objects)
+ {
++    const ScopedCloudCredentials credentials;
+     const fs::path creds = m_path_root / "cloud-07b-creds";
+     WriteCreds(creds, kAccess, kSecret, true);
+-    auto cfg = BaseCfg(creds, "https://minio.example.test");
++    auto cfg = credentials.Config(creds, "https://minio.example.test");
+     cfg.provider = modelnet::CloudProvider::MINIO;
+     cfg.layout = modelnet::CloudObjectLayout::PIECE_OBJECTS;
+     modelnet::S3PieceStore store{cfg};
+@@ -285,6 +414,7 @@ BOOST_AUTO_TEST_CASE(cloud_07b_cloud_object_store_piece_objects)
+ 
+ BOOST_AUTO_TEST_CASE(cloud_07c_piece_objects_hydrate_incomplete)
+ {
++    const ScopedCloudCredentials credentials;
+     using namespace modelnet;
+     const fs::path dir = m_path_root / "cloud-07c";
+     fs::create_directories(dir);
+@@ -298,7 +428,7 @@ BOOST_AUTO_TEST_CASE(cloud_07c_piece_objects_hydrate_incomplete)
+     cfg.pushKV("prefix", "v1");
+     cfg.pushKV("provider", "MINIO");
+     cfg.pushKV("layout", "PIECE_OBJECTS");
+-    cfg.pushKV("credential_ref", fs::PathToString(creds));
++    cfg.pushKV("credential_ref", credentials.RpcRef(creds));
+     cfg.pushKV("use_fake", true);
+     cfg.pushKV("idempotency_key", "cloud-07c-set");
+     UniValue params(UniValue::VARR);
+@@ -374,11 +504,12 @@ BOOST_AUTO_TEST_CASE(cloud_08_layout_not_in_identity)
+ 
+ BOOST_AUTO_TEST_CASE(cloud_09_presign_get_exact_object)
+ {
++    const ScopedCloudCredentials credentials;
+     const fs::path creds = m_path_root / "cloud-09-creds";
+     WriteCreds(creds, kAccess, kSecret, true);
+     modelnet::S3Client client;
+     std::string err;
+-    BOOST_REQUIRE(client.Init(BaseCfg(creds).s3, err));
++    BOOST_REQUIRE_MESSAGE(client.Init(credentials.Config(creds).s3, err), err);
+     const std::vector<unsigned char> body{'z'};
+     BOOST_REQUIRE(client.Put("exact/object", body, err));
+     std::string url;
+@@ -444,11 +575,12 @@ BOOST_AUTO_TEST_CASE(cloud_10_stream_put_over_8mib)
+ 
+ BOOST_AUTO_TEST_CASE(cloud_11_health_json_counters)
+ {
++    const ScopedCloudCredentials credentials;
+     const fs::path creds = m_path_root / "cloud-11-creds";
+     WriteCreds(creds, kAccess, kSecret, true);
+-    modelnet::S3PieceStore store{BaseCfg(creds)};
++    modelnet::S3PieceStore store{credentials.Config(creds)};
+     std::string err;
+-    BOOST_REQUIRE(store.Init(err));
++    BOOST_REQUIRE_MESSAGE(store.Init(err), err);
+     const auto art = ArtifactFill(0x33);
+     const fs::path src = m_path_root / "cloud-11.bin";
+     {
+@@ -475,13 +607,14 @@ BOOST_AUTO_TEST_CASE(cloud_11_health_json_counters)
+ 
+ BOOST_AUTO_TEST_CASE(cloud_12_budget_refuse_when_exhausted)
+ {
++    const ScopedCloudCredentials credentials;
+     const fs::path creds = m_path_root / "cloud-12-creds";
+     WriteCreds(creds, kAccess, kSecret, true);
+-    auto cfg = BaseCfg(creds);
++    auto cfg = credentials.Config(creds);
+     cfg.budget_gets = 1;
+     modelnet::S3PieceStore store{cfg};
+     std::string err;
+-    BOOST_REQUIRE(store.Init(err));
++    BOOST_REQUIRE_MESSAGE(store.Init(err), err);
+     const auto art = ArtifactFill(0x44);
+     const fs::path src = m_path_root / "cloud-12.bin";
+     {
+@@ -497,9 +630,10 @@ BOOST_AUTO_TEST_CASE(cloud_12_budget_refuse_when_exhausted)
+ 
+ BOOST_AUTO_TEST_CASE(cloud_12b_calendar_day_budget_persists)
+ {
++    const ScopedCloudCredentials credentials;
+     const fs::path creds = m_path_root / "cloud-12b-creds";
+     WriteCreds(creds, kAccess, kSecret, true);
+-    auto cfg = BaseCfg(creds);
++    auto cfg = credentials.Config(creds);
+     cfg.budget_gets_per_day = 1;
+     cfg.budget_state_path = m_path_root / "cloud-12b-budget.json";
+     const int64_t day0 = 86400 * 20000 + 3600;
+@@ -507,7 +641,7 @@ BOOST_AUTO_TEST_CASE(cloud_12b_calendar_day_budget_persists)
+         modelnet::S3PieceStore store{cfg};
+         store.SetClockForTests(day0);
+         std::string err;
+-        BOOST_REQUIRE(store.Init(err));
++        BOOST_REQUIRE_MESSAGE(store.Init(err), err);
+         const auto art = ArtifactFill(0x45);
+         const fs::path src = m_path_root / "cloud-12b.bin";
+         {
+@@ -530,7 +664,7 @@ BOOST_AUTO_TEST_CASE(cloud_12b_calendar_day_budget_persists)
+         modelnet::S3PieceStore store{cfg};
+         store.SetClockForTests(day0 + 86400);
+         std::string err;
+-        BOOST_REQUIRE(store.Init(err));
++        BOOST_REQUIRE_MESSAGE(store.Init(err), err);
+         const auto art = ArtifactFill(0x45);
+         std::vector<unsigned char> got;
+         BOOST_CHECK(!store.GetSourceFile(art, 0, got, err));
+@@ -540,11 +674,12 @@ BOOST_AUTO_TEST_CASE(cloud_12b_calendar_day_budget_persists)
+ 
+ BOOST_AUTO_TEST_CASE(fullcloud_01_102400_pieces_one_source_object)
+ {
++    const ScopedCloudCredentials credentials;
+     const fs::path creds = m_path_root / "fc-01-creds";
+     WriteCreds(creds, kAccess, kSecret, true);
+-    modelnet::S3PieceStore store{BaseCfg(creds)};
++    modelnet::S3PieceStore store{credentials.Config(creds)};
+     std::string err;
+-    BOOST_REQUIRE(store.Init(err));
++    BOOST_REQUIRE_MESSAGE(store.Init(err), err);
+     const auto art = ArtifactFill(0x55);
+     const fs::path src = m_path_root / "fc-01.bin";
+     const std::string payload = "tiny-logical-400gib";
+@@ -565,11 +700,12 @@ BOOST_AUTO_TEST_CASE(fullcloud_01_102400_pieces_one_source_object)
+ 
+ BOOST_AUTO_TEST_CASE(fullcloud_02_object_bytes_equal_fileentry)
+ {
++    const ScopedCloudCredentials credentials;
+     const fs::path creds = m_path_root / "fc-02-creds";
+     WriteCreds(creds, kAccess, kSecret, true);
+-    modelnet::S3PieceStore store{BaseCfg(creds)};
++    modelnet::S3PieceStore store{credentials.Config(creds)};
+     std::string err;
+-    BOOST_REQUIRE(store.Init(err));
++    BOOST_REQUIRE_MESSAGE(store.Init(err), err);
+     const auto art = ArtifactFill(0x66);
+     const fs::path src = m_path_root / "fc-02.bin";
+     const std::string payload = "FileEntry-bytes-exact";
+@@ -687,14 +823,15 @@ BOOST_AUTO_TEST_CASE(fullcloud_13_estimated_gets)
+ 
+ BOOST_AUTO_TEST_CASE(fullcloud_20_budget_remaining_in_health)
+ {
++    const ScopedCloudCredentials credentials;
+     const fs::path creds = m_path_root / "fc-20-creds";
+     WriteCreds(creds, kAccess, kSecret, true);
+-    auto cfg = BaseCfg(creds);
++    auto cfg = credentials.Config(creds);
+     cfg.budget_gets = 10;
+     cfg.budget_origin_bytes = 1000;
+     modelnet::S3PieceStore store{cfg};
+     std::string err;
+-    BOOST_REQUIRE(store.Init(err));
++    BOOST_REQUIRE_MESSAGE(store.Init(err), err);
+     const auto art = ArtifactFill(0x88);
+     const fs::path src = m_path_root / "fc-20.bin";
+     {
+@@ -726,12 +863,13 @@ BOOST_AUTO_TEST_CASE(fullcloud_23_source_files_object_key)
+ 
+ BOOST_AUTO_TEST_CASE(fullcloud_05_fakes3_stream_hydrates_one_get)
+ {
++    const ScopedCloudCredentials credentials;
+     using namespace modelnet;
+     const fs::path creds = m_path_root / "cloud-stream-creds";
+     WriteCreds(creds, kAccess, kSecret, true);
+-    S3PieceStore store{BaseCfg(creds)};
++    S3PieceStore store{credentials.Config(creds)};
+     std::string err;
+-    BOOST_REQUIRE(store.Init(err));
++    BOOST_REQUIRE_MESSAGE(store.Init(err), err);
+     const fs::path src = m_path_root / "stream.bin";
+     std::vector<unsigned char> file(256, 0x5a);
+     file[0] = 0x11;
+@@ -769,6 +907,7 @@ BOOST_AUTO_TEST_CASE(fullcloud_05_fakes3_stream_hydrates_one_get)
+ 
+ BOOST_AUTO_TEST_CASE(cloud_rpc_set_hostmodel_events_no_secrets)
+ {
++    const ScopedCloudCredentials credentials;
+     using namespace modelnet;
+     const fs::path dir = m_path_root / "cloud-rpc";
+     fs::create_directories(dir);
+@@ -782,7 +921,7 @@ BOOST_AUTO_TEST_CASE(cloud_rpc_set_hostmodel_events_no_secrets)
+     cfg.pushKV("prefix", "v1");
+     cfg.pushKV("provider", "AUTO");
+     cfg.pushKV("layout", "AUTO");
+-    cfg.pushKV("credential_ref", fs::PathToString(creds));
++    cfg.pushKV("credential_ref", credentials.RpcRef(creds));
+     cfg.pushKV("use_fake", true);
+     cfg.pushKV("idempotency_key", "cloud-rpc-set");
+     UniValue params(UniValue::VARR);
+@@ -879,6 +1018,7 @@ BOOST_AUTO_TEST_CASE(cloud_https_transport_available)
+ 
+ BOOST_AUTO_TEST_CASE(cloud_https_use_fake_false_error_is_not_stubbed)
+ {
++    const ScopedCloudCredentials credentials;
+     const fs::path creds = m_path_root / "cloud-https-creds";
+     WriteCreds(creds, kAccess, kSecret, true);
+     modelnet::S3ClientConfig cfg;
+@@ -886,8 +1026,7 @@ BOOST_AUTO_TEST_CASE(cloud_https_use_fake_false_error_is_not_stubbed)
+     cfg.bucket = "btx-models";
+     cfg.region = "auto";
+     cfg.use_fake = false;
+-    cfg.creds.kind = modelnet::CredentialRefKind::PATH;
+-    cfg.creds.value = fs::PathToString(creds);
++    cfg.creds = credentials.Config(creds).s3.creds;
+     modelnet::S3Client client;
+     std::string err;
+     BOOST_REQUIRE_MESSAGE(client.Init(cfg, err), err);
+@@ -935,9 +1074,10 @@ BOOST_AUTO_TEST_CASE(cloud_https_refuses_redirect)
+ 
+ BOOST_AUTO_TEST_CASE(cloud_https_not_stub_error)
+ {
++    const ScopedCloudCredentials credentials;
+     const fs::path creds = m_path_root / "cloud-https-not-stub-creds";
+     WriteCreds(creds, kAccess, kSecret, true);
+-    modelnet::S3ClientConfig cfg = BaseCfg(creds, "http://127.0.0.1:1").s3;
++    modelnet::S3ClientConfig cfg = credentials.Config(creds, "http://127.0.0.1:1").s3;
+     cfg.use_fake = false;
+     cfg.allow_http_loopback = true;
+     modelnet::S3Client client;
+@@ -950,6 +1090,45 @@ BOOST_AUTO_TEST_CASE(cloud_https_not_stub_error)
+     BOOST_CHECK(err.find("OpenSSL HTTPS transport is stubbed") == std::string::npos);
+ }
+ 
++BOOST_AUTO_TEST_CASE(cloud_fixture_credentials_restore_environment)
++{
++#ifdef WIN32
++    const char* name = "BTX_TEST_CLOUD_FIXTURE_CREDS";
++    test::ScopedEnvVar previous{name, "preexisting-fixture-value"};
++    {
++        const ScopedCloudCredentials credentials;
++        const auto cfg = credentials.Config(fs::PathFromString("unused-credential-file"));
++        BOOST_CHECK(cfg.s3.creds.kind == modelnet::CredentialRefKind::ENV);
++        BOOST_REQUIRE(std::getenv(name));
++        BOOST_CHECK(std::string{std::getenv(name)}.find(kSecret) != std::string::npos);
++    }
++    BOOST_REQUIRE(std::getenv(name));
++    BOOST_CHECK_EQUAL(std::getenv(name), "preexisting-fixture-value");
++    previous.Set(nullptr);
++    {
++        const ScopedCloudCredentials credentials;
++        BOOST_REQUIRE(std::getenv(name));
++    }
++    BOOST_CHECK(std::getenv(name) == nullptr);
++#else
++    const ScopedCloudCredentials credentials;
++    const auto path = fs::PathFromString("unchanged-posix-credential-file");
++    const auto cfg = credentials.Config(path);
++    BOOST_CHECK(cfg.s3.creds.kind == modelnet::CredentialRefKind::PATH);
++    BOOST_CHECK_EQUAL(cfg.s3.creds.value, fs::PathToString(path));
++#endif
++}
++
++BOOST_AUTO_TEST_CASE(cloud_real_http_socket_cleanup)
++{
++    CheckS3SocketCleanup(false);
++}
++
++BOOST_AUTO_TEST_CASE(cloud_tls_handshake_socket_cleanup)
++{
++    CheckS3SocketCleanup(true);
++}
++
+ BOOST_AUTO_TEST_SUITE_END()
+ 
+ #if defined(_WIN32)
+diff --git a/src/test/modelnet_r2_storage_tests.cpp b/src/test/modelnet_r2_storage_tests.cpp
+index b6afa5554..53dcc8a20 100644
+--- a/src/test/modelnet_r2_storage_tests.cpp
++++ b/src/test/modelnet_r2_storage_tests.cpp
+@@ -35,6 +35,7 @@
+ #include <boost/test/unit_test.hpp>
+ 
+ #include <cstdint>
++#include <cstdlib>
+ #include <fstream>
+ #include <sstream>
+ #include <string>
+@@ -89,6 +90,27 @@ modelnet::CloudStoreConfig BaseCfg(const fs::path& creds)
+     return c;
+ }
+ 
++// Positive Windows fixtures use the supported ENV source. Keep BaseCfg's PATH
++// source available for permission-refusal checks; never relax product policy.
++class ScopedR2Credentials
++{
++#ifdef WIN32
++    test::ScopedEnvVar m_credentials{"BTX_TEST_R2_FIXTURE_CREDS",
++        (std::string{"aws_access_key_id="} + kFixtureAccess +
++         "\naws_secret_access_key=" + kFixtureSecret + "\n").c_str()};
++#endif
++
++public:
++    modelnet::CloudStoreConfig Config(const fs::path& creds) const
++    {
++        auto cfg = BaseCfg(creds);
++#ifdef WIN32
++        cfg.s3.creds = {modelnet::CredentialRefKind::ENV, "BTX_TEST_R2_FIXTURE_CREDS"};
++#endif
++        return cfg;
++    }
++};
++
+ modelnet::Digest48 ArtifactFill(unsigned char b)
+ {
+     modelnet::Digest48 d;
+@@ -284,9 +306,10 @@ BOOST_AUTO_TEST_CASE(r2s_03_source_files_cold_get_estimate_is_per_object)
+ // retrying caller burns real egress while the ledger stays frozen.
+ BOOST_AUTO_TEST_CASE(r2s_04_over_budget_get_transfers_bytes_and_records_none)
+ {
++    const ScopedR2Credentials credentials;
+     const fs::path creds = m_path_root / "r2s-04-creds";
+     WriteCreds(creds, kFixtureAccess, kFixtureSecret);
+-    modelnet::CloudStoreConfig cfg = BaseCfg(creds);
++    modelnet::CloudStoreConfig cfg = credentials.Config(creds);
+     cfg.budget_origin_bytes = 8;
+     modelnet::S3PieceStore store{cfg};
+     std::string err;
+@@ -322,9 +345,10 @@ BOOST_AUTO_TEST_CASE(r2s_04_over_budget_get_transfers_bytes_and_records_none)
+ // does not bound Class A operations or written bytes.
+ BOOST_AUTO_TEST_CASE(r2s_05_put_path_is_not_metered)
+ {
++    const ScopedR2Credentials credentials;
+     const fs::path creds = m_path_root / "r2s-05-creds";
+     WriteCreds(creds, kFixtureAccess, kFixtureSecret);
+-    modelnet::CloudStoreConfig cfg = BaseCfg(creds);
++    modelnet::CloudStoreConfig cfg = credentials.Config(creds);
+     cfg.budget_gets = 0;
+     cfg.budget_origin_bytes = 0;
+     modelnet::S3PieceStore store{cfg};
+@@ -421,13 +445,20 @@ BOOST_AUTO_TEST_CASE(r2s_07_minio_is_config_only_not_run)
+ // setcloudstorage, so this shape is only constructible in-process.
+ BOOST_AUTO_TEST_CASE(r2s_08_write_creds_break_fake_signing)
+ {
++    const ScopedR2Credentials credentials;
+     const fs::path read_creds = m_path_root / "r2s-08-read-creds";
+     const fs::path write_creds = m_path_root / "r2s-08-write-creds";
+     WriteCreds(read_creds, kFixtureAccess, kFixtureSecret);
+     WriteCreds(write_creds, "AKIAR2LANEWRITEKEY00", "r2-lane-write-secret-not-real");
+ 
+-    modelnet::S3ClientConfig cfg = BaseCfg(read_creds).s3;
++    modelnet::S3ClientConfig cfg = credentials.Config(read_creds).s3;
+     cfg.write_creds = modelnet::CredentialRef{modelnet::CredentialRefKind::PATH, fs::PathToString(write_creds)};
++#ifdef WIN32
++    // Keep the deliberately different upload key distinct from the read key.
++    test::ScopedEnvVar write_credentials{"BTX_TEST_R2_WRITE_FIXTURE_CREDS",
++        "aws_access_key_id=AKIAR2LANEWRITEKEY00\naws_secret_access_key=r2-lane-write-secret-not-real\n"};
++    cfg.write_creds = modelnet::CredentialRef{modelnet::CredentialRefKind::ENV, "BTX_TEST_R2_WRITE_FIXTURE_CREDS"};
++#endif
+ 
+     modelnet::S3Client client;
+     std::string err;
+@@ -445,9 +476,10 @@ BOOST_AUTO_TEST_CASE(r2s_08_write_creds_break_fake_signing)
+ 
+ BOOST_AUTO_TEST_CASE(r2s_09_physical_whole_file_and_large_extents_fakes3)
+ {
++    const ScopedR2Credentials credentials;
+     const fs::path creds = m_path_root / "r2s-09-creds";
+     WriteCreds(creds, kFixtureAccess, kFixtureSecret);
+-    modelnet::CloudStoreConfig cfg = BaseCfg(creds);
++    modelnet::CloudStoreConfig cfg = credentials.Config(creds);
+     modelnet::S3PieceStore store{cfg};
+     std::string err;
+     BOOST_REQUIRE_MESSAGE(store.Init(err), err);
+@@ -476,6 +508,35 @@ BOOST_AUTO_TEST_CASE(r2s_09_physical_whole_file_and_large_extents_fakes3)
+     BOOST_CHECK(!plan.replaces_source_files);
+ }
+ 
++BOOST_AUTO_TEST_CASE(r2s_fixture_credentials_restore_environment)
++{
++#ifdef WIN32
++    const char* name = "BTX_TEST_R2_FIXTURE_CREDS";
++    test::ScopedEnvVar previous{name, "preexisting-fixture-value"};
++    {
++        const ScopedR2Credentials credentials;
++        const auto cfg = credentials.Config(fs::PathFromString("unused-credential-file"));
++        BOOST_CHECK(cfg.s3.creds.kind == modelnet::CredentialRefKind::ENV);
++        BOOST_REQUIRE(std::getenv(name));
++        BOOST_CHECK(std::string{std::getenv(name)}.find(kFixtureSecret) != std::string::npos);
++    }
++    BOOST_REQUIRE(std::getenv(name));
++    BOOST_CHECK_EQUAL(std::getenv(name), "preexisting-fixture-value");
++    previous.Set(nullptr);
++    {
++        const ScopedR2Credentials credentials;
++        BOOST_REQUIRE(std::getenv(name));
++    }
++    BOOST_CHECK(std::getenv(name) == nullptr);
++#else
++    const ScopedR2Credentials credentials;
++    const auto path = fs::PathFromString("unchanged-posix-credential-file");
++    const auto cfg = credentials.Config(path);
++    BOOST_CHECK(cfg.s3.creds.kind == modelnet::CredentialRefKind::PATH);
++    BOOST_CHECK_EQUAL(cfg.s3.creds.value, fs::PathToString(path));
++#endif
++}
++
+ BOOST_AUTO_TEST_SUITE_END()
+ 
+ #if defined(_WIN32)
+diff --git a/src/test/swarm_confine_tests.cpp b/src/test/swarm_confine_tests.cpp
+index 5c914ad87..e5cfeebaf 100644
+--- a/src/test/swarm_confine_tests.cpp
++++ b/src/test/swarm_confine_tests.cpp
+@@ -9,10 +9,10 @@
+ 
+ #include <boost/test/unit_test.hpp>
+ 
+-#include <sys/stat.h>
+-#include <sys/wait.h>
+ 
+ #ifndef _WIN32
++#include <sys/stat.h>
++#include <sys/wait.h>
+ #include <fcntl.h>
+ #include <signal.h>
+ #include <time.h>
+@@ -190,6 +190,7 @@ BOOST_AUTO_TEST_CASE(path_outside_or_dotdot)
+     fs::remove_all(outside_root);
+ }
+ 
++#ifndef _WIN32
+ BOOST_AUTO_TEST_CASE(confined_helper_or_namespace_absent)
+ {
+     // canonical: InsideRoot refuses symlinks, and macOS TMPDIR is below /var.
+@@ -219,6 +220,43 @@ BOOST_AUTO_TEST_CASE(confined_helper_or_namespace_absent)
+         BOOST_CHECK_EQUAL(WEXITSTATUS(result.child_status), 0);
+     }
+ }
++#else
++BOOST_AUTO_TEST_CASE(windows_rejects_non_native_helper)
++{
++    const fs::path root = fs::canonical(fs::temp_directory_path()) / "btx-swarm-confine-text";
++    const fs::path helper = WriteRegularFile(root / "helper.sh");
++    std::string err = "stale";
++    const auto result = modelnet::SwarmRunConfined(BaseRequest(helper, root), err);
++    fs::remove_all(root);
++    BOOST_CHECK(!result.launched);
++    BOOST_CHECK(!result.limits_applied);
++    BOOST_CHECK_EQUAL(result.child_status, -1);
++    BOOST_CHECK_EQUAL(result.code, "WINDOWS_SANDBOX_CREATEPROCESS");
++    BOOST_CHECK_EQUAL(err, "WINDOWS_SANDBOX_CREATEPROCESS");
++    BOOST_CHECK(!fs::exists(root));
++}
++
++BOOST_AUTO_TEST_CASE(windows_native_helper_runs_and_cleans_up)
++{
++    const fs::path root = fs::canonical(fs::temp_directory_path()) / "btx-swarm-confine-native";
++    fs::create_directories(root);
++    const fs::path helper = root / "btx-open.exe";
++    BOOST_REQUIRE(fs::copy_file(fs::path{MODELNET_BTX_OPEN_PATH}, helper, fs::copy_options::none));
++    const auto helper_size = fs::file_size(helper);
++    std::string err = "stale";
++    // No arguments: print usage and exit 1 without opening a URI.
++    const auto result = modelnet::SwarmRunConfined(BaseRequest(helper, root), err);
++    const bool helper_preserved = fs::exists(helper) && fs::file_size(helper) == helper_size;
++    fs::remove_all(root);
++    BOOST_CHECK_EQUAL(result.code, "CONFINED");
++    BOOST_CHECK(result.launched);
++    BOOST_CHECK(result.limits_applied);
++    BOOST_CHECK_EQUAL(result.child_status, 1);
++    BOOST_CHECK(err.empty());
++    BOOST_CHECK(helper_preserved);
++    BOOST_CHECK(!fs::exists(root));
++}
++#endif
+ 
+ #if defined(__APPLE__) && defined(BTX_SWARM_JAIL_PROBE)
+ namespace {
+diff --git a/src/test/swarm_fsjail_tests.cpp b/src/test/swarm_fsjail_tests.cpp
+index b62874a2a..8c5c973bf 100644
+--- a/src/test/swarm_fsjail_tests.cpp
++++ b/src/test/swarm_fsjail_tests.cpp
+@@ -8,9 +8,9 @@
+ 
+ #include <boost/test/unit_test.hpp>
+ 
+-#include <sys/stat.h>
+ 
+ #ifndef _WIN32
++#include <sys/stat.h>
+ #include <signal.h>
+ #endif
+ 
+@@ -128,6 +128,7 @@ BOOST_AUTO_TEST_CASE(path_outside_or_dotdot)
+     fs::remove_all(outside_root);
+ }
+ 
++#ifndef _WIN32
+ BOOST_AUTO_TEST_CASE(jailed_helper_or_namespace_absent)
+ {
+     // canonical: InsideRoot refuses symlinks, and macOS TMPDIR is below /var.
+@@ -153,6 +154,43 @@ BOOST_AUTO_TEST_CASE(jailed_helper_or_namespace_absent)
+     BOOST_CHECK(!(result.launched && result.code == "JAIL_ABSENT"));
+     BOOST_CHECK(!(result.jailed && result.code == "JAIL_ABSENT"));
+ }
++#else
++BOOST_AUTO_TEST_CASE(windows_rejects_non_native_helper)
++{
++    const fs::path root = fs::canonical(fs::temp_directory_path()) / "btx-swarm-fsjail-text";
++    const fs::path helper = WriteRegularFile(root / "helper.sh");
++    std::string err = "stale";
++    const auto result = modelnet::SwarmRunFilesystemJail(BaseRequest(helper, root), err);
++    fs::remove_all(root);
++    BOOST_CHECK(!result.launched);
++    BOOST_CHECK(!result.jailed);
++    BOOST_CHECK_EQUAL(result.child_status, -1);
++    BOOST_CHECK_EQUAL(result.code, "JAIL_ABSENT");
++    BOOST_CHECK_EQUAL(err, "JAIL_ABSENT");
++    BOOST_CHECK(!fs::exists(root));
++}
++
++BOOST_AUTO_TEST_CASE(windows_native_helper_runs_and_cleans_up)
++{
++    const fs::path root = fs::canonical(fs::temp_directory_path()) / "btx-swarm-fsjail-native";
++    fs::create_directories(root);
++    const fs::path helper = root / "btx-open.exe";
++    BOOST_REQUIRE(fs::copy_file(fs::path{MODELNET_BTX_OPEN_PATH}, helper, fs::copy_options::none));
++    const auto helper_size = fs::file_size(helper);
++    std::string err = "stale";
++    // No arguments: print usage and exit 1 without opening a URI.
++    const auto result = modelnet::SwarmRunFilesystemJail(BaseRequest(helper, root), err);
++    const bool helper_preserved = fs::exists(helper) && fs::file_size(helper) == helper_size;
++    fs::remove_all(root);
++    BOOST_CHECK_EQUAL(result.code, "JAILED");
++    BOOST_CHECK(result.launched);
++    BOOST_CHECK(result.jailed);
++    BOOST_CHECK_EQUAL(result.child_status, 1);
++    BOOST_CHECK(err.empty());
++    BOOST_CHECK(helper_preserved);
++    BOOST_CHECK(!fs::exists(root));
++}
++#endif
+ 
+ BOOST_AUTO_TEST_CASE(zero_tree_limit)
+ {
