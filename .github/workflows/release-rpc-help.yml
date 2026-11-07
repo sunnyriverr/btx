@@ -1,0 +1,32 @@
+name: Release RPC-help observation
+on:
+  push:
+    branches: [codex/ci-rpc-help-release-03416]
+    paths:
+      - .github/workflows/release-rpc-help.yml
+      - contrib/devtools/release-rpc-help/**
+permissions:
+  contents: read
+jobs:
+  observe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: d27530af8ca27eef4311cb92b9ed85b147754835
+          path: product
+      - name: Install documented runtime prerequisites
+        run: |
+          sudo apt-get -o Acquire::Retries=1 update
+          sudo apt-get install -y --no-install-recommends libevent-dev libsqlite3-0 libzmq5 libgomp1
+      - name: Observe current maintained help checks on official package
+        run: python3 contrib/devtools/release-rpc-help/run.py
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: release-rpc-help-records
+          path: release-rpc-results
+          retention-days: 14
