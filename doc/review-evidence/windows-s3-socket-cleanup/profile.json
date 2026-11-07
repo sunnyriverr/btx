@@ -1,0 +1,48 @@
+{
+  "tools": {
+    "clang-cl": {
+      "path": "C:\\Program Files\\LLVM\\bin\\clang-cl.EXE",
+      "sha256": "57e32b1ea2456f12f97bf802453171bbff12d56b2c486b4eca0c75343c0cda2c"
+    },
+    "cl": {
+      "path": "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.EXE",
+      "sha256": "b0a1818ebae6da7f18230a84e76ce839212584ac4c2ab55b97a0d5268085da57"
+    },
+    "cmake": {
+      "path": "C:\\Program Files\\CMake\\bin\\cmake.EXE",
+      "sha256": "84935c0b7cb09c140de0d3b042d4e93e5fac4e6371e75bf28eae3d841f79dfb3"
+    },
+    "ninja": {
+      "path": "C:\\ProgramData\\Chocolatey\\bin\\ninja.EXE",
+      "sha256": "6a4dd2358fccbb483729091586413cc2f2f74e72d329187f5a6b4cbba3c025ad"
+    }
+  },
+  "args": [
+    "cmake",
+    "--debug-find-pkg=OpenSSL",
+    "--preset",
+    "windows-clangcl-static",
+    "-S",
+    "D:\\a\\btx\\btx\\btx",
+    "-B",
+    "D:\\btx-native-035\\project-build",
+    "-DBUILD_TESTS=ON",
+    "-DWITH_MODELNET=ON",
+    "-DVCPKG_MANIFEST_NO_DEFAULT_FEATURES=ON",
+    "-DVCPKG_MANIFEST_FEATURES=wallet;tests;zeromq",
+    "-DVCPKG_INSTALLED_DIR=D:\\btx-native-035\\vcpkg-installed",
+    "-DOPENSSL_ROOT_DIR=D:\\btx-native-035\\openssl-3.5.4-static",
+    "-DOPENSSL_USE_STATIC_LIBS=ON",
+    "-DOPENSSL_MSVC_STATIC_RT=ON",
+    "-DOPENSSL_INCLUDE_DIR=D:\\btx-native-035\\openssl-3.5.4-static\\include",
+    "-DOPENSSL_SSL_LIBRARY=D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libssl.lib",
+    "-DOPENSSL_CRYPTO_LIBRARY=D:\\btx-native-035\\openssl-3.5.4-static\\lib\\libcrypto.lib",
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+  ],
+  "openssl_files": {
+    "include/openssl/opensslv.h": "df513ae26e8baebbc641ba19f3d16f3e9ac0895cb092c81a39e1669f7fcb9c5c",
+    "lib/libssl.lib": "860ce6dd4edf55af8a82a958afb9bae9cd025f3ef7e263bcc266d79cdd5179e8",
+    "lib/libcrypto.lib": "f9385fc262485a1c779aa9a740ee3bde3025b9eb61b113e311024c9571899e12",
+    "bin/openssl.exe": "c63c66cb528c20dbd9f474679c8a19ea13d40f57c7f8efa4085ceb6dbe5c5552"
+  }
+}

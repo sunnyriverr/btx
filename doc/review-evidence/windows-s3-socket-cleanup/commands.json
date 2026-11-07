@@ -1,0 +1,396 @@
+[
+  {
+    "label": "source-parent-fetch",
+    "command": [
+      "git",
+      "fetch",
+      "--no-tags",
+      "--depth=3",
+      "https://github.com/sunnyriverr/btx.git",
+      "666673a3153225ba264c7870e0e82e354df86765"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 2.03,
+    "log_sha256": "0acc5fbbf74dbd4a1d732a4f855d23b76100e7e8e6f4e893d75fa8b94e84a51d",
+    "budget_stop": null
+  },
+  {
+    "label": "source-bundle-verify",
+    "command": [
+      "git",
+      "bundle",
+      "verify",
+      "D:\\btx-native-035\\evidence\\maintained-source.bundle"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 2.01,
+    "log_sha256": "5fc884fcd82be724b0b191d083e7c979b4bb8c73e3042bb1cafbb1a5fcc31dbb",
+    "budget_stop": null
+  },
+  {
+    "label": "source-bundle-fetch",
+    "command": [
+      "git",
+      "fetch",
+      "D:\\btx-native-035\\evidence\\maintained-source.bundle",
+      "refs/heads/codex/test-windows-cloud-r2-fixtures-integration"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 2.0,
+    "log_sha256": "c96f2daf5c77083033a373b8e1968304d837c2cfd8b5a500fba1c380fd6bc14c",
+    "budget_stop": null
+  },
+  {
+    "label": "source-checkout",
+    "command": [
+      "git",
+      "checkout",
+      "--detach",
+      "4ca25183b89fa6aca35ea67a6846a17522b2c6a5"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 2.0,
+    "log_sha256": "23e8366d6630f5f30dc6796ad31d2021d0b8f18394d8b49c7ffa319e61b2c383",
+    "budget_stop": null
+  },
+  {
+    "label": "original-inventory",
+    "command": [
+      "D:\\btx-native-035\\project-build\\bin\\test_btx.exe",
+      "--list_content"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 2.41,
+    "log_sha256": "5504447a693d36b9bbd3b045e5cf3df80a9e73243235045737c4248e31abd8bd",
+    "budget_stop": null
+  },
+  {
+    "label": "socket-bundle-verify",
+    "command": [
+      "git",
+      "bundle",
+      "verify",
+      "D:\\btx-native-035\\evidence\\socket-candidate.bundle"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 0.25,
+    "log_sha256": "6e6e6b4adf0fae295a00c435dfc4ac41aed30d7458934b5231e794265a9a88cf",
+    "budget_stop": null
+  },
+  {
+    "label": "socket-bundle-fetch",
+    "command": [
+      "git",
+      "fetch",
+      "D:\\btx-native-035\\evidence\\socket-candidate.bundle",
+      "refs/heads/codex/test-windows-s3-cleanup-integration"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 0.27,
+    "log_sha256": "1ff9871ad47e653130a8e3e1105872e02a4b11a52add7b974c0c8226cdfa44bb",
+    "budget_stop": null
+  },
+  {
+    "label": "before-checkout",
+    "command": [
+      "git",
+      "checkout",
+      "--detach",
+      "d5d74b212cd2a38f2f2b0c9c17154404090f2a3f"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 2.39,
+    "log_sha256": "c945bb8027cfb92ffc0cf928a58b2260c7dd2440f7748c071ffcacd2a9fe5138",
+    "budget_stop": null
+  },
+  {
+    "label": "before-plan",
+    "command": [
+      "ninja",
+      "-C",
+      "D:\\btx-native-035\\project-build",
+      "-f",
+      "D:\\btx-native-035\\evidence\\before-verified.ninja",
+      "-n",
+      "-d",
+      "explain",
+      "test_btx"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 2.38,
+    "log_sha256": "f57f6d32b240a63508830dd02f267734aaa30958aa387ebd704be32e02cb2a63",
+    "budget_stop": null
+  },
+  {
+    "label": "before-build",
+    "command": [
+      "ninja",
+      "-C",
+      "D:\\btx-native-035\\project-build",
+      "-f",
+      "D:\\btx-native-035\\evidence\\before-verified.ninja",
+      "-j",
+      "4",
+      "-k",
+      "1",
+      "test_btx"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 20.39,
+    "log_sha256": "84f51a06f85618a7446e4594876c47d2f907b0cbb4d23090dedaf67ee7218cda",
+    "budget_stop": null
+  },
+  {
+    "label": "before-inventory",
+    "command": [
+      "D:\\btx-native-035\\project-build\\bin\\test_btx.exe",
+      "--list_content"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 2.41,
+    "log_sha256": "7031b124c04ebee68372bfe62f6f3216018635cc5e6d2462f13c14ca56a69d03",
+    "budget_stop": null
+  },
+  {
+    "label": "map-baseline",
+    "command": [
+      "subst",
+      "S:",
+      "D:\\sr42348955391"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 0.41,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "budget_stop": null
+  },
+  {
+    "label": "before-0",
+    "command": [
+      "D:\\btx-native-035\\project-build\\bin\\test_btx.exe",
+      "--run_test=modelnet_cloud_tests/cloud_real_http_socket_cleanup",
+      "--log_level=message",
+      "--report_level=detailed",
+      "--report_format=XML",
+      "--report_sink=D:\\btx-native-035\\evidence\\before-0.xml",
+      "--catch_system_errors=yes",
+      "--",
+      "-testdatadir=S:/f"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 201,
+    "seconds": 6.62,
+    "log_sha256": "9c88ccd9db30ab9930eb26879deda48945c9c602c5f766c9180dccaf3f940a55",
+    "budget_stop": null
+  },
+  {
+    "label": "before-1",
+    "command": [
+      "D:\\btx-native-035\\project-build\\bin\\test_btx.exe",
+      "--run_test=modelnet_cloud_tests/cloud_tls_handshake_socket_cleanup",
+      "--log_level=message",
+      "--report_level=detailed",
+      "--report_format=XML",
+      "--report_sink=D:\\btx-native-035\\evidence\\before-1.xml",
+      "--catch_system_errors=yes",
+      "--",
+      "-testdatadir=S:/f"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 201,
+    "seconds": 6.61,
+    "log_sha256": "681f28951ff045d0118f56a3721ee34b7e12d72dc201621cfb3186461ea0ca2e",
+    "budget_stop": null
+  },
+  {
+    "label": "unmap-baseline",
+    "command": [
+      "subst",
+      "S:",
+      "/D"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 0.39,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "budget_stop": null
+  },
+  {
+    "label": "after-checkout",
+    "command": [
+      "git",
+      "checkout",
+      "--detach",
+      "c660512641edf3bfb36f287e56a6fa0a8794fe64"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 0.42,
+    "log_sha256": "7f5096a65a5eff997a6b13195294fe59d9d49cb3b3bf273499f3f8475b9901a0",
+    "budget_stop": null
+  },
+  {
+    "label": "after-plan",
+    "command": [
+      "ninja",
+      "-C",
+      "D:\\btx-native-035\\project-build",
+      "-f",
+      "D:\\btx-native-035\\evidence\\after-verified.ninja",
+      "-n",
+      "-d",
+      "explain",
+      "test_btx"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 2.62,
+    "log_sha256": "1bf9484477e1235804798bde7ab59a9fc0d50c2c0a793ea524d67d97167ad301",
+    "budget_stop": null
+  },
+  {
+    "label": "after-build",
+    "command": [
+      "ninja",
+      "-C",
+      "D:\\btx-native-035\\project-build",
+      "-f",
+      "D:\\btx-native-035\\evidence\\after-verified.ninja",
+      "-j",
+      "4",
+      "-k",
+      "1",
+      "test_btx"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 10.62,
+    "log_sha256": "3076b2d1d3d67b2623f2b7cd375c16d47c9396ed41ab005660cc1a1319794092",
+    "budget_stop": null
+  },
+  {
+    "label": "after-inventory",
+    "command": [
+      "D:\\btx-native-035\\project-build\\bin\\test_btx.exe",
+      "--list_content"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 2.88,
+    "log_sha256": "7031b124c04ebee68372bfe62f6f3216018635cc5e6d2462f13c14ca56a69d03",
+    "budget_stop": null
+  },
+  {
+    "label": "map-run",
+    "command": [
+      "subst",
+      "S:",
+      "D:\\sr42348955391"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 0.55,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "budget_stop": null
+  },
+  {
+    "label": "after-0",
+    "command": [
+      "D:\\btx-native-035\\project-build\\bin\\test_btx.exe",
+      "--run_test=modelnet_cloud_tests/cloud_https_not_stub_error",
+      "--log_level=message",
+      "--report_level=detailed",
+      "--report_format=XML",
+      "--report_sink=D:\\btx-native-035\\evidence\\after-0.xml",
+      "--catch_system_errors=yes",
+      "--",
+      "-testdatadir=S:/f"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 2.83,
+    "log_sha256": "76790407f061c6bf8f7bbb6df3d9dbee2726125d99fde0fd4b9ac7d5a3115609",
+    "budget_stop": null
+  },
+  {
+    "label": "after-1",
+    "command": [
+      "D:\\btx-native-035\\project-build\\bin\\test_btx.exe",
+      "--run_test=modelnet_cloud_tests/cloud_https_use_fake_false_error_is_not_stubbed",
+      "--log_level=message",
+      "--report_level=detailed",
+      "--report_format=XML",
+      "--report_sink=D:\\btx-native-035\\evidence\\after-1.xml",
+      "--catch_system_errors=yes",
+      "--",
+      "-testdatadir=S:/f"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 4.81,
+    "log_sha256": "cec87cb457e71c9d2fa94222f7a122c898340f14ebfe18235451c2f481529ce1",
+    "budget_stop": null
+  },
+  {
+    "label": "after-2",
+    "command": [
+      "D:\\btx-native-035\\project-build\\bin\\test_btx.exe",
+      "--run_test=modelnet_cloud_tests/cloud_real_http_socket_cleanup",
+      "--log_level=message",
+      "--report_level=detailed",
+      "--report_format=XML",
+      "--report_sink=D:\\btx-native-035\\evidence\\after-2.xml",
+      "--catch_system_errors=yes",
+      "--",
+      "-testdatadir=S:/f"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 2.84,
+    "log_sha256": "8dd8a36fd998ba6c650cdaed0601895a29ea939179cfb3a17bebacf1fce1a97b",
+    "budget_stop": null
+  },
+  {
+    "label": "after-3",
+    "command": [
+      "D:\\btx-native-035\\project-build\\bin\\test_btx.exe",
+      "--run_test=modelnet_cloud_tests/cloud_tls_handshake_socket_cleanup",
+      "--log_level=message",
+      "--report_level=detailed",
+      "--report_format=XML",
+      "--report_sink=D:\\btx-native-035\\evidence\\after-3.xml",
+      "--catch_system_errors=yes",
+      "--",
+      "-testdatadir=S:/f"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 2.83,
+    "log_sha256": "58a5f87bd9e96fc64ee7fcff202947b63923aa32c7661ce9c5e6b3c5439d45aa",
+    "budget_stop": null
+  },
+  {
+    "label": "unmap-run",
+    "command": [
+      "subst",
+      "S:",
+      "/D"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 0.53,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "budget_stop": null
+  }
+]
