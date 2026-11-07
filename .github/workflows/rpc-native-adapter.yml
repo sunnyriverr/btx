@@ -1,4 +1,4 @@
-name: Native RPC comparison consumer qualification
+name: Model identity label paired repair
 on:
   push:
     branches: [codex/ci-p2mr-external-parent]
@@ -8,22 +8,22 @@ jobs:
   qualify:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: ubuntu-24.04
-    timeout-minutes: 55
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
           sparse-checkout-cone-mode: false
           sparse-checkout: |
-            /contrib/devtools/rpc-native-adapter/
+            /contrib/devtools/identity-label-repair/
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: btxchain/btx
           ref: 0ac06fd23b4a62038963fb29f1c77ab26d7a1346
           path: p2mr-parent-product
           persist-credentials: false
-      - name: Verify source and isolated runner capacity
-        run: python3 contrib/devtools/rpc-native-adapter/run.py preflight
+      - name: Verify exact candidate and source inputs
+        run: python3 contrib/devtools/identity-label-repair/run.py preflight
       - uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
         id: native-cache
         with:
@@ -31,21 +31,23 @@ jobs:
           key: btx-p2mr-external-parent-v1-666673a3-ubuntu24-gcc13-O1-walletON-modelnetON-ssl359
           fail-on-cache-miss: true
       - name: Install matching native prerequisites
-        run: python3 contrib/devtools/rpc-native-adapter/run.py dependencies
-      - name: Configure complete maintained RPC and wallet test files
+        run: python3 contrib/devtools/identity-label-repair/run.py dependencies
+      - name: Configure current CLI and verify unchanged official backend package
         env:
           CACHE_MATCHED_KEY: ${{ steps.native-cache.outputs.cache-matched-key }}
           CACHE_HIT: ${{ steps.native-cache.outputs.cache-hit }}
-        run: python3 contrib/devtools/rpc-native-adapter/run.py configure
-      - name: Test native records and consumer coupling controls
-        run: python3 contrib/devtools/rpc-native-adapter/run.py test
-      - name: Preserve result and restore owned source
+        run: python3 contrib/devtools/identity-label-repair/run.py prepare
+      - name: Prove baseline failure with the maintained case and actual CLI
+        run: python3 contrib/devtools/identity-label-repair/run.py baseline
+      - name: Prove candidate passes the identical unit and CLI workflow
+        run: python3 contrib/devtools/identity-label-repair/run.py test
+      - name: Preserve outcome and clean disposable state
         if: always()
-        run: python3 contrib/devtools/rpc-native-adapter/run.py finalize
+        run: python3 contrib/devtools/identity-label-repair/run.py finalize
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: rpc-comparison-consumer-records
-          path: rpc-native-adapter-results/
+          name: identity-label-repair-records
+          path: identity-label-repair-results/
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 14
