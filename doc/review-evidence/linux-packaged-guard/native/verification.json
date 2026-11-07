@@ -1,0 +1,99 @@
+{
+  "run": 42372485349,
+  "fixture": "74b335ccebc9f3ca83d48bca75b8dfc8a6aa6e2f",
+  "candidate": {
+    "base": "0ac06fd23b4a62038963fb29f1c77ab26d7a1346",
+    "code": "974f7f8340174004cf836dff9f278c54b5160f31",
+    "tree": "99a327dbd7dcac73e4ecbdc6635c3a7811afe7dc",
+    "branch": "codex/fix-linux-packaged-guard-path",
+    "files": {
+      "scripts/release/package_release_archive.py": "a81fd0f214dfd57f906747a7bf23906481ba011b110d11374555f3fe38ae8350",
+      "test/util/package_release_archive_test.py": "c34adb14ee9249297e3e20a4ce224dafcc14fe10ccf12cb0770a106952598491"
+    },
+    "local_only": true,
+    "upstream_post": false,
+    "change": "Linux packaging adds regular hardlink sibling; runtime discovery/launch and binaries unchanged"
+  },
+  "archive": {
+    "sha256": "58657765b5ac41252c44913f56c61247b781149fd21ed79374aedade67805ba1",
+    "asset_id": 720210208,
+    "bytes": 158893635
+  },
+  "qualified": true,
+  "case_sha256": "fbf9344056029eac75bf5e809a7d301eef978e3969e91ace1408d8425732365d",
+  "phases": {
+    "before": {
+      "exit": 1,
+      "guard_ready": false,
+      "checks": 57,
+      "failed_checks": [
+        "packaged guard actually answers on both boots and throughout health polls"
+      ],
+      "boots": 2,
+      "health_polls": 20,
+      "actual_node_helper_pids": [
+        [
+          3113,
+          3305
+        ],
+        [
+          8214,
+          8406
+        ]
+      ],
+      "normal_teardown": true
+    },
+    "after": {
+      "exit": 0,
+      "guard_ready": true,
+      "checks": 59,
+      "failed_checks": [],
+      "boots": 2,
+      "health_polls": 20,
+      "actual_node_helper_pids": [
+        [
+          13414,
+          13606
+        ],
+        [
+          17299,
+          17491
+        ]
+      ],
+      "normal_teardown": true
+    },
+    "symlink-refused": {
+      "exit": 1,
+      "guard_ready": false,
+      "checks": 57,
+      "failed_checks": [
+        "packaged guard actually answers on both boots and throughout health polls"
+      ],
+      "boots": 2,
+      "health_polls": 20,
+      "actual_node_helper_pids": [
+        [
+          21187,
+          21379
+        ],
+        [
+          26266,
+          26458
+        ]
+      ],
+      "normal_teardown": true
+    }
+  },
+  "all127originalfilebytesunchanged": true,
+  "oneaddedregularELF": "libexec/btx-guardd",
+  "binaryguardsha256": "ede4ca9e7cb6e2855345489321989a12f64cd1c0277c448e587c6e8cbcb864b2",
+  "artifact_sha256": "9a989b25152c5dcf9411009a8722e9cbd0c724f939b83babaeb7940519e4e1d3",
+  "runtime_removed_all_phases": true,
+  "limits": [
+    "Ubuntu24 x86_64 one paired run; offline wallet-disabled regtest and short health windows",
+    "Actual production-staged addition overlaid on full official installation; not a newly produced full release archive",
+    "Maintained17test regression separately covers tar extraction/reproducibility with synthetic binary fixtures",
+    "No model workload, inference, GPU, full unit suite, Windows/macOS runtime or release qualification",
+    "No rebuilt executable; source/archive mapping perNumair, producer build not independently reproduced"
+  ]
+}
