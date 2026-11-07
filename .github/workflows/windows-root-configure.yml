@@ -1,11 +1,11 @@
-name: Native Windows current fixture portability verification
+name: Native Windows current full build and units
 permissions:
   contents: read
 jobs:
   configure:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: windows-2025
-    timeout-minutes: 25
+    timeout-minutes: 180
     env:
       BTX_NATIVE_ROOT: D:\btx-native-035
     steps:
@@ -31,9 +31,7 @@ jobs:
     - name: Identify native compiler cache profile
       id: environment
       shell: pwsh
-      run: '$vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
-        -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
-        -property installationPath
+      run: '$vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
 
         if (-not $vs) { throw "Native Visual Studio tools missing" }
 
@@ -50,31 +48,24 @@ jobs:
           D:\btx-native-035\binary-cache
 
           '
-        key: btx356-root-v1-windows-${{ steps.environment.outputs.toolset }}-${{ hashFiles('btx/vcpkg.json')
-          }}-ossl354-afa249f1
+        key: btx356-root-v1-windows-${{ steps.environment.outputs.toolset }}-${{ hashFiles('btx/vcpkg.json') }}-ossl354-afa249f1
       id: dependency_restore
     - name: Require retained native dependency payload before any setup compilation
       shell: pwsh
       env:
-        MATCHED_DEPENDENCIES: ${{ steps.dependency_restore.outputs.cache-matched-key
-          }}
-      run: if (-not $env:MATCHED_DEPENDENCIES) { throw "Existing dependency cache
-        required; refusing cold setup build" }
+        MATCHED_DEPENDENCIES: ${{ steps.dependency_restore.outputs.cache-matched-key }}
+      run: if (-not $env:MATCHED_DEPENDENCIES) { throw "Existing dependency cache required; refusing cold setup build" }
     - name: Reuse completed vcpkg port binaries
       uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
       with:
         path: D:\btx-native-035\binary-cache
-        key: btx356-ports-v1-windows-${{ steps.environment.outputs.toolset }}-${{
-          hashFiles('btx/vcpkg.json') }}-afa249f1-${{ github.run_id }}
-        restore-keys: 'btx356-ports-v1-windows-${{ steps.environment.outputs.toolset
-          }}-${{ hashFiles(''btx/vcpkg.json'') }}-afa249f1-
+        key: btx356-ports-v1-windows-${{ steps.environment.outputs.toolset }}-${{ hashFiles('btx/vcpkg.json') }}-afa249f1-${{ github.run_id }}
+        restore-keys: 'btx356-ports-v1-windows-${{ steps.environment.outputs.toolset }}-${{ hashFiles(''btx/vcpkg.json'') }}-afa249f1-
 
           '
     - name: Provision verified native static OpenSSL
       shell: cmd
-      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
-        Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
-        -property installationPath`) do set "BTX_VS=%%i"
+      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
 
         if not defined BTX_VS exit /b 2
 
@@ -95,9 +86,7 @@ jobs:
         '
     - name: Bootstrap pinned vcpkg tool
       shell: cmd
-      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
-        Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
-        -property installationPath`) do set "BTX_VS=%%i"
+      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
 
         if not defined BTX_VS exit /b 2
 
@@ -119,9 +108,7 @@ jobs:
     - name: Fingerprint source and native build profile
       id: project_profile
       shell: cmd
-      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
-        Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
-        -property installationPath`) do set "BTX_VS=%%i"
+      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
 
         if not defined BTX_VS exit /b 2
 
@@ -154,16 +141,13 @@ jobs:
       shell: pwsh
       env:
         MATCHED_CACHE: ${{ steps.project_restore.outputs.cache-matched-key }}
-      run: 'if (-not $env:MATCHED_CACHE) { throw "Restore proof requires an existing
-        cache; refusing fresh rebuild" }
+      run: 'if (-not $env:MATCHED_CACHE) { throw "Restore proof requires an existing cache; refusing fresh rebuild" }
 
         '
     - name: Verify and restore exactc660 source profile and5885cachedobjects
       id: prepare
       shell: cmd
-      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
-        Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
-        -property installationPath`) do set "BTX_VS=%%i"
+      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
 
         if not defined BTX_VS exit /b 2
 
@@ -185,9 +169,7 @@ jobs:
     - name: Configure current fixture candidate with the retained dependencies
       id: cases
       shell: cmd
-      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
-        Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
-        -property installationPath`) do set "BTX_VS=%%i"
+      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
 
         if not defined BTX_VS exit /b 2
 
@@ -201,8 +183,7 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/current_prerequisites.py
-        configure
+        python controls/contrib/devtools/windows-root-configure/current_prerequisites.py configure
 
         exit /b %errorlevel%
 
@@ -210,9 +191,7 @@ jobs:
     - name: Inspect current generated plans and gate three-object compile
       id: fixture_build
       shell: cmd
-      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
-        Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
-        -property installationPath`) do set "BTX_VS=%%i"
+      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
 
         if not defined BTX_VS exit /b 2
 
@@ -226,18 +205,15 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/current_prerequisites.py
-        plans
+        python controls/contrib/devtools/windows-root-configure/current_prerequisites.py plans
 
         exit /b %errorlevel%
 
         '
-    - name: Compile corrected fixtures and the same positive control
-      id: fixture_run
+    - name: Resume full normal maintained Windows build
+      id: build
       shell: cmd
-      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
-        Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
-        -property installationPath`) do set "BTX_VS=%%i"
+      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
 
         if not defined BTX_VS exit /b 2
 
@@ -251,19 +227,71 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/current_prerequisites.py
-        compile
+        python controls/contrib/devtools/windows-root-configure/resume.py build
 
         exit /b %errorlevel%
 
         '
-    - name: Verify current-source identity cleanup and untouched remote cache
+    - name: Capture complete available object checkpoint before unit execution
+      id: retention
+      shell: cmd
+      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
+
+        if not defined BTX_VS exit /b 2
+
+        call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+
+        if errorlevel 1 exit /b %errorlevel%
+
+        set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
+
+        set "CL="
+
+        set "_CL_="
+
+        python controls/contrib/devtools/windows-root-configure/resume.py retain
+
+        exit /b %errorlevel%
+
+        '
+      if: always() && steps.prepare.outcome == 'success' && steps.cases.outcome == 'success' && steps.fixture_build.outcome == 'success'
+    - name: Preserve compiled progress under new immutable current-source key
+      if: always() && steps.retention.outcome == 'success' && steps.retention.outputs.checkpoint_valid == 'true'
+      uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
+      with:
+        path: 'D:\btx-native-035\project-build
+
+          D:\btx-native-035\vcpkg-installed
+
+          '
+        key: btx356-currentfull-v1-${{ steps.retention.outputs.checkpoint_key }}-${{ github.run_id }}
+    - name: Run bounded isolated current-binary unit batches if full target links
+      id: units
+      shell: cmd
+      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
+
+        if not defined BTX_VS exit /b 2
+
+        call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+
+        if errorlevel 1 exit /b %errorlevel%
+
+        set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
+
+        set "CL="
+
+        set "_CL_="
+
+        python controls/contrib/devtools/windows-root-configure/batches.py run
+
+        exit /b %errorlevel%
+
+        '
+      if: success() && steps.build.outcome == 'success' && steps.retention.outcome == 'success'
+    - name: Verify source objects dependencies and runtime cleanup
       id: verification
-      if: always() && steps.prepare.outcome == 'success'
       shell: cmd
-      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
-        Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
-        -property installationPath`) do set "BTX_VS=%%i"
+      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
 
         if not defined BTX_VS exit /b 2
 
@@ -277,17 +305,40 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/current_prerequisites.py
-        finish
+        python controls/contrib/devtools/windows-root-configure/resume.py finish
 
         exit /b %errorlevel%
 
         '
-    - name: Preserve native maintained target records
+      if: always() && steps.prepare.outcome == 'success' && steps.cases.outcome == 'success'
+    - name: Keep full native acceptance verdict honest
+      id: verdict
+      shell: cmd
+      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
+
+        if not defined BTX_VS exit /b 2
+
+        call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+
+        if errorlevel 1 exit /b %errorlevel%
+
+        set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
+
+        set "CL="
+
+        set "_CL_="
+
+        python controls/contrib/devtools/windows-root-configure/resume.py verdict
+
+        exit /b %errorlevel%
+
+        '
+      if: always() && steps.prepare.outcome == 'success'
+    - name: Preserve actual current build and unit evidence
       if: always()
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
       with:
-        name: native-windows-current-fixture-repair
+        name: native-windows-current-full-resume
         path: D:\btx-native-035\evidence\
         retention-days: 14
 'on':

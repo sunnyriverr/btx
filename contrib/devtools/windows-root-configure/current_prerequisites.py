@@ -1,4 +1,4 @@
-"""Same current generated targets after the retained two-file fixture repair; no full build/runtime/cache-save."""
+"""Configure and inspect the current generated graph; resume.py owns full build/retention."""
 from pathlib import Path
 import json,os,re,subprocess,shutil,sys,base64
 import checkpoint
@@ -37,7 +37,7 @@ def configure():
    dest=s.E/('current-configure-'+Path(name).name);shutil.copyfile(path,dest);R['configure_diagnostics'][name]={'archive_file':dest.name,'sha256':sha(dest)}
  s.save()
  if code:
-  R['status']='CURRENT_CONFIGURE_BLOCKER_CAPTURED';s.save();return
+  R['status']='CURRENT_CONFIGURE_BLOCKER_CAPTURED';s.save();raise RuntimeError('Current configure failed; no build or compatible successor checkpoint allowed')
  R['current_configuration']={n:sha(s.BUILD/n) for n in R['original_config']};R['settings_after']=settings();new=json.loads((s.BUILD/'compile_commands.json').read_text());shutil.copyfile(s.BUILD/'compile_commands.json',s.E/'current-compile-commands.json');oldcmd={x['output']:x for x in R['cached_commands']};newcmd={x['output']:x for x in new};changed=[k for k in sorted(oldcmd.keys()&newcmd.keys()) if oldcmd[k]!=newcmd[k]]
  R['command_delta']={'before':len(oldcmd),'after':len(newcmd),'added':sorted(newcmd.keys()-oldcmd.keys()),'removed':sorted(oldcmd.keys()-newcmd.keys()),'changed_count':len(changed),'changed_unit_count':sum('/test_btx.dir/' in k.replace('\\','/') for k in changed)};examples=[{'output':k,'before':oldcmd[k],'after':newcmd[k]} for k in changed];(s.E/'compile-command-deltas.json').write_text(json.dumps(examples,indent=2)+'\n');R['selected_commands']={}
  for suffix in I['selected_sources']:

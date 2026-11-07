@@ -24,14 +24,16 @@ def run():
     tree = ProcessTree()
     # Preserve handle until Python exits, including unhandled-error cleanup.
     globals()['process_tree'] = tree
-    assert R['status'] == 'RESTORED_VERIFIED'
+    assert R['status'] == 'CURRENT_FULL_LINKED'
     exe = s.BUILD / 'bin/test_btx.exe'
-    assert sha(exe) == M['binary_sha256'] and I['source'] == M['source']
+    assert sha(exe) == M['binary_sha256'] and M['source'] == json.loads((P/'current-inputs.json').read_text())['target']
     assert not s.owned_processes()
     data = Path('D:/bc' + os.environ['GITHUB_RUN_ID'])
     assert not data.exists() and not Path('S:/').exists()
     data.mkdir(); (data / 'tmp').mkdir()
     R.update(unit_data=str(data), status='BATCHES_RUNNING', batch_results=[], unit_invoked=True)
+    s.need('unit-bash-version', [str(Path('C:/Program Files/Git/bin/bash.exe')), '--version'],30)
+    R['runtime_binary_sha256']=M['binary_sha256']
     R['process_tree_policy'] = 'Nested private Windows job; no breakaway; kill descendants on controller exit'
     child = subprocess.Popen([sys.executable, '-c', 'import time;time.sleep(1)'])
     assert tree.active() >= 2
@@ -44,6 +46,9 @@ def run():
     assert bash.is_file()
     os.environ['PATH'] = str(bash.parent) + os.pathsep + os.environ['PATH']
     os.environ['CXX'] = 'clang++'
+    s.need('unit-cmd-bash-resolution',['cmd','/d','/c','where bash'],30)
+    assert Path((s.E/'unit-cmd-bash-resolution.log').read_text().splitlines()[0]).resolve()==bash.resolve()
+    s.need('unit-probe-compiler',['clang++','--version'],30)
     start = time.monotonic()
     # One known small pending suite first validates real selector/XML compatibility.
     jobs = sorted(enumerate(M['jobs']), key=lambda x: (x[1]['suite'] != 'modelnet_native_http_tests', x[0]))
@@ -58,9 +63,12 @@ def run():
             cap = job['timeout_seconds']
             if now - batch_start + cap > M['batch_budget_seconds']:
                 batch += 1; batch_start = now
-            if batch > 3 or now - start + cap > M['campaign_test_budget_seconds']:
+            if batch > 100 or now - start + cap > M['campaign_test_budget_seconds']:
                 R['campaign_stop'] = 'PLANNED_CHECKPOINT_BUDGET'; break
             label = 'suite-' + str(index).zfill(4)
+            short_root=Path('S:/'+format(index,'x'));short_root.mkdir()
+            short_tmp=short_root/'t';short_tmp.mkdir()
+            os.environ['TMP']=os.environ['TEMP']=str(short_tmp)
             report = s.E / (label + '.xml')
             selectors = job['selectors']
             assert selectors and len(set(selectors)) == job['expected_cases']
@@ -99,7 +107,7 @@ def run():
             print('CHECKPOINT', job['suite'], outcome['state'], len(outcome['cases']), flush=True)
         else:
             R['campaign_stop'] = 'ALL_PENDING_JOBS_ATTEMPTED'
-        R['status'] = 'BATCHES_RECORDED'
+        R['status'] = 'CURRENT_UNIT_RESULTS_RECORDED'
         save_progress()
     finally:
         R['test_wall_seconds'] = round(time.monotonic() - start, 2)
