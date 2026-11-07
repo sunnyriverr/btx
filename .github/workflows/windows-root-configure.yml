@@ -1,11 +1,11 @@
-name: Native Windows S3 socket cleanup qualification
+name: Native Windows current-source prerequisite diagnosis
 permissions:
   contents: read
 jobs:
   configure:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: windows-2025
-    timeout-minutes: 20
+    timeout-minutes: 25
     env:
       BTX_NATIVE_ROOT: D:\btx-native-035
     steps:
@@ -43,7 +43,7 @@ jobs:
 
         '
     - name: Reuse exact-profile dependency binaries
-      uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
+      uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
       with:
         path: 'D:\btx-native-035\openssl-3.5.4-static
 
@@ -52,6 +52,14 @@ jobs:
           '
         key: btx356-root-v1-windows-${{ steps.environment.outputs.toolset }}-${{ hashFiles('btx/vcpkg.json')
           }}-ossl354-afa249f1
+      id: dependency_restore
+    - name: Require retained native dependency payload before any setup compilation
+      shell: pwsh
+      env:
+        MATCHED_DEPENDENCIES: ${{ steps.dependency_restore.outputs.cache-matched-key
+          }}
+      run: if (-not $env:MATCHED_DEPENDENCIES) { throw "Existing dependency cache
+        required; refusing cold setup build" }
     - name: Reuse completed vcpkg port binaries
       uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
       with:
@@ -141,7 +149,7 @@ jobs:
           D:\btx-native-035\vcpkg-installed
 
           '
-        key: btx356-cloudfixtures-v1-b0fd516d2b19a8d270f93b9e06d2c559a39d35d1ba8529c40114728e49eb42d0-42227891410
+        key: btx356-s3cleanup-v1-8ac8ea813b9630b168003f71dcbc3449f81828ffe7a9ce1035cb99706fc8b08b-42348955391
     - name: Require existing exact-profile checkpoint for restore proof
       shell: pwsh
       env:
@@ -150,7 +158,7 @@ jobs:
         cache; refusing fresh rebuild" }
 
         '
-    - name: Verify exact4ca source and89ec cache before scoped repair
+    - name: Verify and restore exactc660 source profile and5885cachedobjects
       id: prepare
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -174,7 +182,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Build and observe only two new cleanup regression controls before repair
+    - name: Configure exact current d522 source with the retained dependencies
       id: cases
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -193,12 +201,13 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/socket_repair.py baseline
+        python controls/contrib/devtools/windows-root-configure/current_prerequisites.py
+        configure
 
         exit /b %errorlevel%
 
         '
-    - name: Build the smallest Windows socket cleanup repair from cached objects
+    - name: Inspect normal node full-unit and three-object plans
       id: fixture_build
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -217,12 +226,13 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/socket_repair.py build
+        python controls/contrib/devtools/windows-root-configure/current_prerequisites.py
+        plans
 
         exit /b %errorlevel%
 
         '
-    - name: Verify two existing refusals plus actual HTTP and TLS cleanup
+    - name: Compile only two suspect fixtures and one positive control
       id: fixture_run
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -241,12 +251,13 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/socket_repair.py run
+        python controls/contrib/devtools/windows-root-configure/current_prerequisites.py
+        compile
 
         exit /b %errorlevel%
 
         '
-    - name: Verify source, objects, cleanup and successor cache checkpoint
+    - name: Verify current-source identity cleanup and untouched remote cache
       id: verification
       if: always() && steps.prepare.outcome == 'success'
       shell: cmd
@@ -266,27 +277,17 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/socket_repair.py retain
+        python controls/contrib/devtools/windows-root-configure/current_prerequisites.py
+        finish
 
         exit /b %errorlevel%
 
         '
-    - name: Retain verified repaired objects without replacing original cache
-      if: always() && steps.verification.outputs.checkpoint_valid == 'true'
-      uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
-      with:
-        path: 'D:\btx-native-035\project-build
-
-          D:\btx-native-035\vcpkg-installed
-
-          '
-        key: btx356-s3cleanup-v1-${{ steps.verification.outputs.checkpoint_key }}-${{
-          github.run_id }}
     - name: Preserve native maintained target records
       if: always()
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
       with:
-        name: native-windows-s3-socket-cleanup
+        name: native-windows-current-prerequisites
         path: D:\btx-native-035\evidence\
         retention-days: 14
 'on':
