@@ -128,13 +128,9 @@ def audit(label, variant='candidate', configured=True):
 
 
 def candidate_bytes(name, variant='candidate'):
+    assert variant == 'candidate'
     data = (HERE / 'candidate' / name).read_bytes()
     assert hashlib.sha256(data).hexdigest() == IDENTITY['files'][name]['sha256']
-    return data.replace(old, b'            // Controlled omission of wallet metadata propagation.')
-    if variant == 'constructor_omission' and name == 'src/rpc/server.h':
-        old = b'        argument_factory = fn;'
-        assert data.count(old) == 1
-        return data.replace(old, b'        // Controlled omission of constructor metadata propagation.')
     return data
 
 
