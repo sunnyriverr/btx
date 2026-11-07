@@ -1,16 +1,16 @@
-name: Linux packaged node-owned helper lifecycle
+name: Linux package guard sibling repair
 on:
   push:
     branches: [codex/ci-rpc-help-release-03416]
     paths:
       - .github/workflows/release-rpc-help.yml
-      - contrib/devtools/release-package-lifecycle/**
+      - contrib/devtools/guard-package-repair/**
 permissions:
   contents: read
 jobs:
-  observe:
+  qualify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -21,15 +21,15 @@ jobs:
           repository: btxchain/btx
           ref: 0ac06fd23b4a62038963fb29f1c77ab26d7a1346
           path: product
-      - name: Install documented node runtime prerequisites
+      - name: Install unchanged runtime prerequisites
         run: |
           sudo apt-get -o Acquire::Retries=1 update
           sudo apt-get install -y --no-install-recommends libevent-dev libsqlite3-0 libzmq5 libgomp1
-      - name: Qualify packaged node-owned helper startup and restart
-        run: python3 contrib/devtools/release-package-lifecycle/run.py
+      - name: Prove package guard failure, repaired readiness and safety refusal
+        run: python3 contrib/devtools/guard-package-repair/run.py
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: package-lifecycle-records
-          path: package-lifecycle-results
+          name: guard-package-repair-records
+          path: guard-package-repair-results
           retention-days: 14

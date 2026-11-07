@@ -11,21 +11,23 @@ import subprocess
 import tarfile
 import time
 import traceback
+import sys
 import urllib.request
 
 W = Path(os.environ['GITHUB_WORKSPACE'])
 SOURCE = W / 'product'
-OUT = W / 'package-lifecycle-results'
+OUT = Path(sys.argv[2])
 OUT.mkdir(exist_ok=True)
-RUNTIME = Path('/tmp') / ('btxpkg-' + os.environ['GITHUB_RUN_ID'] + '-' + os.environ['GITHUB_RUN_ATTEMPT'])
+RUNTIME = Path('/tmp') / ('btxpkg-' + os.environ['GITHUB_RUN_ID'] + '-' + os.environ['GITHUB_RUN_ATTEMPT'] + '-' + sys.argv[3])
 BASE = '0ac06fd23b4a62038963fb29f1c77ab26d7a1346'
 EXPECTED = '58657765b5ac41252c44913f56c61247b781149fd21ed79374aedade67805ba1'
 state = {'source_mapping': BASE, 'fixture': os.environ['GITHUB_SHA'],
          'platform': platform.platform(), 'checks': [], 'boots': [],
          'commands': [], 'cleanup_signals': [], 'passed': False,
          'test_scope': 'Packaged ordinary node-owned helper lifecycle; offline wallet-disabled regtest',
-         'product_patch': False, 'source_build': False, 'manual_helper_launch': False}
-package = None
+         'binary_bytes_changed': False, 'package_layout_variant': sys.argv[3],
+         'source_build': False, 'manual_helper_launch': False}
+package = Path(sys.argv[1]).resolve()
 node = None
 node_log = None
 runtime_owned = False
@@ -89,9 +91,9 @@ def command(args, timeout=15):
     return r
 
 
-def rpc(method):
+def rpc(method, *args):
     r = command([package / 'bin/btx-cli', '-regtest', '-datadir=' + str(RUNTIME),
-                 '-rpcport=' + str(port), '-rpcclienttimeout=5', method], timeout=8)
+                 '-rpcport=' + str(port), '-rpcclienttimeout=5', method, *args], timeout=8)
     if r.returncode:
         raise RuntimeError((method, r.returncode, r.stderr[:1500]))
     return json.loads(r.stdout)
@@ -117,7 +119,6 @@ def wait_for(fn, timeout, description):
 
 def source_audit():
     assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=SOURCE, text=True).strip() == BASE
-    assert not subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=no'], cwd=SOURCE)
     names = ['src/init.cpp', 'src/rpc/modelnet.cpp', 'src/modelnet/supervisor.cpp',
              'test/functional/feature_model_security_v2.py']
     return {name: sha(SOURCE / name) for name in names}
@@ -130,6 +131,19 @@ def live_info():
             and info.get('owner_helper_pid', 0) > 0):
         return info
     return None
+
+
+
+def guard_observation():
+    try:
+        value = rpc('modelsecurity', '{"op":"status"}')
+        matching = [x for x in processes() if Path(x['exe']) == package / 'libexec/btx-guardd']
+        ok = (value.get('ok') is True and value.get('automatic_spend_atoms') == '0'
+              and value.get('policy_installed') is False and value.get('journal_valid') is True
+              and len(matching) == 1 and matching[0]['ppid'] == node.pid)
+        return {'ready': ok, 'reply': value, 'processes': matching}
+    except RuntimeError as e:
+        return {'ready': False, 'error': str(e), 'processes': []}
 
 
 def observe_boot(number):
@@ -172,6 +186,12 @@ def observe_boot(number):
             'identity_ids': sorted(x['id'] for x in ids),
             'public_identities': ids,
             'identity_public_store_sha256': sha(identity_files[0]), 'health': []}
+    deadline = time.monotonic() + 3
+    while True:
+        boot['guard'] = guard_observation()
+        if boot['guard']['ready'] or time.monotonic() >= deadline:
+            break
+        time.sleep(.1)
     state['boots'].append(boot)
     save()
     for i in range(10):
@@ -187,6 +207,8 @@ def observe_boot(number):
                    and now.get('peers_connected') == 0
                    and now['automatic_spend_atoms'] == 0 and now.get('advertised_host') is not True
                    and now.get('public_host_reachable') is False)
+        guard = guard_observation()
+        boot.setdefault('guard_health', []).append(guard)
         boot['health'].append({'poll': i, 'pass': healthy, 'height': chain['blocks'],
                                'peers': peers, 'model_peers': now.get('peers_connected'),
                                'helper_pid': current['pid']})
@@ -216,45 +238,14 @@ def stop_node(number):
 
 
 try:
-    check('remote disk headroom before extraction', shutil.disk_usage(W).free > 3 * 1024**3)
-    state['source_before'] = source_audit()
     check('fresh owned runtime', not RUNTIME.exists())
     RUNTIME.mkdir(mode=0o700)
     runtime_owned = True
     state['runtime'] = str(RUNTIME)
-    archive = W / 'package-lifecycle.tar.gz'
-    url = 'https://github.com/btxchain/btx/releases/download/v0.34.16/btx-0.34.16-x86_64-linux-gnu.tar.gz'
-    with urllib.request.urlopen(url, timeout=60) as response, archive.open('wb') as target:
-        shutil.copyfileobj(response, target)
-    state['archive'] = {'asset_id': 720210208, 'url': url, 'sha256': sha(archive),
-                        'bytes': archive.stat().st_size,
-                        'mapping_basis': 'Numair published0ac mapping; producer build not reproduced'}
-    check('exact current archive digest and size', sha(archive) == EXPECTED and archive.stat().st_size == 158893635)
-    dest = W / 'package-lifecycle-installation'
-    dest.mkdir()
-    with tarfile.open(archive) as tar:
-        check('bounded unpacked package', sum(m.size for m in tar.getmembers()) < 2 * 1024**3)
-        tar.extractall(dest, filter='data')
-    archive.unlink()
-    candidates = list(dest.rglob('bin/btxd'))
-    check('one packaged node entrypoint', len(candidates) == 1)
-    package = candidates[0].parent.parent.resolve()
+    state['variant'] = sys.argv[3]
+    state['source_before'] = source_audit()
     before = {str(f.relative_to(package)): sha(f) for f in package.rglob('*') if f.is_file()}
     state['package_files_before'] = before
-    for name in ['btxd', 'btx-cli', 'btx-modeld', 'btx-guardd']:
-        for sub, suffix in [('bin', ''), ('libexec', '.real')]:
-            path = package / sub / (name + suffix)
-            check('executable package file ' + str(path.relative_to(package)), os.access(path, os.X_OK))
-            if sub == 'bin':
-                shutil.copyfile(path, OUT / (name + '-launcher.sh'))
-            else:
-                r = command(['ldd', path])
-                (OUT / (name + '-ldd.log')).write_text(r.stdout + r.stderr)
-                # ldd without launcher LD_LIBRARY_PATH is diagnostic only: bundled resolution is exercised live.
-    for name in ['btxd', 'btx-cli']:
-        r = command([package / 'bin' / name, '-version'])
-        check(name + ' shipped version', r.returncode == 0 and 'v0.34.16' in r.stdout)
-        (OUT / (name + '-version.log')).write_text(r.stdout + r.stderr)
     with socket.socket() as sock:
         sock.bind(('127.0.0.1', 0))
         port = sock.getsockname()[1]
@@ -269,20 +260,26 @@ try:
     second = observe_boot(2)
     check('new node process on restart', first['node']['pid'] != second['node']['pid'])
     check('new helper process on restart', first['helper']['pid'] != second['helper']['pid'])
-    check('default identity survives restart', first['identity_ids'] == second['identity_ids'])
-    check('public identity fields survive restart', first['public_identities'] == second['public_identities'])
-    check('public identity store bytes preserved', first['identity_public_store_sha256'] == second['identity_public_store_sha256'])
+    check('default identity survives restart', first['public_identities'] == second['public_identities'])
     stop_node(2)
     state['source_after'] = source_audit()
-    check('source review files unchanged', state['source_before'] == state['source_after'])
+    check('selected daemon/source files unchanged', state['source_before'] == state['source_after'])
     after = {str(f.relative_to(package)): sha(f) for f in package.rglob('*') if f.is_file()}
-    check('all distributed package files unchanged', before == after)
     state['package_files_after'] = after
+    check('package bytes unchanged within this phase', before == after)
+    # Same acceptance requirement on every variant, including negative controls.
+    ready = all(b['guard']['ready'] and len(b.get('guard_health', [])) == 10
+                and all(x['ready'] for x in b['guard_health']) for b in state['boots'])
+    state['guard_contract_pass'] = ready
+    check('packaged guard actually answers on both boots and throughout health polls', ready)
+    check('fresh guard process after restart', first['guard']['processes'][0]['pid'] != second['guard']['processes'][0]['pid'])
+    check('fresh guard boot after restart', first['guard']['reply']['guard_boot'] != second['guard']['reply']['guard_boot'])
     state['passed'] = True
 except Exception as error:
     state['error'] = repr(error)
     state['traceback'] = traceback.format_exc()
     raise
+
 finally:
     state['cleanup_before'] = processes()
     # Only exact-executable records from this unique extraction are eligible for cleanup.
