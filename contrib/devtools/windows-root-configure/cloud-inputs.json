@@ -1,83 +1,120 @@
 {
-  "source": "4ca25183b89fa6aca35ea67a6846a17522b2c6a5",
-  "binary_sha256": "89ec2f7c4cbf23b5e49f51789c5534b2bde153d959cd1e5a062bba642bb78848",
   "integration_base": "4ca25183b89fa6aca35ea67a6846a17522b2c6a5",
-  "integration": "7b4b116a757ce91f8246e987aa7933ec9ea47156",
-  "tree": "c4f080e267848fcc2409930b3d1f263af5154e47",
-  "changed_files": [
-    "src/modelnet/s3_client.cpp"
-  ],
-  "candidate_file_sha256": {
-    "src/modelnet/s3_client.cpp": "f4995e783c8af0df83013ab2c2973748130229b91aa581e417416d2e9481567c"
-  },
-  "bundle_sha256": "748b736a5b28364954af7f7d8d736e47072e8d8f0e106110048c5a817ad40459",
-  "bundle_ref": "refs/heads/codex/diag-windows-cloud-transport-calls",
+  "baseline": "d5d74b212cd2a38f2f2b0c9c17154404090f2a3f",
+  "integration": "c660512641edf3bfb36f287e56a6fa0a8794fe64",
+  "tree": "74b3b21be455c47b34a2170cdaac74241c5f04ba",
+  "bundle_ref": "refs/heads/codex/test-windows-s3-cleanup-integration",
+  "bundle_sha256": "e5713fa65c4e0c928fffc0b10895a7eb64dee1954b5126fe64dc7675634fca48",
+  "binary_sha256": "89ec2f7c4cbf23b5e49f51789c5534b2bde153d959cd1e5a062bba642bb78848",
   "cases": [
     "modelnet_cloud_tests/cloud_https_not_stub_error",
     "modelnet_cloud_tests/cloud_https_use_fake_false_error_is_not_stubbed"
   ],
-  "new_controls": [],
-  "schema": {
-    "endian": "little",
-    "format": "<10Q",
-    "record_bytes": 80,
-    "magic": 4779542218912581953,
-    "fields": [
-      "magic",
-      "phase",
-      "original_line",
-      "fd_signed",
-      "errno_signed",
-      "wsa_signed",
-      "result_signed",
-      "socket_probe_rc_signed",
-      "socket_type_signed",
-      "close_matches_underscore_close"
-    ],
-    "sites": {
-      "438": {
-        "call": "fcntl GETFL",
-        "before": 2,
-        "after": 3
+  "new_controls": [
+    "modelnet_cloud_tests/cloud_real_http_socket_cleanup",
+    "modelnet_cloud_tests/cloud_tls_handshake_socket_cleanup"
+  ],
+  "reused_baseline": {
+    "run": 42235419798,
+    "ci": "a0557b44805f8bf3b96f4e4fbad92f51f8694451",
+    "baseline_source": "4ca25183b89fa6aca35ea67a6846a17522b2c6a5",
+    "baseline_binary_sha256": "89ec2f7c4cbf23b5e49f51789c5534b2bde153d959cd1e5a062bba642bb78848",
+    "diagnostic_source": "7b4b116a757ce91f8246e987aa7933ec9ea47156",
+    "diagnostic_binary_sha256": "eba07a6966a0fe1caa1bde68c29e9aa6480520a84562bd116a31e9e6570d7c81",
+    "cases": [
+      {
+        "selector": "modelnet_cloud_tests/cloud_https_not_stub_error",
+        "before_exit": 201,
+        "trace_exit": 201,
+        "same_case_result": {
+          "name": "cloud_https_not_stub_error",
+          "result": "aborted",
+          "assertions_passed": "4",
+          "assertions_failed": "1",
+          "warnings_failed": "0",
+          "expected_failures": "0"
+        },
+        "original_cpp_call": "::close(fd)",
+        "original_source_line": 457,
+        "socket_fd": 564,
+        "socket_probe_result": 0,
+        "socket_type": 1,
+        "close_matches_underscore_close": false,
+        "errno_before_close": 112,
+        "wsa_before_close": 0,
+        "connect_result": -1,
+        "connect_errno": 112,
+        "connect_wsa": 10035,
+        "trace_sha256": "308d22ccf3527a522b3805a989b3a8ff83c6ca02b69371bda03355910908303e",
+        "trace_records": 6,
+        "successful_before_without_after": true,
+        "observer_io_error": false,
+        "raw_before_after_log_identical": true
       },
-      "440": {
-        "call": "::connect",
-        "before": 4,
-        "after": 5
-      },
-      "443": {
-        "call": "::close(fd)",
-        "before": 6,
-        "after": 7
-      },
-      "449": {
-        "call": "::close(fd)",
-        "before": 6,
-        "after": 7
-      },
-      "457": {
-        "call": "::close(fd)",
-        "before": 6,
-        "after": 7
-      },
-      "723": {
-        "call": "::close(fd)",
-        "before": 6,
-        "after": 7
-      },
-      "732": {
-        "call": "::close(fd)",
-        "before": 6,
-        "after": 7
+      {
+        "selector": "modelnet_cloud_tests/cloud_https_use_fake_false_error_is_not_stubbed",
+        "before_exit": 201,
+        "trace_exit": 201,
+        "same_case_result": {
+          "name": "cloud_https_use_fake_false_error_is_not_stubbed",
+          "result": "aborted",
+          "assertions_passed": "11",
+          "assertions_failed": "1",
+          "warnings_failed": "0",
+          "expected_failures": "0"
+        },
+        "original_cpp_call": "::close(fd)",
+        "original_source_line": 457,
+        "socket_fd": 564,
+        "socket_probe_result": 0,
+        "socket_type": 1,
+        "close_matches_underscore_close": false,
+        "errno_before_close": 112,
+        "wsa_before_close": 0,
+        "connect_result": -1,
+        "connect_errno": 112,
+        "connect_wsa": 10035,
+        "trace_sha256": "308d22ccf3527a522b3805a989b3a8ff83c6ca02b69371bda03355910908303e",
+        "trace_records": 6,
+        "successful_before_without_after": true,
+        "observer_io_error": false,
+        "raw_before_after_log_identical": true
       }
-    },
-    "source": "4ca25183b89fa6aca35ea67a6846a17522b2c6a5",
-    "diagnostic_file_sha256": "f4995e783c8af0df83013ab2c2973748130229b91aa581e417416d2e9481567c",
-    "original_bytes_recovered_by_trace_removal": true,
-    "original_calls_changed": false,
+    ],
     "test_files_changed": false,
-    "io_error_marker": "BTX_S3_TRACE_IO_ERROR"
-  },
-  "input_cache_id": 10120921101,
-  "input_cache_key": "btx356-cloudfixtures-v1-b0fd516d2b19a8d270f93b9e06d2c559a39d35d1ba8529c40114728e49eb42d0-42227891410"
+    "original_source_recovered_exactly_after_trace_removal": true,
+    "only_two_existing_selectors": true,
+    "runtime_case_invocations": 4,
+    "previously_passing_19_repeated": 0,
+    "original_close_object_symbols": [
+      "FBD 00000000 UNDEF  notype       External     | close"
+    ],
+    "static_crt_compile_flag": true,
+    "sdk_declarations_found": true,
+    "sdk_deprecates_close_to_underscore_close": true,
+    "source_file_change_count": 1,
+    "build_seconds": 46.88,
+    "planned_steps": 11,
+    "planned_objects": [
+      "src/CMakeFiles/bitcoin_clientversion.dir/clientversion.cpp.obj",
+      "src/CMakeFiles/bitcoin_common.dir/matmul/matmul_v4_rc_production_canary.cpp.obj",
+      "src/modelnet/CMakeFiles/bitcoin_modelnet.dir/s3_client.cpp.obj"
+    ],
+    "changed_objects": [
+      "project-build\\src\\CMakeFiles\\bitcoin_clientversion.dir\\clientversion.cpp.obj",
+      "project-build\\src\\CMakeFiles\\bitcoin_common.dir\\matmul\\matmul_v4_rc_production_canary.cpp.obj",
+      "project-build\\src\\modelnet\\CMakeFiles\\bitcoin_modelnet.dir\\s3_client.cpp.obj"
+    ],
+    "objects_retained": 5885,
+    "configuration_dependencies_verified": true,
+    "inventory_identical": true,
+    "cleanup_verified": true,
+    "project_cache_saved": false,
+    "input_cache_id": 10120921101,
+    "archive_sha256": "a41f205d5bc83035b00b6c90d2e2393af86e8ceedddc9f5d9d1d1c5a0946f839",
+    "publication_hold": true,
+    "product_fix_built": false,
+    "verdict": "Exact original close call localized on native Windows in both controls; not a stack capture or repaired transport",
+    "limits": "Temporary logging-only integrated pending-source build on Windows Server2025/clang-cl20.1.8/static CRT; no successful live transfer, Linux/macOS, full-unit or release qualification. No handle-truncation regression or general transport redesign is proved."
+  }
 }

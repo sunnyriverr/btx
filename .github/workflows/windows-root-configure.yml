@@ -1,4 +1,4 @@
-name: Native Windows S3 original-call diagnostic
+name: Native Windows S3 socket cleanup qualification
 permissions:
   contents: read
 jobs:
@@ -150,7 +150,7 @@ jobs:
         cache; refusing fresh rebuild" }
 
         '
-    - name: Verify exact4ca source and89ec cached binary before diagnosis
+    - name: Verify exact4ca source and89ec cache before scoped repair
       id: prepare
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -174,7 +174,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Observe only the two unchanged transport controls
+    - name: Build and observe only two new cleanup regression controls before repair
       id: cases
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -193,13 +193,12 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/transport_diag.py
-        baseline
+        python controls/contrib/devtools/windows-root-configure/socket_repair.py baseline
 
         exit /b %errorlevel%
 
         '
-    - name: Build temporary original-call tracing in one source object
+    - name: Build the smallest Windows socket cleanup repair from cached objects
       id: fixture_build
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -218,13 +217,12 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/transport_diag.py
-        build
+        python controls/contrib/devtools/windows-root-configure/socket_repair.py build
 
         exit /b %errorlevel%
 
         '
-    - name: Capture exact original call with two unchanged checks
+    - name: Verify two existing refusals plus actual HTTP and TLS cleanup
       id: fixture_run
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -243,13 +241,12 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/transport_diag.py
-        diagnose
+        python controls/contrib/devtools/windows-root-configure/socket_repair.py run
 
         exit /b %errorlevel%
 
         '
-    - name: Verify diagnostic identity and cleanup without saving cache
+    - name: Verify source, objects, cleanup and successor cache checkpoint
       id: verification
       if: always() && steps.prepare.outcome == 'success'
       shell: cmd
@@ -269,17 +266,27 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/transport_diag.py
-        retain
+        python controls/contrib/devtools/windows-root-configure/socket_repair.py retain
 
         exit /b %errorlevel%
 
         '
+    - name: Retain verified repaired objects without replacing original cache
+      if: always() && steps.verification.outputs.checkpoint_valid == 'true'
+      uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
+      with:
+        path: 'D:\btx-native-035\project-build
+
+          D:\btx-native-035\vcpkg-installed
+
+          '
+        key: btx356-s3cleanup-v1-${{ steps.verification.outputs.checkpoint_key }}-${{
+          github.run_id }}
     - name: Preserve native maintained target records
       if: always()
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
       with:
-        name: native-windows-s3-call-diagnostic
+        name: native-windows-s3-socket-cleanup
         path: D:\btx-native-035\evidence\
         retention-days: 14
 'on':
