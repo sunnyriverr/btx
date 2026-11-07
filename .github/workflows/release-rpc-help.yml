@@ -1,4 +1,4 @@
-name: Release RPC-help observation
+name: Model identity CLI label observation
 on:
   push:
     branches: [codex/ci-rpc-help-release-03416]
@@ -13,20 +13,23 @@ jobs:
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
+          persist-credentials: false
           repository: btxchain/btx
-          ref: d27530af8ca27eef4311cb92b9ed85b147754835
+          ref: 0ac06fd23b4a62038963fb29f1c77ab26d7a1346
           path: product
       - name: Install documented runtime prerequisites
         run: |
           sudo apt-get -o Acquire::Retries=1 update
           sudo apt-get install -y --no-install-recommends libevent-dev libsqlite3-0 libzmq5 libgomp1
-      - name: Observe current maintained help checks on official package
+      - name: Observe labelled identity CLI and valid controls on official package
         run: python3 contrib/devtools/release-rpc-help/run.py
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: release-rpc-help-records
-          path: release-rpc-results
+          name: identity-label-workflow-records
+          path: identity-label-results
           retention-days: 14

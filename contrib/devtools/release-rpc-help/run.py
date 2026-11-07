@@ -1,4 +1,4 @@
-"""Run the current maintained test against the official archive; never hide failures."""
+"""Observe model identity CLI labels on the unchanged official archive."""
 from pathlib import Path
 import configparser
 import hashlib
@@ -15,11 +15,11 @@ import urllib.request
 W = Path(os.environ['GITHUB_WORKSPACE'])
 P = W / 'product'
 H = Path(__file__).parent
-O = W / 'release-rpc-results'
-R = W / 'release-rpc-runtime'
+O = W / 'identity-label-results'
+R = W / 'identity-label-runtime'
 O.mkdir(exist_ok=True)
-BASE = 'd27530af8ca27eef4311cb92b9ed85b147754835'
-EXPECTED = 'abf8cfb0198610823863570796a55cd4f8a031c917306b9e6182b0cdc2ad8b9a'
+BASE = '0ac06fd23b4a62038963fb29f1c77ab26d7a1346'
+EXPECTED = '58657765b5ac41252c44913f56c61247b781149fd21ed79374aedade67805ba1'
 state = {'source': BASE, 'fixture': os.environ['GITHUB_SHA'], 'commands': [],
          'observation_complete': False, 'test_pass': False, 'cache_saved': False}
 env = dict(os.environ, PYTHONDONTWRITEBYTECODE='1')
@@ -47,8 +47,8 @@ def command(args, label, allowed=(0,), timeout=120):
 def audit():
     assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=P, text=True).strip() == BASE
     assert not subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=no'], cwd=P)
-    return {n: sha(P / n) for n in ['test/functional/rpc_help.py', 'src/rpc/client.cpp',
-                                  'test/functional/test_framework/test_framework.py']}
+    return {n: sha(P / n) for n in ['src/rpc/client.cpp', 'src/rpc/modelnet.cpp', 'src/modelnet/helper.cpp',
+                                  'src/modeld.cpp', 'test/functional/test_framework/test_framework.py']}
 package = None
 def processes():
     found = []
@@ -68,7 +68,8 @@ try:
     with urllib.request.urlopen(url, timeout=60) as source, archive.open('wb') as target:
         shutil.copyfileobj(source, target)
     assert sha(archive) == EXPECTED
-    state['archive'] = {'url': url, 'sha256': EXPECTED, 'bytes': archive.stat().st_size}
+    state['archive'] = {'url': url, 'sha256': EXPECTED, 'bytes': archive.stat().st_size, 'asset_id': 720210208, 'source_mapping': 'Published replacement for release-0.34.16/0ac06fd2 perNumair; not independently reproduced build'}
+    assert archive.stat().st_size == 158893635
     dest = W / 'release-package'
     dest.mkdir()
     with tarfile.open(archive) as tar:
@@ -105,22 +106,24 @@ try:
     configfile = O / 'functional-config.ini'
     with configfile.open('w') as f: config.write(f)
     R.mkdir(mode=0o700)
+    env.update(PYTHONPATH=str(P / 'test/functional'), IDENTITY_RUNTIME=str(R), IDENTITY_RESULTS=str(O))
     command(['python3', H / 'case.py', '--configfile=' + str(configfile),
              '--tmpdir=' + str(R / 'case'), '--cachedir=' + str(R / 'cache'),
-             '--portseed=43416', '--nocleanup'], 'rpc-help', allowed=(0, 1), timeout=240)
-    events = json.loads((O / 'stages.json').read_text())
-    assert [e['name'] for e in events] == ['test_client_conversion_table', 'test_argument_names',
-                                         'test_categories', 'dump_help', 'wallet_help']
-    state['stages'] = events
+             '--portseed=43417', '--nocleanup'], 'identity-label-workflow', timeout=180)
+    observed = json.loads((O / 'observations.json').read_text())
+    assert observed['observation_complete'] and observed['controls_complete']
+    assert len(observed['bad_cli']) == 4 and len(observed['quoted_controls']) == 4
+    assert all(r['returncode'] != 0 and r['state_unchanged'] for r in observed['bad_cli'])
+    assert all(r['returncode'] == 0 and r['persisted_exactly'] for r in observed['quoted_controls'])
+    state['workflow'] = observed
     state['framework_exit'] = state['commands'][-1]['exit']
-    state['test_pass'] = state['framework_exit'] == 0 and all(e['result'] == 'pass' for e in events)
-    assert state['framework_exit'] == (0 if state['test_pass'] else 1)
+    state['test_pass'] = False  # The unchanged CLI has four observed failures, not a repaired product.
     state['source_after'] = audit()
     assert state['source_before'] == state['source_after']
     after = {str(f.relative_to(package)): sha(f) for f in package.rglob('*') if f.is_file()}
     assert before == after
     state['package_files_unchanged'] = True
-    state['observation_complete'] = True
+    state['observation_complete'] = observed['observation_complete']
 except Exception as error:
     state['error'] = repr(error)
     raise
