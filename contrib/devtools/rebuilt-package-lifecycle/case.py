@@ -19,7 +19,7 @@ SOURCE = W / 'product'
 OUT = Path(sys.argv[2])
 OUT.mkdir(exist_ok=True)
 RUNTIME = Path('/tmp') / ('btxpkg-' + os.environ['GITHUB_RUN_ID'] + '-' + os.environ['GITHUB_RUN_ATTEMPT'] + '-' + sys.argv[3])
-BASE = '0ac06fd23b4a62038963fb29f1c77ab26d7a1346'
+BASE = '2f3b574867c11ab79eba829123689b76e6137a38'
 EXPECTED = '58657765b5ac41252c44913f56c61247b781149fd21ed79374aedade67805ba1'
 state = {'source_mapping': BASE, 'fixture': os.environ['GITHUB_SHA'],
          'platform': platform.platform(), 'checks': [], 'boots': [],
