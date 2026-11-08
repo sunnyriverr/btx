@@ -27,10 +27,12 @@ try:
  assert len(versions)==2 and all(x.startswith('OpenSSL 3.5.9 ') for x in versions)
  links=command(['otool','-L',out/'ssl-admission'],'ssl-static-dependencies',30,env)
  assert 'libssl.3.dylib' not in links and 'libcrypto.3.dylib' not in links
- deps=['boost@1.85' ,'libevent','zeromq','libomp','qt','qrencode','librsvg']
+ deps=['boost@1.85' ,'libevent','zeromq','libomp','qt','qrencode','librsvg','libicns']
  command(['brew','info','--json=v2',*deps],'dependency-metadata',120,env)
  command(['brew','install','--force-bottle',*deps],'install-bottles',1200,env)
  command(['brew','list','--versions'],'installed-versions',env=env)
+ for tool in ['rsvg-convert','png2icns']:
+  assert shutil.which(tool),tool+' missing before configure'
  # Never let a dependency operation silently change the pinned SSL identity.
  for file,meta in state['ssl_files'].items():assert hashlib.sha256(Path(file).read_bytes()).hexdigest()==meta['sha256']
  boost=command(['brew','--prefix','boost@1.85'],'boost-prefix',env=env).strip()
