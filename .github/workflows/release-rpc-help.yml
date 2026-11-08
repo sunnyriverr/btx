@@ -1,0 +1,21 @@
+name: Published package ABI inventory
+on:
+  push:
+    branches: [codex/ci-atlas-package-abi]
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - run: timeout --signal=TERM --kill-after=10s 300s python3 contrib/devtools/package-abi/run.py
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: packaged-abi-records
+          path: abi-results
+          retention-days: 14
