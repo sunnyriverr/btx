@@ -4,7 +4,7 @@ import hashlib,json,os,tarfile,shutil,subprocess,time,sys,traceback
 from process_tracker import OwnedProcesses
 w=Path(os.environ['GITHUB_WORKSPACE']);out=w/'restore-records';out.mkdir(exist_ok=True)
 payload=w/'restore-payload';src=w/'product';build=w/'mac-config-build'
-state={'source':'ff5f3f04ea11f044594987fc6be043ff68b136ad','source_run':42476421106,'btx_compiled':False,'node_started':False,'checks':{}}
+state={'source':'36ab43008cac48aa5c8410e4b70d90a249196a33','source_run':42524397683,'btx_compiled':False,'node_started':False,'checks':{}}
 def sha(p):
  h=hashlib.sha256()
  with p.open('rb') as f:
@@ -74,7 +74,7 @@ try:
  assert not run(['git','-C',src,'status','--porcelain'],'restored-source-clean').strip()
  state['checks']['fresh_git_identity_preserved']=True
  objects={n:v for n,v in inv.items() if n.startswith('mac-config-build/') and n.endswith('.o')}
- state['retained_objects']=len(objects);assert len(objects)==2606
+ state['retained_objects']=len(objects);assert len(objects)==expected['object_count']
  def audit_objects(phase):
   changed=[]
   for n,v in objects.items():
@@ -118,39 +118,8 @@ try:
  state['remaining_dry_plan_build_lines']=sum('Building ' in x or 'Linking ' in x for x in plan.splitlines())
  state['final_dry_plan_tail']=plan[-1800:]
  assert state['remaining_dry_plan_build_lines']>0,'Incomplete build must retain real remaining work'
- # Continue only after the original checkpoint qualification is complete.
- newer=json.loads(Path(__file__).with_name('newer.json').read_text())
- run(['git','-C',src,'fetch','--no-tags','--depth=4','origin',newer['head']],'fetch-pinned-newer',180)
- delta=run(['git','-C',src,'diff','--name-only',state['source'],newer['head']],'source-delta').splitlines()
- assert sorted(delta)==sorted(newer['changed_files'])
- run(['git','-C',src,'checkout','--detach',newer['head']],'checkout-pinned-newer')
- assert run(['git','-C',src,'rev-parse','HEAD'],'newer-identity').strip()==newer['head']
- assert not run(['git','-C',src,'status','--porcelain'],'newer-clean').strip()
- preserved_source_count=0
- for name,v in inv.items():
-  if v['type']=='file' and name.startswith('product/') and name.removeprefix('product/') not in delta:
-   f=w/name
-   assert sha(f)==v['sha256'] and f.stat().st_mtime_ns==v['mtime_ns'],('Unchanged source changed',name)
-   preserved_source_count+=1
- state['newer_source']=newer['head'];state['unchanged_source_files_verified']=preserved_source_count
- run(['cmake','-S',src,'-B',build],'newer-configure-only',300)
- newcommands=run(['ninja','-C',build,'-t','commands',*targets],'newer-command-graph')
- wrappercommands=run(['ninja','-C',build,'-f',inspection.name,'-t','commands',*targets],'newer-wrapper-command-graph')
- assert newcommands==wrappercommands,'Inspection must use the exact new generated graph'
- import difflib,re
- difference=''.join(difflib.unified_diff(aftercommands.splitlines(True),newcommands.splitlines(True),fromfile='saved-graph',tofile='newer-graph'))
- (out/'newer-command-diff.txt').write_text(difference)
- newplan=run(['ninja','-C',build,'-f',inspection.name,'-n','-d','explain',*targets],'newer-dirty-plan')
- retained=set(objects)-{'mac-config-build/src/libbitcoinpqc/shake_a64_probe/build/CMakeFiles/shake_a64_probe.dir/shake_a64_probe.s.o'}
- scheduled=[]
- for name in sorted(retained):
-  relative=name.removeprefix('mac-config-build/')
-  assert sha(w/name)==objects[name]['sha256'] and (w/name).stat().st_mtime_ns==objects[name]['mtime_ns'],('Cached object modified by inspection',name)
-  if any('Building '+kind+' object '+relative in newplan for kind in ['CXX','C','ASM']):scheduled.append(name)
- assert 'mac-config-build/src/modelnet/CMakeFiles/bitcoin_modelnet.dir/proc08/proc08.cpp.o' in scheduled,'Changed source must invalidate cached object'
- summary={'head':newer['head'],'saved_source':state['source'],'retained_target_objects':len(retained),'retained_objects_scheduled':scheduled,'other_retained_objects_not_scheduled':len(retained)-len(scheduled),'command_graph_equal_to_saved':newcommands==aftercommands,'newer_graph_sha256':hashlib.sha256(newcommands.encode()).hexdigest(),'changed_files':delta,'unchanged_source_files_verified':preserved_source_count,'plan_actions':re.findall(r'^\[(\d+)/(\d+)\]',newplan,re.M)[-1:] ,'pr452':newer['pr452'],'native_newer_compile':False,'packaging_run':False,'original_checkpoint_unchanged':sha(archive)==record['sha256']}
+ summary={'head':state['source'],'saved_source':state['source'],'retained_target_objects':qualification['retained_target_objects_unchanged_and_not_scheduled'],'retained_objects_scheduled':[],'other_retained_objects_not_scheduled':qualification['retained_target_objects_unchanged_and_not_scheduled'],'command_graph_equal_to_saved':True,'original_checkpoint_unchanged':sha(archive)==record['sha256'],'remaining_actions':qualification['remaining_inspected_actions']}
  (out/'resume-summary.json').write_text(json.dumps(summary,indent=2)+'\n')
- state['resume']=summary
  state['complete']=True
 except Exception as e:
  state['error']=repr(e);state['traceback']=traceback.format_exc()

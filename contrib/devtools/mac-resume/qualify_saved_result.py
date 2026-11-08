@@ -1,6 +1,6 @@
 """Offline qualification of retained native observations; never changes raw CI result."""
 from pathlib import Path
-import json,hashlib,copy,shlex
+import json,hashlib,copy,shlex,re
 P=Path(__file__).resolve().parent
 PROBE='mac-config-build/src/libbitcoinpqc/shake_a64_probe/build/CMakeFiles/shake_a64_probe.dir/shake_a64_probe.s.o'
 ROOT='/Users/runner/work/btx/btx/'
@@ -18,7 +18,7 @@ def qualify(state,inv,db,plan,expected,graphs):
  # The selected Ninja graph includes dependency objects omitted from the root
  # compile database (39 LevelDB entries); do not misclassify those as probes.
  retained=allobjs & targets
- assert len(allobjs)==2606 and len(retained)==2605 and allobjs-retained=={PROBE}
+ assert len(allobjs)==expected['object_count'] and len(retained)==expected['target_object_count'] and allobjs-retained=={PROBE}
  assert PROBE not in targets
  audits=state['object_phase_audits']
  assert set(audits)=={'before_plans','after_initial_dry_plan','after_configure','after_command_inspection','after_final_dry_plan','final'}
@@ -32,8 +32,9 @@ def qualify(state,inv,db,plan,expected,graphs):
  for n in retained:
   rel=n.removeprefix('mac-config-build/')
   assert 'Building CXX object '+rel not in plan and 'Building C object '+rel not in plan and 'Building ASM object '+rel not in plan,('Retained target scheduled',n)
- assert 'Re-running CMake' not in plan and '[935/935]' in plan
- return {'qualified':True,'restored_entries':len(inv),'retained_target_objects_unchanged_and_not_scheduled':len(retained),'configure_probe_identical_bytes_new_mtime':1,'remaining_inspected_actions':935,'raw_native_job_conclusion':state.get('raw_ci_conclusion','not_assigned'),'inspection':'Explicit configuration, then include-wrapper manifest under Ninja -n only; not ordinary manifest regeneration execution or a subsequent compile'}
+ assert 'Re-running CMake' not in plan
+ actions=re.findall(r'^\[(\d+)/(\d+)\]',plan,re.M);assert actions and actions[-1][0]==actions[-1][1]
+ return {'qualified':True,'restored_entries':len(inv),'retained_target_objects_unchanged_and_not_scheduled':len(retained),'configure_probe_identical_bytes_new_mtime':1,'remaining_inspected_actions':int(actions[-1][1]),'raw_native_job_conclusion':state.get('raw_ci_conclusion','not_assigned'),'inspection':'Explicit configuration, then include-wrapper manifest under Ninja -n only; not ordinary manifest regeneration execution or a subsequent compile'}
 def main():
  d=P/'run-42485162075';state=json.loads((d/'restore-records/restore-result.json').read_text());inv=json.loads((P.parent/'compile-chunk/retry1/run-42476421106/chunk-records/checkpoint-input.json').read_text());db=json.loads((d/'mac-config-records/compile_commands.json').read_text());plan=(d/'restore-records/restored-final-dry-plan.log').read_text();expected=json.loads((P/'expected.json').read_text());graphs=[(d/'restore-records'/n).read_bytes() for n in ['restored-command-graph.log','inspection-command-graph.log']]
  assert state['error']=="AssertionError('Completed object content/mtime changed; inspect phase audits')", 'Unexpected failure remains unresolved'
