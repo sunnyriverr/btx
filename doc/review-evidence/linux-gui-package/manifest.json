@@ -1,0 +1,171 @@
+{
+  "base": "ff5f3f04ea11f044594987fc6be043ff68b136ad",
+  "code": "400f863ea082d8b6b9b0c6fb99e2e09224001266",
+  "code_files": {
+    "scripts/release/bundle_qt_gui.py": "57fc611cd35c7964ea7fa5efe04c47063a3a7f5f",
+    "scripts/release/package_release_archive.py": "2e60fb7463de5558ccacfdfe74f019f2c2aa447e",
+    "test/util/package_release_archive_test.py": "252788375a39555831198acce4de993b0360eeb2"
+  },
+  "checker_sha256": "afdbcee8a34141a6368787690aeae767c59b1c85a3ce9faae336c0bb4b96cbbf",
+  "core": {
+    "run": 42460862377,
+    "fixture": "3ea43156261a966f6c8e52fbd76daebee3192285",
+    "workflow_conclusion": "failure in later fresh-stage test setup; earlier qualified results preserved",
+    "before_regressions": {
+      "BundleQtGuiTest.test_direct_private_dependency_survives_host_branch_cut": {
+        "exit": 1,
+        "expected_failure": "libhost_only.so.1"
+      },
+      "PackageReleaseArchiveTest.test_direct_guard_and_qt_keep_shared_and_private_dependencies": {
+        "exit": 1,
+        "expected_failure": "libbtxshared.so.1"
+      }
+    },
+    "after_tests": 25,
+    "prefix_only_mutant_rejected": true,
+    "default_archive_gate_before_exit": 1,
+    "default_archive_gate_after_exit": 0,
+    "independent_archive_negative_controls": {
+      "guard": [
+        "  - btx-0.34.16/libexec/btx-guardd: no RUNPATH reaches btx-0.34.16/lib, so the host's libsqlite3.so.0, libstdc++.so.6, libgcc_s.so.1 load instead of the copies this archive ships"
+      ],
+      "host": [
+        "  - btx-0.34.16/libexec/btx-atlas.real: RUNPATH $ORIGIN/../lib does not reach btx-0.34.16/lib/qt-private, so the host's libglib-2.0.so.0, libdbus-1.so.3 load instead of the copies this archive ships"
+      ]
+    },
+    "corrected_archive_sha256": "d1bce2176834400fbd5202a268524d7348473b469db81a427179943ae063e2d9",
+    "guard_before_direct_exit": 0,
+    "guard_after_direct_exit": 0,
+    "scope": "No actual guard crash reproduced on this host. Runtime ownership and strict archive failure proved.",
+    "node_atlas_wrappers_all_root_libraries_openssl_unchanged": true,
+    "guard_needed_and_version_contract_unchanged": true,
+    "guard_changes": "RUNPATH metadata only, both regular hard-linked names",
+    "private_qt_changes": "pruning and runtime search paths; no component rebuild",
+    "roundtrip_files": 119
+  },
+  "fresh_stage": {
+    "run": 42461456041,
+    "fixture": "978ed8d3dc3d1c2dc4a91b07dd6a6502200fe55c",
+    "workflow_conclusion": "success",
+    "archive_sha256": "e63ef6ce4a4de5b6a49736ea980a66fd9e658cb6d32a5799761ecfed58de9833",
+    "gate": "unchanged default gate incl daemon version launch; not --no-launch",
+    "commands": [
+      {
+        "label": "gate-fresh-source-output",
+        "exit": 0
+      },
+      {
+        "label": "guard-fresh-stage-direct",
+        "exit": 0
+      },
+      {
+        "label": "fresh-guard-loader-clean",
+        "exit": 0
+      },
+      {
+        "label": "fresh-loader-clean-qt",
+        "exit": 0
+      },
+      {
+        "label": "fresh-loader-clean-plugin",
+        "exit": 0
+      },
+      {
+        "label": "fresh-loader-wrapper-qt",
+        "exit": 0
+      },
+      {
+        "label": "fresh-loader-wrapper-plugin",
+        "exit": 0
+      }
+    ],
+    "node_atlas_wrappers_openssl_unchanged": true,
+    "retained_root_libraries_unchanged": [
+      "lib/libbsd.so.0",
+      "lib/libcom_err.so.2",
+      "lib/libcrypto.so.3",
+      "lib/libevent_core-2.1.so.7",
+      "lib/libevent_extra-2.1.so.7",
+      "lib/libevent_pthreads-2.1.so.7",
+      "lib/libgcc_s.so.1",
+      "lib/libgomp.so.1",
+      "lib/libgssapi_krb5.so.2",
+      "lib/libk5crypto.so.3",
+      "lib/libkeyutils.so.1",
+      "lib/libkrb5.so.3",
+      "lib/libkrb5support.so.0",
+      "lib/libmd.so.0",
+      "lib/libnorm.so.1",
+      "lib/libpgm-5.3.so.0",
+      "lib/libsodium.so.23",
+      "lib/libsqlite3.so.0",
+      "lib/libssl.so.3",
+      "lib/libstdc++.so.6",
+      "lib/libzmq.so.5"
+    ],
+    "omitted_old_input_root_libraries": [
+      "lib/libz.so.1",
+      "lib/libzstd.so.1"
+    ],
+    "input_context": "Retained binaries, authoritative root libraries first then retained Qt-private libraries for build-time discovery; exact Qt6.2.4 plugin provider override. Empty output directory, real source stage/write_tar_gz. Not an untouched official producer replay.",
+    "gui_qualified": false,
+    "runtime_removed": true,
+    "remaining_package_processes": []
+  },
+  "gui_evidence": {
+    "run": 42458568275,
+    "repeated": false,
+    "reused_for": "Corrected saved candidate only: Atlas/wrapper/all root libraries unchanged. Qt closure newly loader-qualified.",
+    "fresh_output_gui": "Not executed; different library inventory. Raw fresh record prior_gui_evidence_reused.scope is superseded by this explicit limitation; original evidence preserved."
+  },
+  "limitations": [
+    "Ubuntu24.04 x86_64 hosted loader/archive checks, not physical desktop/Wayland/GPU",
+    "No full guard lifecycle/model workload, broad full suite or release qualification",
+    "Untouched published archive796 remains unchanged and its Atlas launch failure remains valid",
+    "No upstream publication or release asset modification"
+  ],
+  "publication_code": {
+    "base": "ff5f3f04ea11f044594987fc6be043ff68b136ad",
+    "tested_code": "400f863ea082d8b6b9b0c6fb99e2e09224001266",
+    "published_code": "97131db284c4575eb32c9e5d10ab70789756b08e",
+    "tree": "25a85c8a892602d1e2fb1d72a2386ea0aba8e3d5",
+    "tree_identical": true,
+    "branch": "codex/fix-linux-gui-package-runtime",
+    "url": "https://github.com/sunnyriverr/btx/tree/codex/fix-linux-gui-package-runtime"
+  },
+  "raw_scope_correction": "fresh/result.json prior_gui_evidence_reused.scope does not qualify fresh-output Atlas GUI; this record and README supersede that broad label.",
+  "evidence_files": {
+    "retained-artifacts.json": "fa1cba2286d1fc9c13ee2e1c203854b02ee8eb2fe38055c3d7d66dc5bde8a2c1",
+    "core/unit-before-1.log": "98e09eeff7f747a65dc46795cafd2b89ce42a29700913bf0a562c5e57d4d1bd8",
+    "core/loader-wrapper-qt.log": "5bbfcee8bb6769d71e703407b91270cf9d133a08ac546cde05e003cafb617840",
+    "core/unit-before-0.log": "c3dd0f42e01a6d6df32c4c8fc28817f0bf09f991d702403186bf53b14b786043",
+    "core/prefix-only-negative.log": "a6ced84462c5a6d721a16c235011d27bea175d1487bc72d0b7621f7609a7f4ae",
+    "core/guard-after-direct.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "core/result.json": "58266823ccbee876c2df657f60746144b37193a6ac30d8b514f791a9e33a7074",
+    "core/guard-loader-clean.log": "488e11b88538ee0c163c90e359ba71b51a7f5c76ffe87b58f0f7501ad9d80eac",
+    "core/gate-after.log": "95d844a3bfc01825265b8000e1cbfc2b39c17c61f68fd314057019349352e802",
+    "core/unit-after-full.log": "5d64136fdafeda1f9bd2111ffff8647c28b538ba90164aaf5e837b2385441dde",
+    "core/gate-before.log": "2c374987d56578e2462de12f42b96594c9b5e2108d1319e6a1260cfdbe8f3a53",
+    "core/loader-clean-plugin.log": "4ca1571e1a64347f40982d9675c77423da2f6537ad31572178634b800fcf971d",
+    "core/gate-negative-guard.log": "7f56f260caacc1dc46ced023e24a882271ec642f4524e1f0e0bf5034e2d23baf",
+    "core/guard-before-direct.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "core/loader-clean-qt.log": "e0710e18aae726f0fe77d230766fdad5cd7e5e1f9a4b4535cc1bfe0e6d8b9636",
+    "core/gate-negative-host.log": "2111645497394fdf4253a4bf7fa3dda834d9ccc2e55e9742c5bc5eb1b13153b1",
+    "core/negative-guard-edit.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "core/loader-wrapper-plugin.log": "d6c8877fe54ebaabfe36b2e8e3282682f39cbdd77f0951764e911608b548442c",
+    "fresh/fresh-loader-clean-plugin.log": "0909298af987817d17f862c477e767f71a93f03789663624c20f12684b0c7c38",
+    "fresh/fresh-guard-loader-clean.log": "fb75f81340707e848a4f703f60e966ed715e6a2f95d3862e1e7b566dc10b67e9",
+    "fresh/result.json": "793fb17f7a936ec4d506336a877f6492d9c7b5bc4a766e10dc3e87d893f1cda0",
+    "fresh/guard-fresh-stage-direct.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "fresh/fresh-loader-wrapper-qt.log": "3c9902171c0bbf37bfba8c87a2fe166e717a00ff4b56fcf0fa801750e9d07293",
+    "fresh/fresh-loader-wrapper-plugin.log": "7c7f0b1e7202908ee8f56913619d84646656130d989450c54672cf551e05ba94",
+    "fresh/fresh-loader-clean-qt.log": "5d288ca253e26b6366ac5bf7a088dc4c97ef5c3afa31b54305819d10e16848e5",
+    "fresh/gate-fresh-source-output.log": "d92a34aaf0d2bd1a994916c92119f671100fd301fd8193b162dd95ccd1c10083",
+    "gui/result.json": "2304b0afae050941ab0baaa57f45adffee18d2a4dfd9c4d4c313c33896c0e535",
+    "gui/connected.png": "a4be278af2c66e1015b17ab098682b18d5fd616aef4f17903efc61df98634366",
+    "gui/native-confirmation.png": "51a501667376061da8219855ebab3b2107f42a989db41e80412e5975d4eeee41",
+    "executed-recipes/fresh.py": "82aa161cf10df17e9ca7f8090b39b02c2a3a2d908539a32eb7ca2e305abd0274",
+    "executed-recipes/core.py": "c4002b40bf6f688090a99f49343e97a4dd915a78a8dab1bd29e9f6a374531b91",
+    "executed-recipes/fresh-workflow.yml": "7610b0547e16321e6fb9c7443ea32e1581cc209d29c3ae6f925621a4e658157c"
+  }
+}

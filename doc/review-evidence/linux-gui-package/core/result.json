@@ -1,0 +1,1347 @@
+{
+  "fixture": "3ea43156261a966f6c8e52fbd76daebee3192285",
+  "source_base": "ff5f3f04ea11f044594987fc6be043ff68b136ad",
+  "gui_repeated": false,
+  "component_rebuilds": 0,
+  "commands": [
+    {
+      "label": "unit-before-0",
+      "exit": 1
+    },
+    {
+      "label": "unit-before-1",
+      "exit": 1
+    },
+    {
+      "label": "unit-after-full",
+      "exit": 0
+    },
+    {
+      "label": "prefix-only-negative",
+      "exit": 1
+    },
+    {
+      "label": "gate-before",
+      "exit": 1
+    },
+    {
+      "label": "guard-before-direct",
+      "exit": 0
+    },
+    {
+      "label": "gate-after",
+      "exit": 0
+    },
+    {
+      "label": "loader-clean-qt",
+      "exit": 0
+    },
+    {
+      "label": "loader-clean-plugin",
+      "exit": 0
+    },
+    {
+      "label": "loader-wrapper-qt",
+      "exit": 0
+    },
+    {
+      "label": "loader-wrapper-plugin",
+      "exit": 0
+    },
+    {
+      "label": "guard-loader-clean",
+      "exit": 0
+    },
+    {
+      "label": "guard-after-direct",
+      "exit": 0
+    },
+    {
+      "label": "negative-guard-edit",
+      "exit": 0
+    },
+    {
+      "label": "gate-negative-guard",
+      "exit": 1
+    },
+    {
+      "label": "gate-negative-host",
+      "exit": 1
+    }
+  ],
+  "release_qualified": false,
+  "checker_sha256": "afdbcee8a34141a6368787690aeae767c59b1c85a3ce9faae336c0bb4b96cbbf",
+  "unit_before": {
+    "BundleQtGuiTest.test_direct_private_dependency_survives_host_branch_cut": {
+      "exit": 1,
+      "expected_failure": "libhost_only.so.1"
+    },
+    "PackageReleaseArchiveTest.test_direct_guard_and_qt_keep_shared_and_private_dependencies": {
+      "exit": 1,
+      "expected_failure": "libbtxshared.so.1"
+    }
+  },
+  "phase": "gate-negative-host",
+  "unit_after_full_pass": true,
+  "prefix_only_mutant_rejected": true,
+  "gate_before_problems": [
+    "  - btx-0.34.16/libexec/btx-atlas.real: RUNPATH $ORIGIN/../lib does not reach btx-0.34.16/lib/qt-private, so the host's libglib-2.0.so.0, libdbus-1.so.3 load instead of the copies this archive ships",
+    "  - btx-0.34.16/libexec/btx-guardd: no RUNPATH reaches btx-0.34.16/lib, btx-0.34.16/lib/qt-private, so the host's libsqlite3.so.0, libstdc++.so.6, libgcc_s.so.1 load instead of the copies this archive ships"
+  ],
+  "guard_before_direct_exit": 0,
+  "qt_private_pruned": [
+    "lib/qt-private/libbsd.so.0",
+    "lib/qt-private/libcap.so.2",
+    "lib/qt-private/libcom_err.so.2",
+    "lib/qt-private/libdbus-1.so.3",
+    "lib/qt-private/libevent_core-2.1.so.7",
+    "lib/qt-private/libevent_extra-2.1.so.7",
+    "lib/qt-private/libevent_pthreads-2.1.so.7",
+    "lib/qt-private/libgcc_s.so.1",
+    "lib/qt-private/libgcrypt.so.20",
+    "lib/qt-private/libglib-2.0.so.0",
+    "lib/qt-private/libgomp.so.1",
+    "lib/qt-private/libgpg-error.so.0",
+    "lib/qt-private/libgssapi_krb5.so.2",
+    "lib/qt-private/libk5crypto.so.3",
+    "lib/qt-private/libkeyutils.so.1",
+    "lib/qt-private/libkrb5.so.3",
+    "lib/qt-private/libkrb5support.so.0",
+    "lib/qt-private/liblz4.so.1",
+    "lib/qt-private/liblzma.so.5",
+    "lib/qt-private/libmd.so.0",
+    "lib/qt-private/libnorm.so.1",
+    "lib/qt-private/libpcre.so.3",
+    "lib/qt-private/libpgm-5.3.so.0",
+    "lib/qt-private/libsodium.so.23",
+    "lib/qt-private/libsqlite3.so.0",
+    "lib/qt-private/libstdc++.so.6",
+    "lib/qt-private/libsystemd.so.0",
+    "lib/qt-private/libuuid.so.1",
+    "lib/qt-private/libz.so.1",
+    "lib/qt-private/libzmq.so.5",
+    "lib/qt-private/libzstd.so.1"
+  ],
+  "qt_private_rpath_adjusted": [
+    "lib/qt-private/libpcre2-16.so.0",
+    "lib/qt-private/libqrencode.so.4",
+    "lib/qt-private/libxcb-image.so.0",
+    "lib/qt-private/libQt6Core.so.6",
+    "lib/qt-private/libxcb-xinput.so.0",
+    "lib/qt-private/libharfbuzz.so.0",
+    "lib/qt-private/libxcb-sync.so.1",
+    "lib/qt-private/libxcb-icccm.so.4",
+    "lib/qt-private/libbrotlidec.so.1",
+    "lib/qt-private/libxcb-randr.so.0",
+    "lib/qt-private/libxcb-keysyms.so.1",
+    "lib/qt-private/libfontconfig.so.1",
+    "lib/qt-private/libpng16.so.16",
+    "lib/qt-private/libxcb-xkb.so.1",
+    "lib/qt-private/libicuuc.so.70",
+    "lib/qt-private/libdouble-conversion.so.3",
+    "lib/qt-private/libmd4c.so.0",
+    "lib/qt-private/libbrotlicommon.so.1",
+    "lib/qt-private/libgraphite2.so.3",
+    "lib/qt-private/libQt6Network.so.6",
+    "lib/qt-private/libb2.so.1",
+    "lib/qt-private/libQt6Gui.so.6",
+    "lib/qt-private/libproxy.so.1",
+    "lib/qt-private/libexpat.so.1",
+    "lib/qt-private/libxcb-xfixes.so.0",
+    "lib/qt-private/libxcb-render.so.0",
+    "lib/qt-private/libxcb-render-util.so.0",
+    "lib/qt-private/libxcb-shm.so.0",
+    "lib/qt-private/libfreetype.so.6",
+    "lib/qt-private/libicui18n.so.70",
+    "lib/qt-private/libQt6Widgets.so.6",
+    "lib/qt-private/libQt6XcbQpa.so.6",
+    "lib/qt-private/libQt6DBus.so.6",
+    "lib/qt-private/libxcb-shape.so.0",
+    "lib/qt-private/libxcb-util.so.1",
+    "lib/qt-private/qt6/plugins/platforms/libqxcb.so"
+  ],
+  "guard_rpath": [
+    "$ORIGIN/../lib"
+  ],
+  "all_other_files_unchanged": true,
+  "changed_files": {
+    "lib/qt-private/libQt6Core.so.6": {
+      "before": {
+        "sha256": "1a31b98c8c8c05f6cd94836c77cc5cc4fa321d2d7458f0427a40d032266bf9bc",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "46841852d425aa53f0c05826d9e667ffa75a42bf2e0e77e164b7ce29fe286422",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libQt6DBus.so.6": {
+      "before": {
+        "sha256": "f434f01a7554ad22ec1a1e341789ac45747076f1eef8e89bcc83fad807528cba",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "d0b9f47d36345dbf00c2fb2fbee96f07a709a0da8a6b7df78e2fc8596a3c0884",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libQt6Gui.so.6": {
+      "before": {
+        "sha256": "f7608581911f2c0e5cbe59fe141df29c511eb1c5c856d5d678e78f9306b54771",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "dd8800d49c20cc07b6bc33ef16efc4662031b8e80f7a57ab0ec6e07d146dec3c",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libQt6Network.so.6": {
+      "before": {
+        "sha256": "c5885e37a8aa62ed81512af619c60406274258f2a81d8b3d28b9684e8bdcf06d",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "04c984ba33d213e97f79e0648c0e5fde6f87dad5f3f60a5cf0e143e47473d215",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libQt6Widgets.so.6": {
+      "before": {
+        "sha256": "2cdfeb48346e2d7c0f8b07991e32d9a41b6df31dd4a2200f8d8d78a6fb275de4",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "863ca98a862b5dd04ad6486b3ce415b68e57f4f89f15bdb4accfb9c36dd36b6e",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libQt6XcbQpa.so.6": {
+      "before": {
+        "sha256": "a6647cabe4e127de6baf3aeb473c565901d9a9b1890c50cb919138c24c2e6be7",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "6830e6fc044eb40027e68d974ea528ebb1367cf1bac0875902a2cd42bb10fd9d",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libb2.so.1": {
+      "before": {
+        "sha256": "7a9cd497de7957a4e76dbd189b2dfbb8aa9fe15034ecb1a063e13082743de9bc",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "7d06f8c539850e80dfa4d7205044e5a1cff5dbc094728fd74a9520df07a7a396",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libbrotlicommon.so.1": {
+      "before": {
+        "sha256": "cd1597f11608994b477910b7ddd330e234ac74138a4ab1a4b521c73ebfcf9b6d",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "0138cbb02e7ebc9c40fc5496c3badf0f5279628e74c01ed0b21aa92dfa85aa2e",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libbrotlidec.so.1": {
+      "before": {
+        "sha256": "4a3324f2ab0d40822228b9894a0cc605c2ea983aa93f9d26d57a055f5a3ae737",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "257446710956d03c62236f82f205b0f8f264f6f2e4daf4985c76c92d799f47cf",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libbsd.so.0": {
+      "before": {
+        "sha256": "85592d7edec05ee79ae45f4b29d284d2a81031da1c2c921aa4a2d303df0a9dd5",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libcap.so.2": {
+      "before": {
+        "sha256": "507b03ad6351343928e8b46ba0a29835f5d2862b5d9161fa15620e5e0403d137",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libcom_err.so.2": {
+      "before": {
+        "sha256": "05806212ea6f76d47006ee901ef634514710eaa29c3d6f5d0303e59f5ee68b12",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libdbus-1.so.3": {
+      "before": {
+        "sha256": "75ab39f40f3c0852b0cc1950e5097ae67ed416717bec51b51d7b400dc7f2705d",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libdouble-conversion.so.3": {
+      "before": {
+        "sha256": "6977f3f758b03badd88f794a5d28fb01845a63d49ab4619e2830b1a505ea8759",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "e161772047108ee958e3246226e59b74625f1a4162a0e1e06ca7c8dcc18cd9b1",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libevent_core-2.1.so.7": {
+      "before": {
+        "sha256": "eb07b76c1ee20ea5ec92d4f5cc810799cabdc31b0c4051858a4af38b82d3c2cf",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libevent_extra-2.1.so.7": {
+      "before": {
+        "sha256": "9b8cd7253218a4299b6257ab3b1408c12b5448753646b4a9207d347b83f1c510",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libevent_pthreads-2.1.so.7": {
+      "before": {
+        "sha256": "4a1ff2d7077a95c35d384afe3af2b8d92f8fc361000e1c174d816ee52144a355",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libexpat.so.1": {
+      "before": {
+        "sha256": "1f8c6d9bec943735de38d2ea2191d2d31840a164fa7c8ad2e6dc8446cedb1a27",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "d1e03d27d738c05d6867eea97bd77b45601614ff1efb39fb9ccac63124ba2cd4",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libfontconfig.so.1": {
+      "before": {
+        "sha256": "53ac17121622e1d4d182ae09ab8ad0c826d429ef5cfa1c967cae07976ad0a3c9",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "a415d9d1cd68b0d8e428cd5645d32080fbfd0b6ab27c76c4b529aa8016ae22b5",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libfreetype.so.6": {
+      "before": {
+        "sha256": "814e92c4720dfe7b40b420a0f0e74ac74de77bc346496057cee28ac22ddb92db",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "72e91db1b11cf7f2430a9e28ecd79bc9dee827cd525976ada4c8fa6ee79a45e6",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libgcc_s.so.1": {
+      "before": {
+        "sha256": "44330146d5d3e158d130316d50a3a007890863f7d4aca38d4b2b7b3129eda593",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libgcrypt.so.20": {
+      "before": {
+        "sha256": "3543f9144edc85fac43fafc012f50dfa0b623981fda2e87416d6a4c30472e5b8",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libglib-2.0.so.0": {
+      "before": {
+        "sha256": "5bff7cc1178909087dd46f1ca3bbf9cdb28f95d7a7c68235835c10d4555f1e9e",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libgomp.so.1": {
+      "before": {
+        "sha256": "4427bcbbc6faac6eaa4e8906ea4668e1615c9cfdff442549a8f5b49c3639217f",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libgpg-error.so.0": {
+      "before": {
+        "sha256": "7cc95835720e3d9153607862924b26944d365e393c1243bdd9585bb9483764eb",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libgraphite2.so.3": {
+      "before": {
+        "sha256": "dfe6492a71f702fd87ca42ca4fe1265ad508a230dfc0518f9d2fbeec97622e04",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "36deb12794535ed576afa7791c31e1cdcd9c8ca69fb693869ddd658d22099db9",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libgssapi_krb5.so.2": {
+      "before": {
+        "sha256": "84d71a0ad21288aeca10816647e0ee809720aaa72062051b227f4db50517c565",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libharfbuzz.so.0": {
+      "before": {
+        "sha256": "fb7b053a10c29cee22b8c492c64890051ebeac364e788860f6e072560cb5030d",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "3f3979d84f3fca92c07f0dbc750247f3afd7a754d17aee3a856c5609bcb6da9c",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libicui18n.so.70": {
+      "before": {
+        "sha256": "8316e072fe92add6ab0574e25d73caa86e1f9c3dd1bf09bd3a45d3f5fe49d47b",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "060e39512f01e8c23ec8cc6fe6e0a7a892ce558c7902e0eeaa39d59cf16a5a92",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libicuuc.so.70": {
+      "before": {
+        "sha256": "3a288c852813f0b99d2c3aeaecdb6c14b09c9a7e6494160cc8b8f5610d266601",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "89c43e187bb253d9298ce67c0e1b9619e5781396a777c0b904a1ed162234ae0d",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libk5crypto.so.3": {
+      "before": {
+        "sha256": "20033c4eec975ee2d1c28e048d74bb2f9c3f8dc657360994eb50b138a7346a50",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libkeyutils.so.1": {
+      "before": {
+        "sha256": "40ef65dad8898edcdaa3e3b4a518749047b088e814da32ac8915cac64ee55b3c",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libkrb5.so.3": {
+      "before": {
+        "sha256": "158676f5a0a250fd13b3465245c4d61cfb0006b92d321d3bc00ce3910940dae1",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libkrb5support.so.0": {
+      "before": {
+        "sha256": "23fe85bd3bc1b5dcabbd79d10b359cdb9ca5c9fb62952d82d8a4046cef59ecad",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/liblz4.so.1": {
+      "before": {
+        "sha256": "bd788ffde800b619613d9f800f56a7ad6ecdf320b43e2c37bf3f0fd712576bfb",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/liblzma.so.5": {
+      "before": {
+        "sha256": "97c1182325bd62e2b3df82d7e4e2d62d636783c9199588b4ac0e13ff5f6986a8",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libmd.so.0": {
+      "before": {
+        "sha256": "97f8bf366b8d343cfeff575443b72299e500f3d165f2f26b8401be6f0078801e",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libmd4c.so.0": {
+      "before": {
+        "sha256": "aef1ee739a6c570a3a574d6cf01e376a13d495ecba061767598dec143a562f88",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "368c13b08f2c1745e15923261711095ddff52a47f076ba3f22605ebd36488d80",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libnorm.so.1": {
+      "before": {
+        "sha256": "c12441c2c57f49f417fb0459da9ae782c009a73784e73ec9ffec9e68b046e558",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libpcre.so.3": {
+      "before": {
+        "sha256": "d93d66b7507debfff14d7cae606997a496ccbe3ad6a2dd54b9ac5c6371489101",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libpcre2-16.so.0": {
+      "before": {
+        "sha256": "4bead17932941d746146dac526ebd96043a1163cf986e8ce2cbe57d466c973c0",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "e0294af920f86f37625f21bb38dbfd16203e296306d6e690a446dfa2517c52f4",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libpgm-5.3.so.0": {
+      "before": {
+        "sha256": "1052ff933e3e92298e77f04b41a2a6693b9637a03d08062004d31bd9de98ad48",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libpng16.so.16": {
+      "before": {
+        "sha256": "b7df856495561b6ec07ca2a1646209cfd0dadba359d6c79d7f17e29c3a9b69f3",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "69723189ef917ef2077170c1a38c276a7a05b51c65587fdd0170f943e3255981",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libproxy.so.1": {
+      "before": {
+        "sha256": "971cc1c7fba8b59ebbdb5c677333b80574d072a8b0b824ec77b56f23d8e56f33",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "b0187569fdd5d3f414bc21c130803d971242fa27ba06047e5d149dddba785935",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libqrencode.so.4": {
+      "before": {
+        "sha256": "4efd352188c0617ec8fa16ee45fefbc6f4bc6c79c5c58ddac01d3eb54e96f49e",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "f6e13944b1a845633ef4c6e0fc36884fbaed6cf2823863c26aef98788fd9d9fc",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libsodium.so.23": {
+      "before": {
+        "sha256": "29877fb35f992b44e5ae58255407d34062773c76579411c44a651b24c24096ba",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libsqlite3.so.0": {
+      "before": {
+        "sha256": "56b2ea7d6abc84269459c1693dc6cd8dc3d2112aec4d04f1c3ed1d37876c9304",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libstdc++.so.6": {
+      "before": {
+        "sha256": "22965f5a645ffa9d638fe605858e339a3d23e9bfee9e8d88148aa33d19083b33",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libsystemd.so.0": {
+      "before": {
+        "sha256": "f81fbaada73dc3afb62ece8ef1d1ad2c7eab0934664358537ec2e2b1b03b8fa9",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libuuid.so.1": {
+      "before": {
+        "sha256": "fc98f8c070bc2cbe504711d6e2e452a01d23d89ff00664003fde769e778a1964",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libxcb-icccm.so.4": {
+      "before": {
+        "sha256": "32544c6d5e3bcaedd9440765266501a9370f67d64d722d420031fee060df447b",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "4cd96e917d4533f3c2eec3e6f66b558030bda958aa9d828fa0ee2a2898e98dc0",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libxcb-image.so.0": {
+      "before": {
+        "sha256": "b41378a0bd2b6c5d3c9a2815b12c2fd044f2aaac257ddf91d8c177a18bb538f8",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "e0fd599f2bbaddafd374988956348ac331d9abeef7d711c9a7e05234f771a046",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libxcb-keysyms.so.1": {
+      "before": {
+        "sha256": "935e1c360b9c39225abec2fdf6923103f82d5e76c590c589475b2b83ae927f34",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "04b5c845dc2e2299f65cab0e2062783446e692e1fa663de80786fe7f487ee6f7",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libxcb-randr.so.0": {
+      "before": {
+        "sha256": "28c31fbd8a1cfdc493fc1d6b72846c5c9c0060caec719874945f76965d586ac1",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "b7c91e70917104fd647fc175310593b8ce896ec4bd0c45c4fb27e23e66b510ae",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libxcb-render-util.so.0": {
+      "before": {
+        "sha256": "51f9036fe42bd613f9595170af3ed62c975e3c5e05eb8d0c0f22815e99388930",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "00cca6c161c64d753f82f2aec1215e10a7623b8ec197bf99a14afc96b38d21b4",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libxcb-render.so.0": {
+      "before": {
+        "sha256": "5f957eecbf5f6e7fad15595ef59d266242886462f85af487c4f5256036781055",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "d9c9e869590b6761d3367c7cf836e74c654f1cd83e00383eea100b3929598353",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libxcb-shape.so.0": {
+      "before": {
+        "sha256": "49c871c4dfe3edb98aa1b5068d2e6a71cd0dd3f8153efd27d3c16a964f632d00",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "1d563990de300e8012a1fd2b826b2f6142b02577066871b80042f2ec5c69274e",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libxcb-shm.so.0": {
+      "before": {
+        "sha256": "3d3486e66b60519432ed5e8407ec2e4529422cbc65c3ecc10d0df5af4aee9e6a",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "315c4b606bfb20d70f0078b66f8e4e8138f8360c572956aa4613fed4cde664c9",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libxcb-sync.so.1": {
+      "before": {
+        "sha256": "094822098d3e573ffecce89279365a833d3d3aceee98d9c6efa9371adbb1b72e",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "0d489c913197d2376b83c673e13dce13821ba9df6aa20887f08aec6a3a49eae7",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libxcb-util.so.1": {
+      "before": {
+        "sha256": "457e8c442f90c1b5a62ab6a1f134fd50c54d7337f0a59d51e9b03992b23fccad",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "c80a4b35b1e581e9580a8462bfcc384e5d2da65ad42644fd57db9f9603dbd7c1",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libxcb-xfixes.so.0": {
+      "before": {
+        "sha256": "17fb7fe9838949ec1dce0381120f7877d31e2b9b4fb6c05830e892ee0f1f86eb",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "d55d90887b3c88dd0d54d9555a656e3012a85652ef29b25e67a171b086208998",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libxcb-xinput.so.0": {
+      "before": {
+        "sha256": "d8b4de2583559fd2fc423ad4a0f66aa96ab774c2bd2ebd62ca310b0035e7d203",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "85378aa3694704c7c2b96680996b7c81f4d8ecaf5888cf96069073379d9a55ee",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libxcb-xkb.so.1": {
+      "before": {
+        "sha256": "73afd30a8de25cdd29a150d83786aace29d5e45e76c9821ae49820c103a1a663",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "19ad496fb370e3fa75b0c641462c9ab59f8d6c7e5041fc12d3cb67f1bafa43f3",
+        "mode": 493
+      }
+    },
+    "lib/qt-private/libz.so.1": {
+      "before": {
+        "sha256": "141487afd4eba9d2ec4c105d3c0963a9f4ec12edcedc118d36f36f0ffe468308",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libzmq.so.5": {
+      "before": {
+        "sha256": "f3ddde5693aed0f8c67ea5f650cb48d74ccc84c41c24fa09738929bdfa51ee75",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/libzstd.so.1": {
+      "before": {
+        "sha256": "f908cc9e1ba594a313d7a316a4dadfbde456da35be934ad1be40344a01c382df",
+        "mode": 493
+      },
+      "after": null
+    },
+    "lib/qt-private/qt6/plugins/platforms/libqxcb.so": {
+      "before": {
+        "sha256": "a12034e45fac9597cd8f0a0ea0f314c24b0d72786f39c8525b95d06c610e2137",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "8581515c7bffc2e8b10449dfa9acfd392758929815c58f90e41ae50660cb214a",
+        "mode": 493
+      }
+    },
+    "libexec/btx-guardd": {
+      "before": {
+        "sha256": "ede4ca9e7cb6e2855345489321989a12f64cd1c0277c448e587c6e8cbcb864b2",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "9ddfe5dd3d89171aea0922530b9a40168edd3625b443e8513919f728bdc1e2d9",
+        "mode": 493
+      }
+    },
+    "libexec/btx-guardd.real": {
+      "before": {
+        "sha256": "ede4ca9e7cb6e2855345489321989a12f64cd1c0277c448e587c6e8cbcb864b2",
+        "mode": 493
+      },
+      "after": {
+        "sha256": "9ddfe5dd3d89171aea0922530b9a40168edd3625b443e8513919f728bdc1e2d9",
+        "mode": 493
+      }
+    }
+  },
+  "gate_after_exit": 0,
+  "roundtrip_files": 119,
+  "loader": {
+    "clean": {
+      "qt": {
+        "paths": {
+          "libQt6Widgets.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/libQt6Widgets.so.6",
+          "libQt6Gui.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/libQt6Gui.so.6",
+          "libqrencode.so.4": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/libqrencode.so.4",
+          "libQt6Network.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/libQt6Network.so.6",
+          "libQt6DBus.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/libQt6DBus.so.6",
+          "libQt6Core.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/libQt6Core.so.6",
+          "libsqlite3.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/libsqlite3.so.0",
+          "libgomp.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/libgomp.so.1",
+          "libzmq.so.5": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/libzmq.so.5",
+          "libevent_core-2.1.so.7": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/libevent_core-2.1.so.7",
+          "libevent_extra-2.1.so.7": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/libevent_extra-2.1.so.7",
+          "libevent_pthreads-2.1.so.7": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/libevent_pthreads-2.1.so.7",
+          "libstdc++.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/libstdc++.so.6",
+          "libm.so.6": "/lib/x86_64-linux-gnu/libm.so.6",
+          "libgcc_s.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/libgcc_s.so.1",
+          "libc.so.6": "/lib/x86_64-linux-gnu/libc.so.6",
+          "libEGL.so.1": "/lib/x86_64-linux-gnu/libEGL.so.1",
+          "libfontconfig.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/libfontconfig.so.1",
+          "libX11.so.6": "/lib/x86_64-linux-gnu/libX11.so.6",
+          "libglib-2.0.so.0": "/lib/x86_64-linux-gnu/libglib-2.0.so.0",
+          "libxkbcommon.so.0": "/lib/x86_64-linux-gnu/libxkbcommon.so.0",
+          "libGLX.so.0": "/lib/x86_64-linux-gnu/libGLX.so.0",
+          "libOpenGL.so.0": "/lib/x86_64-linux-gnu/libOpenGL.so.0",
+          "libpng16.so.16": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/libpng16.so.16",
+          "libharfbuzz.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/libharfbuzz.so.0",
+          "libmd4c.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/libmd4c.so.0",
+          "libfreetype.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/libfreetype.so.6",
+          "libz.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/../libz.so.1",
+          "libpthread.so.0": "/lib/x86_64-linux-gnu/libpthread.so.0",
+          "libzstd.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/../libzstd.so.1",
+          "libgssapi_krb5.so.2": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/../libgssapi_krb5.so.2",
+          "libbrotlidec.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/libbrotlidec.so.1",
+          "libproxy.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/libproxy.so.1",
+          "libdbus-1.so.3": "/lib/x86_64-linux-gnu/libdbus-1.so.3",
+          "libicui18n.so.70": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/libicui18n.so.70",
+          "libicuuc.so.70": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/libicuuc.so.70",
+          "libdouble-conversion.so.3": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/libdouble-conversion.so.3",
+          "libb2.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/libb2.so.1",
+          "libpcre2-16.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/libpcre2-16.so.0",
+          "libbsd.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/libbsd.so.0",
+          "libsodium.so.23": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/libsodium.so.23",
+          "libpgm-5.3.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/libpgm-5.3.so.0",
+          "libnorm.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/libnorm.so.1",
+          "libGLdispatch.so.0": "/lib/x86_64-linux-gnu/libGLdispatch.so.0",
+          "libexpat.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/libexpat.so.1",
+          "libuuid.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/../libuuid.so.1",
+          "libxcb.so.1": "/lib/x86_64-linux-gnu/libxcb.so.1",
+          "libpcre2-8.so.0": "/lib/x86_64-linux-gnu/libpcre2-8.so.0",
+          "libgraphite2.so.3": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/libgraphite2.so.3",
+          "libkrb5.so.3": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/../libkrb5.so.3",
+          "libk5crypto.so.3": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/../libk5crypto.so.3",
+          "libcom_err.so.2": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/../libcom_err.so.2",
+          "libkrb5support.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/../libkrb5support.so.0",
+          "libbrotlicommon.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/libbrotlicommon.so.1",
+          "libsystemd.so.0": "/lib/x86_64-linux-gnu/libsystemd.so.0",
+          "libicudata.so.70": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/libicudata.so.70",
+          "libmd.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/libmd.so.0",
+          "libXau.so.6": "/lib/x86_64-linux-gnu/libXau.so.6",
+          "libXdmcp.so.6": "/lib/x86_64-linux-gnu/libXdmcp.so.6",
+          "libkeyutils.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/qt-private/../libkeyutils.so.1",
+          "libresolv.so.2": "/lib/x86_64-linux-gnu/libresolv.so.2",
+          "libcap.so.2": "/lib/x86_64-linux-gnu/libcap.so.2",
+          "libgcrypt.so.20": "/lib/x86_64-linux-gnu/libgcrypt.so.20",
+          "liblz4.so.1": "/lib/x86_64-linux-gnu/liblz4.so.1",
+          "liblzma.so.5": "/lib/x86_64-linux-gnu/liblzma.so.5",
+          "libgpg-error.so.0": "/lib/x86_64-linux-gnu/libgpg-error.so.0"
+        },
+        "sha256": {
+          "libQt6Widgets.so.6": "863ca98a862b5dd04ad6486b3ce415b68e57f4f89f15bdb4accfb9c36dd36b6e",
+          "libQt6Gui.so.6": "dd8800d49c20cc07b6bc33ef16efc4662031b8e80f7a57ab0ec6e07d146dec3c",
+          "libqrencode.so.4": "f6e13944b1a845633ef4c6e0fc36884fbaed6cf2823863c26aef98788fd9d9fc",
+          "libQt6Network.so.6": "04c984ba33d213e97f79e0648c0e5fde6f87dad5f3f60a5cf0e143e47473d215",
+          "libQt6DBus.so.6": "d0b9f47d36345dbf00c2fb2fbee96f07a709a0da8a6b7df78e2fc8596a3c0884",
+          "libQt6Core.so.6": "46841852d425aa53f0c05826d9e667ffa75a42bf2e0e77e164b7ce29fe286422",
+          "libsqlite3.so.0": "aab0d93396554931975ed7ef7919d835124a531a838b079dc726629564e97218",
+          "libgomp.so.1": "3544133a430a6e09ac72a9c76ddccd886f667979418257b2c9b5aca3b6e9fd52",
+          "libzmq.so.5": "1697a11a1bf136957e1eff8954b4630d76ff44e76ab1d8e9988446472f9db41d",
+          "libevent_core-2.1.so.7": "b9bae4dd42040bab5cb918ac934e8c445444c2519e6959adcb5e481b2a0ef8ba",
+          "libevent_extra-2.1.so.7": "14a013230feb543584bf0a4bce6a2475a9c920bafb5a7a9593735b5d1287d9b5",
+          "libevent_pthreads-2.1.so.7": "9bdfea19f80223a140839d0ff56fb63bd2bb1cf9b7d5ae2d928532f235a91d82",
+          "libstdc++.so.6": "baf74dcdb7d662cb5554440e2d72116b8f2ac6c7e73023650a15d4502e1df4e1",
+          "libm.so.6": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0",
+          "libgcc_s.so.1": "ac903a620332aaf31b4386abaac0be9292c331220296a9046bc151445490d0cb",
+          "libc.so.6": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf",
+          "libEGL.so.1": "875ecbb2a07d60e32216c9f102965abc1e9cc1da7789558e2e9b8b9c107e231d",
+          "libfontconfig.so.1": "a415d9d1cd68b0d8e428cd5645d32080fbfd0b6ab27c76c4b529aa8016ae22b5",
+          "libX11.so.6": "edd2ddf6e00a81c40b8645f7dbb6d6603c6a0a78d583bdbe7491d8a84de6e3b6",
+          "libglib-2.0.so.0": "448d9d271e77a7f6c4d057336df40c34b02c794f551caf8fa03b5122f25e601b",
+          "libxkbcommon.so.0": "3eb6c7315985803a7c72cb81aa3293b763e6cfc907b70b7b2f641c2827cd90f9",
+          "libGLX.so.0": "16fc8a37eea9210dc83c57eeff5aedc10ab4c6673f2f97e8bb6ee103df657b40",
+          "libOpenGL.so.0": "9a0a6024499300f918ef1b42d581427cdb20bbc17a7d8239a4b7434833a98d4a",
+          "libpng16.so.16": "69723189ef917ef2077170c1a38c276a7a05b51c65587fdd0170f943e3255981",
+          "libharfbuzz.so.0": "3f3979d84f3fca92c07f0dbc750247f3afd7a754d17aee3a856c5609bcb6da9c",
+          "libmd4c.so.0": "368c13b08f2c1745e15923261711095ddff52a47f076ba3f22605ebd36488d80",
+          "libfreetype.so.6": "72e91db1b11cf7f2430a9e28ecd79bc9dee827cd525976ada4c8fa6ee79a45e6",
+          "libz.so.1": "0403c15b8bdf55fbf2df7b2bf87c86a7c825c46e690286d56a9145d8bc51e1c2",
+          "libpthread.so.0": "90491a21ce44efcf3bd4b65ec82501c091d7ebe7f8d9b341dd01d721001d9ecd",
+          "libzstd.so.1": "97467a719f4b2325b4d143d421d3fc6090f6401aeeb8f021b00f11ef6f693b75",
+          "libgssapi_krb5.so.2": "175763583eb1b6f0a6ddafa26a39537a6ac599c6977063d20bc3bbcf5922de4a",
+          "libbrotlidec.so.1": "257446710956d03c62236f82f205b0f8f264f6f2e4daf4985c76c92d799f47cf",
+          "libproxy.so.1": "b0187569fdd5d3f414bc21c130803d971242fa27ba06047e5d149dddba785935",
+          "libdbus-1.so.3": "a6ae7b4ef48562b40d7b9ba8efd2e49f6528b7cc6364bea382dcee4b473b5413",
+          "libicui18n.so.70": "060e39512f01e8c23ec8cc6fe6e0a7a892ce558c7902e0eeaa39d59cf16a5a92",
+          "libicuuc.so.70": "89c43e187bb253d9298ce67c0e1b9619e5781396a777c0b904a1ed162234ae0d",
+          "libdouble-conversion.so.3": "e161772047108ee958e3246226e59b74625f1a4162a0e1e06ca7c8dcc18cd9b1",
+          "libb2.so.1": "7d06f8c539850e80dfa4d7205044e5a1cff5dbc094728fd74a9520df07a7a396",
+          "libpcre2-16.so.0": "e0294af920f86f37625f21bb38dbfd16203e296306d6e690a446dfa2517c52f4",
+          "libbsd.so.0": "d5d03eca7cac947a441c98b574a5f2cf78c0a8ee5b2a105973278b44ee6010cd",
+          "libsodium.so.23": "0c9d710f2cd7c5d827efedb92919c981449d13f80c1107a3298e819e2c7847e8",
+          "libpgm-5.3.so.0": "372bde5e93106d144f75b8aff63fcee5719e1bee19cf1df5d1cdd45ce10ae2db",
+          "libnorm.so.1": "9ec0f4e7965fb688cace296a86328927a851ca1401bb79f000cba66703501d49",
+          "libGLdispatch.so.0": "ca01a91104c8887b3d8e59499b58cbb8f604cc285666b50d9ec888eb0c915182",
+          "libexpat.so.1": "d1e03d27d738c05d6867eea97bd77b45601614ff1efb39fb9ccac63124ba2cd4",
+          "libuuid.so.1": "1cc699a5bf097b27a549c1a2c0470f4088e56849dac351e5c5c8186fd3e9f661",
+          "libxcb.so.1": "7958a0136b121bdc4c708968569ad152a9ed208ab026e2537b1005dde64ca440",
+          "libpcre2-8.so.0": "e00576d71d81d3ba0cfa4903c835a44a8723aac96f72f79ff75200b4cff9071b",
+          "libgraphite2.so.3": "36deb12794535ed576afa7791c31e1cdcd9c8ca69fb693869ddd658d22099db9",
+          "libkrb5.so.3": "04a1c12a7850e07a9f90b1830289c81ca16d729e121dfafba8abfe63087ff91c",
+          "libk5crypto.so.3": "34b61c761827717f2fe67a971bbf9b64f5a9837f3069f3f3e47fbb30a602d49a",
+          "libcom_err.so.2": "f116236dd0bf25c44bebb49fc0138ff3e77de8b10982303e706d413f23c0732a",
+          "libkrb5support.so.0": "644b5fd508b401aff1b820a18a71475140e95fbf60ed5484ec2d8d702543d507",
+          "libbrotlicommon.so.1": "0138cbb02e7ebc9c40fc5496c3badf0f5279628e74c01ed0b21aa92dfa85aa2e",
+          "libsystemd.so.0": "b10be60fc80ea6910df1b253658e638bd29f3d1aeeb3798006fc66972366cb94",
+          "libicudata.so.70": "efa14441325e61f9589f1ffd6a21b684a91f301c107f2919e63b664265ddec7c",
+          "libmd.so.0": "ff7248d82be5ed08a1380ca202deb5b99bcfc79ae976c3ef144ee81300ab5be8",
+          "libXau.so.6": "8040da3f8516c1acfe39f04ff022480cdb273705ba5e7a4ca70bbdb1527cd67a",
+          "libXdmcp.so.6": "667d97d6da16016400ab10de9f83ef4ab209ceb6adf68ff9650225ec13e723b0",
+          "libkeyutils.so.1": "6dc3918271f753e7fbcad94b1be915aa6bf6891d919b8584b8399d269128938c",
+          "libresolv.so.2": "1d730ea434da5a5595bc6a961d7a9ace83e03703205df9644044b3dca79c362f",
+          "libcap.so.2": "6ac6abc86ac891c6e13486470e26f1d939f47fda9e6b5d5508a7f5ec881adc84",
+          "libgcrypt.so.20": "6ad6d7007ee1ad8319eb18ba9a512cf09dda49396a303774c68b47477020bad4",
+          "liblz4.so.1": "40bffd0a098387368b16b992abd5f7cf43c0fa2f05cabe5a6d483719554adfda",
+          "liblzma.so.5": "26b37d25f7ca2a2d348de8ecabacda12e921cd933b21fa069a179760db77219d",
+          "libgpg-error.so.0": "6cb18a007bfcb623029f4528a36b46578fea7dc34c2b505b8e6e0d99e6348cd1"
+        }
+      },
+      "plugin": {
+        "paths": {
+          "libQt6XcbQpa.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libQt6XcbQpa.so.6",
+          "libQt6Gui.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libQt6Gui.so.6",
+          "libQt6Core.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libQt6Core.so.6",
+          "libstdc++.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../../libstdc++.so.6",
+          "libc.so.6": "/lib/x86_64-linux-gnu/libc.so.6",
+          "libxcb-icccm.so.4": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libxcb-icccm.so.4",
+          "libxcb-image.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libxcb-image.so.0",
+          "libxcb-keysyms.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libxcb-keysyms.so.1",
+          "libxcb-randr.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libxcb-randr.so.0",
+          "libxcb-render.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libxcb-render.so.0",
+          "libxcb-render-util.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libxcb-render-util.so.0",
+          "libxcb-shape.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libxcb-shape.so.0",
+          "libxcb-shm.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libxcb-shm.so.0",
+          "libxcb-sync.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libxcb-sync.so.1",
+          "libxcb.so.1": "/lib/x86_64-linux-gnu/libxcb.so.1",
+          "libxcb-xfixes.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libxcb-xfixes.so.0",
+          "libxcb-xkb.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libxcb-xkb.so.1",
+          "libxkbcommon.so.0": "/lib/x86_64-linux-gnu/libxkbcommon.so.0",
+          "libglib-2.0.so.0": "/lib/x86_64-linux-gnu/libglib-2.0.so.0",
+          "libX11-xcb.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libX11-xcb.so.1",
+          "libX11.so.6": "/lib/x86_64-linux-gnu/libX11.so.6",
+          "libSM.so.6": "/lib/x86_64-linux-gnu/libSM.so.6",
+          "libICE.so.6": "/lib/x86_64-linux-gnu/libICE.so.6",
+          "libxcb-xinput.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libxcb-xinput.so.0",
+          "libxkbcommon-x11.so.0": "/lib/x86_64-linux-gnu/libxkbcommon-x11.so.0",
+          "libm.so.6": "/lib/x86_64-linux-gnu/libm.so.6",
+          "libgcc_s.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../../libgcc_s.so.1",
+          "libEGL.so.1": "/lib/x86_64-linux-gnu/libEGL.so.1",
+          "libfontconfig.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libfontconfig.so.1",
+          "libQt6DBus.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libQt6DBus.so.6",
+          "libGLX.so.0": "/lib/x86_64-linux-gnu/libGLX.so.0",
+          "libOpenGL.so.0": "/lib/x86_64-linux-gnu/libOpenGL.so.0",
+          "libpng16.so.16": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libpng16.so.16",
+          "libharfbuzz.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libharfbuzz.so.0",
+          "libmd4c.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libmd4c.so.0",
+          "libfreetype.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libfreetype.so.6",
+          "libz.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../../libz.so.1",
+          "libicui18n.so.70": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libicui18n.so.70",
+          "libicuuc.so.70": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libicuuc.so.70",
+          "libzstd.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../../libzstd.so.1",
+          "libdouble-conversion.so.3": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libdouble-conversion.so.3",
+          "libb2.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libb2.so.1",
+          "libpcre2-16.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libpcre2-16.so.0",
+          "libxcb-util.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libxcb-util.so.1",
+          "libXau.so.6": "/lib/x86_64-linux-gnu/libXau.so.6",
+          "libXdmcp.so.6": "/lib/x86_64-linux-gnu/libXdmcp.so.6",
+          "libpcre2-8.so.0": "/lib/x86_64-linux-gnu/libpcre2-8.so.0",
+          "libuuid.so.1": "/lib/x86_64-linux-gnu/libuuid.so.1",
+          "libbsd.so.0": "/lib/x86_64-linux-gnu/libbsd.so.0",
+          "libGLdispatch.so.0": "/lib/x86_64-linux-gnu/libGLdispatch.so.0",
+          "libexpat.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libexpat.so.1",
+          "libdbus-1.so.3": "/lib/x86_64-linux-gnu/libdbus-1.so.3",
+          "libgraphite2.so.3": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libgraphite2.so.3",
+          "libbrotlidec.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libbrotlidec.so.1",
+          "libicudata.so.70": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libicudata.so.70",
+          "libgomp.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../../libgomp.so.1",
+          "libmd.so.0": "/lib/x86_64-linux-gnu/libmd.so.0",
+          "libsystemd.so.0": "/lib/x86_64-linux-gnu/libsystemd.so.0",
+          "libbrotlicommon.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/qt6/plugins/platforms/../../../libbrotlicommon.so.1",
+          "libcap.so.2": "/lib/x86_64-linux-gnu/libcap.so.2",
+          "libgcrypt.so.20": "/lib/x86_64-linux-gnu/libgcrypt.so.20",
+          "liblz4.so.1": "/lib/x86_64-linux-gnu/liblz4.so.1",
+          "liblzma.so.5": "/lib/x86_64-linux-gnu/liblzma.so.5",
+          "libgpg-error.so.0": "/lib/x86_64-linux-gnu/libgpg-error.so.0"
+        },
+        "sha256": {
+          "libQt6XcbQpa.so.6": "6830e6fc044eb40027e68d974ea528ebb1367cf1bac0875902a2cd42bb10fd9d",
+          "libQt6Gui.so.6": "dd8800d49c20cc07b6bc33ef16efc4662031b8e80f7a57ab0ec6e07d146dec3c",
+          "libQt6Core.so.6": "46841852d425aa53f0c05826d9e667ffa75a42bf2e0e77e164b7ce29fe286422",
+          "libstdc++.so.6": "baf74dcdb7d662cb5554440e2d72116b8f2ac6c7e73023650a15d4502e1df4e1",
+          "libc.so.6": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf",
+          "libxcb-icccm.so.4": "4cd96e917d4533f3c2eec3e6f66b558030bda958aa9d828fa0ee2a2898e98dc0",
+          "libxcb-image.so.0": "e0fd599f2bbaddafd374988956348ac331d9abeef7d711c9a7e05234f771a046",
+          "libxcb-keysyms.so.1": "04b5c845dc2e2299f65cab0e2062783446e692e1fa663de80786fe7f487ee6f7",
+          "libxcb-randr.so.0": "b7c91e70917104fd647fc175310593b8ce896ec4bd0c45c4fb27e23e66b510ae",
+          "libxcb-render.so.0": "d9c9e869590b6761d3367c7cf836e74c654f1cd83e00383eea100b3929598353",
+          "libxcb-render-util.so.0": "00cca6c161c64d753f82f2aec1215e10a7623b8ec197bf99a14afc96b38d21b4",
+          "libxcb-shape.so.0": "1d563990de300e8012a1fd2b826b2f6142b02577066871b80042f2ec5c69274e",
+          "libxcb-shm.so.0": "315c4b606bfb20d70f0078b66f8e4e8138f8360c572956aa4613fed4cde664c9",
+          "libxcb-sync.so.1": "0d489c913197d2376b83c673e13dce13821ba9df6aa20887f08aec6a3a49eae7",
+          "libxcb.so.1": "7958a0136b121bdc4c708968569ad152a9ed208ab026e2537b1005dde64ca440",
+          "libxcb-xfixes.so.0": "d55d90887b3c88dd0d54d9555a656e3012a85652ef29b25e67a171b086208998",
+          "libxcb-xkb.so.1": "19ad496fb370e3fa75b0c641462c9ab59f8d6c7e5041fc12d3cb67f1bafa43f3",
+          "libxkbcommon.so.0": "3eb6c7315985803a7c72cb81aa3293b763e6cfc907b70b7b2f641c2827cd90f9",
+          "libglib-2.0.so.0": "448d9d271e77a7f6c4d057336df40c34b02c794f551caf8fa03b5122f25e601b",
+          "libX11-xcb.so.1": "de65de3a78766201784865fed3c536858fc571fd50e42ba65c9a42aac2c19332",
+          "libX11.so.6": "edd2ddf6e00a81c40b8645f7dbb6d6603c6a0a78d583bdbe7491d8a84de6e3b6",
+          "libSM.so.6": "c9301f0ff852c0edcfc766f91c5df4f73b1b300c0303ac188524154588892fd0",
+          "libICE.so.6": "899ff245d50d4f1a7bb114d13b6200f42f93696ad93f38020c6ed7c84a5a943e",
+          "libxcb-xinput.so.0": "85378aa3694704c7c2b96680996b7c81f4d8ecaf5888cf96069073379d9a55ee",
+          "libxkbcommon-x11.so.0": "109a5c2095ab6bcc36f751d3c0deb3b066ecbfb664a36904b6ca212f987a408a",
+          "libm.so.6": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0",
+          "libgcc_s.so.1": "ac903a620332aaf31b4386abaac0be9292c331220296a9046bc151445490d0cb",
+          "libEGL.so.1": "875ecbb2a07d60e32216c9f102965abc1e9cc1da7789558e2e9b8b9c107e231d",
+          "libfontconfig.so.1": "a415d9d1cd68b0d8e428cd5645d32080fbfd0b6ab27c76c4b529aa8016ae22b5",
+          "libQt6DBus.so.6": "d0b9f47d36345dbf00c2fb2fbee96f07a709a0da8a6b7df78e2fc8596a3c0884",
+          "libGLX.so.0": "16fc8a37eea9210dc83c57eeff5aedc10ab4c6673f2f97e8bb6ee103df657b40",
+          "libOpenGL.so.0": "9a0a6024499300f918ef1b42d581427cdb20bbc17a7d8239a4b7434833a98d4a",
+          "libpng16.so.16": "69723189ef917ef2077170c1a38c276a7a05b51c65587fdd0170f943e3255981",
+          "libharfbuzz.so.0": "3f3979d84f3fca92c07f0dbc750247f3afd7a754d17aee3a856c5609bcb6da9c",
+          "libmd4c.so.0": "368c13b08f2c1745e15923261711095ddff52a47f076ba3f22605ebd36488d80",
+          "libfreetype.so.6": "72e91db1b11cf7f2430a9e28ecd79bc9dee827cd525976ada4c8fa6ee79a45e6",
+          "libz.so.1": "0403c15b8bdf55fbf2df7b2bf87c86a7c825c46e690286d56a9145d8bc51e1c2",
+          "libicui18n.so.70": "060e39512f01e8c23ec8cc6fe6e0a7a892ce558c7902e0eeaa39d59cf16a5a92",
+          "libicuuc.so.70": "89c43e187bb253d9298ce67c0e1b9619e5781396a777c0b904a1ed162234ae0d",
+          "libzstd.so.1": "97467a719f4b2325b4d143d421d3fc6090f6401aeeb8f021b00f11ef6f693b75",
+          "libdouble-conversion.so.3": "e161772047108ee958e3246226e59b74625f1a4162a0e1e06ca7c8dcc18cd9b1",
+          "libb2.so.1": "7d06f8c539850e80dfa4d7205044e5a1cff5dbc094728fd74a9520df07a7a396",
+          "libpcre2-16.so.0": "e0294af920f86f37625f21bb38dbfd16203e296306d6e690a446dfa2517c52f4",
+          "libxcb-util.so.1": "c80a4b35b1e581e9580a8462bfcc384e5d2da65ad42644fd57db9f9603dbd7c1",
+          "libXau.so.6": "8040da3f8516c1acfe39f04ff022480cdb273705ba5e7a4ca70bbdb1527cd67a",
+          "libXdmcp.so.6": "667d97d6da16016400ab10de9f83ef4ab209ceb6adf68ff9650225ec13e723b0",
+          "libpcre2-8.so.0": "e00576d71d81d3ba0cfa4903c835a44a8723aac96f72f79ff75200b4cff9071b",
+          "libuuid.so.1": "78d7f4d6f27b7dffc1c84dfe2f83e84aefa6f6ceeffc6ac4bc41f9fbc61cb84e",
+          "libbsd.so.0": "e86cd4f0019f42c2ba5e60602e0edc8694d2948377d98c3654d0f6bddb5254bb",
+          "libGLdispatch.so.0": "ca01a91104c8887b3d8e59499b58cbb8f604cc285666b50d9ec888eb0c915182",
+          "libexpat.so.1": "d1e03d27d738c05d6867eea97bd77b45601614ff1efb39fb9ccac63124ba2cd4",
+          "libdbus-1.so.3": "a6ae7b4ef48562b40d7b9ba8efd2e49f6528b7cc6364bea382dcee4b473b5413",
+          "libgraphite2.so.3": "36deb12794535ed576afa7791c31e1cdcd9c8ca69fb693869ddd658d22099db9",
+          "libbrotlidec.so.1": "257446710956d03c62236f82f205b0f8f264f6f2e4daf4985c76c92d799f47cf",
+          "libicudata.so.70": "efa14441325e61f9589f1ffd6a21b684a91f301c107f2919e63b664265ddec7c",
+          "libgomp.so.1": "3544133a430a6e09ac72a9c76ddccd886f667979418257b2c9b5aca3b6e9fd52",
+          "libmd.so.0": "423e18586b6ea740f4465afd64f7a9a4cb7264ed979c8e7256f9085af5345fef",
+          "libsystemd.so.0": "b10be60fc80ea6910df1b253658e638bd29f3d1aeeb3798006fc66972366cb94",
+          "libbrotlicommon.so.1": "0138cbb02e7ebc9c40fc5496c3badf0f5279628e74c01ed0b21aa92dfa85aa2e",
+          "libcap.so.2": "6ac6abc86ac891c6e13486470e26f1d939f47fda9e6b5d5508a7f5ec881adc84",
+          "libgcrypt.so.20": "6ad6d7007ee1ad8319eb18ba9a512cf09dda49396a303774c68b47477020bad4",
+          "liblz4.so.1": "40bffd0a098387368b16b992abd5f7cf43c0fa2f05cabe5a6d483719554adfda",
+          "liblzma.so.5": "26b37d25f7ca2a2d348de8ecabacda12e921cd933b21fa069a179760db77219d",
+          "libgpg-error.so.0": "6cb18a007bfcb623029f4528a36b46578fea7dc34c2b505b8e6e0d99e6348cd1"
+        }
+      }
+    },
+    "wrapper": {
+      "qt": {
+        "paths": {
+          "libQt6Widgets.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libQt6Widgets.so.6",
+          "libQt6Gui.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libQt6Gui.so.6",
+          "libqrencode.so.4": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libqrencode.so.4",
+          "libQt6Network.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libQt6Network.so.6",
+          "libQt6DBus.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libQt6DBus.so.6",
+          "libQt6Core.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libQt6Core.so.6",
+          "libsqlite3.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libsqlite3.so.0",
+          "libgomp.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libgomp.so.1",
+          "libzmq.so.5": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libzmq.so.5",
+          "libevent_core-2.1.so.7": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libevent_core-2.1.so.7",
+          "libevent_extra-2.1.so.7": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libevent_extra-2.1.so.7",
+          "libevent_pthreads-2.1.so.7": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libevent_pthreads-2.1.so.7",
+          "libstdc++.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libstdc++.so.6",
+          "libm.so.6": "/lib/x86_64-linux-gnu/libm.so.6",
+          "libgcc_s.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libgcc_s.so.1",
+          "libc.so.6": "/lib/x86_64-linux-gnu/libc.so.6",
+          "libEGL.so.1": "/lib/x86_64-linux-gnu/libEGL.so.1",
+          "libfontconfig.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libfontconfig.so.1",
+          "libX11.so.6": "/lib/x86_64-linux-gnu/libX11.so.6",
+          "libglib-2.0.so.0": "/lib/x86_64-linux-gnu/libglib-2.0.so.0",
+          "libxkbcommon.so.0": "/lib/x86_64-linux-gnu/libxkbcommon.so.0",
+          "libGLX.so.0": "/lib/x86_64-linux-gnu/libGLX.so.0",
+          "libOpenGL.so.0": "/lib/x86_64-linux-gnu/libOpenGL.so.0",
+          "libpng16.so.16": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libpng16.so.16",
+          "libharfbuzz.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libharfbuzz.so.0",
+          "libmd4c.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libmd4c.so.0",
+          "libfreetype.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libfreetype.so.6",
+          "libz.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libz.so.1",
+          "libpthread.so.0": "/lib/x86_64-linux-gnu/libpthread.so.0",
+          "libzstd.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libzstd.so.1",
+          "libgssapi_krb5.so.2": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libgssapi_krb5.so.2",
+          "libbrotlidec.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libbrotlidec.so.1",
+          "libproxy.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libproxy.so.1",
+          "libdbus-1.so.3": "/lib/x86_64-linux-gnu/libdbus-1.so.3",
+          "libicui18n.so.70": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libicui18n.so.70",
+          "libicuuc.so.70": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libicuuc.so.70",
+          "libdouble-conversion.so.3": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libdouble-conversion.so.3",
+          "libb2.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libb2.so.1",
+          "libpcre2-16.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libpcre2-16.so.0",
+          "libbsd.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libbsd.so.0",
+          "libsodium.so.23": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libsodium.so.23",
+          "libpgm-5.3.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libpgm-5.3.so.0",
+          "libnorm.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libnorm.so.1",
+          "libGLdispatch.so.0": "/lib/x86_64-linux-gnu/libGLdispatch.so.0",
+          "libexpat.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libexpat.so.1",
+          "libuuid.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libuuid.so.1",
+          "libxcb.so.1": "/lib/x86_64-linux-gnu/libxcb.so.1",
+          "libpcre2-8.so.0": "/lib/x86_64-linux-gnu/libpcre2-8.so.0",
+          "libgraphite2.so.3": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libgraphite2.so.3",
+          "libkrb5.so.3": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libkrb5.so.3",
+          "libk5crypto.so.3": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libk5crypto.so.3",
+          "libcom_err.so.2": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libcom_err.so.2",
+          "libkrb5support.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libkrb5support.so.0",
+          "libbrotlicommon.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libbrotlicommon.so.1",
+          "libsystemd.so.0": "/lib/x86_64-linux-gnu/libsystemd.so.0",
+          "libicudata.so.70": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libicudata.so.70",
+          "libmd.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libmd.so.0",
+          "libXau.so.6": "/lib/x86_64-linux-gnu/libXau.so.6",
+          "libXdmcp.so.6": "/lib/x86_64-linux-gnu/libXdmcp.so.6",
+          "libkeyutils.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libkeyutils.so.1",
+          "libresolv.so.2": "/lib/x86_64-linux-gnu/libresolv.so.2",
+          "libcap.so.2": "/lib/x86_64-linux-gnu/libcap.so.2",
+          "libgcrypt.so.20": "/lib/x86_64-linux-gnu/libgcrypt.so.20",
+          "liblz4.so.1": "/lib/x86_64-linux-gnu/liblz4.so.1",
+          "liblzma.so.5": "/lib/x86_64-linux-gnu/liblzma.so.5",
+          "libgpg-error.so.0": "/lib/x86_64-linux-gnu/libgpg-error.so.0"
+        },
+        "sha256": {
+          "libQt6Widgets.so.6": "863ca98a862b5dd04ad6486b3ce415b68e57f4f89f15bdb4accfb9c36dd36b6e",
+          "libQt6Gui.so.6": "dd8800d49c20cc07b6bc33ef16efc4662031b8e80f7a57ab0ec6e07d146dec3c",
+          "libqrencode.so.4": "f6e13944b1a845633ef4c6e0fc36884fbaed6cf2823863c26aef98788fd9d9fc",
+          "libQt6Network.so.6": "04c984ba33d213e97f79e0648c0e5fde6f87dad5f3f60a5cf0e143e47473d215",
+          "libQt6DBus.so.6": "d0b9f47d36345dbf00c2fb2fbee96f07a709a0da8a6b7df78e2fc8596a3c0884",
+          "libQt6Core.so.6": "46841852d425aa53f0c05826d9e667ffa75a42bf2e0e77e164b7ce29fe286422",
+          "libsqlite3.so.0": "aab0d93396554931975ed7ef7919d835124a531a838b079dc726629564e97218",
+          "libgomp.so.1": "3544133a430a6e09ac72a9c76ddccd886f667979418257b2c9b5aca3b6e9fd52",
+          "libzmq.so.5": "1697a11a1bf136957e1eff8954b4630d76ff44e76ab1d8e9988446472f9db41d",
+          "libevent_core-2.1.so.7": "b9bae4dd42040bab5cb918ac934e8c445444c2519e6959adcb5e481b2a0ef8ba",
+          "libevent_extra-2.1.so.7": "14a013230feb543584bf0a4bce6a2475a9c920bafb5a7a9593735b5d1287d9b5",
+          "libevent_pthreads-2.1.so.7": "9bdfea19f80223a140839d0ff56fb63bd2bb1cf9b7d5ae2d928532f235a91d82",
+          "libstdc++.so.6": "baf74dcdb7d662cb5554440e2d72116b8f2ac6c7e73023650a15d4502e1df4e1",
+          "libm.so.6": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0",
+          "libgcc_s.so.1": "ac903a620332aaf31b4386abaac0be9292c331220296a9046bc151445490d0cb",
+          "libc.so.6": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf",
+          "libEGL.so.1": "875ecbb2a07d60e32216c9f102965abc1e9cc1da7789558e2e9b8b9c107e231d",
+          "libfontconfig.so.1": "a415d9d1cd68b0d8e428cd5645d32080fbfd0b6ab27c76c4b529aa8016ae22b5",
+          "libX11.so.6": "edd2ddf6e00a81c40b8645f7dbb6d6603c6a0a78d583bdbe7491d8a84de6e3b6",
+          "libglib-2.0.so.0": "448d9d271e77a7f6c4d057336df40c34b02c794f551caf8fa03b5122f25e601b",
+          "libxkbcommon.so.0": "3eb6c7315985803a7c72cb81aa3293b763e6cfc907b70b7b2f641c2827cd90f9",
+          "libGLX.so.0": "16fc8a37eea9210dc83c57eeff5aedc10ab4c6673f2f97e8bb6ee103df657b40",
+          "libOpenGL.so.0": "9a0a6024499300f918ef1b42d581427cdb20bbc17a7d8239a4b7434833a98d4a",
+          "libpng16.so.16": "69723189ef917ef2077170c1a38c276a7a05b51c65587fdd0170f943e3255981",
+          "libharfbuzz.so.0": "3f3979d84f3fca92c07f0dbc750247f3afd7a754d17aee3a856c5609bcb6da9c",
+          "libmd4c.so.0": "368c13b08f2c1745e15923261711095ddff52a47f076ba3f22605ebd36488d80",
+          "libfreetype.so.6": "72e91db1b11cf7f2430a9e28ecd79bc9dee827cd525976ada4c8fa6ee79a45e6",
+          "libz.so.1": "0403c15b8bdf55fbf2df7b2bf87c86a7c825c46e690286d56a9145d8bc51e1c2",
+          "libpthread.so.0": "90491a21ce44efcf3bd4b65ec82501c091d7ebe7f8d9b341dd01d721001d9ecd",
+          "libzstd.so.1": "97467a719f4b2325b4d143d421d3fc6090f6401aeeb8f021b00f11ef6f693b75",
+          "libgssapi_krb5.so.2": "175763583eb1b6f0a6ddafa26a39537a6ac599c6977063d20bc3bbcf5922de4a",
+          "libbrotlidec.so.1": "257446710956d03c62236f82f205b0f8f264f6f2e4daf4985c76c92d799f47cf",
+          "libproxy.so.1": "b0187569fdd5d3f414bc21c130803d971242fa27ba06047e5d149dddba785935",
+          "libdbus-1.so.3": "a6ae7b4ef48562b40d7b9ba8efd2e49f6528b7cc6364bea382dcee4b473b5413",
+          "libicui18n.so.70": "060e39512f01e8c23ec8cc6fe6e0a7a892ce558c7902e0eeaa39d59cf16a5a92",
+          "libicuuc.so.70": "89c43e187bb253d9298ce67c0e1b9619e5781396a777c0b904a1ed162234ae0d",
+          "libdouble-conversion.so.3": "e161772047108ee958e3246226e59b74625f1a4162a0e1e06ca7c8dcc18cd9b1",
+          "libb2.so.1": "7d06f8c539850e80dfa4d7205044e5a1cff5dbc094728fd74a9520df07a7a396",
+          "libpcre2-16.so.0": "e0294af920f86f37625f21bb38dbfd16203e296306d6e690a446dfa2517c52f4",
+          "libbsd.so.0": "d5d03eca7cac947a441c98b574a5f2cf78c0a8ee5b2a105973278b44ee6010cd",
+          "libsodium.so.23": "0c9d710f2cd7c5d827efedb92919c981449d13f80c1107a3298e819e2c7847e8",
+          "libpgm-5.3.so.0": "372bde5e93106d144f75b8aff63fcee5719e1bee19cf1df5d1cdd45ce10ae2db",
+          "libnorm.so.1": "9ec0f4e7965fb688cace296a86328927a851ca1401bb79f000cba66703501d49",
+          "libGLdispatch.so.0": "ca01a91104c8887b3d8e59499b58cbb8f604cc285666b50d9ec888eb0c915182",
+          "libexpat.so.1": "d1e03d27d738c05d6867eea97bd77b45601614ff1efb39fb9ccac63124ba2cd4",
+          "libuuid.so.1": "1cc699a5bf097b27a549c1a2c0470f4088e56849dac351e5c5c8186fd3e9f661",
+          "libxcb.so.1": "7958a0136b121bdc4c708968569ad152a9ed208ab026e2537b1005dde64ca440",
+          "libpcre2-8.so.0": "e00576d71d81d3ba0cfa4903c835a44a8723aac96f72f79ff75200b4cff9071b",
+          "libgraphite2.so.3": "36deb12794535ed576afa7791c31e1cdcd9c8ca69fb693869ddd658d22099db9",
+          "libkrb5.so.3": "04a1c12a7850e07a9f90b1830289c81ca16d729e121dfafba8abfe63087ff91c",
+          "libk5crypto.so.3": "34b61c761827717f2fe67a971bbf9b64f5a9837f3069f3f3e47fbb30a602d49a",
+          "libcom_err.so.2": "f116236dd0bf25c44bebb49fc0138ff3e77de8b10982303e706d413f23c0732a",
+          "libkrb5support.so.0": "644b5fd508b401aff1b820a18a71475140e95fbf60ed5484ec2d8d702543d507",
+          "libbrotlicommon.so.1": "0138cbb02e7ebc9c40fc5496c3badf0f5279628e74c01ed0b21aa92dfa85aa2e",
+          "libsystemd.so.0": "b10be60fc80ea6910df1b253658e638bd29f3d1aeeb3798006fc66972366cb94",
+          "libicudata.so.70": "efa14441325e61f9589f1ffd6a21b684a91f301c107f2919e63b664265ddec7c",
+          "libmd.so.0": "ff7248d82be5ed08a1380ca202deb5b99bcfc79ae976c3ef144ee81300ab5be8",
+          "libXau.so.6": "8040da3f8516c1acfe39f04ff022480cdb273705ba5e7a4ca70bbdb1527cd67a",
+          "libXdmcp.so.6": "667d97d6da16016400ab10de9f83ef4ab209ceb6adf68ff9650225ec13e723b0",
+          "libkeyutils.so.1": "6dc3918271f753e7fbcad94b1be915aa6bf6891d919b8584b8399d269128938c",
+          "libresolv.so.2": "1d730ea434da5a5595bc6a961d7a9ace83e03703205df9644044b3dca79c362f",
+          "libcap.so.2": "6ac6abc86ac891c6e13486470e26f1d939f47fda9e6b5d5508a7f5ec881adc84",
+          "libgcrypt.so.20": "6ad6d7007ee1ad8319eb18ba9a512cf09dda49396a303774c68b47477020bad4",
+          "liblz4.so.1": "40bffd0a098387368b16b992abd5f7cf43c0fa2f05cabe5a6d483719554adfda",
+          "liblzma.so.5": "26b37d25f7ca2a2d348de8ecabacda12e921cd933b21fa069a179760db77219d",
+          "libgpg-error.so.0": "6cb18a007bfcb623029f4528a36b46578fea7dc34c2b505b8e6e0d99e6348cd1"
+        }
+      },
+      "plugin": {
+        "paths": {
+          "libQt6XcbQpa.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libQt6XcbQpa.so.6",
+          "libQt6Gui.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libQt6Gui.so.6",
+          "libQt6Core.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libQt6Core.so.6",
+          "libstdc++.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libstdc++.so.6",
+          "libc.so.6": "/lib/x86_64-linux-gnu/libc.so.6",
+          "libxcb-icccm.so.4": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libxcb-icccm.so.4",
+          "libxcb-image.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libxcb-image.so.0",
+          "libxcb-keysyms.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libxcb-keysyms.so.1",
+          "libxcb-randr.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libxcb-randr.so.0",
+          "libxcb-render.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libxcb-render.so.0",
+          "libxcb-render-util.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libxcb-render-util.so.0",
+          "libxcb-shape.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libxcb-shape.so.0",
+          "libxcb-shm.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libxcb-shm.so.0",
+          "libxcb-sync.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libxcb-sync.so.1",
+          "libxcb.so.1": "/lib/x86_64-linux-gnu/libxcb.so.1",
+          "libxcb-xfixes.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libxcb-xfixes.so.0",
+          "libxcb-xkb.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libxcb-xkb.so.1",
+          "libxkbcommon.so.0": "/lib/x86_64-linux-gnu/libxkbcommon.so.0",
+          "libglib-2.0.so.0": "/lib/x86_64-linux-gnu/libglib-2.0.so.0",
+          "libX11-xcb.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libX11-xcb.so.1",
+          "libX11.so.6": "/lib/x86_64-linux-gnu/libX11.so.6",
+          "libSM.so.6": "/lib/x86_64-linux-gnu/libSM.so.6",
+          "libICE.so.6": "/lib/x86_64-linux-gnu/libICE.so.6",
+          "libxcb-xinput.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libxcb-xinput.so.0",
+          "libxkbcommon-x11.so.0": "/lib/x86_64-linux-gnu/libxkbcommon-x11.so.0",
+          "libm.so.6": "/lib/x86_64-linux-gnu/libm.so.6",
+          "libgcc_s.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libgcc_s.so.1",
+          "libEGL.so.1": "/lib/x86_64-linux-gnu/libEGL.so.1",
+          "libfontconfig.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libfontconfig.so.1",
+          "libQt6DBus.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libQt6DBus.so.6",
+          "libGLX.so.0": "/lib/x86_64-linux-gnu/libGLX.so.0",
+          "libOpenGL.so.0": "/lib/x86_64-linux-gnu/libOpenGL.so.0",
+          "libpng16.so.16": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libpng16.so.16",
+          "libharfbuzz.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libharfbuzz.so.0",
+          "libmd4c.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libmd4c.so.0",
+          "libfreetype.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libfreetype.so.6",
+          "libz.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libz.so.1",
+          "libicui18n.so.70": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libicui18n.so.70",
+          "libicuuc.so.70": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libicuuc.so.70",
+          "libzstd.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libzstd.so.1",
+          "libdouble-conversion.so.3": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libdouble-conversion.so.3",
+          "libb2.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libb2.so.1",
+          "libpcre2-16.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libpcre2-16.so.0",
+          "libxcb-util.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libxcb-util.so.1",
+          "libXau.so.6": "/lib/x86_64-linux-gnu/libXau.so.6",
+          "libXdmcp.so.6": "/lib/x86_64-linux-gnu/libXdmcp.so.6",
+          "libpcre2-8.so.0": "/lib/x86_64-linux-gnu/libpcre2-8.so.0",
+          "libuuid.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libuuid.so.1",
+          "libbsd.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libbsd.so.0",
+          "libGLdispatch.so.0": "/lib/x86_64-linux-gnu/libGLdispatch.so.0",
+          "libexpat.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libexpat.so.1",
+          "libdbus-1.so.3": "/lib/x86_64-linux-gnu/libdbus-1.so.3",
+          "libgraphite2.so.3": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libgraphite2.so.3",
+          "libbrotlidec.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libbrotlidec.so.1",
+          "libicudata.so.70": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libicudata.so.70",
+          "libgomp.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libgomp.so.1",
+          "libmd.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/libmd.so.0",
+          "libsystemd.so.0": "/lib/x86_64-linux-gnu/libsystemd.so.0",
+          "libbrotlicommon.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/lib/qt-private/libbrotlicommon.so.1",
+          "libcap.so.2": "/lib/x86_64-linux-gnu/libcap.so.2",
+          "libgcrypt.so.20": "/lib/x86_64-linux-gnu/libgcrypt.so.20",
+          "liblz4.so.1": "/lib/x86_64-linux-gnu/liblz4.so.1",
+          "liblzma.so.5": "/lib/x86_64-linux-gnu/liblzma.so.5",
+          "libgpg-error.so.0": "/lib/x86_64-linux-gnu/libgpg-error.so.0"
+        },
+        "sha256": {
+          "libQt6XcbQpa.so.6": "6830e6fc044eb40027e68d974ea528ebb1367cf1bac0875902a2cd42bb10fd9d",
+          "libQt6Gui.so.6": "dd8800d49c20cc07b6bc33ef16efc4662031b8e80f7a57ab0ec6e07d146dec3c",
+          "libQt6Core.so.6": "46841852d425aa53f0c05826d9e667ffa75a42bf2e0e77e164b7ce29fe286422",
+          "libstdc++.so.6": "baf74dcdb7d662cb5554440e2d72116b8f2ac6c7e73023650a15d4502e1df4e1",
+          "libc.so.6": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf",
+          "libxcb-icccm.so.4": "4cd96e917d4533f3c2eec3e6f66b558030bda958aa9d828fa0ee2a2898e98dc0",
+          "libxcb-image.so.0": "e0fd599f2bbaddafd374988956348ac331d9abeef7d711c9a7e05234f771a046",
+          "libxcb-keysyms.so.1": "04b5c845dc2e2299f65cab0e2062783446e692e1fa663de80786fe7f487ee6f7",
+          "libxcb-randr.so.0": "b7c91e70917104fd647fc175310593b8ce896ec4bd0c45c4fb27e23e66b510ae",
+          "libxcb-render.so.0": "d9c9e869590b6761d3367c7cf836e74c654f1cd83e00383eea100b3929598353",
+          "libxcb-render-util.so.0": "00cca6c161c64d753f82f2aec1215e10a7623b8ec197bf99a14afc96b38d21b4",
+          "libxcb-shape.so.0": "1d563990de300e8012a1fd2b826b2f6142b02577066871b80042f2ec5c69274e",
+          "libxcb-shm.so.0": "315c4b606bfb20d70f0078b66f8e4e8138f8360c572956aa4613fed4cde664c9",
+          "libxcb-sync.so.1": "0d489c913197d2376b83c673e13dce13821ba9df6aa20887f08aec6a3a49eae7",
+          "libxcb.so.1": "7958a0136b121bdc4c708968569ad152a9ed208ab026e2537b1005dde64ca440",
+          "libxcb-xfixes.so.0": "d55d90887b3c88dd0d54d9555a656e3012a85652ef29b25e67a171b086208998",
+          "libxcb-xkb.so.1": "19ad496fb370e3fa75b0c641462c9ab59f8d6c7e5041fc12d3cb67f1bafa43f3",
+          "libxkbcommon.so.0": "3eb6c7315985803a7c72cb81aa3293b763e6cfc907b70b7b2f641c2827cd90f9",
+          "libglib-2.0.so.0": "448d9d271e77a7f6c4d057336df40c34b02c794f551caf8fa03b5122f25e601b",
+          "libX11-xcb.so.1": "de65de3a78766201784865fed3c536858fc571fd50e42ba65c9a42aac2c19332",
+          "libX11.so.6": "edd2ddf6e00a81c40b8645f7dbb6d6603c6a0a78d583bdbe7491d8a84de6e3b6",
+          "libSM.so.6": "c9301f0ff852c0edcfc766f91c5df4f73b1b300c0303ac188524154588892fd0",
+          "libICE.so.6": "899ff245d50d4f1a7bb114d13b6200f42f93696ad93f38020c6ed7c84a5a943e",
+          "libxcb-xinput.so.0": "85378aa3694704c7c2b96680996b7c81f4d8ecaf5888cf96069073379d9a55ee",
+          "libxkbcommon-x11.so.0": "109a5c2095ab6bcc36f751d3c0deb3b066ecbfb664a36904b6ca212f987a408a",
+          "libm.so.6": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0",
+          "libgcc_s.so.1": "ac903a620332aaf31b4386abaac0be9292c331220296a9046bc151445490d0cb",
+          "libEGL.so.1": "875ecbb2a07d60e32216c9f102965abc1e9cc1da7789558e2e9b8b9c107e231d",
+          "libfontconfig.so.1": "a415d9d1cd68b0d8e428cd5645d32080fbfd0b6ab27c76c4b529aa8016ae22b5",
+          "libQt6DBus.so.6": "d0b9f47d36345dbf00c2fb2fbee96f07a709a0da8a6b7df78e2fc8596a3c0884",
+          "libGLX.so.0": "16fc8a37eea9210dc83c57eeff5aedc10ab4c6673f2f97e8bb6ee103df657b40",
+          "libOpenGL.so.0": "9a0a6024499300f918ef1b42d581427cdb20bbc17a7d8239a4b7434833a98d4a",
+          "libpng16.so.16": "69723189ef917ef2077170c1a38c276a7a05b51c65587fdd0170f943e3255981",
+          "libharfbuzz.so.0": "3f3979d84f3fca92c07f0dbc750247f3afd7a754d17aee3a856c5609bcb6da9c",
+          "libmd4c.so.0": "368c13b08f2c1745e15923261711095ddff52a47f076ba3f22605ebd36488d80",
+          "libfreetype.so.6": "72e91db1b11cf7f2430a9e28ecd79bc9dee827cd525976ada4c8fa6ee79a45e6",
+          "libz.so.1": "0403c15b8bdf55fbf2df7b2bf87c86a7c825c46e690286d56a9145d8bc51e1c2",
+          "libicui18n.so.70": "060e39512f01e8c23ec8cc6fe6e0a7a892ce558c7902e0eeaa39d59cf16a5a92",
+          "libicuuc.so.70": "89c43e187bb253d9298ce67c0e1b9619e5781396a777c0b904a1ed162234ae0d",
+          "libzstd.so.1": "97467a719f4b2325b4d143d421d3fc6090f6401aeeb8f021b00f11ef6f693b75",
+          "libdouble-conversion.so.3": "e161772047108ee958e3246226e59b74625f1a4162a0e1e06ca7c8dcc18cd9b1",
+          "libb2.so.1": "7d06f8c539850e80dfa4d7205044e5a1cff5dbc094728fd74a9520df07a7a396",
+          "libpcre2-16.so.0": "e0294af920f86f37625f21bb38dbfd16203e296306d6e690a446dfa2517c52f4",
+          "libxcb-util.so.1": "c80a4b35b1e581e9580a8462bfcc384e5d2da65ad42644fd57db9f9603dbd7c1",
+          "libXau.so.6": "8040da3f8516c1acfe39f04ff022480cdb273705ba5e7a4ca70bbdb1527cd67a",
+          "libXdmcp.so.6": "667d97d6da16016400ab10de9f83ef4ab209ceb6adf68ff9650225ec13e723b0",
+          "libpcre2-8.so.0": "e00576d71d81d3ba0cfa4903c835a44a8723aac96f72f79ff75200b4cff9071b",
+          "libuuid.so.1": "1cc699a5bf097b27a549c1a2c0470f4088e56849dac351e5c5c8186fd3e9f661",
+          "libbsd.so.0": "d5d03eca7cac947a441c98b574a5f2cf78c0a8ee5b2a105973278b44ee6010cd",
+          "libGLdispatch.so.0": "ca01a91104c8887b3d8e59499b58cbb8f604cc285666b50d9ec888eb0c915182",
+          "libexpat.so.1": "d1e03d27d738c05d6867eea97bd77b45601614ff1efb39fb9ccac63124ba2cd4",
+          "libdbus-1.so.3": "a6ae7b4ef48562b40d7b9ba8efd2e49f6528b7cc6364bea382dcee4b473b5413",
+          "libgraphite2.so.3": "36deb12794535ed576afa7791c31e1cdcd9c8ca69fb693869ddd658d22099db9",
+          "libbrotlidec.so.1": "257446710956d03c62236f82f205b0f8f264f6f2e4daf4985c76c92d799f47cf",
+          "libicudata.so.70": "efa14441325e61f9589f1ffd6a21b684a91f301c107f2919e63b664265ddec7c",
+          "libgomp.so.1": "3544133a430a6e09ac72a9c76ddccd886f667979418257b2c9b5aca3b6e9fd52",
+          "libmd.so.0": "ff7248d82be5ed08a1380ca202deb5b99bcfc79ae976c3ef144ee81300ab5be8",
+          "libsystemd.so.0": "b10be60fc80ea6910df1b253658e638bd29f3d1aeeb3798006fc66972366cb94",
+          "libbrotlicommon.so.1": "0138cbb02e7ebc9c40fc5496c3badf0f5279628e74c01ed0b21aa92dfa85aa2e",
+          "libcap.so.2": "6ac6abc86ac891c6e13486470e26f1d939f47fda9e6b5d5508a7f5ec881adc84",
+          "libgcrypt.so.20": "6ad6d7007ee1ad8319eb18ba9a512cf09dda49396a303774c68b47477020bad4",
+          "liblz4.so.1": "40bffd0a098387368b16b992abd5f7cf43c0fa2f05cabe5a6d483719554adfda",
+          "liblzma.so.5": "26b37d25f7ca2a2d348de8ecabacda12e921cd933b21fa069a179760db77219d",
+          "libgpg-error.so.0": "6cb18a007bfcb623029f4528a36b46578fea7dc34c2b505b8e6e0d99e6348cd1"
+        }
+      }
+    }
+  },
+  "guard_loader": {
+    "paths": {
+      "libsqlite3.so.0": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/libsqlite3.so.0",
+      "libstdc++.so.6": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/libstdc++.so.6",
+      "libgcc_s.so.1": "/home/runner/work/btx/btx/packaging-resolution-runtime/after/btx-0.34.16/libexec/../lib/libgcc_s.so.1",
+      "libc.so.6": "/lib/x86_64-linux-gnu/libc.so.6",
+      "libm.so.6": "/lib/x86_64-linux-gnu/libm.so.6"
+    },
+    "sha256": {
+      "libsqlite3.so.0": "aab0d93396554931975ed7ef7919d835124a531a838b079dc726629564e97218",
+      "libstdc++.so.6": "baf74dcdb7d662cb5554440e2d72116b8f2ac6c7e73023650a15d4502e1df4e1",
+      "libgcc_s.so.1": "ac903a620332aaf31b4386abaac0be9292c331220296a9046bc151445490d0cb",
+      "libc.so.6": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf",
+      "libm.so.6": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+    }
+  },
+  "archive_negatives": {
+    "guard": [
+      "  - btx-0.34.16/libexec/btx-guardd: no RUNPATH reaches btx-0.34.16/lib, so the host's libsqlite3.so.0, libstdc++.so.6, libgcc_s.so.1 load instead of the copies this archive ships"
+    ],
+    "host": [
+      "  - btx-0.34.16/libexec/btx-atlas.real: RUNPATH $ORIGIN/../lib does not reach btx-0.34.16/lib/qt-private, so the host's libglib-2.0.so.0, libdbus-1.so.3 load instead of the copies this archive ships"
+    ]
+  },
+  "fresh_stage_plugin_input_sha256": "a12034e45fac9597cd8f0a0ea0f314c24b0d72786f39c8525b95d06c610e2137",
+  "fresh_stage_plugin_provider": "Explicit retained Qt6.2.4 build input; no host Qt6.4 plugin substitution",
+  "error": "RuntimeError('/home/runner/work/btx/btx/packaging-resolution-runtime/fresh-source-stage/btx-0.34.16/libexec/btx-qt.real is missing libQt6Widgets.so.6; cannot bundle the Qt GUI')",
+  "remaining_package_processes": [],
+  "runtime_removed": false
+}

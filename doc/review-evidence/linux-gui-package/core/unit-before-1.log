@@ -1,0 +1,22 @@
+package_release_archive: skip btx-modeld (absent from the build directory; not shipped)
+package_release_archive: skip btx-hcpd (absent from the build directory; not shipped)
+package_release_archive: skip btx-hosted (absent from the build directory; not shipped)
+package_release_archive: skip btx-open (absent from the build directory; not shipped)
+package_release_archive: skip btx-capability (absent from the build directory; not shipped)
+package_release_archive: skip btx-capabilityd (absent from the build directory; not shipped)
+package_release_archive: skip btx-modelcheck (absent from the build directory; not shipped)
+package_release_archive: skip btx-matmul-backend-info (absent from the build directory; not shipped)
+F
+======================================================================
+FAIL: test_direct_guard_and_qt_keep_shared_and_private_dependencies (__main__.PackageReleaseArchiveTest.test_direct_guard_and_qt_keep_shared_and_private_dependencies)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/btx/btx/baseline/test/util/package_release_archive_test.py", line 260, in test_direct_guard_and_qt_keep_shared_and_private_dependencies
+    self.assertEqual(result.returncode, 0, result.stderr.decode(errors="replace"))
+AssertionError: 127 != 0 : /tmp/tmp0r0hbltv/staged/btx-29.2/libexec/btx-guardd: error while loading shared libraries: libbtxshared.so.1: cannot open shared object file: No such file or directory
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.348s
+
+FAILED (failures=1)
