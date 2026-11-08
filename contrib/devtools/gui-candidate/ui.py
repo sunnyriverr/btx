@@ -50,17 +50,25 @@ def click(name):
         raise TimeoutError('Control action unavailable: '+name)
 
 def endpoint(value):
-    matches = []
-    for n in controls():
-        try:
-            t = n.queryEditableText()
-            if '127.0.0.1' in n.queryText().getText(0, -1):
-                matches.append(t)
-        except Exception:
-            pass
-    if len(matches) != 1:
-        raise TimeoutError('Endpoint field not uniquely accessible')
-    matches[0].setTextContents(value)
+    def matches():
+        found=[]
+        for n in controls():
+            try:
+                edit=n.queryEditableText()
+                label=n.name or ''
+                for relation in n.getRelationSet():
+                    if relation.getRelationType()==pyatspi.RELATION_LABELLED_BY:
+                        label+=' '+ ' '.join(relation.getTarget(i).name or '' for i in range(relation.getNTargets()))
+                if 'Loopback endpoint' in label:
+                    found.append((n,edit))
+            except Exception:
+                pass
+        return found
+    wait(lambda:len(matches())==1,15)
+    n,edit=matches()[0]
+    if not edit.setTextContents(value):
+        raise TimeoutError('Endpoint edit unavailable')
+    wait(lambda:n.queryText().getText(0,-1)==value,5)
 
 def file_path(path):
     # Standard GTK location entry, after independently observing the chooser title.
