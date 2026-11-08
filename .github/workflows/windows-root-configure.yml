@@ -1,4 +1,4 @@
-name: Native Windows larger pending Swarm utilities attestation
+name: Native Windows manager write-fault restart acceptance
 permissions:
   contents: read
 jobs:
@@ -166,7 +166,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Verify saved binary and 16 never-selected cases
+    - name: Verify saved binary and ten never-selected manager cases
       id: ready
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -188,7 +188,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Run 16 new cases in 16 groups
+    - name: Run ten write-fault restart cases in isolated groups
       id: units
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
