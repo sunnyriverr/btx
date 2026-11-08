@@ -40,6 +40,10 @@ try:
  app=root/'btx-qt.app';probe=app/'Contents/MacOS/plugin-admission-probe'
  code=Path(__file__).with_name('probe.cpp')
  run(['xcrun','clang++','-std=c++17','-F/opt/homebrew/opt/qtbase/lib','-framework','QtCore','-Wl,-rpath,@executable_path/../Frameworks',code,'-o',probe],'compile-probe',120)
+ _,linked=run(['otool','-L',probe],'probe-original-loads')
+ core=[line.strip().split(' (')[0] for line in linked.splitlines()[1:] if 'QtCore.framework/' in line];assert len(core)==1
+ run(['install_name_tool','-change',core[0],'@executable_path/../Frameworks/QtCore.framework/Versions/A/QtCore',probe],'bind-probe-to-bundle')
+ _,bound=run(['otool','-L',probe],'probe-bound-loads');assert '/opt/homebrew/' not in bound and '@executable_path/../Frameworks/QtCore.framework/Versions/A/QtCore' in bound
  run(['codesign','--force','--sign','-',probe],'sign-probe')
  run(['otool','-L',probe],'probe-loads');run(['otool','-l',probe],'probe-load-commands')
  env['DYLD_PRINT_LIBRARIES']='1'
@@ -51,7 +55,7 @@ try:
   value=json.loads(lines[0]);assert value['loaded']==expected,(name,value)
   if not expected:assert missing in value['error'] and 'not loaded' in value['error'].lower(),value
   loaded=[line for line in text.splitlines() if line.startswith('dyld[')]
-  assert not any('/opt/homebrew/' in line or '/usr/local/opt/' in line for line in loaded),(name,loaded)
+  ambient=[line for line in loaded if '/opt/homebrew/' in line or '/usr/local/opt/' in line];assert not ambient,(name,ambient)
   results.append({'plugin':name,'expected_load':expected,'exit':status,'result':value,'actual_loaded_images':loaded})
  probe.unlink()
  after={str(p.relative_to(root)):sha(p) for p in root.rglob('*') if p.is_file() and not p.is_symlink()};assert before==after
