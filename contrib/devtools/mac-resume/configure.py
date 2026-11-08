@@ -73,8 +73,16 @@ try:
  targets=['btxd', 'btx-cli', 'btx-util', 'btx-modeld', 'btx-hcpd', 'btx-hosted', 'btx-open', 'btx-capability', 'btx-capabilityd', 'btx-modelcheck', 'btx-matmul-backend-info', 'btx-qt', 'btx-security', 'btx-guardd', 'btx-tx', 'btx-wallet', 'btx-native-qualify']
  plan=command(['ninja','-C',build,'-n',*targets],'actual-dry-plan',120,env);state['plan_steps']=len([x for x in plan.splitlines() if x.startswith('[')])
  command(['ninja','-C',build,'-t','commands',*targets],'generated-build-commands',120,env)
+ assert command(['git','-C',src,'hash-object','gui/atlas/Cargo.lock'],'lock-blob').strip()=='1696287796bf16b72f6dcd6f483286fa45a7b2cc'
+ assert command(['git','-C',src,'hash-object','gui/atlas/rust-toolchain.toml'],'toolchain-blob').strip()=='8770b1d875864c5356dc4abad904b69ec484817f'
  state['atlas_toolchain_file']=(src/'gui/atlas/rust-toolchain.toml').read_text();assert '1.95.0' in state['atlas_toolchain_file']
  command(['rustup','toolchain','list'],'installed-rust-toolchains',60,env)
+ command(['rustup','toolchain','install','1.95.0','--profile','minimal','--component','clippy','--component','rustfmt','--target','aarch64-apple-darwin'],'install-pinned-rust',600,env)
+ env.update(RUSTUP_TOOLCHAIN='1.95.0')
+ command(['rustc','-Vv'],'pinned-rust-version',60,env)
+ command(['cargo','-V'],'pinned-cargo-version',60,env)
+ command(['cargo','metadata','--locked','--format-version','1','--no-deps'],'atlas-metadata',120,env,cwd=src/'gui/atlas')
+ command(['cargo','fetch','--locked','--target','aarch64-apple-darwin'],'atlas-locked-fetch',480,env,cwd=src/'gui/atlas')
  for tool in ['macdeployqt','rsvg-convert','png2icns']:
   found=shutil.which(tool)
   if not found:

@@ -1,7 +1,7 @@
-name: Compile bounded Mac incremental release chunk
+name: Build pinned Mac Atlas shipping executable
 on:
   push:
-    branches: [codex/ci-mac-compile-next-r1]
+    branches: [codex/ci-mac-atlas-build]
 permissions:
   contents: read
   actions: read
@@ -22,26 +22,15 @@ jobs:
           path: product
           persist-credentials: false
       - name: Recreate exact admitted prerequisites and configuration without BTX compilation
-        timeout-minutes: 30
-        run: python3 contrib/devtools/mac-resume/configure.py
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
-        timeout-minutes: 5
-        with:
-          artifact-ids: 13636115219
-          run-id: 42524397683
-          github-token: ${{ github.token }}
-          path: restore-payload
-          merge-multiple: true
-      - name: Verify actual saved files and inspect remaining Ninja work without compiling
-        timeout-minutes: 10
-        run: python3 contrib/devtools/mac-resume/resume.py
-      - name: Bounded serial compile with retained baseline and final checkpoint
         timeout-minutes: 35
+        run: python3 contrib/devtools/mac-resume/configure.py
+      - name: Bounded serial compile with retained baseline and final checkpoint
+        timeout-minutes: 32
         run: python3 contrib/devtools/mac-resume/chunk.py
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: mac-compile-next-records
+          name: mac-atlas-records
           path: |
             restore-records
             mac-config-records
@@ -50,12 +39,12 @@ jobs:
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: mac-compile-next-binaries
+          name: mac-atlas-binaries
           path: chunk-binaries
           retention-days: 14
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: mac-compile-next-checkpoint
+          name: mac-atlas-checkpoint
           path: chunk-checkpoint
           retention-days: 14
