@@ -84,7 +84,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Bootstrap pinned vcpkg tool
+    - name: Provision exact pinned vcpkg via verified official asset
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
 
@@ -100,7 +100,7 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/runner.py vcpkg
+        python controls/contrib/devtools/windows-root-configure/pinned-vcpkg.py vcpkg
 
         exit /b %errorlevel%
 
