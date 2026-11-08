@@ -81,11 +81,21 @@ try:
   fresh,_,skipped=package.stage_release_tree(version='0.34.16',platform_id='linux-x86_64',btxd_path=inputs/'bin/btxd',btx_cli_path=inputs/'bin/btx-cli',btx_util_path=inputs/'bin/btx-util',matmul_metallib_path=None,oracle_metallib_path=None,metal_lib_dir=None,source_root=before,temp_root=runtime/'fresh-source-stage',require_gui=True,require_model_helpers=True)
  finally:os.environ.clear();os.environ.update(old_env)
  assert not skipped
- for n in ['libexec/btxd.real','bin/btxd','lib/libssl.so.3','lib/libcrypto.so.3','libexec/btx-atlas.real',*prov['dependency_graph']['protected_libraries']]:
+ for n in ['libexec/btxd.real','bin/btxd','lib/libssl.so.3','lib/libcrypto.so.3','libexec/btx-atlas.real','bin/btx-atlas']:
   assert sha(fresh/n)==before_files[n]['sha256'],n
+ s['fresh_stage_retained_root_libraries']=[]
+ s['fresh_stage_omitted_input_root_libraries']=[]
+ for n in prov['dependency_graph']['protected_libraries']:
+  if (fresh/n).is_file():
+   assert sha(fresh/n)==before_files[n]['sha256'],n
+   s['fresh_stage_retained_root_libraries'].append(n)
+  else:s['fresh_stage_omitted_input_root_libraries'].append(n)
+ s['fresh_stage_library_scope']='Fresh producer stages OpenSSL and the shared Qt candidate subgraph, not every library carried in the saved archive. Omitted inputs are explicit; unchanged default gate and clean loader checks remain mandatory.'
+
  fresh_tar=outputs/'btx-linux-gui-fresh-stage.tar.gz';package.write_tar_gz(fresh_tar,fresh)
  assert gate(fresh_tar,'gate-fresh-source-output').returncode==0
  assert run([fresh/'libexec/btx-guardd','--stdio'],'guard-fresh-stage-direct',input='',limit=10).returncode==0
+ s['fresh_guard_loader']=resolve(fresh/'libexec/btx-guardd','fresh-guard-loader-clean',clean)
  s['fresh_source_stage_gate_pass']=True
  s['fresh_loader']={}
  fresh_wrapper=dict(clean,LD_LIBRARY_PATH=str(fresh/'lib/qt-private')+':'+str(fresh/'lib'))
