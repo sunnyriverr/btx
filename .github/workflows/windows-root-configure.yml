@@ -1,4 +1,4 @@
-name: Native Windows pending wallet and key cases
+name: Native Windows pending script and PQ rule cases
 permissions:
   contents: read
 jobs:
@@ -182,7 +182,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Verify saved binary and236pending selectors
+    - name: Verify saved binary and249pending selectors
       id: ready
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -206,7 +206,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Run236unrun wallet key cases in47small groups
+    - name: Run249unrun script transaction PQ cases in48groups
       id: units
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -285,7 +285,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
       with:
-        name: native-windows-pending-wallet-keys
+        name: native-windows-pending-script-pq
         path: D:\btx-native-035\evidence\
         retention-days: 14
 'on':
