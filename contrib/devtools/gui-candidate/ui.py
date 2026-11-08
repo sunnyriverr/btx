@@ -50,25 +50,37 @@ def click(name):
         raise TimeoutError('Control action unavailable: '+name)
 
 def endpoint(value):
+    import json,os
+    from pathlib import Path
+    diagnostic=[]
     def matches():
         found=[]
+        diagnostic.clear()
         for n in controls():
             try:
-                edit=n.queryEditableText()
-                label=n.name or ''
-                for relation in n.getRelationSet():
-                    if relation.getRelationType()==pyatspi.RELATION_LABELLED_BY:
-                        label+=' '+ ' '.join(relation.getTarget(i).name or '' for i in range(relation.getNTargets()))
-                if 'Loopback endpoint' in label:
-                    found.append((n,edit))
-            except Exception:
-                pass
+                role=n.getRoleName();state=n.getState();name=n.name or ''
+                editable=state.contains(pyatspi.STATE_EDITABLE)
+                if editable or role in ('entry','text','password text'):
+                    diagnostic.append({'role':role,'name':name,'editable':editable,'interfaces':list(n.getInterfaces())})
+                inside=False;parent=n
+                for _ in range(15):
+                    if parent is None:break
+                    if parent.getRoleName()=='dialog':inside=True;break
+                    parent=parent.parent
+                if role in ('entry','text') and editable and state.contains(pyatspi.STATE_ENABLED) and (inside or 'RPC_PORT' in name or 'Loopback endpoint' in name):
+                    found.append(n)
+            except Exception as error:
+                diagnostic.append({'error':type(error).__name__})
         return found
-    wait(lambda:len(matches())==1,15)
-    n,edit=matches()[0]
-    if not edit.setTextContents(value):
-        raise TimeoutError('Endpoint edit unavailable')
-    wait(lambda:n.queryText().getText(0,-1)==value,5)
+    try:
+        wait(lambda:len(matches())==1,15)
+        n=matches()[0]
+        assert n.queryComponent().grabFocus(), 'Endpoint focus refused'
+        subprocess.run(['xdotool','key','--clearmodifiers','ctrl+a'],check=True,timeout=5)
+        subprocess.run(['xdotool','type','--clearmodifiers','--',value],check=True,timeout=5)
+        wait(lambda:n.queryText().getText(0,-1)==value,5)
+    finally:
+        (Path(os.environ['GITHUB_WORKSPACE'])/'atlas-window-results/endpoint-accessibility.json').write_text(json.dumps(diagnostic,indent=2)+'\n')
 
 def file_path(path):
     # Standard GTK location entry, after independently observing the chooser title.
