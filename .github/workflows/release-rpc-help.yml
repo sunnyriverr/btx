@@ -1,0 +1,57 @@
+name: First bounded serial Mac compile chunk
+on:
+  push:
+    branches: [codex/ci-mac-compile-chunk]
+permissions:
+  contents: read
+jobs:
+  chunk:
+    runs-on: macos-15
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: /contrib/devtools/mac-chunk/
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: ff5f3f04ea11f044594987fc6be043ff68b136ad
+          path: product
+          persist-credentials: false
+      - name: Recreate admitted C++ configuration only
+        timeout-minutes: 30
+        run: python3 contrib/devtools/mac-chunk/configure.py
+      - name: Validate real-tree checkpoint then run serial resource-bounded chunk
+        timeout-minutes: 30
+        run: python3 contrib/devtools/mac-chunk/chunk.py
+      - name: Preserve available executable outputs independently
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: mac-chunk-binaries
+          path: chunk-binaries
+          compression-level: 0
+          retention-days: 14
+      - name: Preserve last valid source/build checkpoint
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: mac-chunk-checkpoint
+          path: |
+            chunk-checkpoint/baseline
+            chunk-checkpoint/after
+            chunk-checkpoint/selected.json
+            chunk-checkpoint/result.json
+          compression-level: 0
+          retention-days: 14
+      - name: Preserve measurements and all failure records
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: mac-chunk-records
+          path: |
+            mac-config-records
+            chunk-records
+          retention-days: 14
