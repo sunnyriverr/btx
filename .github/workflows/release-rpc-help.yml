@@ -1,0 +1,31 @@
+name: Bounded Mac dependency and configuration pilot
+on:
+  push:
+    branches: [codex/ci-mac-config-pilot]
+permissions:
+  contents: read
+jobs:
+  configure:
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: /contrib/devtools/mac-config-pilot/
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: ff5f3f04ea11f044594987fc6be043ff68b136ad
+          path: product
+          persist-credentials: false
+      - name: Bounded dependency setup, configure and dry-run plan
+        timeout-minutes: 27
+        run: python3 contrib/devtools/mac-config-pilot/run.py
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: mac-config-records
+          path: mac-config-records
+          retention-days: 14
