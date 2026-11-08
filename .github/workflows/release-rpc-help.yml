@@ -1,0 +1,32 @@
+name: Packaged Atlas virtual-display observation
+on:
+  push:
+    branches: [codex/ci-atlas-package-window]
+    paths: [".github/workflows/release-rpc-help.yml", "contrib/devtools/packaged-atlas/**"]
+permissions:
+  contents: read
+jobs:
+  observe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install GUI and node runtime prerequisites
+        timeout-minutes: 5
+        run: |
+          sudo apt-get -o Acquire::Retries=1 update
+          sudo apt-get install -y --no-install-recommends libwebkit2gtk-4.1-0 libgtk-3-0t64 libevent-dev libsqlite3-0 libzmq5 libgomp1 xvfb xauth dbus-x11 openbox scrot wmctrl xdotool python3-pyatspi at-spi2-core
+      - name: Run actual packaged GUI on virtual X11
+        timeout-minutes: 6
+        env:
+          BTX_RUN_ATLAS_WINDOW: explicit-native-authorisation
+        run: |
+          timeout --signal=TERM --kill-after=10s 300s dbus-run-session -- xvfb-run -a -s '-screen 0 1440x1000x24 -nolisten tcp' sh -c 'openbox > /tmp/atlas-openbox.log 2>&1 & exec /usr/bin/python3 contrib/devtools/packaged-atlas/run.py'
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: packaged-atlas-window-records
+          path: atlas-window-results
+          retention-days: 14
