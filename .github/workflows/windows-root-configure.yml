@@ -1,4 +1,4 @@
-name: Native Windows pending transaction peer and wallet cases
+name: Native Windows unresolved transaction validation groups
 permissions:
   contents: read
 jobs:
@@ -182,7 +182,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Verify saved binary and294pending selectors
+    - name: Verify saved binary and99unresolved selectors
       id: ready
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -206,7 +206,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Run only294never-run transaction peer index wallet cases
+    - name: Run99unqualified cases in timed explicit groups
       id: units
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -285,7 +285,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
       with:
-        name: native-windows-pending-tx-wallet
+        name: native-windows-txvalidation-groups
         path: D:\btx-native-035\evidence\
         retention-days: 14
 'on':

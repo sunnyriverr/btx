@@ -3,273 +3,7 @@
   "binary_sha256": "31e45f1d0f2aed4168982120596182b5268057e1b9806960f27a60c769906bdd",
   "jobs": [
     {
-      "suite": "mempool_tests",
-      "lane": "other",
-      "selectors": [
-        "mempool_tests/MempoolRemoveTest",
-        "mempool_tests/MempoolIndexingTest",
-        "mempool_tests/MempoolAncestorIndexingTest",
-        "mempool_tests/MempoolSizeLimitTest",
-        "mempool_tests/MempoolAncestryTests",
-        "mempool_tests/MempoolAncestryTestsDiamond"
-      ],
-      "expected_cases": 6,
-      "timeout_seconds": 300
-    },
-    {
-      "suite": "merkle_tests",
-      "lane": "other",
-      "selectors": [
-        "merkle_tests/merkle_test",
-        "merkle_tests/merkle_test_empty_block",
-        "merkle_tests/merkle_test_oneTx_block",
-        "merkle_tests/merkle_test_OddTxWithRepeatedLastTx_block",
-        "merkle_tests/merkle_test_LeftSubtreeRightSubtree",
-        "merkle_tests/merkle_test_BlockWitness"
-      ],
-      "expected_cases": 6,
-      "timeout_seconds": 300
-    },
-    {
-      "suite": "merkleblock_tests",
-      "lane": "other",
-      "selectors": [
-        "merkleblock_tests/merkleblock_construct_from_txids_found",
-        "merkleblock_tests/merkleblock_construct_from_txids_not_found"
-      ],
-      "expected_cases": 2,
-      "timeout_seconds": 300
-    },
-    {
-      "suite": "miniminer_tests",
-      "lane": "other",
-      "selectors": [
-        "miniminer_tests/miniminer_negative",
-        "miniminer_tests/miniminer_1p1c",
-        "miniminer_tests/miniminer_overlap",
-        "miniminer_tests/calculate_cluster",
-        "miniminer_tests/manual_ctor"
-      ],
-      "expected_cases": 5,
-      "timeout_seconds": 300
-    },
-    {
-      "suite": "orphanage_tests",
-      "lane": "other",
-      "selectors": [
-        "orphanage_tests/DoS_mapOrphans",
-        "orphanage_tests/same_txid_diff_witness",
-        "orphanage_tests/get_children",
-        "orphanage_tests/too_large_orphan_tx",
-        "orphanage_tests/oversized_shielded_proof_orphan_tx",
-        "orphanage_tests/process_block",
-        "orphanage_tests/multiple_announcers",
-        "orphanage_tests/peer_worksets",
-        "orphanage_tests/shielded_v2_manifest_and_settlement_anchor_orphans"
-      ],
-      "expected_cases": 9,
-      "timeout_seconds": 300
-    },
-    {
-      "suite": "peerman_tests",
-      "lane": "other",
-      "selectors": [
-        "peerman_tests/block_chunk_manifest_and_assembler_bounds",
-        "peerman_tests/block_chunk_transfer_has_idle_and_absolute_deadlines",
-        "peerman_tests/connections_desirable_service_flags",
-        "peerman_tests/desirable_flags_do_not_block_on_cs_main",
-        "peerman_tests/matmul_consensus_tier_desirable_service_flags",
-        "peerman_tests/matmul_consensus_tier_sync_eligibility_tracks_activation",
-        "peerman_tests/matmul_consensus_tier_preferred_state_reconciles_at_activation",
-        "peerman_tests/matmul_consensus_tier_connected_peer_loses_preference_at_activation",
-        "peerman_tests/chain_sync_protects_peer_when_tip_has_auth_work_deficit",
-        "peerman_tests/matmul_consensus_tier_compact_block_boundary_policy",
-        "peerman_tests/trusted_mirror_authority_headers_advance_best_header",
-        "peerman_tests/trusted_mirror_divergent_tip_follows_authority_headers",
-        "peerman_tests/parked_reorg_suppresses_only_parked_peer_downloads",
-        "peerman_tests/getmmattest_skips_non_serving_peers",
-        "peerman_tests/getmmattest_pre_activation_tip_requests_child",
-        "peerman_tests/getmmattest_consensus_verifier_pre_activation_tip_requests_child",
-        "peerman_tests/getdata_unknown_block_sends_notfound",
-        "peerman_tests/catchup_requests_only_lowest_hole_and_fails_over_silent_peer",
-        "peerman_tests/catchup_direct_fetch_requests_only_lowest_hole",
-        "peerman_tests/long_catchup_uses_wide_download_window",
-        "peerman_tests/catchup_later_peer_fetches_next_window_segment",
-        "peerman_tests/signed_frontier_catchup_prefers_archive_not_miner",
-        "peerman_tests/signed_frontier_seed_does_not_lower_higher_best_known",
-        "peerman_tests/have_data_unconnected_does_not_issue_descendant_getdata",
-        "peerman_tests/getdata_headers_only_sends_notfound",
-        "peerman_tests/broadcast_transaction_fails_closed_without_peerman",
-        "peerman_tests/unrequested_followed_tip_child_persists_without_gpu",
-        "peerman_tests/ticketless_followed_chain_body_is_persisted_or_retained",
-        "peerman_tests/ticketless_competing_sibling_does_not_censor_independent_netgroup",
-        "peerman_tests/handoff_peer_budget_miss_retains_tip_child_body",
-        "peerman_tests/competing_sibling_stays_header_only_on_trusted_mirror",
-        "peerman_tests/catchup_grandchild_persists_on_trusted_mirror",
-        "peerman_tests/catchup_grandchild_persists_without_gpu_on_signer",
-        "peerman_tests/second_tip_child_body_retained_while_occupier_holds_verify",
-        "peerman_tests/encdr_pending_cap_retains_followed_chain_body",
-        "peerman_tests/rc_pending_cap_release_readmits_without_budget_wait",
-        "peerman_tests/budget_deferred_tip_child_retries_at_window_refill",
-        "peerman_tests/budget_deferred_body_without_open_window_does_not_spin",
-        "peerman_tests/linear_tip_child_replays_when_authenticated_work_lags",
-        "peerman_tests/ticketless_followed_tip_child_converges_without_rcadmit",
-        "peerman_tests/persisted_exact_replay_fork_releases_retained_capacity",
-        "peerman_tests/consensus_behind_competing_twin_headers_still_converges",
-        "peerman_tests/retained_active_tip_child_precedes_suffix_under_competing_headers",
-        "peerman_tests/unsolicited_retained_tip_child_retries_without_rcadmit",
-        "peerman_tests/ticketless_tip_child_not_held_after_source_disconnects",
-        "peerman_tests/retained_tip_child_not_held_after_source_disconnects",
-        "peerman_tests/verified_retained_tip_child_released_after_source_disconnects",
-        "peerman_tests/pre_v4_retained_tip_child_released_after_source_disconnects",
-        "peerman_tests/no_worker_retained_tip_child_released_after_source_disconnects",
-        "peerman_tests/cpu_pending_active_tip_child_does_not_reserve_gpu_admission",
-        "peerman_tests/cpu_pending_unique_frontier_does_not_occupy_gpu_slot",
-        "peerman_tests/active_tip_child_precedes_ready_acquisition_frontier",
-        "peerman_tests/retained_active_tip_child_precedes_ready_acquisition_frontier",
-        "peerman_tests/header_only_honest_tip_child_getdata_under_competing_headers",
-        "peerman_tests/header_only_tip_child_does_not_request_from_non_body_peer",
-        "peerman_tests/encdr_competing_sibling_does_not_steal_miner_gpu",
-        "peerman_tests/local_signer_fetches_header_only_lost_twin_after_headers_pull_ahead",
-        "peerman_tests/local_signer_fetches_ancestor_lost_twin_after_tip_moved",
-        "peerman_tests/local_signer_fetches_depth2_lost_twin_cousin",
-        "peerman_tests/local_signer_exactreplays_followed_tip_child_for_ibd",
-        "peerman_tests/signer_free_consensus_exactreplays_followed_tip_child",
-        "peerman_tests/signer_free_consensus_readmits_persisted_have_data_child",
-        "peerman_tests/signer_free_consensus_getdata_followed_child_despite_header_only_skip",
-        "peerman_tests/followed_tip_child_progress_lane_charges_one_per_minute_window",
-        "peerman_tests/followed_tip_child_progress_lane_scales_with_catchup_backlog",
-        "peerman_tests/duplicate_header_no_progress_flood_disconnects_inbound_peer",
-        "peerman_tests/getmmattest_not_validated_does_not_starve_canonical_serve",
-        "peerman_tests/getmmattest_lost_twin_complete_bodies_requests_fork_child",
-        "peerman_tests/archive_block_serve_helpers_and_gates_unchanged",
-        "peerman_tests/archive_getdata_worker_serves_block_without_double_send",
-        "peerman_tests/signer_serve_zero_pushes_new_attestations_refuses_getmmattest",
-        "peerman_tests/exact_replay_persist_path_pushes_mmattest",
-        "peerman_tests/getmmattest_historical_scan_ignored_then_banned",
-        "peerman_tests/stale_tip_with_inflight_and_forty_peers_sends_getheaders",
-        "peerman_tests/sixty_two_preferred_peers_null_best_known_probe_fires",
-        "peerman_tests/pindex_last_common_behind_tip_advances_and_does_not_rerequest",
-        "peerman_tests/live_shape_199300_converges_toward_199328",
-        "peerman_tests/authority_mode_serves_getheaders_to_inbound_non_authority",
-        "peerman_tests/best_header_below_tip_rerequests_headers_and_converges",
-        "peerman_tests/heavier_competing_fork_probes_and_getdata_past_short_reorg",
-        "peerman_tests/heavier_competing_fork_n_plus_72_getdata_fork_child",
-        "peerman_tests/deep_competing_tower_does_not_seed_or_pin_last_common",
-        "peerman_tests/deep_competing_tower_root_fetch_allows_parallel_failover",
-        "peerman_tests/missing_acquisition_frontier_getdata_is_root_not_descendants",
-        "peerman_tests/review_missing_frontier_does_not_block_other_registered_tower",
-        "peerman_tests/missing_tip_child_does_not_block_other_registered_tower",
-        "peerman_tests/review_unavailable_tip_child_does_not_block_other_registered_tower",
-        "peerman_tests/review_unavailable_tip_child_does_not_starve_unique_frontier",
-        "peerman_tests/competing_tower_getheaders_locator_starts_at_known_competing_tip",
-        "peerman_tests/unavailable_fork_cannot_hide_ready_recovery",
-        "peerman_tests/ready_acquisition_fork_replays_while_heaviest_body_missing",
-        "peerman_tests/incoming_acquisition_fork_replays_while_heaviest_body_missing",
-        "peerman_tests/nearby_acquisition_fork_replays_while_deep_frontier_ready",
-        "peerman_tests/incoming_nearby_acquisition_fork_precedes_ready_deep_frontier",
-        "peerman_tests/acquisition_replay_priority_bounds_background_wait",
-        "peerman_tests/review_persisted_child_progress_while_competing_frontier_missing",
-        "peerman_tests/persisted_active_tip_child_precedes_ready_acquisition_frontier",
-        "peerman_tests/fresh_tip_fetches_only_connecting_body_of_deep_heavier_fork",
-        "peerman_tests/header_tower_seeds_best_known_without_duplicate_headers",
-        "peerman_tests/parked_heavier_header_tower_still_getdata",
-        "peerman_tests/best_header_follows_headers_only_suffix_not_pinned_to_tip",
-        "peerman_tests/best_header_follows_heavier_disconnected_fork_not_pinned_to_tip",
-        "peerman_tests/must_probe_getheaders_without_sync_slot_or_network",
-        "peerman_tests/invalidateblock_moves_best_header_off_dead_branch_and_getheaders_resumes",
-        "peerman_tests/initial_headers_sync_prefers_checkpoint_height_peer",
-        "peerman_tests/initial_headers_sync_deprioritizes_low_work_failure",
-        "peerman_tests/low_work_presync_failure_does_not_immediately_retry",
-        "peerman_tests/recalculate_best_header_runs_when_unconfigured",
-        "peerman_tests/silent_getdata_peer_rerequested_from_other_and_tip_advances",
-        "peerman_tests/inflight_payload_bytes_grant_expiry_grace",
-        "peerman_tests/chatter_does_not_grant_inflight_expiry_grace",
-        "peerman_tests/direct_fetch_proven_source_requests_lowest_holes",
-        "peerman_tests/header_only_peer_skipped_once_another_served_a_body",
-        "peerman_tests/background_headers_refresh_learns_quiet_competing_chain",
-        "peerman_tests/background_headers_refresh_lagging_fork_survives_ordinary_probes",
-        "peerman_tests/trusted_authority_refresh_anchors_competing_discovery",
-        "peerman_tests/background_headers_discovery_crosses_lower_work_lead_cap",
-        "peerman_tests/background_headers_refresh_global_limit_and_fairness",
-        "peerman_tests/best_known_probe_is_rate_limited_and_skips_height_zero",
-        "peerman_tests/non_ibd_direct_tip_extension_getheaders_without_requeue",
-        "peerman_tests/matmul_deferred_recovery_does_not_block_scheduler",
-        "peerman_tests/mutated_or_compact_invalid_body_does_not_suppress_fetch",
-        "peerman_tests/disconnected_retained_tip_child_replays_only_with_slot_and_budget",
-        "peerman_tests/replayed_unknown_attestation_getheaders_is_deduped",
-        "peerman_tests/getmmattest_serves_heard_after_pin",
-        "peerman_tests/getmmattest_heard_off_by_default",
-        "peerman_tests/getmmattest_heard_paced_per_requester",
-        "peerman_tests/getmmattest_heard_flood_keeps_pin_first",
-        "peerman_tests/getmmattest_heard_active_chain_and_live_only",
-        "peerman_tests/mmattest_unpinned_unknown_header_not_served",
-        "peerman_tests/getmmatpq_never_serves_heard",
-        "peerman_tests/getmmattest_heard_only_spends_serve_token",
-        "peerman_tests/getmmattest_heard_fills_answer_to_four",
-        "peerman_tests/dropped_historical_holes_stay_fetch_suppressed_past_one_window"
-      ],
-      "expected_cases": 134,
-      "timeout_seconds": 300
-    },
-    {
-      "suite": "txdownload_tests",
-      "lane": "other",
-      "selectors": [
-        "txdownload_tests/tx_rejection_types",
-        "txdownload_tests/handle_missing_inputs"
-      ],
-      "expected_cases": 2,
-      "timeout_seconds": 300
-    },
-    {
-      "suite": "txindex_tests",
-      "lane": "other",
-      "selectors": [
-        "txindex_tests/txindex_initial_sync"
-      ],
-      "expected_cases": 1,
-      "timeout_seconds": 300
-    },
-    {
-      "suite": "txpackage_tests",
-      "lane": "other",
-      "selectors": [
-        "txpackage_tests/package_hash_tests",
-        "txpackage_tests/package_sanitization_tests",
-        "txpackage_tests/package_validation_tests",
-        "txpackage_tests/noncontextual_package_tests",
-        "txpackage_tests/package_submission_tests",
-        "txpackage_tests/package_single_tx",
-        "txpackage_tests/package_witness_swap_tests",
-        "txpackage_tests/package_cpfp_tests",
-        "txpackage_tests/package_rbf_tests"
-      ],
-      "expected_cases": 9,
-      "timeout_seconds": 300
-    },
-    {
-      "suite": "txreconciliation_tests",
-      "lane": "other",
-      "selectors": [
-        "txreconciliation_tests/RegisterPeerTest",
-        "txreconciliation_tests/ForgetPeerTest",
-        "txreconciliation_tests/IsPeerRegisteredTest"
-      ],
-      "expected_cases": 3,
-      "timeout_seconds": 300
-    },
-    {
-      "suite": "txrequest_tests",
-      "lane": "other",
-      "selectors": [
-        "txrequest_tests/TxRequestTest"
-      ],
-      "expected_cases": 1,
-      "timeout_seconds": 300
-    },
-    {
-      "suite": "txvalidation_tests",
+      "suite": "txvalidation_tests/observed-group-01",
       "lane": "other",
       "selectors": [
         "txvalidation_tests/tx_mempool_reject_coinbase",
@@ -277,357 +11,467 @@
         "txvalidation_tests/tx_mempool_rejects_v2_egress_when_imported_receipt_is_missing_from_witness_set",
         "txvalidation_tests/block_rejects_v2_egress_when_shielded_scan_units_exceed_consensus_limit",
         "txvalidation_tests/block_rejects_v2_egress_when_shielded_tree_updates_exceed_consensus_limit",
-        "txvalidation_tests/tx_mempool_activation_gates_shielded_account_registry_append_limit",
+        "txvalidation_tests/tx_mempool_activation_gates_shielded_account_registry_append_limit"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 120,
+      "prior_body_seconds": 8.602
+    },
+    {
+      "suite": "txvalidation_tests/observed-group-02",
+      "lane": "other",
+      "selectors": [
         "txvalidation_tests/block_rejects_shielded_account_registry_append_limit_at_activation",
         "txvalidation_tests/tx_mempool_activation_gates_shielded_account_registry_total_entry_limit",
         "txvalidation_tests/block_rejects_shielded_account_registry_total_entry_limit_at_activation",
         "txvalidation_tests/tx_mempool_accepts_hybrid_v2_egress_after_settlement_anchor_and_evicts_it_after_reorg",
         "txvalidation_tests/tx_mempool_accepts_multi_receipt_hybrid_v2_egress_after_settlement_anchor_and_evicts_it_after_reorg",
-        "txvalidation_tests/tx_connects_claim_backed_v2_settlement_anchor_and_rewinds_state_after_reorg",
+        "txvalidation_tests/tx_connects_claim_backed_v2_settlement_anchor_and_rewinds_state_after_reorg"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 120,
+      "prior_body_seconds": 8.7
+    },
+    {
+      "suite": "txvalidation_tests/observed-group-03",
+      "lane": "other",
+      "selectors": [
         "txvalidation_tests/tx_connects_adapter_backed_v2_settlement_anchor_and_rewinds_state_after_reorg",
         "txvalidation_tests/tx_connects_receipt_adapter_backed_v2_settlement_anchor_and_rewinds_state_after_reorg",
         "txvalidation_tests/tx_connects_multi_receipt_v2_settlement_anchor_and_rewinds_state_after_reorg",
         "txvalidation_tests/tx_connects_reserve_bound_v2_settlement_anchor_and_rewinds_state_after_reorg",
         "txvalidation_tests/tx_mempool_accepts_fee_bearing_v2_rebalance_and_rewinds_state_after_reorg",
-        "txvalidation_tests/tx_mempool_rejects_postfork_rebalance_legacy_wire_family",
+        "txvalidation_tests/tx_mempool_rejects_postfork_rebalance_legacy_wire_family"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 120,
+      "prior_body_seconds": 7.901
+    },
+    {
+      "suite": "txvalidation_tests/observed-group-04",
+      "lane": "other",
+      "selectors": [
         "txvalidation_tests/block_rejects_postfork_rebalance_legacy_proof_wire",
         "txvalidation_tests/tx_mempool_rejects_postfork_rebalance_tampered_deterministic_proof",
         "txvalidation_tests/tx_mempool_accepts_fee_bearing_reserve_bound_v2_settlement_anchor_and_rewinds_state_after_reorg",
         "txvalidation_tests/block_rejects_post_c002_repeated_fresh_v2_rebalance_pool_credits_without_transparent_burn",
         "txvalidation_tests/block_rejects_post_c002_rebalance_to_reserve_bound_settlement_anchor_to_matured_egress_chain",
-        "txvalidation_tests/block_rejects_v2_send_private_transfer_at_sunset_height",
+        "txvalidation_tests/block_rejects_v2_send_private_transfer_at_sunset_height"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 120,
+      "prior_body_seconds": 13.71
+    },
+    {
+      "suite": "txvalidation_tests/observed-group-05",
+      "lane": "other",
+      "selectors": [
         "txvalidation_tests/block_rejects_v2_send_unshield_with_shielded_change_at_sunset_height",
         "txvalidation_tests/block_rejects_non_credit_v2_lifecycle_at_sunset_height",
         "txvalidation_tests/block_rejects_shielded_egress_at_pool_disable_height",
         "txvalidation_tests/block_rejects_shielded_ingress_at_pool_disable_height",
         "txvalidation_tests/block_accepts_pre_pool_disable_shielded_ingress_and_egress",
-        "txvalidation_tests/mempool_evicts_non_exit_shielded_transaction_when_sunset_height_becomes_next_block",
+        "txvalidation_tests/mempool_evicts_non_exit_shielded_transaction_when_sunset_height_becomes_next_block"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 120,
+      "prior_body_seconds": 42.336
+    },
+    {
+      "suite": "txvalidation_tests/observed-group-06",
+      "lane": "other",
+      "selectors": [
         "txvalidation_tests/tx_mempool_activation_gates_stale_v2_settlement_anchor_netting_manifest",
         "txvalidation_tests/block_rejects_stale_v2_settlement_anchor_netting_manifest_at_activation",
         "txvalidation_tests/tx_mempool_rejects_duplicate_v2_rebalance_manifest_after_stale_activation",
         "txvalidation_tests/tx_mempool_activation_gates_zero_fee_v2_rebalance",
         "txvalidation_tests/tx_mempool_activation_gates_noncanonical_fee_v2_rebalance",
-        "txvalidation_tests/tx_mempool_activation_gates_legacy_matrict_rebalance_envelope",
+        "txvalidation_tests/tx_mempool_activation_gates_legacy_matrict_rebalance_envelope"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 120,
+      "prior_body_seconds": 8.694
+    },
+    {
+      "suite": "txvalidation_tests/observed-group-07",
+      "lane": "other",
+      "selectors": [
         "txvalidation_tests/block_rejects_zero_fee_v2_rebalance_at_activation",
         "txvalidation_tests/block_rejects_noncanonical_fee_v2_rebalance_at_activation",
         "txvalidation_tests/block_rejects_legacy_matrict_rebalance_envelope_at_activation",
         "txvalidation_tests/tx_mempool_activation_gates_immature_v2_egress_settlement_anchor",
         "txvalidation_tests/block_rejects_v2_egress_when_settlement_anchor_is_immature_after_activation",
-        "txvalidation_tests/block_disconnect_restores_consumed_v2_settlement_anchor_metadata",
+        "txvalidation_tests/block_disconnect_restores_consumed_v2_settlement_anchor_metadata"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 120,
+      "prior_body_seconds": 8.954
+    },
+    {
+      "suite": "txvalidation_tests/observed-group-08",
+      "lane": "other",
+      "selectors": [
         "txvalidation_tests/tx_mempool_rejects_reused_v2_egress_settlement_anchor_after_single_use_activation",
         "txvalidation_tests/tx_mempool_accepts_v2_ingress_and_rewinds_state_after_reorg",
         "txvalidation_tests/tx_mempool_accepts_signed_v2_ingress_and_rewinds_state_after_reorg",
-        "txvalidation_tests/tx_mempool_accepts_scaled_v2_ingress_and_rewinds_state_after_reorg",
+        "txvalidation_tests/tx_mempool_accepts_scaled_v2_ingress_and_rewinds_state_after_reorg"
+      ],
+      "expected_cases": 4,
+      "timeout_seconds": 120,
+      "prior_body_seconds": 44.505
+    },
+    {
+      "suite": "txvalidation_tests/observed-group-09",
+      "lane": "other",
+      "selectors": [
         "txvalidation_tests/tx_mempool_accepts_hybrid_v2_ingress_and_rewinds_state_after_reorg",
         "txvalidation_tests/tx_mempool_accepts_multishard_v2_ingress_and_rewinds_state_after_reorg",
-        "txvalidation_tests/tx_mempool_accepts_v2_send_after_direct_send_seed_and_rewinds_state_after_reorg",
+        "txvalidation_tests/tx_mempool_accepts_v2_send_after_direct_send_seed_and_rewinds_state_after_reorg"
+      ],
+      "expected_cases": 3,
+      "timeout_seconds": 120,
+      "prior_body_seconds": 42.02
+    },
+    {
+      "suite": "txvalidation_tests/observed-group-10",
+      "lane": "other",
+      "selectors": [
         "txvalidation_tests/tx_mempool_rejects_v2_send_duplicate_ring_positions",
         "txvalidation_tests/tx_mempool_rejects_v2_send_out_of_range_ring_member_position",
         "txvalidation_tests/tx_mempool_rejects_v2_send_subminimum_ring_witness_with_ring_position_reason",
         "txvalidation_tests/tx_mempool_rejects_v2_send_missing_smile_public_account_without_auto_rebuild",
         "txvalidation_tests/block_auto_recovers_v2_send_missing_account_leaf_snapshot_entry",
-        "txvalidation_tests/tx_mempool_stale_shielded_state_rejects_without_auto_rebuild",
+        "txvalidation_tests/tx_mempool_stale_shielded_state_rejects_without_auto_rebuild"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 120,
+      "prior_body_seconds": 43.974
+    },
+    {
+      "suite": "txvalidation_tests/observed-group-11",
+      "lane": "other",
+      "selectors": [
         "txvalidation_tests/tx_mempool_activation_gates_noncanonical_smile_v2_send",
         "txvalidation_tests/tx_mempool_rejects_noncanonical_smile_v2_send_at_codec_disable_height",
         "txvalidation_tests/block_rejects_noncanonical_smile_v2_send_at_codec_disable_height",
         "txvalidation_tests/tx_mempool_activation_gates_legacy_smile_anonset_binding",
         "txvalidation_tests/tx_mempool_accepts_context_bound_smile_v2_send_at_activation",
-        "txvalidation_tests/tx_mempool_accepts_postfork_v2_lifecycle_control",
+        "txvalidation_tests/tx_mempool_accepts_postfork_v2_lifecycle_control"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 120,
+      "prior_body_seconds": 36.47
+    },
+    {
+      "suite": "txvalidation_tests/observed-group-12",
+      "lane": "other",
+      "selectors": [
         "txvalidation_tests/tx_mempool_accepts_postfork_v2_lifecycle_control_with_multiple_transparent_outputs",
         "txvalidation_tests/tx_mempool_rejects_postfork_proofless_transparent_shielding_v2_send",
         "txvalidation_tests/tx_mempool_cleanup_evicts_proofless_transparent_shielding_at_public_flow_disable",
         "txvalidation_tests/tx_mempool_accepts_postfork_coinbase_shielding_v2_send",
         "txvalidation_tests/tx_mempool_rejects_post_disable_coinbase_shielding_v2_send",
-        "txvalidation_tests/tx_mempool_rejects_postfork_v2_lifecycle_tampered_binding",
+        "txvalidation_tests/tx_mempool_rejects_postfork_v2_lifecycle_tampered_binding"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 120,
+      "prior_body_seconds": 7.184
+    },
+    {
+      "suite": "txvalidation_tests/observed-group-13",
+      "lane": "other",
+      "selectors": [
         "txvalidation_tests/tx_mempool_rejects_postfork_v2_lifecycle_tampered_output_value",
         "txvalidation_tests/tx_mempool_rejects_postfork_legacy_v2_send_lifecycle_control",
         "txvalidation_tests/tx_mempool_rejects_postfork_mixed_direct_v2_send",
-        "txvalidation_tests/tx_mempool_rejects_postfork_mixed_direct_v2_send_without_auto_rebuild_retry",
-        "txvalidation_tests/tx_mempool_accepts_c002_zero_output_unshield_v2_send",
-        "txvalidation_tests/tx_mempool_rejects_c002_zero_output_unshield_without_proof",
-        "txvalidation_tests/tx_mempool_rejects_c002_zero_output_unshield_malformed_context",
-        "txvalidation_tests/tx_mempool_rejects_c002_zero_output_unshield_tampered_transparent_outflow",
-        "txvalidation_tests/tx_mempool_rejects_postfork_legacy_compact_direct_send_encoding",
-        "txvalidation_tests/tx_mempool_accepts_v2_ingress_with_canonical_fee_bucket_after_activation",
-        "txvalidation_tests/tx_mempool_rejects_noncanonical_v2_send_fee_bucket_after_activation",
-        "txvalidation_tests/tx_mempool_rejects_v2_ingress_noncanonical_fee_bucket_after_activation",
-        "txvalidation_tests/tx_mempool_rejects_legacy_shield_noncanonical_fee_bucket_after_activation",
-        "txvalidation_tests/tx_mempool_rejects_v2_send_small_anonymity_pool_after_activation",
-        "txvalidation_tests/tx_mempool_rejects_v2_ingress_small_anonymity_pool_after_activation",
-        "txvalidation_tests/block_rejects_noncanonical_v2_send_fee_bucket_after_activation",
-        "txvalidation_tests/block_rejects_postfork_proofless_transparent_shielding_v2_send",
-        "txvalidation_tests/block_accepts_postfork_coinbase_shielding_v2_send",
-        "txvalidation_tests/block_rejects_post_disable_coinbase_shielding_v2_send",
-        "txvalidation_tests/block_rejects_c002_zero_output_unshield_tampered_transparent_outflow",
-        "txvalidation_tests/block_rejects_postfork_v2_lifecycle_tampered_binding",
-        "txvalidation_tests/block_rejects_postfork_v2_lifecycle_tampered_output_value",
-        "txvalidation_tests/block_rejects_postfork_mixed_direct_v2_send",
-        "txvalidation_tests/block_rejects_postfork_legacy_v2_send_lifecycle_control",
-        "txvalidation_tests/block_rejects_postfork_legacy_compact_direct_send_encoding",
-        "txvalidation_tests/block_rejects_v2_ingress_noncanonical_fee_bucket_after_activation",
-        "txvalidation_tests/block_rejects_legacy_shield_noncanonical_fee_bucket_after_activation",
-        "txvalidation_tests/block_rejects_v2_send_small_anonymity_pool_after_activation",
-        "txvalidation_tests/block_rejects_v2_ingress_small_anonymity_pool_after_activation",
-        "txvalidation_tests/block_rejects_legacy_smile_v2_send_at_anonset_binding_height",
-        "txvalidation_tests/ephemeral_tests",
-        "txvalidation_tests/version3_tests"
-      ],
-      "expected_cases": 99,
-      "timeout_seconds": 300
-    },
-    {
-      "suite": "txvalidationcache_tests",
-      "lane": "other",
-      "selectors": [
-        "txvalidationcache_tests/tx_mempool_block_doublespend",
-        "txvalidationcache_tests/checkinputs_test"
-      ],
-      "expected_cases": 2,
-      "timeout_seconds": 300
-    },
-    {
-      "suite": "validation_flush_tests",
-      "lane": "other",
-      "selectors": [
-        "validation_flush_tests/getcoinscachesizestate"
-      ],
-      "expected_cases": 1,
-      "timeout_seconds": 300
-    },
-    {
-      "suite": "validationinterface_tests",
-      "lane": "other",
-      "selectors": [
-        "validationinterface_tests/unregister_validation_interface_race",
-        "validationinterface_tests/unregister_all_during_call"
-      ],
-      "expected_cases": 2,
-      "timeout_seconds": 300
-    },
-    {
-      "suite": "wallet_rpc_tests",
-      "lane": "other",
-      "selectors": [
-        "wallet_rpc_tests/ensure_unique_wallet_name",
-        "wallet_rpc_tests/validate_wallet_bundle_archive_directory_name",
-        "wallet_rpc_tests/validate_wallet_bundle_archive_relative_path",
-        "wallet_rpc_tests/validate_wallet_bundle_archive_relative_paths_are_unique"
+        "txvalidation_tests/tx_mempool_rejects_postfork_mixed_direct_v2_send_without_auto_rebuild_retry"
       ],
       "expected_cases": 4,
-      "timeout_seconds": 300
+      "timeout_seconds": 120,
+      "prior_body_seconds": 16.834
     },
     {
-      "suite": "wallet_transaction_tests",
+      "suite": "txvalidation_tests/interrupted-01",
       "lane": "other",
       "selectors": [
-        "wallet_transaction_tests/roundtrip"
+        "txvalidation_tests/tx_mempool_accepts_c002_zero_output_unshield_v2_send"
       ],
       "expected_cases": 1,
-      "timeout_seconds": 300
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
     },
     {
-      "suite": "walletdb_tests",
+      "suite": "txvalidation_tests/unentered-01",
       "lane": "other",
       "selectors": [
-        "walletdb_tests/walletdb_readkeyvalue",
-        "walletdb_tests/walletdb_read_write_deadlock"
+        "txvalidation_tests/tx_mempool_rejects_c002_zero_output_unshield_without_proof"
       ],
-      "expected_cases": 2,
-      "timeout_seconds": 300
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
     },
     {
-      "suite": "walletload_tests",
+      "suite": "txvalidation_tests/unentered-02",
       "lane": "other",
       "selectors": [
-        "walletload_tests/wallet_load_descriptors",
-        "walletload_tests/wallet_load_descriptor_pq_cache_invalid_pubkey_size",
-        "walletload_tests/wallet_load_descriptor_cache_invalid_xpub_size",
-        "walletload_tests/wallet_load_ckey",
-        "walletload_tests/wallet_load_non_bip68_csv_descriptor"
+        "txvalidation_tests/tx_mempool_rejects_c002_zero_output_unshield_malformed_context"
       ],
-      "expected_cases": 5,
-      "timeout_seconds": 300
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-03",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/tx_mempool_rejects_c002_zero_output_unshield_tampered_transparent_outflow"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-04",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/tx_mempool_rejects_postfork_legacy_compact_direct_send_encoding"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-05",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/tx_mempool_accepts_v2_ingress_with_canonical_fee_bucket_after_activation"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-06",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/tx_mempool_rejects_noncanonical_v2_send_fee_bucket_after_activation"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-07",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/tx_mempool_rejects_v2_ingress_noncanonical_fee_bucket_after_activation"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-08",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/tx_mempool_rejects_legacy_shield_noncanonical_fee_bucket_after_activation"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-09",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/tx_mempool_rejects_v2_send_small_anonymity_pool_after_activation"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-10",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/tx_mempool_rejects_v2_ingress_small_anonymity_pool_after_activation"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-11",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/block_rejects_noncanonical_v2_send_fee_bucket_after_activation"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-12",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/block_rejects_postfork_proofless_transparent_shielding_v2_send"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-13",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/block_accepts_postfork_coinbase_shielding_v2_send"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-14",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/block_rejects_post_disable_coinbase_shielding_v2_send"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-15",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/block_rejects_c002_zero_output_unshield_tampered_transparent_outflow"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-16",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/block_rejects_postfork_v2_lifecycle_tampered_binding"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-17",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/block_rejects_postfork_v2_lifecycle_tampered_output_value"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-18",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/block_rejects_postfork_mixed_direct_v2_send"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-19",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/block_rejects_postfork_legacy_v2_send_lifecycle_control"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-20",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/block_rejects_postfork_legacy_compact_direct_send_encoding"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-21",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/block_rejects_v2_ingress_noncanonical_fee_bucket_after_activation"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-22",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/block_rejects_legacy_shield_noncanonical_fee_bucket_after_activation"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-23",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/block_rejects_v2_send_small_anonymity_pool_after_activation"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-24",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/block_rejects_v2_ingress_small_anonymity_pool_after_activation"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-25",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/block_rejects_legacy_smile_v2_send_at_anonset_binding_height"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-26",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/ephemeral_tests"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
+    },
+    {
+      "suite": "txvalidation_tests/unentered-27",
+      "lane": "other",
+      "selectors": [
+        "txvalidation_tests/version3_tests"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180,
+      "prior_body_seconds": null
     }
   ],
   "all_enabled_cases": [
-    "mempool_tests/MempoolRemoveTest",
-    "mempool_tests/MempoolIndexingTest",
-    "mempool_tests/MempoolAncestorIndexingTest",
-    "mempool_tests/MempoolSizeLimitTest",
-    "mempool_tests/MempoolAncestryTests",
-    "mempool_tests/MempoolAncestryTestsDiamond",
-    "merkle_tests/merkle_test",
-    "merkle_tests/merkle_test_empty_block",
-    "merkle_tests/merkle_test_oneTx_block",
-    "merkle_tests/merkle_test_OddTxWithRepeatedLastTx_block",
-    "merkle_tests/merkle_test_LeftSubtreeRightSubtree",
-    "merkle_tests/merkle_test_BlockWitness",
-    "merkleblock_tests/merkleblock_construct_from_txids_found",
-    "merkleblock_tests/merkleblock_construct_from_txids_not_found",
-    "miniminer_tests/miniminer_negative",
-    "miniminer_tests/miniminer_1p1c",
-    "miniminer_tests/miniminer_overlap",
-    "miniminer_tests/calculate_cluster",
-    "miniminer_tests/manual_ctor",
-    "orphanage_tests/DoS_mapOrphans",
-    "orphanage_tests/same_txid_diff_witness",
-    "orphanage_tests/get_children",
-    "orphanage_tests/too_large_orphan_tx",
-    "orphanage_tests/oversized_shielded_proof_orphan_tx",
-    "orphanage_tests/process_block",
-    "orphanage_tests/multiple_announcers",
-    "orphanage_tests/peer_worksets",
-    "orphanage_tests/shielded_v2_manifest_and_settlement_anchor_orphans",
-    "peerman_tests/block_chunk_manifest_and_assembler_bounds",
-    "peerman_tests/block_chunk_transfer_has_idle_and_absolute_deadlines",
-    "peerman_tests/connections_desirable_service_flags",
-    "peerman_tests/desirable_flags_do_not_block_on_cs_main",
-    "peerman_tests/matmul_consensus_tier_desirable_service_flags",
-    "peerman_tests/matmul_consensus_tier_sync_eligibility_tracks_activation",
-    "peerman_tests/matmul_consensus_tier_preferred_state_reconciles_at_activation",
-    "peerman_tests/matmul_consensus_tier_connected_peer_loses_preference_at_activation",
-    "peerman_tests/chain_sync_protects_peer_when_tip_has_auth_work_deficit",
-    "peerman_tests/matmul_consensus_tier_compact_block_boundary_policy",
-    "peerman_tests/trusted_mirror_authority_headers_advance_best_header",
-    "peerman_tests/trusted_mirror_divergent_tip_follows_authority_headers",
-    "peerman_tests/parked_reorg_suppresses_only_parked_peer_downloads",
-    "peerman_tests/getmmattest_skips_non_serving_peers",
-    "peerman_tests/getmmattest_pre_activation_tip_requests_child",
-    "peerman_tests/getmmattest_consensus_verifier_pre_activation_tip_requests_child",
-    "peerman_tests/getdata_unknown_block_sends_notfound",
-    "peerman_tests/catchup_requests_only_lowest_hole_and_fails_over_silent_peer",
-    "peerman_tests/catchup_direct_fetch_requests_only_lowest_hole",
-    "peerman_tests/long_catchup_uses_wide_download_window",
-    "peerman_tests/catchup_later_peer_fetches_next_window_segment",
-    "peerman_tests/signed_frontier_catchup_prefers_archive_not_miner",
-    "peerman_tests/signed_frontier_seed_does_not_lower_higher_best_known",
-    "peerman_tests/have_data_unconnected_does_not_issue_descendant_getdata",
-    "peerman_tests/getdata_headers_only_sends_notfound",
-    "peerman_tests/broadcast_transaction_fails_closed_without_peerman",
-    "peerman_tests/unrequested_followed_tip_child_persists_without_gpu",
-    "peerman_tests/ticketless_followed_chain_body_is_persisted_or_retained",
-    "peerman_tests/ticketless_competing_sibling_does_not_censor_independent_netgroup",
-    "peerman_tests/handoff_peer_budget_miss_retains_tip_child_body",
-    "peerman_tests/competing_sibling_stays_header_only_on_trusted_mirror",
-    "peerman_tests/catchup_grandchild_persists_on_trusted_mirror",
-    "peerman_tests/catchup_grandchild_persists_without_gpu_on_signer",
-    "peerman_tests/second_tip_child_body_retained_while_occupier_holds_verify",
-    "peerman_tests/encdr_pending_cap_retains_followed_chain_body",
-    "peerman_tests/rc_pending_cap_release_readmits_without_budget_wait",
-    "peerman_tests/budget_deferred_tip_child_retries_at_window_refill",
-    "peerman_tests/budget_deferred_body_without_open_window_does_not_spin",
-    "peerman_tests/linear_tip_child_replays_when_authenticated_work_lags",
-    "peerman_tests/ticketless_followed_tip_child_converges_without_rcadmit",
-    "peerman_tests/persisted_exact_replay_fork_releases_retained_capacity",
-    "peerman_tests/consensus_behind_competing_twin_headers_still_converges",
-    "peerman_tests/retained_active_tip_child_precedes_suffix_under_competing_headers",
-    "peerman_tests/unsolicited_retained_tip_child_retries_without_rcadmit",
-    "peerman_tests/ticketless_tip_child_not_held_after_source_disconnects",
-    "peerman_tests/retained_tip_child_not_held_after_source_disconnects",
-    "peerman_tests/verified_retained_tip_child_released_after_source_disconnects",
-    "peerman_tests/pre_v4_retained_tip_child_released_after_source_disconnects",
-    "peerman_tests/no_worker_retained_tip_child_released_after_source_disconnects",
-    "peerman_tests/cpu_pending_active_tip_child_does_not_reserve_gpu_admission",
-    "peerman_tests/cpu_pending_unique_frontier_does_not_occupy_gpu_slot",
-    "peerman_tests/active_tip_child_precedes_ready_acquisition_frontier",
-    "peerman_tests/retained_active_tip_child_precedes_ready_acquisition_frontier",
-    "peerman_tests/header_only_honest_tip_child_getdata_under_competing_headers",
-    "peerman_tests/header_only_tip_child_does_not_request_from_non_body_peer",
-    "peerman_tests/encdr_competing_sibling_does_not_steal_miner_gpu",
-    "peerman_tests/local_signer_fetches_header_only_lost_twin_after_headers_pull_ahead",
-    "peerman_tests/local_signer_fetches_ancestor_lost_twin_after_tip_moved",
-    "peerman_tests/local_signer_fetches_depth2_lost_twin_cousin",
-    "peerman_tests/local_signer_exactreplays_followed_tip_child_for_ibd",
-    "peerman_tests/signer_free_consensus_exactreplays_followed_tip_child",
-    "peerman_tests/signer_free_consensus_readmits_persisted_have_data_child",
-    "peerman_tests/signer_free_consensus_getdata_followed_child_despite_header_only_skip",
-    "peerman_tests/followed_tip_child_progress_lane_charges_one_per_minute_window",
-    "peerman_tests/followed_tip_child_progress_lane_scales_with_catchup_backlog",
-    "peerman_tests/duplicate_header_no_progress_flood_disconnects_inbound_peer",
-    "peerman_tests/getmmattest_not_validated_does_not_starve_canonical_serve",
-    "peerman_tests/getmmattest_lost_twin_complete_bodies_requests_fork_child",
-    "peerman_tests/archive_block_serve_helpers_and_gates_unchanged",
-    "peerman_tests/archive_getdata_worker_serves_block_without_double_send",
-    "peerman_tests/signer_serve_zero_pushes_new_attestations_refuses_getmmattest",
-    "peerman_tests/exact_replay_persist_path_pushes_mmattest",
-    "peerman_tests/getmmattest_historical_scan_ignored_then_banned",
-    "peerman_tests/stale_tip_with_inflight_and_forty_peers_sends_getheaders",
-    "peerman_tests/sixty_two_preferred_peers_null_best_known_probe_fires",
-    "peerman_tests/pindex_last_common_behind_tip_advances_and_does_not_rerequest",
-    "peerman_tests/live_shape_199300_converges_toward_199328",
-    "peerman_tests/authority_mode_serves_getheaders_to_inbound_non_authority",
-    "peerman_tests/best_header_below_tip_rerequests_headers_and_converges",
-    "peerman_tests/heavier_competing_fork_probes_and_getdata_past_short_reorg",
-    "peerman_tests/heavier_competing_fork_n_plus_72_getdata_fork_child",
-    "peerman_tests/deep_competing_tower_does_not_seed_or_pin_last_common",
-    "peerman_tests/deep_competing_tower_root_fetch_allows_parallel_failover",
-    "peerman_tests/missing_acquisition_frontier_getdata_is_root_not_descendants",
-    "peerman_tests/review_missing_frontier_does_not_block_other_registered_tower",
-    "peerman_tests/missing_tip_child_does_not_block_other_registered_tower",
-    "peerman_tests/review_unavailable_tip_child_does_not_block_other_registered_tower",
-    "peerman_tests/review_unavailable_tip_child_does_not_starve_unique_frontier",
-    "peerman_tests/competing_tower_getheaders_locator_starts_at_known_competing_tip",
-    "peerman_tests/unavailable_fork_cannot_hide_ready_recovery",
-    "peerman_tests/ready_acquisition_fork_replays_while_heaviest_body_missing",
-    "peerman_tests/incoming_acquisition_fork_replays_while_heaviest_body_missing",
-    "peerman_tests/nearby_acquisition_fork_replays_while_deep_frontier_ready",
-    "peerman_tests/incoming_nearby_acquisition_fork_precedes_ready_deep_frontier",
-    "peerman_tests/acquisition_replay_priority_bounds_background_wait",
-    "peerman_tests/review_persisted_child_progress_while_competing_frontier_missing",
-    "peerman_tests/persisted_active_tip_child_precedes_ready_acquisition_frontier",
-    "peerman_tests/fresh_tip_fetches_only_connecting_body_of_deep_heavier_fork",
-    "peerman_tests/header_tower_seeds_best_known_without_duplicate_headers",
-    "peerman_tests/parked_heavier_header_tower_still_getdata",
-    "peerman_tests/best_header_follows_headers_only_suffix_not_pinned_to_tip",
-    "peerman_tests/best_header_follows_heavier_disconnected_fork_not_pinned_to_tip",
-    "peerman_tests/must_probe_getheaders_without_sync_slot_or_network",
-    "peerman_tests/invalidateblock_moves_best_header_off_dead_branch_and_getheaders_resumes",
-    "peerman_tests/initial_headers_sync_prefers_checkpoint_height_peer",
-    "peerman_tests/initial_headers_sync_deprioritizes_low_work_failure",
-    "peerman_tests/low_work_presync_failure_does_not_immediately_retry",
-    "peerman_tests/recalculate_best_header_runs_when_unconfigured",
-    "peerman_tests/silent_getdata_peer_rerequested_from_other_and_tip_advances",
-    "peerman_tests/inflight_payload_bytes_grant_expiry_grace",
-    "peerman_tests/chatter_does_not_grant_inflight_expiry_grace",
-    "peerman_tests/direct_fetch_proven_source_requests_lowest_holes",
-    "peerman_tests/header_only_peer_skipped_once_another_served_a_body",
-    "peerman_tests/background_headers_refresh_learns_quiet_competing_chain",
-    "peerman_tests/background_headers_refresh_lagging_fork_survives_ordinary_probes",
-    "peerman_tests/trusted_authority_refresh_anchors_competing_discovery",
-    "peerman_tests/background_headers_discovery_crosses_lower_work_lead_cap",
-    "peerman_tests/background_headers_refresh_global_limit_and_fairness",
-    "peerman_tests/best_known_probe_is_rate_limited_and_skips_height_zero",
-    "peerman_tests/non_ibd_direct_tip_extension_getheaders_without_requeue",
-    "peerman_tests/matmul_deferred_recovery_does_not_block_scheduler",
-    "peerman_tests/mutated_or_compact_invalid_body_does_not_suppress_fetch",
-    "peerman_tests/disconnected_retained_tip_child_replays_only_with_slot_and_budget",
-    "peerman_tests/replayed_unknown_attestation_getheaders_is_deduped",
-    "peerman_tests/getmmattest_serves_heard_after_pin",
-    "peerman_tests/getmmattest_heard_off_by_default",
-    "peerman_tests/getmmattest_heard_paced_per_requester",
-    "peerman_tests/getmmattest_heard_flood_keeps_pin_first",
-    "peerman_tests/getmmattest_heard_active_chain_and_live_only",
-    "peerman_tests/mmattest_unpinned_unknown_header_not_served",
-    "peerman_tests/getmmatpq_never_serves_heard",
-    "peerman_tests/getmmattest_heard_only_spends_serve_token",
-    "peerman_tests/getmmattest_heard_fills_answer_to_four",
-    "peerman_tests/dropped_historical_holes_stay_fetch_suppressed_past_one_window",
-    "txdownload_tests/tx_rejection_types",
-    "txdownload_tests/handle_missing_inputs",
-    "txindex_tests/txindex_initial_sync",
-    "txpackage_tests/package_hash_tests",
-    "txpackage_tests/package_sanitization_tests",
-    "txpackage_tests/package_validation_tests",
-    "txpackage_tests/noncontextual_package_tests",
-    "txpackage_tests/package_submission_tests",
-    "txpackage_tests/package_single_tx",
-    "txpackage_tests/package_witness_swap_tests",
-    "txpackage_tests/package_cpfp_tests",
-    "txpackage_tests/package_rbf_tests",
-    "txreconciliation_tests/RegisterPeerTest",
-    "txreconciliation_tests/ForgetPeerTest",
-    "txreconciliation_tests/IsPeerRegisteredTest",
-    "txrequest_tests/TxRequestTest",
     "txvalidation_tests/tx_mempool_reject_coinbase",
     "txvalidation_tests/tx_mempool_accepts_v2_egress_after_settlement_anchor_and_evicts_it_after_reorg",
     "txvalidation_tests/tx_mempool_rejects_v2_egress_when_imported_receipt_is_missing_from_witness_set",
@@ -726,27 +570,10 @@
     "txvalidation_tests/block_rejects_v2_ingress_small_anonymity_pool_after_activation",
     "txvalidation_tests/block_rejects_legacy_smile_v2_send_at_anonset_binding_height",
     "txvalidation_tests/ephemeral_tests",
-    "txvalidation_tests/version3_tests",
-    "txvalidationcache_tests/tx_mempool_block_doublespend",
-    "txvalidationcache_tests/checkinputs_test",
-    "validation_flush_tests/getcoinscachesizestate",
-    "validationinterface_tests/unregister_validation_interface_race",
-    "validationinterface_tests/unregister_all_during_call",
-    "wallet_rpc_tests/ensure_unique_wallet_name",
-    "wallet_rpc_tests/validate_wallet_bundle_archive_directory_name",
-    "wallet_rpc_tests/validate_wallet_bundle_archive_relative_path",
-    "wallet_rpc_tests/validate_wallet_bundle_archive_relative_paths_are_unique",
-    "wallet_transaction_tests/roundtrip",
-    "walletdb_tests/walletdb_readkeyvalue",
-    "walletdb_tests/walletdb_read_write_deadlock",
-    "walletload_tests/wallet_load_descriptors",
-    "walletload_tests/wallet_load_descriptor_pq_cache_invalid_pubkey_size",
-    "walletload_tests/wallet_load_descriptor_cache_invalid_xpub_size",
-    "walletload_tests/wallet_load_ckey",
-    "walletload_tests/wallet_load_non_bip68_csv_descriptor"
+    "txvalidation_tests/version3_tests"
   ],
   "campaign_test_budget_seconds": 1800,
   "batch_budget_seconds": 600,
   "require_first_pass_control": false,
-  "scope": "294 pending-only transaction/peer/index/wallet fixture cases on saved37472; full acceptance incomplete"
+  "scope": "Only99unqualified txvalidation cases from prior timeout; timings-based groups, no verified pass repeated"
 }
