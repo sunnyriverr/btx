@@ -1,0 +1,349 @@
+{
+  "candidate": "5fd23a82c6db313797ccd22864951cff3c4e70e9",
+  "callers": [
+    {
+      "case": "pq_phase4_tests/external_signer_matches_p2mr_bip32_fingerprint",
+      "line": 1103,
+      "classification": "missing_launch_dependent_exact_error_control",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_matches_p2mr_bip32_fingerprint)",
+        "BOOST_CHECK_THROW(signer.SignTransaction(psbt, error), std::runtime_error);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_malformed_request_p2mr_bip32_origin",
+      "line": 1132,
+      "classification": "early_refusal_specific_error_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_malformed_request_p2mr_bip32_origin)",
+        "BOOST_CHECK_NO_THROW(ok = signer.SignTransaction(psbt, error));",
+        "BOOST_CHECK(!ok);",
+        "BOOST_CHECK(error.find(\"invalid P2MR BIP32 derivation encoding\") != std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_invalid_p2mr_partial_sig_size",
+      "line": 1166,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_invalid_p2mr_partial_sig_size)",
+        "BOOST_CHECK(!signer.SignTransaction(request_psbt, error));",
+        "BOOST_CHECK(error.find(\"invalid P2MR partial signature\") != std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_unexpected_p2mr_partial_sig_pubkey",
+      "line": 1202,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_unexpected_p2mr_partial_sig_pubkey)",
+        "BOOST_CHECK(!signer.SignTransaction(request_psbt, error));",
+        "BOOST_CHECK(error.find(\"unexpected P2MR partial signature pubkey\") != std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_partial_sig_pubkey_with_nonmatching_fingerprint",
+      "line": 1239,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_partial_sig_pubkey_with_nonmatching_fingerprint)",
+        "BOOST_CHECK(!signer.SignTransaction(request_psbt, error));",
+        "BOOST_CHECK(error.find(\"non-matching fingerprint\") != std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_p2mr_partial_sig_for_unselected_leaf_hash",
+      "line": 1279,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_p2mr_partial_sig_for_unselected_leaf_hash)",
+        "BOOST_CHECK(!signer.SignTransaction(request_psbt, error));",
+        "BOOST_CHECK(error.find(\"unexpected P2MR leaf hash\") != std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_wrong_leaf_sig_when_signer_omits_leaf_metadata",
+      "line": 1316,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_wrong_leaf_sig_when_signer_omits_leaf_metadata)",
+        "BOOST_CHECK(!signer.SignTransaction(request_psbt, error));",
+        "BOOST_CHECK(error.find(\"unexpected P2MR leaf hash\") != std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_conflicting_selected_leaf_metadata",
+      "line": 1355,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_conflicting_selected_leaf_metadata)",
+        "BOOST_CHECK(!signer.SignTransaction(request_psbt, error));",
+        "BOOST_CHECK(error.find(\"conflicting selected P2MR leaf\") != std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_unsupported_selected_leaf_version",
+      "line": 1389,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_unsupported_selected_leaf_version)",
+        "BOOST_CHECK(!signer.SignTransaction(request_psbt, error));",
+        "BOOST_CHECK(error.find(\"unsupported P2MR leaf version\") != std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_unexpected_p2mr_bip32_derivation",
+      "line": 1423,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_unexpected_p2mr_bip32_derivation)",
+        "BOOST_CHECK(!signer.SignTransaction(request_psbt, error));",
+        "BOOST_CHECK(error.find(\"unexpected P2MR BIP32 derivation\") != std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_conflicting_p2mr_bip32_derivation",
+      "line": 1461,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_conflicting_p2mr_bip32_derivation)",
+        "BOOST_CHECK(!signer.SignTransaction(request_psbt, error));",
+        "BOOST_CHECK(error.find(\"conflicting P2MR BIP32 derivation\") != std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_unexpected_p2mr_csfs_message",
+      "line": 1498,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_unexpected_p2mr_csfs_message)",
+        "BOOST_CHECK(!signer.SignTransaction(request_psbt, error));",
+        "BOOST_CHECK(error.find(\"unexpected P2MR CSFS message\") != std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_conflicting_p2mr_csfs_message",
+      "line": 1537,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_conflicting_p2mr_csfs_message)",
+        "BOOST_CHECK(!signer.SignTransaction(request_psbt, error));",
+        "BOOST_CHECK(error.find(\"conflicting P2MR CSFS message\") != std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_invalid_p2mr_csfs_sig_size",
+      "line": 1578,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_invalid_p2mr_csfs_sig_size)",
+        "BOOST_CHECK(!signer.SignTransaction(request_psbt, error));",
+        "BOOST_CHECK(error.find(\"invalid P2MR CSFS signature\") != std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_p2mr_csfs_signature_without_message",
+      "line": 1618,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_p2mr_csfs_signature_without_message)",
+        "BOOST_CHECK(!signer.SignTransaction(request_psbt, error));",
+        "BOOST_CHECK(error.find(\"missing P2MR CSFS message\") != std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_unexpected_p2mr_csfs_signature_pubkey",
+      "line": 1658,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_unexpected_p2mr_csfs_signature_pubkey)",
+        "BOOST_CHECK(!signer.SignTransaction(request_psbt, error));",
+        "BOOST_CHECK(error.find(\"unexpected P2MR CSFS signature pubkey\") != std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_nonmatching_fingerprint_p2mr_csfs_signature_pubkey",
+      "line": 1700,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_nonmatching_fingerprint_p2mr_csfs_signature_pubkey)",
+        "BOOST_CHECK(!signer.SignTransaction(request_psbt, error));",
+        "BOOST_CHECK(error.find(\"non-matching fingerprint\") != std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_request_p2mr_metadata_without_prevout_script",
+      "line": 1773,
+      "classification": "early_refusal_specific_error_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_request_p2mr_metadata_without_prevout_script)",
+        "BOOST_CHECK_NO_THROW(signed_ok = signer.SignTransaction(request_psbt, error));",
+        "BOOST_CHECK(!signed_ok);",
+        "BOOST_CHECK(error.find(\"missing prevout script for P2MR metadata\") != std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_request_p2mr_metadata_for_non_p2mr_prevout",
+      "line": 1807,
+      "classification": "early_refusal_specific_error_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_request_p2mr_metadata_for_non_p2mr_prevout)",
+        "BOOST_CHECK_NO_THROW(signed_ok = signer.SignTransaction(request_psbt, error));",
+        "BOOST_CHECK(!signed_ok);",
+        "BOOST_CHECK(error.find(\"non-P2MR prevout script has P2MR metadata\") != std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_conflicting_signer_p2mr_merkle_root",
+      "line": 1877,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_conflicting_signer_p2mr_merkle_root)",
+        "BOOST_CHECK(!signer.SignTransaction(request_psbt, error));",
+        "BOOST_CHECK(error.find(\"conflicting P2MR merkle root\") != std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_enumerate_parses_p2mr_capabilities",
+      "line": 2031,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_enumerate_parses_p2mr_capabilities)",
+        "BOOST_REQUIRE(ExternalSigner::Enumerate(MockSignerCommand(script_path), signers, \"regtest\"));",
+        "BOOST_REQUIRE_EQUAL(signers.size(), 1U);",
+        "BOOST_CHECK(signers[0].SupportsP2MR());",
+        "BOOST_REQUIRE_EQUAL(signers[0].SupportedPQAlgorithms().size(), 2U);",
+        "BOOST_CHECK_EQUAL(signers[0].SupportedPQAlgorithms()[0], \"ml_dsa_44\");",
+        "BOOST_CHECK_EQUAL(signers[0].SupportedPQAlgorithms()[1], \"slh_dsa_128s\");"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_enumerate_defaults_without_p2mr_capabilities",
+      "line": 2046,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_enumerate_defaults_without_p2mr_capabilities)",
+        "BOOST_REQUIRE(ExternalSigner::Enumerate(MockSignerCommand(script_path), signers, \"regtest\"));",
+        "BOOST_REQUIRE_EQUAL(signers.size(), 1U);",
+        "BOOST_CHECK(!signers[0].SupportsP2MR());",
+        "BOOST_CHECK(signers[0].SupportedPQAlgorithms().empty());"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_enumerate_rejects_invalid_fingerprint",
+      "line": 2059,
+      "classification": "missing_launch_dependent_exact_error_control",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_enumerate_rejects_invalid_fingerprint)",
+        "BOOST_CHECK_THROW(ExternalSigner::Enumerate(MockSignerCommand(script_path), signers, \"regtest\"), std::runtime_error);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_enumerate_rejects_non_string_fingerprint",
+      "line": 2069,
+      "classification": "missing_launch_dependent_exact_error_control",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_enumerate_rejects_non_string_fingerprint)",
+        "BOOST_CHECK_THROW(ExternalSigner::Enumerate(MockSignerCommand(script_path), signers, \"regtest\"), std::runtime_error);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_enumerate_duplicate_does_not_hide_later_signer",
+      "line": 2079,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_enumerate_duplicate_does_not_hide_later_signer)",
+        "BOOST_REQUIRE(ExternalSigner::Enumerate(MockSignerCommand(script_path), signers, \"regtest\"));",
+        "BOOST_REQUIRE_EQUAL(signers.size(), 2U);",
+        "BOOST_CHECK_EQUAL(signers[0].m_fingerprint, \"00000001\");",
+        "BOOST_CHECK_EQUAL(signers[1].m_fingerprint, \"00000002\");"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_command_args_are_not_shell_quoted",
+      "line": 2092,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_command_args_are_not_shell_quoted)",
+        "BOOST_REQUIRE(response.isObject());",
+        "BOOST_REQUIRE(response.find_value(\"argv\").isStr());",
+        "BOOST_CHECK(argv_dump.find(\"|'00000001'|\") == std::string::npos);",
+        "BOOST_CHECK(argv_dump.find(\"|00000001|\") != std::string::npos);",
+        "BOOST_CHECK(argv_dump.find(\"|\" + descriptor) != std::string::npos);",
+        "BOOST_CHECK(argv_dump.find(\"'\" + descriptor + \"'\") == std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_invalid_chain_argument",
+      "line": 2114,
+      "classification": "early_argument_guard_source_proved_before_launch",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_invalid_chain_argument)",
+        "BOOST_CHECK_THROW(signer.GetDescriptors(0), std::runtime_error);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_displayaddress_descriptor_with_whitespace",
+      "line": 2126,
+      "classification": "early_argument_guard_source_proved_before_launch",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_displayaddress_descriptor_with_whitespace)",
+        "BOOST_CHECK_THROW(signer.DisplayAddress(descriptor), std::runtime_error);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_getp2mrpubkeys_descriptor_with_whitespace",
+      "line": 2140,
+      "classification": "early_argument_guard_source_proved_before_launch",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_getp2mrpubkeys_descriptor_with_whitespace)",
+        "BOOST_CHECK_THROW(signer.GetP2MRPubKeys(descriptor, /*index=*/0), std::runtime_error);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_modified_unsigned_tx",
+      "line": 2154,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_modified_unsigned_tx)",
+        "BOOST_CHECK_NO_THROW(signed_ok = signer.SignTransaction(request_psbt, error));",
+        "BOOST_CHECK(!signed_ok);",
+        "BOOST_CHECK(error.find(\"modified transaction\") != std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_p2mr_material_for_non_p2mr_input",
+      "line": 2193,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_p2mr_material_for_non_p2mr_input)",
+        "BOOST_CHECK_NO_THROW(signed_ok = signer.SignTransaction(request_psbt, error));",
+        "BOOST_CHECK(!signed_ok);",
+        "BOOST_CHECK(error.find(\"non-P2MR input\") != std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_rejects_p2mr_material_without_prevout_script",
+      "line": 2237,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_rejects_p2mr_material_without_prevout_script)",
+        "BOOST_CHECK_NO_THROW(signed_ok = signer.SignTransaction(request_psbt, error));",
+        "BOOST_CHECK(!signed_ok);",
+        "BOOST_CHECK(error.find(\"without prevout script\") != std::string::npos);"
+      ]
+    },
+    {
+      "case": "pq_phase4_tests/external_signer_preserves_existing_psbt_input_metadata",
+      "line": 2279,
+      "classification": "native_path_specific_pass_reused",
+      "assertions": [
+        "BOOST_AUTO_TEST_CASE(external_signer_preserves_existing_psbt_input_metadata)",
+        "BOOST_CHECK_NO_THROW(signed_ok = signer.SignTransaction(request_psbt, error));",
+        "BOOST_CHECK(signed_ok);",
+        "BOOST_CHECK_EQUAL(error, \"\");",
+        "BOOST_CHECK(request_psbt.inputs[0].unknown.contains(unknown_key));"
+      ]
+    }
+  ]
+}

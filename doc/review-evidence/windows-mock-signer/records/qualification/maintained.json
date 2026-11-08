@@ -1,0 +1,679 @@
+{
+  "source": "5fd23a82c6db313797ccd22864951cff3c4e70e9",
+  "unit_binary_sha256": "63b84bde9ddeb81df5a79434e4faeae43b282c81a942563be166b2ae0e0986c6",
+  "runtime_binary_sha256": "63b84bde9ddeb81df5a79434e4faeae43b282c81a942563be166b2ae0e0986c6",
+  "batch_results": [
+    {
+      "exit": 0,
+      "expected": 1,
+      "announced": 1,
+      "cases": {
+        "pq_phase4_tests/external_signer_matches_p2mr_bip32_fingerprint": {
+          "name": "external_signer_matches_p2mr_bip32_fingerprint",
+          "result": "passed",
+          "assertions_passed": "1",
+          "assertions_failed": "0",
+          "warnings_failed": "0",
+          "expected_failures": "0"
+        }
+      },
+      "budget_stop": null,
+      "state": "passed",
+      "suite": "pq_phase4_tests/qualification-0",
+      "batch": 1,
+      "seconds": 2.5,
+      "log_sha256": "daa9006fd6dc71199fc8dffc13b4ce1caacb6792f95f3fc398f07669893c8c55",
+      "report_sha256": "a744f0f011bb0d33fd9b23cf1242730b31a7a7f659e0f693df0d3d79f7f59f57",
+      "job_active_processes_after_suite": 1
+    },
+    {
+      "exit": 0,
+      "expected": 1,
+      "announced": 1,
+      "cases": {
+        "pq_phase4_tests/external_signer_enumerate_rejects_invalid_fingerprint": {
+          "name": "external_signer_enumerate_rejects_invalid_fingerprint",
+          "result": "passed",
+          "assertions_passed": "1",
+          "assertions_failed": "0",
+          "warnings_failed": "0",
+          "expected_failures": "0"
+        }
+      },
+      "budget_stop": null,
+      "state": "passed",
+      "suite": "pq_phase4_tests/qualification-1",
+      "batch": 1,
+      "seconds": 2.5,
+      "log_sha256": "706a5b0983c89e2956a1ef4376c57784747c3aff0819c7fb2044ce41caa2f091",
+      "report_sha256": "207c9d98338e9a49248a6bb1840b16f8e33e4706251b1e1d2a74f3af8c416802",
+      "job_active_processes_after_suite": 1
+    },
+    {
+      "exit": 0,
+      "expected": 1,
+      "announced": 1,
+      "cases": {
+        "pq_phase4_tests/external_signer_enumerate_rejects_non_string_fingerprint": {
+          "name": "external_signer_enumerate_rejects_non_string_fingerprint",
+          "result": "passed",
+          "assertions_passed": "1",
+          "assertions_failed": "0",
+          "warnings_failed": "0",
+          "expected_failures": "0"
+        }
+      },
+      "budget_stop": null,
+      "state": "passed",
+      "suite": "pq_phase4_tests/qualification-2",
+      "batch": 1,
+      "seconds": 2.5,
+      "log_sha256": "a168c3b07e2ee91f491827545ac75093995a7bfa0ec05592275215298c088671",
+      "report_sha256": "5f0edb774e699d29d807359f8d1a3de22c1c50bd2e168ce5b6deb6e921ec1a5c",
+      "job_active_processes_after_suite": 1
+    }
+  ],
+  "commands": [
+    {
+      "label": "source-parent-fetch",
+      "command": [
+        "git",
+        "fetch",
+        "--no-tags",
+        "--depth=3",
+        "https://github.com/sunnyriverr/btx.git",
+        "d522af520f55067bd470fdcc0c246e3b4d3a26fc"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 4.03,
+      "log_sha256": "fe67db12ca6ad4a05c43322be1756f3fa9cd4202ead7d0386f9f4b9b09938d6b",
+      "budget_stop": null
+    },
+    {
+      "label": "source-bundle-verify",
+      "command": [
+        "git",
+        "bundle",
+        "verify",
+        "D:\\btx-native-035\\evidence\\maintained-source.bundle"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.02,
+      "log_sha256": "30cfe998488626deb20d6a5df100e186ebd02c0f23710f15ab8bd01e5731a463",
+      "budget_stop": null
+    },
+    {
+      "label": "source-bundle-fetch",
+      "command": [
+        "git",
+        "fetch",
+        "D:\\btx-native-035\\evidence\\maintained-source.bundle",
+        "refs/heads/codex/test-current-windows-runtime-prerequisites"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.0,
+      "log_sha256": "cf81b49cf4df62b114ac2dfce96035324f984e7346195210949d6d3a48b4539e",
+      "budget_stop": null
+    },
+    {
+      "label": "source-checkout",
+      "command": [
+        "git",
+        "checkout",
+        "--detach",
+        "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.0,
+      "log_sha256": "12c6a36e01c52723cf3aa8fb00ed697b6a08047d164f8ad5811b9f3adb8618bb",
+      "budget_stop": null
+    },
+    {
+      "label": "qualification-fetch",
+      "command": [
+        "git",
+        "fetch",
+        "D:\\btx-native-035\\evidence\\candidate.bundle",
+        "refs/heads/codex/test-windows-mock-signer"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 0.33,
+      "log_sha256": "61810badfeb37c6337a91929eae5d0cb04221d3f2b830c70322f26dceca121ec",
+      "budget_stop": null
+    },
+    {
+      "label": "before-checkout",
+      "command": [
+        "git",
+        "checkout",
+        "--detach",
+        "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.56,
+      "log_sha256": "bc2c5dbf170a95431398930849e08dd1d50ec5db39156a490937d4b6cfbd11b3",
+      "budget_stop": null
+    },
+    {
+      "label": "before-regenerate",
+      "command": [
+        "ninja",
+        "-C",
+        "D:\\btx-native-035\\project-build",
+        "build.ninja"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 36.7,
+      "log_sha256": "6cdd4485c842ec6a271eaf1959a54933be3bb356e3de1364541dc673c5842fc5",
+      "budget_stop": null
+    },
+    {
+      "label": "before-plan",
+      "command": [
+        "ninja",
+        "-C",
+        "D:\\btx-native-035\\project-build",
+        "-n",
+        "-d",
+        "explain",
+        "test_btx"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.48,
+      "log_sha256": "6cfe9366a1dfd7761212650dadd9598e6594a1481e3f8ddf94c3933d4763d152",
+      "budget_stop": null
+    },
+    {
+      "label": "before-build",
+      "command": [
+        "ninja",
+        "-C",
+        "D:\\btx-native-035\\project-build",
+        "-j",
+        "2",
+        "test_btx"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 30.5,
+      "log_sha256": "0ed80375845848e8744bcaea7422b5b17c2e60c23cab7fce22cedddbaed51475",
+      "budget_stop": null
+    },
+    {
+      "label": "unit-bash-version",
+      "command": [
+        "C:\\Program Files\\Git\\bin\\bash.exe",
+        "--version"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 0.33,
+      "log_sha256": "64e0c91e1c0ed648eed7e6f287b24f6b3b77338344f3535cf794bebf5907ec01",
+      "budget_stop": null
+    },
+    {
+      "label": "unit-cmd-bash-resolution",
+      "command": [
+        "cmd",
+        "/d",
+        "/c",
+        "where bash"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 0.33,
+      "log_sha256": "227d695d935ea73fb40a90b451cb097e9c59a70119420c8ec1763dee1a83d95a",
+      "budget_stop": null
+    },
+    {
+      "label": "unit-probe-compiler",
+      "command": [
+        "clang++",
+        "--version"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.55,
+      "log_sha256": "661974250fc5ed291000a9000c99466582a67ef96304a893526f7e46b7db492e",
+      "budget_stop": null
+    },
+    {
+      "label": "map-short-batch-root",
+      "command": [
+        "subst",
+        "S:",
+        "D:\\bc42442778867"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 0.33,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "budget_stop": null
+    },
+    {
+      "label": "suite-0000",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\test_btx.exe",
+        "--run_test=pq_phase4_tests/external_signer_matches_p2mr_bip32_fingerprint",
+        "--log_level=test_suite",
+        "--report_level=detailed",
+        "--report_format=XML",
+        "--report_sink=D:\\btx-native-035\\evidence\\suite-0000.xml",
+        "--catch_system_errors=yes",
+        "--",
+        "-testdatadir=S:/0"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 201,
+      "seconds": 2.5,
+      "log_sha256": "e142d47c52783e99b1b71c122aa5f141288e90008b9f6c88365413f6269415cc",
+      "budget_stop": null
+    },
+    {
+      "label": "suite-0001",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\test_btx.exe",
+        "--run_test=pq_phase4_tests/external_signer_enumerate_rejects_invalid_fingerprint",
+        "--log_level=test_suite",
+        "--report_level=detailed",
+        "--report_format=XML",
+        "--report_sink=D:\\btx-native-035\\evidence\\suite-0001.xml",
+        "--catch_system_errors=yes",
+        "--",
+        "-testdatadir=S:/1"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 201,
+      "seconds": 2.48,
+      "log_sha256": "54232694b41977954c051d2a7ae3921d5b7415380dfa1719b58a2809792a46be",
+      "budget_stop": null
+    },
+    {
+      "label": "suite-0002",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\test_btx.exe",
+        "--run_test=pq_phase4_tests/external_signer_enumerate_rejects_non_string_fingerprint",
+        "--log_level=test_suite",
+        "--report_level=detailed",
+        "--report_format=XML",
+        "--report_sink=D:\\btx-native-035\\evidence\\suite-0002.xml",
+        "--catch_system_errors=yes",
+        "--",
+        "-testdatadir=S:/2"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 201,
+      "seconds": 2.48,
+      "log_sha256": "5b88c651ebe98ee3e127c7546b41da9a1b279be30e56315d33200369e66e2c10",
+      "budget_stop": null
+    },
+    {
+      "label": "before-restore-owned-fixture",
+      "command": [
+        "git",
+        "restore",
+        "--source=HEAD",
+        "--",
+        "src/test/pq_phase4_tests.cpp"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 0.33,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "budget_stop": null
+    },
+    {
+      "label": "after-checkout",
+      "command": [
+        "git",
+        "checkout",
+        "--detach",
+        "5fd23a82c6db313797ccd22864951cff3c4e70e9"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 0.34,
+      "log_sha256": "a5b03b30b8a0c9462e0915e92f1a2c8436f27ea77892e501874b826c36e6de04",
+      "budget_stop": null
+    },
+    {
+      "label": "after-regenerate",
+      "command": [
+        "ninja",
+        "-C",
+        "D:\\btx-native-035\\project-build",
+        "build.ninja"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.51,
+      "log_sha256": "50485dcaaac5db5f133eeedceac5bdee9578760716eb3dfb192b5d1a44fa9a77",
+      "budget_stop": null
+    },
+    {
+      "label": "after-plan",
+      "command": [
+        "ninja",
+        "-C",
+        "D:\\btx-native-035\\project-build",
+        "-n",
+        "-d",
+        "explain",
+        "test_btx"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.48,
+      "log_sha256": "6cfe9366a1dfd7761212650dadd9598e6594a1481e3f8ddf94c3933d4763d152",
+      "budget_stop": null
+    },
+    {
+      "label": "after-build",
+      "command": [
+        "ninja",
+        "-C",
+        "D:\\btx-native-035\\project-build",
+        "-j",
+        "2",
+        "test_btx"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 24.5,
+      "log_sha256": "07cebf77a1a903268e6778313fbcdebd32fd0d29dfe7bf25161c566b602cc955",
+      "budget_stop": null
+    },
+    {
+      "label": "unit-bash-version",
+      "command": [
+        "C:\\Program Files\\Git\\bin\\bash.exe",
+        "--version"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 0.34,
+      "log_sha256": "64e0c91e1c0ed648eed7e6f287b24f6b3b77338344f3535cf794bebf5907ec01",
+      "budget_stop": null
+    },
+    {
+      "label": "unit-cmd-bash-resolution",
+      "command": [
+        "cmd",
+        "/d",
+        "/c",
+        "where bash"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 0.33,
+      "log_sha256": "227d695d935ea73fb40a90b451cb097e9c59a70119420c8ec1763dee1a83d95a",
+      "budget_stop": null
+    },
+    {
+      "label": "unit-probe-compiler",
+      "command": [
+        "clang++",
+        "--version"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 0.33,
+      "log_sha256": "661974250fc5ed291000a9000c99466582a67ef96304a893526f7e46b7db492e",
+      "budget_stop": null
+    },
+    {
+      "label": "map-short-batch-root",
+      "command": [
+        "subst",
+        "S:",
+        "D:\\bc42442778867"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 0.31,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "budget_stop": null
+    },
+    {
+      "label": "suite-0000",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\test_btx.exe",
+        "--run_test=pq_phase4_tests/external_signer_matches_p2mr_bip32_fingerprint",
+        "--log_level=test_suite",
+        "--report_level=detailed",
+        "--report_format=XML",
+        "--report_sink=D:\\btx-native-035\\evidence\\suite-0000.xml",
+        "--catch_system_errors=yes",
+        "--",
+        "-testdatadir=S:/0"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.5,
+      "log_sha256": "daa9006fd6dc71199fc8dffc13b4ce1caacb6792f95f3fc398f07669893c8c55",
+      "budget_stop": null
+    },
+    {
+      "label": "suite-0001",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\test_btx.exe",
+        "--run_test=pq_phase4_tests/external_signer_enumerate_rejects_invalid_fingerprint",
+        "--log_level=test_suite",
+        "--report_level=detailed",
+        "--report_format=XML",
+        "--report_sink=D:\\btx-native-035\\evidence\\suite-0001.xml",
+        "--catch_system_errors=yes",
+        "--",
+        "-testdatadir=S:/1"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.5,
+      "log_sha256": "706a5b0983c89e2956a1ef4376c57784747c3aff0819c7fb2044ce41caa2f091",
+      "budget_stop": null
+    },
+    {
+      "label": "suite-0002",
+      "command": [
+        "D:\\btx-native-035\\project-build\\bin\\test_btx.exe",
+        "--run_test=pq_phase4_tests/external_signer_enumerate_rejects_non_string_fingerprint",
+        "--log_level=test_suite",
+        "--report_level=detailed",
+        "--report_format=XML",
+        "--report_sink=D:\\btx-native-035\\evidence\\suite-0002.xml",
+        "--catch_system_errors=yes",
+        "--",
+        "-testdatadir=S:/2"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 2.5,
+      "log_sha256": "a168c3b07e2ee91f491827545ac75093995a7bfa0ec05592275215298c088671",
+      "budget_stop": null
+    },
+    {
+      "label": "after-restore-owned-fixture",
+      "command": [
+        "git",
+        "restore",
+        "--source=HEAD",
+        "--",
+        "src/test/pq_phase4_tests.cpp"
+      ],
+      "cwd": "D:\\a\\btx\\btx\\btx",
+      "exit": 0,
+      "seconds": 0.33,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "budget_stop": null
+    }
+  ],
+  "qualification_complete": true,
+  "qualification_results": [
+    {
+      "stage": "before",
+      "source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+      "overlay_sha256": "588da6edae48c0d2781665a6100c6355708e1374d5b180e002104c0d48df6528",
+      "binary_sha256": "3689b56db46461ce6127a12aa920add927ee67556a236ebf32e9d13035c00e94",
+      "results": [
+        {
+          "exit": 201,
+          "expected": 1,
+          "announced": 1,
+          "cases": {
+            "pq_phase4_tests/external_signer_matches_p2mr_bip32_fingerprint": {
+              "name": "external_signer_matches_p2mr_bip32_fingerprint",
+              "result": "failed",
+              "assertions_passed": "0",
+              "assertions_failed": "1",
+              "warnings_failed": "0",
+              "expected_failures": "0"
+            }
+          },
+          "budget_stop": null,
+          "state": "failed",
+          "suite": "pq_phase4_tests/qualification-0",
+          "batch": 1,
+          "seconds": 2.5,
+          "log_sha256": "e142d47c52783e99b1b71c122aa5f141288e90008b9f6c88365413f6269415cc",
+          "report_sha256": "aac92f14a740ddd24cedf719a740b562c2ab79e6e4d88363520f3b32a50452cc",
+          "job_active_processes_after_suite": 1
+        },
+        {
+          "exit": 201,
+          "expected": 1,
+          "announced": 1,
+          "cases": {
+            "pq_phase4_tests/external_signer_enumerate_rejects_invalid_fingerprint": {
+              "name": "external_signer_enumerate_rejects_invalid_fingerprint",
+              "result": "failed",
+              "assertions_passed": "0",
+              "assertions_failed": "1",
+              "warnings_failed": "0",
+              "expected_failures": "0"
+            }
+          },
+          "budget_stop": null,
+          "state": "failed",
+          "suite": "pq_phase4_tests/qualification-1",
+          "batch": 1,
+          "seconds": 2.48,
+          "log_sha256": "54232694b41977954c051d2a7ae3921d5b7415380dfa1719b58a2809792a46be",
+          "report_sha256": "10aeb425dd736398f6aa7852321adc98b442ff98cd1464db2f13c59da5173792",
+          "job_active_processes_after_suite": 1
+        },
+        {
+          "exit": 201,
+          "expected": 1,
+          "announced": 1,
+          "cases": {
+            "pq_phase4_tests/external_signer_enumerate_rejects_non_string_fingerprint": {
+              "name": "external_signer_enumerate_rejects_non_string_fingerprint",
+              "result": "failed",
+              "assertions_passed": "0",
+              "assertions_failed": "1",
+              "warnings_failed": "0",
+              "expected_failures": "0"
+            }
+          },
+          "budget_stop": null,
+          "state": "failed",
+          "suite": "pq_phase4_tests/qualification-2",
+          "batch": 1,
+          "seconds": 2.48,
+          "log_sha256": "5b88c651ebe98ee3e127c7546b41da9a1b279be30e56315d33200369e66e2c10",
+          "report_sha256": "7143bfe299c496243496d5ab05d763a7cb5134f43362b1490bc6cfc9aff4d218",
+          "job_active_processes_after_suite": 1
+        }
+      ],
+      "cleanup": true
+    },
+    {
+      "stage": "after",
+      "source": "5fd23a82c6db313797ccd22864951cff3c4e70e9",
+      "overlay_sha256": "cc25dfef3a86e0d6dea87fb1aa2a4a045211f29b9db1d4c96c2ce95433f37bab",
+      "binary_sha256": "63b84bde9ddeb81df5a79434e4faeae43b282c81a942563be166b2ae0e0986c6",
+      "results": [
+        {
+          "exit": 0,
+          "expected": 1,
+          "announced": 1,
+          "cases": {
+            "pq_phase4_tests/external_signer_matches_p2mr_bip32_fingerprint": {
+              "name": "external_signer_matches_p2mr_bip32_fingerprint",
+              "result": "passed",
+              "assertions_passed": "1",
+              "assertions_failed": "0",
+              "warnings_failed": "0",
+              "expected_failures": "0"
+            }
+          },
+          "budget_stop": null,
+          "state": "passed",
+          "suite": "pq_phase4_tests/qualification-0",
+          "batch": 1,
+          "seconds": 2.5,
+          "log_sha256": "daa9006fd6dc71199fc8dffc13b4ce1caacb6792f95f3fc398f07669893c8c55",
+          "report_sha256": "a744f0f011bb0d33fd9b23cf1242730b31a7a7f659e0f693df0d3d79f7f59f57",
+          "job_active_processes_after_suite": 1
+        },
+        {
+          "exit": 0,
+          "expected": 1,
+          "announced": 1,
+          "cases": {
+            "pq_phase4_tests/external_signer_enumerate_rejects_invalid_fingerprint": {
+              "name": "external_signer_enumerate_rejects_invalid_fingerprint",
+              "result": "passed",
+              "assertions_passed": "1",
+              "assertions_failed": "0",
+              "warnings_failed": "0",
+              "expected_failures": "0"
+            }
+          },
+          "budget_stop": null,
+          "state": "passed",
+          "suite": "pq_phase4_tests/qualification-1",
+          "batch": 1,
+          "seconds": 2.5,
+          "log_sha256": "706a5b0983c89e2956a1ef4376c57784747c3aff0819c7fb2044ce41caa2f091",
+          "report_sha256": "207c9d98338e9a49248a6bb1840b16f8e33e4706251b1e1d2a74f3af8c416802",
+          "job_active_processes_after_suite": 1
+        },
+        {
+          "exit": 0,
+          "expected": 1,
+          "announced": 1,
+          "cases": {
+            "pq_phase4_tests/external_signer_enumerate_rejects_non_string_fingerprint": {
+              "name": "external_signer_enumerate_rejects_non_string_fingerprint",
+              "result": "passed",
+              "assertions_passed": "1",
+              "assertions_failed": "0",
+              "warnings_failed": "0",
+              "expected_failures": "0"
+            }
+          },
+          "budget_stop": null,
+          "state": "passed",
+          "suite": "pq_phase4_tests/qualification-2",
+          "batch": 1,
+          "seconds": 2.5,
+          "log_sha256": "a168c3b07e2ee91f491827545ac75093995a7bfa0ec05592275215298c088671",
+          "report_sha256": "5f0edb774e699d29d807359f8d1a3de22c1c50bd2e168ce5b6deb6e921ec1a5c",
+          "job_active_processes_after_suite": 1
+        }
+      ],
+      "cleanup": true
+    }
+  ],
+  "owned_processes_after_execution": [],
+  "short_drive_removed": true
+}

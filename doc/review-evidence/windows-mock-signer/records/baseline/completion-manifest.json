@@ -1,0 +1,942 @@
+{
+  "source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+  "binary_sha256": "31e45f1d0f2aed4168982120596182b5268057e1b9806960f27a60c769906bdd",
+  "jobs": [
+    {
+      "suite": "miniscript_tests/group-01",
+      "parent_suite": "miniscript_tests",
+      "lane": "other",
+      "selectors": [
+        "miniscript_tests/fixed_tests",
+        "miniscript_tests/p2mr_context_properties",
+        "miniscript_tests/parse_pk_mldsa_p2mr_fragment",
+        "miniscript_tests/parse_pk_slhdsa_p2mr_fragment",
+        "miniscript_tests/parse_pk_pq_fragments_require_p2mr_context_and_correct_sizes",
+        "miniscript_tests/parse_multi_mldsa_p2mr_fragment"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "miniscript_tests/group-02",
+      "parent_suite": "miniscript_tests",
+      "lane": "other",
+      "selectors": [
+        "miniscript_tests/parse_multi_slhdsa_p2mr_fragment",
+        "miniscript_tests/parse_multi_pq_fragments_require_p2mr_context_and_valid_sizes",
+        "miniscript_tests/parse_script_regression_handles_malformed_fuzz_vector_without_throw",
+        "miniscript_tests/multi_mldsa_p2mr_satisfaction"
+      ],
+      "expected_cases": 4,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_consensus_tests/group-01",
+      "parent_suite": "pq_consensus_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_consensus_tests/witness_v2_recognized_as_p2mr",
+        "pq_consensus_tests/p2mr_single_leaf_mldsa_valid_spend",
+        "pq_consensus_tests/p2mr_single_leaf_mldsa_invalid_sig_fails",
+        "pq_consensus_tests/p2mr_two_leaf_spend_leaf0_mldsa",
+        "pq_consensus_tests/p2mr_two_leaf_spend_leaf1_slhdsa",
+        "pq_consensus_tests/p2mr_wrong_merkle_proof_fails"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_consensus_tests/group-02",
+      "parent_suite": "pq_consensus_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_consensus_tests/p2mr_wrong_leaf_version_fails",
+        "pq_consensus_tests/p2mr_empty_witness_fails",
+        "pq_consensus_tests/p2mr_wrong_control_size_fails",
+        "pq_consensus_tests/p2mr_reserved_falcon_opsuccess_slots_succeed",
+        "pq_consensus_tests/p2mr_reserved_falcon_opsuccess_slot_discouraged_by_flag",
+        "pq_consensus_tests/p2mr_annex_signature_hash_commits_to_annex"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_consensus_tests/group-03",
+      "parent_suite": "pq_consensus_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_consensus_tests/op_checksig_mldsa_pops_correct_stack",
+        "pq_consensus_tests/op_checksig_mldsa_disallowed_flag_fails",
+        "pq_consensus_tests/op_checksig_mldsa_wrong_pubkey_size_fails",
+        "pq_consensus_tests/op_checksig_slhdsa_pops_correct_stack",
+        "pq_consensus_tests/op_checksig_slhdsa_with_mldsa_disable_flag_still_succeeds",
+        "pq_consensus_tests/op_checksig_pq_rejected_in_tapscript"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_consensus_tests/group-04",
+      "parent_suite": "pq_consensus_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_consensus_tests/op_checksigadd_mldsa_increments_counter",
+        "pq_consensus_tests/op_checksigadd_mldsa_disallowed_flag_fails",
+        "pq_consensus_tests/op_checksigadd_slhdsa_empty_sig_keeps_counter",
+        "pq_consensus_tests/op_checksigadd_rejected_outside_p2mr",
+        "pq_consensus_tests/op_checksigadd_weight_exhaustion_fails",
+        "pq_consensus_tests/op_checksigadd_wrong_pubkey_size_fails"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_consensus_tests/group-05",
+      "parent_suite": "pq_consensus_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_consensus_tests/op_checksigadd_requires_minimal_counter_encoding",
+        "pq_consensus_tests/p2mr_existing_primitives_fit_element_limit",
+        "pq_consensus_tests/p2mr_checksig_mldsa_decrements_validation_weight",
+        "pq_consensus_tests/p2mr_checksig_slhdsa_decrements_validation_weight",
+        "pq_consensus_tests/p2mr_checksig_weight_exhaustion_fails",
+        "pq_consensus_tests/p2mr_oversized_exec_stack_element_is_rejected"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_consensus_tests/group-06",
+      "parent_suite": "pq_consensus_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_consensus_tests/p2mr_oversized_push_value_is_rejected",
+        "pq_consensus_tests/p2mr_script_size_cap_rejects_oversized_leaf",
+        "pq_consensus_tests/p2mr_script_size_cap_accepts_boundary_leaf",
+        "pq_consensus_tests/ctv_preimage_without_scriptsigs_is_84_bytes",
+        "pq_consensus_tests/ctv_preimage_with_scriptsigs_is_116_bytes",
+        "pq_consensus_tests/ctv_preimage_with_shielded_bundle_adds_32_byte_digest"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_consensus_tests/group-07",
+      "parent_suite": "pq_consensus_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_consensus_tests/ctv_hash_commits_to_shielded_bundle_fields",
+        "pq_consensus_tests/ctv_hash_commits_to_v2_shielded_bundle_bytes",
+        "pq_consensus_tests/ctv_roundtrip_happy_path_p2mr",
+        "pq_consensus_tests/ctv_mismatch_outputs_fails",
+        "pq_consensus_tests/ctv_mismatch_locktime_fails",
+        "pq_consensus_tests/ctv_mismatch_input_index_fails"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_consensus_tests/group-08",
+      "parent_suite": "pq_consensus_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_consensus_tests/ctv_cleanstack_no_pop_behavior",
+        "pq_consensus_tests/ctv_non_32_byte_arg_fails_20_bytes",
+        "pq_consensus_tests/ctv_non_32_byte_arg_fails_33_bytes",
+        "pq_consensus_tests/ctv_non_32_byte_arg_fails_empty",
+        "pq_consensus_tests/ctv_empty_stack_fails",
+        "pq_consensus_tests/ctv_hash_differs_by_input_index"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_consensus_tests/group-09",
+      "parent_suite": "pq_consensus_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_consensus_tests/ctv_flag_unset_behaves_as_nop",
+        "pq_consensus_tests/ctv_flag_unset_with_discourage_nops_fails",
+        "pq_consensus_tests/ctv_flag_set_non_p2mr_context_is_nop",
+        "pq_consensus_tests/ctv_check_missing_txdata_fails_safely",
+        "pq_consensus_tests/ctv_sequences_subhash_matches_manual",
+        "pq_consensus_tests/ctv_outputs_subhash_matches_manual"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_consensus_tests/group-10",
+      "parent_suite": "pq_consensus_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_consensus_tests/ctv_scriptsigs_subhash_matches_manual",
+        "pq_consensus_tests/ctv_precompute_sets_ready_flag",
+        "pq_consensus_tests/ctv_and_checksig_combined_leaf_succeeds",
+        "pq_consensus_tests/csv_multisig_leaf_succeeds_when_sequence_is_met",
+        "pq_consensus_tests/csv_multisig_leaf_fails_when_sequence_is_unmet",
+        "pq_consensus_tests/csfs_mldsa_happy_path"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_consensus_tests/group-11",
+      "parent_suite": "pq_consensus_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_consensus_tests/csfs_slhdsa_happy_path",
+        "pq_consensus_tests/csfs_slhdsa_corrupted_signature_pushes_false",
+        "pq_consensus_tests/csfs_slhdsa_empty_signature_pushes_false_and_does_not_consume_weight",
+        "pq_consensus_tests/csfs_slhdsa_nullfail_nonempty_failed_sig_errors",
+        "pq_consensus_tests/csfs_corrupted_signature_pushes_false",
+        "pq_consensus_tests/csfs_empty_signature_pushes_false_and_does_not_consume_weight"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_consensus_tests/group-12",
+      "parent_suite": "pq_consensus_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_consensus_tests/csfs_nullfail_nonempty_failed_sig_errors",
+        "pq_consensus_tests/csfs_stack_underflow_fails",
+        "pq_consensus_tests/csfs_pubkey_size_rejections",
+        "pq_consensus_tests/csfs_tagged_hash_domain_separation",
+        "pq_consensus_tests/csfs_write_vs_stream_operator_hashing_differs",
+        "pq_consensus_tests/csfs_does_not_use_checkpqsignature_path"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_consensus_tests/group-13",
+      "parent_suite": "pq_consensus_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_consensus_tests/csfs_sigversion_gating_bad_opcode",
+        "pq_consensus_tests/csfs_message_size_boundaries",
+        "pq_consensus_tests/csfs_signature_size_enforced_exactly",
+        "pq_consensus_tests/csfs_validation_weight_accounting",
+        "pq_consensus_tests/csfs_validation_weight_exhaustion_and_boundary",
+        "pq_consensus_tests/csfs_standard_delegation_oracle_and_spender"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_consensus_tests/group-14",
+      "parent_suite": "pq_consensus_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_consensus_tests/csfs_delegation_invalid_oracle_signature_fails",
+        "pq_consensus_tests/csfs_delegation_invalid_spender_signature_fails",
+        "pq_consensus_tests/csfs_delegation_leaf_size_expectations",
+        "pq_consensus_tests/consensus_rejects_non_p2mr_outputs_in_blocks",
+        "pq_consensus_tests/consensus_accepts_p2mr_outputs_in_blocks",
+        "pq_consensus_tests/consensus_accepts_opreturn_and_p2mr_outputs_in_blocks"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_consensus_tests/group-15",
+      "parent_suite": "pq_consensus_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_consensus_tests/consensus_rejects_oversized_serialized_blocks"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_phase4_tests/group-01",
+      "parent_suite": "pq_phase4_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_phase4_tests/signp2mr_ctv_only_witness_has_two_items",
+        "pq_phase4_tests/signp2mr_rejects_odd_leaf_version",
+        "pq_phase4_tests/signp2mr_ctv_checksig_witness_has_three_items",
+        "pq_phase4_tests/signp2mr_cltv_multisig_witness_has_keycount_plus_two_items",
+        "pq_phase4_tests/signp2mr_csv_multisig_witness_has_keycount_plus_two_items",
+        "pq_phase4_tests/signp2mr_csfs_only_without_sigdata_material_fails"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_phase4_tests/group-02",
+      "parent_suite": "pq_phase4_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_phase4_tests/signp2mr_csfs_verify_checksig_witness_has_five_items",
+        "pq_phase4_tests/signp2mr_prefers_existing_sigdata_signature",
+        "pq_phase4_tests/signp2mr_falls_back_to_createpqsig_when_sigdata_empty",
+        "pq_phase4_tests/signp2mr_prefers_mldsa_leaf_by_default_when_multiple_checksig_leaves_exist",
+        "pq_phase4_tests/signp2mr_prefers_slhdsa_leaf_when_requested",
+        "pq_phase4_tests/psbt_multisig_p2mr_partial_combine_finalize"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_phase4_tests/group-03",
+      "parent_suite": "pq_phase4_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_phase4_tests/psbt_ctv_multisig_p2mr_partial_combine_finalize",
+        "pq_phase4_tests/psbt_csv_multisig_p2mr_partial_combine_finalize",
+        "pq_phase4_tests/psbt_cltv_multisig_finalize_rejects_unsatisfied_locktime",
+        "pq_phase4_tests/psbt_csv_multisig_finalize_rejects_unsatisfied_sequence",
+        "pq_phase4_tests/psbt_sha256_preimage_must_match_key",
+        "pq_phase4_tests/psbt_fill_signature_data_populates_p2mr_fields"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_phase4_tests/group-04",
+      "parent_suite": "pq_phase4_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_phase4_tests/psbt_from_signature_data_writes_p2mr_fields_back",
+        "pq_phase4_tests/psbt_input_roundtrips_new_p2mr_keys",
+        "pq_phase4_tests/psbt_input_disambiguates_same_pubkey_across_two_leaves",
+        "pq_phase4_tests/combinepsbt_merges_complementary_p2mr_material",
+        "pq_phase4_tests/combinepsbt_replaces_malformed_p2mr_partial_sig_with_valid_one",
+        "pq_phase4_tests/combinepsbt_replaces_wrong_but_well_formed_p2mr_partial_sig_with_valid_one"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_phase4_tests/group-05",
+      "parent_suite": "pq_phase4_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_phase4_tests/combinepsbt_rejects_conflicting_selected_p2mr_leaf",
+        "pq_phase4_tests/combinepsbt_rejects_conflicting_p2mr_merkle_root",
+        "pq_phase4_tests/psbt_output_roundtrips_p2mr_fields",
+        "pq_phase4_tests/psbt_input_rejects_invalid_p2mr_pubkey_sizes",
+        "pq_phase4_tests/psbt_output_rejects_invalid_p2mr_pubkey_sizes",
+        "pq_phase4_tests/external_signer_matches_p2mr_bip32_fingerprint"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_phase4_tests/group-06",
+      "parent_suite": "pq_phase4_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_phase4_tests/external_signer_rejects_malformed_request_p2mr_bip32_origin",
+        "pq_phase4_tests/external_signer_rejects_invalid_p2mr_partial_sig_size",
+        "pq_phase4_tests/external_signer_rejects_unexpected_p2mr_partial_sig_pubkey",
+        "pq_phase4_tests/external_signer_rejects_partial_sig_pubkey_with_nonmatching_fingerprint",
+        "pq_phase4_tests/external_signer_rejects_p2mr_partial_sig_for_unselected_leaf_hash",
+        "pq_phase4_tests/external_signer_rejects_wrong_leaf_sig_when_signer_omits_leaf_metadata"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_phase4_tests/group-07",
+      "parent_suite": "pq_phase4_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_phase4_tests/external_signer_rejects_conflicting_selected_leaf_metadata",
+        "pq_phase4_tests/external_signer_rejects_unsupported_selected_leaf_version",
+        "pq_phase4_tests/external_signer_rejects_unexpected_p2mr_bip32_derivation",
+        "pq_phase4_tests/external_signer_rejects_conflicting_p2mr_bip32_derivation",
+        "pq_phase4_tests/external_signer_rejects_unexpected_p2mr_csfs_message",
+        "pq_phase4_tests/external_signer_rejects_conflicting_p2mr_csfs_message"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_phase4_tests/group-08",
+      "parent_suite": "pq_phase4_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_phase4_tests/external_signer_rejects_invalid_p2mr_csfs_sig_size",
+        "pq_phase4_tests/external_signer_rejects_p2mr_csfs_signature_without_message",
+        "pq_phase4_tests/external_signer_rejects_unexpected_p2mr_csfs_signature_pubkey",
+        "pq_phase4_tests/external_signer_rejects_nonmatching_fingerprint_p2mr_csfs_signature_pubkey",
+        "pq_phase4_tests/external_signer_rejects_p2mr_input_missing_required_metadata",
+        "pq_phase4_tests/external_signer_rejects_request_p2mr_metadata_without_prevout_script"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_phase4_tests/group-09",
+      "parent_suite": "pq_phase4_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_phase4_tests/external_signer_rejects_request_p2mr_metadata_for_non_p2mr_prevout",
+        "pq_phase4_tests/external_signer_rejects_p2mr_prevout_commitment_mismatch",
+        "pq_phase4_tests/external_signer_rejects_conflicting_signer_p2mr_merkle_root",
+        "pq_phase4_tests/external_signer_rejects_p2mr_control_leaf_version_mismatch",
+        "pq_phase4_tests/external_signer_rejects_p2mr_control_odd_leaf_version",
+        "pq_phase4_tests/external_signer_requires_p2mr_fingerprint_match_from_p2mr_paths"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_phase4_tests/group-10",
+      "parent_suite": "pq_phase4_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_phase4_tests/p2mr_minimal_if_enforced",
+        "pq_phase4_tests/external_signer_enumerate_parses_p2mr_capabilities",
+        "pq_phase4_tests/external_signer_enumerate_defaults_without_p2mr_capabilities",
+        "pq_phase4_tests/external_signer_enumerate_rejects_invalid_fingerprint",
+        "pq_phase4_tests/external_signer_enumerate_rejects_non_string_fingerprint",
+        "pq_phase4_tests/external_signer_enumerate_duplicate_does_not_hide_later_signer"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_phase4_tests/group-11",
+      "parent_suite": "pq_phase4_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_phase4_tests/external_signer_command_args_are_not_shell_quoted",
+        "pq_phase4_tests/external_signer_rejects_invalid_chain_argument",
+        "pq_phase4_tests/external_signer_rejects_displayaddress_descriptor_with_whitespace",
+        "pq_phase4_tests/external_signer_rejects_getp2mrpubkeys_descriptor_with_whitespace",
+        "pq_phase4_tests/external_signer_rejects_modified_unsigned_tx",
+        "pq_phase4_tests/external_signer_rejects_p2mr_material_for_non_p2mr_input"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_phase4_tests/group-12",
+      "parent_suite": "pq_phase4_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_phase4_tests/external_signer_rejects_p2mr_material_without_prevout_script",
+        "pq_phase4_tests/external_signer_preserves_existing_psbt_input_metadata",
+        "pq_phase4_tests/pq_key_derivation_deterministic"
+      ],
+      "expected_cases": 3,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "script_htlc_templates_tests/group-01",
+      "parent_suite": "script_htlc_templates_tests",
+      "lane": "other",
+      "selectors": [
+        "script_htlc_templates_tests/legacy_htlc_leaf_valid_build",
+        "script_htlc_templates_tests/htlc_tx_leaf_valid_build",
+        "script_htlc_templates_tests/htlc_sha256_leaf_valid_build",
+        "script_htlc_templates_tests/htlc_leaf_invalid_preimage_size",
+        "script_htlc_templates_tests/refund_leaf_valid_build",
+        "script_htlc_templates_tests/htlc_leaf_size_within_policy"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "script_htlc_templates_tests/group-02",
+      "parent_suite": "script_htlc_templates_tests",
+      "lane": "other",
+      "selectors": [
+        "script_htlc_templates_tests/htlc_correct_preimage_succeeds",
+        "script_htlc_templates_tests/htlc_wrong_preimage_fails",
+        "script_htlc_templates_tests/refund_after_timeout_succeeds",
+        "script_htlc_templates_tests/refund_before_timeout_fails",
+        "script_htlc_templates_tests/csv_multisig_rejects_non_bip68_sequence_bits",
+        "script_htlc_templates_tests/two_leaf_merkle_htlc"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "script_htlc_templates_tests/group-03",
+      "parent_suite": "script_htlc_templates_tests",
+      "lane": "other",
+      "selectors": [
+        "script_htlc_templates_tests/htlc_sha256_leaf_rejects_other_preimage_length",
+        "script_htlc_templates_tests/htlc_claim_leaves_enforce_32_byte_preimage_under_flag"
+      ],
+      "expected_cases": 2,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "script_p2sh_tests/group-01",
+      "parent_suite": "script_p2sh_tests",
+      "lane": "other",
+      "selectors": [
+        "script_p2sh_tests/sign",
+        "script_p2sh_tests/norecurse",
+        "script_p2sh_tests/set",
+        "script_p2sh_tests/is",
+        "script_p2sh_tests/switchover",
+        "script_p2sh_tests/AreInputsStandard"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "script_parse_tests/group-01",
+      "parent_suite": "script_parse_tests",
+      "lane": "other",
+      "selectors": [
+        "script_parse_tests/parse_script"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "script_segwit_tests/group-01",
+      "parent_suite": "script_segwit_tests",
+      "lane": "other",
+      "selectors": [
+        "script_segwit_tests/IsPayToWitnessScriptHash_Valid",
+        "script_segwit_tests/IsPayToWitnessScriptHash_Invalid_NotOp0",
+        "script_segwit_tests/IsPayToWitnessScriptHash_Invalid_Size",
+        "script_segwit_tests/IsPayToWitnessScriptHash_Invalid_Nop",
+        "script_segwit_tests/IsPayToWitnessScriptHash_Invalid_EmptyScript",
+        "script_segwit_tests/IsPayToWitnessScriptHash_Invalid_Pushdata"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "script_segwit_tests/group-02",
+      "parent_suite": "script_segwit_tests",
+      "lane": "other",
+      "selectors": [
+        "script_segwit_tests/IsWitnessProgram_Valid",
+        "script_segwit_tests/IsWitnessProgram_Invalid_Version",
+        "script_segwit_tests/IsWitnessProgram_Invalid_Size",
+        "script_segwit_tests/IsWitnessProgram_Invalid_Nop",
+        "script_segwit_tests/IsWitnessProgram_Invalid_EmptyScript",
+        "script_segwit_tests/IsWitnessProgram_Invalid_Pushdata"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "script_standard_tests/group-01",
+      "parent_suite": "script_standard_tests",
+      "lane": "other",
+      "selectors": [
+        "script_standard_tests/dest_default_is_no_dest",
+        "script_standard_tests/script_standard_Solver_success",
+        "script_standard_tests/script_standard_Solver_failure",
+        "script_standard_tests/script_standard_ExtractDestination",
+        "script_standard_tests/script_standard_GetScriptFor_",
+        "script_standard_tests/script_standard_taproot_builder"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "script_standard_tests/group-02",
+      "parent_suite": "script_standard_tests",
+      "lane": "other",
+      "selectors": [
+        "script_standard_tests/bip341_spk_test_vectors"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "script_tests/group-01",
+      "parent_suite": "script_tests",
+      "lane": "other",
+      "selectors": [
+        "script_tests/script_build",
+        "script_tests/script_json_test",
+        "script_tests/script_PushData",
+        "script_tests/script_cltv_truncated",
+        "script_tests/script_CHECKMULTISIG12",
+        "script_tests/script_CHECKMULTISIG23"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "script_tests/group-02",
+      "parent_suite": "script_tests",
+      "lane": "other",
+      "selectors": [
+        "script_tests/script_size_and_capacity_test",
+        "script_tests/script_combineSigs",
+        "script_tests/sign_invalid_miniscript",
+        "script_tests/sign_paytoanchor",
+        "script_tests/script_standard_push",
+        "script_tests/script_IsPushOnly_on_invalid_scripts"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "script_tests/group-03",
+      "parent_suite": "script_tests",
+      "lane": "other",
+      "selectors": [
+        "script_tests/script_GetScriptAsm",
+        "script_tests/script_byte_array_u8_vector_equivalence",
+        "script_tests/script_FindAndDelete",
+        "script_tests/script_HasValidOps",
+        "script_tests/tapscript_opsuccess_includes_p2mr_opcode_values",
+        "script_tests/p2mr_opsuccess_excludes_defined_pq_opcodes"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "script_tests/group-04",
+      "parent_suite": "script_tests",
+      "lane": "other",
+      "selectors": [
+        "script_tests/script_DataCarrierBytes",
+        "script_tests/script_GetScriptForTransactionInput",
+        "script_tests/script_assets_test",
+        "script_tests/bip341_keypath_test_vectors",
+        "script_tests/compute_tapbranch",
+        "script_tests/compute_tapleaf"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "scriptnum_tests/group-01",
+      "parent_suite": "scriptnum_tests",
+      "lane": "other",
+      "selectors": [
+        "scriptnum_tests/creation",
+        "scriptnum_tests/operators"
+      ],
+      "expected_cases": 2,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "sighash_tests/group-01",
+      "parent_suite": "sighash_tests",
+      "lane": "other",
+      "selectors": [
+        "sighash_tests/sighash_test",
+        "sighash_tests/sighash_from_data",
+        "sighash_tests/sighash_caching"
+      ],
+      "expected_cases": 3,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "sigopcount_tests/group-01",
+      "parent_suite": "sigopcount_tests",
+      "lane": "other",
+      "selectors": [
+        "sigopcount_tests/GetSigOpCount",
+        "sigopcount_tests/GetTxSigOpCost"
+      ],
+      "expected_cases": 2,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "transaction_tests/group-01",
+      "parent_suite": "transaction_tests",
+      "lane": "other",
+      "selectors": [
+        "transaction_tests/tx_valid",
+        "transaction_tests/tx_invalid",
+        "transaction_tests/tx_no_inputs",
+        "transaction_tests/tx_oversized",
+        "transaction_tests/basic_transaction_tests",
+        "transaction_tests/checktransaction_specialized_transparent_inputs"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "transaction_tests/group-02",
+      "parent_suite": "transaction_tests",
+      "lane": "other",
+      "selectors": [
+        "transaction_tests/test_Get",
+        "transaction_tests/test_big_witness_transaction",
+        "transaction_tests/test_witness",
+        "transaction_tests/test_IsStandard",
+        "transaction_tests/max_standard_legacy_sigops",
+        "transaction_tests/spends_witness_prog"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "transaction_tests/group-03",
+      "parent_suite": "transaction_tests",
+      "lane": "other",
+      "selectors": [
+        "transaction_tests/p2mr_multisig_witness_sigop_count",
+        "transaction_tests/p2mr_csfs_witness_sigop_count"
+      ],
+      "expected_cases": 2,
+      "timeout_seconds": 180
+    }
+  ],
+  "all_enabled_cases": [
+    "miniscript_tests/fixed_tests",
+    "miniscript_tests/p2mr_context_properties",
+    "miniscript_tests/parse_pk_mldsa_p2mr_fragment",
+    "miniscript_tests/parse_pk_slhdsa_p2mr_fragment",
+    "miniscript_tests/parse_pk_pq_fragments_require_p2mr_context_and_correct_sizes",
+    "miniscript_tests/parse_multi_mldsa_p2mr_fragment",
+    "miniscript_tests/parse_multi_slhdsa_p2mr_fragment",
+    "miniscript_tests/parse_multi_pq_fragments_require_p2mr_context_and_valid_sizes",
+    "miniscript_tests/parse_script_regression_handles_malformed_fuzz_vector_without_throw",
+    "miniscript_tests/multi_mldsa_p2mr_satisfaction",
+    "pq_consensus_tests/witness_v2_recognized_as_p2mr",
+    "pq_consensus_tests/p2mr_single_leaf_mldsa_valid_spend",
+    "pq_consensus_tests/p2mr_single_leaf_mldsa_invalid_sig_fails",
+    "pq_consensus_tests/p2mr_two_leaf_spend_leaf0_mldsa",
+    "pq_consensus_tests/p2mr_two_leaf_spend_leaf1_slhdsa",
+    "pq_consensus_tests/p2mr_wrong_merkle_proof_fails",
+    "pq_consensus_tests/p2mr_wrong_leaf_version_fails",
+    "pq_consensus_tests/p2mr_empty_witness_fails",
+    "pq_consensus_tests/p2mr_wrong_control_size_fails",
+    "pq_consensus_tests/p2mr_reserved_falcon_opsuccess_slots_succeed",
+    "pq_consensus_tests/p2mr_reserved_falcon_opsuccess_slot_discouraged_by_flag",
+    "pq_consensus_tests/p2mr_annex_signature_hash_commits_to_annex",
+    "pq_consensus_tests/op_checksig_mldsa_pops_correct_stack",
+    "pq_consensus_tests/op_checksig_mldsa_disallowed_flag_fails",
+    "pq_consensus_tests/op_checksig_mldsa_wrong_pubkey_size_fails",
+    "pq_consensus_tests/op_checksig_slhdsa_pops_correct_stack",
+    "pq_consensus_tests/op_checksig_slhdsa_with_mldsa_disable_flag_still_succeeds",
+    "pq_consensus_tests/op_checksig_pq_rejected_in_tapscript",
+    "pq_consensus_tests/op_checksigadd_mldsa_increments_counter",
+    "pq_consensus_tests/op_checksigadd_mldsa_disallowed_flag_fails",
+    "pq_consensus_tests/op_checksigadd_slhdsa_empty_sig_keeps_counter",
+    "pq_consensus_tests/op_checksigadd_rejected_outside_p2mr",
+    "pq_consensus_tests/op_checksigadd_weight_exhaustion_fails",
+    "pq_consensus_tests/op_checksigadd_wrong_pubkey_size_fails",
+    "pq_consensus_tests/op_checksigadd_requires_minimal_counter_encoding",
+    "pq_consensus_tests/p2mr_existing_primitives_fit_element_limit",
+    "pq_consensus_tests/p2mr_checksig_mldsa_decrements_validation_weight",
+    "pq_consensus_tests/p2mr_checksig_slhdsa_decrements_validation_weight",
+    "pq_consensus_tests/p2mr_checksig_weight_exhaustion_fails",
+    "pq_consensus_tests/p2mr_oversized_exec_stack_element_is_rejected",
+    "pq_consensus_tests/p2mr_oversized_push_value_is_rejected",
+    "pq_consensus_tests/p2mr_script_size_cap_rejects_oversized_leaf",
+    "pq_consensus_tests/p2mr_script_size_cap_accepts_boundary_leaf",
+    "pq_consensus_tests/ctv_preimage_without_scriptsigs_is_84_bytes",
+    "pq_consensus_tests/ctv_preimage_with_scriptsigs_is_116_bytes",
+    "pq_consensus_tests/ctv_preimage_with_shielded_bundle_adds_32_byte_digest",
+    "pq_consensus_tests/ctv_hash_commits_to_shielded_bundle_fields",
+    "pq_consensus_tests/ctv_hash_commits_to_v2_shielded_bundle_bytes",
+    "pq_consensus_tests/ctv_roundtrip_happy_path_p2mr",
+    "pq_consensus_tests/ctv_mismatch_outputs_fails",
+    "pq_consensus_tests/ctv_mismatch_locktime_fails",
+    "pq_consensus_tests/ctv_mismatch_input_index_fails",
+    "pq_consensus_tests/ctv_cleanstack_no_pop_behavior",
+    "pq_consensus_tests/ctv_non_32_byte_arg_fails_20_bytes",
+    "pq_consensus_tests/ctv_non_32_byte_arg_fails_33_bytes",
+    "pq_consensus_tests/ctv_non_32_byte_arg_fails_empty",
+    "pq_consensus_tests/ctv_empty_stack_fails",
+    "pq_consensus_tests/ctv_hash_differs_by_input_index",
+    "pq_consensus_tests/ctv_flag_unset_behaves_as_nop",
+    "pq_consensus_tests/ctv_flag_unset_with_discourage_nops_fails",
+    "pq_consensus_tests/ctv_flag_set_non_p2mr_context_is_nop",
+    "pq_consensus_tests/ctv_check_missing_txdata_fails_safely",
+    "pq_consensus_tests/ctv_sequences_subhash_matches_manual",
+    "pq_consensus_tests/ctv_outputs_subhash_matches_manual",
+    "pq_consensus_tests/ctv_scriptsigs_subhash_matches_manual",
+    "pq_consensus_tests/ctv_precompute_sets_ready_flag",
+    "pq_consensus_tests/ctv_and_checksig_combined_leaf_succeeds",
+    "pq_consensus_tests/csv_multisig_leaf_succeeds_when_sequence_is_met",
+    "pq_consensus_tests/csv_multisig_leaf_fails_when_sequence_is_unmet",
+    "pq_consensus_tests/csfs_mldsa_happy_path",
+    "pq_consensus_tests/csfs_slhdsa_happy_path",
+    "pq_consensus_tests/csfs_slhdsa_corrupted_signature_pushes_false",
+    "pq_consensus_tests/csfs_slhdsa_empty_signature_pushes_false_and_does_not_consume_weight",
+    "pq_consensus_tests/csfs_slhdsa_nullfail_nonempty_failed_sig_errors",
+    "pq_consensus_tests/csfs_corrupted_signature_pushes_false",
+    "pq_consensus_tests/csfs_empty_signature_pushes_false_and_does_not_consume_weight",
+    "pq_consensus_tests/csfs_nullfail_nonempty_failed_sig_errors",
+    "pq_consensus_tests/csfs_stack_underflow_fails",
+    "pq_consensus_tests/csfs_pubkey_size_rejections",
+    "pq_consensus_tests/csfs_tagged_hash_domain_separation",
+    "pq_consensus_tests/csfs_write_vs_stream_operator_hashing_differs",
+    "pq_consensus_tests/csfs_does_not_use_checkpqsignature_path",
+    "pq_consensus_tests/csfs_sigversion_gating_bad_opcode",
+    "pq_consensus_tests/csfs_message_size_boundaries",
+    "pq_consensus_tests/csfs_signature_size_enforced_exactly",
+    "pq_consensus_tests/csfs_validation_weight_accounting",
+    "pq_consensus_tests/csfs_validation_weight_exhaustion_and_boundary",
+    "pq_consensus_tests/csfs_standard_delegation_oracle_and_spender",
+    "pq_consensus_tests/csfs_delegation_invalid_oracle_signature_fails",
+    "pq_consensus_tests/csfs_delegation_invalid_spender_signature_fails",
+    "pq_consensus_tests/csfs_delegation_leaf_size_expectations",
+    "pq_consensus_tests/consensus_rejects_non_p2mr_outputs_in_blocks",
+    "pq_consensus_tests/consensus_accepts_p2mr_outputs_in_blocks",
+    "pq_consensus_tests/consensus_accepts_opreturn_and_p2mr_outputs_in_blocks",
+    "pq_consensus_tests/consensus_rejects_oversized_serialized_blocks",
+    "pq_phase4_tests/signp2mr_ctv_only_witness_has_two_items",
+    "pq_phase4_tests/signp2mr_rejects_odd_leaf_version",
+    "pq_phase4_tests/signp2mr_ctv_checksig_witness_has_three_items",
+    "pq_phase4_tests/signp2mr_cltv_multisig_witness_has_keycount_plus_two_items",
+    "pq_phase4_tests/signp2mr_csv_multisig_witness_has_keycount_plus_two_items",
+    "pq_phase4_tests/signp2mr_csfs_only_without_sigdata_material_fails",
+    "pq_phase4_tests/signp2mr_csfs_verify_checksig_witness_has_five_items",
+    "pq_phase4_tests/signp2mr_prefers_existing_sigdata_signature",
+    "pq_phase4_tests/signp2mr_falls_back_to_createpqsig_when_sigdata_empty",
+    "pq_phase4_tests/signp2mr_prefers_mldsa_leaf_by_default_when_multiple_checksig_leaves_exist",
+    "pq_phase4_tests/signp2mr_prefers_slhdsa_leaf_when_requested",
+    "pq_phase4_tests/psbt_multisig_p2mr_partial_combine_finalize",
+    "pq_phase4_tests/psbt_ctv_multisig_p2mr_partial_combine_finalize",
+    "pq_phase4_tests/psbt_csv_multisig_p2mr_partial_combine_finalize",
+    "pq_phase4_tests/psbt_cltv_multisig_finalize_rejects_unsatisfied_locktime",
+    "pq_phase4_tests/psbt_csv_multisig_finalize_rejects_unsatisfied_sequence",
+    "pq_phase4_tests/psbt_sha256_preimage_must_match_key",
+    "pq_phase4_tests/psbt_fill_signature_data_populates_p2mr_fields",
+    "pq_phase4_tests/psbt_from_signature_data_writes_p2mr_fields_back",
+    "pq_phase4_tests/psbt_input_roundtrips_new_p2mr_keys",
+    "pq_phase4_tests/psbt_input_disambiguates_same_pubkey_across_two_leaves",
+    "pq_phase4_tests/combinepsbt_merges_complementary_p2mr_material",
+    "pq_phase4_tests/combinepsbt_replaces_malformed_p2mr_partial_sig_with_valid_one",
+    "pq_phase4_tests/combinepsbt_replaces_wrong_but_well_formed_p2mr_partial_sig_with_valid_one",
+    "pq_phase4_tests/combinepsbt_rejects_conflicting_selected_p2mr_leaf",
+    "pq_phase4_tests/combinepsbt_rejects_conflicting_p2mr_merkle_root",
+    "pq_phase4_tests/psbt_output_roundtrips_p2mr_fields",
+    "pq_phase4_tests/psbt_input_rejects_invalid_p2mr_pubkey_sizes",
+    "pq_phase4_tests/psbt_output_rejects_invalid_p2mr_pubkey_sizes",
+    "pq_phase4_tests/external_signer_matches_p2mr_bip32_fingerprint",
+    "pq_phase4_tests/external_signer_rejects_malformed_request_p2mr_bip32_origin",
+    "pq_phase4_tests/external_signer_rejects_invalid_p2mr_partial_sig_size",
+    "pq_phase4_tests/external_signer_rejects_unexpected_p2mr_partial_sig_pubkey",
+    "pq_phase4_tests/external_signer_rejects_partial_sig_pubkey_with_nonmatching_fingerprint",
+    "pq_phase4_tests/external_signer_rejects_p2mr_partial_sig_for_unselected_leaf_hash",
+    "pq_phase4_tests/external_signer_rejects_wrong_leaf_sig_when_signer_omits_leaf_metadata",
+    "pq_phase4_tests/external_signer_rejects_conflicting_selected_leaf_metadata",
+    "pq_phase4_tests/external_signer_rejects_unsupported_selected_leaf_version",
+    "pq_phase4_tests/external_signer_rejects_unexpected_p2mr_bip32_derivation",
+    "pq_phase4_tests/external_signer_rejects_conflicting_p2mr_bip32_derivation",
+    "pq_phase4_tests/external_signer_rejects_unexpected_p2mr_csfs_message",
+    "pq_phase4_tests/external_signer_rejects_conflicting_p2mr_csfs_message",
+    "pq_phase4_tests/external_signer_rejects_invalid_p2mr_csfs_sig_size",
+    "pq_phase4_tests/external_signer_rejects_p2mr_csfs_signature_without_message",
+    "pq_phase4_tests/external_signer_rejects_unexpected_p2mr_csfs_signature_pubkey",
+    "pq_phase4_tests/external_signer_rejects_nonmatching_fingerprint_p2mr_csfs_signature_pubkey",
+    "pq_phase4_tests/external_signer_rejects_p2mr_input_missing_required_metadata",
+    "pq_phase4_tests/external_signer_rejects_request_p2mr_metadata_without_prevout_script",
+    "pq_phase4_tests/external_signer_rejects_request_p2mr_metadata_for_non_p2mr_prevout",
+    "pq_phase4_tests/external_signer_rejects_p2mr_prevout_commitment_mismatch",
+    "pq_phase4_tests/external_signer_rejects_conflicting_signer_p2mr_merkle_root",
+    "pq_phase4_tests/external_signer_rejects_p2mr_control_leaf_version_mismatch",
+    "pq_phase4_tests/external_signer_rejects_p2mr_control_odd_leaf_version",
+    "pq_phase4_tests/external_signer_requires_p2mr_fingerprint_match_from_p2mr_paths",
+    "pq_phase4_tests/p2mr_minimal_if_enforced",
+    "pq_phase4_tests/external_signer_enumerate_parses_p2mr_capabilities",
+    "pq_phase4_tests/external_signer_enumerate_defaults_without_p2mr_capabilities",
+    "pq_phase4_tests/external_signer_enumerate_rejects_invalid_fingerprint",
+    "pq_phase4_tests/external_signer_enumerate_rejects_non_string_fingerprint",
+    "pq_phase4_tests/external_signer_enumerate_duplicate_does_not_hide_later_signer",
+    "pq_phase4_tests/external_signer_command_args_are_not_shell_quoted",
+    "pq_phase4_tests/external_signer_rejects_invalid_chain_argument",
+    "pq_phase4_tests/external_signer_rejects_displayaddress_descriptor_with_whitespace",
+    "pq_phase4_tests/external_signer_rejects_getp2mrpubkeys_descriptor_with_whitespace",
+    "pq_phase4_tests/external_signer_rejects_modified_unsigned_tx",
+    "pq_phase4_tests/external_signer_rejects_p2mr_material_for_non_p2mr_input",
+    "pq_phase4_tests/external_signer_rejects_p2mr_material_without_prevout_script",
+    "pq_phase4_tests/external_signer_preserves_existing_psbt_input_metadata",
+    "pq_phase4_tests/pq_key_derivation_deterministic",
+    "script_htlc_templates_tests/legacy_htlc_leaf_valid_build",
+    "script_htlc_templates_tests/htlc_tx_leaf_valid_build",
+    "script_htlc_templates_tests/htlc_sha256_leaf_valid_build",
+    "script_htlc_templates_tests/htlc_leaf_invalid_preimage_size",
+    "script_htlc_templates_tests/refund_leaf_valid_build",
+    "script_htlc_templates_tests/htlc_leaf_size_within_policy",
+    "script_htlc_templates_tests/htlc_correct_preimage_succeeds",
+    "script_htlc_templates_tests/htlc_wrong_preimage_fails",
+    "script_htlc_templates_tests/refund_after_timeout_succeeds",
+    "script_htlc_templates_tests/refund_before_timeout_fails",
+    "script_htlc_templates_tests/csv_multisig_rejects_non_bip68_sequence_bits",
+    "script_htlc_templates_tests/two_leaf_merkle_htlc",
+    "script_htlc_templates_tests/htlc_sha256_leaf_rejects_other_preimage_length",
+    "script_htlc_templates_tests/htlc_claim_leaves_enforce_32_byte_preimage_under_flag",
+    "script_p2sh_tests/sign",
+    "script_p2sh_tests/norecurse",
+    "script_p2sh_tests/set",
+    "script_p2sh_tests/is",
+    "script_p2sh_tests/switchover",
+    "script_p2sh_tests/AreInputsStandard",
+    "script_parse_tests/parse_script",
+    "script_segwit_tests/IsPayToWitnessScriptHash_Valid",
+    "script_segwit_tests/IsPayToWitnessScriptHash_Invalid_NotOp0",
+    "script_segwit_tests/IsPayToWitnessScriptHash_Invalid_Size",
+    "script_segwit_tests/IsPayToWitnessScriptHash_Invalid_Nop",
+    "script_segwit_tests/IsPayToWitnessScriptHash_Invalid_EmptyScript",
+    "script_segwit_tests/IsPayToWitnessScriptHash_Invalid_Pushdata",
+    "script_segwit_tests/IsWitnessProgram_Valid",
+    "script_segwit_tests/IsWitnessProgram_Invalid_Version",
+    "script_segwit_tests/IsWitnessProgram_Invalid_Size",
+    "script_segwit_tests/IsWitnessProgram_Invalid_Nop",
+    "script_segwit_tests/IsWitnessProgram_Invalid_EmptyScript",
+    "script_segwit_tests/IsWitnessProgram_Invalid_Pushdata",
+    "script_standard_tests/dest_default_is_no_dest",
+    "script_standard_tests/script_standard_Solver_success",
+    "script_standard_tests/script_standard_Solver_failure",
+    "script_standard_tests/script_standard_ExtractDestination",
+    "script_standard_tests/script_standard_GetScriptFor_",
+    "script_standard_tests/script_standard_taproot_builder",
+    "script_standard_tests/bip341_spk_test_vectors",
+    "script_tests/script_build",
+    "script_tests/script_json_test",
+    "script_tests/script_PushData",
+    "script_tests/script_cltv_truncated",
+    "script_tests/script_CHECKMULTISIG12",
+    "script_tests/script_CHECKMULTISIG23",
+    "script_tests/script_size_and_capacity_test",
+    "script_tests/script_combineSigs",
+    "script_tests/sign_invalid_miniscript",
+    "script_tests/sign_paytoanchor",
+    "script_tests/script_standard_push",
+    "script_tests/script_IsPushOnly_on_invalid_scripts",
+    "script_tests/script_GetScriptAsm",
+    "script_tests/script_byte_array_u8_vector_equivalence",
+    "script_tests/script_FindAndDelete",
+    "script_tests/script_HasValidOps",
+    "script_tests/tapscript_opsuccess_includes_p2mr_opcode_values",
+    "script_tests/p2mr_opsuccess_excludes_defined_pq_opcodes",
+    "script_tests/script_DataCarrierBytes",
+    "script_tests/script_GetScriptForTransactionInput",
+    "script_tests/script_assets_test",
+    "script_tests/bip341_keypath_test_vectors",
+    "script_tests/compute_tapbranch",
+    "script_tests/compute_tapleaf",
+    "scriptnum_tests/creation",
+    "scriptnum_tests/operators",
+    "sighash_tests/sighash_test",
+    "sighash_tests/sighash_from_data",
+    "sighash_tests/sighash_caching",
+    "sigopcount_tests/GetSigOpCount",
+    "sigopcount_tests/GetTxSigOpCost",
+    "transaction_tests/tx_valid",
+    "transaction_tests/tx_invalid",
+    "transaction_tests/tx_no_inputs",
+    "transaction_tests/tx_oversized",
+    "transaction_tests/basic_transaction_tests",
+    "transaction_tests/checktransaction_specialized_transparent_inputs",
+    "transaction_tests/test_Get",
+    "transaction_tests/test_big_witness_transaction",
+    "transaction_tests/test_witness",
+    "transaction_tests/test_IsStandard",
+    "transaction_tests/max_standard_legacy_sigops",
+    "transaction_tests/spends_witness_prog",
+    "transaction_tests/p2mr_multisig_witness_sigop_count",
+    "transaction_tests/p2mr_csfs_witness_sigop_count"
+  ],
+  "campaign_test_budget_seconds": 1800,
+  "batch_budget_seconds": 600,
+  "require_first_pass_control": false,
+  "scope": "249previouslyunselected script/transaction/PQrule unit cases; one portion of consolidated356gate, no rule/code change"
+}
