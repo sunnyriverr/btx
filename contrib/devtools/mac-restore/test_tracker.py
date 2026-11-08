@@ -15,6 +15,10 @@ for kind in ['group','session']:
 while not os.path.exists(os.environ['EXIT']):time.sleep(.05)
 '''
 def main():
+    quick = subprocess.Popen([sys.executable, '-c', 'pass'], start_new_session=True)
+    quick.wait(timeout=5)
+    completed = OwnedProcesses(quick)
+    assert completed.update()['processes'] == [] and completed.stop()['processes'] == []
     with tempfile.TemporaryDirectory(prefix='mac-tracker-') as td:
         root = pathlib.Path(td)
         sentinel = subprocess.Popen([sys.executable, '-c', 'import time;time.sleep(40)'], start_new_session=True)
@@ -35,7 +39,7 @@ def main():
             (root/'exit').touch();proc.wait(timeout=5)
             orphan=tracker.update();assert set(pids)<=set(x['pid'] for x in orphan['processes'])
             clean=tracker.stop();assert clean['processes']==[] and sentinel.poll() is None
-            return {'pass':True,'old_single_group_misses_children':True,'old_group_rss_bytes':old_rss,'owned_rss_bytes':measured['rss_bytes'],'observed_groups':measured['process_groups'],'observed_sessions':measured['sessions'],'orphan_children_retained':True,'SIGKILL_escalation_and_cleanup':True,'unrelated_sentinel_preserved':True}
+            return {'pass':True,'already_completed_command_handled':True,'old_single_group_misses_children':True,'old_group_rss_bytes':old_rss,'owned_rss_bytes':measured['rss_bytes'],'observed_groups':measured['process_groups'],'observed_sessions':measured['sessions'],'orphan_children_retained':True,'SIGKILL_escalation_and_cleanup':True,'unrelated_sentinel_preserved':True}
         finally:
             tracker.stop()
             sentinel.terminate();sentinel.wait(timeout=5)

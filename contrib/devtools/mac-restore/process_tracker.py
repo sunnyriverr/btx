@@ -30,7 +30,8 @@ class OwnedProcesses:
         self.known = {}
         self.peak_rss_bytes = 0
         self.update()
-        assert self.known, 'Owned launch exited before tracking was established'
+        assert self.known or proc.poll() is not None, 'Live owned launch was not observable'
+        # A completed short command legitimately has no live process or RSS sample.
 
     def update(self):
         rows = snapshot()
