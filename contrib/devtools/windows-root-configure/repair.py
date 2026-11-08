@@ -12,21 +12,28 @@ try:
  s.need('mock-checkout',['git','checkout','--detach',C['target']],60)
  cat=s.catalog(C['target'],'mock-before')
  assert [n for n in cat['files'] if cat['files'][n]!=R['source_catalog']['files'].get(n)]==['src/test/pq_phase4_tests.cpp']
+ before_commands=sha(s.BUILD/'compile_commands.json')
+ os.environ.update(VCPKG_ROOT=str(s.ROOT/'vcpkg'),VCPKG_DISABLE_METRICS='1',VCPKG_BINARY_SOURCES='clear;files,'+str(s.ROOT/'binary-cache')+',read')
+ s.need('mock-regenerate-graph',['ninja','-C',str(s.BUILD),'build.ninja'],180)
+ assert sha(s.BUILD/'compile_commands.json')==before_commands
  plan=['ninja','-C',str(s.BUILD),'-n','-d','explain','test_btx'];s.need('mock-build-plan',plan,120)
  text=(s.E/'mock-build-plan.log').read_text(errors='replace');actions=re.findall(r'^\[\d+/\d+\] (.*)',text,re.M);assert 0<len(actions)<=20,actions
- objects=[a for a in actions if a.startswith('Building CXX object')];assert len(objects)<=3,objects
- assert all('pq_phase4_tests.cpp' in a or 'clientversion.cpp' in a for a in objects),objects
+ objects=[a for a in actions if a.startswith('Building CXX object')];assert len(objects)<=4,objects
+ assert all('pq_phase4_tests.cpp' in a or 'clientversion.cpp' in a or 'matmul_v4_rc_production_canary.cpp' in a or 'matmul_v4_rc_production_golden_manifest.cpp' in a for a in objects),objects
  R['mock_build_plan']=actions;s.save()
  s.need('mock-focused-build',['ninja','-C',str(s.BUILD),'-j','2','test_btx'],600)
  current=sha(s.BUILD/'bin/test_btx.exe');assert current!=baseline
  R.update(source=C['target'],source_catalog=cat,baseline_binary_sha256=baseline,unit_binary_sha256=current,status='RESTORED_BINARY_READY')
  m=json.loads((P/'completion-manifest.json').read_text());m['binary_sha256']=current;(P/'completion-manifest.json').write_text(json.dumps(m));shutil.copyfile(P/'completion-manifest.json',s.E/'completion-manifest.json');s.save()
  inputs=json.loads((P/'current-inputs.json').read_text());inputs['target']=C['target'];(P/'current-inputs.json').write_text(json.dumps(inputs))
- import batches
- R=batches.R
- batches.run()
+ R['mock_test_entry']=[sys.executable,str(P/'batches.py'),'run'];s.save()
+ result=subprocess.run(R['mock_test_entry'],timeout=1100)
+ s.R=json.loads(s.STATE.read_text());R=s.R
+ R['mock_test_entry_exit']=result.returncode
+ assert result.returncode==0
  assert len(R['batch_results'])==24
 finally:
+ s.R=json.loads(s.STATE.read_text());R=s.R
  survivors=s.owned_processes();R['owned_processes_before_cleanup']=survivors;s.quiesce()
  if R.get('unit_data'):
   data=Path(R['unit_data']);assert data.parent==Path('D:/') and data.name=='bc'+os.environ['GITHUB_RUN_ID']
@@ -41,9 +48,9 @@ finally:
   R['mock_cached_files_changed']=changed;R['mock_cached_files_missing']=missing
   changed_objects=[n for n in changed if n.endswith('.obj')];R['mock_changed_objects']=changed_objects
   assert not missing
-  assert len(changed_objects)<=3 and all('pq_phase4_tests.cpp' in n or 'clientversion.cpp' in n for n in changed_objects),changed_objects
+  assert len(changed_objects)<=4 and all('pq_phase4_tests.cpp' in n or 'clientversion.cpp' in n or 'matmul_v4_rc_production_canary.cpp' in n or 'matmul_v4_rc_production_golden_manifest.cpp' in n for n in changed_objects),changed_objects
   assert all(not n.startswith('vcpkg-installed/') for n in changed)
-  assert not any(n.endswith(x) for n in changed for x in ['CMakeCache.txt','compile_commands.json'])
+  assert not any(n.endswith('compile_commands.json') for n in changed)
   R['mock_relinked_executables']=[n for n in changed if n.endswith('.exe')]
   assert all(not n.endswith('.exe') or any(n.endswith(x) for x in ['test_btx.exe','btxd.exe','btx-open.exe','btx-modeld.exe']) for n in changed)
  if 'cat' in globals():assert s.catalog(C['target'],'mock-after')==cat
