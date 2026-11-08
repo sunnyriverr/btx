@@ -1,7 +1,7 @@
-name: Verify actual Mac partial checkpoint and resource tracker
+name: Inspect newer Mac release incremental resume without compilation
 on:
   push:
-    branches: [codex/ci-mac-checkpoint-restore]
+    branches: [codex/ci-mac-resume-plan]
 permissions:
   contents: read
   actions: read
@@ -14,21 +14,16 @@ jobs:
         with:
           persist-credentials: false
           sparse-checkout-cone-mode: false
-          sparse-checkout: /contrib/devtools/mac-restore/
+          sparse-checkout: /contrib/devtools/mac-resume/
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: btxchain/btx
           ref: ff5f3f04ea11f044594987fc6be043ff68b136ad
           path: product
           persist-credentials: false
-      - name: Prove cross-group resource tracking and cleanup
-        timeout-minutes: 2
-        run: |
-          mkdir -p restore-records
-          python3 contrib/devtools/mac-restore/test_tracker.py > restore-records/native-tracker-result.json
       - name: Recreate exact admitted prerequisites and configuration without BTX compilation
         timeout-minutes: 30
-        run: python3 contrib/devtools/mac-restore/configure.py
+        run: python3 contrib/devtools/mac-resume/configure.py
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         timeout-minutes: 5
         with:
@@ -39,11 +34,11 @@ jobs:
           merge-multiple: true
       - name: Verify actual saved files and inspect remaining Ninja work without compiling
         timeout-minutes: 10
-        run: python3 contrib/devtools/mac-restore/restore.py
+        run: python3 contrib/devtools/mac-resume/resume.py
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: mac-actual-checkpoint-restore-records
+          name: mac-newer-resume-plan-records
           path: |
             restore-records
             mac-config-records
