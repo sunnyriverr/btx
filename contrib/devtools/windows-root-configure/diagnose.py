@@ -11,14 +11,37 @@ try:
  names=[n for n in cp['files']if n.replace('\\','/').endswith('/proc08.cpp.obj')];assert len(names)==1
  name=names[0];obj=s.ROOT/name;assert sha(obj)==cp['files'][name]['sha256']
  entries=json.loads((s.BUILD/'compile_commands.json').read_text());commands=[c for c in entries if c['file'].replace('\\','/').endswith('/modelnet/proc08/proc08.cpp')];assert len(commands)==1
- command=commands[0].get('command',str(commands[0].get('arguments')))
- assert 'clang-cl'in command and ('-MT'in command or '/MT'in command)and 'DNDEBUG'in command
- assert '/MD'not in command and '-MD'not in command and 'flto'not in command and '/GL'not in command
- assert not owned.exists();owned.mkdir();(owned/'runtime').mkdir()
- target=owned/'probe.exe'
- compile=['clang-cl','/nologo','/std:c++20','/EHsc','/MT','/O2','/DNDEBUG','/DWIN32','/I'+str(s.SOURCE/'src'),str(P/'probe.cpp'),str(obj),'/Fe'+str(target),'/Fo'+str(owned/'probe.obj')]
- R['diagnostic_inputs']=dict(original_object=name,object_sha256=sha(obj),original_compile_entry=commands[0],probe_source_sha256=sha(P/'probe.cpp'),kind='Unmodified cached Proc08 object plus real original headers; standalone diagnostic driver only; no product source or generated target rebuild');s.save()
- s.need('proc08-probe-compile',compile,90)
+ import ctypes,re
+ entry=commands[0]
+ (s.E/'proc08-original-compile-entry.json').write_text(json.dumps(entry,indent=2)+'\n')
+ if 'arguments' in entry:
+  args=entry['arguments']
+ else:
+  shell=ctypes.windll.shell32;count=ctypes.c_int();shell.CommandLineToArgvW.argtypes=[ctypes.c_wchar_p,ctypes.POINTER(ctypes.c_int)];shell.CommandLineToArgvW.restype=ctypes.POINTER(ctypes.c_wchar_p)
+  ptr=shell.CommandLineToArgvW(entry['command'],ctypes.byref(count));assert ptr
+  args=[ptr[i]for i in range(count.value)];ctypes.windll.kernel32.LocalFree.argtypes=[ctypes.c_void_p];ctypes.windll.kernel32.LocalFree(ptr)
+ assert Path(args[0]).name.lower() in ['clang-cl.exe','clang-cl'],args[0]
+ assert not owned.exists();owned.mkdir();(owned/'runtime').mkdir();target=owned/'probe.exe'
+ compile=args.copy();sources=0;outputs=0;i=1
+ while i<len(compile):
+  arg=compile[i]
+  if arg.replace('\\','/').lower()==entry['file'].replace('\\','/').lower():compile[i]=str(P/'probe.cpp');sources+=1
+  elif arg.lower() in ['/fo','-fo']:
+   compile[i+1]=str(owned/'probe.obj');outputs+=1;i+=1
+  elif arg[:3].lower()in ['/fo','-fo']:
+   compile[i]=arg[:3]+str(owned/'probe.obj');outputs+=1
+  elif arg.lower()in ['/fd','-fd']:
+   compile[i+1]=str(owned/'probe.pdb');i+=1
+  elif arg[:3].lower()in ['/fd','-fd']:compile[i]=arg[:3]+str(owned/'probe.pdb')
+  assert not arg.lower().startswith(('/yc','-yc','/sourcedependencies')),'Unexpected mutable compiler output'
+  i+=1
+ assert sources==outputs==1,(sources,outputs,compile)
+ assert any(arg.lower()in ['-c','/c']for arg in compile)
+ cache=(s.BUILD/'CMakeCache.txt').read_text();linkers=re.findall(r'^CMAKE_LINKER:FILEPATH=(.+)$',cache,re.M);assert len(linkers)==1
+ link=[linkers[0],'/NOLOGO','/SUBSYSTEM:CONSOLE','/OUT:'+str(target),str(owned/'probe.obj'),str(obj),'kernel32.lib']
+ R['diagnostic_inputs']=dict(original_object=name,object_sha256=sha(obj),original_compile_entry=entry,probe_compile_command=compile,probe_link_command=link,probe_source_sha256=sha(P/'probe.cpp'),kind='Unmodified cached Proc08 object plus real original headers; exact generated compile command redirected to standalone driver/output only; no product rebuild');s.save()
+ s.need('proc08-probe-compile',compile,90,cwd=Path(entry['directory']))
+ s.need('proc08-probe-link',link,90,cwd=owned)
  R['diagnostic_binary_sha256']=sha(target);s.need('proc08-probe-run',[str(target),str(owned/'runtime')],60)
  records=[json.loads(line)for line in(s.E/'proc08-probe-run.log').read_text().splitlines()];assert len(records)==15;assert records[0]==dict(same_file_mixed=True,same_file_forward=True)
  cases={x['case']:x for x in records[1:]};assert len(cases)==14
