@@ -91,4 +91,4 @@ def file_path(path):
     time.sleep(.3)
     subprocess.run(['xdotool','type','--clearmodifiers','--',str(path)],check=True,timeout=5)
     wait(lambda:str(path) in text(),10)
-    click('Open')
+    click('Select')
