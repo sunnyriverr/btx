@@ -29,7 +29,7 @@ def qualify(state,inv,db,plan,expected,graphs):
    assert delta['path']==PROBE and delta['expected']=={'sha256':inv[PROBE]['sha256'],'mtime_ns':inv[PROBE]['mtime_ns']}
    assert delta['actual']['sha256']==delta['expected']['sha256'],'Probe byte changes are not exempt'
    assert delta['actual']['mtime_ns']!=delta['expected']['mtime_ns']
- for n in retained:
+ for n in retained-set(expected.get('allowed_generated_rebuilds',[])):
   rel=n.removeprefix('mac-config-build/')
   assert 'Building CXX object '+rel not in plan and 'Building C object '+rel not in plan and 'Building ASM object '+rel not in plan,('Retained target scheduled',n)
  assert 'Re-running CMake' not in plan

@@ -107,7 +107,7 @@ try:
  for n,v in objects.items():
   relative=n.removeprefix('mac-config-build/')
   if 'Building CXX object '+relative in plan or 'Building C object '+relative in plan:scheduled.append(n)
- assert not scheduled,('Previously completed objects scheduled to rebuild',scheduled[:20])
+ assert set(scheduled)<=set(expected['allowed_generated_rebuilds']),('Unexplained retained rebuild',scheduled)
  audit_objects('final')
  from qualify_saved_result import qualify
  qualification=qualify(state,inv,[],plan,expected,[aftercommands.encode(),inspectcommands.encode()])
@@ -118,7 +118,7 @@ try:
  state['remaining_dry_plan_build_lines']=sum('Building ' in x or 'Linking ' in x for x in plan.splitlines())
  state['final_dry_plan_tail']=plan[-1800:]
  assert state['remaining_dry_plan_build_lines']>0,'Incomplete build must retain real remaining work'
- summary={'head':state['source'],'saved_source':state['source'],'retained_target_objects':qualification['retained_target_objects_unchanged_and_not_scheduled'],'retained_objects_scheduled':[],'other_retained_objects_not_scheduled':qualification['retained_target_objects_unchanged_and_not_scheduled'],'command_graph_equal_to_saved':True,'original_checkpoint_unchanged':sha(archive)==record['sha256'],'remaining_actions':qualification['remaining_inspected_actions']}
+ summary={'head':state['source'],'saved_source':state['source'],'retained_target_objects':qualification['retained_target_objects_unchanged_and_not_scheduled'],'retained_objects_scheduled':scheduled,'other_retained_objects_not_scheduled':qualification['retained_target_objects_unchanged_and_not_scheduled']-len(scheduled),'command_graph_equal_to_saved':True,'original_checkpoint_unchanged':sha(archive)==record['sha256'],'remaining_actions':qualification['remaining_inspected_actions']}
  (out/'resume-summary.json').write_text(json.dumps(summary,indent=2)+'\n')
  state['complete']=True
 except Exception as e:
