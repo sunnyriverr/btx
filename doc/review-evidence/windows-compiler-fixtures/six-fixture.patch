@@ -1,0 +1,266 @@
+diff --git a/src/test/modelnet_035_wan_endpoint_tests.cpp b/src/test/modelnet_035_wan_endpoint_tests.cpp
+index 406a1ba64..7d0e3e763 100644
+--- a/src/test/modelnet_035_wan_endpoint_tests.cpp
++++ b/src/test/modelnet_035_wan_endpoint_tests.cpp
+@@ -509,6 +509,7 @@ BOOST_AUTO_TEST_CASE(portable_archive_entries)
+     BOOST_CHECK_EQUAL(err, "BTX035_PATH_UNSAFE");
+     BOOST_CHECK_EQUAL(FileText(kept), "keep-me");
+ 
++#ifndef _WIN32
+     const fs::path devdir = m_path_root / "wan-dev";
+     BOOST_REQUIRE(fs::create_directories(devdir));
+     const fs::path node = devdir / "node";
+@@ -517,6 +518,7 @@ BOOST_AUTO_TEST_CASE(portable_archive_entries)
+     BOOST_CHECK(!roll.WritePortableArchive(devdir, devtar, err));
+     BOOST_CHECK_EQUAL(err, "BTX035_PATH_UNSAFE");
+     BOOST_CHECK(!fs::exists(devtar));
++#endif
+ 
+     const fs::path link_root = m_path_root / "tree-link";
+     fs::create_symlink(tree, link_root);
+diff --git a/src/test/modelnet_ahp_api_tests.cpp b/src/test/modelnet_ahp_api_tests.cpp
+index 585d890cd..f0e7a60e6 100644
+--- a/src/test/modelnet_ahp_api_tests.cpp
++++ b/src/test/modelnet_ahp_api_tests.cpp
+@@ -10,6 +10,7 @@
+ #include <modelnet/http_bridge.h>
+ #include <modelnet/package_acquisition.h>
+ #include <modelnet/package_core.h>
++#include <test/util/sdk_process.h>
+ #include <test/util/setup_common.h>
+ #include <test/modelnet_n02_idem.h>
+ #include <univalue.h>
+@@ -68,7 +69,7 @@ std::string HelperErr(bool ok, const UniValue& result, const std::string& code)
+     return {};
+ }
+ 
+-#ifdef MODELNET_BTX_OPEN_PATH
++#if defined(MODELNET_BTX_OPEN_PATH) && !defined(WIN32)
+ std::string ShellQuote(const std::string& s)
+ {
+     std::string q = "'";
+@@ -235,16 +236,20 @@ BOOST_AUTO_TEST_CASE(ahp_api_04_plan_execute_cancel_acquisition)
+     BOOST_REQUIRE(fixture.find("btx://") == std::string::npos);
+     BOOST_REQUIRE(fixture.ends_with(".btx") || fixture.ends_with(".BTX"));
+     // One argv: the unsigned .btx path. Not a shell of mixed URI+file.
++    std::string out;
++#ifdef WIN32
++    const int rc = sdk_test::Spawn({MODELNET_BTX_OPEN_PATH, fixture}, out, false);
++#else
+     const std::string cmd = ShellQuote(MODELNET_BTX_OPEN_PATH) + " " + ShellQuote(fixture);
+     BOOST_REQUIRE(cmd.find("btx://") == std::string::npos);
+     FILE* fp = popen(cmd.c_str(), "r");
+     BOOST_REQUIRE(fp);
+-    std::string out;
+     char buf[4096];
+     while (fgets(buf, sizeof(buf), fp) != nullptr) {
+         out.append(buf);
+     }
+     const int rc = pclose(fp);
++#endif
+     BOOST_REQUIRE_EQUAL(rc, 0);
+     const bool inspect_fields = out.find("core_version") != std::string::npos ||
+                                 out.find("documents") != std::string::npos ||
+diff --git a/src/test/modelnet_ahp_comp_tests.cpp b/src/test/modelnet_ahp_comp_tests.cpp
+index 6abfceda4..0370c0deb 100644
+--- a/src/test/modelnet_ahp_comp_tests.cpp
++++ b/src/test/modelnet_ahp_comp_tests.cpp
+@@ -232,12 +232,20 @@ BOOST_AUTO_TEST_CASE(ahp_comp_05_modelnet_disabled_build)
+     BOOST_REQUIRE_MESSAGE(!script.empty() && fs::exists(script),
+                           "missing contrib/modelnet/check-with-modelnet-off.sh");
+     const std::string cmd = "bash " + fs::PathToString(script) + " 2>&1";
++#ifdef _WIN32
++    FILE* pipe = _popen(cmd.c_str(), "r");
++#else
+     FILE* pipe = popen(cmd.c_str(), "r");
++#endif
+     BOOST_REQUIRE(pipe);
+     std::string out;
+     char buf[512];
+     while (fgets(buf, sizeof(buf), pipe) != nullptr) out.append(buf);
++#ifdef _WIN32
++    const int status = _pclose(pipe);
++#else
+     const int status = pclose(pipe);
++#endif
+     BOOST_TEST_MESSAGE(out);
+     BOOST_REQUIRE_EQUAL(status, 0);
+     BOOST_CHECK(out.find("WITH_MODELNET=OFF is the monetary-only build") != std::string::npos);
+diff --git a/src/test/modelnet_ahp_journey_tests.cpp b/src/test/modelnet_ahp_journey_tests.cpp
+index 85b38845b..f1b2c3b62 100644
+--- a/src/test/modelnet_ahp_journey_tests.cpp
++++ b/src/test/modelnet_ahp_journey_tests.cpp
+@@ -14,6 +14,7 @@
+ #include <modelnet/package_documents.h>
+ #include <modelnet/package_economy.h>
+ #include <modelnet/package_install.h>
++#include <test/util/sdk_process.h>
+ #include <test/util/setup_common.h>
+ #include <univalue.h>
+ #include <util/fs.h>
+@@ -82,7 +83,7 @@ bool JsonHasAccountKey(const UniValue& v)
+     return false;
+ }
+ 
+-#ifdef MODELNET_BTX_OPEN_PATH
++#if defined(MODELNET_BTX_OPEN_PATH) && !defined(WIN32)
+ std::string ShellQuote(const std::string& s)
+ {
+     std::string q = "'";
+@@ -320,15 +321,19 @@ BOOST_AUTO_TEST_CASE(ahp_j08_offline_and_cancellation)
+     BOOST_TEST_MESSAGE(std::string("AHP-J08 btx-open binary: ") + MODELNET_BTX_OPEN_PATH);
+     BOOST_REQUIRE(fs::exists(fs::PathFromString(MODELNET_BTX_OPEN_PATH)));
+     const std::string fixture = fs::PathToString(Fixture("model-agent.btx"));
++    std::string out;
++#ifdef WIN32
++    const int rc = sdk_test::Spawn({MODELNET_BTX_OPEN_PATH, fixture}, out, false);
++#else
+     const std::string cmd = ShellQuote(MODELNET_BTX_OPEN_PATH) + " " + ShellQuote(fixture);
+     FILE* fp = popen(cmd.c_str(), "r");
+     BOOST_REQUIRE(fp);
+-    std::string out;
+     char buf[4096];
+     while (fgets(buf, sizeof(buf), fp) != nullptr) {
+         out.append(buf);
+     }
+     const int rc = pclose(fp);
++#endif
+     BOOST_REQUIRE_EQUAL(rc, 0);
+     BOOST_CHECK(out.find("action=preview-only") != std::string::npos);
+     BOOST_CHECK(out.find("agents_md_write=false") != std::string::npos);
+diff --git a/src/test/swarm_confine_tests.cpp b/src/test/swarm_confine_tests.cpp
+index 5c914ad87..e5cfeebaf 100644
+--- a/src/test/swarm_confine_tests.cpp
++++ b/src/test/swarm_confine_tests.cpp
+@@ -9,10 +9,10 @@
+ 
+ #include <boost/test/unit_test.hpp>
+ 
+-#include <sys/stat.h>
+-#include <sys/wait.h>
+ 
+ #ifndef _WIN32
++#include <sys/stat.h>
++#include <sys/wait.h>
+ #include <fcntl.h>
+ #include <signal.h>
+ #include <time.h>
+@@ -190,6 +190,7 @@ BOOST_AUTO_TEST_CASE(path_outside_or_dotdot)
+     fs::remove_all(outside_root);
+ }
+ 
++#ifndef _WIN32
+ BOOST_AUTO_TEST_CASE(confined_helper_or_namespace_absent)
+ {
+     // canonical: InsideRoot refuses symlinks, and macOS TMPDIR is below /var.
+@@ -219,6 +220,43 @@ BOOST_AUTO_TEST_CASE(confined_helper_or_namespace_absent)
+         BOOST_CHECK_EQUAL(WEXITSTATUS(result.child_status), 0);
+     }
+ }
++#else
++BOOST_AUTO_TEST_CASE(windows_rejects_non_native_helper)
++{
++    const fs::path root = fs::canonical(fs::temp_directory_path()) / "btx-swarm-confine-text";
++    const fs::path helper = WriteRegularFile(root / "helper.sh");
++    std::string err = "stale";
++    const auto result = modelnet::SwarmRunConfined(BaseRequest(helper, root), err);
++    fs::remove_all(root);
++    BOOST_CHECK(!result.launched);
++    BOOST_CHECK(!result.limits_applied);
++    BOOST_CHECK_EQUAL(result.child_status, -1);
++    BOOST_CHECK_EQUAL(result.code, "WINDOWS_SANDBOX_CREATEPROCESS");
++    BOOST_CHECK_EQUAL(err, "WINDOWS_SANDBOX_CREATEPROCESS");
++    BOOST_CHECK(!fs::exists(root));
++}
++
++BOOST_AUTO_TEST_CASE(windows_native_helper_runs_and_cleans_up)
++{
++    const fs::path root = fs::canonical(fs::temp_directory_path()) / "btx-swarm-confine-native";
++    fs::create_directories(root);
++    const fs::path helper = root / "btx-open.exe";
++    BOOST_REQUIRE(fs::copy_file(fs::path{MODELNET_BTX_OPEN_PATH}, helper, fs::copy_options::none));
++    const auto helper_size = fs::file_size(helper);
++    std::string err = "stale";
++    // No arguments: print usage and exit 1 without opening a URI.
++    const auto result = modelnet::SwarmRunConfined(BaseRequest(helper, root), err);
++    const bool helper_preserved = fs::exists(helper) && fs::file_size(helper) == helper_size;
++    fs::remove_all(root);
++    BOOST_CHECK_EQUAL(result.code, "CONFINED");
++    BOOST_CHECK(result.launched);
++    BOOST_CHECK(result.limits_applied);
++    BOOST_CHECK_EQUAL(result.child_status, 1);
++    BOOST_CHECK(err.empty());
++    BOOST_CHECK(helper_preserved);
++    BOOST_CHECK(!fs::exists(root));
++}
++#endif
+ 
+ #if defined(__APPLE__) && defined(BTX_SWARM_JAIL_PROBE)
+ namespace {
+diff --git a/src/test/swarm_fsjail_tests.cpp b/src/test/swarm_fsjail_tests.cpp
+index b62874a2a..8c5c973bf 100644
+--- a/src/test/swarm_fsjail_tests.cpp
++++ b/src/test/swarm_fsjail_tests.cpp
+@@ -8,9 +8,9 @@
+ 
+ #include <boost/test/unit_test.hpp>
+ 
+-#include <sys/stat.h>
+ 
+ #ifndef _WIN32
++#include <sys/stat.h>
+ #include <signal.h>
+ #endif
+ 
+@@ -128,6 +128,7 @@ BOOST_AUTO_TEST_CASE(path_outside_or_dotdot)
+     fs::remove_all(outside_root);
+ }
+ 
++#ifndef _WIN32
+ BOOST_AUTO_TEST_CASE(jailed_helper_or_namespace_absent)
+ {
+     // canonical: InsideRoot refuses symlinks, and macOS TMPDIR is below /var.
+@@ -153,6 +154,43 @@ BOOST_AUTO_TEST_CASE(jailed_helper_or_namespace_absent)
+     BOOST_CHECK(!(result.launched && result.code == "JAIL_ABSENT"));
+     BOOST_CHECK(!(result.jailed && result.code == "JAIL_ABSENT"));
+ }
++#else
++BOOST_AUTO_TEST_CASE(windows_rejects_non_native_helper)
++{
++    const fs::path root = fs::canonical(fs::temp_directory_path()) / "btx-swarm-fsjail-text";
++    const fs::path helper = WriteRegularFile(root / "helper.sh");
++    std::string err = "stale";
++    const auto result = modelnet::SwarmRunFilesystemJail(BaseRequest(helper, root), err);
++    fs::remove_all(root);
++    BOOST_CHECK(!result.launched);
++    BOOST_CHECK(!result.jailed);
++    BOOST_CHECK_EQUAL(result.child_status, -1);
++    BOOST_CHECK_EQUAL(result.code, "JAIL_ABSENT");
++    BOOST_CHECK_EQUAL(err, "JAIL_ABSENT");
++    BOOST_CHECK(!fs::exists(root));
++}
++
++BOOST_AUTO_TEST_CASE(windows_native_helper_runs_and_cleans_up)
++{
++    const fs::path root = fs::canonical(fs::temp_directory_path()) / "btx-swarm-fsjail-native";
++    fs::create_directories(root);
++    const fs::path helper = root / "btx-open.exe";
++    BOOST_REQUIRE(fs::copy_file(fs::path{MODELNET_BTX_OPEN_PATH}, helper, fs::copy_options::none));
++    const auto helper_size = fs::file_size(helper);
++    std::string err = "stale";
++    // No arguments: print usage and exit 1 without opening a URI.
++    const auto result = modelnet::SwarmRunFilesystemJail(BaseRequest(helper, root), err);
++    const bool helper_preserved = fs::exists(helper) && fs::file_size(helper) == helper_size;
++    fs::remove_all(root);
++    BOOST_CHECK_EQUAL(result.code, "JAILED");
++    BOOST_CHECK(result.launched);
++    BOOST_CHECK(result.jailed);
++    BOOST_CHECK_EQUAL(result.child_status, 1);
++    BOOST_CHECK(err.empty());
++    BOOST_CHECK(helper_preserved);
++    BOOST_CHECK(!fs::exists(root));
++}
++#endif
+ 
+ BOOST_AUTO_TEST_CASE(zero_tree_limit)
+ {
