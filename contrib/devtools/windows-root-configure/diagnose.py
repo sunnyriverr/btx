@@ -22,20 +22,9 @@ try:
   args=[ptr[i]for i in range(count.value)];ctypes.windll.kernel32.LocalFree.argtypes=[ctypes.c_void_p];ctypes.windll.kernel32.LocalFree(ptr)
  assert Path(args[0]).name.lower() in ['clang-cl.exe','clang-cl'],args[0]
  assert not owned.exists();owned.mkdir();(owned/'runtime').mkdir();target=owned/'probe.exe'
- compile=args.copy();sources=0;outputs=0;i=1
- while i<len(compile):
-  arg=compile[i]
-  if arg.replace('\\','/').lower()==entry['file'].replace('\\','/').lower():compile[i]=str(P/'probe.cpp');sources+=1
-  elif arg.lower() in ['/fo','-fo']:
-   compile[i+1]=str(owned/'probe.obj');outputs+=1;i+=1
-  elif arg[:3].lower()in ['/fo','-fo']:
-   compile[i]=arg[:3]+str(owned/'probe.obj');outputs+=1
-  elif arg.lower()in ['/fd','-fd']:
-   compile[i+1]=str(owned/'probe.pdb');i+=1
-  elif arg[:3].lower()in ['/fd','-fd']:compile[i]=arg[:3]+str(owned/'probe.pdb')
-  assert not arg.lower().startswith(('/yc','-yc','/sourcedependencies')),'Unexpected mutable compiler output'
-  i+=1
- assert sources==outputs==1,(sources,outputs,compile)
+ from redirect_compile import redirect
+ compile,redirected=redirect(args,entry['file'],str(P/'probe.cpp'),str(owned/'probe.obj'),str(owned/'probe.pdb'))
+ R['diagnostic_original_compiler_args']=args;R['diagnostic_redirected_fields']=redirected;s.save()
  assert any(arg.lower()in ['-c','/c']for arg in compile)
  cache=(s.BUILD/'CMakeCache.txt').read_text();linkers=re.findall(r'^CMAKE_LINKER:FILEPATH=(.+)$',cache,re.M);assert len(linkers)==1
  link=[linkers[0],'/NOLOGO','/SUBSYSTEM:CONSOLE','/OUT:'+str(target),str(owned/'probe.obj'),str(obj),'kernel32.lib']
