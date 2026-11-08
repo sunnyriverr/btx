@@ -122,7 +122,9 @@ def main():
         assert ('Endpoint: '+endpoint in confirmation and 'Chain: regtest' in confirmation
                 and genesis in confirmation), 'Unexpected native connection target'
         state['native_confirmation_checked']=True
-        ui.click('OK')
+        state['native_confirmation_text']=confirmation
+        state['native_confirmation_image']=capture('native-confirmation')
+        ui.click('Ok')
         ui.wait(lambda:'LIVE LOCAL' in ui.text() and '0 blocks' in ui.text(),45)
         state['connected_observations']=[{'time':time.monotonic(),'text':ui.text()}]
         time.sleep(5)
