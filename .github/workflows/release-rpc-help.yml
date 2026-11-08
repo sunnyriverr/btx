@@ -1,14 +1,14 @@
-name: Inspect newer Mac release incremental resume without compilation
+name: Compile bounded Mac incremental release chunk
 on:
   push:
-    branches: [codex/ci-mac-resume-plan]
+    branches: [codex/ci-mac-compile-resume]
 permissions:
   contents: read
   actions: read
 jobs:
   restore:
     runs-on: macos-15
-    timeout-minutes: 50
+    timeout-minutes: 75
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -35,11 +35,27 @@ jobs:
       - name: Verify actual saved files and inspect remaining Ninja work without compiling
         timeout-minutes: 10
         run: python3 contrib/devtools/mac-resume/resume.py
+      - name: Bounded serial compile with retained baseline and final checkpoint
+        timeout-minutes: 35
+        run: python3 contrib/devtools/mac-resume/chunk.py
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: mac-newer-resume-plan-records
+          name: mac-compile-resume-records
           path: |
             restore-records
             mac-config-records
+            chunk-records
+          retention-days: 14
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: mac-compile-resume-binaries
+          path: chunk-binaries
+          retention-days: 14
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: mac-compile-resume-checkpoint
+          path: chunk-checkpoint
           retention-days: 14
