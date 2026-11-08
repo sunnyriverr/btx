@@ -1,16 +1,16 @@
-name: Untouched rebuilt Linux guard and helper lifecycle
+name: Packaged maintained model transfer
 on:
   push:
     branches: [codex/ci-rpc-help-release-03416]
     paths:
       - .github/workflows/release-rpc-help.yml
-      - contrib/devtools/rebuilt-package-lifecycle/**
+      - contrib/devtools/packaged-transfer/**
 permissions:
   contents: read
 jobs:
   observe:
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -26,10 +26,10 @@ jobs:
           sudo apt-get -o Acquire::Retries=1 update
           sudo apt-get install -y --no-install-recommends libevent-dev libsqlite3-0 libzmq5 libgomp1
       - name: Qualify packaged node-owned helper startup and restart
-        run: python3 contrib/devtools/rebuilt-package-lifecycle/run.py
+        run: python3 contrib/devtools/packaged-transfer/run.py
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: rebuilt-package-records
-          path: rebuilt-package-results
+          name: packaged-transfer-records
+          path: packaged-transfer-results
           retention-days: 14
