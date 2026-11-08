@@ -61,7 +61,7 @@ def endpoint(value):
                 role=n.getRoleName();state=n.getState();name=n.name or ''
                 editable=state.contains(pyatspi.STATE_EDITABLE)
                 if editable or role in ('entry','text','password text'):
-                    diagnostic.append({'role':role,'name':name,'editable':editable,'interfaces':list(n.getInterfaces())})
+                    diagnostic.append({'role':role,'name':name,'editable':editable})
                 inside=False;parent=n
                 for _ in range(15):
                     if parent is None:break
