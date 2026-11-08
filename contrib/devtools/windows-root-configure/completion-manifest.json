@@ -3,327 +3,111 @@
   "binary_sha256": "31e45f1d0f2aed4168982120596182b5268057e1b9806960f27a60c769906bdd",
   "jobs": [
     {
-      "suite": "validation_tests/0",
+      "suite": "validation_chainstate_tests/validation_chainstate_resize_caches",
       "selectors": [
-        "validation_tests/checkpoint_sanity",
-        "validation_tests/checkpoint_height_empty_defaults_to_zero",
-        "validation_tests/block_subsidy_test",
-        "validation_tests/subsidy_limit_test",
-        "validation_tests/mldsa_mempool_policy_window"
+        "validation_chainstate_tests/validation_chainstate_resize_caches"
       ],
-      "expected_cases": 5,
+      "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "validation_tests/1",
+      "suite": "validation_block_tests/processnewblock_signals_ordering",
       "selectors": [
-        "validation_tests/mldsa_mempool_policy_disabled_without_cutover_height",
-        "validation_tests/regtest_mldsa_disable_height_override",
-        "validation_tests/regtest_mldsa_disable_height_rejects_negative",
-        "validation_tests/regtest_shielded_tx_binding_activation_height_override",
-        "validation_tests/regtest_shielded_tx_binding_activation_height_rejects_negative"
+        "validation_block_tests/processnewblock_signals_ordering"
       ],
-      "expected_cases": 5,
+      "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "validation_tests/2",
+      "suite": "validation_block_tests/mempool_locks_reorg",
       "selectors": [
-        "validation_tests/regtest_shielded_bridge_tag_activation_height_override",
-        "validation_tests/regtest_shielded_bridge_tag_activation_height_rejects_negative",
-        "validation_tests/regtest_shielded_smile_rice_codec_disable_height_override",
-        "validation_tests/regtest_shielded_smile_rice_codec_disable_height_rejects_negative",
-        "validation_tests/regtest_shielded_matrict_disable_height_override"
+        "validation_block_tests/mempool_locks_reorg"
       ],
-      "expected_cases": 5,
+      "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "validation_tests/3",
+      "suite": "validation_block_tests/try_sync_validation_queue_timeout",
       "selectors": [
-        "validation_tests/regtest_shielded_matrict_disable_height_rejects_negative",
-        "validation_tests/regtest_shielded_pool_disable_height_override",
-        "validation_tests/regtest_shielded_pool_disable_height_rejects_negative",
-        "validation_tests/mainnet_shielded_pool_disable_height_is_199300",
-        "validation_tests/closed_shielded_snapshot_pin_matches_mainnet_assumeutxo"
+        "validation_block_tests/try_sync_validation_queue_timeout"
       ],
-      "expected_cases": 5,
+      "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "validation_tests/4",
+      "suite": "validation_block_tests/activatebestchain_does_not_block_on_stuck_subscriber",
       "selectors": [
-        "validation_tests/non_mainnet_shielded_pool_disable_height_is_unset",
-        "validation_tests/regtest_shielded_spend_path_recovery_activation_height_default",
-        "validation_tests/regtest_shielded_spend_path_recovery_activation_height_override",
-        "validation_tests/regtest_shielded_spend_path_recovery_activation_height_rejects_negative",
-        "validation_tests/regtest_shielded_c002_activation_height_override"
+        "validation_block_tests/activatebestchain_does_not_block_on_stuck_subscriber"
       ],
-      "expected_cases": 5,
+      "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "validation_tests/5",
+      "suite": "validation_block_tests/witness_commitment_index",
       "selectors": [
-        "validation_tests/regtest_shielded_c002_activation_height_rejects_negative",
-        "validation_tests/regtest_shielded_v2_send_zero_output_exit_activation_height_default",
-        "validation_tests/regtest_shielded_v2_send_zero_output_exit_activation_height_override",
-        "validation_tests/regtest_shielded_v2_send_zero_output_exit_activation_height_rejects_negative",
-        "validation_tests/slh_dsa_fips205_mempool_policy_uses_next_block_height"
+        "validation_block_tests/witness_commitment_index"
       ],
-      "expected_cases": 5,
+      "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "validation_tests/6",
+      "suite": "validation_block_tests/random_tiebreak_equal_work",
       "selectors": [
-        "validation_tests/regtest_shielded_pq128_upgrade_height_override",
-        "validation_tests/regtest_shielded_pq128_upgrade_height_rejects_negative",
-        "validation_tests/regtest_shielded_pool_credit_disable_height_override",
-        "validation_tests/regtest_shielded_pool_credit_disable_height_rejects_negative",
-        "validation_tests/regtest_shielded_sunset_height_override"
+        "validation_block_tests/random_tiebreak_equal_work"
       ],
-      "expected_cases": 5,
+      "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "validation_tests/7",
+      "suite": "validation_chainstate_tests/chainstate_update_tip",
       "selectors": [
-        "validation_tests/regtest_shielded_direct_send_public_flow_disable_height_override",
-        "validation_tests/regtest_shielded_direct_send_public_flow_disable_height_rejects_negative",
-        "validation_tests/regtest_shielded_height_128000_upgrade_gate_overrides",
-        "validation_tests/regtest_shielded_sunset_height_rejects_negative",
-        "validation_tests/ds3_unpinned_shielded_snapshot_fails_closed_by_default"
+        "validation_chainstate_tests/chainstate_update_tip"
       ],
-      "expected_cases": 5,
+      "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "validation_tests/8",
+      "suite": "validation_chainstatemanager_tests/chainstatemanager",
       "selectors": [
-        "validation_tests/recovery_proof_verify_cost_consensus_gate_defaults_unset",
-        "validation_tests/mainnet_velocity_cap_active_at_sunset_and_expires_at_v03212_height",
-        "validation_tests/production_shielded_pool_credit_disable_aligns_with_sunset",
-        "validation_tests/recovery_exit_activates_with_shielded_sunset_on_production_networks",
-        "validation_tests/signet_parse_tests"
+        "validation_chainstatemanager_tests/chainstatemanager"
       ],
-      "expected_cases": 5,
+      "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "validation_tests/9",
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_clears_attested_assumeutxo_on_snapshot_teardown",
       "selectors": [
-        "validation_tests/test_regtest_assumeutxo",
-        "validation_tests/assumeutxo_snapshot_header_compatibility",
-        "validation_tests/attested_snapshot_header_compatibility",
-        "validation_tests/test_regtest_assumeutxo_functional_harness_override",
-        "validation_tests/test_mainnet_assumeutxo_snapshot_metadata"
+        "validation_chainstatemanager_tests/chainstatemanager_clears_attested_assumeutxo_on_snapshot_teardown"
       ],
-      "expected_cases": 5,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "validation_tests/10",
-      "selectors": [
-        "validation_tests/assumeutxo_bases_must_sit_on_checkpoint_lineage",
-        "validation_tests/block_malleation"
-      ],
-      "expected_cases": 2,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "versionbits_tests/0",
-      "selectors": [
-        "versionbits_tests/versionbits_test",
-        "versionbits_tests/versionbits_computeblockversion",
-        "versionbits_tests/versionbits_height_overflow_guards",
-        "versionbits_tests/versionbits_period_alignment_handles_genesis_parent"
-      ],
-      "expected_cases": 4,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "matmul_field_tests/0",
-      "selectors": [
-        "matmul_field_tests/field_modulus_is_prime",
-        "matmul_field_tests/field_add_basic",
-        "matmul_field_tests/field_add_commutative",
-        "matmul_field_tests/field_mul_basic",
-        "matmul_field_tests/field_mul_associative",
-        "matmul_field_tests/field_mul_distributive",
-        "matmul_field_tests/field_inverse",
-        "matmul_field_tests/field_sub_is_add_neg",
-        "matmul_field_tests/field_from_oracle_deterministic",
-        "matmul_field_tests/field_from_oracle_output_range"
-      ],
-      "expected_cases": 10,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "matmul_field_tests/1",
-      "selectors": [
-        "matmul_field_tests/field_from_oracle_different_seed_differs",
-        "matmul_field_tests/field_from_oracle_different_index_differs",
-        "matmul_field_tests/field_reduce64_edge_cases",
-        "matmul_field_tests/field_reduce64_single_fold_boundary",
-        "matmul_field_tests/field_reduce64_double_fold_required",
-        "matmul_field_tests/field_reduce64_exhaustive_power_of_two",
-        "matmul_field_tests/field_dot_product_basic",
-        "matmul_field_tests/field_dot_kernel_probe_matches_build",
-        "matmul_field_tests/field_dot_product_empty",
-        "matmul_field_tests/field_dot_product_matches_manual_reduce"
-      ],
-      "expected_cases": 10,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "matmul_field_tests/2",
-      "selectors": [
-        "matmul_field_tests/field_dot_product_worst_case_short",
-        "matmul_field_tests/field_dot_product_worst_case_n512",
-        "matmul_field_tests/field_dot_product_worst_case_large",
-        "matmul_field_tests/field_dot_product_worst_case_near_modulus",
-        "matmul_field_tests/field_naive_accumulation_overflow_demonstration",
-        "matmul_field_tests/field_naive_accumulation_two_products_wrong",
-        "matmul_field_tests/from_oracle_pinned_tv1",
-        "matmul_field_tests/from_oracle_pinned_tv2",
-        "matmul_field_tests/from_oracle_pinned_tv3",
-        "matmul_field_tests/from_oracle_pinned_tv4"
-      ],
-      "expected_cases": 10,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "matmul_field_tests/3",
-      "selectors": [
-        "matmul_field_tests/from_oracle_retry_preimage_format",
-        "matmul_field_tests/from_seed_pinned_2x2",
-        "matmul_field_tests/from_seed_row_major_indexing",
-        "matmul_field_tests/from_seed_domain_separation_a_b",
-        "matmul_field_tests/from_seed_cross_platform_consistency",
-        "matmul_field_tests/from_oracle_extra_vectors_zero_seed",
-        "matmul_field_tests/from_oracle_extra_vectors_nonzero_seed",
-        "matmul_field_tests/dot_all_max_len4_vector"
-      ],
-      "expected_cases": 8,
+      "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     }
   ],
   "all_enabled_cases": [
-    "validation_tests/checkpoint_sanity",
-    "validation_tests/checkpoint_height_empty_defaults_to_zero",
-    "validation_tests/block_subsidy_test",
-    "validation_tests/subsidy_limit_test",
-    "validation_tests/mldsa_mempool_policy_window",
-    "validation_tests/mldsa_mempool_policy_disabled_without_cutover_height",
-    "validation_tests/regtest_mldsa_disable_height_override",
-    "validation_tests/regtest_mldsa_disable_height_rejects_negative",
-    "validation_tests/regtest_shielded_tx_binding_activation_height_override",
-    "validation_tests/regtest_shielded_tx_binding_activation_height_rejects_negative",
-    "validation_tests/regtest_shielded_bridge_tag_activation_height_override",
-    "validation_tests/regtest_shielded_bridge_tag_activation_height_rejects_negative",
-    "validation_tests/regtest_shielded_smile_rice_codec_disable_height_override",
-    "validation_tests/regtest_shielded_smile_rice_codec_disable_height_rejects_negative",
-    "validation_tests/regtest_shielded_matrict_disable_height_override",
-    "validation_tests/regtest_shielded_matrict_disable_height_rejects_negative",
-    "validation_tests/regtest_shielded_pool_disable_height_override",
-    "validation_tests/regtest_shielded_pool_disable_height_rejects_negative",
-    "validation_tests/mainnet_shielded_pool_disable_height_is_199300",
-    "validation_tests/closed_shielded_snapshot_pin_matches_mainnet_assumeutxo",
-    "validation_tests/non_mainnet_shielded_pool_disable_height_is_unset",
-    "validation_tests/regtest_shielded_spend_path_recovery_activation_height_default",
-    "validation_tests/regtest_shielded_spend_path_recovery_activation_height_override",
-    "validation_tests/regtest_shielded_spend_path_recovery_activation_height_rejects_negative",
-    "validation_tests/regtest_shielded_c002_activation_height_override",
-    "validation_tests/regtest_shielded_c002_activation_height_rejects_negative",
-    "validation_tests/regtest_shielded_v2_send_zero_output_exit_activation_height_default",
-    "validation_tests/regtest_shielded_v2_send_zero_output_exit_activation_height_override",
-    "validation_tests/regtest_shielded_v2_send_zero_output_exit_activation_height_rejects_negative",
-    "validation_tests/slh_dsa_fips205_mempool_policy_uses_next_block_height",
-    "validation_tests/regtest_shielded_pq128_upgrade_height_override",
-    "validation_tests/regtest_shielded_pq128_upgrade_height_rejects_negative",
-    "validation_tests/regtest_shielded_pool_credit_disable_height_override",
-    "validation_tests/regtest_shielded_pool_credit_disable_height_rejects_negative",
-    "validation_tests/regtest_shielded_sunset_height_override",
-    "validation_tests/regtest_shielded_direct_send_public_flow_disable_height_override",
-    "validation_tests/regtest_shielded_direct_send_public_flow_disable_height_rejects_negative",
-    "validation_tests/regtest_shielded_height_128000_upgrade_gate_overrides",
-    "validation_tests/regtest_shielded_sunset_height_rejects_negative",
-    "validation_tests/ds3_unpinned_shielded_snapshot_fails_closed_by_default",
-    "validation_tests/recovery_proof_verify_cost_consensus_gate_defaults_unset",
-    "validation_tests/mainnet_velocity_cap_active_at_sunset_and_expires_at_v03212_height",
-    "validation_tests/production_shielded_pool_credit_disable_aligns_with_sunset",
-    "validation_tests/recovery_exit_activates_with_shielded_sunset_on_production_networks",
-    "validation_tests/signet_parse_tests",
-    "validation_tests/test_regtest_assumeutxo",
-    "validation_tests/assumeutxo_snapshot_header_compatibility",
-    "validation_tests/attested_snapshot_header_compatibility",
-    "validation_tests/test_regtest_assumeutxo_functional_harness_override",
-    "validation_tests/test_mainnet_assumeutxo_snapshot_metadata",
-    "validation_tests/assumeutxo_bases_must_sit_on_checkpoint_lineage",
-    "validation_tests/block_malleation",
-    "versionbits_tests/versionbits_test",
-    "versionbits_tests/versionbits_computeblockversion",
-    "versionbits_tests/versionbits_height_overflow_guards",
-    "versionbits_tests/versionbits_period_alignment_handles_genesis_parent",
-    "matmul_field_tests/field_modulus_is_prime",
-    "matmul_field_tests/field_add_basic",
-    "matmul_field_tests/field_add_commutative",
-    "matmul_field_tests/field_mul_basic",
-    "matmul_field_tests/field_mul_associative",
-    "matmul_field_tests/field_mul_distributive",
-    "matmul_field_tests/field_inverse",
-    "matmul_field_tests/field_sub_is_add_neg",
-    "matmul_field_tests/field_from_oracle_deterministic",
-    "matmul_field_tests/field_from_oracle_output_range",
-    "matmul_field_tests/field_from_oracle_different_seed_differs",
-    "matmul_field_tests/field_from_oracle_different_index_differs",
-    "matmul_field_tests/field_reduce64_edge_cases",
-    "matmul_field_tests/field_reduce64_single_fold_boundary",
-    "matmul_field_tests/field_reduce64_double_fold_required",
-    "matmul_field_tests/field_reduce64_exhaustive_power_of_two",
-    "matmul_field_tests/field_dot_product_basic",
-    "matmul_field_tests/field_dot_kernel_probe_matches_build",
-    "matmul_field_tests/field_dot_product_empty",
-    "matmul_field_tests/field_dot_product_matches_manual_reduce",
-    "matmul_field_tests/field_dot_product_worst_case_short",
-    "matmul_field_tests/field_dot_product_worst_case_n512",
-    "matmul_field_tests/field_dot_product_worst_case_large",
-    "matmul_field_tests/field_dot_product_worst_case_near_modulus",
-    "matmul_field_tests/field_naive_accumulation_overflow_demonstration",
-    "matmul_field_tests/field_naive_accumulation_two_products_wrong",
-    "matmul_field_tests/from_oracle_pinned_tv1",
-    "matmul_field_tests/from_oracle_pinned_tv2",
-    "matmul_field_tests/from_oracle_pinned_tv3",
-    "matmul_field_tests/from_oracle_pinned_tv4",
-    "matmul_field_tests/from_oracle_retry_preimage_format",
-    "matmul_field_tests/from_seed_pinned_2x2",
-    "matmul_field_tests/from_seed_row_major_indexing",
-    "matmul_field_tests/from_seed_domain_separation_a_b",
-    "matmul_field_tests/from_seed_cross_platform_consistency",
-    "matmul_field_tests/from_oracle_extra_vectors_zero_seed",
-    "matmul_field_tests/from_oracle_extra_vectors_nonzero_seed",
-    "matmul_field_tests/dot_all_max_len4_vector"
+    "validation_block_tests/processnewblock_signals_ordering",
+    "validation_block_tests/mempool_locks_reorg",
+    "validation_block_tests/try_sync_validation_queue_timeout",
+    "validation_block_tests/activatebestchain_does_not_block_on_stuck_subscriber",
+    "validation_block_tests/witness_commitment_index",
+    "validation_block_tests/random_tiebreak_equal_work",
+    "validation_chainstate_tests/validation_chainstate_resize_caches",
+    "validation_chainstate_tests/chainstate_update_tip",
+    "validation_chainstatemanager_tests/chainstatemanager",
+    "validation_chainstatemanager_tests/chainstatemanager_clears_attested_assumeutxo_on_snapshot_teardown"
   ],
   "campaign_test_budget_seconds": 1800,
   "batch_budget_seconds": 1800,
   "require_first_pass_control": true,
-  "scope": "94 previously unrun validation-rule/versionbits/finite-field unit cases; not chain recovery, device or release qualification",
-  "total": 94
+  "scope": "10 previously unrun block/chainstate/chainstate-manager timing-first maintained unit cases; no product fix or release qualification",
+  "total": 10
 }
