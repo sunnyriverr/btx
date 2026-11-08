@@ -1,4 +1,4 @@
-name: Native Windows pending script and PQ rule cases
+name: Native Windows mock signer fixture repair
 permissions:
   contents: read
 jobs:
@@ -182,8 +182,8 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Verify saved binary and249pending selectors
-      id: ready
+    - name: Build only mock-signer fixture and run24affected cases
+      id: repair
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
         Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
@@ -201,91 +201,16 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/refusal.py ready
+        python controls/contrib/devtools/windows-root-configure/repair.py
 
         exit /b %errorlevel%
 
         '
-    - name: Run249unrun script transaction PQ cases in48groups
-      id: units
-      shell: cmd
-      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
-        Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
-        -property installationPath`) do set "BTX_VS=%%i"
-
-        if not defined BTX_VS exit /b 2
-
-        call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
-
-        if errorlevel 1 exit /b %errorlevel%
-
-        set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
-
-        set "CL="
-
-        set "_CL_="
-
-        python controls/contrib/devtools/windows-root-configure/batches.py run
-
-        exit /b %errorlevel%
-
-        '
-      if: success() && steps.ready.outcome == 'success'
-    - name: Verify source objects dependencies and runtime cleanup
-      id: verification
-      shell: cmd
-      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
-        Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
-        -property installationPath`) do set "BTX_VS=%%i"
-
-        if not defined BTX_VS exit /b 2
-
-        call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
-
-        if errorlevel 1 exit /b %errorlevel%
-
-        set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
-
-        set "CL="
-
-        set "_CL_="
-
-        python controls/contrib/devtools/windows-root-configure/batches.py verify
-
-        exit /b %errorlevel%
-
-        '
-      if: always() && steps.ready.outcome == 'success'
-    - name: Require selected batch and cleanup
-      id: verdict
-      shell: cmd
-      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
-        Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
-        -property installationPath`) do set "BTX_VS=%%i"
-
-        if not defined BTX_VS exit /b 2
-
-        call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
-
-        if errorlevel 1 exit /b %errorlevel%
-
-        set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
-
-        set "CL="
-
-        set "_CL_="
-
-        python controls/contrib/devtools/windows-root-configure/refusal.py verdict
-
-        exit /b %errorlevel%
-
-        '
-      if: always() && steps.verification.outcome == 'success'
     - name: Preserve actual current build and unit evidence
       if: always()
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
       with:
-        name: native-windows-pending-script-pq
+        name: native-windows-mock-signer-repair
         path: D:\btx-native-035\evidence\
         retention-days: 14
 'on':
