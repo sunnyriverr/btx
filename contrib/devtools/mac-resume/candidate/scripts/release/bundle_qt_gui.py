@@ -374,7 +374,9 @@ def deploy_macos_qt_app(source_binary: Path, release_root: Path, version: str) -
                 raise RuntimeError("macdeployqt reported an incomplete deployment: " + diagnostics)
         finally:
             for plugin in adjusted:
-                subprocess.check_call(["install_name_tool", "-delete_rpath", search_path, str(plugin)])
+                loads = subprocess.check_output(["otool", "-l", str(plugin)], text=True)
+                if f"path {search_path} (offset" in loads:
+                    subprocess.check_call(["install_name_tool", "-delete_rpath", search_path, str(plugin)])
     _rewrite_homebrew_ids(app)
     if shutil.which("codesign"):
         subprocess.check_call(["codesign", "--force", "--deep", "--sign", "-", str(app)])

@@ -668,7 +668,7 @@ class BundleQtGuiTest(unittest.TestCase):
         result, _ = self._mac_deploy_fixture("WARNING: informational message\n")
         self.assertTrue(result.is_file())
 
-    def test_macos_plugin_only_frameworks_are_additional_roots(self):
+    def _plugin_dependency_recovery_fixture(self, tool_removed_path=False):
         with tempfile.TemporaryDirectory() as tmp:
             root = pathlib.Path(tmp)
             binary = root / "btx-qt"
@@ -684,7 +684,7 @@ class BundleQtGuiTest(unittest.TestCase):
                 return subprocess.CompletedProcess(args, 0, "", "")
             with mock.patch.object(self.module, "_macdeployqt", return_value=pathlib.Path("/qt/bin/macdeployqt")), \
                  mock.patch.object(self.module.subprocess, "run", side_effect=deploy), \
-                 mock.patch.object(self.module.subprocess, "check_output", return_value=""), \
+                 mock.patch.object(self.module.subprocess, "check_output", side_effect=["", "" if tool_removed_path else "path /qt/lib (offset 12)"]), \
                  mock.patch.object(self.module.subprocess, "check_call") as edit, \
                  mock.patch.object(self.module.shutil, "which", return_value=None):
                 self.module.deploy_macos_qt_app(binary, root / "release", "test")
@@ -692,7 +692,14 @@ class BundleQtGuiTest(unittest.TestCase):
             self.assertIn("-no-plugins", calls[1])
             self.assertTrue(any(arg.startswith("-executable=") for arg in calls[1]))
             self.assertIn("-add_rpath", edit.call_args_list[0].args[0])
-            self.assertIn("-delete_rpath", edit.call_args_list[-1].args[0])
+            deletes = [c for c in edit.call_args_list if "-delete_rpath" in c.args[0]]
+            self.assertEqual(len(deletes), 0 if tool_removed_path else 1)
+
+    def test_macos_plugin_only_frameworks_are_additional_roots(self):
+        self._plugin_dependency_recovery_fixture(False)
+
+    def test_macos_deployer_may_remove_temporary_rpath(self):
+        self._plugin_dependency_recovery_fixture(True)
 
     def test_direct_private_dependency_survives_host_branch_cut(self):
         with tempfile.TemporaryDirectory() as tmp:
