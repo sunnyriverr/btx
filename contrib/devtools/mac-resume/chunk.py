@@ -120,7 +120,7 @@ finally:
     if p.is_file() and not p.is_symlink() and p.name.startswith('btx') and os.access(p,os.X_OK):finished[p.name]={'sha256':sha(p),'bytes':p.stat().st_size,'mode':p.stat().st_mode&0o777}
   assert sum(x['bytes'] for x in finished.values())<2*1024**3
   with tarfile.open(bins/'available-executables.tar.gz','w:gz',compresslevel=1) as t:
-   for name in finished:t.add(roots[1]/'bin'/name,arcname=name)
+   for name in finished:t.add(roots[1]/'aarch64-apple-darwin/release'/name,arcname=name)
   (bins/'manifest.json').write_text(json.dumps(finished,indent=2));state['available_executables']=finished;state['binary_artifact_sha256']=sha(bins/'available-executables.tar.gz')
  except Exception as e:state['binary_retention_error']=repr(e)
  try:
