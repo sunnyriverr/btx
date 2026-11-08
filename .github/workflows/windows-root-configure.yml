@@ -1,4 +1,4 @@
-name: Native Windows pending governor and ring cases
+name: Native Windows pending RingCT cases
 permissions:
   contents: read
 jobs:
@@ -182,7 +182,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Verify saved binary and 91 never-selected cases
+    - name: Verify saved binary and 82 never-selected cases
       id: ready
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -206,7 +206,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Run 91 new governor and ring cases in 32 groups
+    - name: Run 91 new RingCT cases in 32 groups
       id: units
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft

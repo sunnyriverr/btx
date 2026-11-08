@@ -3,449 +3,407 @@
   "binary_sha256": "31e45f1d0f2aed4168982120596182b5268057e1b9806960f27a60c769906bdd",
   "jobs": [
     {
-      "suite": "resource_governor_tests/0",
+      "suite": "ringct_balance_proof_tests/0",
       "selectors": [
-        "resource_governor_tests/gov_consensus_and_spend_never",
-        "resource_governor_tests/gov_pol_01_idle_gpu_permits_mining",
-        "resource_governor_tests/gov_pol_02_foreground_gpu_blocks_mining"
+        "ringct_balance_proof_tests/create_verify_balance_proof",
+        "ringct_balance_proof_tests/imbalance_rejected",
+        "ringct_balance_proof_tests/tamper_detected"
       ],
       "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 120
+      "timeout_seconds": 300
     },
     {
-      "suite": "resource_governor_tests/1",
+      "suite": "ringct_balance_proof_tests/1",
       "selectors": [
-        "resource_governor_tests/gov_pol_03_validation_blocks_immediately",
-        "resource_governor_tests/gov_pol_04_thermal_hot_blocks_mining",
-        "resource_governor_tests/gov_pol_05_battery_blocks_mining"
+        "ringct_balance_proof_tests/tx_binding_hash_mismatch_rejected",
+        "ringct_balance_proof_tests/serialized_size_is_compact",
+        "ringct_balance_proof_tests/zero_fee_balance_proof_roundtrip"
       ],
       "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 120
+      "timeout_seconds": 300
     },
     {
-      "suite": "resource_governor_tests/2",
+      "suite": "ringct_balance_proof_tests/2",
       "selectors": [
-        "resource_governor_tests/gov_pol_06_network_busy_throttles_seeding",
-        "resource_governor_tests/gov_pol_07_foreground_download_outranks_seeding",
-        "resource_governor_tests/gov_pol_08_preservation_lowest_network_priority"
+        "ringct_balance_proof_tests/wrong_fee_fails_verification",
+        "ringct_balance_proof_tests/three_input_three_output_balance_proof",
+        "ringct_balance_proof_tests/swapped_input_output_order_fails"
       ],
       "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 120
+      "timeout_seconds": 300
     },
     {
-      "suite": "resource_governor_tests/3",
+      "suite": "ringct_commitment_tests/0",
       "selectors": [
-        "resource_governor_tests/gov_pol_09_fixed_operator_limits_override_auto",
-        "resource_governor_tests/gov_pol_09b_operator_cap_does_not_bypass_metered_or_battery",
-        "resource_governor_tests/gov_pol_10_off_prevents_optional_background"
+        "ringct_commitment_tests/commit_open_verify_roundtrip",
+        "ringct_commitment_tests/commit_with_seed_is_deterministic",
+        "ringct_commitment_tests/additivity_property_mod_q"
       ],
       "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 120
+      "timeout_seconds": 300
     },
     {
-      "suite": "resource_governor_tests/4",
+      "suite": "ringct_commitment_tests/1",
       "selectors": [
-        "resource_governor_tests/gov_off_denies_mining_not_ungoverned_mode",
-        "resource_governor_tests/gov_unarmed_auto_schedule_does_not_fail_open",
-        "resource_governor_tests/gov_unarmed_manual_consent_preserves_existing_miner"
+        "ringct_commitment_tests/commitment_serialization_roundtrip",
+        "ringct_commitment_tests/commitment_deserialize_rejects_out_of_range_coeff",
+        "ringct_commitment_tests/commitment_modq23_serialization_boundary_roundtrip"
       ],
       "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 120
+      "timeout_seconds": 300
     },
     {
-      "suite": "resource_governor_tests/5",
+      "suite": "ringct_commitment_tests/2",
       "selectors": [
-        "resource_governor_tests/gov_hys_01_short_spike_does_not_flap",
-        "resource_governor_tests/gov_hys_02_sustained_pressure_pauses",
-        "resource_governor_tests/gov_hys_03_brief_idle_does_not_resume"
+        "ringct_commitment_tests/deterministic_commitment_known_answer_vector",
+        "ringct_commitment_tests/zero_value_commitment_roundtrip",
+        "ringct_commitment_tests/max_money_commitment_roundtrip"
       ],
       "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 120
+      "timeout_seconds": 300
     },
     {
-      "suite": "resource_governor_tests/6",
+      "suite": "ringct_commitment_tests/3",
       "selectors": [
-        "resource_governor_tests/gov_hys_04_sustained_idle_resumes",
-        "resource_governor_tests/gov_hys_05_cooldown_enforced",
-        "resource_governor_tests/gov_hys_06_rapid_alternating_samples_stable"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "resource_governor_tests/7",
-      "selectors": [
-        "resource_governor_tests/gov_mine_01_starts_after_idle_threshold",
-        "resource_governor_tests/gov_mine_02_ramps_intensity",
-        "resource_governor_tests/gov_mine_03_foreground_ai_pauses"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "resource_governor_tests/8",
-      "selectors": [
-        "resource_governor_tests/gov_mine_04_validation_signal_pauses",
-        "resource_governor_tests/gov_mine_05_cancel_does_not_leave_active",
-        "resource_governor_tests/gov_mine_06_intensity_zero_on_stop"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "resource_governor_tests/9",
-      "selectors": [
-        "resource_governor_tests/gov_mine_07_resumes_cleanly",
-        "resource_governor_tests/gov_mine_08_policy_has_no_stale_submit_flag",
-        "resource_governor_tests/gov_mine_09_reserved_validator_never_mined"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "resource_governor_tests/10",
-      "selectors": [
-        "resource_governor_tests/gov_net_01_idle_link_increases_allowance",
-        "resource_governor_tests/gov_net_02_busy_link_reduces_allowance",
-        "resource_governor_tests/gov_net_03_latency_inflation_reduces_upload"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "resource_governor_tests/11",
-      "selectors": [
-        "resource_governor_tests/gov_net_04_explicit_cap_always_respected",
-        "resource_governor_tests/gov_net_05_foreground_retrieval_retains_bandwidth",
-        "resource_governor_tests/gov_net_06_seeding_resumes_after_pressure"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "resource_governor_tests/12",
-      "selectors": [
-        "resource_governor_tests/gov_net_07_preservation_throttled_before_seeding",
-        "resource_governor_tests/gov_net_08_no_thread_explosion_in_permit",
-        "resource_governor_tests/gov_pwr_01_desktop_ac_permits"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "resource_governor_tests/13",
-      "selectors": [
-        "resource_governor_tests/gov_pwr_02_laptop_battery_pauses_mining",
-        "resource_governor_tests/gov_pwr_03_ac_restore_permits_later_resume",
-        "resource_governor_tests/gov_pwr_04_hot_reduces_background"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "resource_governor_tests/14",
-      "selectors": [
-        "resource_governor_tests/gov_pwr_05_critical_stops_optional",
-        "resource_governor_tests/gov_pwr_06_thermal_recovery_obeys_cooldown",
-        "resource_governor_tests/gov_mem_01_memory_pressure_reduces_concurrency"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "resource_governor_tests/15",
-      "selectors": [
-        "resource_governor_tests/gov_mem_02_swap_pressure_pauses_heavy",
-        "resource_governor_tests/gov_disk_01_high_io_reduces_preservation",
-        "resource_governor_tests/gov_disk_02_emergency_storage_allows_gc"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "resource_governor_tests/16",
-      "selectors": [
-        "resource_governor_tests/gov_disk_03_governor_does_not_evict_pins",
-        "resource_governor_tests/gov_disk_04_gc_bounded_vs_foreground",
-        "resource_governor_tests/gov_fail_01_unavailable_pauses_mining"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "resource_governor_tests/17",
-      "selectors": [
-        "resource_governor_tests/gov_fail_02_unavailable_does_not_touch_consensus",
-        "resource_governor_tests/gov_fail_03_modeld_independence_documented",
-        "resource_governor_tests/gov_fail_04_unknown_gpu_conservative_intensity"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "resource_governor_tests/18",
-      "selectors": [
-        "resource_governor_tests/gov_fail_05_malformed_policy_rejected",
-        "resource_governor_tests/gov_mode_parse_and_rpc_shape",
-        "resource_governor_tests/gov_metered_pauses_preservation"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "resource_governor_tests/19",
-      "selectors": [
-        "resource_governor_tests/gov_e2e_overnight_12h",
-        "resource_governor_tests/gov_e2e_active_day",
-        "resource_governor_tests/gov_e2e_val_lat"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "resource_governor_tests/20",
-      "selectors": [
-        "resource_governor_tests/gov_e2e_nvidia_workstation",
-        "resource_governor_tests/gov_e2e_apple_metal",
-        "resource_governor_tests/gov_e2e_bufferbloat_shaped"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "resource_governor_tests/21",
-      "selectors": [
-        "resource_governor_tests/gov_e2e_battery_sysfs"
+        "ringct_commitment_tests/commitment_hiding_property"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 120
+      "timeout_seconds": 300
     },
     {
-      "suite": "rest_tests/0",
+      "suite": "ringct_matrict_tests/0",
       "selectors": [
-        "rest_tests/test_query_string"
+        "ringct_matrict_tests/create_verify_matrict_roundtrip",
+        "ringct_matrict_tests/create_verify_matrict_with_explicit_output_note_commitments",
+        "ringct_matrict_tests/output_commitment_mismatch_rejected"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "ringct_matrict_tests/1",
+      "selectors": [
+        "ringct_matrict_tests/ring_member_mismatch_rejected",
+        "ringct_matrict_tests/matrict_verifier_rejects_empty_or_subminimum_ring_surface",
+        "ringct_matrict_tests/matrict_verifier_rejects_jagged_ring_surface"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "ringct_matrict_tests/2",
+      "selectors": [
+        "ringct_matrict_tests/proof_size_target_for_2in_2out",
+        "ringct_matrict_tests/nullifier_binding_mismatch_rejected",
+        "ringct_matrict_tests/deterministic_matrict_proof_is_repeatable"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "ringct_matrict_tests/3",
+      "selectors": [
+        "ringct_matrict_tests/hedged_entropy_changes_matrict_proof_but_verifies",
+        "ringct_matrict_tests/three_input_matrict_proof_roundtrip",
+        "ringct_matrict_tests/four_input_one_output_matrict_proof_roundtrip"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "ringct_matrict_tests/4",
+      "selectors": [
+        "ringct_matrict_tests/sub_proof_substitution_detected",
+        "ringct_matrict_tests/matrict_serialize_rejects_oversized_vector_counts",
+        "ringct_matrict_tests/matrict_unserialize_rejects_oversized_vector_counts"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "ringct_matrict_tests/5",
+      "selectors": [
+        "ringct_matrict_tests/matrict_unserialize_rejects_vector_count_mismatches",
+        "ringct_matrict_tests/cross_transaction_proof_replay_detected",
+        "ringct_matrict_tests/binding_hash_binds_genesis_after_disable_height"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "ringct_range_proof_tests/0",
+      "selectors": [
+        "ringct_range_proof_tests/create_verify_range_proof",
+        "ringct_range_proof_tests/negative_value_rejected",
+        "ringct_range_proof_tests/value_above_range_bits_rejected"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "ringct_range_proof_tests/1",
+      "selectors": [
+        "ringct_range_proof_tests/tamper_fails_verification",
+        "ringct_range_proof_tests/binding_tamper_fails_verification",
+        "ringct_range_proof_tests/serialized_size_is_compact"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "ringct_range_proof_tests/2",
+      "selectors": [
+        "ringct_range_proof_tests/max_money_value_roundtrip",
+        "ringct_range_proof_tests/zero_value_range_proof_roundtrip",
+        "ringct_range_proof_tests/value_one_range_proof_roundtrip"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "ringct_range_proof_tests/3",
+      "selectors": [
+        "ringct_range_proof_tests/power_of_two_boundary_range_proof_roundtrip",
+        "ringct_range_proof_tests/max_range_value_roundtrip",
+        "ringct_range_proof_tests/wrong_commitment_fails_verification"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "ringct_range_proof_tests/4",
+      "selectors": [
+        "ringct_range_proof_tests/all_zero_responses_rejected"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 120
+      "timeout_seconds": 300
     },
     {
-      "suite": "result_tests/0",
+      "suite": "ringct_ring_signature_tests/0",
       "selectors": [
-        "result_tests/check_returned",
-        "result_tests/check_value_or"
+        "ringct_ring_signature_tests/create_verify_ring_signature",
+        "ringct_ring_signature_tests/wrong_message_fails",
+        "ringct_ring_signature_tests/tamper_detected"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "ringct_ring_signature_tests/1",
+      "selectors": [
+        "ringct_ring_signature_tests/challenge_decomposition_tamper_detected",
+        "ringct_ring_signature_tests/random_forgery_rejected",
+        "ringct_ring_signature_tests/monte_carlo_forgery_rejection"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "ringct_ring_signature_tests/2",
+      "selectors": [
+        "ringct_ring_signature_tests/challenge_chain_tamper_detected",
+        "ringct_ring_signature_tests/public_key_offset_tamper_detected",
+        "ringct_ring_signature_tests/duplicate_effective_public_keys_rejected"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "ringct_ring_signature_tests/3",
+      "selectors": [
+        "ringct_ring_signature_tests/serialized_size_is_compact",
+        "ringct_ring_signature_tests/derive_input_nullifier_is_deterministic",
+        "ringct_ring_signature_tests/derive_input_secret_from_note_requires_32_byte_key_and_nonzero_secret"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "ringct_ring_signature_tests/4",
+      "selectors": [
+        "ringct_ring_signature_tests/ring_signature_nullifier_binding_detects_tamper",
+        "ringct_ring_signature_tests/create_rejects_zero_input_secret",
+        "ringct_ring_signature_tests/response_distribution_limits_real_index_bias"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "ringct_ring_signature_tests/5",
+      "selectors": [
+        "ringct_ring_signature_tests/known_answer_vectors_for_deterministic_derivations",
+        "ringct_ring_signature_tests/duplicate_key_images_are_rejected",
+        "ringct_ring_signature_tests/duplicate_ring_members_are_rejected_by_creation"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "ringct_ring_signature_tests/6",
+      "selectors": [
+        "ringct_ring_signature_tests/slot_domain_separation_produces_distinct_public_keys",
+        "ringct_ring_signature_tests/null_ring_members_are_rejected",
+        "ringct_ring_signature_tests/verify_rejects_null_member_ring"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "ringct_ring_signature_tests/7",
+      "selectors": [
+        "ringct_ring_signature_tests/rejects_oversized_input_count",
+        "ringct_ring_signature_tests/serialize_rejects_oversized_input_proof_vector_count",
+        "ringct_ring_signature_tests/unserialize_rejects_oversized_input_proof_vector_count"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "ringct_ring_signature_tests/8",
+      "selectors": [
+        "ringct_ring_signature_tests/unserialize_polyvec_signed8_rejects_invalid_packed_length",
+        "ringct_ring_signature_tests/unserialize_polyvec_signed16_rejects_invalid_packed_length",
+        "ringct_ring_signature_tests/unserialize_polyvec_modq24_rejects_invalid_packed_length"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "ringct_ring_signature_tests/9",
+      "selectors": [
+        "ringct_ring_signature_tests/derive_input_nullifier_changes_with_key_and_member",
+        "ringct_ring_signature_tests/deterministic_ring_signature_known_answer_vector",
+        "ringct_ring_signature_tests/hedged_entropy_changes_signature_but_verifies"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "ringct_ring_signature_tests/10",
+      "selectors": [
+        "ringct_ring_signature_tests/public_key_offset_intersection_is_input_localized",
+        "ringct_ring_signature_tests/create_verify_ring_signature_supports_larger_supported_ring_sizes"
       ],
       "expected_cases": 2,
       "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "reverselock_tests/0",
-      "selectors": [
-        "reverselock_tests/reverselock_basics",
-        "reverselock_tests/reverselock_multiple",
-        "reverselock_tests/reverselock_errors"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "ring_selection_tests/0",
-      "selectors": [
-        "ring_selection_tests/select_ring_positions_size_and_real_member",
-        "ring_selection_tests/select_ring_positions_is_deterministic_for_seed",
-        "ring_selection_tests/select_ring_positions_clamps_real_position"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "ring_selection_tests/1",
-      "selectors": [
-        "ring_selection_tests/select_ring_positions_handles_empty_tree",
-        "ring_selection_tests/select_ring_positions_unique_when_tree_large_enough",
-        "ring_selection_tests/select_ring_positions_covers_available_members_when_tree_small"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "ring_selection_tests/2",
-      "selectors": [
-        "ring_selection_tests/select_ring_positions_keeps_unique_first_sample_without_shift",
-        "ring_selection_tests/select_ring_positions_practical_trees_avoid_oldest_bucket_collapse",
-        "ring_selection_tests/select_shared_ring_positions_practical_trees_do_not_isolate_recent_real_members"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "ring_selection_tests/3",
-      "selectors": [
-        "ring_selection_tests/select_ring_positions_practical_trees_cover_recent_maturation_window",
-        "ring_selection_tests/select_ring_positions_age_spread_covers_all_quartiles",
-        "ring_selection_tests/select_shared_ring_positions_age_spread_covers_all_quartiles"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "ring_selection_tests/4",
-      "selectors": [
-        "ring_selection_tests/select_ring_positions_shifted_pareto_sampler_avoids_newest_bucket_collapse",
-        "ring_selection_tests/select_shared_ring_positions_shifted_pareto_sampler_avoids_newest_bucket_collapse",
-        "ring_selection_tests/select_ring_positions_with_exclusions_avoids_overlap_when_possible"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "ring_selection_tests/5",
-      "selectors": [
-        "ring_selection_tests/select_ring_positions_with_exclusions_is_deterministic",
-        "ring_selection_tests/select_ring_positions_with_exclusions_preserves_diversity_target",
-        "ring_selection_tests/select_ring_positions_with_tip_exclusions_avoids_recent_members_when_possible"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
-    },
-    {
-      "suite": "ring_selection_tests/6",
-      "selectors": [
-        "ring_selection_tests/select_ring_positions_with_tip_exclusions_keeps_real_member_if_recent",
-        "ring_selection_tests/select_shared_ring_positions_with_tip_exclusions_adds_recent_decoy_when_real_is_recent",
-        "ring_selection_tests/real_index_uniform_distribution"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 120
+      "timeout_seconds": 300
     }
   ],
   "all_enabled_cases": [
-    "resource_governor_tests/gov_consensus_and_spend_never",
-    "resource_governor_tests/gov_pol_01_idle_gpu_permits_mining",
-    "resource_governor_tests/gov_pol_02_foreground_gpu_blocks_mining",
-    "resource_governor_tests/gov_pol_03_validation_blocks_immediately",
-    "resource_governor_tests/gov_pol_04_thermal_hot_blocks_mining",
-    "resource_governor_tests/gov_pol_05_battery_blocks_mining",
-    "resource_governor_tests/gov_pol_06_network_busy_throttles_seeding",
-    "resource_governor_tests/gov_pol_07_foreground_download_outranks_seeding",
-    "resource_governor_tests/gov_pol_08_preservation_lowest_network_priority",
-    "resource_governor_tests/gov_pol_09_fixed_operator_limits_override_auto",
-    "resource_governor_tests/gov_pol_09b_operator_cap_does_not_bypass_metered_or_battery",
-    "resource_governor_tests/gov_pol_10_off_prevents_optional_background",
-    "resource_governor_tests/gov_off_denies_mining_not_ungoverned_mode",
-    "resource_governor_tests/gov_unarmed_auto_schedule_does_not_fail_open",
-    "resource_governor_tests/gov_unarmed_manual_consent_preserves_existing_miner",
-    "resource_governor_tests/gov_hys_01_short_spike_does_not_flap",
-    "resource_governor_tests/gov_hys_02_sustained_pressure_pauses",
-    "resource_governor_tests/gov_hys_03_brief_idle_does_not_resume",
-    "resource_governor_tests/gov_hys_04_sustained_idle_resumes",
-    "resource_governor_tests/gov_hys_05_cooldown_enforced",
-    "resource_governor_tests/gov_hys_06_rapid_alternating_samples_stable",
-    "resource_governor_tests/gov_mine_01_starts_after_idle_threshold",
-    "resource_governor_tests/gov_mine_02_ramps_intensity",
-    "resource_governor_tests/gov_mine_03_foreground_ai_pauses",
-    "resource_governor_tests/gov_mine_04_validation_signal_pauses",
-    "resource_governor_tests/gov_mine_05_cancel_does_not_leave_active",
-    "resource_governor_tests/gov_mine_06_intensity_zero_on_stop",
-    "resource_governor_tests/gov_mine_07_resumes_cleanly",
-    "resource_governor_tests/gov_mine_08_policy_has_no_stale_submit_flag",
-    "resource_governor_tests/gov_mine_09_reserved_validator_never_mined",
-    "resource_governor_tests/gov_net_01_idle_link_increases_allowance",
-    "resource_governor_tests/gov_net_02_busy_link_reduces_allowance",
-    "resource_governor_tests/gov_net_03_latency_inflation_reduces_upload",
-    "resource_governor_tests/gov_net_04_explicit_cap_always_respected",
-    "resource_governor_tests/gov_net_05_foreground_retrieval_retains_bandwidth",
-    "resource_governor_tests/gov_net_06_seeding_resumes_after_pressure",
-    "resource_governor_tests/gov_net_07_preservation_throttled_before_seeding",
-    "resource_governor_tests/gov_net_08_no_thread_explosion_in_permit",
-    "resource_governor_tests/gov_pwr_01_desktop_ac_permits",
-    "resource_governor_tests/gov_pwr_02_laptop_battery_pauses_mining",
-    "resource_governor_tests/gov_pwr_03_ac_restore_permits_later_resume",
-    "resource_governor_tests/gov_pwr_04_hot_reduces_background",
-    "resource_governor_tests/gov_pwr_05_critical_stops_optional",
-    "resource_governor_tests/gov_pwr_06_thermal_recovery_obeys_cooldown",
-    "resource_governor_tests/gov_mem_01_memory_pressure_reduces_concurrency",
-    "resource_governor_tests/gov_mem_02_swap_pressure_pauses_heavy",
-    "resource_governor_tests/gov_disk_01_high_io_reduces_preservation",
-    "resource_governor_tests/gov_disk_02_emergency_storage_allows_gc",
-    "resource_governor_tests/gov_disk_03_governor_does_not_evict_pins",
-    "resource_governor_tests/gov_disk_04_gc_bounded_vs_foreground",
-    "resource_governor_tests/gov_fail_01_unavailable_pauses_mining",
-    "resource_governor_tests/gov_fail_02_unavailable_does_not_touch_consensus",
-    "resource_governor_tests/gov_fail_03_modeld_independence_documented",
-    "resource_governor_tests/gov_fail_04_unknown_gpu_conservative_intensity",
-    "resource_governor_tests/gov_fail_05_malformed_policy_rejected",
-    "resource_governor_tests/gov_mode_parse_and_rpc_shape",
-    "resource_governor_tests/gov_metered_pauses_preservation",
-    "resource_governor_tests/gov_e2e_overnight_12h",
-    "resource_governor_tests/gov_e2e_active_day",
-    "resource_governor_tests/gov_e2e_val_lat",
-    "resource_governor_tests/gov_e2e_nvidia_workstation",
-    "resource_governor_tests/gov_e2e_apple_metal",
-    "resource_governor_tests/gov_e2e_bufferbloat_shaped",
-    "resource_governor_tests/gov_e2e_battery_sysfs",
-    "rest_tests/test_query_string",
-    "result_tests/check_returned",
-    "result_tests/check_value_or",
-    "reverselock_tests/reverselock_basics",
-    "reverselock_tests/reverselock_multiple",
-    "reverselock_tests/reverselock_errors",
-    "ring_selection_tests/select_ring_positions_size_and_real_member",
-    "ring_selection_tests/select_ring_positions_is_deterministic_for_seed",
-    "ring_selection_tests/select_ring_positions_clamps_real_position",
-    "ring_selection_tests/select_ring_positions_handles_empty_tree",
-    "ring_selection_tests/select_ring_positions_unique_when_tree_large_enough",
-    "ring_selection_tests/select_ring_positions_covers_available_members_when_tree_small",
-    "ring_selection_tests/select_ring_positions_keeps_unique_first_sample_without_shift",
-    "ring_selection_tests/select_ring_positions_practical_trees_avoid_oldest_bucket_collapse",
-    "ring_selection_tests/select_shared_ring_positions_practical_trees_do_not_isolate_recent_real_members",
-    "ring_selection_tests/select_ring_positions_practical_trees_cover_recent_maturation_window",
-    "ring_selection_tests/select_ring_positions_age_spread_covers_all_quartiles",
-    "ring_selection_tests/select_shared_ring_positions_age_spread_covers_all_quartiles",
-    "ring_selection_tests/select_ring_positions_shifted_pareto_sampler_avoids_newest_bucket_collapse",
-    "ring_selection_tests/select_shared_ring_positions_shifted_pareto_sampler_avoids_newest_bucket_collapse",
-    "ring_selection_tests/select_ring_positions_with_exclusions_avoids_overlap_when_possible",
-    "ring_selection_tests/select_ring_positions_with_exclusions_is_deterministic",
-    "ring_selection_tests/select_ring_positions_with_exclusions_preserves_diversity_target",
-    "ring_selection_tests/select_ring_positions_with_tip_exclusions_avoids_recent_members_when_possible",
-    "ring_selection_tests/select_ring_positions_with_tip_exclusions_keeps_real_member_if_recent",
-    "ring_selection_tests/select_shared_ring_positions_with_tip_exclusions_adds_recent_decoy_when_real_is_recent",
-    "ring_selection_tests/real_index_uniform_distribution"
+    "ringct_balance_proof_tests/create_verify_balance_proof",
+    "ringct_balance_proof_tests/imbalance_rejected",
+    "ringct_balance_proof_tests/tamper_detected",
+    "ringct_balance_proof_tests/tx_binding_hash_mismatch_rejected",
+    "ringct_balance_proof_tests/serialized_size_is_compact",
+    "ringct_balance_proof_tests/zero_fee_balance_proof_roundtrip",
+    "ringct_balance_proof_tests/wrong_fee_fails_verification",
+    "ringct_balance_proof_tests/three_input_three_output_balance_proof",
+    "ringct_balance_proof_tests/swapped_input_output_order_fails",
+    "ringct_commitment_tests/commit_open_verify_roundtrip",
+    "ringct_commitment_tests/commit_with_seed_is_deterministic",
+    "ringct_commitment_tests/additivity_property_mod_q",
+    "ringct_commitment_tests/commitment_serialization_roundtrip",
+    "ringct_commitment_tests/commitment_deserialize_rejects_out_of_range_coeff",
+    "ringct_commitment_tests/commitment_modq23_serialization_boundary_roundtrip",
+    "ringct_commitment_tests/deterministic_commitment_known_answer_vector",
+    "ringct_commitment_tests/zero_value_commitment_roundtrip",
+    "ringct_commitment_tests/max_money_commitment_roundtrip",
+    "ringct_commitment_tests/commitment_hiding_property",
+    "ringct_matrict_tests/create_verify_matrict_roundtrip",
+    "ringct_matrict_tests/create_verify_matrict_with_explicit_output_note_commitments",
+    "ringct_matrict_tests/output_commitment_mismatch_rejected",
+    "ringct_matrict_tests/ring_member_mismatch_rejected",
+    "ringct_matrict_tests/matrict_verifier_rejects_empty_or_subminimum_ring_surface",
+    "ringct_matrict_tests/matrict_verifier_rejects_jagged_ring_surface",
+    "ringct_matrict_tests/proof_size_target_for_2in_2out",
+    "ringct_matrict_tests/nullifier_binding_mismatch_rejected",
+    "ringct_matrict_tests/deterministic_matrict_proof_is_repeatable",
+    "ringct_matrict_tests/hedged_entropy_changes_matrict_proof_but_verifies",
+    "ringct_matrict_tests/three_input_matrict_proof_roundtrip",
+    "ringct_matrict_tests/four_input_one_output_matrict_proof_roundtrip",
+    "ringct_matrict_tests/sub_proof_substitution_detected",
+    "ringct_matrict_tests/matrict_serialize_rejects_oversized_vector_counts",
+    "ringct_matrict_tests/matrict_unserialize_rejects_oversized_vector_counts",
+    "ringct_matrict_tests/matrict_unserialize_rejects_vector_count_mismatches",
+    "ringct_matrict_tests/cross_transaction_proof_replay_detected",
+    "ringct_matrict_tests/binding_hash_binds_genesis_after_disable_height",
+    "ringct_range_proof_tests/create_verify_range_proof",
+    "ringct_range_proof_tests/negative_value_rejected",
+    "ringct_range_proof_tests/value_above_range_bits_rejected",
+    "ringct_range_proof_tests/tamper_fails_verification",
+    "ringct_range_proof_tests/binding_tamper_fails_verification",
+    "ringct_range_proof_tests/serialized_size_is_compact",
+    "ringct_range_proof_tests/max_money_value_roundtrip",
+    "ringct_range_proof_tests/zero_value_range_proof_roundtrip",
+    "ringct_range_proof_tests/value_one_range_proof_roundtrip",
+    "ringct_range_proof_tests/power_of_two_boundary_range_proof_roundtrip",
+    "ringct_range_proof_tests/max_range_value_roundtrip",
+    "ringct_range_proof_tests/wrong_commitment_fails_verification",
+    "ringct_range_proof_tests/all_zero_responses_rejected",
+    "ringct_ring_signature_tests/create_verify_ring_signature",
+    "ringct_ring_signature_tests/wrong_message_fails",
+    "ringct_ring_signature_tests/tamper_detected",
+    "ringct_ring_signature_tests/challenge_decomposition_tamper_detected",
+    "ringct_ring_signature_tests/random_forgery_rejected",
+    "ringct_ring_signature_tests/monte_carlo_forgery_rejection",
+    "ringct_ring_signature_tests/challenge_chain_tamper_detected",
+    "ringct_ring_signature_tests/public_key_offset_tamper_detected",
+    "ringct_ring_signature_tests/duplicate_effective_public_keys_rejected",
+    "ringct_ring_signature_tests/serialized_size_is_compact",
+    "ringct_ring_signature_tests/derive_input_nullifier_is_deterministic",
+    "ringct_ring_signature_tests/derive_input_secret_from_note_requires_32_byte_key_and_nonzero_secret",
+    "ringct_ring_signature_tests/ring_signature_nullifier_binding_detects_tamper",
+    "ringct_ring_signature_tests/create_rejects_zero_input_secret",
+    "ringct_ring_signature_tests/response_distribution_limits_real_index_bias",
+    "ringct_ring_signature_tests/known_answer_vectors_for_deterministic_derivations",
+    "ringct_ring_signature_tests/duplicate_key_images_are_rejected",
+    "ringct_ring_signature_tests/duplicate_ring_members_are_rejected_by_creation",
+    "ringct_ring_signature_tests/slot_domain_separation_produces_distinct_public_keys",
+    "ringct_ring_signature_tests/null_ring_members_are_rejected",
+    "ringct_ring_signature_tests/verify_rejects_null_member_ring",
+    "ringct_ring_signature_tests/rejects_oversized_input_count",
+    "ringct_ring_signature_tests/serialize_rejects_oversized_input_proof_vector_count",
+    "ringct_ring_signature_tests/unserialize_rejects_oversized_input_proof_vector_count",
+    "ringct_ring_signature_tests/unserialize_polyvec_signed8_rejects_invalid_packed_length",
+    "ringct_ring_signature_tests/unserialize_polyvec_signed16_rejects_invalid_packed_length",
+    "ringct_ring_signature_tests/unserialize_polyvec_modq24_rejects_invalid_packed_length",
+    "ringct_ring_signature_tests/derive_input_nullifier_changes_with_key_and_member",
+    "ringct_ring_signature_tests/deterministic_ring_signature_known_answer_vector",
+    "ringct_ring_signature_tests/hedged_entropy_changes_signature_but_verifies",
+    "ringct_ring_signature_tests/public_key_offset_intersection_is_input_localized",
+    "ringct_ring_signature_tests/create_verify_ring_signature_supports_larger_supported_ring_sizes"
   ],
   "campaign_test_budget_seconds": 1800,
   "batch_budget_seconds": 1800,
   "require_first_pass_control": false,
-  "scope": "New governor/REST/result/locking/ring-selection maintained cases only; no actual device or full unit qualification",
-  "total": 91
+  "scope": "Previously unrun ring commitment/balance/matrix/range/signature maintained cases only",
+  "total": 82
 }
