@@ -24,7 +24,7 @@ def run():
     tree = ProcessTree()
     # Preserve handle until Python exits, including unhandled-error cleanup.
     globals()['process_tree'] = tree
-    assert R['status'] == 'CURRENT_FULL_LINKED'
+    assert R['status'] == 'RESTORED_BINARY_READY'
     exe = s.BUILD / 'bin/test_btx.exe'
     assert sha(exe) == M['binary_sha256'] and M['source'] == json.loads((P/'current-inputs.json').read_text())['target']
     assert not s.owned_processes()

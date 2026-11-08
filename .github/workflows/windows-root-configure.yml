@@ -1,11 +1,11 @@
-name: Native Windows current executable and credential prerequisites
+name: Native Windows saved-binary refusal controls
 permissions:
   contents: read
 jobs:
   configure:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: windows-2025
-    timeout-minutes: 35
+    timeout-minutes: 20
     env:
       BTX_NATIVE_ROOT: D:\btx-native-035
     steps:
@@ -149,7 +149,7 @@ jobs:
           D:\btx-native-035\vcpkg-installed
 
           '
-        key: btx356-s3cleanup-v1-8ac8ea813b9630b168003f71dcbc3449f81828ffe7a9ce1035cb99706fc8b08b-42348955391
+        key: btx356-currentfull-v1-f67683b78d6f574e58d1f9813a3e2429eb1b30ac884d2ff3f4421f8029611103-42413581374
     - name: Require existing exact-profile checkpoint for restore proof
       shell: pwsh
       env:
@@ -158,7 +158,7 @@ jobs:
         cache; refusing fresh rebuild" }
 
         '
-    - name: Verify exact compatible c660 checkpoint and retained objects
+    - name: Verify exact saved37472 source profile and5885objects
       id: prepare
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -182,8 +182,8 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Configure current fixture candidate with the retained dependencies
-      id: cases
+    - name: Verify saved binary hash and only two selectors
+      id: ready
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
         Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
@@ -201,100 +201,12 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/current_prerequisites.py
-        configure
+        python controls/contrib/devtools/windows-root-configure/refusal.py ready
 
         exit /b %errorlevel%
 
         '
-    - name: Check normal current plan; reject global command invalidation
-      id: fixture_build
-      shell: cmd
-      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
-        Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
-        -property installationPath`) do set "BTX_VS=%%i"
-
-        if not defined BTX_VS exit /b 2
-
-        call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
-
-        if errorlevel 1 exit /b %errorlevel%
-
-        set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
-
-        set "CL="
-
-        set "_CL_="
-
-        python controls/contrib/devtools/windows-root-configure/current_prerequisites.py
-        plans
-
-        exit /b %errorlevel%
-
-        '
-    - name: Build current reconciled targets from compatible objects
-      id: build
-      shell: cmd
-      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
-        Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
-        -property installationPath`) do set "BTX_VS=%%i"
-
-        if not defined BTX_VS exit /b 2
-
-        call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
-
-        if errorlevel 1 exit /b %errorlevel%
-
-        set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
-
-        set "CL="
-
-        set "_CL_="
-
-        python controls/contrib/devtools/windows-root-configure/resume.py build
-
-        exit /b %errorlevel%
-
-        '
-    - name: Capture complete available object checkpoint before unit execution
-      id: retention
-      shell: cmd
-      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
-        Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
-        -property installationPath`) do set "BTX_VS=%%i"
-
-        if not defined BTX_VS exit /b 2
-
-        call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
-
-        if errorlevel 1 exit /b %errorlevel%
-
-        set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
-
-        set "CL="
-
-        set "_CL_="
-
-        python controls/contrib/devtools/windows-root-configure/resume.py retain
-
-        exit /b %errorlevel%
-
-        '
-      if: always() && steps.prepare.outcome == 'success' && steps.cases.outcome ==
-        'success' && steps.fixture_build.outcome == 'success'
-    - name: Preserve compiled progress under new immutable current-source key
-      if: always() && steps.retention.outcome == 'success' && steps.retention.outputs.checkpoint_valid
-        == 'true'
-      uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
-      with:
-        path: 'D:\btx-native-035\project-build
-
-          D:\btx-native-035\vcpkg-installed
-
-          '
-        key: btx356-currentfull-v1-${{ steps.retention.outputs.checkpoint_key }}-${{
-          github.run_id }}
-    - name: Run only31 explicit affected and necessary control cases
+    - name: Run only two nonnative-helper refusal controls
       id: units
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -318,8 +230,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-      if: success() && steps.build.outcome == 'success' && steps.retention.outcome
-        == 'success'
+      if: success() && steps.ready.outcome == 'success'
     - name: Verify source objects dependencies and runtime cleanup
       id: verification
       shell: cmd
@@ -339,14 +250,13 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/resume.py finish
+        python controls/contrib/devtools/windows-root-configure/batches.py verify
 
         exit /b %errorlevel%
 
         '
-      if: always() && steps.prepare.outcome == 'success' && steps.cases.outcome ==
-        'success'
-    - name: Verify selected-case result without claiming full unit acceptance
+      if: always() && steps.ready.outcome == 'success'
+    - name: Require both refusal controls and cleanup
       id: verdict
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -365,17 +275,17 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/resume.py verdict
+        python controls/contrib/devtools/windows-root-configure/refusal.py verdict
 
         exit /b %errorlevel%
 
         '
-      if: always() && steps.prepare.outcome == 'success'
+      if: always() && steps.verification.outcome == 'success'
     - name: Preserve actual current build and unit evidence
       if: always()
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
       with:
-        name: native-windows-current-runtime-prerequisites
+        name: native-windows-refusal-controls
         path: D:\btx-native-035\evidence\
         retention-days: 14
 'on':
