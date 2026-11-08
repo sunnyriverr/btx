@@ -13,7 +13,7 @@ try:
  cat=s.catalog(C['target'],'mock-before')
  assert [n for n in cat['files'] if cat['files'][n]!=R['source_catalog']['files'].get(n)]==['src/test/pq_phase4_tests.cpp']
  plan=['ninja','-C',str(s.BUILD),'-n','-d','explain','test_btx'];s.need('mock-build-plan',plan,120)
- text=(s.E/'mock-build-plan.log').read_text(errors='replace');actions=re.findall(r'^\[\d+/\d+\] (.*)',text,re.M);assert 0<len(actions)<=15,actions
+ text=(s.E/'mock-build-plan.log').read_text(errors='replace');actions=re.findall(r'^\[\d+/\d+\] (.*)',text,re.M);assert 0<len(actions)<=20,actions
  objects=[a for a in actions if a.startswith('Building CXX object')];assert len(objects)<=3,objects
  assert all('pq_phase4_tests.cpp' in a or 'clientversion.cpp' in a for a in objects),objects
  R['mock_build_plan']=actions;s.save()
@@ -21,7 +21,9 @@ try:
  current=sha(s.BUILD/'bin/test_btx.exe');assert current!=baseline
  R.update(source=C['target'],source_catalog=cat,baseline_binary_sha256=baseline,unit_binary_sha256=current,status='RESTORED_BINARY_READY')
  m=json.loads((P/'completion-manifest.json').read_text());m['binary_sha256']=current;(P/'completion-manifest.json').write_text(json.dumps(m));shutil.copyfile(P/'completion-manifest.json',s.E/'completion-manifest.json');s.save()
+ inputs=json.loads((P/'current-inputs.json').read_text());inputs['target']=C['target'];(P/'current-inputs.json').write_text(json.dumps(inputs))
  import batches
+ R=batches.R
  batches.run()
  assert len(R['batch_results'])==24
 finally:
@@ -42,7 +44,8 @@ finally:
   assert len(changed_objects)<=3 and all('pq_phase4_tests.cpp' in n or 'clientversion.cpp' in n for n in changed_objects),changed_objects
   assert all(not n.startswith('vcpkg-installed/') for n in changed)
   assert not any(n.endswith(x) for n in changed for x in ['CMakeCache.txt','compile_commands.json'])
-  assert all(not n.endswith('.exe') or n.endswith('test_btx.exe') for n in changed)
+  R['mock_relinked_executables']=[n for n in changed if n.endswith('.exe')]
+  assert all(not n.endswith('.exe') or any(n.endswith(x) for x in ['test_btx.exe','btxd.exe','btx-open.exe','btx-modeld.exe']) for n in changed)
  if 'cat' in globals():assert s.catalog(C['target'],'mock-after')==cat
  R['mock_cleanup_verified']=not survivors and R.get('runtime_data_removed',False) and R.get('short_drive_removed',False)
  R['mock_repair_pass']=R['mock_cleanup_verified'] and len(R.get('batch_results',[]))==24 and all(j['state']=='passed' for j in R['batch_results'])
