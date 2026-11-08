@@ -83,7 +83,12 @@ def endpoint(value):
         (Path(os.environ['GITHUB_WORKSPACE'])/'atlas-window-results/endpoint-accessibility.json').write_text(json.dumps(diagnostic,indent=2)+'\n')
 
 def file_path(path):
-    # Standard GTK location entry, after independently observing the chooser title.
-    subprocess.run(['xdotool', 'key', '--clearmodifiers', 'ctrl+l'], check=True, timeout=5)
-    subprocess.run(['xdotool', 'type', '--clearmodifiers', '--', str(path)], check=True, timeout=5)
-    subprocess.run(['xdotool', 'key', '--clearmodifiers', 'Return'], check=True, timeout=5)
+    # Focus the independently observed native GTK picker, not the underlying web form.
+    windows=subprocess.check_output(['xdotool','search','--onlyvisible','--name',"Choose this BTX node's RPC"],text=True,timeout=5).splitlines()
+    if len(windows)!=1:raise TimeoutError('Native cookie picker not uniquely visible')
+    subprocess.run(['xdotool','windowactivate','--sync',windows[0]],check=True,timeout=5)
+    subprocess.run(['xdotool','key','--clearmodifiers','ctrl+l'],check=True,timeout=5)
+    time.sleep(.3)
+    subprocess.run(['xdotool','type','--clearmodifiers','--',str(path)],check=True,timeout=5)
+    wait(lambda:str(path) in text(),10)
+    click('Open')

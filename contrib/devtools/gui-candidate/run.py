@@ -115,6 +115,7 @@ def main():
         ui.wait(lambda:'Choose cookie and connect' in ui.text())
         ui.endpoint(endpoint);ui.click('Choose cookie and connect')
         ui.wait(lambda:"Choose this BTX node's RPC .cookie file" in ui.text())
+        state['cookie_picker_text']=ui.text();state['cookie_picker_image']=capture('cookie-picker')
         ui.file_path(runtime/'node/regtest/.cookie')
         ui.wait(lambda:'Connect to local node' in ui.text())
         confirmation=ui.text()
