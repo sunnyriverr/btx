@@ -10,8 +10,6 @@ test ! -e "$BTX_GUI_BUILD"
 test -f "$BTX_GUI_SSL/lib/libssl.a"
 test -f "$BTX_GUI_SSL/lib/libcrypto.a"
 "$BTX_GUI_SSL/bin/openssl" version
-pkg-config --atleast-version=6.2 Qt6Core
-pkg-config --modversion Qt6Core Qt6Gui Qt6Widgets Qt6Network Qt6DBus
 cmake -S "$BTX_GUI_SOURCE" -B "$BTX_GUI_BUILD" -G Ninja \
  -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ \
  -DBUILD_GUI=ON -DWITH_QT_VERSION=6 -DENABLE_WALLET=ON -DWITH_SQLITE=ON \

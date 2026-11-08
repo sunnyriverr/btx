@@ -26,8 +26,12 @@ try:
  assert not subprocess.check_output(['git','status','--porcelain','--untracked-files=no'],cwd=src)
  run(['getconf','GNU_LIBC_VERSION'],'libc');run(['g++','--version'],'compiler');run(['cmake','--version'],'cmake')
  run(['dpkg-query','-W'],'installed-packages')
- run(['pkg-config','--modversion','Qt6Core','Qt6Gui','Qt6Widgets','Qt6Network','Qt6DBus','webkit2gtk-4.1','gtk+-3.0'],'gui-versions')
- plugin=run(['qtpaths6','--query','QT_INSTALL_PLUGINS'],'qt-plugin-root').strip()
+ run(['pkg-config','--modversion','webkit2gtk-4.1','gtk+-3.0'],'gui-versions')
+ probe=r/'qt-probe';probe.mkdir();(probe/'CMakeLists.txt').write_text('cmake_minimum_required(VERSION 3.22)\nproject(QtProbe LANGUAGES CXX)\nfind_package(Qt6 6.2 REQUIRED COMPONENTS Core Gui Widgets Network DBus LinguistTools)\nmessage(STATUS \"Resolved Qt ${Qt6_VERSION}\")\n')
+ run(['cmake','-S',probe,'-B',r/'qt-probe-build'],'qt-package-discovery')
+ tool=next((str(x) for x in [Path('/usr/bin/qtpaths6'),Path('/usr/lib/qt6/bin/qtpaths'),Path('/usr/lib/qt6/bin/qtpaths6')] if x.is_file()),None)
+ assert tool,'Qt paths tool unavailable'
+ plugin=run([tool,'--query','QT_INSTALL_PLUGINS'],'qt-plugin-root').strip()
  assert (Path(plugin)/'platforms/libqxcb.so').is_file(),'Qt XCB platform plugin unavailable'
  a=r/'openssl.tar.gz'
  with urllib.request.urlopen('https://github.com/openssl/openssl/releases/download/openssl-3.5.9/openssl-3.5.9.tar.gz',timeout=60) as f,a.open('wb') as dst:shutil.copyfileobj(f,dst)
