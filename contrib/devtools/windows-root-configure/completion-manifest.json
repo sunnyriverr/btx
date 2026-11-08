@@ -3,577 +3,905 @@
   "binary_sha256": "31e45f1d0f2aed4168982120596182b5268057e1b9806960f27a60c769906bdd",
   "jobs": [
     {
-      "suite": "txvalidation_tests/observed-group-01",
+      "suite": "multisig_tests/group-01",
+      "parent_suite": "multisig_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/tx_mempool_reject_coinbase",
-        "txvalidation_tests/tx_mempool_accepts_v2_egress_after_settlement_anchor_and_evicts_it_after_reorg",
-        "txvalidation_tests/tx_mempool_rejects_v2_egress_when_imported_receipt_is_missing_from_witness_set",
-        "txvalidation_tests/block_rejects_v2_egress_when_shielded_scan_units_exceed_consensus_limit",
-        "txvalidation_tests/block_rejects_v2_egress_when_shielded_tree_updates_exceed_consensus_limit",
-        "txvalidation_tests/tx_mempool_activation_gates_shielded_account_registry_append_limit"
-      ],
-      "expected_cases": 6,
-      "timeout_seconds": 120,
-      "prior_body_seconds": 8.602
-    },
-    {
-      "suite": "txvalidation_tests/observed-group-02",
-      "lane": "other",
-      "selectors": [
-        "txvalidation_tests/block_rejects_shielded_account_registry_append_limit_at_activation",
-        "txvalidation_tests/tx_mempool_activation_gates_shielded_account_registry_total_entry_limit",
-        "txvalidation_tests/block_rejects_shielded_account_registry_total_entry_limit_at_activation",
-        "txvalidation_tests/tx_mempool_accepts_hybrid_v2_egress_after_settlement_anchor_and_evicts_it_after_reorg",
-        "txvalidation_tests/tx_mempool_accepts_multi_receipt_hybrid_v2_egress_after_settlement_anchor_and_evicts_it_after_reorg",
-        "txvalidation_tests/tx_connects_claim_backed_v2_settlement_anchor_and_rewinds_state_after_reorg"
-      ],
-      "expected_cases": 6,
-      "timeout_seconds": 120,
-      "prior_body_seconds": 8.7
-    },
-    {
-      "suite": "txvalidation_tests/observed-group-03",
-      "lane": "other",
-      "selectors": [
-        "txvalidation_tests/tx_connects_adapter_backed_v2_settlement_anchor_and_rewinds_state_after_reorg",
-        "txvalidation_tests/tx_connects_receipt_adapter_backed_v2_settlement_anchor_and_rewinds_state_after_reorg",
-        "txvalidation_tests/tx_connects_multi_receipt_v2_settlement_anchor_and_rewinds_state_after_reorg",
-        "txvalidation_tests/tx_connects_reserve_bound_v2_settlement_anchor_and_rewinds_state_after_reorg",
-        "txvalidation_tests/tx_mempool_accepts_fee_bearing_v2_rebalance_and_rewinds_state_after_reorg",
-        "txvalidation_tests/tx_mempool_rejects_postfork_rebalance_legacy_wire_family"
-      ],
-      "expected_cases": 6,
-      "timeout_seconds": 120,
-      "prior_body_seconds": 7.901
-    },
-    {
-      "suite": "txvalidation_tests/observed-group-04",
-      "lane": "other",
-      "selectors": [
-        "txvalidation_tests/block_rejects_postfork_rebalance_legacy_proof_wire",
-        "txvalidation_tests/tx_mempool_rejects_postfork_rebalance_tampered_deterministic_proof",
-        "txvalidation_tests/tx_mempool_accepts_fee_bearing_reserve_bound_v2_settlement_anchor_and_rewinds_state_after_reorg",
-        "txvalidation_tests/block_rejects_post_c002_repeated_fresh_v2_rebalance_pool_credits_without_transparent_burn",
-        "txvalidation_tests/block_rejects_post_c002_rebalance_to_reserve_bound_settlement_anchor_to_matured_egress_chain",
-        "txvalidation_tests/block_rejects_v2_send_private_transfer_at_sunset_height"
-      ],
-      "expected_cases": 6,
-      "timeout_seconds": 120,
-      "prior_body_seconds": 13.71
-    },
-    {
-      "suite": "txvalidation_tests/observed-group-05",
-      "lane": "other",
-      "selectors": [
-        "txvalidation_tests/block_rejects_v2_send_unshield_with_shielded_change_at_sunset_height",
-        "txvalidation_tests/block_rejects_non_credit_v2_lifecycle_at_sunset_height",
-        "txvalidation_tests/block_rejects_shielded_egress_at_pool_disable_height",
-        "txvalidation_tests/block_rejects_shielded_ingress_at_pool_disable_height",
-        "txvalidation_tests/block_accepts_pre_pool_disable_shielded_ingress_and_egress",
-        "txvalidation_tests/mempool_evicts_non_exit_shielded_transaction_when_sunset_height_becomes_next_block"
-      ],
-      "expected_cases": 6,
-      "timeout_seconds": 120,
-      "prior_body_seconds": 42.336
-    },
-    {
-      "suite": "txvalidation_tests/observed-group-06",
-      "lane": "other",
-      "selectors": [
-        "txvalidation_tests/tx_mempool_activation_gates_stale_v2_settlement_anchor_netting_manifest",
-        "txvalidation_tests/block_rejects_stale_v2_settlement_anchor_netting_manifest_at_activation",
-        "txvalidation_tests/tx_mempool_rejects_duplicate_v2_rebalance_manifest_after_stale_activation",
-        "txvalidation_tests/tx_mempool_activation_gates_zero_fee_v2_rebalance",
-        "txvalidation_tests/tx_mempool_activation_gates_noncanonical_fee_v2_rebalance",
-        "txvalidation_tests/tx_mempool_activation_gates_legacy_matrict_rebalance_envelope"
-      ],
-      "expected_cases": 6,
-      "timeout_seconds": 120,
-      "prior_body_seconds": 8.694
-    },
-    {
-      "suite": "txvalidation_tests/observed-group-07",
-      "lane": "other",
-      "selectors": [
-        "txvalidation_tests/block_rejects_zero_fee_v2_rebalance_at_activation",
-        "txvalidation_tests/block_rejects_noncanonical_fee_v2_rebalance_at_activation",
-        "txvalidation_tests/block_rejects_legacy_matrict_rebalance_envelope_at_activation",
-        "txvalidation_tests/tx_mempool_activation_gates_immature_v2_egress_settlement_anchor",
-        "txvalidation_tests/block_rejects_v2_egress_when_settlement_anchor_is_immature_after_activation",
-        "txvalidation_tests/block_disconnect_restores_consumed_v2_settlement_anchor_metadata"
-      ],
-      "expected_cases": 6,
-      "timeout_seconds": 120,
-      "prior_body_seconds": 8.954
-    },
-    {
-      "suite": "txvalidation_tests/observed-group-08",
-      "lane": "other",
-      "selectors": [
-        "txvalidation_tests/tx_mempool_rejects_reused_v2_egress_settlement_anchor_after_single_use_activation",
-        "txvalidation_tests/tx_mempool_accepts_v2_ingress_and_rewinds_state_after_reorg",
-        "txvalidation_tests/tx_mempool_accepts_signed_v2_ingress_and_rewinds_state_after_reorg",
-        "txvalidation_tests/tx_mempool_accepts_scaled_v2_ingress_and_rewinds_state_after_reorg"
-      ],
-      "expected_cases": 4,
-      "timeout_seconds": 120,
-      "prior_body_seconds": 44.505
-    },
-    {
-      "suite": "txvalidation_tests/observed-group-09",
-      "lane": "other",
-      "selectors": [
-        "txvalidation_tests/tx_mempool_accepts_hybrid_v2_ingress_and_rewinds_state_after_reorg",
-        "txvalidation_tests/tx_mempool_accepts_multishard_v2_ingress_and_rewinds_state_after_reorg",
-        "txvalidation_tests/tx_mempool_accepts_v2_send_after_direct_send_seed_and_rewinds_state_after_reorg"
+        "multisig_tests/multisig_verify",
+        "multisig_tests/multisig_IsStandard",
+        "multisig_tests/multisig_Sign"
       ],
       "expected_cases": 3,
-      "timeout_seconds": 120,
-      "prior_body_seconds": 42.02
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/observed-group-10",
+      "suite": "pq_address_tests/group-01",
+      "parent_suite": "pq_address_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/tx_mempool_rejects_v2_send_duplicate_ring_positions",
-        "txvalidation_tests/tx_mempool_rejects_v2_send_out_of_range_ring_member_position",
-        "txvalidation_tests/tx_mempool_rejects_v2_send_subminimum_ring_witness_with_ring_position_reason",
-        "txvalidation_tests/tx_mempool_rejects_v2_send_missing_smile_public_account_without_auto_rebuild",
-        "txvalidation_tests/block_auto_recovers_v2_send_missing_account_leaf_snapshot_entry",
-        "txvalidation_tests/tx_mempool_stale_shielded_state_rejects_without_auto_rebuild"
+        "pq_address_tests/witness_v2_p2mr_destination_type_exists",
+        "pq_address_tests/encode_p2mr_address_mainnet",
+        "pq_address_tests/decode_p2mr_address_mainnet",
+        "pq_address_tests/p2mr_address_rejects_wrong_length",
+        "pq_address_tests/output_type_p2mr_exists",
+        "pq_address_tests/output_type_from_p2mr_destination"
       ],
       "expected_cases": 6,
-      "timeout_seconds": 120,
-      "prior_body_seconds": 43.974
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/observed-group-11",
+      "suite": "pq_address_tests/group-02",
+      "parent_suite": "pq_address_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/tx_mempool_activation_gates_noncanonical_smile_v2_send",
-        "txvalidation_tests/tx_mempool_rejects_noncanonical_smile_v2_send_at_codec_disable_height",
-        "txvalidation_tests/block_rejects_noncanonical_smile_v2_send_at_codec_disable_height",
-        "txvalidation_tests/tx_mempool_activation_gates_legacy_smile_anonset_binding",
-        "txvalidation_tests/tx_mempool_accepts_context_bound_smile_v2_send_at_activation",
-        "txvalidation_tests/tx_mempool_accepts_postfork_v2_lifecycle_control"
+        "pq_address_tests/get_script_for_p2mr_destination"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_crypto_tests/group-01",
+      "parent_suite": "pq_crypto_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_crypto_tests/mldsa44_keygen_produces_valid_sizes",
+        "pq_crypto_tests/mldsa44_sign_verify_roundtrip",
+        "pq_crypto_tests/mldsa44_hedged_signing_varies_signature",
+        "pq_crypto_tests/mldsa44_verify_rejects_wrong_message",
+        "pq_crypto_tests/mldsa44_verify_rejects_wrong_key",
+        "pq_crypto_tests/slhdsa128s_keygen_produces_valid_sizes"
       ],
       "expected_cases": 6,
-      "timeout_seconds": 120,
-      "prior_body_seconds": 36.47
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/observed-group-12",
+      "suite": "pq_crypto_tests/group-02",
+      "parent_suite": "pq_crypto_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/tx_mempool_accepts_postfork_v2_lifecycle_control_with_multiple_transparent_outputs",
-        "txvalidation_tests/tx_mempool_rejects_postfork_proofless_transparent_shielding_v2_send",
-        "txvalidation_tests/tx_mempool_cleanup_evicts_proofless_transparent_shielding_at_public_flow_disable",
-        "txvalidation_tests/tx_mempool_accepts_postfork_coinbase_shielding_v2_send",
-        "txvalidation_tests/tx_mempool_rejects_post_disable_coinbase_shielding_v2_send",
-        "txvalidation_tests/tx_mempool_rejects_postfork_v2_lifecycle_tampered_binding"
+        "pq_crypto_tests/slhdsa128s_sign_verify_roundtrip",
+        "pq_crypto_tests/slhdsa128s_hedged_signing_varies_signature",
+        "pq_crypto_tests/slhdsa128s_verify_rejects_wrong_message",
+        "pq_crypto_tests/pq_key_zeroization",
+        "pq_crypto_tests/slhdsa128s_fips205_official_acvp_kat",
+        "pq_crypto_tests/slhdsa128s_fips205_internal_core_kat"
       ],
       "expected_cases": 6,
-      "timeout_seconds": 120,
-      "prior_body_seconds": 7.184
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/observed-group-13",
+      "suite": "pq_crypto_tests/group-03",
+      "parent_suite": "pq_crypto_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/tx_mempool_rejects_postfork_v2_lifecycle_tampered_output_value",
-        "txvalidation_tests/tx_mempool_rejects_postfork_legacy_v2_send_lifecycle_control",
-        "txvalidation_tests/tx_mempool_rejects_postfork_mixed_direct_v2_send",
-        "txvalidation_tests/tx_mempool_rejects_postfork_mixed_direct_v2_send_without_auto_rebuild_retry"
+        "pq_crypto_tests/slhdsa128s_fips205_keygen_locus_diagnostic",
+        "pq_crypto_tests/fips205_pure_context_wrapper_bytes",
+        "pq_crypto_tests/slhdsa128s_fips205_sign_verify_roundtrip",
+        "pq_crypto_tests/slhdsa128s_fips205_mode_separation",
+        "pq_crypto_tests/mldsa44_fips205_flag_is_noop"
       ],
-      "expected_cases": 4,
-      "timeout_seconds": 120,
-      "prior_body_seconds": 16.834
+      "expected_cases": 5,
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/interrupted-01",
+      "suite": "pq_descriptor_tests/group-01",
+      "parent_suite": "pq_descriptor_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/tx_mempool_accepts_c002_zero_output_unshield_v2_send"
+        "pq_descriptor_tests/parse_mr_descriptor_single_key",
+        "pq_descriptor_tests/mr_descriptor_produces_correct_script",
+        "pq_descriptor_tests/mr_descriptor_hd_derivation",
+        "pq_descriptor_tests/mr_descriptor_two_leaf_tree",
+        "pq_descriptor_tests/mr_descriptor_reports_max_satisfaction_for_checksig_tree",
+        "pq_descriptor_tests/mr_descriptor_parses_multi_pq_leaf"
       ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
+      "expected_cases": 6,
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/unentered-01",
+      "suite": "pq_descriptor_tests/group-02",
+      "parent_suite": "pq_descriptor_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/tx_mempool_rejects_c002_zero_output_unshield_without_proof"
+        "pq_descriptor_tests/mr_descriptor_parses_sortedmulti_pq_leaf",
+        "pq_descriptor_tests/mr_descriptor_tree_syntax_single_backup_wrapper",
+        "pq_descriptor_tests/mr_descriptor_tree_syntax_multiple_backups",
+        "pq_descriptor_tests/mr_descriptor_two_leaf_tree_with_hd_backup",
+        "pq_descriptor_tests/mr_descriptor_parses_pqhd_fingerprint_form",
+        "pq_descriptor_tests/mr_descriptor_roundtrip_string"
       ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
+      "expected_cases": 6,
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/unentered-02",
+      "suite": "pq_descriptor_tests/group-03",
+      "parent_suite": "pq_descriptor_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/tx_mempool_rejects_c002_zero_output_unshield_malformed_context"
+        "pq_descriptor_tests/mr_descriptor_parses_ctv_leaf",
+        "pq_descriptor_tests/mr_descriptor_parses_unspendable_commitment_leaf",
+        "pq_descriptor_tests/mr_descriptor_rejects_commitment_wrong_hash_length",
+        "pq_descriptor_tests/mr_descriptor_parses_ctv_checksig_leaf",
+        "pq_descriptor_tests/mr_descriptor_parses_ctv_multisig_leaf",
+        "pq_descriptor_tests/mr_descriptor_parses_csfs_leaf"
       ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
+      "expected_cases": 6,
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/unentered-03",
+      "suite": "pq_descriptor_tests/group-04",
+      "parent_suite": "pq_descriptor_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/tx_mempool_rejects_c002_zero_output_unshield_tampered_transparent_outflow"
+        "pq_descriptor_tests/mr_descriptor_parses_csfs_pk_leaf",
+        "pq_descriptor_tests/mr_descriptor_parses_htlc_leaf",
+        "pq_descriptor_tests/mr_descriptor_parses_transaction_bound_htlc_leaf",
+        "pq_descriptor_tests/mr_descriptor_parses_sha256_htlc_leaf",
+        "pq_descriptor_tests/mr_descriptor_rejects_immediate_refund_and_identical_keys",
+        "pq_descriptor_tests/mr_descriptor_model_htlc_sha256_alias_canonicalizes"
       ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
+      "expected_cases": 6,
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/unentered-04",
+      "suite": "pq_descriptor_tests/group-05",
+      "parent_suite": "pq_descriptor_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/tx_mempool_rejects_postfork_legacy_compact_direct_send_encoding"
+        "pq_descriptor_tests/mr_descriptor_parses_refund_leaf",
+        "pq_descriptor_tests/mr_descriptor_parses_cltv_multisig_leaf",
+        "pq_descriptor_tests/mr_descriptor_parses_csv_multisig_leaf",
+        "pq_descriptor_tests/mr_descriptor_parses_two_leaf_htlc_refund_tree",
+        "pq_descriptor_tests/mr_descriptor_rejects_ctv_wrong_hash_length",
+        "pq_descriptor_tests/mr_descriptor_rejects_htlc_wrong_hash_length"
       ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
+      "expected_cases": 6,
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/unentered-05",
+      "suite": "pq_descriptor_tests/group-06",
+      "parent_suite": "pq_descriptor_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/tx_mempool_accepts_v2_ingress_with_canonical_fee_bucket_after_activation"
+        "pq_descriptor_tests/mr_descriptor_rejects_htlc_tx_wrong_hash_length",
+        "pq_descriptor_tests/mr_descriptor_rejects_htlc_sha256_wrong_hash_length",
+        "pq_descriptor_tests/mr_descriptor_rejects_csfs_pk_leaf_above_policy_limit",
+        "pq_descriptor_tests/tr_raw_leaf_rejects_p2mr_opsuccess_without_override",
+        "pq_descriptor_tests/tr_raw_leaf_allows_p2mr_opsuccess_with_override",
+        "pq_descriptor_tests/p2mr_builder_helpers_emit_expected_bytes"
       ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
+      "expected_cases": 6,
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/unentered-06",
+      "suite": "pq_descriptor_tests/group-07",
+      "parent_suite": "pq_descriptor_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/tx_mempool_rejects_noncanonical_v2_send_fee_bucket_after_activation"
+        "pq_descriptor_tests/p2mr_multisig_builder_emits_expected_bytes",
+        "pq_descriptor_tests/p2mr_multisig_ctv_builder_emits_expected_bytes",
+        "pq_descriptor_tests/p2mr_multisig_cltv_builder_emits_expected_bytes",
+        "pq_descriptor_tests/p2mr_multisig_csv_builder_emits_expected_bytes",
+        "pq_descriptor_tests/p2mr_timelock_builders_use_minimal_small_int_encoding",
+        "pq_descriptor_tests/p2mr_multisig_builder_rejects_bad_threshold"
       ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
+      "expected_cases": 6,
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/unentered-07",
+      "suite": "pq_descriptor_tests/group-08",
+      "parent_suite": "pq_descriptor_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/tx_mempool_rejects_v2_ingress_noncanonical_fee_bucket_after_activation"
+        "pq_descriptor_tests/mr_descriptor_roundtrip_new_leaf_expressions",
+        "pq_descriptor_tests/mr_descriptor_roundtrip_timelocked_multisig_expressions",
+        "pq_descriptor_tests/mr_descriptor_rejects_non_bip68_csv_sequence",
+        "pq_descriptor_tests/mr_descriptor_checksum_validation",
+        "pq_descriptor_tests/mr_descriptor_tree_syntax_rejects_malformed_backup_tree",
+        "pq_descriptor_tests/mr_descriptor_rejects_missing_primary_key"
       ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
+      "expected_cases": 6,
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/unentered-08",
+      "suite": "pq_descriptor_tests/group-09",
+      "parent_suite": "pq_descriptor_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/tx_mempool_rejects_legacy_shield_noncanonical_fee_bucket_after_activation"
+        "pq_descriptor_tests/mr_descriptor_rejects_wrong_primary_key_size",
+        "pq_descriptor_tests/mr_descriptor_rejects_wrong_backup_key_size",
+        "pq_descriptor_tests/mr_descriptor_rejects_unknown_backup_wrapper",
+        "pq_descriptor_tests/mr_descriptor_rejects_empty_backup_tree_expression",
+        "pq_descriptor_tests/mr_descriptor_rejects_non_top_level_mr",
+        "pq_descriptor_tests/mr_descriptor_rejects_multipath_derivation_syntax"
       ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
+      "expected_cases": 6,
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/unentered-09",
+      "suite": "pq_keyderivation_tests/group-01",
+      "parent_suite": "pq_keyderivation_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/tx_mempool_rejects_v2_send_small_anonymity_pool_after_activation"
+        "pq_keyderivation_tests/determinism",
+        "pq_keyderivation_tests/pqhd_known_answer",
+        "pq_keyderivation_tests/path_components_affect_output",
+        "pq_keyderivation_tests/algo_affects_output",
+        "pq_keyderivation_tests/empty_seed_returns_zero",
+        "pq_keyderivation_tests/key_derivation_produces_valid_keys"
       ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
+      "expected_cases": 6,
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/unentered-10",
+      "suite": "pq_keyderivation_tests/group-02",
+      "parent_suite": "pq_keyderivation_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/tx_mempool_rejects_v2_ingress_small_anonymity_pool_after_activation"
+        "pq_keyderivation_tests/wallet_namespace_forwarding",
+        "pq_keyderivation_tests/hkdf_intermediate_state_is_cleansed_on_destruct",
+        "pq_keyderivation_tests/randombytes_names_do_not_alias_libsodium"
       ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
+      "expected_cases": 3,
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/unentered-11",
+      "suite": "pq_merkle_tests/group-01",
+      "parent_suite": "pq_merkle_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/block_rejects_noncanonical_v2_send_fee_bucket_after_activation"
+        "pq_merkle_tests/compute_single_leaf_hash",
+        "pq_merkle_tests/compute_two_leaf_merkle_root",
+        "pq_merkle_tests/single_leaf_merkle_root_equals_leaf_hash",
+        "pq_merkle_tests/default_wallet_tree_produces_deterministic_root",
+        "pq_merkle_tests/control_block_single_leaf_is_one_byte",
+        "pq_merkle_tests/control_block_two_leaves_is_33_bytes"
       ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
+      "expected_cases": 6,
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/unentered-12",
+      "suite": "pq_merkle_tests/group-02",
+      "parent_suite": "pq_merkle_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/block_rejects_postfork_proofless_transparent_shielding_v2_send"
+        "pq_merkle_tests/verify_merkle_proof_valid",
+        "pq_merkle_tests/verify_merkle_proof_invalid_sibling"
       ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
+      "expected_cases": 2,
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/unentered-13",
+      "suite": "pq_multisig_descriptor_tests/group-01",
+      "parent_suite": "pq_multisig_descriptor_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/block_accepts_postfork_coinbase_shielding_v2_send"
+        "pq_multisig_descriptor_tests/parse_multi_pq_mixed_roundtrip_and_expand",
+        "pq_multisig_descriptor_tests/parse_sortedmulti_pq_sorts_by_pubkey_bytes",
+        "pq_multisig_descriptor_tests/parse_multi_pq_rejects_invalid_threshold",
+        "pq_multisig_descriptor_tests/parse_multi_pq_rejects_single_key_multisig",
+        "pq_multisig_descriptor_tests/parse_multi_pq_rejects_duplicate_keys",
+        "pq_multisig_descriptor_tests/multi_pq_hd_derivation_expand_and_cache_roundtrip"
       ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
+      "expected_cases": 6,
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/unentered-14",
+      "suite": "pq_multisig_tests/group-01",
+      "parent_suite": "pq_multisig_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/block_rejects_post_disable_coinbase_shielding_v2_send"
+        "pq_multisig_tests/checksigadd_empty_sig_keeps_counter_and_weight",
+        "pq_multisig_tests/checksigadd_nonempty_sig_increments_counter_and_debits_weight",
+        "pq_multisig_tests/checksigadd_validation_weight_exhaustion_fails",
+        "pq_multisig_tests/checksigadd_rejects_wrong_pubkey_size",
+        "pq_multisig_tests/build_p2mr_multisig_script_enforces_limits_and_mixed_algorithms",
+        "pq_multisig_tests/covenant_kofn_committee_size_boundary"
       ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
+      "expected_cases": 6,
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/unentered-15",
+      "suite": "pq_multisig_tests/group-02",
+      "parent_suite": "pq_multisig_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/block_rejects_c002_zero_output_unshield_tampered_transparent_outflow"
-      ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
-    },
-    {
-      "suite": "txvalidation_tests/unentered-16",
-      "lane": "other",
-      "selectors": [
-        "txvalidation_tests/block_rejects_postfork_v2_lifecycle_tampered_binding"
-      ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
-    },
-    {
-      "suite": "txvalidation_tests/unentered-17",
-      "lane": "other",
-      "selectors": [
-        "txvalidation_tests/block_rejects_postfork_v2_lifecycle_tampered_output_value"
-      ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
-    },
-    {
-      "suite": "txvalidation_tests/unentered-18",
-      "lane": "other",
-      "selectors": [
-        "txvalidation_tests/block_rejects_postfork_mixed_direct_v2_send"
-      ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
-    },
-    {
-      "suite": "txvalidation_tests/unentered-19",
-      "lane": "other",
-      "selectors": [
-        "txvalidation_tests/block_rejects_postfork_legacy_v2_send_lifecycle_control"
-      ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
-    },
-    {
-      "suite": "txvalidation_tests/unentered-20",
-      "lane": "other",
-      "selectors": [
-        "txvalidation_tests/block_rejects_postfork_legacy_compact_direct_send_encoding"
-      ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
-    },
-    {
-      "suite": "txvalidation_tests/unentered-21",
-      "lane": "other",
-      "selectors": [
-        "txvalidation_tests/block_rejects_v2_ingress_noncanonical_fee_bucket_after_activation"
-      ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
-    },
-    {
-      "suite": "txvalidation_tests/unentered-22",
-      "lane": "other",
-      "selectors": [
-        "txvalidation_tests/block_rejects_legacy_shield_noncanonical_fee_bucket_after_activation"
-      ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
-    },
-    {
-      "suite": "txvalidation_tests/unentered-23",
-      "lane": "other",
-      "selectors": [
-        "txvalidation_tests/block_rejects_v2_send_small_anonymity_pool_after_activation"
+        "pq_multisig_tests/covenant_kofn_mldsa_threshold_logic"
       ],
       "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/unentered-24",
+      "suite": "pq_multisig_wallet_tests/group-01",
+      "parent_suite": "pq_multisig_wallet_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/block_rejects_v2_ingress_small_anonymity_pool_after_activation"
+        "pq_multisig_wallet_tests/sign_p2mr_transaction_multisig_leaf",
+        "pq_multisig_wallet_tests/sign_p2mr_transaction_cltv_multisig_leaf_updates_locktime",
+        "pq_multisig_wallet_tests/sign_p2mr_transaction_csv_multisig_leaf_updates_sequence",
+        "pq_multisig_wallet_tests/psbt_signs_p2mr_multisig_with_pubkey_fallback",
+        "pq_multisig_wallet_tests/psbt_signs_cltv_p2mr_multisig_with_pubkey_fallback",
+        "pq_multisig_wallet_tests/psbt_signs_csv_p2mr_multisig_with_pubkey_fallback"
       ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
+      "expected_cases": 6,
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/unentered-25",
+      "suite": "pq_multisig_wallet_tests/group-02",
+      "parent_suite": "pq_multisig_wallet_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/block_rejects_legacy_smile_v2_send_at_anonset_binding_height"
+        "pq_multisig_wallet_tests/psbt_combines_and_finalizes_csv_p2mr_multisig_from_wallet_signers",
+        "pq_multisig_wallet_tests/psbt_signer_replaces_invalid_cached_p2mr_partial_sig",
+        "pq_multisig_wallet_tests/psbt_updater_sets_leaf_for_fixed_watchonly_multisig",
+        "pq_multisig_wallet_tests/psbt_updater_sets_cltv_fields_for_watchonly_timelocked_multisig",
+        "pq_multisig_wallet_tests/psbt_updater_preserves_existing_nonfinal_sequence_for_cltv_watchonly_timelocked_multisig",
+        "pq_multisig_wallet_tests/psbt_updater_rejects_cltv_field_mutation_after_partial_signing"
       ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
+      "expected_cases": 6,
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/unentered-26",
+      "suite": "pq_multisig_wallet_tests/group-03",
+      "parent_suite": "pq_multisig_wallet_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/ephemeral_tests"
+        "pq_multisig_wallet_tests/psbt_updater_sets_csv_fields_for_watchonly_timelocked_multisig",
+        "pq_multisig_wallet_tests/psbt_updater_rejects_csv_field_mutation_after_partial_signing",
+        "pq_multisig_wallet_tests/psbt_updater_sets_leaf_for_rpc_style_imported_fixed_multisig",
+        "pq_multisig_wallet_tests/psbt_signer_refuses_cltv_rewrite_unless_adjust_timelocks",
+        "pq_multisig_wallet_tests/psbt_multileaf_requires_a_selected_leaf",
+        "pq_multisig_wallet_tests/psbt_multileaf_unsigned_while_a_spent_output_is_missing"
       ],
-      "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
+      "expected_cases": 6,
+      "timeout_seconds": 180
     },
     {
-      "suite": "txvalidation_tests/unentered-27",
+      "suite": "pq_multisig_wallet_tests/group-04",
+      "parent_suite": "pq_multisig_wallet_tests",
       "lane": "other",
       "selectors": [
-        "txvalidation_tests/version3_tests"
+        "pq_multisig_wallet_tests/htlc_sha256_claim_psbt_signs_only_with_real_preimage"
       ],
       "expected_cases": 1,
-      "timeout_seconds": 180,
-      "prior_body_seconds": null
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_policy_tests/group-01",
+      "parent_suite": "pq_policy_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_policy_tests/p2mr_output_is_standard",
+        "pq_policy_tests/legacy_p2pkh_output_is_nonstandard",
+        "pq_policy_tests/p2wpkh_output_is_nonstandard",
+        "pq_policy_tests/taproot_output_is_nonstandard",
+        "pq_policy_tests/p2mr_witness_is_standard",
+        "pq_policy_tests/p2mr_annex_is_nonstandard_by_policy"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_policy_tests/group-02",
+      "parent_suite": "pq_policy_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_policy_tests/p2mr_multisig_witness_is_standard",
+        "pq_policy_tests/p2mr_cltv_multisig_witness_is_standard",
+        "pq_policy_tests/p2mr_csv_multisig_witness_is_standard",
+        "pq_policy_tests/p2mr_ctv_multisig_witness_is_standard",
+        "pq_policy_tests/p2mr_multisig_with_too_many_sigs_rejected_by_policy",
+        "pq_policy_tests/p2mr_multisig_duplicate_pubkeys_rejected_by_policy"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_policy_tests/group-03",
+      "parent_suite": "pq_policy_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_policy_tests/p2mr_reserved_falcon_leafs_rejected_by_policy",
+        "pq_policy_tests/p2mr_ctv_only_witness_is_standard",
+        "pq_policy_tests/p2mr_ctv_checksig_mldsa_witness_is_standard",
+        "pq_policy_tests/p2mr_ctv_checksig_slhdsa_witness_is_standard",
+        "pq_policy_tests/p2mr_csfs_only_witness_is_standard",
+        "pq_policy_tests/p2mr_delegation_witness_is_standard"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_policy_tests/group-04",
+      "parent_suite": "pq_policy_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_policy_tests/p2mr_backup_witness_is_standard",
+        "pq_policy_tests/p2mr_witness_rejects_bad_stack_size",
+        "pq_policy_tests/p2mr_witness_rejects_bad_control_size",
+        "pq_policy_tests/p2mr_witness_rejects_bad_leaf_script_shape",
+        "pq_policy_tests/p2mr_witness_rejects_bad_signature_size",
+        "pq_policy_tests/p2mr_witness_rejects_invalid_signature_hashtype"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_policy_tests/group-05",
+      "parent_suite": "pq_policy_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_policy_tests/p2mr_witness_rejects_explicit_default_signature_hashtype",
+        "pq_policy_tests/p2mr_witness_rejects_bad_leaf_version",
+        "pq_policy_tests/p2mr_transaction_accepted_by_mempool",
+        "pq_policy_tests/p2mr_htlc_tx_witness_is_standard",
+        "pq_policy_tests/p2mr_htlc_sha256_witness_is_standard",
+        "pq_policy_tests/p2mr_legacy_htlc_witness_is_nonstandard"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_policy_tests/group-06",
+      "parent_suite": "pq_policy_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_policy_tests/p2mr_csfs_witness_rejects_oversized_message_policy",
+        "pq_policy_tests/p2mr_csfs_signature_plus_hashtype_rejected_by_policy",
+        "pq_policy_tests/p2mr_csfs_slhdsa_only_witness_is_standard",
+        "pq_policy_tests/p2mr_csfs_slhdsa_witness_rejects_oversized_message_policy",
+        "pq_policy_tests/p2mr_csfs_slhdsa_signature_plus_hashtype_rejected_by_policy",
+        "pq_policy_tests/p2mr_two_mldsa_delegation_leaf_rejected_by_policy_limit"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_policy_tests/group-07",
+      "parent_suite": "pq_policy_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_policy_tests/p2mr_policy_stack_size_six_and_one_rejected"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_wallet_tests/group-01",
+      "parent_suite": "pq_wallet_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_wallet_tests/generate_wallet_descriptor_p2mr",
+        "pq_wallet_tests/create_wallet_p2mr_destination",
+        "pq_wallet_tests/wallet_creates_p2mr_only_descriptors",
+        "pq_wallet_tests/sign_p2mr_transaction_mldsa",
+        "pq_wallet_tests/sign_p2mr_transaction_slhdsa_backup",
+        "pq_wallet_tests/sign_p2mr_slhdsa_uses_matching_c002_signature_mode"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_wallet_tests/group-02",
+      "parent_suite": "pq_wallet_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_wallet_tests/psbt_sign_p2mr_slhdsa_uses_c002_signature_mode",
+        "pq_wallet_tests/sign_p2mr_prefers_mldsa_when_available_and_slhdsa_fallback_when_needed",
+        "pq_wallet_tests/p2mr_metadata_weight_estimator_matches_selected_algorithm",
+        "pq_wallet_tests/p2mr_metadata_weight_estimator_is_fail_closed_and_covers_policy_maxima",
+        "pq_wallet_tests/p2mr_specialized_leaf_is_not_automatically_selected",
+        "pq_wallet_tests/p2mr_mixed_tree_requires_an_available_generic_key"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_wallet_tests/group-03",
+      "parent_suite": "pq_wallet_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_wallet_tests/sign_p2mr_transaction_multisig_leaf",
+        "pq_wallet_tests/sign_p2mr_fee_bearing_rebalance_preserves_shielded_bundle",
+        "pq_wallet_tests/p2mr_backup_estimator_covers_actual_weight",
+        "pq_wallet_tests/p2mr_primary_estimator_covers_actual_weight",
+        "pq_wallet_tests/p2mr_fee_sizing_counts_pq_sigops",
+        "pq_wallet_tests/p2mr_transaction_weight_calculation"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_wallet_tests/group-04",
+      "parent_suite": "pq_wallet_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_wallet_tests/wallet_rejects_non_p2mr_address_type",
+        "pq_wallet_tests/watch_only_p2mr_wallet_with_cache_cannot_sign",
+        "pq_wallet_tests/pq_native_generate_descriptor",
+        "pq_wallet_tests/pq_native_descriptor_expansion",
+        "pq_wallet_tests/pq_seed_survives_descriptor_import_roundtrip",
+        "pq_wallet_tests/encrypted_import_persists_pq_seed_as_ciphertext"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_wallet_tests/group-05",
+      "parent_suite": "pq_wallet_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_wallet_tests/mismatched_pq_cache_does_not_leave_wallet_unlocked",
+        "pq_wallet_tests/cross_descriptor_pq_key_merge_signs_multisig",
+        "pq_wallet_tests/cross_descriptor_merge_fails_without_enough_keys",
+        "pq_wallet_tests/extract_pq_seed_returns_nullopt_for_fingerprint_only",
+        "pq_wallet_tests/multisig_pq_seed_persistence_roundtrip",
+        "pq_wallet_tests/extract_all_pq_seeds_deduplicates_by_fingerprint"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "pq_wallet_tests/group-06",
+      "parent_suite": "pq_wallet_tests",
+      "lane": "other",
+      "selectors": [
+        "pq_wallet_tests/gethdkeys_and_createwalletdescriptor_p2mr",
+        "pq_wallet_tests/importdescriptors_rejects_wpkh_on_enforcing_chain"
+      ],
+      "expected_cases": 2,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "psbt_tests/group-01",
+      "parent_suite": "psbt_tests",
+      "lane": "other",
+      "selectors": [
+        "psbt_tests/merge_proprietary_fields"
+      ],
+      "expected_cases": 1,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "psbt_wallet_tests/group-01",
+      "parent_suite": "psbt_wallet_tests",
+      "lane": "other",
+      "selectors": [
+        "psbt_wallet_tests/psbt_updater_test",
+        "psbt_wallet_tests/parse_hd_keypath"
+      ],
+      "expected_cases": 2,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "scriptpubkeyman_tests/group-01",
+      "parent_suite": "scriptpubkeyman_tests",
+      "lane": "other",
+      "selectors": [
+        "scriptpubkeyman_tests/CanProvide",
+        "scriptpubkeyman_tests/DescriptorScriptPubKeyManTests",
+        "scriptpubkeyman_tests/Legacy_IsKeyActive",
+        "scriptpubkeyman_tests/Legacy_IsKeyActive_no_implicit_segwit",
+        "scriptpubkeyman_tests/Descriptor_IsKeyActive"
+      ],
+      "expected_cases": 5,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "wallet_crypto_tests/group-01",
+      "parent_suite": "wallet_crypto_tests",
+      "lane": "other",
+      "selectors": [
+        "wallet_crypto_tests/passphrase",
+        "wallet_crypto_tests/encrypt",
+        "wallet_crypto_tests/decrypt",
+        "wallet_crypto_tests/authenticated_secret_roundtrip_and_tamper_detection",
+        "wallet_crypto_tests/authenticated_secret_accepts_legacy_ciphertext_for_migration"
+      ],
+      "expected_cases": 5,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "wallet_tests/group-01",
+      "parent_suite": "wallet_tests",
+      "lane": "other",
+      "selectors": [
+        "wallet_tests/update_non_range_descriptor",
+        "wallet_tests/scan_for_wallet_transactions",
+        "wallet_tests/scan_for_wallet_transactions_abort",
+        "wallet_tests/importmulti_rescan",
+        "wallet_tests/importwallet_rescan",
+        "wallet_tests/write_wallet_settings_concurrently"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "wallet_tests/group-02",
+      "parent_suite": "wallet_tests",
+      "lane": "other",
+      "selectors": [
+        "wallet_tests/coin_mark_dirty_immature_credit",
+        "wallet_tests/ComputeTimeSmart",
+        "wallet_tests/LoadReceiveRequests",
+        "wallet_tests/WatchOnlyPubKeys",
+        "wallet_tests/ListCoinsTest",
+        "wallet_tests/MixedInputHistoryAccountingTest"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "wallet_tests/group-03",
+      "parent_suite": "wallet_tests",
+      "lane": "other",
+      "selectors": [
+        "wallet_tests/BasicOutputTypesTest",
+        "wallet_tests/wallet_disableprivkeys",
+        "wallet_tests/dummy_input_size_test",
+        "wallet_tests/wallet_descriptor_test",
+        "wallet_tests/CreateWallet",
+        "wallet_tests/CreateWalletWithoutChain"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "wallet_tests/group-04",
+      "parent_suite": "wallet_tests",
+      "lane": "other",
+      "selectors": [
+        "wallet_tests/RemoveTxs",
+        "wallet_tests/wallet_sync_tx_invalid_state_test",
+        "wallet_tests/tx_depth_height_overflow_guards",
+        "wallet_tests/tx_depth_unset_last_processed_height_returns_zero",
+        "wallet_tests/frozen_header_tower_holds_settlement_without_disconnect",
+        "wallet_tests/competing_heavier_header_holds_settlement_without_disconnect"
+      ],
+      "expected_cases": 6,
+      "timeout_seconds": 180
     }
   ],
   "all_enabled_cases": [
-    "txvalidation_tests/tx_mempool_reject_coinbase",
-    "txvalidation_tests/tx_mempool_accepts_v2_egress_after_settlement_anchor_and_evicts_it_after_reorg",
-    "txvalidation_tests/tx_mempool_rejects_v2_egress_when_imported_receipt_is_missing_from_witness_set",
-    "txvalidation_tests/block_rejects_v2_egress_when_shielded_scan_units_exceed_consensus_limit",
-    "txvalidation_tests/block_rejects_v2_egress_when_shielded_tree_updates_exceed_consensus_limit",
-    "txvalidation_tests/tx_mempool_activation_gates_shielded_account_registry_append_limit",
-    "txvalidation_tests/block_rejects_shielded_account_registry_append_limit_at_activation",
-    "txvalidation_tests/tx_mempool_activation_gates_shielded_account_registry_total_entry_limit",
-    "txvalidation_tests/block_rejects_shielded_account_registry_total_entry_limit_at_activation",
-    "txvalidation_tests/tx_mempool_accepts_hybrid_v2_egress_after_settlement_anchor_and_evicts_it_after_reorg",
-    "txvalidation_tests/tx_mempool_accepts_multi_receipt_hybrid_v2_egress_after_settlement_anchor_and_evicts_it_after_reorg",
-    "txvalidation_tests/tx_connects_claim_backed_v2_settlement_anchor_and_rewinds_state_after_reorg",
-    "txvalidation_tests/tx_connects_adapter_backed_v2_settlement_anchor_and_rewinds_state_after_reorg",
-    "txvalidation_tests/tx_connects_receipt_adapter_backed_v2_settlement_anchor_and_rewinds_state_after_reorg",
-    "txvalidation_tests/tx_connects_multi_receipt_v2_settlement_anchor_and_rewinds_state_after_reorg",
-    "txvalidation_tests/tx_connects_reserve_bound_v2_settlement_anchor_and_rewinds_state_after_reorg",
-    "txvalidation_tests/tx_mempool_accepts_fee_bearing_v2_rebalance_and_rewinds_state_after_reorg",
-    "txvalidation_tests/tx_mempool_rejects_postfork_rebalance_legacy_wire_family",
-    "txvalidation_tests/block_rejects_postfork_rebalance_legacy_proof_wire",
-    "txvalidation_tests/tx_mempool_rejects_postfork_rebalance_tampered_deterministic_proof",
-    "txvalidation_tests/tx_mempool_accepts_fee_bearing_reserve_bound_v2_settlement_anchor_and_rewinds_state_after_reorg",
-    "txvalidation_tests/block_rejects_post_c002_repeated_fresh_v2_rebalance_pool_credits_without_transparent_burn",
-    "txvalidation_tests/block_rejects_post_c002_rebalance_to_reserve_bound_settlement_anchor_to_matured_egress_chain",
-    "txvalidation_tests/block_rejects_v2_send_private_transfer_at_sunset_height",
-    "txvalidation_tests/block_rejects_v2_send_unshield_with_shielded_change_at_sunset_height",
-    "txvalidation_tests/block_rejects_non_credit_v2_lifecycle_at_sunset_height",
-    "txvalidation_tests/block_rejects_shielded_egress_at_pool_disable_height",
-    "txvalidation_tests/block_rejects_shielded_ingress_at_pool_disable_height",
-    "txvalidation_tests/block_accepts_pre_pool_disable_shielded_ingress_and_egress",
-    "txvalidation_tests/mempool_evicts_non_exit_shielded_transaction_when_sunset_height_becomes_next_block",
-    "txvalidation_tests/tx_mempool_activation_gates_stale_v2_settlement_anchor_netting_manifest",
-    "txvalidation_tests/block_rejects_stale_v2_settlement_anchor_netting_manifest_at_activation",
-    "txvalidation_tests/tx_mempool_rejects_duplicate_v2_rebalance_manifest_after_stale_activation",
-    "txvalidation_tests/tx_mempool_activation_gates_zero_fee_v2_rebalance",
-    "txvalidation_tests/tx_mempool_activation_gates_noncanonical_fee_v2_rebalance",
-    "txvalidation_tests/tx_mempool_activation_gates_legacy_matrict_rebalance_envelope",
-    "txvalidation_tests/block_rejects_zero_fee_v2_rebalance_at_activation",
-    "txvalidation_tests/block_rejects_noncanonical_fee_v2_rebalance_at_activation",
-    "txvalidation_tests/block_rejects_legacy_matrict_rebalance_envelope_at_activation",
-    "txvalidation_tests/tx_mempool_activation_gates_immature_v2_egress_settlement_anchor",
-    "txvalidation_tests/block_rejects_v2_egress_when_settlement_anchor_is_immature_after_activation",
-    "txvalidation_tests/block_disconnect_restores_consumed_v2_settlement_anchor_metadata",
-    "txvalidation_tests/tx_mempool_rejects_reused_v2_egress_settlement_anchor_after_single_use_activation",
-    "txvalidation_tests/tx_mempool_accepts_v2_ingress_and_rewinds_state_after_reorg",
-    "txvalidation_tests/tx_mempool_accepts_signed_v2_ingress_and_rewinds_state_after_reorg",
-    "txvalidation_tests/tx_mempool_accepts_scaled_v2_ingress_and_rewinds_state_after_reorg",
-    "txvalidation_tests/tx_mempool_accepts_hybrid_v2_ingress_and_rewinds_state_after_reorg",
-    "txvalidation_tests/tx_mempool_accepts_multishard_v2_ingress_and_rewinds_state_after_reorg",
-    "txvalidation_tests/tx_mempool_accepts_v2_send_after_direct_send_seed_and_rewinds_state_after_reorg",
-    "txvalidation_tests/tx_mempool_rejects_v2_send_duplicate_ring_positions",
-    "txvalidation_tests/tx_mempool_rejects_v2_send_out_of_range_ring_member_position",
-    "txvalidation_tests/tx_mempool_rejects_v2_send_subminimum_ring_witness_with_ring_position_reason",
-    "txvalidation_tests/tx_mempool_rejects_v2_send_missing_smile_public_account_without_auto_rebuild",
-    "txvalidation_tests/block_auto_recovers_v2_send_missing_account_leaf_snapshot_entry",
-    "txvalidation_tests/tx_mempool_stale_shielded_state_rejects_without_auto_rebuild",
-    "txvalidation_tests/tx_mempool_activation_gates_noncanonical_smile_v2_send",
-    "txvalidation_tests/tx_mempool_rejects_noncanonical_smile_v2_send_at_codec_disable_height",
-    "txvalidation_tests/block_rejects_noncanonical_smile_v2_send_at_codec_disable_height",
-    "txvalidation_tests/tx_mempool_activation_gates_legacy_smile_anonset_binding",
-    "txvalidation_tests/tx_mempool_accepts_context_bound_smile_v2_send_at_activation",
-    "txvalidation_tests/tx_mempool_accepts_postfork_v2_lifecycle_control",
-    "txvalidation_tests/tx_mempool_accepts_postfork_v2_lifecycle_control_with_multiple_transparent_outputs",
-    "txvalidation_tests/tx_mempool_rejects_postfork_proofless_transparent_shielding_v2_send",
-    "txvalidation_tests/tx_mempool_cleanup_evicts_proofless_transparent_shielding_at_public_flow_disable",
-    "txvalidation_tests/tx_mempool_accepts_postfork_coinbase_shielding_v2_send",
-    "txvalidation_tests/tx_mempool_rejects_post_disable_coinbase_shielding_v2_send",
-    "txvalidation_tests/tx_mempool_rejects_postfork_v2_lifecycle_tampered_binding",
-    "txvalidation_tests/tx_mempool_rejects_postfork_v2_lifecycle_tampered_output_value",
-    "txvalidation_tests/tx_mempool_rejects_postfork_legacy_v2_send_lifecycle_control",
-    "txvalidation_tests/tx_mempool_rejects_postfork_mixed_direct_v2_send",
-    "txvalidation_tests/tx_mempool_rejects_postfork_mixed_direct_v2_send_without_auto_rebuild_retry",
-    "txvalidation_tests/tx_mempool_accepts_c002_zero_output_unshield_v2_send",
-    "txvalidation_tests/tx_mempool_rejects_c002_zero_output_unshield_without_proof",
-    "txvalidation_tests/tx_mempool_rejects_c002_zero_output_unshield_malformed_context",
-    "txvalidation_tests/tx_mempool_rejects_c002_zero_output_unshield_tampered_transparent_outflow",
-    "txvalidation_tests/tx_mempool_rejects_postfork_legacy_compact_direct_send_encoding",
-    "txvalidation_tests/tx_mempool_accepts_v2_ingress_with_canonical_fee_bucket_after_activation",
-    "txvalidation_tests/tx_mempool_rejects_noncanonical_v2_send_fee_bucket_after_activation",
-    "txvalidation_tests/tx_mempool_rejects_v2_ingress_noncanonical_fee_bucket_after_activation",
-    "txvalidation_tests/tx_mempool_rejects_legacy_shield_noncanonical_fee_bucket_after_activation",
-    "txvalidation_tests/tx_mempool_rejects_v2_send_small_anonymity_pool_after_activation",
-    "txvalidation_tests/tx_mempool_rejects_v2_ingress_small_anonymity_pool_after_activation",
-    "txvalidation_tests/block_rejects_noncanonical_v2_send_fee_bucket_after_activation",
-    "txvalidation_tests/block_rejects_postfork_proofless_transparent_shielding_v2_send",
-    "txvalidation_tests/block_accepts_postfork_coinbase_shielding_v2_send",
-    "txvalidation_tests/block_rejects_post_disable_coinbase_shielding_v2_send",
-    "txvalidation_tests/block_rejects_c002_zero_output_unshield_tampered_transparent_outflow",
-    "txvalidation_tests/block_rejects_postfork_v2_lifecycle_tampered_binding",
-    "txvalidation_tests/block_rejects_postfork_v2_lifecycle_tampered_output_value",
-    "txvalidation_tests/block_rejects_postfork_mixed_direct_v2_send",
-    "txvalidation_tests/block_rejects_postfork_legacy_v2_send_lifecycle_control",
-    "txvalidation_tests/block_rejects_postfork_legacy_compact_direct_send_encoding",
-    "txvalidation_tests/block_rejects_v2_ingress_noncanonical_fee_bucket_after_activation",
-    "txvalidation_tests/block_rejects_legacy_shield_noncanonical_fee_bucket_after_activation",
-    "txvalidation_tests/block_rejects_v2_send_small_anonymity_pool_after_activation",
-    "txvalidation_tests/block_rejects_v2_ingress_small_anonymity_pool_after_activation",
-    "txvalidation_tests/block_rejects_legacy_smile_v2_send_at_anonset_binding_height",
-    "txvalidation_tests/ephemeral_tests",
-    "txvalidation_tests/version3_tests"
+    "multisig_tests/multisig_verify",
+    "multisig_tests/multisig_IsStandard",
+    "multisig_tests/multisig_Sign",
+    "pq_address_tests/witness_v2_p2mr_destination_type_exists",
+    "pq_address_tests/encode_p2mr_address_mainnet",
+    "pq_address_tests/decode_p2mr_address_mainnet",
+    "pq_address_tests/p2mr_address_rejects_wrong_length",
+    "pq_address_tests/output_type_p2mr_exists",
+    "pq_address_tests/output_type_from_p2mr_destination",
+    "pq_address_tests/get_script_for_p2mr_destination",
+    "pq_crypto_tests/mldsa44_keygen_produces_valid_sizes",
+    "pq_crypto_tests/mldsa44_sign_verify_roundtrip",
+    "pq_crypto_tests/mldsa44_hedged_signing_varies_signature",
+    "pq_crypto_tests/mldsa44_verify_rejects_wrong_message",
+    "pq_crypto_tests/mldsa44_verify_rejects_wrong_key",
+    "pq_crypto_tests/slhdsa128s_keygen_produces_valid_sizes",
+    "pq_crypto_tests/slhdsa128s_sign_verify_roundtrip",
+    "pq_crypto_tests/slhdsa128s_hedged_signing_varies_signature",
+    "pq_crypto_tests/slhdsa128s_verify_rejects_wrong_message",
+    "pq_crypto_tests/pq_key_zeroization",
+    "pq_crypto_tests/slhdsa128s_fips205_official_acvp_kat",
+    "pq_crypto_tests/slhdsa128s_fips205_internal_core_kat",
+    "pq_crypto_tests/slhdsa128s_fips205_keygen_locus_diagnostic",
+    "pq_crypto_tests/fips205_pure_context_wrapper_bytes",
+    "pq_crypto_tests/slhdsa128s_fips205_sign_verify_roundtrip",
+    "pq_crypto_tests/slhdsa128s_fips205_mode_separation",
+    "pq_crypto_tests/mldsa44_fips205_flag_is_noop",
+    "pq_descriptor_tests/parse_mr_descriptor_single_key",
+    "pq_descriptor_tests/mr_descriptor_produces_correct_script",
+    "pq_descriptor_tests/mr_descriptor_hd_derivation",
+    "pq_descriptor_tests/mr_descriptor_two_leaf_tree",
+    "pq_descriptor_tests/mr_descriptor_reports_max_satisfaction_for_checksig_tree",
+    "pq_descriptor_tests/mr_descriptor_parses_multi_pq_leaf",
+    "pq_descriptor_tests/mr_descriptor_parses_sortedmulti_pq_leaf",
+    "pq_descriptor_tests/mr_descriptor_tree_syntax_single_backup_wrapper",
+    "pq_descriptor_tests/mr_descriptor_tree_syntax_multiple_backups",
+    "pq_descriptor_tests/mr_descriptor_two_leaf_tree_with_hd_backup",
+    "pq_descriptor_tests/mr_descriptor_parses_pqhd_fingerprint_form",
+    "pq_descriptor_tests/mr_descriptor_roundtrip_string",
+    "pq_descriptor_tests/mr_descriptor_parses_ctv_leaf",
+    "pq_descriptor_tests/mr_descriptor_parses_unspendable_commitment_leaf",
+    "pq_descriptor_tests/mr_descriptor_rejects_commitment_wrong_hash_length",
+    "pq_descriptor_tests/mr_descriptor_parses_ctv_checksig_leaf",
+    "pq_descriptor_tests/mr_descriptor_parses_ctv_multisig_leaf",
+    "pq_descriptor_tests/mr_descriptor_parses_csfs_leaf",
+    "pq_descriptor_tests/mr_descriptor_parses_csfs_pk_leaf",
+    "pq_descriptor_tests/mr_descriptor_parses_htlc_leaf",
+    "pq_descriptor_tests/mr_descriptor_parses_transaction_bound_htlc_leaf",
+    "pq_descriptor_tests/mr_descriptor_parses_sha256_htlc_leaf",
+    "pq_descriptor_tests/mr_descriptor_rejects_immediate_refund_and_identical_keys",
+    "pq_descriptor_tests/mr_descriptor_model_htlc_sha256_alias_canonicalizes",
+    "pq_descriptor_tests/mr_descriptor_parses_refund_leaf",
+    "pq_descriptor_tests/mr_descriptor_parses_cltv_multisig_leaf",
+    "pq_descriptor_tests/mr_descriptor_parses_csv_multisig_leaf",
+    "pq_descriptor_tests/mr_descriptor_parses_two_leaf_htlc_refund_tree",
+    "pq_descriptor_tests/mr_descriptor_rejects_ctv_wrong_hash_length",
+    "pq_descriptor_tests/mr_descriptor_rejects_htlc_wrong_hash_length",
+    "pq_descriptor_tests/mr_descriptor_rejects_htlc_tx_wrong_hash_length",
+    "pq_descriptor_tests/mr_descriptor_rejects_htlc_sha256_wrong_hash_length",
+    "pq_descriptor_tests/mr_descriptor_rejects_csfs_pk_leaf_above_policy_limit",
+    "pq_descriptor_tests/tr_raw_leaf_rejects_p2mr_opsuccess_without_override",
+    "pq_descriptor_tests/tr_raw_leaf_allows_p2mr_opsuccess_with_override",
+    "pq_descriptor_tests/p2mr_builder_helpers_emit_expected_bytes",
+    "pq_descriptor_tests/p2mr_multisig_builder_emits_expected_bytes",
+    "pq_descriptor_tests/p2mr_multisig_ctv_builder_emits_expected_bytes",
+    "pq_descriptor_tests/p2mr_multisig_cltv_builder_emits_expected_bytes",
+    "pq_descriptor_tests/p2mr_multisig_csv_builder_emits_expected_bytes",
+    "pq_descriptor_tests/p2mr_timelock_builders_use_minimal_small_int_encoding",
+    "pq_descriptor_tests/p2mr_multisig_builder_rejects_bad_threshold",
+    "pq_descriptor_tests/mr_descriptor_roundtrip_new_leaf_expressions",
+    "pq_descriptor_tests/mr_descriptor_roundtrip_timelocked_multisig_expressions",
+    "pq_descriptor_tests/mr_descriptor_rejects_non_bip68_csv_sequence",
+    "pq_descriptor_tests/mr_descriptor_checksum_validation",
+    "pq_descriptor_tests/mr_descriptor_tree_syntax_rejects_malformed_backup_tree",
+    "pq_descriptor_tests/mr_descriptor_rejects_missing_primary_key",
+    "pq_descriptor_tests/mr_descriptor_rejects_wrong_primary_key_size",
+    "pq_descriptor_tests/mr_descriptor_rejects_wrong_backup_key_size",
+    "pq_descriptor_tests/mr_descriptor_rejects_unknown_backup_wrapper",
+    "pq_descriptor_tests/mr_descriptor_rejects_empty_backup_tree_expression",
+    "pq_descriptor_tests/mr_descriptor_rejects_non_top_level_mr",
+    "pq_descriptor_tests/mr_descriptor_rejects_multipath_derivation_syntax",
+    "pq_keyderivation_tests/determinism",
+    "pq_keyderivation_tests/pqhd_known_answer",
+    "pq_keyderivation_tests/path_components_affect_output",
+    "pq_keyderivation_tests/algo_affects_output",
+    "pq_keyderivation_tests/empty_seed_returns_zero",
+    "pq_keyderivation_tests/key_derivation_produces_valid_keys",
+    "pq_keyderivation_tests/wallet_namespace_forwarding",
+    "pq_keyderivation_tests/hkdf_intermediate_state_is_cleansed_on_destruct",
+    "pq_keyderivation_tests/randombytes_names_do_not_alias_libsodium",
+    "pq_merkle_tests/compute_single_leaf_hash",
+    "pq_merkle_tests/compute_two_leaf_merkle_root",
+    "pq_merkle_tests/single_leaf_merkle_root_equals_leaf_hash",
+    "pq_merkle_tests/default_wallet_tree_produces_deterministic_root",
+    "pq_merkle_tests/control_block_single_leaf_is_one_byte",
+    "pq_merkle_tests/control_block_two_leaves_is_33_bytes",
+    "pq_merkle_tests/verify_merkle_proof_valid",
+    "pq_merkle_tests/verify_merkle_proof_invalid_sibling",
+    "pq_multisig_descriptor_tests/parse_multi_pq_mixed_roundtrip_and_expand",
+    "pq_multisig_descriptor_tests/parse_sortedmulti_pq_sorts_by_pubkey_bytes",
+    "pq_multisig_descriptor_tests/parse_multi_pq_rejects_invalid_threshold",
+    "pq_multisig_descriptor_tests/parse_multi_pq_rejects_single_key_multisig",
+    "pq_multisig_descriptor_tests/parse_multi_pq_rejects_duplicate_keys",
+    "pq_multisig_descriptor_tests/multi_pq_hd_derivation_expand_and_cache_roundtrip",
+    "pq_multisig_tests/checksigadd_empty_sig_keeps_counter_and_weight",
+    "pq_multisig_tests/checksigadd_nonempty_sig_increments_counter_and_debits_weight",
+    "pq_multisig_tests/checksigadd_validation_weight_exhaustion_fails",
+    "pq_multisig_tests/checksigadd_rejects_wrong_pubkey_size",
+    "pq_multisig_tests/build_p2mr_multisig_script_enforces_limits_and_mixed_algorithms",
+    "pq_multisig_tests/covenant_kofn_committee_size_boundary",
+    "pq_multisig_tests/covenant_kofn_mldsa_threshold_logic",
+    "pq_multisig_wallet_tests/sign_p2mr_transaction_multisig_leaf",
+    "pq_multisig_wallet_tests/sign_p2mr_transaction_cltv_multisig_leaf_updates_locktime",
+    "pq_multisig_wallet_tests/sign_p2mr_transaction_csv_multisig_leaf_updates_sequence",
+    "pq_multisig_wallet_tests/psbt_signs_p2mr_multisig_with_pubkey_fallback",
+    "pq_multisig_wallet_tests/psbt_signs_cltv_p2mr_multisig_with_pubkey_fallback",
+    "pq_multisig_wallet_tests/psbt_signs_csv_p2mr_multisig_with_pubkey_fallback",
+    "pq_multisig_wallet_tests/psbt_combines_and_finalizes_csv_p2mr_multisig_from_wallet_signers",
+    "pq_multisig_wallet_tests/psbt_signer_replaces_invalid_cached_p2mr_partial_sig",
+    "pq_multisig_wallet_tests/psbt_updater_sets_leaf_for_fixed_watchonly_multisig",
+    "pq_multisig_wallet_tests/psbt_updater_sets_cltv_fields_for_watchonly_timelocked_multisig",
+    "pq_multisig_wallet_tests/psbt_updater_preserves_existing_nonfinal_sequence_for_cltv_watchonly_timelocked_multisig",
+    "pq_multisig_wallet_tests/psbt_updater_rejects_cltv_field_mutation_after_partial_signing",
+    "pq_multisig_wallet_tests/psbt_updater_sets_csv_fields_for_watchonly_timelocked_multisig",
+    "pq_multisig_wallet_tests/psbt_updater_rejects_csv_field_mutation_after_partial_signing",
+    "pq_multisig_wallet_tests/psbt_updater_sets_leaf_for_rpc_style_imported_fixed_multisig",
+    "pq_multisig_wallet_tests/psbt_signer_refuses_cltv_rewrite_unless_adjust_timelocks",
+    "pq_multisig_wallet_tests/psbt_multileaf_requires_a_selected_leaf",
+    "pq_multisig_wallet_tests/psbt_multileaf_unsigned_while_a_spent_output_is_missing",
+    "pq_multisig_wallet_tests/htlc_sha256_claim_psbt_signs_only_with_real_preimage",
+    "pq_policy_tests/p2mr_output_is_standard",
+    "pq_policy_tests/legacy_p2pkh_output_is_nonstandard",
+    "pq_policy_tests/p2wpkh_output_is_nonstandard",
+    "pq_policy_tests/taproot_output_is_nonstandard",
+    "pq_policy_tests/p2mr_witness_is_standard",
+    "pq_policy_tests/p2mr_annex_is_nonstandard_by_policy",
+    "pq_policy_tests/p2mr_multisig_witness_is_standard",
+    "pq_policy_tests/p2mr_cltv_multisig_witness_is_standard",
+    "pq_policy_tests/p2mr_csv_multisig_witness_is_standard",
+    "pq_policy_tests/p2mr_ctv_multisig_witness_is_standard",
+    "pq_policy_tests/p2mr_multisig_with_too_many_sigs_rejected_by_policy",
+    "pq_policy_tests/p2mr_multisig_duplicate_pubkeys_rejected_by_policy",
+    "pq_policy_tests/p2mr_reserved_falcon_leafs_rejected_by_policy",
+    "pq_policy_tests/p2mr_ctv_only_witness_is_standard",
+    "pq_policy_tests/p2mr_ctv_checksig_mldsa_witness_is_standard",
+    "pq_policy_tests/p2mr_ctv_checksig_slhdsa_witness_is_standard",
+    "pq_policy_tests/p2mr_csfs_only_witness_is_standard",
+    "pq_policy_tests/p2mr_delegation_witness_is_standard",
+    "pq_policy_tests/p2mr_backup_witness_is_standard",
+    "pq_policy_tests/p2mr_witness_rejects_bad_stack_size",
+    "pq_policy_tests/p2mr_witness_rejects_bad_control_size",
+    "pq_policy_tests/p2mr_witness_rejects_bad_leaf_script_shape",
+    "pq_policy_tests/p2mr_witness_rejects_bad_signature_size",
+    "pq_policy_tests/p2mr_witness_rejects_invalid_signature_hashtype",
+    "pq_policy_tests/p2mr_witness_rejects_explicit_default_signature_hashtype",
+    "pq_policy_tests/p2mr_witness_rejects_bad_leaf_version",
+    "pq_policy_tests/p2mr_transaction_accepted_by_mempool",
+    "pq_policy_tests/p2mr_htlc_tx_witness_is_standard",
+    "pq_policy_tests/p2mr_htlc_sha256_witness_is_standard",
+    "pq_policy_tests/p2mr_legacy_htlc_witness_is_nonstandard",
+    "pq_policy_tests/p2mr_csfs_witness_rejects_oversized_message_policy",
+    "pq_policy_tests/p2mr_csfs_signature_plus_hashtype_rejected_by_policy",
+    "pq_policy_tests/p2mr_csfs_slhdsa_only_witness_is_standard",
+    "pq_policy_tests/p2mr_csfs_slhdsa_witness_rejects_oversized_message_policy",
+    "pq_policy_tests/p2mr_csfs_slhdsa_signature_plus_hashtype_rejected_by_policy",
+    "pq_policy_tests/p2mr_two_mldsa_delegation_leaf_rejected_by_policy_limit",
+    "pq_policy_tests/p2mr_policy_stack_size_six_and_one_rejected",
+    "pq_wallet_tests/generate_wallet_descriptor_p2mr",
+    "pq_wallet_tests/create_wallet_p2mr_destination",
+    "pq_wallet_tests/wallet_creates_p2mr_only_descriptors",
+    "pq_wallet_tests/sign_p2mr_transaction_mldsa",
+    "pq_wallet_tests/sign_p2mr_transaction_slhdsa_backup",
+    "pq_wallet_tests/sign_p2mr_slhdsa_uses_matching_c002_signature_mode",
+    "pq_wallet_tests/psbt_sign_p2mr_slhdsa_uses_c002_signature_mode",
+    "pq_wallet_tests/sign_p2mr_prefers_mldsa_when_available_and_slhdsa_fallback_when_needed",
+    "pq_wallet_tests/p2mr_metadata_weight_estimator_matches_selected_algorithm",
+    "pq_wallet_tests/p2mr_metadata_weight_estimator_is_fail_closed_and_covers_policy_maxima",
+    "pq_wallet_tests/p2mr_specialized_leaf_is_not_automatically_selected",
+    "pq_wallet_tests/p2mr_mixed_tree_requires_an_available_generic_key",
+    "pq_wallet_tests/sign_p2mr_transaction_multisig_leaf",
+    "pq_wallet_tests/sign_p2mr_fee_bearing_rebalance_preserves_shielded_bundle",
+    "pq_wallet_tests/p2mr_backup_estimator_covers_actual_weight",
+    "pq_wallet_tests/p2mr_primary_estimator_covers_actual_weight",
+    "pq_wallet_tests/p2mr_fee_sizing_counts_pq_sigops",
+    "pq_wallet_tests/p2mr_transaction_weight_calculation",
+    "pq_wallet_tests/wallet_rejects_non_p2mr_address_type",
+    "pq_wallet_tests/watch_only_p2mr_wallet_with_cache_cannot_sign",
+    "pq_wallet_tests/pq_native_generate_descriptor",
+    "pq_wallet_tests/pq_native_descriptor_expansion",
+    "pq_wallet_tests/pq_seed_survives_descriptor_import_roundtrip",
+    "pq_wallet_tests/encrypted_import_persists_pq_seed_as_ciphertext",
+    "pq_wallet_tests/mismatched_pq_cache_does_not_leave_wallet_unlocked",
+    "pq_wallet_tests/cross_descriptor_pq_key_merge_signs_multisig",
+    "pq_wallet_tests/cross_descriptor_merge_fails_without_enough_keys",
+    "pq_wallet_tests/extract_pq_seed_returns_nullopt_for_fingerprint_only",
+    "pq_wallet_tests/multisig_pq_seed_persistence_roundtrip",
+    "pq_wallet_tests/extract_all_pq_seeds_deduplicates_by_fingerprint",
+    "pq_wallet_tests/gethdkeys_and_createwalletdescriptor_p2mr",
+    "pq_wallet_tests/importdescriptors_rejects_wpkh_on_enforcing_chain",
+    "psbt_tests/merge_proprietary_fields",
+    "psbt_wallet_tests/psbt_updater_test",
+    "psbt_wallet_tests/parse_hd_keypath",
+    "scriptpubkeyman_tests/CanProvide",
+    "scriptpubkeyman_tests/DescriptorScriptPubKeyManTests",
+    "scriptpubkeyman_tests/Legacy_IsKeyActive",
+    "scriptpubkeyman_tests/Legacy_IsKeyActive_no_implicit_segwit",
+    "scriptpubkeyman_tests/Descriptor_IsKeyActive",
+    "wallet_crypto_tests/passphrase",
+    "wallet_crypto_tests/encrypt",
+    "wallet_crypto_tests/decrypt",
+    "wallet_crypto_tests/authenticated_secret_roundtrip_and_tamper_detection",
+    "wallet_crypto_tests/authenticated_secret_accepts_legacy_ciphertext_for_migration",
+    "wallet_tests/update_non_range_descriptor",
+    "wallet_tests/scan_for_wallet_transactions",
+    "wallet_tests/scan_for_wallet_transactions_abort",
+    "wallet_tests/importmulti_rescan",
+    "wallet_tests/importwallet_rescan",
+    "wallet_tests/write_wallet_settings_concurrently",
+    "wallet_tests/coin_mark_dirty_immature_credit",
+    "wallet_tests/ComputeTimeSmart",
+    "wallet_tests/LoadReceiveRequests",
+    "wallet_tests/WatchOnlyPubKeys",
+    "wallet_tests/ListCoinsTest",
+    "wallet_tests/MixedInputHistoryAccountingTest",
+    "wallet_tests/BasicOutputTypesTest",
+    "wallet_tests/wallet_disableprivkeys",
+    "wallet_tests/dummy_input_size_test",
+    "wallet_tests/wallet_descriptor_test",
+    "wallet_tests/CreateWallet",
+    "wallet_tests/CreateWalletWithoutChain",
+    "wallet_tests/RemoveTxs",
+    "wallet_tests/wallet_sync_tx_invalid_state_test",
+    "wallet_tests/tx_depth_height_overflow_guards",
+    "wallet_tests/tx_depth_unset_last_processed_height_returns_zero",
+    "wallet_tests/frozen_header_tower_holds_settlement_without_disconnect",
+    "wallet_tests/competing_heavier_header_holds_settlement_without_disconnect"
   ],
   "campaign_test_budget_seconds": 1800,
   "batch_budget_seconds": 600,
   "require_first_pass_control": false,
-  "scope": "Only99unqualified txvalidation cases from prior timeout; timings-based groups, no verified pass repeated"
+  "scope": "236previouslyunselected native Windows wallet/key/descriptor/PSBT fixture cases; one portion of consolidated356acceptance, fullunit gate incomplete"
 }
