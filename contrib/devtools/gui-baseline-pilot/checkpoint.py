@@ -53,10 +53,12 @@ def verify_restored(workspace,manifest):
  assert snapshot(workspace)==manifest['rows'],'Checkpoint bytes/modes/links/timestamps differ'
 
 def restore_timestamps(workspace,manifest):
- # Tar/PAX float timestamps can lose nanoseconds; first prove all other identity.
+ # Safe extraction may narrow modes and round PAX times. Prove bytes/type/links before restoring only recorded permission bits and nanosecond times.
  actual=snapshot(workspace)
  assert set(actual)==set(manifest['rows'])
  for name,row in actual.items():
-  assert {k:v for k,v in row.items() if k!='mtime_ns'}=={k:v for k,v in manifest['rows'][name].items() if k!='mtime_ns'}
+  assert {k:v for k,v in row.items() if k not in ('mtime_ns','mode')}=={k:v for k,v in manifest['rows'][name].items() if k not in ('mtime_ns','mode')}
  for name,row in sorted(manifest['rows'].items(),key=lambda item:len(Path(item[0]).parts),reverse=True):
+  assert 0<=row['mode']<=0o777
+  if row['kind']!='link':os.chmod(workspace/name,row['mode'])
   os.utime(workspace/name,ns=(row['mtime_ns'],row['mtime_ns']),follow_symlinks=False)
