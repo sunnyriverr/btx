@@ -31,7 +31,7 @@ def inventory():
    if '.git' in rel.parts:continue
    st=p.lstat();v={'mode':st.st_mode&0o777,'mtime_ns':st.st_mtime_ns}
    if p.is_symlink():
-    target=os.readlink(p);assert not Path(target).is_absolute() and any(p.resolve().is_relative_to(r.resolve()) for r in roots),'Checkpoint external/absolute symlink: '+str(rel);v.update(type='symlink',target=target)
+    target=os.readlink(p);resolved=p.resolve();assert any(resolved.is_relative_to(r.resolve()) for r in roots),'Checkpoint external symlink: '+str(rel);v.update(type='symlink',target=target,archive_target=os.path.relpath(resolved,p.parent.resolve()) if Path(target).is_absolute() else target)
    elif p.is_dir():v['type']='dir'
    elif p.is_file():v.update(type='file',sha256=sha(p),bytes=st.st_size);total+=st.st_size
    else:raise RuntimeError('Non-regular checkpoint entry '+str(rel))
@@ -42,7 +42,8 @@ def write_checkpoint(inv,total):
  generation='after' if state.get('baseline_checkpoint_valid') else 'baseline'
  destination=payload/generation;assert not destination.exists()
  free=shutil.disk_usage(w).free;assert free>16*1024**3,'Insufficient room for compressed checkpoint+reserve'
- cmd=['/usr/bin/tar','--exclude=.git','-czf',str(w/'.mac-checkpoint-candidate.tar.gz'),*[str(p.relative_to(w)) for p in roots if p.exists()]]
+ input_manifest=out/'checkpoint-input.json';input_manifest.write_text(json.dumps(inv))
+ cmd=[sys.executable,str(Path(__file__).resolve()),'archive-only',str(input_manifest),str(w/'.mac-checkpoint-candidate.tar.gz')]
  with (out/'checkpoint.log').open('w') as log:
   cp=subprocess.Popen(cmd,cwd=w,env=dict(os.environ,COPYFILE_DISABLE='1'),stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
   began=time.monotonic()
@@ -65,6 +66,23 @@ def write_checkpoint(inv,total):
  assert sha(destination/'checkpoint.tar.gz')==digest
  pointer=payload/'selected.tmp';pointer.write_text(json.dumps(receipt,indent=2));pointer.replace(payload/'selected.json')
  state['checkpoint']=receipt;state['checkpoint_retained_locally_on_runner']=True
+
+
+def archive_worker(inv,archive):
+ def accepted(info):
+  if '.git' in Path(info.name).parts:return None
+  assert info.name.rstrip('/') in inv
+  if info.issym():
+   target=inv[info.name]['archive_target'];assert not Path(target).is_absolute()
+   resolved=(w/info.name).parent.joinpath(target).resolve()
+   assert any(resolved.is_relative_to(r.resolve()) for r in roots)
+   info.linkname=target
+  return info
+ with tarfile.open(archive,'w:gz',compresslevel=1) as t:
+  for root in roots:
+   if root.exists():t.add(root,arcname=root.name,filter=accepted)
+if len(sys.argv)>1 and sys.argv[1]=='archive-only':
+ archive_worker(json.loads(Path(sys.argv[2]).read_text()),Path(sys.argv[3]));raise SystemExit(0)
 
 try:
  assert all(p.exists() for p in roots)
