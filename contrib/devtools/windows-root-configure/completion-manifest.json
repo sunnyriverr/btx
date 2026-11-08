@@ -3,1123 +3,1081 @@
   "binary_sha256": "31e45f1d0f2aed4168982120596182b5268057e1b9806960f27a60c769906bdd",
   "jobs": [
     {
-      "suite": "swarm_nodedefault_seeds_tests/0",
+      "suite": "swarm_notfallbackpeer_tests/0",
       "selectors": [
-        "swarm_nodedefault_seeds_tests/add_seed_is_held"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_nodedefault_spend_tests/0",
-      "selectors": [
-        "swarm_nodedefault_spend_tests/spend_starts_unarmed",
-        "swarm_nodedefault_spend_tests/research_key_is_not_signed",
-        "swarm_nodedefault_spend_tests/scheduler_is_not_signed"
+        "swarm_notfallbackpeer_tests/empty_peer_id_is_peer",
+        "swarm_notfallbackpeer_tests/want_connect_is_not_connected",
+        "swarm_notfallbackpeer_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_nodedefault_spend_tests/1",
+      "suite": "swarm_notfalsecompat_tests/0",
       "selectors": [
-        "swarm_nodedefault_spend_tests/research_key_and_scheduler_are_not_signed",
-        "swarm_nodedefault_spend_tests/unsigned_operator_is_not_signed",
-        "swarm_nodedefault_spend_tests/unsigned_operator_with_low_bound_is_not_signed"
+        "swarm_notfalsecompat_tests/empty_peer_id_is_peer",
+        "swarm_notfalsecompat_tests/want_share_is_not_live",
+        "swarm_notfalsecompat_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_nodedefault_spend_tests/2",
+      "suite": "swarm_notfamilydir_tests/0",
       "selectors": [
-        "swarm_nodedefault_spend_tests/research_key_with_low_bound_is_not_signed",
-        "swarm_nodedefault_spend_tests/bound_below_one",
-        "swarm_nodedefault_spend_tests/negative_bound"
+        "swarm_notfamilydir_tests/empty_family_id_is_family",
+        "swarm_notfamilydir_tests/want_publish_is_not_published",
+        "swarm_notfamilydir_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_nodedefault_spend_tests/3",
+      "suite": "swarm_notfees_tests/0",
       "selectors": [
-        "swarm_nodedefault_spend_tests/operator_signed_arm_records_decimal",
-        "swarm_nodedefault_spend_tests/minimum_bound_arms",
-        "swarm_nodedefault_spend_tests/second_arm_is_replay_ahead_of_other_refusals"
+        "swarm_notfees_tests/empty_invoice_id_is_invoice",
+        "swarm_notfees_tests/want_publish_is_unmeasured",
+        "swarm_notfees_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_nodedefault_spend_tests/4",
+      "suite": "swarm_notfiat_tests/0",
       "selectors": [
-        "swarm_nodedefault_spend_tests/refused_arm_does_not_block_a_later_arm"
+        "swarm_notfiat_tests/empty_quote_id_is_quote",
+        "swarm_notfiat_tests/want_count_is_not_balance",
+        "swarm_notfiat_tests/plain_note_is_noted"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_nodedefault_training_tests/0",
+      "suite": "swarm_notfinetune_tests/0",
       "selectors": [
-        "swarm_nodedefault_training_tests/enable_training_is_held"
+        "swarm_notfinetune_tests/empty_job_id",
+        "swarm_notfinetune_tests/missing_checkpoint",
+        "swarm_notfinetune_tests/missing_checkpoint_even_if_want_publish"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_nodedefault_vram_tests/0",
+      "suite": "swarm_notfinetune_tests/1",
       "selectors": [
-        "swarm_nodedefault_vram_tests/nonzero_vram_claim_is_vram_zero",
-        "swarm_nodedefault_vram_tests/zero_vram_claim_leaves_zero"
+        "swarm_notfinetune_tests/want_publish_held",
+        "swarm_notfinetune_tests/noted"
       ],
       "expected_cases": 2,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_nonsigner_tests/0",
+      "suite": "swarm_notfirstedge_tests/0",
       "selectors": [
-        "swarm_nonsigner_tests/empty_claim",
-        "swarm_nonsigner_tests/signer_false_want_claim_false",
-        "swarm_nonsigner_tests/want_claim_true_signer_true"
+        "swarm_notfirstedge_tests/empty_edge_id",
+        "swarm_notfirstedge_tests/first_edge_without_want_fee",
+        "swarm_notfirstedge_tests/want_fee_on_later_edge"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_nonsigner_tests/1",
+      "suite": "swarm_notfirstedge_tests/1",
       "selectors": [
-        "swarm_nonsigner_tests/signer_true_want_claim_false"
+        "swarm_notfirstedge_tests/plain_later_edge"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_nopenalty_tests/0",
+      "suite": "swarm_notfitness_tests/0",
       "selectors": [
-        "swarm_nopenalty_tests/empty_channel_id_is_penalty",
-        "swarm_nopenalty_tests/empty_channel_id_wins_over_want_secp_and_stale",
-        "swarm_nopenalty_tests/want_secp_penalty_is_no_penalty"
+        "swarm_notfitness_tests/empty_challenge_id",
+        "swarm_notfitness_tests/missing_validated",
+        "swarm_notfitness_tests/want_move_with_all_three_true"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_nopenalty_tests/1",
+      "suite": "swarm_notfitness_tests/1",
       "selectors": [
-        "swarm_nopenalty_tests/want_secp_penalty_wins_over_stale_state",
-        "swarm_nopenalty_tests/stale_state_is_hashlock",
-        "swarm_nopenalty_tests/plain_note_is_noted"
+        "swarm_notfitness_tests/plain_note_all_three_true"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notflagship_tests/0",
+      "selectors": [
+        "swarm_notflagship_tests/empty_stage_id_is_stage",
+        "swarm_notflagship_tests/want_pass_is_unqualified",
+        "swarm_notflagship_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_norealmoney_tests/0",
+      "suite": "swarm_notfork_tests/0",
       "selectors": [
-        "swarm_norealmoney_tests/empty_channel_id_is_channel",
-        "swarm_norealmoney_tests/want_real_money_is_real_money",
-        "swarm_norealmoney_tests/plain_note_is_noted"
+        "swarm_notfork_tests/empty_branch_id_is_branch",
+        "swarm_notfork_tests/incompatible_without_want_average_is_fork",
+        "swarm_notfork_tests/want_average_with_compatible_is_fork"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_nosidecar_tests/0",
+      "suite": "swarm_notfork_tests/1",
       "selectors": [
-        "swarm_nosidecar_tests/empty_node_id_is_sidecar",
-        "swarm_nosidecar_tests/want_exec_is_not_launched",
-        "swarm_nosidecar_tests/plain_note_is_noted"
+        "swarm_notfork_tests/plain_compatible_note_is_noted"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notforwarder_tests/0",
+      "selectors": [
+        "swarm_notforwarder_tests/empty_invoice_id_is_invoice",
+        "swarm_notforwarder_tests/want_charge_is_not_charged",
+        "swarm_notforwarder_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_not14400_tests/0",
+      "suite": "swarm_notfourbal_tests/0",
       "selectors": [
-        "swarm_not14400_tests/empty_channel_id_is_channel",
-        "swarm_not14400_tests/blocks_159_is_not_guarantee",
-        "swarm_not14400_tests/blocks_161_is_not_guarantee"
+        "swarm_notfourbal_tests/empty_ledger_id_is_ledger",
+        "swarm_notfourbal_tests/want_merge_is_separate",
+        "swarm_notfourbal_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_not14400_tests/1",
+      "suite": "swarm_notframework_tests/0",
       "selectors": [
-        "swarm_not14400_tests/blocks_160_with_want_guarantee_is_not_guarantee",
-        "swarm_not14400_tests/blocks_160_plain_is_noted"
+        "swarm_notframework_tests/empty_run_id_is_run",
+        "swarm_notframework_tests/want_publish_is_unmeasured",
+        "swarm_notframework_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notfrozen_tests/0",
+      "selectors": [
+        "swarm_notfrozen_tests/empty_pair_id_is_pair",
+        "swarm_notfrozen_tests/pair_count_seven_is_frozen",
+        "swarm_notfrozen_tests/want_unfreeze_with_eight_pairs_is_frozen"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notfrozen_tests/1",
+      "selectors": [
+        "swarm_notfrozen_tests/plain_note_with_eight_pairs_is_noted"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notfsdp_tests/0",
+      "selectors": [
+        "swarm_notfsdp_tests/empty_node_id_is_train",
+        "swarm_notfsdp_tests/want_fsdp_is_not_distributed",
+        "swarm_notfsdp_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notgone_tests/0",
+      "selectors": [
+        "swarm_notgone_tests/empty_coord_id_is_coord",
+        "swarm_notgone_tests/want_vanish_is_not_injected",
+        "swarm_notgone_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notgovernor_tests/0",
+      "selectors": [
+        "swarm_notgovernor_tests/empty_node_id_is_node",
+        "swarm_notgovernor_tests/idle_off_is_drain",
+        "swarm_notgovernor_tests/battery_is_drain"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notgovernor_tests/1",
+      "selectors": [
+        "swarm_notgovernor_tests/thermal_is_drain",
+        "swarm_notgovernor_tests/metered_is_drain",
+        "swarm_notgovernor_tests/want_keep_is_drain"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notgovernor_tests/2",
+      "selectors": [
+        "swarm_notgovernor_tests/plain_node_is_noted"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notgpuhours_tests/0",
+      "selectors": [
+        "swarm_notgpuhours_tests/empty_job_id",
+        "swarm_notgpuhours_tests/want_publish_unmeasured",
+        "swarm_notgpuhours_tests/noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notgpuoff_tests/0",
+      "selectors": [
+        "swarm_notgpuoff_tests/empty_node_id",
+        "swarm_notgpuoff_tests/want_train",
+        "swarm_notgpuoff_tests/noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notgrad_tests/0",
+      "selectors": [
+        "swarm_notgrad_tests/empty_job_id_is_job",
+        "swarm_notgrad_tests/want_sync_is_not_synced",
+        "swarm_notgrad_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notgradleak_tests/0",
+      "selectors": [
+        "swarm_notgradleak_tests/empty_gradient_id_is_gradient",
+        "swarm_notgradleak_tests/want_publish_is_held",
+        "swarm_notgradleak_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notguest_tests/0",
+      "selectors": [
+        "swarm_notguest_tests/empty_guest_id_is_guest",
+        "swarm_notguest_tests/want_pass_is_unqualified",
+        "swarm_notguest_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_nothashleaf_tests/0",
+      "selectors": [
+        "swarm_nothashleaf_tests/empty_channel_id_is_channel",
+        "swarm_nothashleaf_tests/want_build_is_not_built",
+        "swarm_nothashleaf_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_nothflineage_tests/0",
+      "selectors": [
+        "swarm_nothflineage_tests/empty_origin_id",
+        "swarm_nothflineage_tests/want_authority",
+        "swarm_nothflineage_tests/noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notholdout_tests/0",
+      "selectors": [
+        "swarm_notholdout_tests/empty_model_id_is_model",
+        "swarm_notholdout_tests/want_score_is_not_scored",
+        "swarm_notholdout_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notidentity_tests/0",
+      "selectors": [
+        "swarm_notidentity_tests/empty_node_id",
+        "swarm_notidentity_tests/want_bind_not_bound",
+        "swarm_notidentity_tests/noted_clears_err"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notinit_tests/0",
+      "selectors": [
+        "swarm_notinit_tests/empty_node_id",
+        "swarm_notinit_tests/want_shutdown_not_shutdown",
+        "swarm_notinit_tests/want_init_not_init"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notinit_tests/1",
+      "selectors": [
+        "swarm_notinit_tests/noted_clears_err"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notisland_tests/0",
+      "selectors": [
+        "swarm_notisland_tests/empty_run_id_is_run",
+        "swarm_notisland_tests/want_publish_is_unmeasured",
+        "swarm_notisland_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notjoinon_tests/0",
+      "selectors": [
+        "swarm_notjoinon_tests/empty_node_id_is_node",
+        "swarm_notjoinon_tests/modelnet_off_is_default_on",
+        "swarm_notjoinon_tests/want_skip_join_is_held"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notjoinon_tests/1",
+      "selectors": [
+        "swarm_notjoinon_tests/plain_on_is_noted"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notkvpage_tests/0",
+      "selectors": [
+        "swarm_notkvpage_tests/empty_page_id_is_page",
+        "swarm_notkvpage_tests/incompatible_without_want_share_is_separate",
+        "swarm_notkvpage_tests/want_share_with_compatible_is_held"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notkvpage_tests/1",
+      "selectors": [
+        "swarm_notkvpage_tests/plain_compatible_note_is_noted"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notl1_tests/0",
+      "selectors": [
+        "swarm_notl1_tests/empty_payment_id_is_payment",
+        "swarm_notl1_tests/want_broadcast_is_not_broadcast",
+        "swarm_notl1_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notlaterpage_tests/0",
+      "selectors": [
+        "swarm_notlaterpage_tests/empty_page_id_is_page",
+        "swarm_notlaterpage_tests/revoked_without_want_read_is_revoked",
+        "swarm_notlaterpage_tests/want_read_without_revoked_is_revoked"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notlaterpage_tests/1",
+      "selectors": [
+        "swarm_notlaterpage_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notlearner_tests/0",
+      "selectors": [
+        "swarm_notlearner_tests/empty_trajectory_id_is_trajectory",
+        "swarm_notlearner_tests/want_queue_is_not_queued",
+        "swarm_notlearner_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notlease_tests/0",
+      "selectors": [
+        "swarm_notlease_tests/empty_lease_id_is_lease",
+        "swarm_notlease_tests/want_replace_is_not_injected",
+        "swarm_notlease_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notlivefault_tests/0",
+      "selectors": [
+        "swarm_notlivefault_tests/empty_fault_id_is_fault",
+        "swarm_notlivefault_tests/want_inject_is_not_injected",
+        "swarm_notlivefault_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notlmcache_tests/0",
+      "selectors": [
+        "swarm_notlmcache_tests/empty_page_id_is_cache",
+        "swarm_notlmcache_tests/want_transfer_without_cuda_ops_is_engine_absent",
+        "swarm_notlmcache_tests/want_transfer_with_cuda_ops_is_held"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notlmcache_tests/1",
+      "selectors": [
+        "swarm_notlmcache_tests/cuda_ops_without_want_transfer_is_noted"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notlongbase_tests/0",
+      "selectors": [
+        "swarm_notlongbase_tests/empty_checkpoint_id_is_checkpoint",
+        "swarm_notlongbase_tests/want_execute_is_not_executed",
+        "swarm_notlongbase_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notmainnet_tests/0",
+      "selectors": [
+        "swarm_notmainnet_tests/empty_request_id_is_request",
+        "swarm_notmainnet_tests/want_mainnet_is_mainnet",
+        "swarm_notmainnet_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notmandate_tests/0",
+      "selectors": [
+        "swarm_notmandate_tests/empty_mandate_id_is_mandate",
+        "swarm_notmandate_tests/unsigned_is_unsigned",
+        "swarm_notmandate_tests/want_spend_is_held"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notmandate_tests/1",
+      "selectors": [
+        "swarm_notmandate_tests/plain_signed_note_is_noted"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notmanifestcap_tests/0",
+      "selectors": [
+        "swarm_notmanifestcap_tests/empty_manifest_id",
+        "swarm_notmanifestcap_tests/size_16383",
+        "swarm_notmanifestcap_tests/size_16385"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notmanifestcap_tests/1",
+      "selectors": [
+        "swarm_notmanifestcap_tests/size_16384_want_store",
+        "swarm_notmanifestcap_tests/size_16384_plain"
       ],
       "expected_cases": 2,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_nota2a_tests/0",
+      "suite": "swarm_notmargin_tests/0",
       "selectors": [
-        "swarm_nota2a_tests/empty_peer_id_is_peer",
-        "swarm_nota2a_tests/want_connect_is_not_connected",
-        "swarm_nota2a_tests/plain_note_is_noted"
+        "swarm_notmargin_tests/empty_channel_id_is_channel",
+        "swarm_notmargin_tests/blocks_159_is_held",
+        "swarm_notmargin_tests/want_close_with_blocks_160_is_held"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notablation_tests/0",
+      "suite": "swarm_notmargin_tests/1",
       "selectors": [
-        "swarm_notablation_tests/empty_run_id_is_run",
-        "swarm_notablation_tests/want_publish_is_unmeasured",
-        "swarm_notablation_tests/plain_note_is_noted"
+        "swarm_notmargin_tests/plain_note_with_blocks_160_is_noted"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notmcp_tests/0",
+      "selectors": [
+        "swarm_notmcp_tests/empty_adapter_id",
+        "swarm_notmcp_tests/want_connect_not_connected",
+        "swarm_notmcp_tests/noted_clears_err"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notaccel_tests/0",
+      "suite": "swarm_notmedium_tests/0",
       "selectors": [
-        "swarm_notaccel_tests/empty_node_id_is_node",
-        "swarm_notaccel_tests/missing_gpu_is_cpu_only",
-        "swarm_notaccel_tests/missing_gpu_and_want_train_is_cpu_only"
+        "swarm_notmedium_tests/empty_adapter_id_is_adapter",
+        "swarm_notmedium_tests/want_execute_is_not_executed",
+        "swarm_notmedium_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notaccel_tests/1",
+      "suite": "swarm_notmesh_tests/0",
       "selectors": [
-        "swarm_notaccel_tests/gpu_present_want_train_is_cpu_only",
-        "swarm_notaccel_tests/gpu_present_without_want_train_is_noted"
+        "swarm_notmesh_tests/empty_mesh_id",
+        "swarm_notmesh_tests/mesh_count_2",
+        "swarm_notmesh_tests/want_open_mesh_count_1"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notmesh_tests/1",
+      "selectors": [
+        "swarm_notmesh_tests/plain_note_mesh_count_1"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notmhq_tests/0",
+      "selectors": [
+        "swarm_notmhq_tests/empty_route_id_is_route",
+        "swarm_notmhq_tests/hop_count_two_without_want_qualify_is_unqualified",
+        "swarm_notmhq_tests/hop_count_one_want_qualify_is_unqualified"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notmhq_tests/1",
+      "selectors": [
+        "swarm_notmhq_tests/hop_count_one_plain_is_noted"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notmine_tests/0",
+      "selectors": [
+        "swarm_notmine_tests/empty_node_id_is_mine",
+        "swarm_notmine_tests/want_mine_is_not_mined",
+        "swarm_notmine_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notminthread_tests/0",
+      "selectors": [
+        "swarm_notminthread_tests/empty_node_id",
+        "swarm_notminthread_tests/thread_count_0",
+        "swarm_notminthread_tests/thread_count_1_with_want_apply"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notminthread_tests/1",
+      "selectors": [
+        "swarm_notminthread_tests/thread_count_1_plain"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notmixed_tests/0",
+      "selectors": [
+        "swarm_notmixed_tests/empty_job_id_is_job",
+        "swarm_notmixed_tests/want_mixed_is_not_mixed",
+        "swarm_notmixed_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notmodelon_tests/0",
+      "selectors": [
+        "swarm_notmodelon_tests/empty_node_id_is_node",
+        "swarm_notmodelon_tests/modelnet_on_false_is_default_on",
+        "swarm_notmodelon_tests/want_disable_is_default_on"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notmodelon_tests/1",
+      "selectors": [
+        "swarm_notmodelon_tests/plain_on_is_noted"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notmoonabs_tests/0",
+      "selectors": [
+        "swarm_notmoonabs_tests/empty_adapter_id_is_adapter",
+        "swarm_notmoonabs_tests/want_move_is_engine_absent",
+        "swarm_notmoonabs_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notmooncake_tests/0",
+      "selectors": [
+        "swarm_notmooncake_tests/empty_page_id_is_mooncake",
+        "swarm_notmooncake_tests/want_transfer_without_mooncake_is_engine_absent",
+        "swarm_notmooncake_tests/want_transfer_with_mooncake_is_held"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notmooncake_tests/1",
+      "selectors": [
+        "swarm_notmooncake_tests/mooncake_without_want_transfer_is_noted"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notmtls_tests/0",
+      "selectors": [
+        "swarm_notmtls_tests/empty_peer_id",
+        "swarm_notmtls_tests/want_session",
+        "swarm_notmtls_tests/plain_note"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notmultihop_tests/0",
+      "selectors": [
+        "swarm_notmultihop_tests/empty_route_id_is_route",
+        "swarm_notmultihop_tests/zero_hops_is_route",
+        "swarm_notmultihop_tests/two_hops_want_qualify_is_unqualified"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notmultihop_tests/1",
+      "selectors": [
+        "swarm_notmultihop_tests/one_hop_want_qualify_is_held",
+        "swarm_notmultihop_tests/one_hop_without_want_qualify_is_noted"
       ],
       "expected_cases": 2,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notacquire_tests/0",
+      "suite": "swarm_notmultinode_tests/0",
       "selectors": [
-        "swarm_notacquire_tests/empty_artifact_id_is_artifact",
-        "swarm_notacquire_tests/want_verify_is_unverified",
-        "swarm_notacquire_tests/plain_note_is_noted"
+        "swarm_notmultinode_tests/empty_run_id",
+        "swarm_notmultinode_tests/want_publish_out_of_scope",
+        "swarm_notmultinode_tests/noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notadmin_tests/0",
+      "suite": "swarm_notnat_tests/0",
       "selectors": [
-        "swarm_notadmin_tests/empty_admin_id_is_admin",
-        "swarm_notadmin_tests/want_move_is_refused",
-        "swarm_notadmin_tests/plain_note_is_noted"
+        "swarm_notnat_tests/empty_peer_id_is_peer",
+        "swarm_notnat_tests/want_traverse_is_no_nat",
+        "swarm_notnat_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notadopt_tests/0",
+      "suite": "swarm_notnccl_tests/0",
       "selectors": [
-        "swarm_notadopt_tests/empty_descendant_id_is_descendant",
-        "swarm_notadopt_tests/want_adopt_is_not_adopted",
-        "swarm_notadopt_tests/plain_note_is_noted"
+        "swarm_notnccl_tests/empty_job_id_is_job",
+        "swarm_notnccl_tests/want_sync_is_engine_absent",
+        "swarm_notnccl_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notaes_tests/0",
+      "suite": "swarm_notneighborhood_tests/0",
       "selectors": [
-        "swarm_notaes_tests/empty_realm_id_is_realm",
-        "swarm_notaes_tests/empty_realm_id_wins_over_want_seal",
-        "swarm_notaes_tests/want_seal_is_not_sealed"
+        "swarm_notneighborhood_tests/empty_node_id",
+        "swarm_notneighborhood_tests/peer_count_7",
+        "swarm_notneighborhood_tests/want_connect_peer_count_1"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notaes_tests/1",
+      "suite": "swarm_notneighborhood_tests/1",
       "selectors": [
-        "swarm_notaes_tests/plain_note_is_noted"
+        "swarm_notneighborhood_tests/plain_note_peer_count_4"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notagreement_tests/0",
+      "suite": "swarm_notnetbytes_tests/0",
       "selectors": [
-        "swarm_notagreement_tests/empty_agreement_id_is_agreement",
-        "swarm_notagreement_tests/want_settle_is_not_settlement",
-        "swarm_notagreement_tests/plain_note_is_noted"
+        "swarm_notnetbytes_tests/empty_peer_id_is_peer",
+        "swarm_notnetbytes_tests/want_publish_is_unmeasured",
+        "swarm_notnetbytes_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notassumption_tests/0",
+      "suite": "swarm_notnetcost_tests/0",
       "selectors": [
-        "swarm_notassumption_tests/empty_close_id_is_close",
-        "swarm_notassumption_tests/want_measure_is_measure_refused",
-        "swarm_notassumption_tests/plain_note_is_noted"
+        "swarm_notnetcost_tests/empty_peer_id_is_peer",
+        "swarm_notnetcost_tests/want_publish_is_unmeasured",
+        "swarm_notnetcost_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notautospend_tests/0",
+      "suite": "swarm_notniche_tests/0",
       "selectors": [
-        "swarm_notautospend_tests/empty_wallet_id_is_wallet",
-        "swarm_notautospend_tests/atoms_one_is_held",
-        "swarm_notautospend_tests/empty_atoms_is_held"
+        "swarm_notniche_tests/empty_niche_id_is_niche",
+        "swarm_notniche_tests/want_merge_is_separate",
+        "swarm_notniche_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notautospend_tests/1",
-      "selectors": [
-        "swarm_notautospend_tests/want_spend_is_held",
-        "swarm_notautospend_tests/plain_zero_atoms_is_noted"
-      ],
-      "expected_cases": 2,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notbaseline_tests/0",
-      "selectors": [
-        "swarm_notbaseline_tests/empty_run_id_is_run",
-        "swarm_notbaseline_tests/want_publish_is_unmeasured",
-        "swarm_notbaseline_tests/run_without_publish_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notbenchmark_tests/0",
-      "selectors": [
-        "swarm_notbenchmark_tests/empty_node_id_is_rate",
-        "swarm_notbenchmark_tests/negative_rate_is_rate",
-        "swarm_notbenchmark_tests/want_publish_with_tokens_is_unmeasured"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notbenchmark_tests/1",
-      "selectors": [
-        "swarm_notbenchmark_tests/tokens_without_want_publish_is_noted"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notbody_tests/0",
-      "selectors": [
-        "swarm_notbody_tests/empty_body_id",
-        "swarm_notbody_tests/size_33554433",
-        "swarm_notbody_tests/want_store_size_1"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notbody_tests/1",
-      "selectors": [
-        "swarm_notbody_tests/plain_note_size_32"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notbytes_tests/0",
-      "selectors": [
-        "swarm_notbytes_tests/empty_page_id_is_bytes",
-        "swarm_notbytes_tests/want_publish_is_unmeasured",
-        "swarm_notbytes_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcachegain_tests/0",
-      "selectors": [
-        "swarm_notcachegain_tests/empty_page_id_is_cache",
-        "swarm_notcachegain_tests/want_publish_is_unmeasured",
-        "swarm_notcachegain_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcachehit_tests/0",
-      "selectors": [
-        "swarm_notcachehit_tests/empty_node_id_is_hit",
-        "swarm_notcachehit_tests/want_publish_is_unmeasured",
-        "swarm_notcachehit_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcacheoff_tests/0",
-      "selectors": [
-        "swarm_notcacheoff_tests/empty_run_id",
-        "swarm_notcacheoff_tests/want_publish",
-        "swarm_notcacheoff_tests/noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcallerqual_tests/0",
-      "selectors": [
-        "swarm_notcallerqual_tests/empty_engine_id_is_engine",
-        "swarm_notcallerqual_tests/want_qualify_with_tokens_per_sec_100_is_unmeasured",
-        "swarm_notcallerqual_tests/want_qualify_with_zero_tokens_is_unmeasured"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcallerqual_tests/1",
-      "selectors": [
-        "swarm_notcallerqual_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcanary_tests/0",
-      "selectors": [
-        "swarm_notcanary_tests/empty_candidate_id_is_candidate",
-        "swarm_notcanary_tests/want_roll_is_not_canary",
-        "swarm_notcanary_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcapped_tests/0",
-      "selectors": [
-        "swarm_notcapped_tests/empty_node_id",
-        "swarm_notcapped_tests/thread_count_65",
-        "swarm_notcapped_tests/want_train_thread_count_1"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcapped_tests/1",
-      "selectors": [
-        "swarm_notcapped_tests/plain_note_thread_count_8"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcatalog_tests/0",
-      "selectors": [
-        "swarm_notcatalog_tests/empty_model_id_is_model",
-        "swarm_notcatalog_tests/want_emit_is_not_emitted",
-        "swarm_notcatalog_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcert_tests/0",
-      "selectors": [
-        "swarm_notcert_tests/empty_descendant_id_is_descendant",
-        "swarm_notcert_tests/want_cert_is_no_cert",
-        "swarm_notcert_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notchurn_tests/0",
-      "selectors": [
-        "swarm_notchurn_tests/empty_peer_id_is_peer",
-        "swarm_notchurn_tests/want_recover_is_not_observed",
-        "swarm_notchurn_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notckpttime_tests/0",
-      "selectors": [
-        "swarm_notckpttime_tests/empty_job_id_is_job",
-        "swarm_notckpttime_tests/missing_checkpoint_is_no_checkpoint_even_if_want_publish",
-        "swarm_notckpttime_tests/want_publish_is_unmeasured"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notckpttime_tests/1",
-      "selectors": [
-        "swarm_notckpttime_tests/saved_without_publish_is_noted"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notclearing_tests/0",
-      "selectors": [
-        "swarm_notclearing_tests/empty_batch_id_is_batch",
-        "swarm_notclearing_tests/want_settle_is_not_settled",
-        "swarm_notclearing_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notclosetmpl_tests/0",
-      "selectors": [
-        "swarm_notclosetmpl_tests/empty_channel_id_is_channel",
-        "swarm_notclosetmpl_tests/template_count_0_is_one_template",
-        "swarm_notclosetmpl_tests/template_count_2_is_one_template"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notclosetmpl_tests/1",
-      "selectors": [
-        "swarm_notclosetmpl_tests/want_close_with_one_template_is_held",
-        "swarm_notclosetmpl_tests/plain_note_with_one_template_is_noted"
-      ],
-      "expected_cases": 2,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcohort_tests/0",
-      "selectors": [
-        "swarm_notcohort_tests/empty_cohort_id_is_cohort",
-        "swarm_notcohort_tests/want_extend_before_until_is_held",
-        "swarm_notcohort_tests/now_equal_until_without_want_extend_is_expired"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcohort_tests/1",
-      "selectors": [
-        "swarm_notcohort_tests/now_before_until_is_noted"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcollateral_tests/0",
-      "selectors": [
-        "swarm_notcollateral_tests/empty_pool_id_is_pool",
-        "swarm_notcollateral_tests/want_reserve_is_not_live",
-        "swarm_notcollateral_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcontrib_tests/0",
-      "selectors": [
-        "swarm_notcontrib_tests/empty_worker_id_is_worker",
-        "swarm_notcontrib_tests/want_publish_is_unverified",
-        "swarm_notcontrib_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcoord_tests/0",
-      "selectors": [
-        "swarm_notcoord_tests/empty_task_id_is_task",
-        "swarm_notcoord_tests/want_run_is_not_run",
-        "swarm_notcoord_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcoordoff_tests/0",
-      "selectors": [
-        "swarm_notcoordoff_tests/empty_run_id",
-        "swarm_notcoordoff_tests/want_publish",
-        "swarm_notcoordoff_tests/noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcpueval_tests/0",
-      "selectors": [
-        "swarm_notcpueval_tests/empty_node_id",
-        "swarm_notcpueval_tests/absent_device",
-        "swarm_notcpueval_tests/present_device_want_gpu"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcpueval_tests/1",
-      "selectors": [
-        "swarm_notcpueval_tests/present_device_plain"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcrash_tests/0",
-      "selectors": [
-        "swarm_notcrash_tests/empty_node_id",
-        "swarm_notcrash_tests/want_recover_not_shown",
-        "swarm_notcrash_tests/noted_clears_err"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcredential_tests/0",
-      "selectors": [
-        "swarm_notcredential_tests/empty_item_id_is_item",
-        "swarm_notcredential_tests/credential_without_want_admit_is_credential",
-        "swarm_notcredential_tests/want_admit_without_credential_is_credential"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcredential_tests/1",
-      "selectors": [
-        "swarm_notcredential_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcudaops_tests/0",
-      "selectors": [
-        "swarm_notcudaops_tests/empty_engine_id_is_engine",
-        "swarm_notcudaops_tests/ops_absent_without_want_transfer",
-        "swarm_notcudaops_tests/ops_present_with_want_transfer_is_engine_absent"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcudaops_tests/1",
-      "selectors": [
-        "swarm_notcudaops_tests/ops_present_plain_is_noted"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcurrency_tests/0",
-      "selectors": [
-        "swarm_notcurrency_tests/empty_unit_id_is_unit",
-        "swarm_notcurrency_tests/other_unit_without_want_rename_is_fixed",
-        "swarm_notcurrency_tests/want_rename_on_btx_is_fixed"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notcurrency_tests/1",
-      "selectors": [
-        "swarm_notcurrency_tests/plain_btx_is_noted"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notdataset_tests/0",
-      "selectors": [
-        "swarm_notdataset_tests/empty_dataset_id_is_dataset",
-        "swarm_notdataset_tests/want_train_is_not_started",
-        "swarm_notdataset_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notdep_tests/0",
-      "selectors": [
-        "swarm_notdep_tests/empty_dep_id",
-        "swarm_notdep_tests/want_detect_not_detected",
-        "swarm_notdep_tests/noted_clears_err"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notdiloco_tests/0",
-      "selectors": [
-        "swarm_notdiloco_tests/empty_island_id_is_island",
-        "swarm_notdiloco_tests/want_average_is_not_averaged",
-        "swarm_notdiloco_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notdiscover_tests/0",
-      "selectors": [
-        "swarm_notdiscover_tests/empty_runtime_id_is_runtime",
-        "swarm_notdiscover_tests/want_discover_is_not_found",
-        "swarm_notdiscover_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notdispute_tests/0",
-      "selectors": [
-        "swarm_notdispute_tests/empty_receipt_id_is_receipt",
-        "swarm_notdispute_tests/want_settle_is_not_settled",
-        "swarm_notdispute_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notdistinct_tests/0",
-      "selectors": [
-        "swarm_notdistinct_tests/empty_report_id_is_report",
-        "swarm_notdistinct_tests/same_author_is_same_evaluator",
-        "swarm_notdistinct_tests/want_sign_is_not_accepted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notdistinct_tests/1",
-      "selectors": [
-        "swarm_notdistinct_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notdns_tests/0",
-      "selectors": [
-        "swarm_notdns_tests/empty_seed_id_is_seed",
-        "swarm_notdns_tests/want_publish_is_empty",
-        "swarm_notdns_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notdup_tests/0",
-      "selectors": [
-        "swarm_notdup_tests/empty_receipt_id_is_receipt",
-        "swarm_notdup_tests/want_accept_is_not_live",
-        "swarm_notdup_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notdurable_tests/0",
-      "selectors": [
-        "swarm_notdurable_tests/empty_state_id_is_state",
-        "swarm_notdurable_tests/want_persist_is_not_persisted",
-        "swarm_notdurable_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notelectric_tests/0",
-      "selectors": [
-        "swarm_notelectric_tests/empty_meter_id",
-        "swarm_notelectric_tests/want_publish_unmeasured",
-        "swarm_notelectric_tests/noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notenv_tests/0",
-      "selectors": [
-        "swarm_notenv_tests/empty_feature_id_is_feature",
-        "swarm_notenv_tests/env_required_is_no_switch",
-        "swarm_notenv_tests/want_enable_is_no_switch"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notenv_tests/1",
-      "selectors": [
-        "swarm_notenv_tests/env_required_and_want_enable_is_no_switch",
-        "swarm_notenv_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 2,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notexit_tests/0",
-      "selectors": [
-        "swarm_notexit_tests/empty_batch_id_is_batch",
-        "swarm_notexit_tests/want_measure_is_measure_refused",
-        "swarm_notexit_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notexplore_tests/0",
-      "selectors": [
-        "swarm_notexplore_tests/empty_slot_id_is_slot",
-        "swarm_notexplore_tests/want_assign_is_not_assigned",
-        "swarm_notexplore_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notfailover_tests/0",
-      "selectors": [
-        "swarm_notfailover_tests/empty_coord_id",
-        "swarm_notfailover_tests/want_publish_unmeasured",
-        "swarm_notfailover_tests/noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notfallback_tests/0",
-      "selectors": [
-        "swarm_notfallback_tests/empty_node_id_is_node",
-        "swarm_notfallback_tests/want_train_with_gpu_is_cpu_only",
-        "swarm_notfallback_tests/want_train_missing_gpu_keeps_observer"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notfallback_tests/1",
-      "selectors": [
-        "swarm_notfallback_tests/want_train_wins_over_want_observe",
-        "swarm_notfallback_tests/want_observe_is_noted",
-        "swarm_notfallback_tests/want_observe_missing_gpu_keeps_observer"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notfallback_tests/2",
-      "selectors": [
-        "swarm_notfallback_tests/neither_flag_is_noted",
-        "swarm_notfallback_tests/neither_flag_missing_gpu_keeps_observer"
-      ],
-      "expected_cases": 2,
       "lane": "other",
       "timeout_seconds": 180
     }
   ],
   "all_enabled_cases": [
-    "swarm_nodedefault_seeds_tests/add_seed_is_held",
-    "swarm_nodedefault_spend_tests/spend_starts_unarmed",
-    "swarm_nodedefault_spend_tests/research_key_is_not_signed",
-    "swarm_nodedefault_spend_tests/scheduler_is_not_signed",
-    "swarm_nodedefault_spend_tests/research_key_and_scheduler_are_not_signed",
-    "swarm_nodedefault_spend_tests/unsigned_operator_is_not_signed",
-    "swarm_nodedefault_spend_tests/unsigned_operator_with_low_bound_is_not_signed",
-    "swarm_nodedefault_spend_tests/research_key_with_low_bound_is_not_signed",
-    "swarm_nodedefault_spend_tests/bound_below_one",
-    "swarm_nodedefault_spend_tests/negative_bound",
-    "swarm_nodedefault_spend_tests/operator_signed_arm_records_decimal",
-    "swarm_nodedefault_spend_tests/minimum_bound_arms",
-    "swarm_nodedefault_spend_tests/second_arm_is_replay_ahead_of_other_refusals",
-    "swarm_nodedefault_spend_tests/refused_arm_does_not_block_a_later_arm",
-    "swarm_nodedefault_training_tests/enable_training_is_held",
-    "swarm_nodedefault_vram_tests/nonzero_vram_claim_is_vram_zero",
-    "swarm_nodedefault_vram_tests/zero_vram_claim_leaves_zero",
-    "swarm_nonsigner_tests/empty_claim",
-    "swarm_nonsigner_tests/signer_false_want_claim_false",
-    "swarm_nonsigner_tests/want_claim_true_signer_true",
-    "swarm_nonsigner_tests/signer_true_want_claim_false",
-    "swarm_nopenalty_tests/empty_channel_id_is_penalty",
-    "swarm_nopenalty_tests/empty_channel_id_wins_over_want_secp_and_stale",
-    "swarm_nopenalty_tests/want_secp_penalty_is_no_penalty",
-    "swarm_nopenalty_tests/want_secp_penalty_wins_over_stale_state",
-    "swarm_nopenalty_tests/stale_state_is_hashlock",
-    "swarm_nopenalty_tests/plain_note_is_noted",
-    "swarm_norealmoney_tests/empty_channel_id_is_channel",
-    "swarm_norealmoney_tests/want_real_money_is_real_money",
-    "swarm_norealmoney_tests/plain_note_is_noted",
-    "swarm_nosidecar_tests/empty_node_id_is_sidecar",
-    "swarm_nosidecar_tests/want_exec_is_not_launched",
-    "swarm_nosidecar_tests/plain_note_is_noted",
-    "swarm_not14400_tests/empty_channel_id_is_channel",
-    "swarm_not14400_tests/blocks_159_is_not_guarantee",
-    "swarm_not14400_tests/blocks_161_is_not_guarantee",
-    "swarm_not14400_tests/blocks_160_with_want_guarantee_is_not_guarantee",
-    "swarm_not14400_tests/blocks_160_plain_is_noted",
-    "swarm_nota2a_tests/empty_peer_id_is_peer",
-    "swarm_nota2a_tests/want_connect_is_not_connected",
-    "swarm_nota2a_tests/plain_note_is_noted",
-    "swarm_notablation_tests/empty_run_id_is_run",
-    "swarm_notablation_tests/want_publish_is_unmeasured",
-    "swarm_notablation_tests/plain_note_is_noted",
-    "swarm_notaccel_tests/empty_node_id_is_node",
-    "swarm_notaccel_tests/missing_gpu_is_cpu_only",
-    "swarm_notaccel_tests/missing_gpu_and_want_train_is_cpu_only",
-    "swarm_notaccel_tests/gpu_present_want_train_is_cpu_only",
-    "swarm_notaccel_tests/gpu_present_without_want_train_is_noted",
-    "swarm_notacquire_tests/empty_artifact_id_is_artifact",
-    "swarm_notacquire_tests/want_verify_is_unverified",
-    "swarm_notacquire_tests/plain_note_is_noted",
-    "swarm_notadmin_tests/empty_admin_id_is_admin",
-    "swarm_notadmin_tests/want_move_is_refused",
-    "swarm_notadmin_tests/plain_note_is_noted",
-    "swarm_notadopt_tests/empty_descendant_id_is_descendant",
-    "swarm_notadopt_tests/want_adopt_is_not_adopted",
-    "swarm_notadopt_tests/plain_note_is_noted",
-    "swarm_notaes_tests/empty_realm_id_is_realm",
-    "swarm_notaes_tests/empty_realm_id_wins_over_want_seal",
-    "swarm_notaes_tests/want_seal_is_not_sealed",
-    "swarm_notaes_tests/plain_note_is_noted",
-    "swarm_notagreement_tests/empty_agreement_id_is_agreement",
-    "swarm_notagreement_tests/want_settle_is_not_settlement",
-    "swarm_notagreement_tests/plain_note_is_noted",
-    "swarm_notassumption_tests/empty_close_id_is_close",
-    "swarm_notassumption_tests/want_measure_is_measure_refused",
-    "swarm_notassumption_tests/plain_note_is_noted",
-    "swarm_notautospend_tests/empty_wallet_id_is_wallet",
-    "swarm_notautospend_tests/atoms_one_is_held",
-    "swarm_notautospend_tests/empty_atoms_is_held",
-    "swarm_notautospend_tests/want_spend_is_held",
-    "swarm_notautospend_tests/plain_zero_atoms_is_noted",
-    "swarm_notbaseline_tests/empty_run_id_is_run",
-    "swarm_notbaseline_tests/want_publish_is_unmeasured",
-    "swarm_notbaseline_tests/run_without_publish_is_noted",
-    "swarm_notbenchmark_tests/empty_node_id_is_rate",
-    "swarm_notbenchmark_tests/negative_rate_is_rate",
-    "swarm_notbenchmark_tests/want_publish_with_tokens_is_unmeasured",
-    "swarm_notbenchmark_tests/tokens_without_want_publish_is_noted",
-    "swarm_notbody_tests/empty_body_id",
-    "swarm_notbody_tests/size_33554433",
-    "swarm_notbody_tests/want_store_size_1",
-    "swarm_notbody_tests/plain_note_size_32",
-    "swarm_notbytes_tests/empty_page_id_is_bytes",
-    "swarm_notbytes_tests/want_publish_is_unmeasured",
-    "swarm_notbytes_tests/plain_note_is_noted",
-    "swarm_notcachegain_tests/empty_page_id_is_cache",
-    "swarm_notcachegain_tests/want_publish_is_unmeasured",
-    "swarm_notcachegain_tests/plain_note_is_noted",
-    "swarm_notcachehit_tests/empty_node_id_is_hit",
-    "swarm_notcachehit_tests/want_publish_is_unmeasured",
-    "swarm_notcachehit_tests/plain_note_is_noted",
-    "swarm_notcacheoff_tests/empty_run_id",
-    "swarm_notcacheoff_tests/want_publish",
-    "swarm_notcacheoff_tests/noted",
-    "swarm_notcallerqual_tests/empty_engine_id_is_engine",
-    "swarm_notcallerqual_tests/want_qualify_with_tokens_per_sec_100_is_unmeasured",
-    "swarm_notcallerqual_tests/want_qualify_with_zero_tokens_is_unmeasured",
-    "swarm_notcallerqual_tests/plain_note_is_noted",
-    "swarm_notcanary_tests/empty_candidate_id_is_candidate",
-    "swarm_notcanary_tests/want_roll_is_not_canary",
-    "swarm_notcanary_tests/plain_note_is_noted",
-    "swarm_notcapped_tests/empty_node_id",
-    "swarm_notcapped_tests/thread_count_65",
-    "swarm_notcapped_tests/want_train_thread_count_1",
-    "swarm_notcapped_tests/plain_note_thread_count_8",
-    "swarm_notcatalog_tests/empty_model_id_is_model",
-    "swarm_notcatalog_tests/want_emit_is_not_emitted",
-    "swarm_notcatalog_tests/plain_note_is_noted",
-    "swarm_notcert_tests/empty_descendant_id_is_descendant",
-    "swarm_notcert_tests/want_cert_is_no_cert",
-    "swarm_notcert_tests/plain_note_is_noted",
-    "swarm_notchurn_tests/empty_peer_id_is_peer",
-    "swarm_notchurn_tests/want_recover_is_not_observed",
-    "swarm_notchurn_tests/plain_note_is_noted",
-    "swarm_notckpttime_tests/empty_job_id_is_job",
-    "swarm_notckpttime_tests/missing_checkpoint_is_no_checkpoint_even_if_want_publish",
-    "swarm_notckpttime_tests/want_publish_is_unmeasured",
-    "swarm_notckpttime_tests/saved_without_publish_is_noted",
-    "swarm_notclearing_tests/empty_batch_id_is_batch",
-    "swarm_notclearing_tests/want_settle_is_not_settled",
-    "swarm_notclearing_tests/plain_note_is_noted",
-    "swarm_notclosetmpl_tests/empty_channel_id_is_channel",
-    "swarm_notclosetmpl_tests/template_count_0_is_one_template",
-    "swarm_notclosetmpl_tests/template_count_2_is_one_template",
-    "swarm_notclosetmpl_tests/want_close_with_one_template_is_held",
-    "swarm_notclosetmpl_tests/plain_note_with_one_template_is_noted",
-    "swarm_notcohort_tests/empty_cohort_id_is_cohort",
-    "swarm_notcohort_tests/want_extend_before_until_is_held",
-    "swarm_notcohort_tests/now_equal_until_without_want_extend_is_expired",
-    "swarm_notcohort_tests/now_before_until_is_noted",
-    "swarm_notcollateral_tests/empty_pool_id_is_pool",
-    "swarm_notcollateral_tests/want_reserve_is_not_live",
-    "swarm_notcollateral_tests/plain_note_is_noted",
-    "swarm_notcontrib_tests/empty_worker_id_is_worker",
-    "swarm_notcontrib_tests/want_publish_is_unverified",
-    "swarm_notcontrib_tests/plain_note_is_noted",
-    "swarm_notcoord_tests/empty_task_id_is_task",
-    "swarm_notcoord_tests/want_run_is_not_run",
-    "swarm_notcoord_tests/plain_note_is_noted",
-    "swarm_notcoordoff_tests/empty_run_id",
-    "swarm_notcoordoff_tests/want_publish",
-    "swarm_notcoordoff_tests/noted",
-    "swarm_notcpueval_tests/empty_node_id",
-    "swarm_notcpueval_tests/absent_device",
-    "swarm_notcpueval_tests/present_device_want_gpu",
-    "swarm_notcpueval_tests/present_device_plain",
-    "swarm_notcrash_tests/empty_node_id",
-    "swarm_notcrash_tests/want_recover_not_shown",
-    "swarm_notcrash_tests/noted_clears_err",
-    "swarm_notcredential_tests/empty_item_id_is_item",
-    "swarm_notcredential_tests/credential_without_want_admit_is_credential",
-    "swarm_notcredential_tests/want_admit_without_credential_is_credential",
-    "swarm_notcredential_tests/plain_note_is_noted",
-    "swarm_notcudaops_tests/empty_engine_id_is_engine",
-    "swarm_notcudaops_tests/ops_absent_without_want_transfer",
-    "swarm_notcudaops_tests/ops_present_with_want_transfer_is_engine_absent",
-    "swarm_notcudaops_tests/ops_present_plain_is_noted",
-    "swarm_notcurrency_tests/empty_unit_id_is_unit",
-    "swarm_notcurrency_tests/other_unit_without_want_rename_is_fixed",
-    "swarm_notcurrency_tests/want_rename_on_btx_is_fixed",
-    "swarm_notcurrency_tests/plain_btx_is_noted",
-    "swarm_notdataset_tests/empty_dataset_id_is_dataset",
-    "swarm_notdataset_tests/want_train_is_not_started",
-    "swarm_notdataset_tests/plain_note_is_noted",
-    "swarm_notdep_tests/empty_dep_id",
-    "swarm_notdep_tests/want_detect_not_detected",
-    "swarm_notdep_tests/noted_clears_err",
-    "swarm_notdiloco_tests/empty_island_id_is_island",
-    "swarm_notdiloco_tests/want_average_is_not_averaged",
-    "swarm_notdiloco_tests/plain_note_is_noted",
-    "swarm_notdiscover_tests/empty_runtime_id_is_runtime",
-    "swarm_notdiscover_tests/want_discover_is_not_found",
-    "swarm_notdiscover_tests/plain_note_is_noted",
-    "swarm_notdispute_tests/empty_receipt_id_is_receipt",
-    "swarm_notdispute_tests/want_settle_is_not_settled",
-    "swarm_notdispute_tests/plain_note_is_noted",
-    "swarm_notdistinct_tests/empty_report_id_is_report",
-    "swarm_notdistinct_tests/same_author_is_same_evaluator",
-    "swarm_notdistinct_tests/want_sign_is_not_accepted",
-    "swarm_notdistinct_tests/plain_note_is_noted",
-    "swarm_notdns_tests/empty_seed_id_is_seed",
-    "swarm_notdns_tests/want_publish_is_empty",
-    "swarm_notdns_tests/plain_note_is_noted",
-    "swarm_notdup_tests/empty_receipt_id_is_receipt",
-    "swarm_notdup_tests/want_accept_is_not_live",
-    "swarm_notdup_tests/plain_note_is_noted",
-    "swarm_notdurable_tests/empty_state_id_is_state",
-    "swarm_notdurable_tests/want_persist_is_not_persisted",
-    "swarm_notdurable_tests/plain_note_is_noted",
-    "swarm_notelectric_tests/empty_meter_id",
-    "swarm_notelectric_tests/want_publish_unmeasured",
-    "swarm_notelectric_tests/noted",
-    "swarm_notenv_tests/empty_feature_id_is_feature",
-    "swarm_notenv_tests/env_required_is_no_switch",
-    "swarm_notenv_tests/want_enable_is_no_switch",
-    "swarm_notenv_tests/env_required_and_want_enable_is_no_switch",
-    "swarm_notenv_tests/plain_note_is_noted",
-    "swarm_notexit_tests/empty_batch_id_is_batch",
-    "swarm_notexit_tests/want_measure_is_measure_refused",
-    "swarm_notexit_tests/plain_note_is_noted",
-    "swarm_notexplore_tests/empty_slot_id_is_slot",
-    "swarm_notexplore_tests/want_assign_is_not_assigned",
-    "swarm_notexplore_tests/plain_note_is_noted",
-    "swarm_notfailover_tests/empty_coord_id",
-    "swarm_notfailover_tests/want_publish_unmeasured",
-    "swarm_notfailover_tests/noted",
-    "swarm_notfallback_tests/empty_node_id_is_node",
-    "swarm_notfallback_tests/want_train_with_gpu_is_cpu_only",
-    "swarm_notfallback_tests/want_train_missing_gpu_keeps_observer",
-    "swarm_notfallback_tests/want_train_wins_over_want_observe",
-    "swarm_notfallback_tests/want_observe_is_noted",
-    "swarm_notfallback_tests/want_observe_missing_gpu_keeps_observer",
-    "swarm_notfallback_tests/neither_flag_is_noted",
-    "swarm_notfallback_tests/neither_flag_missing_gpu_keeps_observer"
+    "swarm_notfallbackpeer_tests/empty_peer_id_is_peer",
+    "swarm_notfallbackpeer_tests/want_connect_is_not_connected",
+    "swarm_notfallbackpeer_tests/plain_note_is_noted",
+    "swarm_notfalsecompat_tests/empty_peer_id_is_peer",
+    "swarm_notfalsecompat_tests/want_share_is_not_live",
+    "swarm_notfalsecompat_tests/plain_note_is_noted",
+    "swarm_notfamilydir_tests/empty_family_id_is_family",
+    "swarm_notfamilydir_tests/want_publish_is_not_published",
+    "swarm_notfamilydir_tests/plain_note_is_noted",
+    "swarm_notfees_tests/empty_invoice_id_is_invoice",
+    "swarm_notfees_tests/want_publish_is_unmeasured",
+    "swarm_notfees_tests/plain_note_is_noted",
+    "swarm_notfiat_tests/empty_quote_id_is_quote",
+    "swarm_notfiat_tests/want_count_is_not_balance",
+    "swarm_notfiat_tests/plain_note_is_noted",
+    "swarm_notfinetune_tests/empty_job_id",
+    "swarm_notfinetune_tests/missing_checkpoint",
+    "swarm_notfinetune_tests/missing_checkpoint_even_if_want_publish",
+    "swarm_notfinetune_tests/want_publish_held",
+    "swarm_notfinetune_tests/noted",
+    "swarm_notfirstedge_tests/empty_edge_id",
+    "swarm_notfirstedge_tests/first_edge_without_want_fee",
+    "swarm_notfirstedge_tests/want_fee_on_later_edge",
+    "swarm_notfirstedge_tests/plain_later_edge",
+    "swarm_notfitness_tests/empty_challenge_id",
+    "swarm_notfitness_tests/missing_validated",
+    "swarm_notfitness_tests/want_move_with_all_three_true",
+    "swarm_notfitness_tests/plain_note_all_three_true",
+    "swarm_notflagship_tests/empty_stage_id_is_stage",
+    "swarm_notflagship_tests/want_pass_is_unqualified",
+    "swarm_notflagship_tests/plain_note_is_noted",
+    "swarm_notfork_tests/empty_branch_id_is_branch",
+    "swarm_notfork_tests/incompatible_without_want_average_is_fork",
+    "swarm_notfork_tests/want_average_with_compatible_is_fork",
+    "swarm_notfork_tests/plain_compatible_note_is_noted",
+    "swarm_notforwarder_tests/empty_invoice_id_is_invoice",
+    "swarm_notforwarder_tests/want_charge_is_not_charged",
+    "swarm_notforwarder_tests/plain_note_is_noted",
+    "swarm_notfourbal_tests/empty_ledger_id_is_ledger",
+    "swarm_notfourbal_tests/want_merge_is_separate",
+    "swarm_notfourbal_tests/plain_note_is_noted",
+    "swarm_notframework_tests/empty_run_id_is_run",
+    "swarm_notframework_tests/want_publish_is_unmeasured",
+    "swarm_notframework_tests/plain_note_is_noted",
+    "swarm_notfrozen_tests/empty_pair_id_is_pair",
+    "swarm_notfrozen_tests/pair_count_seven_is_frozen",
+    "swarm_notfrozen_tests/want_unfreeze_with_eight_pairs_is_frozen",
+    "swarm_notfrozen_tests/plain_note_with_eight_pairs_is_noted",
+    "swarm_notfsdp_tests/empty_node_id_is_train",
+    "swarm_notfsdp_tests/want_fsdp_is_not_distributed",
+    "swarm_notfsdp_tests/plain_note_is_noted",
+    "swarm_notgone_tests/empty_coord_id_is_coord",
+    "swarm_notgone_tests/want_vanish_is_not_injected",
+    "swarm_notgone_tests/plain_note_is_noted",
+    "swarm_notgovernor_tests/empty_node_id_is_node",
+    "swarm_notgovernor_tests/idle_off_is_drain",
+    "swarm_notgovernor_tests/battery_is_drain",
+    "swarm_notgovernor_tests/thermal_is_drain",
+    "swarm_notgovernor_tests/metered_is_drain",
+    "swarm_notgovernor_tests/want_keep_is_drain",
+    "swarm_notgovernor_tests/plain_node_is_noted",
+    "swarm_notgpuhours_tests/empty_job_id",
+    "swarm_notgpuhours_tests/want_publish_unmeasured",
+    "swarm_notgpuhours_tests/noted",
+    "swarm_notgpuoff_tests/empty_node_id",
+    "swarm_notgpuoff_tests/want_train",
+    "swarm_notgpuoff_tests/noted",
+    "swarm_notgrad_tests/empty_job_id_is_job",
+    "swarm_notgrad_tests/want_sync_is_not_synced",
+    "swarm_notgrad_tests/plain_note_is_noted",
+    "swarm_notgradleak_tests/empty_gradient_id_is_gradient",
+    "swarm_notgradleak_tests/want_publish_is_held",
+    "swarm_notgradleak_tests/plain_note_is_noted",
+    "swarm_notguest_tests/empty_guest_id_is_guest",
+    "swarm_notguest_tests/want_pass_is_unqualified",
+    "swarm_notguest_tests/plain_note_is_noted",
+    "swarm_nothashleaf_tests/empty_channel_id_is_channel",
+    "swarm_nothashleaf_tests/want_build_is_not_built",
+    "swarm_nothashleaf_tests/plain_note_is_noted",
+    "swarm_nothflineage_tests/empty_origin_id",
+    "swarm_nothflineage_tests/want_authority",
+    "swarm_nothflineage_tests/noted",
+    "swarm_notholdout_tests/empty_model_id_is_model",
+    "swarm_notholdout_tests/want_score_is_not_scored",
+    "swarm_notholdout_tests/plain_note_is_noted",
+    "swarm_notidentity_tests/empty_node_id",
+    "swarm_notidentity_tests/want_bind_not_bound",
+    "swarm_notidentity_tests/noted_clears_err",
+    "swarm_notinit_tests/empty_node_id",
+    "swarm_notinit_tests/want_shutdown_not_shutdown",
+    "swarm_notinit_tests/want_init_not_init",
+    "swarm_notinit_tests/noted_clears_err",
+    "swarm_notisland_tests/empty_run_id_is_run",
+    "swarm_notisland_tests/want_publish_is_unmeasured",
+    "swarm_notisland_tests/plain_note_is_noted",
+    "swarm_notjoinon_tests/empty_node_id_is_node",
+    "swarm_notjoinon_tests/modelnet_off_is_default_on",
+    "swarm_notjoinon_tests/want_skip_join_is_held",
+    "swarm_notjoinon_tests/plain_on_is_noted",
+    "swarm_notkvpage_tests/empty_page_id_is_page",
+    "swarm_notkvpage_tests/incompatible_without_want_share_is_separate",
+    "swarm_notkvpage_tests/want_share_with_compatible_is_held",
+    "swarm_notkvpage_tests/plain_compatible_note_is_noted",
+    "swarm_notl1_tests/empty_payment_id_is_payment",
+    "swarm_notl1_tests/want_broadcast_is_not_broadcast",
+    "swarm_notl1_tests/plain_note_is_noted",
+    "swarm_notlaterpage_tests/empty_page_id_is_page",
+    "swarm_notlaterpage_tests/revoked_without_want_read_is_revoked",
+    "swarm_notlaterpage_tests/want_read_without_revoked_is_revoked",
+    "swarm_notlaterpage_tests/plain_note_is_noted",
+    "swarm_notlearner_tests/empty_trajectory_id_is_trajectory",
+    "swarm_notlearner_tests/want_queue_is_not_queued",
+    "swarm_notlearner_tests/plain_note_is_noted",
+    "swarm_notlease_tests/empty_lease_id_is_lease",
+    "swarm_notlease_tests/want_replace_is_not_injected",
+    "swarm_notlease_tests/plain_note_is_noted",
+    "swarm_notlivefault_tests/empty_fault_id_is_fault",
+    "swarm_notlivefault_tests/want_inject_is_not_injected",
+    "swarm_notlivefault_tests/plain_note_is_noted",
+    "swarm_notlmcache_tests/empty_page_id_is_cache",
+    "swarm_notlmcache_tests/want_transfer_without_cuda_ops_is_engine_absent",
+    "swarm_notlmcache_tests/want_transfer_with_cuda_ops_is_held",
+    "swarm_notlmcache_tests/cuda_ops_without_want_transfer_is_noted",
+    "swarm_notlongbase_tests/empty_checkpoint_id_is_checkpoint",
+    "swarm_notlongbase_tests/want_execute_is_not_executed",
+    "swarm_notlongbase_tests/plain_note_is_noted",
+    "swarm_notmainnet_tests/empty_request_id_is_request",
+    "swarm_notmainnet_tests/want_mainnet_is_mainnet",
+    "swarm_notmainnet_tests/plain_note_is_noted",
+    "swarm_notmandate_tests/empty_mandate_id_is_mandate",
+    "swarm_notmandate_tests/unsigned_is_unsigned",
+    "swarm_notmandate_tests/want_spend_is_held",
+    "swarm_notmandate_tests/plain_signed_note_is_noted",
+    "swarm_notmanifestcap_tests/empty_manifest_id",
+    "swarm_notmanifestcap_tests/size_16383",
+    "swarm_notmanifestcap_tests/size_16385",
+    "swarm_notmanifestcap_tests/size_16384_want_store",
+    "swarm_notmanifestcap_tests/size_16384_plain",
+    "swarm_notmargin_tests/empty_channel_id_is_channel",
+    "swarm_notmargin_tests/blocks_159_is_held",
+    "swarm_notmargin_tests/want_close_with_blocks_160_is_held",
+    "swarm_notmargin_tests/plain_note_with_blocks_160_is_noted",
+    "swarm_notmcp_tests/empty_adapter_id",
+    "swarm_notmcp_tests/want_connect_not_connected",
+    "swarm_notmcp_tests/noted_clears_err",
+    "swarm_notmedium_tests/empty_adapter_id_is_adapter",
+    "swarm_notmedium_tests/want_execute_is_not_executed",
+    "swarm_notmedium_tests/plain_note_is_noted",
+    "swarm_notmesh_tests/empty_mesh_id",
+    "swarm_notmesh_tests/mesh_count_2",
+    "swarm_notmesh_tests/want_open_mesh_count_1",
+    "swarm_notmesh_tests/plain_note_mesh_count_1",
+    "swarm_notmhq_tests/empty_route_id_is_route",
+    "swarm_notmhq_tests/hop_count_two_without_want_qualify_is_unqualified",
+    "swarm_notmhq_tests/hop_count_one_want_qualify_is_unqualified",
+    "swarm_notmhq_tests/hop_count_one_plain_is_noted",
+    "swarm_notmine_tests/empty_node_id_is_mine",
+    "swarm_notmine_tests/want_mine_is_not_mined",
+    "swarm_notmine_tests/plain_note_is_noted",
+    "swarm_notminthread_tests/empty_node_id",
+    "swarm_notminthread_tests/thread_count_0",
+    "swarm_notminthread_tests/thread_count_1_with_want_apply",
+    "swarm_notminthread_tests/thread_count_1_plain",
+    "swarm_notmixed_tests/empty_job_id_is_job",
+    "swarm_notmixed_tests/want_mixed_is_not_mixed",
+    "swarm_notmixed_tests/plain_note_is_noted",
+    "swarm_notmodelon_tests/empty_node_id_is_node",
+    "swarm_notmodelon_tests/modelnet_on_false_is_default_on",
+    "swarm_notmodelon_tests/want_disable_is_default_on",
+    "swarm_notmodelon_tests/plain_on_is_noted",
+    "swarm_notmoonabs_tests/empty_adapter_id_is_adapter",
+    "swarm_notmoonabs_tests/want_move_is_engine_absent",
+    "swarm_notmoonabs_tests/plain_note_is_noted",
+    "swarm_notmooncake_tests/empty_page_id_is_mooncake",
+    "swarm_notmooncake_tests/want_transfer_without_mooncake_is_engine_absent",
+    "swarm_notmooncake_tests/want_transfer_with_mooncake_is_held",
+    "swarm_notmooncake_tests/mooncake_without_want_transfer_is_noted",
+    "swarm_notmtls_tests/empty_peer_id",
+    "swarm_notmtls_tests/want_session",
+    "swarm_notmtls_tests/plain_note",
+    "swarm_notmultihop_tests/empty_route_id_is_route",
+    "swarm_notmultihop_tests/zero_hops_is_route",
+    "swarm_notmultihop_tests/two_hops_want_qualify_is_unqualified",
+    "swarm_notmultihop_tests/one_hop_want_qualify_is_held",
+    "swarm_notmultihop_tests/one_hop_without_want_qualify_is_noted",
+    "swarm_notmultinode_tests/empty_run_id",
+    "swarm_notmultinode_tests/want_publish_out_of_scope",
+    "swarm_notmultinode_tests/noted",
+    "swarm_notnat_tests/empty_peer_id_is_peer",
+    "swarm_notnat_tests/want_traverse_is_no_nat",
+    "swarm_notnat_tests/plain_note_is_noted",
+    "swarm_notnccl_tests/empty_job_id_is_job",
+    "swarm_notnccl_tests/want_sync_is_engine_absent",
+    "swarm_notnccl_tests/plain_note_is_noted",
+    "swarm_notneighborhood_tests/empty_node_id",
+    "swarm_notneighborhood_tests/peer_count_7",
+    "swarm_notneighborhood_tests/want_connect_peer_count_1",
+    "swarm_notneighborhood_tests/plain_note_peer_count_4",
+    "swarm_notnetbytes_tests/empty_peer_id_is_peer",
+    "swarm_notnetbytes_tests/want_publish_is_unmeasured",
+    "swarm_notnetbytes_tests/plain_note_is_noted",
+    "swarm_notnetcost_tests/empty_peer_id_is_peer",
+    "swarm_notnetcost_tests/want_publish_is_unmeasured",
+    "swarm_notnetcost_tests/plain_note_is_noted",
+    "swarm_notniche_tests/empty_niche_id_is_niche",
+    "swarm_notniche_tests/want_merge_is_separate",
+    "swarm_notniche_tests/plain_note_is_noted"
   ],
   "campaign_test_budget_seconds": 1800,
   "batch_budget_seconds": 1800,
   "require_first_pass_control": true,
-  "scope": "Previously unrun node-default/role/no-spend/no-sidecar and Swarm negative capability/qualification guard maintained unit cases; no live operations",
-  "total": 216
+  "scope": "Previously unrun Swarm negative fallback/identity/qualification/GPU/model-cache/lease/mesh/network capability guard maintained unit cases; no live operations",
+  "total": 207
 }
