@@ -1,4 +1,4 @@
-name: Native Windows mock signer fixture repair
+name: Native Windows mock signer missing controls
 permissions:
   contents: read
 jobs:
@@ -182,7 +182,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Build only mock-signer fixture and run24affected cases
+    - name: Qualify only three missing error paths before and after
       id: repair
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -201,7 +201,7 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/repair.py
+        python controls/contrib/devtools/windows-root-configure/qualify.py
 
         exit /b %errorlevel%
 
@@ -210,7 +210,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
       with:
-        name: native-windows-mock-signer-repair
+        name: native-windows-mock-signer-qualification
         path: D:\btx-native-035\evidence\
         retention-days: 14
 'on':
