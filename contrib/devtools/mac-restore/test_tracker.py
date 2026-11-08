@@ -1,5 +1,6 @@
 import json, os, pathlib, subprocess, sys, tempfile, time, signal
 from process_tracker import OwnedProcesses
+import process_tracker
 
 CHILD = '''import os,signal,time
 os.setpgid(0,0) if os.environ['KIND']=='group' else os.setsid()
@@ -19,6 +20,32 @@ def main():
     quick.wait(timeout=5)
     completed = OwnedProcesses(quick)
     assert completed.update()['processes'] == [] and completed.stop()['processes'] == []
+    # Reproduce the review catch: initialization must not launch a ps call outside
+    # the protected observation/cleanup path. A one-shot observation error must
+    # still stop the owned command, while preserving the unrelated sentinel.
+    faultproc = subprocess.Popen([sys.executable, '-c', 'import time;time.sleep(40)'], start_new_session=True)
+    original = process_tracker.snapshot
+    calls = [0]
+    def fail_once():
+        calls[0] += 1
+        if calls[0] == 1: raise subprocess.TimeoutExpired('ps fixture', .01)
+        return original()
+    process_tracker.snapshot = fail_once
+    failure_tracker = None
+    try:
+        failure_tracker = OwnedProcesses(faultproc)
+        try:
+            failure_tracker.update()
+            raise AssertionError('Observation fault was not injected')
+        except subprocess.TimeoutExpired:
+            pass
+        finally:
+            assert failure_tracker.stop()['processes'] == []
+        assert faultproc.poll() is not None
+    finally:
+        process_tracker.snapshot = original
+        if faultproc.poll() is None:
+            faultproc.kill(); faultproc.wait(timeout=5)
     with tempfile.TemporaryDirectory(prefix='mac-tracker-') as td:
         root = pathlib.Path(td)
         sentinel = subprocess.Popen([sys.executable, '-c', 'import time;time.sleep(40)'], start_new_session=True)
@@ -39,7 +66,7 @@ def main():
             (root/'exit').touch();proc.wait(timeout=5)
             orphan=tracker.update();assert set(pids)<=set(x['pid'] for x in orphan['processes'])
             clean=tracker.stop();assert clean['processes']==[] and sentinel.poll() is None
-            return {'pass':True,'already_completed_command_handled':True,'old_single_group_misses_children':True,'old_group_rss_bytes':old_rss,'owned_rss_bytes':measured['rss_bytes'],'observed_groups':measured['process_groups'],'observed_sessions':measured['sessions'],'orphan_children_retained':True,'SIGKILL_escalation_and_cleanup':True,'unrelated_sentinel_preserved':True}
+            return {'pass':True,'already_completed_command_handled':True,'initial_observation_error_cleanup':True,'old_single_group_misses_children':True,'old_group_rss_bytes':old_rss,'owned_rss_bytes':measured['rss_bytes'],'observed_groups':measured['process_groups'],'observed_sessions':measured['sessions'],'orphan_children_retained':True,'SIGKILL_escalation_and_cleanup':True,'unrelated_sentinel_preserved':True}
         finally:
             tracker.stop()
             sentinel.terminate();sentinel.wait(timeout=5)

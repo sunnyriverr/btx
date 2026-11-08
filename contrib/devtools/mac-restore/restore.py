@@ -75,20 +75,40 @@ try:
  state['checks']['fresh_git_identity_preserved']=True
  objects={n:v for n,v in inv.items() if n.startswith('mac-config-build/') and n.endswith('.o')}
  state['retained_objects']=len(objects);assert len(objects)==2606
+ def audit_objects(phase):
+  changed=[]
+  for n,v in objects.items():
+   path=w/n
+   actual={'sha256':sha(path),'mtime_ns':path.stat().st_mtime_ns} if path.exists() else {'missing':True}
+   expected_object={'sha256':v['sha256'],'mtime_ns':v['mtime_ns']}
+   if actual!=expected_object:changed.append({'path':n,'expected':expected_object,'actual':actual})
+  state.setdefault('object_phase_audits',{})[phase]={'changed_count':len(changed),'changed':changed[:25]};save()
+  return changed
+ assert not audit_objects('before_plans')
+
  # Configuration regeneration is permitted; no compiler/build command is executed.
  # Observe untouched dry-run first, then explicit configure-only regeneration to avoid stale generator timestamps.
  targets=json.loads(Path(__file__).with_name('targets.json').read_text())
  run(['ninja','-C',build,'-n','-d','explain',*targets],'restored-initial-dry-plan')
+ audit_objects('after_initial_dry_plan')
  run(['cmake','-S',src,'-B',build],'restored-configure-only',300)
+ audit_objects('after_configure')
  aftercommands=run(['ninja','-C',build,'-t','commands',*targets],'restored-command-graph')
  assert hashlib.sha256(aftercommands.encode()).hexdigest()==expected['commands_sha256'],'Restored commands changed after configure'
- plan=run(['ninja','-C',build,'-n','-d','explain',*targets],'restored-final-dry-plan')
+ # A normal -n exits after pretending to regenerate CMake's main manifest.
+ # Inspect the identical already-regenerated graph through a nongenerated wrapper.
+ inspection=build/'checkpoint-inspection.ninja';inspection.write_text('include build.ninja\n')
+ inspectcommands=run(['ninja','-C',build,'-f',inspection.name,'-t','commands',*targets],'inspection-command-graph')
+ assert hashlib.sha256(inspectcommands.encode()).hexdigest()==expected['commands_sha256']
+ audit_objects('after_command_inspection')
+ plan=run(['ninja','-C',build,'-f',inspection.name,'-n','-d','explain',*targets],'restored-final-dry-plan')
+ audit_objects('after_final_dry_plan')
  scheduled=[]
  for n,v in objects.items():
   relative=n.removeprefix('mac-config-build/')
   if 'Building CXX object '+relative in plan or 'Building C object '+relative in plan:scheduled.append(n)
  assert not scheduled,('Previously completed objects scheduled to rebuild',scheduled[:20])
- for n,v in objects.items():assert sha(w/n)==v['sha256'] and (w/n).stat().st_mtime_ns==v['mtime_ns']
+ assert not audit_objects('final'), 'Completed object content/mtime changed; inspect phase audits'
  state['checks']['retained_objects_not_scheduled_or_modified']=True
  state['checks']['command_graph_matches_after_regeneration']=True
  state['remaining_dry_plan_build_lines']=sum('Building ' in x or 'Linking ' in x for x in plan.splitlines())

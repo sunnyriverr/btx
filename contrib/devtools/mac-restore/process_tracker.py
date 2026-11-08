@@ -29,9 +29,8 @@ class OwnedProcesses:
         self.sid = proc.pid  # caller must use start_new_session=True
         self.known = {}
         self.peak_rss_bytes = 0
-        self.update()
-        assert self.known or proc.poll() is not None, 'Live owned launch was not observable'
-        # A completed short command legitimately has no live process or RSS sample.
+        # Passive initialization: first observation belongs inside caller's try/finally.
+        # Short completed commands legitimately have no live process/RSS sample.
 
     def update(self):
         rows = snapshot()
