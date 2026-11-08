@@ -7,6 +7,11 @@ def sha(path):
  with path.open('rb') as f:
   for block in iter(lambda:f.read(1024*1024),b''):h.update(block)
  return h.hexdigest()
+def link_target(workspace,path,target):
+ resolved=(path.parent/target).resolve()
+ assert any(resolved.is_relative_to((workspace/root).resolve()) for root in ROOTS),'Link escapes checkpoint roots: '+str(path.relative_to(workspace))+' -> '+target
+ return os.path.relpath(target,path.parent) if Path(target).is_absolute() else target
+
 def snapshot(workspace):
  rows={}
  for name in ROOTS:
@@ -18,8 +23,7 @@ def snapshot(workspace):
    st=p.lstat();row={'mtime_ns':st.st_mtime_ns,'mode':st.st_mode & 0o777}
    if p.is_symlink():
     target=os.readlink(p)
-    assert not Path(target).is_absolute() and (p.parent/target).resolve().is_relative_to(workspace.resolve()),'Link escapes checkpoint workspace: '+str(rel)+' -> '+target
-    row.update(kind='link',target=target)
+    row.update(kind='link',target=link_target(workspace,p,target))
    elif p.is_file():row.update(kind='file',sha256=sha(p),bytes=st.st_size)
    elif p.is_dir():row['kind']='directory'
    else:raise ValueError('Unexpected special file')
@@ -34,7 +38,9 @@ def create(workspace,output,identity,reserve=2*1024**3):
  assert shutil.disk_usage(output).free>total+reserve,'Insufficient checkpoint headroom'
  archive=output/'build-state.tar.gz';manifest={'identity':identity,'workspace':str(workspace),'rows':before}
  def include(info):
-  return None if '.git' in Path(info.name).parts else info
+  if '.git' in Path(info.name).parts:return None
+  if info.issym():info.linkname=link_target(workspace,workspace/info.name,info.linkname)
+  return info
  with tarfile.open(archive,'w:gz',compresslevel=1,format=tarfile.PAX_FORMAT) as t:
   for name in ROOTS:
    if (workspace/name).exists():t.add(workspace/name,arcname=name,filter=include)

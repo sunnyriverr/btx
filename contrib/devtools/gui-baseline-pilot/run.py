@@ -61,6 +61,9 @@ try:
  try:snapshot(w)
  except AssertionError as error:s['checkpoint_rejection']=str(error)
  else:s['checkpoint_rejection']=None
+ assert s['checkpoint_rejection'] is None,s['checkpoint_rejection']
+ from checkpoint import create
+ m=create(w,w/'configured-checkpoint',{'source':s['source'],'fixture':s['fixture']});s['checkpoint_sha256']=m['archive_sha256']
 
 except Exception as e:s['error']=repr(e);s['configuration_pass']=False
 finally:
