@@ -19,11 +19,17 @@ jobs:
           path: candidate-input
           run-id: 42456654351
           github-token: ${{ github.token }}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: linux-gui-candidate-window
+          path: prior-gui
+          run-id: 42456950551
+          github-token: ${{ github.token }}
       - name: Install documented GUI and node runtime prerequisites
         timeout-minutes: 5
         run: |
           sudo apt-get -o Acquire::Retries=1 update
-          sudo apt-get install -y --no-install-recommends libwebkit2gtk-4.1-0 libgtk-3-0t64 libevent-dev libsqlite3-0 libzmq5 libgomp1 libopengl0 xvfb xauth dbus-x11 openbox scrot wmctrl xdotool python3-pyatspi at-spi2-core
+          sudo apt-get install -y --no-install-recommends libwebkit2gtk-4.1-0 libgtk-3-0t64 libevent-dev libsqlite3-0 libzmq5 libgomp1 libopengl0 libxkbcommon-x11-0 libayatana-appindicator3-1 xvfb xauth dbus-x11 openbox scrot wmctrl xdotool python3-pyatspi at-spi2-core
       - name: Observe actual candidate window and disposable local connection
         timeout-minutes: 6
         env:

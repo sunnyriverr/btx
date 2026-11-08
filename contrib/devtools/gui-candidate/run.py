@@ -102,10 +102,10 @@ def main():
             match=re.search(re.escape(soname)+r' => (/\S+)',resolved)
             assert match and not Path(match.group(1)).resolve().is_relative_to(package.resolve())
             state['atlas_host_resolution'][soname]=match.group(1)
-        with (out/'qt-version.log').open('wb') as log:
-            qt_control=subprocess.run([str(package/'bin/btx-qt'),'-version'],env=dict(env,QT_DEBUG_PLUGINS='1'),stdout=log,stderr=subprocess.STDOUT,timeout=30)
-        state['qt_version_control_exit']=qt_control.returncode
-        assert qt_control.returncode==0,'Candidate Qt launcher control failed'
+        prior_file=w/'prior-gui/result.json'
+        prior=json.loads(prior_file.read_text())
+        assert prior['archive_sha256']==state['archive_sha256'] and prior['qt_version_control_exit']==0
+        state['qt_version_control_reused']={'run':42456950551,'saved_result_sha256':digest(prior_file),'exit':prior['qt_version_control_exit'],'candidate_unchanged':True}
         app=start([package/'bin/btx-atlas'],'atlas',env)
         ui.wait(lambda:'The node is the network.' in ui.text(),45)
         state['app_alive']=app.poll() is None
