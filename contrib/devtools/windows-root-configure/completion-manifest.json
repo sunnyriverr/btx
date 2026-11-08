@@ -3,90 +3,414 @@
   "binary_sha256": "31e45f1d0f2aed4168982120596182b5268057e1b9806960f27a60c769906bdd",
   "jobs": [
     {
-      "suite": "validation_chainstatemanager_tests/shielded_write_failure_payload_is_fatal_and_restart_safe",
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_rebuilds_shielded_state_when_commitment_index_missing",
       "selectors": [
-        "validation_chainstatemanager_tests/shielded_write_failure_payload_is_fatal_and_restart_safe"
+        "validation_chainstatemanager_tests/chainstatemanager_rebuilds_shielded_state_when_commitment_index_missing"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 300
     },
     {
-      "suite": "validation_chainstatemanager_tests/shielded_write_failure_prepared_marker_is_fatal_and_restart_safe",
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_reloads_version4_snapshot_settlement_anchor_state",
       "selectors": [
-        "validation_chainstatemanager_tests/shielded_write_failure_prepared_marker_is_fatal_and_restart_safe"
+        "validation_chainstatemanager_tests/chainstatemanager_reloads_version4_snapshot_settlement_anchor_state"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 300
     },
     {
-      "suite": "validation_chainstatemanager_tests/shielded_write_failure_manifest_is_fatal_and_restart_safe",
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_reloads_chain_equivalent_snapshot_account_registry_state",
       "selectors": [
-        "validation_chainstatemanager_tests/shielded_write_failure_manifest_is_fatal_and_restart_safe"
+        "validation_chainstatemanager_tests/chainstatemanager_reloads_chain_equivalent_snapshot_account_registry_state"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 300
     },
     {
-      "suite": "validation_chainstatemanager_tests/shielded_write_failure_velocity_is_fatal_and_restart_safe",
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_rebuilds_non_chain_equivalent_snapshot_account_registry_state_on_restart",
       "selectors": [
-        "validation_chainstatemanager_tests/shielded_write_failure_velocity_is_fatal_and_restart_safe"
+        "validation_chainstatemanager_tests/chainstatemanager_rebuilds_non_chain_equivalent_snapshot_account_registry_state_on_restart"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 300
     },
     {
-      "suite": "validation_chainstatemanager_tests/shielded_write_failure_pool_is_fatal_and_restart_safe",
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_retains_commitment_index_when_configured",
       "selectors": [
-        "validation_chainstatemanager_tests/shielded_write_failure_pool_is_fatal_and_restart_safe"
+        "validation_chainstatemanager_tests/chainstatemanager_retains_commitment_index_when_configured"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 300
     },
     {
-      "suite": "validation_chainstatemanager_tests/shielded_write_failure_final_state_is_fatal_and_restart_safe",
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_reloads_persisted_netting_manifest_state",
       "selectors": [
-        "validation_chainstatemanager_tests/shielded_write_failure_final_state_is_fatal_and_restart_safe"
+        "validation_chainstatemanager_tests/chainstatemanager_reloads_persisted_netting_manifest_state"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 300
     },
     {
-      "suite": "validation_chainstatemanager_tests/shielded_write_failure_accumulator_is_fatal_and_restart_safe",
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_reloads_persisted_account_registry_state",
       "selectors": [
-        "validation_chainstatemanager_tests/shielded_write_failure_accumulator_is_fatal_and_restart_safe"
+        "validation_chainstatemanager_tests/chainstatemanager_reloads_persisted_account_registry_state"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 300
     },
     {
-      "suite": "validation_chainstatemanager_tests/shielded_write_failure_state_pin_is_fatal_and_restart_safe",
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_restores_persisted_shielded_state_after_failed_snapshot_section_load",
       "selectors": [
-        "validation_chainstatemanager_tests/shielded_write_failure_state_pin_is_fatal_and_restart_safe"
+        "validation_chainstatemanager_tests/chainstatemanager_restores_persisted_shielded_state_after_failed_snapshot_section_load"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 300
     },
     {
-      "suite": "validation_chainstatemanager_tests/shielded_write_failure_marker_clear_is_fatal_and_restart_safe",
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_rebuilds_anchor_history_when_commitment_index_is_restored",
       "selectors": [
-        "validation_chainstatemanager_tests/shielded_write_failure_marker_clear_is_fatal_and_restart_safe"
+        "validation_chainstatemanager_tests/chainstatemanager_rebuilds_anchor_history_when_commitment_index_is_restored"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 300
     },
     {
-      "suite": "validation_chainstatemanager_tests/shielded_write_failure_settlement_is_fatal_and_restart_safe",
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_repairs_in_memory_anchor_history_from_active_chain",
       "selectors": [
-        "validation_chainstatemanager_tests/shielded_write_failure_settlement_is_fatal_and_restart_safe"
+        "validation_chainstatemanager_tests/chainstatemanager_repairs_in_memory_anchor_history_from_active_chain"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_limits_auto_repair_attempts_to_once_per_shielded_state_generation",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_limits_auto_repair_attempts_to_once_per_shielded_state_generation"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_rejects_stale_anchor_history_for_mempool_accept",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_rejects_stale_anchor_history_for_mempool_accept"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_auto_repairs_stale_anchor_history_for_block_connect",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_auto_repairs_stale_anchor_history_for_block_connect"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_startup_repairs_stale_anchor_history_and_auto_reconsiders_failed_shielded_block",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_startup_repairs_stale_anchor_history_and_auto_reconsiders_failed_shielded_block"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_startup_keeps_failed_pre_pool_credit_disable_shielded_block_until_reconsidered",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_startup_keeps_failed_pre_pool_credit_disable_shielded_block_until_reconsidered"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_rebuilds_truncated_persisted_account_registry_snapshot",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_rebuilds_truncated_persisted_account_registry_snapshot"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_rebuilds_account_registry_when_payload_store_is_incomplete",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_rebuilds_account_registry_when_payload_store_is_incomplete"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_rebuilds_from_chain_when_persisted_account_registry_snapshot_semantically_drifts",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_rebuilds_from_chain_when_persisted_account_registry_snapshot_semantically_drifts"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_prunes_disconnected_account_registry_payloads_on_restart",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_prunes_disconnected_account_registry_payloads_on_restart"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_rebuilds_missing_account_registry_payload_store_on_restart",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_rebuilds_missing_account_registry_payload_store_on_restart"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_rebuilds_from_chain_when_mutation_marker_is_present",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_rebuilds_from_chain_when_mutation_marker_is_present"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_rebuilds_full_shielded_state_from_chain_when_mutation_marker_is_present",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_rebuilds_full_shielded_state_from_chain_when_mutation_marker_is_present"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_fails_closed_when_marker_rebuild_needs_pruned_block",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_fails_closed_when_marker_rebuild_needs_pruned_block"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_skips_genesis_rebuild_for_stale_tip_matched_prepared_marker",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_skips_genesis_rebuild_for_stale_tip_matched_prepared_marker"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_fast_restores_sealed_pin_after_unclean_shutdown",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_fast_restores_sealed_pin_after_unclean_shutdown"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_restores_prepared_shielded_transition_from_journal",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_restores_prepared_shielded_transition_from_journal"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_gap_only_catches_up_persisted_shielded_ancestor",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_gap_only_catches_up_persisted_shielded_ancestor"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_gap_only_unwinds_persisted_shielded_descendant",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_gap_only_unwinds_persisted_shielded_descendant"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_refuses_genesis_rebuild_wipe_when_ahead_tip_blocks_missing",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_refuses_genesis_rebuild_wipe_when_ahead_tip_blocks_missing"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_gap_only_recovers_persisted_shielded_short_fork",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_gap_only_recovers_persisted_shielded_short_fork"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_rebuilds_from_chain_when_persisted_nullifier_state_drifts_without_marker",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_rebuilds_from_chain_when_persisted_nullifier_state_drifts_without_marker"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_fast_startup_rebuilds_stale_recovery_exit_commitment_state",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_fast_startup_rebuilds_stale_recovery_exit_commitment_state"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_fast_startup_skips_recovery_exit_audit_with_verified_state_pin",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_fast_startup_skips_recovery_exit_audit_with_verified_state_pin"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_fast_startup_verifies_pin_after_nonempty_registry_restore",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_fast_startup_verifies_pin_after_nonempty_registry_restore"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_fast_startup_keeps_fast_path_after_history_window_refresh",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_fast_startup_keeps_fast_path_after_history_window_refresh"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_fast_startup_repairs_stale_unshield_velocity",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_fast_startup_repairs_stale_unshield_velocity"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_loads_v9_snapshot_unshield_velocity",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_loads_v9_snapshot_unshield_velocity"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_wrong_snapshot_pin_restores_previous_state",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_wrong_snapshot_pin_restores_previous_state"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/shielded_snapshot_transaction_crash_recovery",
+      "selectors": [
+        "validation_chainstatemanager_tests/shielded_snapshot_transaction_crash_recovery"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_loads_legacy_snapshot_rebuilds_unshield_velocity",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_loads_legacy_snapshot_rebuilds_unshield_velocity"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_rebuilds_from_chain_when_persisted_bridge_state_drifts_without_marker",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_rebuilds_from_chain_when_persisted_bridge_state_drifts_without_marker"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_builds_shielded_proof_audit_archive",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_builds_shielded_proof_audit_archive"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_args",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_args"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_skips_shielded_state_after_pool_disable",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_skips_shielded_state_after_pool_disable"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/dumptxoutset_succeeds_on_default_node_after_pool_disable",
+      "selectors": [
+        "validation_chainstatemanager_tests/dumptxoutset_succeeds_on_default_node_after_pool_disable"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 300
+    },
+    {
+      "suite": "validation_chainstatemanager_tests/chainstatemanager_force_shielded_state_after_pool_disable",
+      "selectors": [
+        "validation_chainstatemanager_tests/chainstatemanager_force_shielded_state_after_pool_disable"
       ],
       "expected_cases": 1,
       "lane": "other",
@@ -94,20 +418,56 @@
     }
   ],
   "all_enabled_cases": [
-    "validation_chainstatemanager_tests/shielded_write_failure_payload_is_fatal_and_restart_safe",
-    "validation_chainstatemanager_tests/shielded_write_failure_prepared_marker_is_fatal_and_restart_safe",
-    "validation_chainstatemanager_tests/shielded_write_failure_manifest_is_fatal_and_restart_safe",
-    "validation_chainstatemanager_tests/shielded_write_failure_velocity_is_fatal_and_restart_safe",
-    "validation_chainstatemanager_tests/shielded_write_failure_pool_is_fatal_and_restart_safe",
-    "validation_chainstatemanager_tests/shielded_write_failure_final_state_is_fatal_and_restart_safe",
-    "validation_chainstatemanager_tests/shielded_write_failure_accumulator_is_fatal_and_restart_safe",
-    "validation_chainstatemanager_tests/shielded_write_failure_state_pin_is_fatal_and_restart_safe",
-    "validation_chainstatemanager_tests/shielded_write_failure_marker_clear_is_fatal_and_restart_safe",
-    "validation_chainstatemanager_tests/shielded_write_failure_settlement_is_fatal_and_restart_safe"
+    "validation_chainstatemanager_tests/chainstatemanager_rebuilds_shielded_state_when_commitment_index_missing",
+    "validation_chainstatemanager_tests/chainstatemanager_reloads_version4_snapshot_settlement_anchor_state",
+    "validation_chainstatemanager_tests/chainstatemanager_reloads_chain_equivalent_snapshot_account_registry_state",
+    "validation_chainstatemanager_tests/chainstatemanager_rebuilds_non_chain_equivalent_snapshot_account_registry_state_on_restart",
+    "validation_chainstatemanager_tests/chainstatemanager_retains_commitment_index_when_configured",
+    "validation_chainstatemanager_tests/chainstatemanager_reloads_persisted_netting_manifest_state",
+    "validation_chainstatemanager_tests/chainstatemanager_reloads_persisted_account_registry_state",
+    "validation_chainstatemanager_tests/chainstatemanager_restores_persisted_shielded_state_after_failed_snapshot_section_load",
+    "validation_chainstatemanager_tests/chainstatemanager_rebuilds_anchor_history_when_commitment_index_is_restored",
+    "validation_chainstatemanager_tests/chainstatemanager_repairs_in_memory_anchor_history_from_active_chain",
+    "validation_chainstatemanager_tests/chainstatemanager_limits_auto_repair_attempts_to_once_per_shielded_state_generation",
+    "validation_chainstatemanager_tests/chainstatemanager_rejects_stale_anchor_history_for_mempool_accept",
+    "validation_chainstatemanager_tests/chainstatemanager_auto_repairs_stale_anchor_history_for_block_connect",
+    "validation_chainstatemanager_tests/chainstatemanager_startup_repairs_stale_anchor_history_and_auto_reconsiders_failed_shielded_block",
+    "validation_chainstatemanager_tests/chainstatemanager_startup_keeps_failed_pre_pool_credit_disable_shielded_block_until_reconsidered",
+    "validation_chainstatemanager_tests/chainstatemanager_rebuilds_truncated_persisted_account_registry_snapshot",
+    "validation_chainstatemanager_tests/chainstatemanager_rebuilds_account_registry_when_payload_store_is_incomplete",
+    "validation_chainstatemanager_tests/chainstatemanager_rebuilds_from_chain_when_persisted_account_registry_snapshot_semantically_drifts",
+    "validation_chainstatemanager_tests/chainstatemanager_prunes_disconnected_account_registry_payloads_on_restart",
+    "validation_chainstatemanager_tests/chainstatemanager_rebuilds_missing_account_registry_payload_store_on_restart",
+    "validation_chainstatemanager_tests/chainstatemanager_rebuilds_from_chain_when_mutation_marker_is_present",
+    "validation_chainstatemanager_tests/chainstatemanager_rebuilds_full_shielded_state_from_chain_when_mutation_marker_is_present",
+    "validation_chainstatemanager_tests/chainstatemanager_fails_closed_when_marker_rebuild_needs_pruned_block",
+    "validation_chainstatemanager_tests/chainstatemanager_skips_genesis_rebuild_for_stale_tip_matched_prepared_marker",
+    "validation_chainstatemanager_tests/chainstatemanager_fast_restores_sealed_pin_after_unclean_shutdown",
+    "validation_chainstatemanager_tests/chainstatemanager_restores_prepared_shielded_transition_from_journal",
+    "validation_chainstatemanager_tests/chainstatemanager_gap_only_catches_up_persisted_shielded_ancestor",
+    "validation_chainstatemanager_tests/chainstatemanager_gap_only_unwinds_persisted_shielded_descendant",
+    "validation_chainstatemanager_tests/chainstatemanager_refuses_genesis_rebuild_wipe_when_ahead_tip_blocks_missing",
+    "validation_chainstatemanager_tests/chainstatemanager_gap_only_recovers_persisted_shielded_short_fork",
+    "validation_chainstatemanager_tests/chainstatemanager_rebuilds_from_chain_when_persisted_nullifier_state_drifts_without_marker",
+    "validation_chainstatemanager_tests/chainstatemanager_fast_startup_rebuilds_stale_recovery_exit_commitment_state",
+    "validation_chainstatemanager_tests/chainstatemanager_fast_startup_skips_recovery_exit_audit_with_verified_state_pin",
+    "validation_chainstatemanager_tests/chainstatemanager_fast_startup_verifies_pin_after_nonempty_registry_restore",
+    "validation_chainstatemanager_tests/chainstatemanager_fast_startup_keeps_fast_path_after_history_window_refresh",
+    "validation_chainstatemanager_tests/chainstatemanager_fast_startup_repairs_stale_unshield_velocity",
+    "validation_chainstatemanager_tests/chainstatemanager_loads_v9_snapshot_unshield_velocity",
+    "validation_chainstatemanager_tests/chainstatemanager_wrong_snapshot_pin_restores_previous_state",
+    "validation_chainstatemanager_tests/shielded_snapshot_transaction_crash_recovery",
+    "validation_chainstatemanager_tests/chainstatemanager_loads_legacy_snapshot_rebuilds_unshield_velocity",
+    "validation_chainstatemanager_tests/chainstatemanager_rebuilds_from_chain_when_persisted_bridge_state_drifts_without_marker",
+    "validation_chainstatemanager_tests/chainstatemanager_builds_shielded_proof_audit_archive",
+    "validation_chainstatemanager_tests/chainstatemanager_args",
+    "validation_chainstatemanager_tests/chainstatemanager_skips_shielded_state_after_pool_disable",
+    "validation_chainstatemanager_tests/dumptxoutset_succeeds_on_default_node_after_pool_disable",
+    "validation_chainstatemanager_tests/chainstatemanager_force_shielded_state_after_pool_disable"
   ],
   "campaign_test_budget_seconds": 1800,
   "batch_budget_seconds": 1800,
   "require_first_pass_control": false,
-  "scope": "Ten never-selected native Windows manager write-fault/restart cases; default cheap MatMul fixture;300s/case and1800s campaign; simulated persistence failures not OS process crashes",
-  "total": 10
+  "scope": "46 never-selected native Windows manager persisted-state, registry, marker, history, startup and refusal cases; default cheap MatMul fixtures;300s/case and1800s campaign; eight extended snapshot bodies excluded",
+  "total": 46
 }
