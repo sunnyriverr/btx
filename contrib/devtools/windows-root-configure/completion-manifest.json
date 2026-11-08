@@ -3,640 +3,610 @@
   "binary_sha256": "31e45f1d0f2aed4168982120596182b5268057e1b9806960f27a60c769906bdd",
   "jobs": [
     {
-      "suite": "migrate_safe_tests/0",
+      "suite": "ml_kem_tests/0",
       "selectors": [
-        "migrate_safe_tests/store_rejects_empty_and_negative"
+        "ml_kem_tests/keygen_produces_correct_sizes"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "migrate_safe_tests/1",
+      "suite": "ml_kem_tests/1",
       "selectors": [
-        "migrate_safe_tests/upgrade_refusal_keeps_body"
+        "ml_kem_tests/keygen_produces_different_keys_each_call"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "migrate_safe_tests/2",
+      "suite": "ml_kem_tests/2",
       "selectors": [
-        "migrate_safe_tests/failed_move_keeps_body"
+        "ml_kem_tests/deterministic_keygen_from_seed"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "miner_shielded_tests/0",
+      "suite": "ml_kem_tests/3",
       "selectors": [
-        "miner_shielded_tests/block_assembler_skips_unprojectable_scan_placeholder_when_validity_check_is_disabled"
+        "ml_kem_tests/encapsulation_key_check_preserves_generated_keys"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "miner_shielded_tests/1",
+      "suite": "ml_kem_tests/4",
       "selectors": [
-        "miner_shielded_tests/block_assembler_skips_unprojectable_tree_placeholder_when_validity_check_is_disabled"
+        "ml_kem_tests/encapsulation_key_check_does_not_restrict_seed"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "miner_shielded_tests/2",
+      "suite": "ml_kem_tests/5",
       "selectors": [
-        "miner_shielded_tests/block_assembler_projects_shielded_pool_balance_when_validity_check_is_disabled"
+        "ml_kem_tests/encapsulation_key_check_range_and_position"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "miner_shielded_tests/3",
+      "suite": "ml_kem_tests/6",
       "selectors": [
-        "miner_shielded_tests/block_assembler_prefilters_stale_shielded_pool_candidates_before_budget_cap"
+        "ml_kem_tests/encaps_decaps_roundtrip"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "miner_shielded_tests/4",
+      "suite": "ml_kem_tests/7",
       "selectors": [
-        "miner_shielded_tests/mixed_family_mempool_trim_evicts_lowest_feerate_entry"
+        "ml_kem_tests/decaps_with_wrong_sk_produces_different_secret"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "miner_shielded_tests/5",
+      "suite": "ml_kem_tests/8",
       "selectors": [
-        "miner_shielded_tests/block_assembler_orders_mixed_family_workload_by_ancestor_feerate"
+        "ml_kem_tests/decaps_altered_ciphertext_retains_implicit_rejection"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "miner_shielded_tests/6",
+      "suite": "ml_kem_tests/9",
       "selectors": [
-        "miner_shielded_tests/block_assembler_includes_egress_with_confirmed_rebalance_settlement_dependencies"
+        "ml_kem_tests/decaps_rejects_invalid_secret_key_lengths"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "miner_shielded_tests/7",
+      "suite": "ml_kem_tests/10",
       "selectors": [
-        "miner_shielded_tests/block_assembler_skips_rebalance_that_exceeds_account_registry_append_limit"
+        "ml_kem_tests/fips203_sk_contains_pk_and_hash"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "miner_shielded_tests/8",
+      "suite": "mod01_tests/0",
       "selectors": [
-        "miner_shielded_tests/block_assembler_skips_rebalance_that_exceeds_account_registry_total_entry_limit"
+        "mod01_tests/id_text_aux_and_flag"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "miner_tests/0",
+      "suite": "mod01_tests/1",
       "selectors": [
-        "miner_tests/CreateNewBlock_extra_nonce_unique_templates"
+        "mod01_tests/engines_private_slices_and_exact"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "miner_tests/1",
+      "suite": "mod01_tests/2",
       "selectors": [
-        "miner_tests/CreateNewBlock_validity"
+        "mod01_tests/every_known_id_release_stays_unqualified"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "miner_tests/2",
+      "suite": "mod01_tests/3",
       "selectors": [
-        "miner_tests/update_time_clamps_to_future_mtp_policy"
+        "mod01_tests/hosts_stay_one"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "miner_tests/3",
+      "suite": "model_trust_tests/0",
       "selectors": [
-        "miner_tests/update_time_clamps_to_parent_advance_after_stall_recovery"
+        "model_trust_tests/empty_channel_or_digest_is_field"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "miner_tests/4",
+      "suite": "model_trust_tests/1",
       "selectors": [
-        "miner_tests/a5_timewarp_drift_reconciliation_prevents_boundary_halt"
+        "model_trust_tests/sequence_below_one_is_sequence"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "miner_tests/5",
+      "suite": "model_trust_tests/2",
       "selectors": [
-        "miner_tests/test_block_validity_rejects_future_mtp_drift"
+        "model_trust_tests/first_attest_stores_sequence_and_digest"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "miner_tests/6",
+      "suite": "model_trust_tests/3",
       "selectors": [
-        "miner_tests/test_block_validity_rejects_parent_time_advance"
+        "model_trust_tests/lower_sequence_is_rollback"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "miner_tests/7",
+      "suite": "model_trust_tests/4",
       "selectors": [
-        "miner_tests/height_overflow_guards"
+        "model_trust_tests/equal_sequence_different_digest_is_mismatch"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_chain_guard_tests/0",
+      "suite": "model_trust_tests/5",
       "selectors": [
-        "mining_chain_guard_tests/disabled_guard_does_not_pause_mining"
+        "model_trust_tests/same_sequence_and_digest_is_replay"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_chain_guard_tests/1",
+      "suite": "model_trust_tests/6",
       "selectors": [
-        "mining_chain_guard_tests/initial_block_download_keeps_mining_with_recovery_warning"
+        "model_trust_tests/higher_sequence_replaces_then_rollback_and_mismatch"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_chain_guard_tests/2",
+      "suite": "model_trust_tests/7",
       "selectors": [
-        "mining_chain_guard_tests/insufficient_peer_consensus_keeps_mining_with_recovery_warning"
+        "model_trust_tests/monetary_store_stays_false"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_chain_guard_tests/3",
+      "suite": "native_discovery_tests/0",
       "selectors": [
-        "mining_chain_guard_tests/default_guard_requires_three_peers"
+        "native_discovery_tests/canonical_packet_and_chain_isolation"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_chain_guard_tests/4",
+      "suite": "native_discovery_tests/1",
       "selectors": [
-        "mining_chain_guard_tests/local_tip_ahead_of_peer_median_keeps_mining_to_propagate_tip"
+        "native_discovery_tests/no_rpc_metadata_public_or_hostname_hints"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_chain_guard_tests/5",
+      "suite": "native_discovery_tests/2",
       "selectors": [
-        "mining_chain_guard_tests/local_tip_behind_peer_median_keeps_mining_with_recovery_warning"
+        "native_discovery_tests/node_rpc_and_p2p_ports_are_never_hints_or_dials"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_chain_guard_tests/6",
+      "suite": "native_discovery_tests/3",
       "selectors": [
-        "mining_chain_guard_tests/near_tip_peer_quorum_keeps_mining_with_recovery_warning"
+        "native_discovery_tests/expiration_refresh_and_clock_reversal"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_chain_guard_tests/7",
+      "suite": "native_discovery_tests/4",
       "selectors": [
-        "mining_chain_guard_tests/median_majority_close_to_tip_keeps_mining_enabled"
+        "native_discovery_tests/global_and_per_source_bounds"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_chain_guard_tests/8",
+      "suite": "native_discovery_tests/5",
       "selectors": [
-        "mining_chain_guard_tests/stale_lagging_peers_are_filtered_out_before_median_check"
+        "native_discovery_tests/malformed_nonce_padding_and_network"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_chain_guard_tests/9",
+      "suite": "native_discovery_tests/6",
       "selectors": [
-        "mining_chain_guard_tests/recently_active_lagging_peers_still_count_for_fork_safety"
+        "native_discovery_tests/automatic_policy_revocation_has_one_gate"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_chain_guard_tests/10",
+      "suite": "native_discovery_tests/7",
       "selectors": [
-        "mining_chain_guard_tests/network_inactive_keeps_mining_with_recovery_warning"
+        "native_discovery_tests/automatic_candidates_are_retained_chain_and_identity_observations"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_chain_guard_tests/11",
+      "suite": "native_discovery_tests/8",
       "selectors": [
-        "mining_chain_guard_tests/same_height_hash_split_marks_island_suspect"
+        "native_discovery_tests/every_automatic_transport_requires_an_explicit_network_response"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_chain_guard_tests/12",
+      "suite": "nif_chunk_tests/0",
       "selectors": [
-        "mining_chain_guard_tests/matching_tip_hashes_keep_guard_healthy"
+        "nif_chunk_tests/authorize_chunks_against_the_bound_state"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_chain_guard_tests/13",
+      "suite": "nif_chunk_tests/1",
       "selectors": [
-        "mining_chain_guard_tests/insufficient_peers_marks_island_suspect_without_hash_split"
+        "nif_chunk_tests/overflow_leaves_the_running_total"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_chain_guard_tests/14",
+      "suite": "nif_chunk_tests/2",
       "selectors": [
-        "mining_chain_guard_tests/far_behind_headers_are_catch_up_not_insufficient_peer_consensus"
+        "nif_chunk_tests/spend_before_bind_leaves_balance_zero"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_chain_guard_tests/15",
+      "suite": "nif_continue_tests/0",
       "selectors": [
-        "mining_chain_guard_tests/insufficient_peer_consensus_still_applies_at_same_height"
+        "nif_continue_tests/exact_move_rejects_mismatch_and_remote"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_chain_guard_tests/16",
+      "suite": "nif_cost_tests/0",
       "selectors": [
-        "mining_chain_guard_tests/consensus_samples_keep_only_outbound_with_hash"
+        "nif_cost_tests/mean_10_uncertainty_5_fits_15_not_14"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_chain_guard_tests/17",
+      "suite": "nif_cost_tests/1",
       "selectors": [
-        "mining_chain_guard_tests/hashless_outbound_peers_do_not_satisfy_peer_consensus"
+        "nif_cost_tests/unqualified_device_stores_nothing"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_chain_guard_tests/18",
+      "suite": "nif_cost_tests/2",
       "selectors": [
-        "mining_chain_guard_tests/catch_up_visibility_is_not_reclassified_as_insufficient_peer_consensus"
+        "nif_cost_tests/second_estimate_keeps_10_and_5"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_chain_guard_tests/19",
+      "suite": "nif_cost_tests/3",
       "selectors": [
-        "mining_chain_guard_tests/recovery_escalation_due_debounces_within_interval"
+        "nif_cost_tests/empty_peer_and_negative_uncertainty_store_nothing"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_chain_guard_tests/20",
+      "suite": "nif_discover_tests/0",
       "selectors": [
-        "mining_chain_guard_tests/miningpeermesh_replaces_defaults_and_rpc_reports_it"
+        "nif_discover_tests/multicast_hint_is_not_authority"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_crash_guard_tests/0",
+      "suite": "nif_discover_tests/1",
       "selectors": [
-        "mining_crash_guard_tests/test_block_validity_rejects_null_pindex_prev"
+        "nif_discover_tests/unauthenticated_peer_is_auth"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_crash_guard_tests/1",
+      "suite": "nif_discover_tests/2",
       "selectors": [
-        "mining_crash_guard_tests/test_block_validity_rejects_non_tip_pindex"
+        "nif_discover_tests/one_authenticated_local_peer_can_connect"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_crash_guard_tests/2",
+      "suite": "nif_discover_tests/3",
       "selectors": [
-        "mining_crash_guard_tests/test_block_validity_with_valid_tip_succeeds_or_fails_gracefully"
+        "nif_discover_tests/wan_is_no_route"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_crash_guard_tests/3",
+      "suite": "nif_discover_tests/4",
       "selectors": [
-        "mining_crash_guard_tests/generateblock_succeeds_with_valid_tip"
+        "nif_discover_tests/hosts_stay_one"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_crash_guard_tests/4",
+      "suite": "nif_drain_tests/0",
       "selectors": [
-        "mining_crash_guard_tests/generateblock_no_submit_returns_hex"
+        "nif_drain_tests/open_refusals_store_nothing"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_crash_guard_tests/5",
+      "suite": "nif_drain_tests/1",
       "selectors": [
-        "mining_crash_guard_tests/sequential_generateblock_no_crash"
+        "nif_drain_tests/replay_open_keeps_first_deadline"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_crash_guard_tests/6",
+      "suite": "nif_drain_tests/2",
       "selectors": [
-        "mining_crash_guard_tests/create_new_block_succeeds"
+        "nif_drain_tests/hold_then_cancel_leaves_bytes"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_crash_guard_tests/7",
+      "suite": "nif_drain_tests/3",
       "selectors": [
-        "mining_crash_guard_tests/create_new_block_multiple_times_no_crash"
+        "nif_drain_tests/drain_before_deadline_returns_physical_to_zero"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_crash_guard_tests/8",
+      "suite": "nif_drain_tests/4",
       "selectors": [
-        "mining_crash_guard_tests/get_ancestor_returns_self_for_own_height"
+        "nif_drain_tests/drain_at_deadline_is_expired"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_crash_guard_tests/9",
+      "suite": "nif_drain_tests/5",
       "selectors": [
-        "mining_crash_guard_tests/get_ancestor_returns_genesis_for_height_zero"
+        "nif_drain_tests/release_before_drain_is_pinned"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_crash_guard_tests/10",
+      "suite": "nif_drain_tests/6",
       "selectors": [
-        "mining_crash_guard_tests/get_ancestor_returns_nullptr_for_negative_height"
+        "nif_drain_tests/overflow_does_not_change_the_total"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_crash_guard_tests/11",
+      "suite": "nif_drain_tests/7",
       "selectors": [
-        "mining_crash_guard_tests/get_ancestor_returns_nullptr_for_excessive_height"
+        "nif_drain_tests/idle_flags_stay_false"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_crash_guard_tests/12",
+      "suite": "nif_egress_tests/0",
       "selectors": [
-        "mining_crash_guard_tests/connect_block_with_valid_state_no_crash"
+        "nif_egress_tests/bad_scope_keeps_the_previous_scope"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_crash_guard_tests/13",
+      "suite": "nif_egress_tests/1",
       "selectors": [
-        "mining_crash_guard_tests/precious_block_with_valid_chain"
+        "nif_egress_tests/local_send_stores_three_bytes"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_crash_guard_tests/14",
+      "suite": "nif_egress_tests/2",
       "selectors": [
-        "mining_crash_guard_tests/chain_tip_consistency_after_block_generation"
+        "nif_egress_tests/lan_exchange_reports_four_wire_bytes"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_crash_guard_tests/15",
+      "suite": "nif_egress_tests/3",
       "selectors": [
-        "mining_crash_guard_tests/chain_ancestor_linkage_integrity"
+        "nif_egress_tests/peer_exchange_uses_the_same_wire"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_crash_guard_tests/16",
+      "suite": "nif_egress_tests/4",
       "selectors": [
-        "mining_crash_guard_tests/block_template_prev_block_matches_tip"
+        "nif_egress_tests/wan_is_no_route_and_does_not_broaden_scope"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_crash_guard_tests/17",
+      "suite": "nif_egress_tests/5",
       "selectors": [
-        "mining_crash_guard_tests/block_template_coinbase_is_valid"
+        "nif_egress_tests/scan_is_not_scan"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     },
     {
-      "suite": "mining_crash_guard_tests/18",
+      "suite": "nif_egress_tests/6",
       "selectors": [
-        "mining_crash_guard_tests/generatetoaddress_with_zero_nblocks"
+        "nif_egress_tests/airgap_blocks_a_later_lan_send"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 240
-    },
-    {
-      "suite": "mining_crash_guard_tests/19",
-      "selectors": [
-        "mining_crash_guard_tests/interleaved_template_and_generate_no_crash"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 240
-    },
-    {
-      "suite": "mining_crash_guard_tests/20",
-      "selectors": [
-        "mining_crash_guard_tests/rapid_sequential_block_generation"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 240
-    },
-    {
-      "suite": "mining_crash_guard_tests/21",
-      "selectors": [
-        "mining_crash_guard_tests/coins_view_matches_tip_after_block_generation"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 240
+      "timeout_seconds": 180
     }
   ],
   "all_enabled_cases": [
-    "migrate_safe_tests/store_rejects_empty_and_negative",
-    "migrate_safe_tests/upgrade_refusal_keeps_body",
-    "migrate_safe_tests/failed_move_keeps_body",
-    "miner_shielded_tests/block_assembler_skips_unprojectable_scan_placeholder_when_validity_check_is_disabled",
-    "miner_shielded_tests/block_assembler_skips_unprojectable_tree_placeholder_when_validity_check_is_disabled",
-    "miner_shielded_tests/block_assembler_projects_shielded_pool_balance_when_validity_check_is_disabled",
-    "miner_shielded_tests/block_assembler_prefilters_stale_shielded_pool_candidates_before_budget_cap",
-    "miner_shielded_tests/mixed_family_mempool_trim_evicts_lowest_feerate_entry",
-    "miner_shielded_tests/block_assembler_orders_mixed_family_workload_by_ancestor_feerate",
-    "miner_shielded_tests/block_assembler_includes_egress_with_confirmed_rebalance_settlement_dependencies",
-    "miner_shielded_tests/block_assembler_skips_rebalance_that_exceeds_account_registry_append_limit",
-    "miner_shielded_tests/block_assembler_skips_rebalance_that_exceeds_account_registry_total_entry_limit",
-    "miner_tests/CreateNewBlock_extra_nonce_unique_templates",
-    "miner_tests/CreateNewBlock_validity",
-    "miner_tests/update_time_clamps_to_future_mtp_policy",
-    "miner_tests/update_time_clamps_to_parent_advance_after_stall_recovery",
-    "miner_tests/a5_timewarp_drift_reconciliation_prevents_boundary_halt",
-    "miner_tests/test_block_validity_rejects_future_mtp_drift",
-    "miner_tests/test_block_validity_rejects_parent_time_advance",
-    "miner_tests/height_overflow_guards",
-    "mining_chain_guard_tests/disabled_guard_does_not_pause_mining",
-    "mining_chain_guard_tests/initial_block_download_keeps_mining_with_recovery_warning",
-    "mining_chain_guard_tests/insufficient_peer_consensus_keeps_mining_with_recovery_warning",
-    "mining_chain_guard_tests/default_guard_requires_three_peers",
-    "mining_chain_guard_tests/local_tip_ahead_of_peer_median_keeps_mining_to_propagate_tip",
-    "mining_chain_guard_tests/local_tip_behind_peer_median_keeps_mining_with_recovery_warning",
-    "mining_chain_guard_tests/near_tip_peer_quorum_keeps_mining_with_recovery_warning",
-    "mining_chain_guard_tests/median_majority_close_to_tip_keeps_mining_enabled",
-    "mining_chain_guard_tests/stale_lagging_peers_are_filtered_out_before_median_check",
-    "mining_chain_guard_tests/recently_active_lagging_peers_still_count_for_fork_safety",
-    "mining_chain_guard_tests/network_inactive_keeps_mining_with_recovery_warning",
-    "mining_chain_guard_tests/same_height_hash_split_marks_island_suspect",
-    "mining_chain_guard_tests/matching_tip_hashes_keep_guard_healthy",
-    "mining_chain_guard_tests/insufficient_peers_marks_island_suspect_without_hash_split",
-    "mining_chain_guard_tests/far_behind_headers_are_catch_up_not_insufficient_peer_consensus",
-    "mining_chain_guard_tests/insufficient_peer_consensus_still_applies_at_same_height",
-    "mining_chain_guard_tests/consensus_samples_keep_only_outbound_with_hash",
-    "mining_chain_guard_tests/hashless_outbound_peers_do_not_satisfy_peer_consensus",
-    "mining_chain_guard_tests/catch_up_visibility_is_not_reclassified_as_insufficient_peer_consensus",
-    "mining_chain_guard_tests/recovery_escalation_due_debounces_within_interval",
-    "mining_chain_guard_tests/miningpeermesh_replaces_defaults_and_rpc_reports_it",
-    "mining_crash_guard_tests/test_block_validity_rejects_null_pindex_prev",
-    "mining_crash_guard_tests/test_block_validity_rejects_non_tip_pindex",
-    "mining_crash_guard_tests/test_block_validity_with_valid_tip_succeeds_or_fails_gracefully",
-    "mining_crash_guard_tests/generateblock_succeeds_with_valid_tip",
-    "mining_crash_guard_tests/generateblock_no_submit_returns_hex",
-    "mining_crash_guard_tests/sequential_generateblock_no_crash",
-    "mining_crash_guard_tests/create_new_block_succeeds",
-    "mining_crash_guard_tests/create_new_block_multiple_times_no_crash",
-    "mining_crash_guard_tests/get_ancestor_returns_self_for_own_height",
-    "mining_crash_guard_tests/get_ancestor_returns_genesis_for_height_zero",
-    "mining_crash_guard_tests/get_ancestor_returns_nullptr_for_negative_height",
-    "mining_crash_guard_tests/get_ancestor_returns_nullptr_for_excessive_height",
-    "mining_crash_guard_tests/connect_block_with_valid_state_no_crash",
-    "mining_crash_guard_tests/precious_block_with_valid_chain",
-    "mining_crash_guard_tests/chain_tip_consistency_after_block_generation",
-    "mining_crash_guard_tests/chain_ancestor_linkage_integrity",
-    "mining_crash_guard_tests/block_template_prev_block_matches_tip",
-    "mining_crash_guard_tests/block_template_coinbase_is_valid",
-    "mining_crash_guard_tests/generatetoaddress_with_zero_nblocks",
-    "mining_crash_guard_tests/interleaved_template_and_generate_no_crash",
-    "mining_crash_guard_tests/rapid_sequential_block_generation",
-    "mining_crash_guard_tests/coins_view_matches_tip_after_block_generation"
+    "ml_kem_tests/keygen_produces_correct_sizes",
+    "ml_kem_tests/keygen_produces_different_keys_each_call",
+    "ml_kem_tests/deterministic_keygen_from_seed",
+    "ml_kem_tests/encapsulation_key_check_preserves_generated_keys",
+    "ml_kem_tests/encapsulation_key_check_does_not_restrict_seed",
+    "ml_kem_tests/encapsulation_key_check_range_and_position",
+    "ml_kem_tests/encaps_decaps_roundtrip",
+    "ml_kem_tests/decaps_with_wrong_sk_produces_different_secret",
+    "ml_kem_tests/decaps_altered_ciphertext_retains_implicit_rejection",
+    "ml_kem_tests/decaps_rejects_invalid_secret_key_lengths",
+    "ml_kem_tests/fips203_sk_contains_pk_and_hash",
+    "mod01_tests/id_text_aux_and_flag",
+    "mod01_tests/engines_private_slices_and_exact",
+    "mod01_tests/every_known_id_release_stays_unqualified",
+    "mod01_tests/hosts_stay_one",
+    "model_trust_tests/empty_channel_or_digest_is_field",
+    "model_trust_tests/sequence_below_one_is_sequence",
+    "model_trust_tests/first_attest_stores_sequence_and_digest",
+    "model_trust_tests/lower_sequence_is_rollback",
+    "model_trust_tests/equal_sequence_different_digest_is_mismatch",
+    "model_trust_tests/same_sequence_and_digest_is_replay",
+    "model_trust_tests/higher_sequence_replaces_then_rollback_and_mismatch",
+    "model_trust_tests/monetary_store_stays_false",
+    "native_discovery_tests/canonical_packet_and_chain_isolation",
+    "native_discovery_tests/no_rpc_metadata_public_or_hostname_hints",
+    "native_discovery_tests/node_rpc_and_p2p_ports_are_never_hints_or_dials",
+    "native_discovery_tests/expiration_refresh_and_clock_reversal",
+    "native_discovery_tests/global_and_per_source_bounds",
+    "native_discovery_tests/malformed_nonce_padding_and_network",
+    "native_discovery_tests/automatic_policy_revocation_has_one_gate",
+    "native_discovery_tests/automatic_candidates_are_retained_chain_and_identity_observations",
+    "native_discovery_tests/every_automatic_transport_requires_an_explicit_network_response",
+    "nif_chunk_tests/authorize_chunks_against_the_bound_state",
+    "nif_chunk_tests/overflow_leaves_the_running_total",
+    "nif_chunk_tests/spend_before_bind_leaves_balance_zero",
+    "nif_continue_tests/exact_move_rejects_mismatch_and_remote",
+    "nif_cost_tests/mean_10_uncertainty_5_fits_15_not_14",
+    "nif_cost_tests/unqualified_device_stores_nothing",
+    "nif_cost_tests/second_estimate_keeps_10_and_5",
+    "nif_cost_tests/empty_peer_and_negative_uncertainty_store_nothing",
+    "nif_discover_tests/multicast_hint_is_not_authority",
+    "nif_discover_tests/unauthenticated_peer_is_auth",
+    "nif_discover_tests/one_authenticated_local_peer_can_connect",
+    "nif_discover_tests/wan_is_no_route",
+    "nif_discover_tests/hosts_stay_one",
+    "nif_drain_tests/open_refusals_store_nothing",
+    "nif_drain_tests/replay_open_keeps_first_deadline",
+    "nif_drain_tests/hold_then_cancel_leaves_bytes",
+    "nif_drain_tests/drain_before_deadline_returns_physical_to_zero",
+    "nif_drain_tests/drain_at_deadline_is_expired",
+    "nif_drain_tests/release_before_drain_is_pinned",
+    "nif_drain_tests/overflow_does_not_change_the_total",
+    "nif_drain_tests/idle_flags_stay_false",
+    "nif_egress_tests/bad_scope_keeps_the_previous_scope",
+    "nif_egress_tests/local_send_stores_three_bytes",
+    "nif_egress_tests/lan_exchange_reports_four_wire_bytes",
+    "nif_egress_tests/peer_exchange_uses_the_same_wire",
+    "nif_egress_tests/wan_is_no_route_and_does_not_broaden_scope",
+    "nif_egress_tests/scan_is_not_scan",
+    "nif_egress_tests/airgap_blocks_a_later_lan_send"
   ],
   "campaign_test_budget_seconds": 1800,
   "batch_budget_seconds": 480,
   "require_first_pass_control": true,
-  "scope": "63 previously never-selected migration/mining guard cases; unchanged saved binary"
+  "scope": "60 previously never-selected crypto/trust/discovery/NIF unit cases; unchanged saved binary"
 }
