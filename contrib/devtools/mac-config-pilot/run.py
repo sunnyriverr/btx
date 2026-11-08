@@ -4,7 +4,7 @@ import os,subprocess,json,hashlib,platform,shutil,sys
 w=Path(os.environ['GITHUB_WORKSPACE']);out=w/'mac-config-records';out.mkdir(exist_ok=True);src=w/'product';build=w/'mac-config-build';state={'expected_source':'ff5f3f04ea11f044594987fc6be043ff68b136ad','expected_image':'20261104.0514.1','openssl_version':'3.5.9','btx_compiled':False,'node_started':False,'commands':[]}
 def save():(out/'result.json').write_text(json.dumps(state,indent=2)+'\n')
 def command(argv,label,limit=60,env=None,cwd=None):
- save();p=subprocess.run(list(map(str,argv)),cwd=cwd,env=env,capture_output=True,text=True,timeout=limit);(out/(label+'.log')).write_text(p.stdout+p.stderr);state['commands'].append({'label':label,'args':list(map(str,argv)),'exit':p.returncode});save()
+ print('START '+label,flush=True);save();p=subprocess.run(list(map(str,argv)),cwd=cwd,env=env,capture_output=True,text=True,timeout=limit);(out/(label+'.log')).write_text(p.stdout+p.stderr);state['commands'].append({'label':label,'args':list(map(str,argv)),'exit':p.returncode});save()
  if p.returncode:raise RuntimeError(label+' failed; inspect retained log')
  return p.stdout
 try:
@@ -27,7 +27,7 @@ try:
  assert len(versions)==2 and all(x.startswith('OpenSSL 3.5.9 ') for x in versions)
  links=command(['otool','-L',out/'ssl-admission'],'ssl-static-dependencies',30,env)
  assert 'libssl.3.dylib' not in links and 'libcrypto.3.dylib' not in links
- deps=['boost@1.85' ,'libevent','zeromq','libomp','qt','qrencode']
+ deps=['boost@1.85' ,'libevent','zeromq','libomp','qt','qrencode','librsvg']
  command(['brew','info','--json=v2',*deps],'dependency-metadata',120,env)
  command(['brew','install','--force-bottle',*deps],'install-bottles',1200,env)
  command(['brew','list','--versions'],'installed-versions',env=env)
@@ -50,5 +50,8 @@ try:
  assert not command(['git','-C',src,'status','--porcelain'],'final-source-status').strip()
  state['complete']=True
 except Exception as e:state['error']=repr(e)
-finally:save()
+finally:
+ for name in ['CMakeCache.txt','compile_commands.json']:
+  if (build/name).exists():shutil.copy2(build/name,out/name)
+ save()
 sys.exit(0 if state.get('complete') else 1)
