@@ -18,32 +18,25 @@ jobs:
           python-version: '3.12'
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
-          name: gui-component-qt
-          path: retained-qt
-          run-id: 42452742962
+          name: linux-gui-candidate
+          path: prior-candidate
+          run-id: 42456436636
           github-token: ${{ github.token }}
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
-          name: gui-component-atlas
-          path: retained-atlas
-          run-id: 42443474044
+          name: linux-gui-candidate-records
+          path: prior-records
+          run-id: 42456436636
           github-token: ${{ github.token }}
-      - name: Baseline packaging dependencies
+      - name: Correct archive ownership and empty directories; retain strict gate result
         timeout-minutes: 6
-        run: |
-          sudo apt-get -o Acquire::Retries=1 update
-          sudo apt-get install -y --no-install-recommends qt6-base-dev qt6-base-dev-tools libqrencode4 libzmq5 libevent-dev libsqlite3-0 patchelf binutils
-          dpkg-query -W > packaging-installed-packages.log
-      - name: Assemble protected candidate and run unchanged archive gate
-        timeout-minutes: 10
-        run: python3 contrib/devtools/gui-candidate/assemble.py
+        run: python3 contrib/devtools/gui-candidate/repair.py
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
           name: linux-gui-candidate-records
           path: |
             candidate-results
-            packaging-installed-packages.log
           retention-days: 14
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()

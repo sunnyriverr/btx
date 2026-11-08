@@ -47,7 +47,7 @@ def main():
         shutil.copyfile(w/'candidate-input/btx-linux-gui-candidate.tar.gz',archive)
         state['archive_sha256']=digest(archive)
         assert state['archive_sha256']==ARCHIVE
-        state['candidate_provenance']={k:provenance[k] for k in ['source','input_binaries','gui_candidate_binaries','full_archive_gate_pass','only_unchanged_guard_diagnostic','node_and_openssl_unchanged']}
+        state['candidate_provenance']={k:provenance[k] for k in ['source','input_binaries','gui_candidate_binaries','full_archive_gate_pass','only_unchanged_guard_diagnostic','node_and_openssl_unchanged','remaining_gate_scope']}
         state['reconstructed_candidate']=True
         state['release_qualified']=False
         dest=runtime/'package';dest.mkdir()
@@ -74,6 +74,21 @@ def main():
         state['rpc_control']={'chain':chain['chain'],'blocks':chain['blocks'],'peers':rpc('getconnectioncount')}
         assert state['rpc_control']=={'chain':'regtest','blocks':0,'peers':0}
         genesis=subprocess.check_output([str(package/'bin/btx-cli'),'-regtest','-datadir='+str(runtime/'node'),'-rpcport='+str(port),'getblockhash','0'],timeout=10,text=True).strip()
+        # Independently observe intended Atlas resolution before GUI: private Qt libraries must not shadow host GTK/WebKit GLib/DBus.
+        loader_env=dict(env,LD_LIBRARY_PATH=str(package/'lib'))
+        resolved=subprocess.check_output(['ldd',str(package/'libexec/btx-atlas.real')],env=loader_env,text=True,stderr=subprocess.STDOUT,timeout=20)
+        (out/'atlas-ldd.log').write_text(resolved)
+        assert 'not found' not in resolved
+        import re
+        state['atlas_host_resolution']={}
+        for soname in ('libglib-2.0.so.0','libdbus-1.so.3'):
+            match=re.search(re.escape(soname)+r' => (/\S+)',resolved)
+            assert match and not Path(match.group(1)).resolve().is_relative_to(package.resolve())
+            state['atlas_host_resolution'][soname]=match.group(1)
+        with (out/'qt-version.log').open('wb') as log:
+            qt_control=subprocess.run([str(package/'bin/btx-qt'),'-version'],env=env,stdout=log,stderr=subprocess.STDOUT,timeout=30)
+        state['qt_version_control_exit']=qt_control.returncode
+        assert qt_control.returncode==0,'Candidate Qt launcher control failed'
         app=start([package/'bin/btx-atlas'],'atlas',env)
         ui.wait(lambda:'The node is the network.' in ui.text(),45)
         state['app_alive']=app.poll() is None
