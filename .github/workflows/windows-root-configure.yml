@@ -1,11 +1,11 @@
-name: Native Windows pending I/O and RPC cases
+name: Native Windows pending transaction peer and wallet cases
 permissions:
   contents: read
 jobs:
   configure:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: windows-2025
-    timeout-minutes: 30
+    timeout-minutes: 45
     env:
       BTX_NATIVE_ROOT: D:\btx-native-035
     steps:
@@ -182,7 +182,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Verify saved binary and120pending selectors
+    - name: Verify saved binary and294pending selectors
       id: ready
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -206,7 +206,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Run only120never-run I/O/network/settings/RPC cases
+    - name: Run only294never-run transaction peer index wallet cases
       id: units
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -285,7 +285,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
       with:
-        name: native-windows-pending-io-rpc
+        name: native-windows-pending-tx-wallet
         path: D:\btx-native-035\evidence\
         retention-days: 14
 'on':
