@@ -1,31 +1,451 @@
 {
-  "source": "92b0c884f21e36a350194b746d1bd7f083d4aff4",
-  "binary_sha256": "updated after verified rebuild",
+  "source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+  "binary_sha256": "31e45f1d0f2aed4168982120596182b5268057e1b9806960f27a60c769906bdd",
   "jobs": [
     {
-      "suite": "proc08_tests/evidence_and_research_path",
+      "suite": "resource_governor_tests/0",
       "selectors": [
-        "proc08_tests/evidence_and_research_path"
+        "resource_governor_tests/gov_consensus_and_spend_never",
+        "resource_governor_tests/gov_pol_01_idle_gpu_permits_mining",
+        "resource_governor_tests/gov_pol_02_foreground_gpu_blocks_mining"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "resource_governor_tests/1",
+      "selectors": [
+        "resource_governor_tests/gov_pol_03_validation_blocks_immediately",
+        "resource_governor_tests/gov_pol_04_thermal_hot_blocks_mining",
+        "resource_governor_tests/gov_pol_05_battery_blocks_mining"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "resource_governor_tests/2",
+      "selectors": [
+        "resource_governor_tests/gov_pol_06_network_busy_throttles_seeding",
+        "resource_governor_tests/gov_pol_07_foreground_download_outranks_seeding",
+        "resource_governor_tests/gov_pol_08_preservation_lowest_network_priority"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "resource_governor_tests/3",
+      "selectors": [
+        "resource_governor_tests/gov_pol_09_fixed_operator_limits_override_auto",
+        "resource_governor_tests/gov_pol_09b_operator_cap_does_not_bypass_metered_or_battery",
+        "resource_governor_tests/gov_pol_10_off_prevents_optional_background"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "resource_governor_tests/4",
+      "selectors": [
+        "resource_governor_tests/gov_off_denies_mining_not_ungoverned_mode",
+        "resource_governor_tests/gov_unarmed_auto_schedule_does_not_fail_open",
+        "resource_governor_tests/gov_unarmed_manual_consent_preserves_existing_miner"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "resource_governor_tests/5",
+      "selectors": [
+        "resource_governor_tests/gov_hys_01_short_spike_does_not_flap",
+        "resource_governor_tests/gov_hys_02_sustained_pressure_pauses",
+        "resource_governor_tests/gov_hys_03_brief_idle_does_not_resume"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "resource_governor_tests/6",
+      "selectors": [
+        "resource_governor_tests/gov_hys_04_sustained_idle_resumes",
+        "resource_governor_tests/gov_hys_05_cooldown_enforced",
+        "resource_governor_tests/gov_hys_06_rapid_alternating_samples_stable"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "resource_governor_tests/7",
+      "selectors": [
+        "resource_governor_tests/gov_mine_01_starts_after_idle_threshold",
+        "resource_governor_tests/gov_mine_02_ramps_intensity",
+        "resource_governor_tests/gov_mine_03_foreground_ai_pauses"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "resource_governor_tests/8",
+      "selectors": [
+        "resource_governor_tests/gov_mine_04_validation_signal_pauses",
+        "resource_governor_tests/gov_mine_05_cancel_does_not_leave_active",
+        "resource_governor_tests/gov_mine_06_intensity_zero_on_stop"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "resource_governor_tests/9",
+      "selectors": [
+        "resource_governor_tests/gov_mine_07_resumes_cleanly",
+        "resource_governor_tests/gov_mine_08_policy_has_no_stale_submit_flag",
+        "resource_governor_tests/gov_mine_09_reserved_validator_never_mined"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "resource_governor_tests/10",
+      "selectors": [
+        "resource_governor_tests/gov_net_01_idle_link_increases_allowance",
+        "resource_governor_tests/gov_net_02_busy_link_reduces_allowance",
+        "resource_governor_tests/gov_net_03_latency_inflation_reduces_upload"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "resource_governor_tests/11",
+      "selectors": [
+        "resource_governor_tests/gov_net_04_explicit_cap_always_respected",
+        "resource_governor_tests/gov_net_05_foreground_retrieval_retains_bandwidth",
+        "resource_governor_tests/gov_net_06_seeding_resumes_after_pressure"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "resource_governor_tests/12",
+      "selectors": [
+        "resource_governor_tests/gov_net_07_preservation_throttled_before_seeding",
+        "resource_governor_tests/gov_net_08_no_thread_explosion_in_permit",
+        "resource_governor_tests/gov_pwr_01_desktop_ac_permits"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "resource_governor_tests/13",
+      "selectors": [
+        "resource_governor_tests/gov_pwr_02_laptop_battery_pauses_mining",
+        "resource_governor_tests/gov_pwr_03_ac_restore_permits_later_resume",
+        "resource_governor_tests/gov_pwr_04_hot_reduces_background"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "resource_governor_tests/14",
+      "selectors": [
+        "resource_governor_tests/gov_pwr_05_critical_stops_optional",
+        "resource_governor_tests/gov_pwr_06_thermal_recovery_obeys_cooldown",
+        "resource_governor_tests/gov_mem_01_memory_pressure_reduces_concurrency"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "resource_governor_tests/15",
+      "selectors": [
+        "resource_governor_tests/gov_mem_02_swap_pressure_pauses_heavy",
+        "resource_governor_tests/gov_disk_01_high_io_reduces_preservation",
+        "resource_governor_tests/gov_disk_02_emergency_storage_allows_gc"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "resource_governor_tests/16",
+      "selectors": [
+        "resource_governor_tests/gov_disk_03_governor_does_not_evict_pins",
+        "resource_governor_tests/gov_disk_04_gc_bounded_vs_foreground",
+        "resource_governor_tests/gov_fail_01_unavailable_pauses_mining"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "resource_governor_tests/17",
+      "selectors": [
+        "resource_governor_tests/gov_fail_02_unavailable_does_not_touch_consensus",
+        "resource_governor_tests/gov_fail_03_modeld_independence_documented",
+        "resource_governor_tests/gov_fail_04_unknown_gpu_conservative_intensity"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "resource_governor_tests/18",
+      "selectors": [
+        "resource_governor_tests/gov_fail_05_malformed_policy_rejected",
+        "resource_governor_tests/gov_mode_parse_and_rpc_shape",
+        "resource_governor_tests/gov_metered_pauses_preservation"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "resource_governor_tests/19",
+      "selectors": [
+        "resource_governor_tests/gov_e2e_overnight_12h",
+        "resource_governor_tests/gov_e2e_active_day",
+        "resource_governor_tests/gov_e2e_val_lat"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "resource_governor_tests/20",
+      "selectors": [
+        "resource_governor_tests/gov_e2e_nvidia_workstation",
+        "resource_governor_tests/gov_e2e_apple_metal",
+        "resource_governor_tests/gov_e2e_bufferbloat_shaped"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "resource_governor_tests/21",
+      "selectors": [
+        "resource_governor_tests/gov_e2e_battery_sysfs"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 120
     },
     {
-      "suite": "proc08_tests/research_path_separators",
+      "suite": "rest_tests/0",
       "selectors": [
-        "proc08_tests/research_path_separators"
+        "rest_tests/test_query_string"
       ],
       "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "result_tests/0",
+      "selectors": [
+        "result_tests/check_returned",
+        "result_tests/check_value_or"
+      ],
+      "expected_cases": 2,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "reverselock_tests/0",
+      "selectors": [
+        "reverselock_tests/reverselock_basics",
+        "reverselock_tests/reverselock_multiple",
+        "reverselock_tests/reverselock_errors"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "ring_selection_tests/0",
+      "selectors": [
+        "ring_selection_tests/select_ring_positions_size_and_real_member",
+        "ring_selection_tests/select_ring_positions_is_deterministic_for_seed",
+        "ring_selection_tests/select_ring_positions_clamps_real_position"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "ring_selection_tests/1",
+      "selectors": [
+        "ring_selection_tests/select_ring_positions_handles_empty_tree",
+        "ring_selection_tests/select_ring_positions_unique_when_tree_large_enough",
+        "ring_selection_tests/select_ring_positions_covers_available_members_when_tree_small"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "ring_selection_tests/2",
+      "selectors": [
+        "ring_selection_tests/select_ring_positions_keeps_unique_first_sample_without_shift",
+        "ring_selection_tests/select_ring_positions_practical_trees_avoid_oldest_bucket_collapse",
+        "ring_selection_tests/select_shared_ring_positions_practical_trees_do_not_isolate_recent_real_members"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "ring_selection_tests/3",
+      "selectors": [
+        "ring_selection_tests/select_ring_positions_practical_trees_cover_recent_maturation_window",
+        "ring_selection_tests/select_ring_positions_age_spread_covers_all_quartiles",
+        "ring_selection_tests/select_shared_ring_positions_age_spread_covers_all_quartiles"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "ring_selection_tests/4",
+      "selectors": [
+        "ring_selection_tests/select_ring_positions_shifted_pareto_sampler_avoids_newest_bucket_collapse",
+        "ring_selection_tests/select_shared_ring_positions_shifted_pareto_sampler_avoids_newest_bucket_collapse",
+        "ring_selection_tests/select_ring_positions_with_exclusions_avoids_overlap_when_possible"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "ring_selection_tests/5",
+      "selectors": [
+        "ring_selection_tests/select_ring_positions_with_exclusions_is_deterministic",
+        "ring_selection_tests/select_ring_positions_with_exclusions_preserves_diversity_target",
+        "ring_selection_tests/select_ring_positions_with_tip_exclusions_avoids_recent_members_when_possible"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 120
+    },
+    {
+      "suite": "ring_selection_tests/6",
+      "selectors": [
+        "ring_selection_tests/select_ring_positions_with_tip_exclusions_keeps_real_member_if_recent",
+        "ring_selection_tests/select_shared_ring_positions_with_tip_exclusions_adds_recent_decoy_when_real_is_recent",
+        "ring_selection_tests/real_index_uniform_distribution"
+      ],
+      "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 120
     }
   ],
   "all_enabled_cases": [
-    "proc08_tests/evidence_and_research_path",
-    "proc08_tests/research_path_separators"
+    "resource_governor_tests/gov_consensus_and_spend_never",
+    "resource_governor_tests/gov_pol_01_idle_gpu_permits_mining",
+    "resource_governor_tests/gov_pol_02_foreground_gpu_blocks_mining",
+    "resource_governor_tests/gov_pol_03_validation_blocks_immediately",
+    "resource_governor_tests/gov_pol_04_thermal_hot_blocks_mining",
+    "resource_governor_tests/gov_pol_05_battery_blocks_mining",
+    "resource_governor_tests/gov_pol_06_network_busy_throttles_seeding",
+    "resource_governor_tests/gov_pol_07_foreground_download_outranks_seeding",
+    "resource_governor_tests/gov_pol_08_preservation_lowest_network_priority",
+    "resource_governor_tests/gov_pol_09_fixed_operator_limits_override_auto",
+    "resource_governor_tests/gov_pol_09b_operator_cap_does_not_bypass_metered_or_battery",
+    "resource_governor_tests/gov_pol_10_off_prevents_optional_background",
+    "resource_governor_tests/gov_off_denies_mining_not_ungoverned_mode",
+    "resource_governor_tests/gov_unarmed_auto_schedule_does_not_fail_open",
+    "resource_governor_tests/gov_unarmed_manual_consent_preserves_existing_miner",
+    "resource_governor_tests/gov_hys_01_short_spike_does_not_flap",
+    "resource_governor_tests/gov_hys_02_sustained_pressure_pauses",
+    "resource_governor_tests/gov_hys_03_brief_idle_does_not_resume",
+    "resource_governor_tests/gov_hys_04_sustained_idle_resumes",
+    "resource_governor_tests/gov_hys_05_cooldown_enforced",
+    "resource_governor_tests/gov_hys_06_rapid_alternating_samples_stable",
+    "resource_governor_tests/gov_mine_01_starts_after_idle_threshold",
+    "resource_governor_tests/gov_mine_02_ramps_intensity",
+    "resource_governor_tests/gov_mine_03_foreground_ai_pauses",
+    "resource_governor_tests/gov_mine_04_validation_signal_pauses",
+    "resource_governor_tests/gov_mine_05_cancel_does_not_leave_active",
+    "resource_governor_tests/gov_mine_06_intensity_zero_on_stop",
+    "resource_governor_tests/gov_mine_07_resumes_cleanly",
+    "resource_governor_tests/gov_mine_08_policy_has_no_stale_submit_flag",
+    "resource_governor_tests/gov_mine_09_reserved_validator_never_mined",
+    "resource_governor_tests/gov_net_01_idle_link_increases_allowance",
+    "resource_governor_tests/gov_net_02_busy_link_reduces_allowance",
+    "resource_governor_tests/gov_net_03_latency_inflation_reduces_upload",
+    "resource_governor_tests/gov_net_04_explicit_cap_always_respected",
+    "resource_governor_tests/gov_net_05_foreground_retrieval_retains_bandwidth",
+    "resource_governor_tests/gov_net_06_seeding_resumes_after_pressure",
+    "resource_governor_tests/gov_net_07_preservation_throttled_before_seeding",
+    "resource_governor_tests/gov_net_08_no_thread_explosion_in_permit",
+    "resource_governor_tests/gov_pwr_01_desktop_ac_permits",
+    "resource_governor_tests/gov_pwr_02_laptop_battery_pauses_mining",
+    "resource_governor_tests/gov_pwr_03_ac_restore_permits_later_resume",
+    "resource_governor_tests/gov_pwr_04_hot_reduces_background",
+    "resource_governor_tests/gov_pwr_05_critical_stops_optional",
+    "resource_governor_tests/gov_pwr_06_thermal_recovery_obeys_cooldown",
+    "resource_governor_tests/gov_mem_01_memory_pressure_reduces_concurrency",
+    "resource_governor_tests/gov_mem_02_swap_pressure_pauses_heavy",
+    "resource_governor_tests/gov_disk_01_high_io_reduces_preservation",
+    "resource_governor_tests/gov_disk_02_emergency_storage_allows_gc",
+    "resource_governor_tests/gov_disk_03_governor_does_not_evict_pins",
+    "resource_governor_tests/gov_disk_04_gc_bounded_vs_foreground",
+    "resource_governor_tests/gov_fail_01_unavailable_pauses_mining",
+    "resource_governor_tests/gov_fail_02_unavailable_does_not_touch_consensus",
+    "resource_governor_tests/gov_fail_03_modeld_independence_documented",
+    "resource_governor_tests/gov_fail_04_unknown_gpu_conservative_intensity",
+    "resource_governor_tests/gov_fail_05_malformed_policy_rejected",
+    "resource_governor_tests/gov_mode_parse_and_rpc_shape",
+    "resource_governor_tests/gov_metered_pauses_preservation",
+    "resource_governor_tests/gov_e2e_overnight_12h",
+    "resource_governor_tests/gov_e2e_active_day",
+    "resource_governor_tests/gov_e2e_val_lat",
+    "resource_governor_tests/gov_e2e_nvidia_workstation",
+    "resource_governor_tests/gov_e2e_apple_metal",
+    "resource_governor_tests/gov_e2e_bufferbloat_shaped",
+    "resource_governor_tests/gov_e2e_battery_sysfs",
+    "rest_tests/test_query_string",
+    "result_tests/check_returned",
+    "result_tests/check_value_or",
+    "reverselock_tests/reverselock_basics",
+    "reverselock_tests/reverselock_multiple",
+    "reverselock_tests/reverselock_errors",
+    "ring_selection_tests/select_ring_positions_size_and_real_member",
+    "ring_selection_tests/select_ring_positions_is_deterministic_for_seed",
+    "ring_selection_tests/select_ring_positions_clamps_real_position",
+    "ring_selection_tests/select_ring_positions_handles_empty_tree",
+    "ring_selection_tests/select_ring_positions_unique_when_tree_large_enough",
+    "ring_selection_tests/select_ring_positions_covers_available_members_when_tree_small",
+    "ring_selection_tests/select_ring_positions_keeps_unique_first_sample_without_shift",
+    "ring_selection_tests/select_ring_positions_practical_trees_avoid_oldest_bucket_collapse",
+    "ring_selection_tests/select_shared_ring_positions_practical_trees_do_not_isolate_recent_real_members",
+    "ring_selection_tests/select_ring_positions_practical_trees_cover_recent_maturation_window",
+    "ring_selection_tests/select_ring_positions_age_spread_covers_all_quartiles",
+    "ring_selection_tests/select_shared_ring_positions_age_spread_covers_all_quartiles",
+    "ring_selection_tests/select_ring_positions_shifted_pareto_sampler_avoids_newest_bucket_collapse",
+    "ring_selection_tests/select_shared_ring_positions_shifted_pareto_sampler_avoids_newest_bucket_collapse",
+    "ring_selection_tests/select_ring_positions_with_exclusions_avoids_overlap_when_possible",
+    "ring_selection_tests/select_ring_positions_with_exclusions_is_deterministic",
+    "ring_selection_tests/select_ring_positions_with_exclusions_preserves_diversity_target",
+    "ring_selection_tests/select_ring_positions_with_tip_exclusions_avoids_recent_members_when_possible",
+    "ring_selection_tests/select_ring_positions_with_tip_exclusions_keeps_real_member_if_recent",
+    "ring_selection_tests/select_shared_ring_positions_with_tip_exclusions_adds_recent_decoy_when_real_is_recent",
+    "ring_selection_tests/real_index_uniform_distribution"
   ],
-  "batch_budget_seconds": 300,
-  "campaign_test_budget_seconds": 500,
-  "require_first_pass_control": false
+  "campaign_test_budget_seconds": 1800,
+  "batch_budget_seconds": 1800,
+  "require_first_pass_control": false,
+  "scope": "New governor/REST/result/locking/ring-selection maintained cases only; no actual device or full unit qualification",
+  "total": 91
 }
