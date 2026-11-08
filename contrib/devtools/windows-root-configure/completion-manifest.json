@@ -3,900 +3,726 @@
   "binary_sha256": "31e45f1d0f2aed4168982120596182b5268057e1b9806960f27a60c769906bdd",
   "jobs": [
     {
-      "suite": "node_cycle_tests/0",
+      "suite": "peerman_first_body_and_reorg_tests/0",
       "selectors": [
-        "node_cycle_tests/idle_before_run_is_closed"
+        "peerman_first_body_and_reorg_tests/fast_relay_uses_supplied_body_before_disk_availability",
+        "peerman_first_body_and_reorg_tests/invalidateblock_notifies_peerman_without_caller_chain_lock"
       ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "node_cycle_tests/1",
-      "selectors": [
-        "node_cycle_tests/run_reaches_failure_with_generation_zero"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "node_cycle_tests/2",
-      "selectors": [
-        "node_cycle_tests/accept_journal_advances_once"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "node_warnings_tests/0",
-      "selectors": [
-        "node_warnings_tests/warnings"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "note_encryption_tests/0",
-      "selectors": [
-        "note_encryption_tests/encrypt_decrypt_roundtrip"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "note_encryption_tests/1",
-      "selectors": [
-        "note_encryption_tests/decrypt_rejects_invalid_secret_key_lengths"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "note_encryption_tests/2",
-      "selectors": [
-        "note_encryption_tests/decrypt_with_wrong_key_returns_nullopt"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "note_encryption_tests/3",
-      "selectors": [
-        "note_encryption_tests/view_tag_statistical_rejection"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "note_encryption_tests/4",
-      "selectors": [
-        "note_encryption_tests/encrypted_note_serialization_roundtrip"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "note_encryption_tests/5",
-      "selectors": [
-        "note_encryption_tests/deterministic_encryption_same_inputs_same_output"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "note_encryption_tests/6",
-      "selectors": [
-        "note_encryption_tests/bound_note_transport_roundtrip_and_bucketed_padding"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "note_encryption_tests/7",
-      "selectors": [
-        "note_encryption_tests/encrypted_note_deserialize_rejects_oversized_ciphertext_payload"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "note_encryption_tests/8",
-      "selectors": [
-        "note_encryption_tests/trydecrypt_rejects_oversized_runtime_ciphertext_payload"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "note_encryption_tests/9",
-      "selectors": [
-        "note_encryption_tests/trydecrypt_rejects_undersized_runtime_ciphertext_payload"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "note_encryption_tests/10",
-      "selectors": [
-        "note_encryption_tests/note_encryption_deterministic_kat_frozen"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "nt01_tests/0",
-      "selectors": [
-        "nt01_tests/id_text_aux_and_flag"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "nt01_tests/1",
-      "selectors": [
-        "nt01_tests/engine_private_fork_and_prof"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "nt01_tests/2",
-      "selectors": [
-        "nt01_tests/every_known_id_release_stays_unqualified"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "nt01_tests/3",
-      "selectors": [
-        "nt01_tests/hosts_stay_one"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "nt02_tests/0",
-      "selectors": [
-        "nt02_tests/id_text_aux_and_flag"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "nt02_tests/1",
-      "selectors": [
-        "nt02_tests/engines_private_kv_and_lan"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "nt02_tests/2",
-      "selectors": [
-        "nt02_tests/every_known_id_release_stays_unqualified"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "nt02_tests/3",
-      "selectors": [
-        "nt02_tests/hosts_stay_one"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "nt03_tests/0",
-      "selectors": [
-        "nt03_tests/id_text_aux_and_flag"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "nt03_tests/1",
-      "selectors": [
-        "nt03_tests/engine_private_pkg_and_lan"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "nt03_tests/2",
-      "selectors": [
-        "nt03_tests/every_known_id_release_stays_unqualified"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "nt03_tests/3",
-      "selectors": [
-        "nt03_tests/hosts_stay_one"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "nt04_tests/0",
-      "selectors": [
-        "nt04_tests/id_text_aux_and_flag"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "nt04_tests/1",
-      "selectors": [
-        "nt04_tests/exact_engine_private_qa_and_spend"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "nt04_tests/2",
-      "selectors": [
-        "nt04_tests/every_known_id_release_stays_unqualified"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "nt04_tests/3",
-      "selectors": [
-        "nt04_tests/hosts_stay_one"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "nullifier_set_tests/0",
-      "selectors": [
-        "nullifier_set_tests/insert_and_contains"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "nullifier_set_tests/1",
-      "selectors": [
-        "nullifier_set_tests/batch_insert_and_any_exist"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "nullifier_set_tests/2",
-      "selectors": [
-        "nullifier_set_tests/remove_and_verify"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "nullifier_set_tests/3",
-      "selectors": [
-        "nullifier_set_tests/settlement_anchor_insert_remove_and_iterate"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "nullifier_set_tests/4",
-      "selectors": [
-        "nullifier_set_tests/netting_manifest_insert_remove_and_iterate"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "nullifier_set_tests/5",
-      "selectors": [
-        "nullifier_set_tests/count_nullifiers_tracks_exact_entries"
-      ],
-      "expected_cases": 1,
+      "expected_cases": 2,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "nullifier_set_tests/6",
+      "suite": "peerman_trusted_mirror_bootstrap_tests/0",
       "selectors": [
-        "nullifier_set_tests/count_nullifiers_remove_ignores_missing_and_duplicate_entries"
+        "peerman_trusted_mirror_bootstrap_tests/fresh_mirror_deadlock_empty_archive_consensus_headers_and_raise_only_bestknown",
+        "peerman_trusted_mirror_bootstrap_tests/block_connected_terminate_skips_reorged_away_body"
       ],
-      "expected_cases": 1,
+      "expected_cases": 2,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "nullifier_set_tests/7",
+      "suite": "pmt_tests/0",
       "selectors": [
-        "nullifier_set_tests/count_nullifiers_reloads_persisted_counter_on_restart"
+        "pmt_tests/pmt_test1",
+        "pmt_tests/pmt_malleability"
       ],
-      "expected_cases": 1,
+      "expected_cases": 2,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "nullifier_set_tests/8",
+      "suite": "policy_fee_tests/0",
       "selectors": [
-        "nullifier_set_tests/count_nullifiers_backfills_missing_counter_key"
+        "policy_fee_tests/FeeRounder"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "nullifier_set_tests/9",
+      "suite": "policyestimator_tests/0",
       "selectors": [
-        "nullifier_set_tests/concurrent_reads"
+        "policyestimator_tests/BlockPolicyEstimates"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "nullifier_set_tests/10",
+      "suite": "pool_tests/0",
       "selectors": [
-        "nullifier_set_tests/duplicate_insert_idempotent"
+        "pool_tests/basic_allocating",
+        "pool_tests/allocate_any_byte",
+        "pool_tests/random_allocations"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "nullifier_set_tests/11",
+      "suite": "pool_tests/1",
       "selectors": [
-        "nullifier_set_tests/nonexistent_nullifier_returns_false"
+        "pool_tests/memusage_test"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "nullifier_set_tests/12",
+      "suite": "pow_tests/0",
       "selectors": [
-        "nullifier_set_tests/null_nullifier_rejected"
+        "pow_tests/get_next_work",
+        "pow_tests/get_next_work_pow_limit",
+        "pow_tests/get_next_work_lower_limit_actual"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "nullifier_set_tests/13",
+      "suite": "pow_tests/1",
       "selectors": [
-        "nullifier_set_tests/double_spend_rejection_via_any_exist"
+        "pow_tests/get_next_work_upper_limit_actual",
+        "pow_tests/CheckProofOfWork_test_negative_target",
+        "pow_tests/CheckProofOfWork_test_overflow_target"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "nullifier_set_tests/14",
+      "suite": "pow_tests/2",
       "selectors": [
-        "nullifier_set_tests/disconnect_rollback_enables_respend"
+        "pow_tests/CheckProofOfWork_test_too_easy_target",
+        "pow_tests/CheckProofOfWork_test_biger_hash_than_target",
+        "pow_tests/CheckProofOfWork_test_zero_target"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "nullifier_set_tests/15",
+      "suite": "pow_tests/3",
       "selectors": [
-        "nullifier_set_tests/pool_balance_connect_disconnect_cycle"
+        "pow_tests/GetBlockProofEquivalentTime_test",
+        "pow_tests/ChainParams_MAIN_sanity",
+        "pow_tests/ChainParams_REGTEST_sanity"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "nullifier_set_tests/16",
+      "suite": "pow_tests/4",
       "selectors": [
-        "nullifier_set_tests/persisted_shielded_state_roundtrip"
+        "pow_tests/ChainParams_TESTNET_sanity",
+        "pow_tests/ChainParams_TESTNET_matmul_activation",
+        "pow_tests/ChainParams_TESTNET_genesis_reduced_data_compliant"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "nullifier_set_tests/17",
+      "suite": "pow_tests/5",
       "selectors": [
-        "nullifier_set_tests/persisted_shielded_state_roundtrip_restores_commitment_index"
+        "pow_tests/ChainParams_TESTNET_btx_network_identity",
+        "pow_tests/ChainParams_TESTNET4_btx_network_identity",
+        "pow_tests/ChainParams_TESTNET4_sanity"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "nullifier_set_tests/18",
+      "suite": "pow_tests/6",
       "selectors": [
-        "nullifier_set_tests/persisted_shielded_state_roundtrip_reads_legacy_state_without_digest"
+        "pow_tests/ChainParams_SIGNET_sanity",
+        "pow_tests/ChainParams_SIGNET_shielded_activation_heights",
+        "pow_tests/ChainParams_MAIN_matmul_activation"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "nullifier_set_tests/19",
+      "suite": "pow_tests/7",
       "selectors": [
-        "nullifier_set_tests/persisted_shielded_state_roundtrip_reads_positional_state_without_digest"
+        "pow_tests/ChainParams_MAIN_genesis_reduced_data_compliant",
+        "pow_tests/ChainParams_MAIN_historical_asert_boundary_matches_live_chain",
+        "pow_tests/encdr_stall_recovery_parent_advance_and_clamped_asert"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "nullifier_set_tests/20",
+      "suite": "pow_tests/8",
       "selectors": [
-        "nullifier_set_tests/persisted_shielded_state_roundtrip_reads_positional_state_with_digest_and_snapshot"
+        "pow_tests/ChainParams_MAIN_genesis_header_fields_frozen",
+        "pow_tests/ChainParams_MAIN_genesis_hashes_frozen",
+        "pow_tests/ChainParams_REGTEST_matmul_activation"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "nullifier_set_tests/21",
+      "suite": "pow_tests/9",
       "selectors": [
-        "nullifier_set_tests/nullifier_negative_cache_is_invalidated_by_insert"
+        "pow_tests/ChainParams_REGTEST_genesis_reduced_data_compliant",
+        "pow_tests/ChainParams_TESTNET_genesis_header_fields_frozen",
+        "pow_tests/ChainParams_TESTNET_genesis_hashes_frozen"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "nullifier_set_tests/22",
+      "suite": "pow_tests/10",
       "selectors": [
-        "nullifier_set_tests/settlement_anchor_negative_cache_is_invalidated_by_insert"
+        "pow_tests/ChainParams_TESTNET4_genesis_hashes_frozen",
+        "pow_tests/ChainParams_REGTEST_genesis_header_fields_frozen",
+        "pow_tests/ChainParams_REGTEST_genesis_hashes_frozen"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "nullifier_set_tests/23",
+      "suite": "pow_tests/11",
       "selectors": [
-        "nullifier_set_tests/netting_manifest_negative_cache_is_invalidated_by_insert"
+        "pow_tests/ChainParams_REGTEST_custom_overrides",
+        "pow_tests/ChainParams_REGTEST_invalid_custom_overrides_rejected",
+        "pow_tests/ChainParams_REGTEST_matmul_strict_option"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "nullifier_set_tests/24",
+      "suite": "pow_tests/12",
       "selectors": [
-        "nullifier_set_tests/shielded_mutation_marker_roundtrip_and_clear"
+        "pow_tests/ChainParams_REGTEST_matmul_dgw_option",
+        "pow_tests/ChainParams_REGTEST_matmul_activation_override_options",
+        "pow_tests/ChainParams_REGTEST_matmul_activation_override_args"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "nullifier_set_tests/25",
+      "suite": "pow_tests/13",
       "selectors": [
-        "nullifier_set_tests/shielded_mutation_marker_rejects_oversized_payload_count_before_allocation"
+        "pow_tests/ChainParams_REGTEST_rc_coupled_activation_override_args",
+        "pow_tests/ChainParams_REGTEST_rc_coupled_profile_override_args",
+        "pow_tests/MatMulPreHashEpsilonBits_resolve_upgrade_at_boundary"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "nullifier_set_tests/26",
+      "suite": "pow_tests/14",
       "selectors": [
-        "nullifier_set_tests/shielded_mutation_marker_invalid_payload_forces_recovery_sentinel"
+        "pow_tests/MatMulNonceSeedV2_binds_mutable_header_fields",
+        "pow_tests/MatMulNonceSeed_activation_boundary_selects_legacy_then_v2",
+        "pow_tests/MatMulParentMtpSeed_activation_selects_v3_and_requires_parent_context"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "nullifier_set_tests/27",
+      "suite": "pow_tests/15",
       "selectors": [
-        "nullifier_set_tests/settlement_anchor_replay_double_mint_poc"
+        "pow_tests/MatMulBMX4CSeed_field_pinning_is_v3_and_idempotent",
+        "pow_tests/MatMulParentMtpSeed_solver_requires_parent_context_after_activation",
+        "pow_tests/MatMulNonceSeed_solver_mines_and_verifies_at_activation_boundary"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "obs01_tests/0",
+      "suite": "pow_tests/16",
       "selectors": [
-        "obs01_tests/pass_latches"
+        "pow_tests/MatMulNonceSeed_solver_disables_shared_base_matrix_batching",
+        "pow_tests/MatMulNonceSeed_cuda_prehash_scan_matches_cpu_gate",
+        "pow_tests/MatMulNonceSeed_metal_prehash_scan_matches_cpu_gate"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "ops_drill_tests/0",
+      "suite": "pow_tests/17",
       "selectors": [
-        "ops_drill_tests/benign_triage"
+        "pow_tests/MatMulParentMtpSeed_cuda_prehash_scan_matches_cpu_gate",
+        "pow_tests/MatMulParentMtpSeed_metal_prehash_scan_matches_cpu_gate",
+        "pow_tests/MatMulNonceSeed_metal_solver_uses_gpu_scan_and_variable_base_batch"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "ops_drill_tests/1",
+      "suite": "pow_tests/18",
       "selectors": [
-        "ops_drill_tests/non_benign_contain"
+        "pow_tests/MatMulParentMtpSeed_metal_solver_uses_gpu_scan_and_variable_base_batch",
+        "pow_tests/MatMulParentMtpSeed_cuda_solver_uses_gpu_scan_and_variable_base_batch",
+        "pow_tests/MatMulNonceSeed_metal_batch_default_scales_with_gpu_core_count"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "ops_drill_tests/2",
+      "suite": "pow_tests/19",
       "selectors": [
-        "ops_drill_tests/benign_contain_stores_name"
+        "pow_tests/MatMulNonceSeed_cuda_batch_override_accepts_large_batch",
+        "pow_tests/EffectiveTargetSpacingForHeight_uses_fast_phase_schedule",
+        "pow_tests/ChainParams_MAIN_btx_network_identity"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "ops_drill_tests/3",
+      "suite": "pow_tests/20",
       "selectors": [
-        "ops_drill_tests/field_drill_and_fixture_store_nothing"
+        "pow_tests/ChainParams_MAIN_hardening_anchor_consistency",
+        "pow_tests/HasValidProofOfWork_matmul_phase1_checks",
+        "pow_tests/GetNextWorkRequired_matmul_dgw_window_guard"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "ops_drill_tests/4",
+      "suite": "pow_tests/21",
       "selectors": [
-        "ops_drill_tests/each_benign_drill_name"
+        "pow_tests/GetNextWorkRequired_matmul_malformed_ancestor_chain_fails_closed",
+        "pow_tests/GetNextWorkRequired_matmul_missing_prev_link_fails_closed",
+        "pow_tests/PermittedDifficultyTransition_matmul_bounds"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "p2p03_tests/0",
+      "suite": "pow_tests/22",
       "selectors": [
-        "p2p03_tests/field_before_scheduler_or_gpus"
+        "pow_tests/GetNextWorkRequired_matmul_warmup_floor",
+        "pow_tests/GetNextWorkRequired_matmul_dgw_steady_state",
+        "pow_tests/GetNextWorkRequired_matmul_dgw_long_horizon_scaling"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "p2p03_tests/1",
+      "suite": "pow_tests/23",
       "selectors": [
-        "p2p03_tests/scheduler_refused_and_unshared"
+        "pow_tests/GetNextWorkRequired_matmul_dgw_oscillation_resilience",
+        "pow_tests/GetNextWorkRequired_matmul_dgw_timestamp_drift_recovery",
+        "pow_tests/CBlockIndex_preserves_matmul_header_fields"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "p2p03_tests/2",
+      "suite": "pow_tests/24",
       "selectors": [
-        "p2p03_tests/two_gpus_stay_unqualified"
+        "pow_tests/CDiskBlockIndex_construct_hash_keeps_matmul_fields",
+        "pow_tests/bip94_timewarp_protection_applies_on_matmul_dgw_heights",
+        "pow_tests/bip94_timewarp_protection_retains_boundary_behavior_on_legacy_retarget"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "p2p03_tests/3",
+      "suite": "pow_tests/25",
       "selectors": [
-        "p2p03_tests/local_count_is_not_three_physical_hosts"
+        "pow_tests/matmul_solve_pipelines_next_nonce_preparation_when_async_enabled",
+        "pow_tests/matmul_share_target_override_relaxes_only_digest_exit",
+        "pow_tests/matmul_v4_share_target_override_relaxes_only_digest_exit"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "pay02_tests/0",
+      "suite": "pow_tests/26",
       "selectors": [
-        "pay02_tests/record_funding_stores_paths_without_settlement"
+        "pow_tests/finalize_matmul_solved_block_offloads_at_enc_dr_height",
+        "pow_tests/matmul_recompute_single_flight_collapses_duplicates",
+        "pow_tests/matmul_solve_prefetches_following_single_nonce_batches_when_async_enabled"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "pay02_tests/1",
+      "suite": "pow_tests/27",
       "selectors": [
-        "pay02_tests/prove_exit_stays_unqualified"
+        "pow_tests/matmul_solve_extends_prefetch_queue_for_tuned_multi_nonce_batches",
+        "pow_tests/matmul_solve_uses_two_nonce_batches_for_metal_product_mining_auto_policy",
+        "pow_tests/matmul_solve_processes_nonce_attempts_in_deterministic_batches_when_enabled"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "pay02_tests/2",
+      "suite": "pow_tests/28",
       "selectors": [
-        "pay02_tests/federate_refuses_a_second_organization"
+        "pow_tests/matmul_solve_advances_nonce_window_from_zero_without_exhaustion",
+        "pow_tests/matmul_solve_refreshes_header_time_when_configured_interval_elapses",
+        "pow_tests/matmul_solve_skips_header_time_refresh_on_min_difficulty_networks"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "pay02_tests/3",
+      "suite": "pow_tests/29",
       "selectors": [
-        "pay02_tests/cross_host_faults_stay_unqualified"
+        "pow_tests/matmul_solve_ignores_malformed_batch_size_env_suffix",
+        "pow_tests/matmul_solve_defaults_to_single_nonce_batch_for_mainnet_shape",
+        "pow_tests/matmul_solve_uses_two_nonce_batch_for_post_activation_mainnet_shape"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "pay02_tests/4",
+      "suite": "pow_tests/30",
       "selectors": [
-        "pay02_tests/native_observer_requires_confirmed_bytes_and_resets_on_reorg"
+        "pow_tests/matmul_solve_uses_high_perf_apple_metal_defaults_when_perf_override_is_large",
+        "pow_tests/matmul_solve_uses_conservative_generic_apple_metal_prefetch_default",
+        "pow_tests/matmul_solve_uses_two_nonce_batch_on_tuned_mainnet_shape"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "pay02_tests/5",
+      "suite": "pow_tests/31",
       "selectors": [
-        "pay02_tests/native_observer_rejects_wrong_destination_fees_and_extra_inputs"
+        "pow_tests/matmul_solve_uses_cuda_batch_defaults_when_backend_is_available",
+        "pow_tests/matmul_solve_enables_parallel_solver_when_configured",
+        "pow_tests/matmul_solve_keeps_async_prepare_enabled_for_multi_nonce_batches"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "pay02_tests/6",
+      "suite": "pow_tests/32",
       "selectors": [
-        "pay02_tests/native_observer_refund_requires_cltv_and_stable_chain_view"
+        "pow_tests/matmul_solve_respects_async_prepare_disable_override",
+        "pow_tests/matmul_solve_respects_cpu_confirm_env_override",
+        "pow_tests/matmul_solve_enables_cpu_confirm_for_cuda_in_strict_mode"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "pay_regtest_tests/0",
+      "suite": "pow_tests/33",
       "selectors": [
-        "pay_regtest_tests/same_pool_is_economy"
+        "pow_tests/matmul_solve_uses_resolved_backend_in_strict_mode_without_explicit_override",
+        "pow_tests/matmul_solve_fails_closed_when_required_backend_is_not_active",
+        "pow_tests/matmul_solve_crosses_60999_to_61000_with_product_digest_contract"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "pay_regtest_tests/1",
+      "suite": "pow_tests/34",
       "selectors": [
-        "pay_regtest_tests/pay_keeps_held"
+        "pow_tests/live_mainnet_61000_block_matches_fixed_contract_and_breaks_legacy_contract",
+        "pow_tests/matmul_digest_compare_probe_ignores_matching_digests",
+        "pow_tests/matmul_digest_compare_probe_captures_first_divergence_once"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "pay_regtest_tests/2",
+      "suite": "pow_tests/35",
       "selectors": [
-        "pay_regtest_tests/settle_unqualified_moves_no_atoms"
+        "pow_tests/cuda_strict_regtest_warning_repro_solves_without_digest_divergence",
+        "pow_tests/product_committed_digest_deterministic",
+        "pow_tests/product_committed_digest_height_gate"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "pcp_tests/0",
+      "suite": "pow_tests/36",
       "selectors": [
-        "pcp_tests/natpmp_ipv4"
+        "pow_tests/product_committed_digest_rejects_wrong_digest",
+        "pow_tests/product_committed_digest_rejects_wrong_product",
+        "pow_tests/e1_nonce_seed_fold_is_gated_and_backward_compatible"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "pcp_tests/1",
+      "suite": "pow_tests/37",
       "selectors": [
-        "pcp_tests/pcp_ipv4"
+        "pow_tests/e1_v2_miner_produces_consensus_valid_nonce_bound_seeds_across_boundary",
+        "pow_tests/e1_v2_parallel_solver_engages_and_stays_consensus_valid",
+        "pow_tests/MatMulBMX4C_mine_validate_round_trip_enforcing"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "pcp_tests/2",
+      "suite": "pow_tests/38",
       "selectors": [
-        "pcp_tests/pcp_ipv6"
+        "pow_tests/MatMulHeaderPoW_withdrawn_test_only_grind_is_decoupled",
+        "pow_tests/MatMulHeaderPoWGateTarget_pure_fixed_vectors",
+        "pow_tests/MatMulHeaderPoW_wire_fixed_182_ignores_bit26_and_nonce"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "pcp_tests/3",
+      "suite": "pow_tests/39",
       "selectors": [
-        "pcp_tests/pcp_timeout"
+        "pow_tests/MatMulHeaderPoW_fixed_wire_has_no_bit26_activation_boundary",
+        "pow_tests/MatMulHeaderPoW_withdrawn_nonce_grind_leaves_gethash_stable",
+        "pow_tests/MatMulHeaderPoW_grind_helper_and_public_nets_disabled"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "pcp_tests/4",
+      "suite": "pow_tests/40",
       "selectors": [
-        "pcp_tests/pcp_connrefused"
+        "pow_tests/ReduceRescaleRatioToU32_exact_and_rejects",
+        "pow_tests/matmul_digest_below_target_does_not_authenticate_work",
+        "pow_tests/qualified_gpu_digest_mismatch_is_retryable_not_consensus"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "pcp_tests/5",
+      "suite": "pq_genesis_tests/0",
       "selectors": [
-        "pcp_tests/pcp_ipv6_timeout_success"
+        "pq_genesis_tests/genesis_coinbase_is_p2mr",
+        "pq_genesis_tests/genesis_block_valid",
+        "pq_genesis_tests/genesis_coinbase_amount_correct"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "pcp_tests/6",
+      "suite": "pq_genesis_tests/1",
       "selectors": [
-        "pcp_tests/pcp_ipv4_fail_no_resources"
+        "pq_genesis_tests/regtest_genesis_is_p2mr"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "pcp_tests/7",
+      "suite": "pq_mining_template_tests/0",
       "selectors": [
-        "pcp_tests/pcp_ipv4_fail_unsupported_version"
+        "pq_mining_template_tests/default_coinbase_output_is_p2mr_on_enforcing_chains",
+        "pq_mining_template_tests/rejects_non_p2mr_coinbase_output_on_enforcing_chains",
+        "pq_mining_template_tests/allows_op_return_coinbase_output_on_enforcing_chains"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "pcp_tests/8",
+      "suite": "pq_timing_tests/0",
       "selectors": [
-        "pcp_tests/natpmp_protocol_error"
+        "pq_timing_tests/mldsa_sign_constant_time",
+        "pq_timing_tests/mldsa_verify_constant_time",
+        "pq_timing_tests/key_comparison_constant_time"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "pcp_tests/9",
+      "suite": "pq_timing_tests/1",
       "selectors": [
-        "pcp_tests/pcp_protocol_error"
+        "pq_timing_tests/key_zeroization_complete"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     }
   ],
   "all_enabled_cases": [
-    "node_cycle_tests/idle_before_run_is_closed",
-    "node_cycle_tests/run_reaches_failure_with_generation_zero",
-    "node_cycle_tests/accept_journal_advances_once",
-    "node_warnings_tests/warnings",
-    "note_encryption_tests/encrypt_decrypt_roundtrip",
-    "note_encryption_tests/decrypt_rejects_invalid_secret_key_lengths",
-    "note_encryption_tests/decrypt_with_wrong_key_returns_nullopt",
-    "note_encryption_tests/view_tag_statistical_rejection",
-    "note_encryption_tests/encrypted_note_serialization_roundtrip",
-    "note_encryption_tests/deterministic_encryption_same_inputs_same_output",
-    "note_encryption_tests/bound_note_transport_roundtrip_and_bucketed_padding",
-    "note_encryption_tests/encrypted_note_deserialize_rejects_oversized_ciphertext_payload",
-    "note_encryption_tests/trydecrypt_rejects_oversized_runtime_ciphertext_payload",
-    "note_encryption_tests/trydecrypt_rejects_undersized_runtime_ciphertext_payload",
-    "note_encryption_tests/note_encryption_deterministic_kat_frozen",
-    "nt01_tests/id_text_aux_and_flag",
-    "nt01_tests/engine_private_fork_and_prof",
-    "nt01_tests/every_known_id_release_stays_unqualified",
-    "nt01_tests/hosts_stay_one",
-    "nt02_tests/id_text_aux_and_flag",
-    "nt02_tests/engines_private_kv_and_lan",
-    "nt02_tests/every_known_id_release_stays_unqualified",
-    "nt02_tests/hosts_stay_one",
-    "nt03_tests/id_text_aux_and_flag",
-    "nt03_tests/engine_private_pkg_and_lan",
-    "nt03_tests/every_known_id_release_stays_unqualified",
-    "nt03_tests/hosts_stay_one",
-    "nt04_tests/id_text_aux_and_flag",
-    "nt04_tests/exact_engine_private_qa_and_spend",
-    "nt04_tests/every_known_id_release_stays_unqualified",
-    "nt04_tests/hosts_stay_one",
-    "nullifier_set_tests/insert_and_contains",
-    "nullifier_set_tests/batch_insert_and_any_exist",
-    "nullifier_set_tests/remove_and_verify",
-    "nullifier_set_tests/settlement_anchor_insert_remove_and_iterate",
-    "nullifier_set_tests/netting_manifest_insert_remove_and_iterate",
-    "nullifier_set_tests/count_nullifiers_tracks_exact_entries",
-    "nullifier_set_tests/count_nullifiers_remove_ignores_missing_and_duplicate_entries",
-    "nullifier_set_tests/count_nullifiers_reloads_persisted_counter_on_restart",
-    "nullifier_set_tests/count_nullifiers_backfills_missing_counter_key",
-    "nullifier_set_tests/concurrent_reads",
-    "nullifier_set_tests/duplicate_insert_idempotent",
-    "nullifier_set_tests/nonexistent_nullifier_returns_false",
-    "nullifier_set_tests/null_nullifier_rejected",
-    "nullifier_set_tests/double_spend_rejection_via_any_exist",
-    "nullifier_set_tests/disconnect_rollback_enables_respend",
-    "nullifier_set_tests/pool_balance_connect_disconnect_cycle",
-    "nullifier_set_tests/persisted_shielded_state_roundtrip",
-    "nullifier_set_tests/persisted_shielded_state_roundtrip_restores_commitment_index",
-    "nullifier_set_tests/persisted_shielded_state_roundtrip_reads_legacy_state_without_digest",
-    "nullifier_set_tests/persisted_shielded_state_roundtrip_reads_positional_state_without_digest",
-    "nullifier_set_tests/persisted_shielded_state_roundtrip_reads_positional_state_with_digest_and_snapshot",
-    "nullifier_set_tests/nullifier_negative_cache_is_invalidated_by_insert",
-    "nullifier_set_tests/settlement_anchor_negative_cache_is_invalidated_by_insert",
-    "nullifier_set_tests/netting_manifest_negative_cache_is_invalidated_by_insert",
-    "nullifier_set_tests/shielded_mutation_marker_roundtrip_and_clear",
-    "nullifier_set_tests/shielded_mutation_marker_rejects_oversized_payload_count_before_allocation",
-    "nullifier_set_tests/shielded_mutation_marker_invalid_payload_forces_recovery_sentinel",
-    "nullifier_set_tests/settlement_anchor_replay_double_mint_poc",
-    "obs01_tests/pass_latches",
-    "ops_drill_tests/benign_triage",
-    "ops_drill_tests/non_benign_contain",
-    "ops_drill_tests/benign_contain_stores_name",
-    "ops_drill_tests/field_drill_and_fixture_store_nothing",
-    "ops_drill_tests/each_benign_drill_name",
-    "p2p03_tests/field_before_scheduler_or_gpus",
-    "p2p03_tests/scheduler_refused_and_unshared",
-    "p2p03_tests/two_gpus_stay_unqualified",
-    "p2p03_tests/local_count_is_not_three_physical_hosts",
-    "pay02_tests/record_funding_stores_paths_without_settlement",
-    "pay02_tests/prove_exit_stays_unqualified",
-    "pay02_tests/federate_refuses_a_second_organization",
-    "pay02_tests/cross_host_faults_stay_unqualified",
-    "pay02_tests/native_observer_requires_confirmed_bytes_and_resets_on_reorg",
-    "pay02_tests/native_observer_rejects_wrong_destination_fees_and_extra_inputs",
-    "pay02_tests/native_observer_refund_requires_cltv_and_stable_chain_view",
-    "pay_regtest_tests/same_pool_is_economy",
-    "pay_regtest_tests/pay_keeps_held",
-    "pay_regtest_tests/settle_unqualified_moves_no_atoms",
-    "pcp_tests/natpmp_ipv4",
-    "pcp_tests/pcp_ipv4",
-    "pcp_tests/pcp_ipv6",
-    "pcp_tests/pcp_timeout",
-    "pcp_tests/pcp_connrefused",
-    "pcp_tests/pcp_ipv6_timeout_success",
-    "pcp_tests/pcp_ipv4_fail_no_resources",
-    "pcp_tests/pcp_ipv4_fail_unsupported_version",
-    "pcp_tests/natpmp_protocol_error",
-    "pcp_tests/pcp_protocol_error"
+    "peerman_first_body_and_reorg_tests/fast_relay_uses_supplied_body_before_disk_availability",
+    "peerman_first_body_and_reorg_tests/invalidateblock_notifies_peerman_without_caller_chain_lock",
+    "peerman_trusted_mirror_bootstrap_tests/fresh_mirror_deadlock_empty_archive_consensus_headers_and_raise_only_bestknown",
+    "peerman_trusted_mirror_bootstrap_tests/block_connected_terminate_skips_reorged_away_body",
+    "pmt_tests/pmt_test1",
+    "pmt_tests/pmt_malleability",
+    "policy_fee_tests/FeeRounder",
+    "policyestimator_tests/BlockPolicyEstimates",
+    "pool_tests/basic_allocating",
+    "pool_tests/allocate_any_byte",
+    "pool_tests/random_allocations",
+    "pool_tests/memusage_test",
+    "pow_tests/get_next_work",
+    "pow_tests/get_next_work_pow_limit",
+    "pow_tests/get_next_work_lower_limit_actual",
+    "pow_tests/get_next_work_upper_limit_actual",
+    "pow_tests/CheckProofOfWork_test_negative_target",
+    "pow_tests/CheckProofOfWork_test_overflow_target",
+    "pow_tests/CheckProofOfWork_test_too_easy_target",
+    "pow_tests/CheckProofOfWork_test_biger_hash_than_target",
+    "pow_tests/CheckProofOfWork_test_zero_target",
+    "pow_tests/GetBlockProofEquivalentTime_test",
+    "pow_tests/ChainParams_MAIN_sanity",
+    "pow_tests/ChainParams_REGTEST_sanity",
+    "pow_tests/ChainParams_TESTNET_sanity",
+    "pow_tests/ChainParams_TESTNET_matmul_activation",
+    "pow_tests/ChainParams_TESTNET_genesis_reduced_data_compliant",
+    "pow_tests/ChainParams_TESTNET_btx_network_identity",
+    "pow_tests/ChainParams_TESTNET4_btx_network_identity",
+    "pow_tests/ChainParams_TESTNET4_sanity",
+    "pow_tests/ChainParams_SIGNET_sanity",
+    "pow_tests/ChainParams_SIGNET_shielded_activation_heights",
+    "pow_tests/ChainParams_MAIN_matmul_activation",
+    "pow_tests/ChainParams_MAIN_genesis_reduced_data_compliant",
+    "pow_tests/ChainParams_MAIN_historical_asert_boundary_matches_live_chain",
+    "pow_tests/encdr_stall_recovery_parent_advance_and_clamped_asert",
+    "pow_tests/ChainParams_MAIN_genesis_header_fields_frozen",
+    "pow_tests/ChainParams_MAIN_genesis_hashes_frozen",
+    "pow_tests/ChainParams_REGTEST_matmul_activation",
+    "pow_tests/ChainParams_REGTEST_genesis_reduced_data_compliant",
+    "pow_tests/ChainParams_TESTNET_genesis_header_fields_frozen",
+    "pow_tests/ChainParams_TESTNET_genesis_hashes_frozen",
+    "pow_tests/ChainParams_TESTNET4_genesis_hashes_frozen",
+    "pow_tests/ChainParams_REGTEST_genesis_header_fields_frozen",
+    "pow_tests/ChainParams_REGTEST_genesis_hashes_frozen",
+    "pow_tests/ChainParams_REGTEST_custom_overrides",
+    "pow_tests/ChainParams_REGTEST_invalid_custom_overrides_rejected",
+    "pow_tests/ChainParams_REGTEST_matmul_strict_option",
+    "pow_tests/ChainParams_REGTEST_matmul_dgw_option",
+    "pow_tests/ChainParams_REGTEST_matmul_activation_override_options",
+    "pow_tests/ChainParams_REGTEST_matmul_activation_override_args",
+    "pow_tests/ChainParams_REGTEST_rc_coupled_activation_override_args",
+    "pow_tests/ChainParams_REGTEST_rc_coupled_profile_override_args",
+    "pow_tests/MatMulPreHashEpsilonBits_resolve_upgrade_at_boundary",
+    "pow_tests/MatMulNonceSeedV2_binds_mutable_header_fields",
+    "pow_tests/MatMulNonceSeed_activation_boundary_selects_legacy_then_v2",
+    "pow_tests/MatMulParentMtpSeed_activation_selects_v3_and_requires_parent_context",
+    "pow_tests/MatMulBMX4CSeed_field_pinning_is_v3_and_idempotent",
+    "pow_tests/MatMulParentMtpSeed_solver_requires_parent_context_after_activation",
+    "pow_tests/MatMulNonceSeed_solver_mines_and_verifies_at_activation_boundary",
+    "pow_tests/MatMulNonceSeed_solver_disables_shared_base_matrix_batching",
+    "pow_tests/MatMulNonceSeed_cuda_prehash_scan_matches_cpu_gate",
+    "pow_tests/MatMulNonceSeed_metal_prehash_scan_matches_cpu_gate",
+    "pow_tests/MatMulParentMtpSeed_cuda_prehash_scan_matches_cpu_gate",
+    "pow_tests/MatMulParentMtpSeed_metal_prehash_scan_matches_cpu_gate",
+    "pow_tests/MatMulNonceSeed_metal_solver_uses_gpu_scan_and_variable_base_batch",
+    "pow_tests/MatMulParentMtpSeed_metal_solver_uses_gpu_scan_and_variable_base_batch",
+    "pow_tests/MatMulParentMtpSeed_cuda_solver_uses_gpu_scan_and_variable_base_batch",
+    "pow_tests/MatMulNonceSeed_metal_batch_default_scales_with_gpu_core_count",
+    "pow_tests/MatMulNonceSeed_cuda_batch_override_accepts_large_batch",
+    "pow_tests/EffectiveTargetSpacingForHeight_uses_fast_phase_schedule",
+    "pow_tests/ChainParams_MAIN_btx_network_identity",
+    "pow_tests/ChainParams_MAIN_hardening_anchor_consistency",
+    "pow_tests/HasValidProofOfWork_matmul_phase1_checks",
+    "pow_tests/GetNextWorkRequired_matmul_dgw_window_guard",
+    "pow_tests/GetNextWorkRequired_matmul_malformed_ancestor_chain_fails_closed",
+    "pow_tests/GetNextWorkRequired_matmul_missing_prev_link_fails_closed",
+    "pow_tests/PermittedDifficultyTransition_matmul_bounds",
+    "pow_tests/GetNextWorkRequired_matmul_warmup_floor",
+    "pow_tests/GetNextWorkRequired_matmul_dgw_steady_state",
+    "pow_tests/GetNextWorkRequired_matmul_dgw_long_horizon_scaling",
+    "pow_tests/GetNextWorkRequired_matmul_dgw_oscillation_resilience",
+    "pow_tests/GetNextWorkRequired_matmul_dgw_timestamp_drift_recovery",
+    "pow_tests/CBlockIndex_preserves_matmul_header_fields",
+    "pow_tests/CDiskBlockIndex_construct_hash_keeps_matmul_fields",
+    "pow_tests/bip94_timewarp_protection_applies_on_matmul_dgw_heights",
+    "pow_tests/bip94_timewarp_protection_retains_boundary_behavior_on_legacy_retarget",
+    "pow_tests/matmul_solve_pipelines_next_nonce_preparation_when_async_enabled",
+    "pow_tests/matmul_share_target_override_relaxes_only_digest_exit",
+    "pow_tests/matmul_v4_share_target_override_relaxes_only_digest_exit",
+    "pow_tests/finalize_matmul_solved_block_offloads_at_enc_dr_height",
+    "pow_tests/matmul_recompute_single_flight_collapses_duplicates",
+    "pow_tests/matmul_solve_prefetches_following_single_nonce_batches_when_async_enabled",
+    "pow_tests/matmul_solve_extends_prefetch_queue_for_tuned_multi_nonce_batches",
+    "pow_tests/matmul_solve_uses_two_nonce_batches_for_metal_product_mining_auto_policy",
+    "pow_tests/matmul_solve_processes_nonce_attempts_in_deterministic_batches_when_enabled",
+    "pow_tests/matmul_solve_advances_nonce_window_from_zero_without_exhaustion",
+    "pow_tests/matmul_solve_refreshes_header_time_when_configured_interval_elapses",
+    "pow_tests/matmul_solve_skips_header_time_refresh_on_min_difficulty_networks",
+    "pow_tests/matmul_solve_ignores_malformed_batch_size_env_suffix",
+    "pow_tests/matmul_solve_defaults_to_single_nonce_batch_for_mainnet_shape",
+    "pow_tests/matmul_solve_uses_two_nonce_batch_for_post_activation_mainnet_shape",
+    "pow_tests/matmul_solve_uses_high_perf_apple_metal_defaults_when_perf_override_is_large",
+    "pow_tests/matmul_solve_uses_conservative_generic_apple_metal_prefetch_default",
+    "pow_tests/matmul_solve_uses_two_nonce_batch_on_tuned_mainnet_shape",
+    "pow_tests/matmul_solve_uses_cuda_batch_defaults_when_backend_is_available",
+    "pow_tests/matmul_solve_enables_parallel_solver_when_configured",
+    "pow_tests/matmul_solve_keeps_async_prepare_enabled_for_multi_nonce_batches",
+    "pow_tests/matmul_solve_respects_async_prepare_disable_override",
+    "pow_tests/matmul_solve_respects_cpu_confirm_env_override",
+    "pow_tests/matmul_solve_enables_cpu_confirm_for_cuda_in_strict_mode",
+    "pow_tests/matmul_solve_uses_resolved_backend_in_strict_mode_without_explicit_override",
+    "pow_tests/matmul_solve_fails_closed_when_required_backend_is_not_active",
+    "pow_tests/matmul_solve_crosses_60999_to_61000_with_product_digest_contract",
+    "pow_tests/live_mainnet_61000_block_matches_fixed_contract_and_breaks_legacy_contract",
+    "pow_tests/matmul_digest_compare_probe_ignores_matching_digests",
+    "pow_tests/matmul_digest_compare_probe_captures_first_divergence_once",
+    "pow_tests/cuda_strict_regtest_warning_repro_solves_without_digest_divergence",
+    "pow_tests/product_committed_digest_deterministic",
+    "pow_tests/product_committed_digest_height_gate",
+    "pow_tests/product_committed_digest_rejects_wrong_digest",
+    "pow_tests/product_committed_digest_rejects_wrong_product",
+    "pow_tests/e1_nonce_seed_fold_is_gated_and_backward_compatible",
+    "pow_tests/e1_v2_miner_produces_consensus_valid_nonce_bound_seeds_across_boundary",
+    "pow_tests/e1_v2_parallel_solver_engages_and_stays_consensus_valid",
+    "pow_tests/MatMulBMX4C_mine_validate_round_trip_enforcing",
+    "pow_tests/MatMulHeaderPoW_withdrawn_test_only_grind_is_decoupled",
+    "pow_tests/MatMulHeaderPoWGateTarget_pure_fixed_vectors",
+    "pow_tests/MatMulHeaderPoW_wire_fixed_182_ignores_bit26_and_nonce",
+    "pow_tests/MatMulHeaderPoW_fixed_wire_has_no_bit26_activation_boundary",
+    "pow_tests/MatMulHeaderPoW_withdrawn_nonce_grind_leaves_gethash_stable",
+    "pow_tests/MatMulHeaderPoW_grind_helper_and_public_nets_disabled",
+    "pow_tests/ReduceRescaleRatioToU32_exact_and_rejects",
+    "pow_tests/matmul_digest_below_target_does_not_authenticate_work",
+    "pow_tests/qualified_gpu_digest_mismatch_is_retryable_not_consensus",
+    "pq_genesis_tests/genesis_coinbase_is_p2mr",
+    "pq_genesis_tests/genesis_block_valid",
+    "pq_genesis_tests/genesis_coinbase_amount_correct",
+    "pq_genesis_tests/regtest_genesis_is_p2mr",
+    "pq_mining_template_tests/default_coinbase_output_is_p2mr_on_enforcing_chains",
+    "pq_mining_template_tests/rejects_non_p2mr_coinbase_output_on_enforcing_chains",
+    "pq_mining_template_tests/allows_op_return_coinbase_output_on_enforcing_chains",
+    "pq_timing_tests/mldsa_sign_constant_time",
+    "pq_timing_tests/mldsa_verify_constant_time",
+    "pq_timing_tests/key_comparison_constant_time",
+    "pq_timing_tests/key_zeroization_complete"
   ],
   "campaign_test_budget_seconds": 1800,
-  "batch_budget_seconds": 480,
+  "batch_budget_seconds": 600,
   "require_first_pass_control": false,
-  "scope": "89 previously never-selected node/notes/nullifier/NT/operator/payment/PCP maintained unit cases; unchanged saved binary"
+  "scope": "146 never-selected peer/pow/PQ maintained unit cases in53boundedgroups; unchanged saved binary"
 }
