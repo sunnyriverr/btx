@@ -73,10 +73,18 @@ try:
   finally:(root/'external-link').unlink()
   os.link(root/'cpp/main.cpp',root/'cpp/main-hardlink.cpp');assert (root/'cpp/main.cpp').samefile(root/'cpp/main-hardlink.cpp')
   meta=checkpoint(payload/'checkpoint.tar.gz');record={'identity':identity(),'metadata':meta,'archive_sha256':sha(payload/'checkpoint.tar.gz'),'binaries':{p.name:sha(p) for p in payload.glob('binary-*')}}
+  with tarfile.open(payload/'finished-binaries.tar.gz','w:gz') as bundle:
+   for binary in payload.glob('binary-*'):bundle.add(binary,arcname=binary.name)
+  record['binary_archive_sha256']=sha(payload/'finished-binaries.tar.gz')
+  for binary in payload.glob('binary-*'):binary.unlink()
   (payload/'checkpoint.json').write_text(json.dumps(record,indent=2));state['checks']['produced']=True;state['injected_later_failure']=True;save();raise SystemExit(23)
  else:
   record=json.loads((payload/'checkpoint.json').read_text());assert identity()==record['identity'];assert sha(payload/'checkpoint.tar.gz')==record['archive_sha256'];restore(record['metadata'],payload/'checkpoint.tar.gz');assert (root/'cpp/main.cpp').samefile(root/'cpp/main-hardlink.cpp');state['checks']['internal_hardlink_preserved']=True
-  for name,digest in record['binaries'].items():assert sha(payload/name)==digest and (payload/name).stat().st_mode&0o111
+  assert sha(payload/'finished-binaries.tar.gz')==record['binary_archive_sha256']
+  finished=w/'restored-finished-binaries';assert not finished.exists();finished.mkdir()
+  with tarfile.open(payload/'finished-binaries.tar.gz') as bundle:
+   assert all(m.isfile() and Path(m.name).name==m.name and m.name in record['binaries'] for m in bundle.getmembers());bundle.extractall(finished,filter='data')
+  for name,digest in record['binaries'].items():assert sha(finished/name)==digest and (finished/name).stat().st_mode&0o111 and run([finished/name],'retained-'+name).strip()=='original'
   state['checks']['independent_binary_artifacts_verified']=True;state['checks']['restored_exact_content_and_metadata']=True
   binaries=binary_paths();before={str(p):(sha(p),p.stat().st_mtime_ns) for p in binaries}
   objects={str(p):p.stat().st_mtime_ns for p in (root/'cpp-build').rglob('*.o')}
