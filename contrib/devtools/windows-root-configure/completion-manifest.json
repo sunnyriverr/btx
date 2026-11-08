@@ -3,540 +3,810 @@
   "binary_sha256": "31e45f1d0f2aed4168982120596182b5268057e1b9806960f27a60c769906bdd",
   "jobs": [
     {
-      "suite": "ml_kem_tests/0",
+      "suite": "nif_exec_tests/0",
       "selectors": [
-        "ml_kem_tests/keygen_produces_correct_sizes"
+        "nif_exec_tests/memory_batch_respects_scope_cap_and_cancel"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "ml_kem_tests/1",
+      "suite": "nif_fork_tests/0",
       "selectors": [
-        "ml_kem_tests/keygen_produces_different_keys_each_call"
+        "nif_fork_tests/reserve_refusals_store_nothing"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "ml_kem_tests/2",
+      "suite": "nif_fork_tests/1",
       "selectors": [
-        "ml_kem_tests/deterministic_keygen_from_seed"
+        "nif_fork_tests/reserve_past_capacity_keeps_used"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "ml_kem_tests/3",
+      "suite": "nif_fork_tests/2",
       "selectors": [
-        "ml_kem_tests/encapsulation_key_check_preserves_generated_keys"
+        "nif_fork_tests/pinned_release_does_not_free"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "ml_kem_tests/4",
+      "suite": "nif_fork_tests/3",
       "selectors": [
-        "ml_kem_tests/encapsulation_key_check_does_not_restrict_seed"
+        "nif_fork_tests/two_devices_are_hardware"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "ml_kem_tests/5",
+      "suite": "nif_fork_tests/4",
       "selectors": [
-        "ml_kem_tests/encapsulation_key_check_range_and_position"
+        "nif_fork_tests/vendor_execute_is_absent"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "ml_kem_tests/6",
+      "suite": "nif_gate_tests/0",
       "selectors": [
-        "ml_kem_tests/encaps_decaps_roundtrip"
+        "nif_gate_tests/bad_kind_and_empty_name_store_nothing"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "ml_kem_tests/7",
+      "suite": "nif_gate_tests/1",
       "selectors": [
-        "ml_kem_tests/decaps_with_wrong_sk_produces_different_secret"
+        "nif_gate_tests/unlinked_rdma_is_absent_and_does_not_pass"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "ml_kem_tests/8",
+      "suite": "nif_gate_tests/2",
       "selectors": [
-        "ml_kem_tests/decaps_altered_ciphertext_retains_implicit_rejection"
+        "nif_gate_tests/five_linked_kinds_remain_unqualified"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "ml_kem_tests/9",
+      "suite": "nif_guard_tests/0",
       "selectors": [
-        "ml_kem_tests/decaps_rejects_invalid_secret_key_lengths"
+        "nif_guard_tests/stale_leader_is_not_stored"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "ml_kem_tests/10",
+      "suite": "nif_guard_tests/1",
       "selectors": [
-        "ml_kem_tests/fips203_sk_contains_pk_and_hash"
+        "nif_guard_tests/expired_cohort_is_not_stored"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "mod01_tests/0",
+      "suite": "nif_guard_tests/2",
       "selectors": [
-        "mod01_tests/id_text_aux_and_flag"
+        "nif_guard_tests/revoked_data_is_not_stored"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "mod01_tests/1",
+      "suite": "nif_guard_tests/3",
       "selectors": [
-        "mod01_tests/engines_private_slices_and_exact"
+        "nif_guard_tests/foreign_tenant_cache_is_not_stored"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "mod01_tests/2",
+      "suite": "nif_guard_tests/4",
       "selectors": [
-        "mod01_tests/every_known_id_release_stays_unqualified"
+        "nif_guard_tests/receipt_replay_does_not_add"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "mod01_tests/3",
+      "suite": "nif_guard_tests/5",
       "selectors": [
-        "mod01_tests/hosts_stay_one"
+        "nif_guard_tests/checkpoint_code_is_not_stored"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "model_trust_tests/0",
+      "suite": "nif_guard_tests/6",
       "selectors": [
-        "model_trust_tests/empty_channel_or_digest_is_field"
+        "nif_guard_tests/negative_rank_is_not_stored"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "model_trust_tests/1",
+      "suite": "nif_guard_tests/7",
       "selectors": [
-        "model_trust_tests/sequence_below_one_is_sequence"
+        "nif_guard_tests/spend_key_is_not_stored"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "model_trust_tests/2",
+      "suite": "nif_image_tests/0",
       "selectors": [
-        "model_trust_tests/first_attest_stores_sequence_and_digest"
+        "nif_image_tests/short_digest_is_digest"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "model_trust_tests/3",
+      "suite": "nif_image_tests/1",
       "selectors": [
-        "model_trust_tests/lower_sequence_is_rollback"
+        "nif_image_tests/equal_authorities_store_nothing"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "model_trust_tests/4",
+      "suite": "nif_image_tests/2",
       "selectors": [
-        "model_trust_tests/equal_sequence_different_digest_is_mismatch"
+        "nif_image_tests/two_digests_roll_back_to_the_first"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "model_trust_tests/5",
+      "suite": "nif_image_tests/3",
       "selectors": [
-        "model_trust_tests/same_sequence_and_digest_is_replay"
+        "nif_image_tests/download_leaves_startup_downloads_at_zero"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "model_trust_tests/6",
+      "suite": "nif_image_tests/4",
       "selectors": [
-        "model_trust_tests/higher_sequence_replaces_then_rollback_and_mismatch"
+        "nif_image_tests/execute_is_engine_absent"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "model_trust_tests/7",
+      "suite": "nif_island_tests/0",
       "selectors": [
-        "model_trust_tests/monetary_store_stays_false"
+        "nif_island_tests/unqualified_hardware_is_not_stored"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "native_discovery_tests/0",
+      "suite": "nif_island_tests/1",
       "selectors": [
-        "native_discovery_tests/canonical_packet_and_chain_isolation"
+        "nif_island_tests/measured_rtt_is_kept"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "native_discovery_tests/1",
+      "suite": "nif_island_tests/2",
       "selectors": [
-        "native_discovery_tests/no_rpc_metadata_public_or_hostname_hints"
+        "nif_island_tests/queue_cap_refuses_the_extra_byte"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "native_discovery_tests/2",
+      "suite": "nif_island_tests/3",
       "selectors": [
-        "native_discovery_tests/node_rpc_and_p2p_ports_are_never_hints_or_dials"
+        "nif_island_tests/rtt_5000_is_no_route"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "native_discovery_tests/3",
+      "suite": "nif_island_tests/4",
       "selectors": [
-        "native_discovery_tests/expiration_refresh_and_clock_reversal"
+        "nif_island_tests/prefill_and_decode_can_be_two_members"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "native_discovery_tests/4",
+      "suite": "nif_journal_tests/0",
       "selectors": [
-        "native_discovery_tests/global_and_per_source_bounds"
+        "nif_journal_tests/empty_fields_write_nothing"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "native_discovery_tests/5",
+      "suite": "nif_journal_tests/1",
       "selectors": [
-        "native_discovery_tests/malformed_nonce_padding_and_network"
+        "nif_journal_tests/journal_ok_false_writes_no_file"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "native_discovery_tests/6",
+      "suite": "nif_journal_tests/2",
       "selectors": [
-        "native_discovery_tests/automatic_policy_revocation_has_one_gate"
+        "nif_journal_tests/successful_write_then_replay_keeps_the_first_bytes"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "native_discovery_tests/7",
+      "suite": "nif_lifecycle_tests/0",
       "selectors": [
-        "native_discovery_tests/automatic_candidates_are_retained_chain_and_identity_observations"
+        "nif_lifecycle_tests/admit_stores_the_request"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "native_discovery_tests/8",
+      "suite": "nif_lifecycle_tests/1",
       "selectors": [
-        "native_discovery_tests/every_automatic_transport_requires_an_explicit_network_response"
+        "nif_lifecycle_tests/second_admit_is_replay"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_chunk_tests/0",
+      "suite": "nif_lifecycle_tests/2",
       "selectors": [
-        "nif_chunk_tests/authorize_chunks_against_the_bound_state"
+        "nif_lifecycle_tests/reload_reconstructs_the_record"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_chunk_tests/1",
+      "suite": "nif_lifecycle_tests/3",
       "selectors": [
-        "nif_chunk_tests/overflow_leaves_the_running_total"
+        "nif_lifecycle_tests/missing_journal_leaves_the_record_empty"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_chunk_tests/2",
+      "suite": "nif_lifecycle_tests/4",
       "selectors": [
-        "nif_chunk_tests/spend_before_bind_leaves_balance_zero"
+        "nif_lifecycle_tests/revocation_blocks_the_next_chunk"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_continue_tests/0",
+      "suite": "nif_lifecycle_tests/5",
       "selectors": [
-        "nif_continue_tests/exact_move_rejects_mismatch_and_remote"
+        "nif_lifecycle_tests/crash_leaves_validation_unaffected"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_cost_tests/0",
+      "suite": "nif_lifecycle_tests/6",
       "selectors": [
-        "nif_cost_tests/mean_10_uncertainty_5_fits_15_not_14"
+        "nif_lifecycle_tests/receipt_does_not_admit"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_cost_tests/1",
+      "suite": "nif_lifecycle_tests/7",
       "selectors": [
-        "nif_cost_tests/unqualified_device_stores_nothing"
+        "nif_lifecycle_tests/empty_attempt_stores_nothing"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_cost_tests/2",
+      "suite": "nif_manifest_tests/0",
       "selectors": [
-        "nif_cost_tests/second_estimate_keeps_10_and_5"
+        "nif_manifest_tests/two_pieces_in_order_then_seal"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_cost_tests/3",
+      "suite": "nif_manifest_tests/1",
       "selectors": [
-        "nif_cost_tests/empty_peer_and_negative_uncertainty_store_nothing"
+        "nif_manifest_tests/second_index_first_is_order"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_discover_tests/0",
+      "suite": "nif_manifest_tests/2",
       "selectors": [
-        "nif_discover_tests/multicast_hint_is_not_authority"
+        "nif_manifest_tests/changed_digest_is_altered"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_discover_tests/1",
+      "suite": "nif_manifest_tests/3",
       "selectors": [
-        "nif_discover_tests/unauthenticated_peer_is_auth"
+        "nif_manifest_tests/expiry_stores_nothing"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_discover_tests/2",
+      "suite": "nif_manifest_tests/4",
       "selectors": [
-        "nif_discover_tests/one_authenticated_local_peer_can_connect"
+        "nif_manifest_tests/producer_claim_is_not_a_compute_proof"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_discover_tests/3",
+      "suite": "nif_manifest_tests/5",
       "selectors": [
-        "nif_discover_tests/wan_is_no_route"
+        "nif_manifest_tests/rdma_is_engine_absent"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_discover_tests/4",
+      "suite": "nif_media_tests/0",
       "selectors": [
-        "nif_discover_tests/hosts_stay_one"
+        "nif_media_tests/unbound_acquire_is_purpose"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_drain_tests/0",
+      "suite": "nif_media_tests/1",
       "selectors": [
-        "nif_drain_tests/open_refusals_store_nothing"
+        "nif_media_tests/bad_purpose_stores_nothing_and_valid_bind_replaces"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_drain_tests/1",
+      "suite": "nif_media_tests/2",
       "selectors": [
-        "nif_drain_tests/replay_open_keeps_first_deadline"
+        "nif_media_tests/remote_download_writes_nothing"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_drain_tests/2",
+      "suite": "nif_media_tests/3",
       "selectors": [
-        "nif_drain_tests/hold_then_cancel_leaves_bytes"
+        "nif_media_tests/unauthorized_writes_nothing"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_drain_tests/3",
+      "suite": "nif_media_tests/4",
       "selectors": [
-        "nif_drain_tests/drain_before_deadline_returns_physical_to_zero"
+        "nif_media_tests/elf_and_pickle_write_nothing"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_drain_tests/4",
+      "suite": "nif_media_tests/5",
       "selectors": [
-        "nif_drain_tests/drain_at_deadline_is_expired"
+        "nif_media_tests/empty_id_is_media_and_one_local_body_is_stored"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_drain_tests/5",
+      "suite": "nif_media_tests/6",
       "selectors": [
-        "nif_drain_tests/release_before_drain_is_pinned"
+        "nif_media_tests/replay_keeps_the_first_body"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_drain_tests/6",
+      "suite": "nif_media_tests/7",
       "selectors": [
-        "nif_drain_tests/overflow_does_not_change_the_total"
+        "nif_media_tests/idle_flags_stay_closed"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_drain_tests/7",
+      "suite": "nif_memprof_tests/0",
       "selectors": [
-        "nif_drain_tests/idle_flags_stay_false"
+        "nif_memprof_tests/reserve_60_model_10_transient_further_40_is_capacity"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_egress_tests/0",
+      "suite": "nif_memprof_tests/1",
       "selectors": [
-        "nif_egress_tests/bad_scope_keeps_the_previous_scope"
+        "nif_memprof_tests/empty_bytes_order_and_overflow_store_nothing"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_egress_tests/1",
+      "suite": "nif_memprof_tests/2",
       "selectors": [
-        "nif_egress_tests/local_send_stores_three_bytes"
+        "nif_memprof_tests/release_subtracts_only_that_reservation"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_egress_tests/2",
+      "suite": "nif_observe_tests/0",
       "selectors": [
-        "nif_egress_tests/lan_exchange_reports_four_wire_bytes"
+        "nif_observe_tests/two_ticks_observe_one_admit_spend_stays_and_gpu_absent"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_egress_tests/3",
+      "suite": "nif_pages_tests/0",
       "selectors": [
-        "nif_egress_tests/peer_exchange_uses_the_same_wire"
+        "nif_pages_tests/window_position_page_and_absent_remote"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_egress_tests/4",
+      "suite": "nif_pay_tests/0",
       "selectors": [
-        "nif_egress_tests/wan_is_no_route_and_does_not_broaden_scope"
+        "nif_pay_tests/reserve_earns_once_and_settle_stays_unqualified"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_egress_tests/5",
+      "suite": "nif_pqpeer_tests/0",
       "selectors": [
-        "nif_egress_tests/scan_is_not_scan"
+        "nif_pqpeer_tests/empty_peer_stores_nothing"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "nif_egress_tests/6",
+      "suite": "nif_pqpeer_tests/1",
       "selectors": [
-        "nif_egress_tests/airgap_blocks_a_later_lan_send"
+        "nif_pqpeer_tests/bad_key_length_stores_nothing"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_pqpeer_tests/2",
+      "selectors": [
+        "nif_pqpeer_tests/multicast_valid_signature_is_hint_not_authority"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_pqpeer_tests/3",
+      "selectors": [
+        "nif_pqpeer_tests/generated_signature_authenticates_one_peer"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_pqpeer_tests/4",
+      "selectors": [
+        "nif_pqpeer_tests/bad_signature_is_auth_and_stores_nothing"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_pqpeer_tests/5",
+      "selectors": [
+        "nif_pqpeer_tests/replay_keeps_first_authenticated_peer"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_pqpeer_tests/6",
+      "selectors": [
+        "nif_pqpeer_tests/two_authenticated_peers_keep_one_host"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_pqpeer_tests/7",
+      "selectors": [
+        "nif_pqpeer_tests/connect_once_then_replay"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_pqpeer_tests/8",
+      "selectors": [
+        "nif_pqpeer_tests/wan_and_scan_refuse"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_pqpeer_tests/9",
+      "selectors": [
+        "nif_pqpeer_tests/idle_flags_stay_false"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_reqbind_tests/0",
+      "selectors": [
+        "nif_reqbind_tests/bind_keeps_the_first_attempt"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_sandbox_tests/0",
+      "selectors": [
+        "nif_sandbox_tests/root_path_egress_download_elf_and_child_limit"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_sandbox_tests/1",
+      "selectors": [
+        "nif_sandbox_tests/reparse_point_under_the_root_is_refused"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_scope_tests/0",
+      "selectors": [
+        "nif_scope_tests/local_copy_lan_exchange_wan_and_beacon"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_status_tests/0",
+      "selectors": [
+        "nif_status_tests/component_record_does_not_qualify_release"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_status_tests/1",
+      "selectors": [
+        "nif_status_tests/hardware_record_leaves_hardware_unqualified"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_status_tests/2",
+      "selectors": [
+        "nif_status_tests/release_is_unqualified"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_status_tests/3",
+      "selectors": [
+        "nif_status_tests/duplicate_component_name_does_not_double_the_count"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_status_tests/4",
+      "selectors": [
+        "nif_status_tests/unknown_kind_is_class_and_empty_name_is_name"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_status_tests/5",
+      "selectors": [
+        "nif_status_tests/promote_is_unqualified"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_status_tests/6",
+      "selectors": [
+        "nif_status_tests/classes_stay_separate"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_text_tests/0",
+      "selectors": [
+        "nif_text_tests/id_one_is_special"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_text_tests/1",
+      "selectors": [
+        "nif_text_tests/eos_text_is_lookalike_and_not_id_one"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_text_tests/2",
+      "selectors": [
+        "nif_text_tests/empty_text_is_text_other_text_appends"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_text_tests/3",
+      "selectors": [
+        "nif_text_tests/lone_lead_and_leading_continuation_are_boundary"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_text_tests/4",
+      "selectors": [
+        "nif_text_tests/eacute_commits_two_incomplete_does_not_add_again"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_text_tests/5",
+      "selectors": [
+        "nif_text_tests/split_mid_codepoint_does_not_grow"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_token_tests/0",
+      "selectors": [
+        "nif_token_tests/empty_grammar_stores_nothing"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_token_tests/1",
+      "selectors": [
+        "nif_token_tests/sampler_mismatch_is_compat"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_token_tests/2",
+      "selectors": [
+        "nif_token_tests/matching_triple_continues_once"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_token_tests/3",
+      "selectors": [
+        "nif_token_tests/second_match_is_replay"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "nif_token_tests/4",
+      "selectors": [
+        "nif_token_tests/remote_rdma_is_engine_absent"
       ],
       "expected_cases": 1,
       "lane": "other",
@@ -544,69 +814,99 @@
     }
   ],
   "all_enabled_cases": [
-    "ml_kem_tests/keygen_produces_correct_sizes",
-    "ml_kem_tests/keygen_produces_different_keys_each_call",
-    "ml_kem_tests/deterministic_keygen_from_seed",
-    "ml_kem_tests/encapsulation_key_check_preserves_generated_keys",
-    "ml_kem_tests/encapsulation_key_check_does_not_restrict_seed",
-    "ml_kem_tests/encapsulation_key_check_range_and_position",
-    "ml_kem_tests/encaps_decaps_roundtrip",
-    "ml_kem_tests/decaps_with_wrong_sk_produces_different_secret",
-    "ml_kem_tests/decaps_altered_ciphertext_retains_implicit_rejection",
-    "ml_kem_tests/decaps_rejects_invalid_secret_key_lengths",
-    "ml_kem_tests/fips203_sk_contains_pk_and_hash",
-    "mod01_tests/id_text_aux_and_flag",
-    "mod01_tests/engines_private_slices_and_exact",
-    "mod01_tests/every_known_id_release_stays_unqualified",
-    "mod01_tests/hosts_stay_one",
-    "model_trust_tests/empty_channel_or_digest_is_field",
-    "model_trust_tests/sequence_below_one_is_sequence",
-    "model_trust_tests/first_attest_stores_sequence_and_digest",
-    "model_trust_tests/lower_sequence_is_rollback",
-    "model_trust_tests/equal_sequence_different_digest_is_mismatch",
-    "model_trust_tests/same_sequence_and_digest_is_replay",
-    "model_trust_tests/higher_sequence_replaces_then_rollback_and_mismatch",
-    "model_trust_tests/monetary_store_stays_false",
-    "native_discovery_tests/canonical_packet_and_chain_isolation",
-    "native_discovery_tests/no_rpc_metadata_public_or_hostname_hints",
-    "native_discovery_tests/node_rpc_and_p2p_ports_are_never_hints_or_dials",
-    "native_discovery_tests/expiration_refresh_and_clock_reversal",
-    "native_discovery_tests/global_and_per_source_bounds",
-    "native_discovery_tests/malformed_nonce_padding_and_network",
-    "native_discovery_tests/automatic_policy_revocation_has_one_gate",
-    "native_discovery_tests/automatic_candidates_are_retained_chain_and_identity_observations",
-    "native_discovery_tests/every_automatic_transport_requires_an_explicit_network_response",
-    "nif_chunk_tests/authorize_chunks_against_the_bound_state",
-    "nif_chunk_tests/overflow_leaves_the_running_total",
-    "nif_chunk_tests/spend_before_bind_leaves_balance_zero",
-    "nif_continue_tests/exact_move_rejects_mismatch_and_remote",
-    "nif_cost_tests/mean_10_uncertainty_5_fits_15_not_14",
-    "nif_cost_tests/unqualified_device_stores_nothing",
-    "nif_cost_tests/second_estimate_keeps_10_and_5",
-    "nif_cost_tests/empty_peer_and_negative_uncertainty_store_nothing",
-    "nif_discover_tests/multicast_hint_is_not_authority",
-    "nif_discover_tests/unauthenticated_peer_is_auth",
-    "nif_discover_tests/one_authenticated_local_peer_can_connect",
-    "nif_discover_tests/wan_is_no_route",
-    "nif_discover_tests/hosts_stay_one",
-    "nif_drain_tests/open_refusals_store_nothing",
-    "nif_drain_tests/replay_open_keeps_first_deadline",
-    "nif_drain_tests/hold_then_cancel_leaves_bytes",
-    "nif_drain_tests/drain_before_deadline_returns_physical_to_zero",
-    "nif_drain_tests/drain_at_deadline_is_expired",
-    "nif_drain_tests/release_before_drain_is_pinned",
-    "nif_drain_tests/overflow_does_not_change_the_total",
-    "nif_drain_tests/idle_flags_stay_false",
-    "nif_egress_tests/bad_scope_keeps_the_previous_scope",
-    "nif_egress_tests/local_send_stores_three_bytes",
-    "nif_egress_tests/lan_exchange_reports_four_wire_bytes",
-    "nif_egress_tests/peer_exchange_uses_the_same_wire",
-    "nif_egress_tests/wan_is_no_route_and_does_not_broaden_scope",
-    "nif_egress_tests/scan_is_not_scan",
-    "nif_egress_tests/airgap_blocks_a_later_lan_send"
+    "nif_exec_tests/memory_batch_respects_scope_cap_and_cancel",
+    "nif_fork_tests/reserve_refusals_store_nothing",
+    "nif_fork_tests/reserve_past_capacity_keeps_used",
+    "nif_fork_tests/pinned_release_does_not_free",
+    "nif_fork_tests/two_devices_are_hardware",
+    "nif_fork_tests/vendor_execute_is_absent",
+    "nif_gate_tests/bad_kind_and_empty_name_store_nothing",
+    "nif_gate_tests/unlinked_rdma_is_absent_and_does_not_pass",
+    "nif_gate_tests/five_linked_kinds_remain_unqualified",
+    "nif_guard_tests/stale_leader_is_not_stored",
+    "nif_guard_tests/expired_cohort_is_not_stored",
+    "nif_guard_tests/revoked_data_is_not_stored",
+    "nif_guard_tests/foreign_tenant_cache_is_not_stored",
+    "nif_guard_tests/receipt_replay_does_not_add",
+    "nif_guard_tests/checkpoint_code_is_not_stored",
+    "nif_guard_tests/negative_rank_is_not_stored",
+    "nif_guard_tests/spend_key_is_not_stored",
+    "nif_image_tests/short_digest_is_digest",
+    "nif_image_tests/equal_authorities_store_nothing",
+    "nif_image_tests/two_digests_roll_back_to_the_first",
+    "nif_image_tests/download_leaves_startup_downloads_at_zero",
+    "nif_image_tests/execute_is_engine_absent",
+    "nif_island_tests/unqualified_hardware_is_not_stored",
+    "nif_island_tests/measured_rtt_is_kept",
+    "nif_island_tests/queue_cap_refuses_the_extra_byte",
+    "nif_island_tests/rtt_5000_is_no_route",
+    "nif_island_tests/prefill_and_decode_can_be_two_members",
+    "nif_journal_tests/empty_fields_write_nothing",
+    "nif_journal_tests/journal_ok_false_writes_no_file",
+    "nif_journal_tests/successful_write_then_replay_keeps_the_first_bytes",
+    "nif_lifecycle_tests/admit_stores_the_request",
+    "nif_lifecycle_tests/second_admit_is_replay",
+    "nif_lifecycle_tests/reload_reconstructs_the_record",
+    "nif_lifecycle_tests/missing_journal_leaves_the_record_empty",
+    "nif_lifecycle_tests/revocation_blocks_the_next_chunk",
+    "nif_lifecycle_tests/crash_leaves_validation_unaffected",
+    "nif_lifecycle_tests/receipt_does_not_admit",
+    "nif_lifecycle_tests/empty_attempt_stores_nothing",
+    "nif_manifest_tests/two_pieces_in_order_then_seal",
+    "nif_manifest_tests/second_index_first_is_order",
+    "nif_manifest_tests/changed_digest_is_altered",
+    "nif_manifest_tests/expiry_stores_nothing",
+    "nif_manifest_tests/producer_claim_is_not_a_compute_proof",
+    "nif_manifest_tests/rdma_is_engine_absent",
+    "nif_media_tests/unbound_acquire_is_purpose",
+    "nif_media_tests/bad_purpose_stores_nothing_and_valid_bind_replaces",
+    "nif_media_tests/remote_download_writes_nothing",
+    "nif_media_tests/unauthorized_writes_nothing",
+    "nif_media_tests/elf_and_pickle_write_nothing",
+    "nif_media_tests/empty_id_is_media_and_one_local_body_is_stored",
+    "nif_media_tests/replay_keeps_the_first_body",
+    "nif_media_tests/idle_flags_stay_closed",
+    "nif_memprof_tests/reserve_60_model_10_transient_further_40_is_capacity",
+    "nif_memprof_tests/empty_bytes_order_and_overflow_store_nothing",
+    "nif_memprof_tests/release_subtracts_only_that_reservation",
+    "nif_observe_tests/two_ticks_observe_one_admit_spend_stays_and_gpu_absent",
+    "nif_pages_tests/window_position_page_and_absent_remote",
+    "nif_pay_tests/reserve_earns_once_and_settle_stays_unqualified",
+    "nif_pqpeer_tests/empty_peer_stores_nothing",
+    "nif_pqpeer_tests/bad_key_length_stores_nothing",
+    "nif_pqpeer_tests/multicast_valid_signature_is_hint_not_authority",
+    "nif_pqpeer_tests/generated_signature_authenticates_one_peer",
+    "nif_pqpeer_tests/bad_signature_is_auth_and_stores_nothing",
+    "nif_pqpeer_tests/replay_keeps_first_authenticated_peer",
+    "nif_pqpeer_tests/two_authenticated_peers_keep_one_host",
+    "nif_pqpeer_tests/connect_once_then_replay",
+    "nif_pqpeer_tests/wan_and_scan_refuse",
+    "nif_pqpeer_tests/idle_flags_stay_false",
+    "nif_reqbind_tests/bind_keeps_the_first_attempt",
+    "nif_sandbox_tests/root_path_egress_download_elf_and_child_limit",
+    "nif_sandbox_tests/reparse_point_under_the_root_is_refused",
+    "nif_scope_tests/local_copy_lan_exchange_wan_and_beacon",
+    "nif_status_tests/component_record_does_not_qualify_release",
+    "nif_status_tests/hardware_record_leaves_hardware_unqualified",
+    "nif_status_tests/release_is_unqualified",
+    "nif_status_tests/duplicate_component_name_does_not_double_the_count",
+    "nif_status_tests/unknown_kind_is_class_and_empty_name_is_name",
+    "nif_status_tests/promote_is_unqualified",
+    "nif_status_tests/classes_stay_separate",
+    "nif_text_tests/id_one_is_special",
+    "nif_text_tests/eos_text_is_lookalike_and_not_id_one",
+    "nif_text_tests/empty_text_is_text_other_text_appends",
+    "nif_text_tests/lone_lead_and_leading_continuation_are_boundary",
+    "nif_text_tests/eacute_commits_two_incomplete_does_not_add_again",
+    "nif_text_tests/split_mid_codepoint_does_not_grow",
+    "nif_token_tests/empty_grammar_stores_nothing",
+    "nif_token_tests/sampler_mismatch_is_compat",
+    "nif_token_tests/matching_triple_continues_once",
+    "nif_token_tests/second_match_is_replay",
+    "nif_token_tests/remote_rdma_is_engine_absent"
   ],
   "campaign_test_budget_seconds": 1800,
   "batch_budget_seconds": 480,
-  "require_first_pass_control": true,
-  "scope": "60 previously never-selected crypto/trust/discovery/NIF unit cases; unchanged saved binary"
+  "require_first_pass_control": false,
+  "scope": "90 previously never-selected NIF maintained cases; unchanged saved binary"
 }

@@ -182,7 +182,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Verify saved binary and 60 never-selected cases
+    - name: Verify saved binary and 90 never-selected cases
       id: ready
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -206,7 +206,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Run 60 new discovery and NIF cases
+    - name: Run 90 new NIF cases
       id: units
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
