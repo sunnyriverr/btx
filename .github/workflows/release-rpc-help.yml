@@ -1,57 +1,50 @@
-name: First bounded serial Mac compile chunk
+name: Verify actual Mac partial checkpoint and resource tracker
 on:
   push:
-    branches: [codex/ci-mac-compile-chunk]
+    branches: [codex/ci-mac-checkpoint-restore]
 permissions:
   contents: read
+  actions: read
 jobs:
-  chunk:
+  restore:
     runs-on: macos-15
-    timeout-minutes: 75
+    timeout-minutes: 50
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
           sparse-checkout-cone-mode: false
-          sparse-checkout: /contrib/devtools/mac-chunk/
+          sparse-checkout: /contrib/devtools/mac-restore/
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: btxchain/btx
           ref: ff5f3f04ea11f044594987fc6be043ff68b136ad
           path: product
           persist-credentials: false
-      - name: Recreate admitted C++ configuration only
+      - name: Prove cross-group resource tracking and cleanup
+        timeout-minutes: 2
+        run: |
+          mkdir -p restore-records
+          python3 contrib/devtools/mac-restore/test_tracker.py > restore-records/native-tracker-result.json
+      - name: Recreate exact admitted prerequisites and configuration without BTX compilation
         timeout-minutes: 30
-        run: python3 contrib/devtools/mac-chunk/configure.py
-      - name: Validate real-tree checkpoint then run serial resource-bounded chunk
-        timeout-minutes: 30
-        run: python3 contrib/devtools/mac-chunk/chunk.py
-      - name: Preserve available executable outputs independently
-        if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        run: python3 contrib/devtools/mac-restore/configure.py
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        timeout-minutes: 5
         with:
-          name: mac-chunk-binaries
-          path: chunk-binaries
-          compression-level: 0
-          retention-days: 14
-      - name: Preserve last valid source/build checkpoint
+          artifact-ids: 13616621067
+          run-id: 42476421106
+          github-token: ${{ github.token }}
+          path: restore-payload
+          merge-multiple: true
+      - name: Verify actual saved files and inspect remaining Ninja work without compiling
+        timeout-minutes: 10
+        run: python3 contrib/devtools/mac-restore/restore.py
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
-          name: mac-chunk-checkpoint
+          name: mac-actual-checkpoint-restore-records
           path: |
-            chunk-checkpoint/baseline
-            chunk-checkpoint/after
-            chunk-checkpoint/selected.json
-            chunk-checkpoint/result.json
-          compression-level: 0
-          retention-days: 14
-      - name: Preserve measurements and all failure records
-        if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
-        with:
-          name: mac-chunk-records
-          path: |
+            restore-records
             mac-config-records
-            chunk-records
           retention-days: 14
