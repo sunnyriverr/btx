@@ -1,4 +1,4 @@
-name: Native Windows larger pending Swarm batch 03
+name: Native Windows larger pending Swarm utilities attestation
 permissions:
   contents: read
 jobs:
@@ -166,7 +166,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Verify saved binary and 753 never-selected cases
+    - name: Verify saved binary and 132 never-selected cases
       id: ready
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -188,7 +188,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Run 753 new cases in 38 groups
+    - name: Run 132 new cases in 14 groups
       id: units
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
