@@ -239,7 +239,7 @@ class PackageReleaseArchiveTest(unittest.TestCase):
                                     ("btx-qt", "extern int qt_value(void); int main(void) { return qt_value()==21 ? 0 : 3; }\n", qt.name)):
                 c = root / (name + ".c");c.write_text(code)
                 subprocess.run(["cc", str(c), "-L" + str(buildlib), "-l:" + dep,
-                                "-Wl,-rpath,$ORIGIN/buildlib", "-Wl,-rpath-link," + str(buildlib),
+                                "-Wl,-rpath," + (str(buildlib) if name == "btx-qt" else "$ORIGIN/buildlib"), "-Wl,-rpath-link," + str(buildlib),
                                 "-o", str(root / name)], check=True)
             # Text daemon/CLI fixtures have no ELF dependencies. Do not fake the Qt/guard graphs.
             actual_ldd, actual_needed = bundle._ldd_map, getattr(bundle, "_needed", lambda path: set())
@@ -254,12 +254,12 @@ class PackageReleaseArchiveTest(unittest.TestCase):
             self.assertTrue(guard.samefile(staged / "libexec/btx-guardd.real"))
             for name in ("libbtxshared.so.1", "libbtxsharedchild.so.1"):
                 self.assertTrue((staged / "lib" / name).is_file())
-            self.assertTrue((staged / "lib/qt-private/libbtxprivate.so.1").is_file())
-            self.assertFalse((staged / "lib/libbtxprivate.so.1").exists())
             clean_env = {k: v for k, v in os.environ.items() if not k.startswith("LD_")}
             for binary in (guard, staged / "libexec/btx-qt.real"):
                 result = subprocess.run([str(binary)], env=clean_env, capture_output=True, timeout=5)
                 self.assertEqual(result.returncode, 0, result.stderr.decode(errors="replace"))
+            self.assertTrue((staged / "lib/qt-private/libbtxprivate.so.1").is_file())
+            self.assertFalse((staged / "lib/libbtxprivate.so.1").exists())
             archive = root / "guard.tar.gz"
             self.module.write_tar_gz(archive, staged)
             with tarfile.open(archive) as tar:

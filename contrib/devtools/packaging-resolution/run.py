@@ -49,7 +49,10 @@ try:
  regressions=['BundleQtGuiTest.test_direct_private_dependency_survives_host_branch_cut','PackageReleaseArchiveTest.test_direct_guard_and_qt_keep_shared_and_private_dependencies']
  s['unit_before']={}
  for n,name in enumerate(regressions):
-  r=run([sys.executable,baseline/test,name],f'unit-before-{n}',limit=90);assert r.returncode!=0;s['unit_before'][name]=r.returncode
+  r=run([sys.executable,baseline/test,name],f'unit-before-{n}',limit=90);assert r.returncode!=0
+  expected='libhost_only.so.1' if n==0 else 'libbtxshared.so.1'
+  assert expected in r.stdout and 'FAIL:' in r.stdout and 'ERROR:' not in r.stdout, 'Wrong baseline failure: '+r.stdout[-1500:]
+  s['unit_before'][name]={'exit':r.returncode,'expected_failure':expected}
  r=run([sys.executable,source/test],'unit-after-full',limit=120);assert r.returncode==0 and 'skipped=' not in r.stdout
  s['unit_after_full_pass']=True
  # Prefix-only mutant must not let flattened ldd leak host-owned descendants back into the Qt bundle.
@@ -156,6 +159,13 @@ try:
  assert gate(fresh_tar,'gate-fresh-source-output').returncode==0
  assert run([fresh/'libexec/btx-guardd','--stdio'],'guard-fresh-stage-direct',input='',limit=10).returncode==0
  s['fresh_source_stage_gate_pass']=True
+ s['fresh_loader']={}
+ fresh_wrapper=dict(clean,LD_LIBRARY_PATH=str(fresh/'lib/qt-private')+':'+str(fresh/'lib'))
+ for label,env in [('clean',clean),('wrapper',fresh_wrapper)]:
+  s['fresh_loader'][label]={}
+  for name,path in [('qt',fresh/'libexec/btx-qt.real'),('plugin',fresh/'lib/qt-private/qt6/plugins/platforms/libqxcb.so')]:
+   s['fresh_loader'][label][name]=resolve(path,'fresh-loader-'+label+'-'+name,env)
+
  s['corrected_archive_sha256']=sha(corrected);s['fresh_source_archive_sha256']=sha(fresh_tar)
  s['node_openssl_atlas_unchanged']=True;s['prior_gui_evidence_reused']={'run':42458568275,'package_input':sha(bad),'scope':'Atlas bytes, wrapper and shared root libraries unchanged. Qt closure newly loader-qualified only; no GUI repeat.'}
  assert sha(checker)==s['checker_sha256'];s['complete']=True
