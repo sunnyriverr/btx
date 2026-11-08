@@ -1,0 +1,469 @@
+
+
+
+
+
+2026-11-08T00:31:34.141430Z [init] [common/init.cpp:72] [std::optional<common::ConfigError> common::InitConfig(ArgsManager&, SettingsAbortFn)] [warning] Data directory "/home/runner/work/btx/btx/packaged-transfer-runtime/case/node2" contains a legacy "bitcoin.conf" but no "btx.conf". The default configuration filename has changed to "btx.conf". Please rename "bitcoin.conf" to "btx.conf" to ensure your settings are applied.
+2026-11-08T00:31:34.141504Z [init] [init/common.cpp:161] [void init::LogPackageVersion()] BTX version v0.34.16 (release build)
+2026-11-08T00:31:34.141534Z [init] [init.cpp:1186] [void InitParameterInteraction(ArgsManager&)] parameter interaction: -bind set -> setting -listen=1
+2026-11-08T00:31:34.141602Z [init] [init.cpp:1618] [bool AppInitParameterInteraction(const ArgsManager&)] regtest: -matmulvalidation=consensus requires ExactReplay before activation after the profile height. A CPU-only local test can set -matmulvalidation=economic. Transaction and script validation are unchanged.
+2026-11-08T00:31:34.141613Z [init] [init.cpp:1980] [bool AppInitParameterInteraction(const ArgsManager&)] This consensus node has no -matmultrustedpubkey/-matmultrustedpqpubkey. getmatmultrustedstatus reports configured=false and getmatmulattestedtip is empty, so the node cannot see or follow the attested tip. Mining/submit nodes should set -matmultrustedpubkey or -matmultrustedpqpubkey to the signer key(s) and -matmultrustedthreshold (ExactReplay is unchanged).
+2026-11-08T00:31:34.141619Z [init] [init.cpp:2015] [bool AppInitParameterInteraction(const ArgsManager&)] MatMul RC portable CPU mismatch confirmation: disabled (qualified device authority)
+2026-11-08T00:31:34.141621Z [init] [init.cpp:2039] [bool AppInitParameterInteraction(const ArgsManager&)] MatMul accelerator request: cpu (default)
+2026-11-08T00:31:34.141689Z [init] [kernel/context.cpp:20] [kernel::Context::Context()::<lambda()>] Using the 'x86_shani(1way;2way)' SHA256 implementation
+2026-11-08T00:31:34.242600Z [init] [random.cpp:111] [void {anonymous}::ReportHardwareRand()] Using RdSeed as an additional entropy source
+2026-11-08T00:31:34.242602Z [init] [random.cpp:114] [void {anonymous}::ReportHardwareRand()] Using RdRand as an additional entropy source
+2026-11-08T00:31:34.244013Z [init] [init/common.cpp:120] [bool init::StartLogging(const ArgsManager&)] Default data directory /home/runner/.btx
+2026-11-08T00:31:34.244016Z [init] [init/common.cpp:121] [bool init::StartLogging(const ArgsManager&)] Using data directory /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest
+2026-11-08T00:31:34.244023Z [init] [init/common.cpp:130] [bool init::StartLogging(const ArgsManager&)] Config file: /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/bitcoin.conf
+2026-11-08T00:31:34.244030Z [init] [init/common.cpp:144] [bool init::StartLogging(const ArgsManager&)] R/W Config file: /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/btx_rw.conf (not found, skipping)
+2026-11-08T00:31:34.244040Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: regtest="1"
+2026-11-08T00:31:34.244045Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: [regtest] bind="127.0.0.1"
+2026-11-08T00:31:34.244049Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: [regtest] connect="0"
+2026-11-08T00:31:34.244053Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: [regtest] deprecatedrpc="create_bdb"
+2026-11-08T00:31:34.244055Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: [regtest] discover="0"
+2026-11-08T00:31:34.244062Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: [regtest] dnsseed="0"
+2026-11-08T00:31:34.244064Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: [regtest] fallbackfee="0.0002"
+2026-11-08T00:31:34.244067Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: [regtest] fixedseeds="0"
+2026-11-08T00:31:34.244070Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: [regtest] keypool="1"
+2026-11-08T00:31:34.244073Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: [regtest] listenonion="0"
+2026-11-08T00:31:34.244076Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: [regtest] maxconnections="94"
+2026-11-08T00:31:34.244079Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: [regtest] modelbind="0"
+2026-11-08T00:31:34.244081Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: [regtest] natpmp="0"
+2026-11-08T00:31:34.244084Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: [regtest] peertimeout="999999999"
+2026-11-08T00:31:34.244087Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: [regtest] port="13171"
+2026-11-08T00:31:34.244090Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: [regtest] printtoconsole="0"
+2026-11-08T00:31:34.244096Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: [regtest] rpcdoccheck="1"
+2026-11-08T00:31:34.244099Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: [regtest] rpcport="18171"
+2026-11-08T00:31:34.244102Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: [regtest] rpcservertimeout="99000"
+2026-11-08T00:31:34.244105Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: [regtest] server="1"
+2026-11-08T00:31:34.244108Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: [regtest] shrinkdebugfile="0"
+2026-11-08T00:31:34.244114Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: [regtest] unsafesqlitesync="1"
+2026-11-08T00:31:34.244118Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Config file arg: [regtest] upnp="0"
+2026-11-08T00:31:34.244121Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Command-line arg: conf="/home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/bitcoin.conf"
+2026-11-08T00:31:34.244123Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Command-line arg: corepolicy=""
+2026-11-08T00:31:34.244126Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Command-line arg: datadir="/home/runner/work/btx/btx/packaged-transfer-runtime/case/node2"
+2026-11-08T00:31:34.244130Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Command-line arg: debug=""
+2026-11-08T00:31:34.244133Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Command-line arg: debugexclude="libevent"
+2026-11-08T00:31:34.244135Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Command-line arg: debugexclude="leveldb"
+2026-11-08T00:31:34.244137Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Command-line arg: debugexclude="rand"
+2026-11-08T00:31:34.244140Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Command-line arg: disablewallet=""
+2026-11-08T00:31:34.244143Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Command-line arg: loglevel="trace"
+2026-11-08T00:31:34.244146Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Command-line arg: logratelimit=false
+2026-11-08T00:31:34.244148Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Command-line arg: logsourcelocations=""
+2026-11-08T00:31:34.244151Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Command-line arg: logthreadnames=""
+2026-11-08T00:31:34.244153Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Command-line arg: logtimemicros=""
+2026-11-08T00:31:34.244156Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Command-line arg: modelbind="0.0.0.0:59445"
+2026-11-08T00:31:34.244161Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Command-line arg: modeldir="/home/runner/work/btx/btx/packaged-transfer-runtime/case/models-2"
+2026-11-08T00:31:34.244163Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Command-line arg: modellandiscovery="1"
+2026-11-08T00:31:34.244165Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Command-line arg: onlynet="ipv4"
+2026-11-08T00:31:34.244168Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Command-line arg: regtestmatmulltsealaspow="0"
+2026-11-08T00:31:34.244171Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Command-line arg: softwareexpiry="0"
+2026-11-08T00:31:34.244173Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Command-line arg: uacomment="testnode2"
+2026-11-08T00:31:34.244176Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Command-line arg: v2transport="0"
+2026-11-08T00:31:34.244179Z [init] [common/args.cpp:1032] [void ArgsManager::logArgsPrefix(const std::string&, const std::string&, const std::map<std::__cxx11::basic_string<char>, std::vector<UniValue> >&) const] Command-line arg: walletimplicitsegwit=""
+2026-11-08T00:31:34.244188Z [init] [init.cpp:2792] [bool InitializeMatMulRCReadinessPostDaemon(const ArgsManager&, const CChainParams&)] MatMul RC execution policy: auto-fallback provider=toy-rc ready=1 reason=toy-dimensions workspace_required=0 workspace_capacity=0 allow_unverifiable_catchup=0
+2026-11-08T00:31:34.244196Z [init] [init.cpp:3075] [bool AppInitMain(node::NodeContext&, interfaces::BlockAndHeaderTipInfo*)] Using at most 94 automatic connections (65536 file descriptors available)
+2026-11-08T00:31:34.244266Z [init] [init.cpp:3164] [bool AppInitMain(node::NodeContext&, interfaces::BlockAndHeaderTipInfo*)] Log rate limiting disabled
+2026-11-08T00:31:34.244271Z [init] [wallet/init.cpp:166] [virtual void wallet::WalletInit::Construct(node::NodeContext&) const] Wallet disabled!
+2026-11-08T00:31:34.246824Z [scheduler] [util/thread.cpp:20] [void util::TraceThread(std::string_view, std::function<void()>)] scheduler thread start
+2026-11-08T00:31:34.250888Z [init] [httpserver.cpp:245] [bool InitHTTPAllowList()] [http] Allowing HTTP connections from: 127.0.0.0/8 ::1/128 
+2026-11-08T00:31:34.250946Z [init] [httpserver.cpp:500] [bool HTTPBindAddresses(evhttp*)] Binding RPC on address ::1 port 18171
+2026-11-08T00:31:34.251059Z [init] [httpserver.cpp:500] [bool HTTPBindAddresses(evhttp*)] Binding RPC on address 127.0.0.1 port 18171
+2026-11-08T00:31:34.251102Z [init] [httpserver.cpp:603] [bool InitHTTPServer(const util::SignalInterrupt&)] [http] Initialized HTTP server
+2026-11-08T00:31:34.251107Z [init] [httpserver.cpp:605] [bool InitHTTPServer(const util::SignalInterrupt&)] [http] creating work queue of depth 256
+2026-11-08T00:31:34.251112Z [init] [httpserver.cpp:611] [bool InitHTTPServer(const util::SignalInterrupt&)] [http] creating control work queue of depth 32
+2026-11-08T00:31:34.251116Z [init] [rpc/server.cpp:352] [void StartRPC()] [rpc] Starting RPC
+2026-11-08T00:31:34.251129Z [init] [httprpc.cpp:440] [bool StartHTTPRPC(const std::any&)] [rpc] Starting HTTP RPC server
+2026-11-08T00:31:34.251412Z [init] [rpc/request.cpp:153] [AuthCookieResult GenerateAuthCookie(const std::pair<std::optional<std::filesystem::perms>, bool>&, std::string&, std::string&)] Generated RPC authentication cookie /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/.cookie
+2026-11-08T00:31:34.251424Z [init] [rpc/request.cpp:154] [AuthCookieResult GenerateAuthCookie(const std::pair<std::optional<std::filesystem::perms>, bool>&, std::string&, std::string&)] Permissions used for cookie: rw-------
+2026-11-08T00:31:34.251429Z [init] [httprpc.cpp:323] [bool InitRPCAuthentication()] Using random cookie authentication.
+2026-11-08T00:31:34.251443Z [init] [httpserver.cpp:917] [void RegisterHTTPHandler(const std::string&, bool, const HTTPRequestHandler&)] [http] Registering HTTP handler for / (exactmatch 1)
+2026-11-08T00:31:34.251450Z [init] [httpserver.cpp:917] [void RegisterHTTPHandler(const std::string&, bool, const HTTPRequestHandler&)] [http] Registering HTTP handler for /btx-model/3/ (exactmatch 0)
+2026-11-08T00:31:34.251454Z [init] [httpserver.cpp:917] [void RegisterHTTPHandler(const std::string&, bool, const HTTPRequestHandler&)] [http] Registering HTTP handler for /wallet/ (exactmatch 0)
+2026-11-08T00:31:34.251460Z [init] [httpserver.cpp:632] [void StartHTTPServer()] Starting HTTP server with 16 worker threads plus 1 control thread
+2026-11-08T00:31:34.251556Z [http] [httpserver.cpp:375] [void ThreadHTTP(event_base*)] [http] Entering http event loop
+2026-11-08T00:31:34.251941Z [init] [init.cpp:3280] [bool AppInitMain(node::NodeContext&, interfaces::BlockAndHeaderTipInfo*)] Using /16 prefix for IP bucketing
+2026-11-08T00:31:34.251953Z [init] [noui.cpp:57] [void noui_InitMessage(const std::string&)] init message: Loading P2P addresses…
+2026-11-08T00:31:34.252699Z [init] [addrdb.cpp:211] [util::Result<std::unique_ptr<AddrMan> > LoadAddrman(const NetGroupManager&, const ArgsManager&)] Creating peers.dat because the file was not found ("/home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/peers.dat")
+2026-11-08T00:31:34.253520Z [init] [noui.cpp:57] [void noui_InitMessage(const std::string&)] init message: Loading banlist…
+2026-11-08T00:31:34.253537Z [init] [banman.cpp:93] [void BanMan::LoadBanlist()] Recreating the banlist database
+2026-11-08T00:31:34.253578Z [init] [banman.cpp:119] [void BanMan::DumpBanlist()] [net] Flushed 0 banned node addresses/subnets to disk  0ms
+2026-11-08T00:31:34.253587Z [init] [net.cpp:2826] [void CConnman::SetTryNewOutboundPeer(bool)] [net] setting try another outbound peer=false
+2026-11-08T00:31:34.253595Z [init] [net.cpp:3839] [void CConnman::SetNetworkActive(bool)] SetNetworkActive: true
+2026-11-08T00:31:34.253983Z [init] [policy/fees.cpp:562] [CBlockPolicyEstimator::CBlockPolicyEstimator(const fs::path&, bool)] /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/fee_estimates.dat is not found. Continue anyway.
+2026-11-08T00:31:34.254023Z [init] [init.cpp:3519] [bool AppInitMain(node::NodeContext&, interfaces::BlockAndHeaderTipInfo*)] Cache configuration:
+2026-11-08T00:31:34.254032Z [init] [init.cpp:3520] [bool AppInitMain(node::NodeContext&, interfaces::BlockAndHeaderTipInfo*)] * Using 2.0 MiB for block index database
+2026-11-08T00:31:34.254037Z [init] [init.cpp:3528] [bool AppInitMain(node::NodeContext&, interfaces::BlockAndHeaderTipInfo*)] * Using 8.0 MiB for chain state database
+2026-11-08T00:31:34.254080Z [init] [init.cpp:2526] [node::ChainstateLoadResult InitAndLoadChainstate(node::NodeContext&, bool, bool, const kernel::CacheSizes&, const ArgsManager&)] * Using 54.0 MiB for in-memory UTXO set (plus up to 976.6 MiB of unused mempool space)
+2026-11-08T00:31:34.254119Z [init] [init.cpp:2562] [node::ChainstateLoadResult InitAndLoadChainstate(node::NodeContext&, bool, bool, const kernel::CacheSizes&, const ArgsManager&)] Selfish-mining mitigation: randomized equal-work tie-breaking ENABLED (node-local, non-consensus)
+2026-11-08T00:31:34.254138Z [init] [checkqueue.h:147] [CCheckQueue<T, R>::CCheckQueue(unsigned int, int) [with T = CScriptCheck; R = std::pair<ScriptError_t, std::__cxx11::basic_string<char> >]] Script verification uses 3 additional threads
+2026-11-08T00:31:34.254233Z [init] [checkqueue.h:147] [CCheckQueue<T, R>::CCheckQueue(unsigned int, int) [with T = CShieldedProofCheck; R = std::__cxx11::basic_string<char>]] Script verification uses 3 additional threads
+2026-11-08T00:31:34.254303Z [init] [checkqueue.h:147] [CCheckQueue<T, R>::CCheckQueue(unsigned int, int) [with T = CShieldedSpendAuthCheck; R = std::__cxx11::basic_string<char>]] Script verification uses 3 additional threads
+2026-11-08T00:31:34.254458Z [init] [node/blockstorage.cpp:2027] [auto node::InitBlocksdirXorKey(const BlockManager::Options&)] Using obfuscation key for blocksdir *.dat files (/home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/blocks)
+2026-11-08T00:31:34.254528Z [init] [dbwrapper.cpp:287] [CDBWrapper::CDBWrapper(const DBParams&)] Opening LevelDB in /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/blocks/index
+2026-11-08T00:31:34.256678Z [init] [dbwrapper.cpp:295] [CDBWrapper::CDBWrapper(const DBParams&)] Opened LevelDB successfully
+2026-11-08T00:31:34.256691Z [init] [dbwrapper.cpp:318] [CDBWrapper::CDBWrapper(const DBParams&)] Using obfuscation key for /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/blocks/index
+2026-11-08T00:31:34.285191Z [init] [script/sigcache.cpp:39] [SignatureCache::SignatureCache(size_t)] Using 64 MiB out of 64 MiB requested for signature cache, able to store 2097152 elements
+2026-11-08T00:31:34.313629Z [init] [validation.cpp:7142] [ValidationCache::ValidationCache(size_t, size_t)] Using 64 MiB out of 64 MiB requested for script execution cache, able to store 2097152 elements
+2026-11-08T00:31:34.313790Z [init] [noui.cpp:57] [void noui_InitMessage(const std::string&)] init message: Loading block index…
+2026-11-08T00:31:34.313798Z [init] [node/chainstate.cpp:183] [node::ChainstateLoadResult node::LoadChainstate(ChainstateManager&, const kernel::CacheSizes&, const ChainstateLoadOptions&)] Validating signatures for all blocks.
+2026-11-08T00:31:34.313817Z [init] [node/chainstate.cpp:185] [node::ChainstateLoadResult node::LoadChainstate(ChainstateManager&, const kernel::CacheSizes&, const ChainstateLoadOptions&)] Setting nMinimumChainWork=0000000000000000000000000000000000000000000000000000000000000000
+2026-11-08T00:31:34.313870Z [init] [node/blockstorage.cpp:1263] [bool node::BlockManager::LoadBlockIndexDB(const std::optional<uint256>&, const std::optional<AssumeutxoData>&)] MatMul replay authority context initialized/changed; cleared_exact_replay=0 cleared_trusted=0 (no -reindex)
+2026-11-08T00:31:34.313875Z [init] [node/blockstorage.cpp:1282] [bool node::BlockManager::LoadBlockIndexDB(const std::optional<uint256>&, const std::optional<AssumeutxoData>&)] LoadBlockIndexDB: last block file = 0
+2026-11-08T00:31:34.313883Z [init] [node/blockstorage.cpp:1286] [bool node::BlockManager::LoadBlockIndexDB(const std::optional<uint256>&, const std::optional<AssumeutxoData>&)] LoadBlockIndexDB: last block file info: CBlockFileInfo(blocks=0, size=0, heights=0...0, time=1970-01-01...1970-01-01)
+2026-11-08T00:31:34.313886Z [init] [node/blockstorage.cpp:1297] [bool node::BlockManager::LoadBlockIndexDB(const std::optional<uint256>&, const std::optional<AssumeutxoData>&)] Checking all blk files are present...
+2026-11-08T00:31:34.314298Z [init] [validation.cpp:19448] [bool ChainstateManager::MaybeClearStaleInvalidMarksForValidationEpoch()] MaybeClearStaleInvalidMarksForValidationEpoch: validation-epoch scan index_entries=0 manual_lineage=0 (stored_epoch=0 compiled_epoch=1)
+2026-11-08T00:31:34.314572Z [init] [validation.cpp:19694] [bool ChainstateManager::MaybeClearStaleInvalidMarksForValidationEpoch()] [warning] validation epoch 0 -> 1: cleared 0 BLOCK_FAILED_* mark(s) on the heaviest data-backed lineage, re-checked headers/bodies, re-marked 0, unparked 0, left 0 operator-invalid; ActivateBestChain follows after LoadChainTip
+2026-11-08T00:31:34.314719Z [init] [flatfile.cpp:86] [size_t FlatFileSeq::Allocate(const FlatFilePos&, size_t, bool&) const] [validation] Pre-allocating up to position 0x1000000 in blk00000.dat
+2026-11-08T00:31:34.314938Z [init] [node/chainstate.cpp:88] [node::ChainstateLoadResult node::CompleteChainstateInitialization(ChainstateManager&, const ChainstateLoadOptions&)] Initializing chainstate Chainstate [ibd] @ height -1 (null)
+2026-11-08T00:31:34.314993Z [init] [dbwrapper.cpp:287] [CDBWrapper::CDBWrapper(const DBParams&)] Opening LevelDB in /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/chainstate
+2026-11-08T00:31:34.317719Z [init] [dbwrapper.cpp:295] [CDBWrapper::CDBWrapper(const DBParams&)] Opened LevelDB successfully
+2026-11-08T00:31:34.317743Z [init] [dbwrapper.cpp:316] [CDBWrapper::CDBWrapper(const DBParams&)] Wrote new obfuscation key for /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/chainstate
+2026-11-08T00:31:34.317747Z [init] [dbwrapper.cpp:318] [CDBWrapper::CDBWrapper(const DBParams&)] Using obfuscation key for /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/chainstate
+2026-11-08T00:31:34.317859Z [init] [validation.cpp:6838] [void CoinsViews::InitCache(int32_t)] Block input prevout fetching uses 2 additional threads
+2026-11-08T00:31:34.317869Z [prevout.00] [util/thread.cpp:20] [void util::TraceThread(std::string_view, std::function<void()>)] prevout.00 thread start
+2026-11-08T00:31:34.317881Z [prevout.01] [util/thread.cpp:20] [void util::TraceThread(std::string_view, std::function<void()>)] prevout.01 thread start
+2026-11-08T00:31:34.317891Z [init] [node/chainstate.cpp:134] [node::ChainstateLoadResult node::CompleteChainstateInitialization(ChainstateManager&, const ChainstateLoadOptions&)] Populating block index candidates (1 headers)
+2026-11-08T00:31:34.317898Z [init] [node/chainstate.cpp:139] [node::ChainstateLoadResult node::CompleteChainstateInitialization(ChainstateManager&, const ChainstateLoadOptions&)] Populated block index candidates
+2026-11-08T00:31:34.317904Z [init] [noui.cpp:57] [void noui_InitMessage(const std::string&)] init message: Verifying blocks…
+2026-11-08T00:31:34.317909Z [init] [init.cpp:2642] [node::ChainstateLoadResult InitAndLoadChainstate(node::NodeContext&, bool, bool, const kernel::CacheSizes&, const ArgsManager&)] Block index and chainstate loaded
+2026-11-08T00:31:34.318149Z [init] [init.cpp:3601] [bool AppInitMain(node::NodeContext&, interfaces::BlockAndHeaderTipInfo*)] Dandelion++ privacy relay enabled (activation height: 0)
+2026-11-08T00:31:34.318181Z [init] [noui.cpp:57] [void noui_InitMessage(const std::string&)] init message: Initializing shielded state…
+2026-11-08T00:31:34.321226Z [init] [dbwrapper.cpp:287] [CDBWrapper::CDBWrapper(const DBParams&)] Opening LevelDB in /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/shielded_state/account_registry
+2026-11-08T00:31:34.323733Z [init] [dbwrapper.cpp:295] [CDBWrapper::CDBWrapper(const DBParams&)] Opened LevelDB successfully
+2026-11-08T00:31:34.323758Z [init] [dbwrapper.cpp:316] [CDBWrapper::CDBWrapper(const DBParams&)] Wrote new obfuscation key for /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/shielded_state/account_registry
+2026-11-08T00:31:34.323762Z [init] [dbwrapper.cpp:318] [CDBWrapper::CDBWrapper(const DBParams&)] Using obfuscation key for /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/shielded_state/account_registry
+2026-11-08T00:31:34.323827Z [init] [dbwrapper.cpp:287] [CDBWrapper::CDBWrapper(const DBParams&)] Opening LevelDB in /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/shielded_state/nullifiers
+2026-11-08T00:31:34.327652Z [init] [dbwrapper.cpp:295] [CDBWrapper::CDBWrapper(const DBParams&)] Opened LevelDB successfully
+2026-11-08T00:31:34.327672Z [init] [dbwrapper.cpp:316] [CDBWrapper::CDBWrapper(const DBParams&)] Wrote new obfuscation key for /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/shielded_state/nullifiers
+2026-11-08T00:31:34.327678Z [init] [dbwrapper.cpp:318] [CDBWrapper::CDBWrapper(const DBParams&)] Using obfuscation key for /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/shielded_state/nullifiers
+2026-11-08T00:31:34.328108Z [init] [validation.cpp:21807] [bool ChainstateManager::EnsureShieldedStateInitialized()] EnsureShieldedStateInitialized: loading persisted shielded state at tip height=-1 hash=0000000000000000000000000000000000000000000000000000000000000000 retention=full
+2026-11-08T00:31:34.328115Z [init] [validation.cpp:22933] [bool ChainstateManager::EnsureShieldedStateInitialized()] EnsureShieldedStateInitialized: no readable persisted shielded restart state; a full chain-derived rebuild is required.
+2026-11-08T00:31:34.328131Z [init] [dbwrapper.cpp:282] [CDBWrapper::CDBWrapper(const DBParams&)] Wiping LevelDB in /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/shielded_state/nullifiers
+2026-11-08T00:31:34.328772Z [init] [dbwrapper.cpp:287] [CDBWrapper::CDBWrapper(const DBParams&)] Opening LevelDB in /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/shielded_state/nullifiers
+2026-11-08T00:31:34.331367Z [init] [dbwrapper.cpp:295] [CDBWrapper::CDBWrapper(const DBParams&)] Opened LevelDB successfully
+2026-11-08T00:31:34.331391Z [init] [dbwrapper.cpp:316] [CDBWrapper::CDBWrapper(const DBParams&)] Wrote new obfuscation key for /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/shielded_state/nullifiers
+2026-11-08T00:31:34.331394Z [init] [dbwrapper.cpp:318] [CDBWrapper::CDBWrapper(const DBParams&)] Using obfuscation key for /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/shielded_state/nullifiers
+2026-11-08T00:31:34.332102Z [init] [dbwrapper.cpp:282] [CDBWrapper::CDBWrapper(const DBParams&)] Wiping LevelDB in /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/shielded_state/account_registry
+2026-11-08T00:31:34.332649Z [init] [dbwrapper.cpp:287] [CDBWrapper::CDBWrapper(const DBParams&)] Opening LevelDB in /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/shielded_state/account_registry
+2026-11-08T00:31:34.334999Z [init] [dbwrapper.cpp:295] [CDBWrapper::CDBWrapper(const DBParams&)] Opened LevelDB successfully
+2026-11-08T00:31:34.335026Z [init] [dbwrapper.cpp:316] [CDBWrapper::CDBWrapper(const DBParams&)] Wrote new obfuscation key for /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/shielded_state/account_registry
+2026-11-08T00:31:34.335030Z [init] [dbwrapper.cpp:318] [CDBWrapper::CDBWrapper(const DBParams&)] Using obfuscation key for /home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/shielded_state/account_registry
+2026-11-08T00:31:34.336413Z [init] [validation.cpp:20287] [bool ChainstateManager::PersistShieldedState(const CBlockIndex*, bool)] [validation] PersistShieldedState: writing snapshot height=-1 hash=0000000000000000000000000000000000000000000000000000000000000000 tree_size=0 registry_entries=0
+2026-11-08T00:31:34.337598Z [init] [validation.cpp:21310] [ChainstateManager::EnsureShieldedStateInitialized()::<lambda()>] EnsureShieldedStateInitialized: initialized tree_size=0 root=f390ca3f27d51c5b790a0e8c5cd8a80207372961190c51ef4fa334a86a0a6788 nullifiers=0 pool=0
+2026-11-08T00:31:34.337612Z [init] [init.cpp:3680] [bool AppInitMain(node::NodeContext&, interfaces::BlockAndHeaderTipInfo*)] Setting NODE_NETWORK on non-prune mode
+2026-11-08T00:31:34.337704Z [initload] [util/thread.cpp:20] [void util::TraceThread(std::string_view, std::function<void()>)] initload thread start
+2026-11-08T00:31:34.337766Z [initload] [validation.cpp:9692] [bool Chainstate::ConnectTip(BlockValidationState&, CBlockIndex*, const std::shared_ptr<const CBlock>&, ConnectTrace&, DisconnectedBlockTransactions&)] [bench]   - Load block from disk: 0.03ms
+2026-11-08T00:31:34.337787Z [initload] [validation.cpp:7845] [bool Chainstate::ConnectBlock(const CBlock&, BlockValidationState&, CBlockIndex*, CCoinsViewCache&, bool, bool)] [bench]     - Sanity checks: 0.01ms [0.00s (0.01ms/blk)]
+2026-11-08T00:31:34.337797Z [initload] [validation.cpp:7953] [bool Chainstate::ConnectBlock(const CBlock&, BlockValidationState&, CBlockIndex*, CCoinsViewCache&, bool, bool)] [bench]     - Fork checks: 0.01ms [0.00s (0.01ms/blk)]
+2026-11-08T00:31:34.337816Z [initload] [validation.cpp:8737] [bool Chainstate::ConnectBlock(const CBlock&, BlockValidationState&, CBlockIndex*, CCoinsViewCache&, bool, bool)] [bench]       - Connect 1 transactions: 0.02ms (0.018ms/tx, 0.000ms/txin) [0.00s (0.02ms/blk)]
+2026-11-08T00:31:34.337825Z [initload] [validation.cpp:8794] [bool Chainstate::ConnectBlock(const CBlock&, BlockValidationState&, CBlockIndex*, CCoinsViewCache&, bool, bool)] [bench]     - Verify 0 txins: 0.03ms (0.000ms/txin) [0.00s (0.03ms/blk)]
+2026-11-08T00:31:34.337864Z [initload] [flatfile.cpp:86] [size_t FlatFileSeq::Allocate(const FlatFilePos&, size_t, bool&) const] [validation] Pre-allocating up to position 0x100000 in rev00000.dat
+2026-11-08T00:31:34.337948Z [initload] [validation.cpp:8981] [bool Chainstate::ConnectBlock(const CBlock&, BlockValidationState&, CBlockIndex*, CCoinsViewCache&, bool, bool)] [bench]     - Write undo data: 0.12ms [0.00s (0.12ms/blk)]
+2026-11-08T00:31:34.337977Z [initload] [validation.cpp:20287] [bool ChainstateManager::PersistShieldedState(const CBlockIndex*, bool)] [validation] PersistShieldedState: writing snapshot height=0 hash=521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360 tree_size=0 registry_entries=0
+2026-11-08T00:31:34.338406Z [initload] [validation.cpp:9004] [bool Chainstate::ConnectBlock(const CBlock&, BlockValidationState&, CBlockIndex*, CCoinsViewCache&, bool, bool)] [bench]     - Index writing: 0.46ms [0.00s (0.46ms/blk)]
+2026-11-08T00:31:34.338416Z [initload] [validationinterface.cpp:290] [void ValidationSignals::BlockChecked(const CBlock&, const BlockValidationState&)] [validation] BlockChecked: block hash=521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360 state=Valid
+2026-11-08T00:31:34.338428Z [initload] [validation.cpp:9731] [bool Chainstate::ConnectTip(BlockValidationState&, CBlockIndex*, const std::shared_ptr<const CBlock>&, ConnectTrace&, DisconnectedBlockTransactions&)] [bench]   - Connect total: 0.67ms [0.00s (0.67ms/blk)]
+2026-11-08T00:31:34.338443Z [initload] [validation.cpp:9742] [bool Chainstate::ConnectTip(BlockValidationState&, CBlockIndex*, const std::shared_ptr<const CBlock>&, ConnectTrace&, DisconnectedBlockTransactions&)] [bench]   - Flush: 0.01ms [0.00s (0.01ms/blk)]
+2026-11-08T00:31:34.338449Z [initload] [validation.cpp:9752] [bool Chainstate::ConnectTip(BlockValidationState&, CBlockIndex*, const std::shared_ptr<const CBlock>&, ConnectTrace&, DisconnectedBlockTransactions&)] [bench]   - Writing chainstate: 0.01ms [0.00s (0.01ms/blk)]
+2026-11-08T00:31:34.338455Z [initload] [validationinterface.cpp:266] [void ValidationSignals::MempoolTransactionsRemovedForBlock(const std::vector<RemovedMempoolTransactionInfo>&, unsigned int)] [validation] Enqueuing MempoolTransactionsRemovedForBlock: block height=0 txs removed=0
+2026-11-08T00:31:34.338471Z [initload] [validation.cpp:9236] [void UpdateTipLog(const ChainstateManager&, const CCoinsViewCache&, const CBlockIndex*, const std::string&, const std::string&, const std::string&)] UpdateTip: new best=521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360 height=0 version=0x00000001 log2_work=1.000000 tx=1 date='2011-02-02T23:16:42Z' progress=1.000000 cache=0.3MiB(1txo)
+2026-11-08T00:31:34.338478Z [initload] [validation.cpp:9794] [bool Chainstate::ConnectTip(BlockValidationState&, CBlockIndex*, const std::shared_ptr<const CBlock>&, ConnectTrace&, DisconnectedBlockTransactions&)] [bench]   - Connect postprocess: 0.03ms [0.00s (0.03ms/blk)]
+2026-11-08T00:31:34.338482Z [initload] [validation.cpp:9798] [bool Chainstate::ConnectTip(BlockValidationState&, CBlockIndex*, const std::shared_ptr<const CBlock>&, ConnectTrace&, DisconnectedBlockTransactions&)] [bench] - Connect block: 0.75ms [0.00s (0.75ms/blk)]
+2026-11-08T00:31:34.338493Z [initload] [txmempool.cpp:974] [void CTxMemPool::check(const CCoinsViewCache&, int64_t) const] [mempool] Checking mempool with 0 transactions and 0 inputs
+2026-11-08T00:31:34.338504Z [initload] [validationinterface.cpp:256] [void ValidationSignals::BlockConnected(ChainstateRole, const std::shared_ptr<const CBlock>&, const CBlockIndex*)] [validation] Enqueuing BlockConnected: block hash=521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360 block height=0
+2026-11-08T00:31:34.338509Z [initload] [validationinterface.cpp:220] [void ValidationSignals::UpdatedBlockTip(const CBlockIndex*, const CBlockIndex*, bool)] [validation] Enqueuing UpdatedBlockTip: new block hash=521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360 fork block hash=null (in IBD=true)
+2026-11-08T00:31:34.338526Z [initload] [validationinterface.cpp:228] [void ValidationSignals::ActiveTipChange(const CBlockIndex&, bool)] [validation] ActiveTipChange: new block hash=521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360 block height=0
+2026-11-08T00:31:34.338557Z [initload] [node/mempool_persist.cpp:83] [bool node::LoadMempool(CTxMemPool&, const fs::path&, Chainstate&, ImportMempoolOptions&&)] Failed to open mempool file. Continuing anyway.
+2026-11-08T00:31:34.338561Z [initload] [util/thread.cpp:22] [void util::TraceThread(std::string_view, std::function<void()>)] initload thread exit
+2026-11-08T00:31:34.338591Z [init] [init.cpp:3817] [bool AppInitMain(node::NodeContext&, interfaces::BlockAndHeaderTipInfo*)] block tree size = 1
+2026-11-08T00:31:34.338599Z [init] [init.cpp:3830] [bool AppInitMain(node::NodeContext&, interfaces::BlockAndHeaderTipInfo*)] nBestHeight = 0
+2026-11-08T00:31:34.338653Z [init] [net.cpp:3812] [bool CConnman::BindListenPort(const CService&, bilingual_str&, NetPermissionFlags)] Bound to 127.0.0.1:13171
+2026-11-08T00:31:34.338663Z [init] [noui.cpp:57] [void noui_InitMessage(const std::string&)] init message: Starting network threads…
+2026-11-08T00:31:34.338673Z [scheduler] [validationinterface.cpp:266] [ValidationSignals::MempoolTransactionsRemovedForBlock(const std::vector<RemovedMempoolTransactionInfo>&, unsigned int)::<lambda()>] [validation] MempoolTransactionsRemovedForBlock: block height=0 txs removed=0
+2026-11-08T00:31:34.338689Z [scheduler] [validationinterface.cpp:256] [ValidationSignals::BlockConnected(ChainstateRole, const std::shared_ptr<const CBlock>&, const CBlockIndex*)::<lambda()>] [validation] BlockConnected: block hash=521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360 block height=0
+2026-11-08T00:31:34.338701Z [scheduler] [validationinterface.cpp:220] [ValidationSignals::UpdatedBlockTip(const CBlockIndex*, const CBlockIndex*, bool)::<lambda()>] [validation] UpdatedBlockTip: new block hash=521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360 fork block hash=null (in IBD=true)
+2026-11-08T00:31:34.338705Z [init] [net.cpp:4024] [bool CConnman::Start(CScheduler&, const Options&)] DNS seeding disabled
+2026-11-08T00:31:34.338762Z [init] [noui.cpp:57] [void noui_InitMessage(const std::string&)] init message: Done loading
+2026-11-08T00:31:34.338858Z [init] [init.cpp:4474] [bool AppInitMain(node::NodeContext&, interfaces::BlockAndHeaderTipInfo*)] model storage: resolved requested budget auto to 1GiB using saved policy or the bounded starter default.
+2026-11-08T00:31:34.338903Z [init] [init.cpp:4512] [bool AppInitMain(node::NodeContext&, interfaces::BlockAndHeaderTipInfo*)] model helper exe=/home/runner/work/btx/btx/release-package/btx-0.34.16/bin/btx-modeld socket=/home/runner/work/btx/btx/packaged-transfer-runtime/case/node2/regtest/modelnet/modeld.sock storage=1GiB bind=0.0.0.0:59445 host=off relay=0 missing=0 proxies=0 onlynet=ipv4
+2026-11-08T00:31:34.339026Z [scheduler] [net_processing.cpp:10144] [virtual void {anonymous}::PeerManagerImpl::UpdatedBlockTip(const CBlockIndex*, const CBlockIndex*, bool)] [net] UpdatedBlockTip: announcing 521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360 despite age-only IBD
+2026-11-08T00:31:34.339069Z [net] [util/thread.cpp:20] [void util::TraceThread(std::string_view, std::function<void()>)] net thread start
+2026-11-08T00:31:34.339100Z [addcon] [util/thread.cpp:20] [void util::TraceThread(std::string_view, std::function<void()>)] addcon thread start
+2026-11-08T00:31:34.339123Z [msghand] [util/thread.cpp:20] [void util::TraceThread(std::string_view, std::function<void()>)] msghand thread start
+2026-11-08T00:31:34.339143Z [mmrecover] [util/thread.cpp:20] [void util::TraceThread(std::string_view, std::function<void()>)] mmrecover thread start
+2026-11-08T00:31:34.545453Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:34.546863Z [httpworker.0] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=getblockcount user=__cookie__
+2026-11-08T00:31:34.547938Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:34.549882Z [httpworker.1] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=getmempoolinfo user=__cookie__
+2026-11-08T00:31:34.613668Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:34.613755Z [httpworker.2] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=getmodelnetworkinfo user=__cookie__
+2026-11-08T00:31:34.615143Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:34.615203Z [httpworker.3] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=getmodelnetworkinfo user=__cookie__
+2026-11-08T00:31:34.621354Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:34.621426Z [httpworker.4] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=getmodelnetworkinfo user=__cookie__
+2026-11-08T00:31:39.338847Z [scheduler] [dandelion.cpp:139] [void Dandelion::DandelionManager::SelectNewRelays()] [dandelion] Dandelion++: selected 0 relay destination(s)
+2026-11-08T00:31:39.338861Z [scheduler] [dandelion.cpp:69] [void Dandelion::DandelionManager::MaybeRotateEpoch()] [dandelion] Dandelion++: new epoch, stem_mode=1
+2026-11-08T00:31:39.595479Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:39.595551Z [httpworker.7] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=getmodelnetworkinfo user=__cookie__
+2026-11-08T00:31:39.600709Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:39.600775Z [httpworker.8] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=getmodelnetworkinfo user=__cookie__
+2026-11-08T00:31:39.601818Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:39.601877Z [httpworker.9] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=getpeerinfo user=__cookie__
+2026-11-08T00:31:44.640454Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:44.640560Z [httpworker.10] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:49.638241Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:49.638337Z [httpworker.11] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=getmodelnetworkinfo user=__cookie__
+2026-11-08T00:31:50.096933Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:50.097000Z [httpworker.6] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:50.147643Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:50.147706Z [httpworker.13] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:50.198315Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:50.198367Z [httpworker.14] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:50.248939Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:50.248995Z [httpworker.15] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:50.299659Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:50.299743Z [httpworker.12] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:50.350470Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:50.350533Z [httpworker.5] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:50.401203Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:50.401246Z [httpworker.0] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:50.451914Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:50.451956Z [httpworker.1] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:50.502719Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:50.502783Z [httpworker.2] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:50.553603Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:50.553668Z [httpworker.3] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:50.604356Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:50.604396Z [httpworker.4] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:50.655091Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:50.655153Z [httpworker.7] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:50.705967Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:50.706028Z [httpworker.8] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:50.756760Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:50.756830Z [httpworker.9] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:50.807542Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:50.807598Z [httpworker.10] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:50.858197Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:50.858236Z [httpworker.11] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:50.908782Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:50.908835Z [httpworker.6] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:50.959381Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:50.959423Z [httpworker.13] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:51.010024Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:51.010068Z [httpworker.14] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:51.060654Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:51.060696Z [httpworker.15] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:51.111236Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:51.111276Z [httpworker.12] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:51.161961Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:51.162020Z [httpworker.5] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:51.212764Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:51.212832Z [httpworker.0] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:51.263484Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:51.263520Z [httpworker.1] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:51.314073Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:51.314120Z [httpworker.2] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:51.364629Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:51.364666Z [httpworker.3] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:51.415189Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:51.415239Z [httpworker.4] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:51.465831Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:51.465875Z [httpworker.7] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:51.516419Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:51.516455Z [httpworker.8] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:51.567017Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:51.567054Z [httpworker.9] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:51.617599Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:51.617635Z [httpworker.10] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:51.668236Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:51.668275Z [httpworker.11] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:51.718891Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:51.718928Z [httpworker.6] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:51.769552Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:51.769599Z [httpworker.13] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:51.820525Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:51.820593Z [httpworker.14] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:51.871538Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:51.871599Z [httpworker.15] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:51.922438Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:51.922493Z [httpworker.12] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:51.973179Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:51.973214Z [httpworker.5] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:52.023709Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:52.023754Z [httpworker.0] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:52.074264Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:52.074302Z [httpworker.1] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:52.124842Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:52.124882Z [httpworker.2] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:52.175468Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:52.175514Z [httpworker.3] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:52.226076Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:52.226131Z [httpworker.4] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:52.276705Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:52.276749Z [httpworker.7] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:52.327291Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:52.327340Z [httpworker.8] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:52.377865Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:52.377901Z [httpworker.9] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:52.428406Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:52.428449Z [httpworker.10] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:52.478992Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:52.479043Z [httpworker.11] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:52.529582Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:52.529620Z [httpworker.6] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:52.580218Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:52.580265Z [httpworker.13] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:52.630852Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:52.630891Z [httpworker.14] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:52.681493Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:52.681529Z [httpworker.15] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:52.732107Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:52.732145Z [httpworker.12] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:52.782717Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:52.782764Z [httpworker.5] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:52.833387Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:52.833442Z [httpworker.0] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:52.883973Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:52.884011Z [httpworker.1] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:52.934543Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:52.934579Z [httpworker.2] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:52.985129Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:52.985181Z [httpworker.3] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:53.035722Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:53.035768Z [httpworker.4] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:53.086296Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:53.086345Z [httpworker.7] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:53.136874Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:53.136922Z [httpworker.8] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:53.187415Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:53.187467Z [httpworker.9] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:53.238083Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:53.238134Z [httpworker.10] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:53.288667Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:53.288700Z [httpworker.11] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:53.339280Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:53.339332Z [httpworker.6] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:53.389837Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:53.389871Z [httpworker.13] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:53.440403Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:53.440454Z [httpworker.14] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:53.491082Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:53.491152Z [httpworker.15] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:53.541988Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:53.542043Z [httpworker.12] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:53.592755Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:53.592800Z [httpworker.5] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:53.643448Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:53.643508Z [httpworker.0] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:53.694153Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:53.694199Z [httpworker.1] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:53.744762Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:53.744798Z [httpworker.2] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:53.795427Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:53.795484Z [httpworker.3] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:53.846051Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:53.846102Z [httpworker.4] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:53.896640Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:53.896688Z [httpworker.7] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:53.947231Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:53.947272Z [httpworker.8] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:53.997837Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:53.997884Z [httpworker.9] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:54.048673Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:54.048765Z [httpworker.10] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:54.099712Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:54.099774Z [httpworker.11] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:54.150678Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:54.150766Z [httpworker.6] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:54.201752Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:54.201849Z [httpworker.13] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:54.252766Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:54.252858Z [httpworker.14] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:54.303900Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:54.303977Z [httpworker.15] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:54.354927Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:54.354992Z [httpworker.12] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:54.405862Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:54.405913Z [httpworker.5] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:54.456623Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:54.456662Z [httpworker.0] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:54.507298Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:54.507335Z [httpworker.1] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:54.557929Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:54.557990Z [httpworker.2] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:54.608743Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:54.608801Z [httpworker.3] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:54.659664Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:54.659721Z [httpworker.4] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=listmodels user=__cookie__
+2026-11-08T00:31:54.660384Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:54.660409Z [httpworker.7] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=getmodelnetworkinfo user=__cookie__
+2026-11-08T00:31:54.663186Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:54.663217Z [httpworker.8] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=getmodelnetworkinfo user=__cookie__
+2026-11-08T00:31:54.664285Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:54.664312Z [httpworker.9] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=getblockcount user=__cookie__
+2026-11-08T00:31:54.718023Z [http] [httpserver.cpp:311] [void http_request_cb(evhttp_request*, void*)] [http] Received a POST request for / from 127.0.0.1:56276
+2026-11-08T00:31:54.718076Z [httpworker.ctrl] [rpc/request.cpp:249] [void JSONRPCRequest::parse(const UniValue&)] [rpc] ThreadRPCServer method=stop user=__cookie__
+2026-11-08T00:31:54.718119Z [init] [httpserver.cpp:647] [void InterruptHTTPServer()] [http] Interrupting HTTP server
+2026-11-08T00:31:54.718271Z [init] [httprpc.cpp:485] [void InterruptHTTPRPC()] [rpc] Interrupting HTTP RPC server
+2026-11-08T00:31:54.718279Z [init] [rpc/server.cpp:361] [InterruptRPC()::<lambda()>] [rpc] Interrupting RPC
+2026-11-08T00:31:54.718320Z [mmrecover] [util/thread.cpp:22] [void util::TraceThread(std::string_view, std::function<void()>)] mmrecover thread exit
+2026-11-08T00:31:54.718586Z [addcon] [util/thread.cpp:22] [void util::TraceThread(std::string_view, std::function<void()>)] addcon thread exit
+2026-11-08T00:31:54.718704Z [init] [init.cpp:368] [void Shutdown(node::NodeContext&)] Shutdown: In progress...
+2026-11-08T00:31:54.718711Z [init] [init.cpp:373] [void Shutdown(node::NodeContext&)] Shutdown: stopping owned btx-modeld helper
+2026-11-08T00:31:54.719928Z [net] [util/thread.cpp:22] [void util::TraceThread(std::string_view, std::function<void()>)] net thread exit
+2026-11-08T00:31:54.753181Z [msghand] [util/thread.cpp:22] [void util::TraceThread(std::string_view, std::function<void()>)] msghand thread exit
+2026-11-08T00:31:54.919153Z [shutoff] [logging/timer.h:58] [void BCLog::Timer<TimeType>::Log(const std::string&) [with TimeType = std::chrono::duration<long int, std::ratio<1, 1000> >; std::string = std::__cxx11::basic_string<char>]] [bench] FlushStateToDisk: write block and undo data to disk started
+2026-11-08T00:31:54.920029Z [shutoff] [logging/timer.h:58] [void BCLog::Timer<TimeType>::Log(const std::string&) [with TimeType = std::chrono::duration<long int, std::ratio<1, 1000> >; std::string = std::__cxx11::basic_string<char>]] [bench] FlushStateToDisk: write block and undo data to disk completed (0.85ms)
+2026-11-08T00:31:54.920042Z [shutoff] [logging/timer.h:58] [void BCLog::Timer<TimeType>::Log(const std::string&) [with TimeType = std::chrono::duration<long int, std::ratio<1, 1000> >; std::string = std::__cxx11::basic_string<char>]] [bench] FlushStateToDisk: write block index to disk started
+2026-11-08T00:31:54.920276Z [shutoff] [logging/timer.h:58] [void BCLog::Timer<TimeType>::Log(const std::string&) [with TimeType = std::chrono::duration<long int, std::ratio<1, 1000> >; std::string = std::__cxx11::basic_string<char>]] [bench] FlushStateToDisk: write block index to disk completed (0.23ms)
+2026-11-08T00:31:54.920291Z [shutoff] [logging/timer.h:58] [void BCLog::Timer<TimeType>::Log(const std::string&) [with TimeType = std::chrono::duration<long int, std::ratio<1, 1000> >; std::string = std::__cxx11::basic_string<char>]] [bench] BatchWrite: write coins cache to disk (1 out of 1 cached coins) started
+2026-11-08T00:31:54.920299Z [shutoff] [txdb.cpp:194] [virtual bool CCoinsViewDB::BatchWrite(CoinsViewCacheCursor&, const uint256&)] [coindb] Writing final batch of 0.00 MiB
+2026-11-08T00:31:54.920312Z [shutoff] [txdb.cpp:196] [virtual bool CCoinsViewDB::BatchWrite(CoinsViewCacheCursor&, const uint256&)] [coindb] Committed 1 changed transaction outputs (out of 1) to coin database...
+2026-11-08T00:31:54.920315Z [shutoff] [logging/timer.h:58] [void BCLog::Timer<TimeType>::Log(const std::string&) [with TimeType = std::chrono::duration<long int, std::ratio<1, 1000> >; std::string = std::__cxx11::basic_string<char>]] [bench] BatchWrite: write coins cache to disk (1 out of 1 cached coins) completed (0.02ms)
+2026-11-08T00:31:54.920336Z [shutoff] [validationinterface.cpp:285] [void ValidationSignals::ChainStateFlushed(ChainstateRole, const CBlockLocator&)] [validation] Enqueuing ChainStateFlushed: block hash=521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360
+2026-11-08T00:31:54.920348Z [shutoff] [init.cpp:413] [Shutdown(node::NodeContext&)::<lambda(const char*)>] Shutdown: shielded state already sealed at tip height=0 hash=521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360 (before HTTP worker join)
+2026-11-08T00:31:54.920403Z [scheduler] [validationinterface.cpp:285] [ValidationSignals::ChainStateFlushed(ChainstateRole, const CBlockLocator&)::<lambda()>] [validation] ChainStateFlushed: block hash=521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360
+2026-11-08T00:31:54.948382Z [shutoff] [httprpc.cpp:490] [void StopHTTPRPC()] [rpc] Stopping HTTP RPC server
+2026-11-08T00:31:54.948392Z [shutoff] [httpserver.cpp:932] [void UnregisterHTTPHandler(const std::string&, bool)] [http] Unregistering HTTP handler for / (exactmatch 1)
+2026-11-08T00:31:54.948397Z [shutoff] [httpserver.cpp:932] [void UnregisterHTTPHandler(const std::string&, bool)] [http] Unregistering HTTP handler for /btx-model/3/ (exactmatch 0)
+2026-11-08T00:31:54.948400Z [shutoff] [httpserver.cpp:932] [void UnregisterHTTPHandler(const std::string&, bool)] [http] Unregistering HTTP handler for /wallet/ (exactmatch 0)
+2026-11-08T00:31:54.948406Z [shutoff] [rpc/server.cpp:373] [StopRPC()::<lambda()>] [rpc] Stopping RPC
+2026-11-08T00:31:54.948448Z [shutoff] [rpc/server.cpp:376] [StopRPC()::<lambda()>] [rpc] RPC stopped.
+2026-11-08T00:31:54.948451Z [shutoff] [httpserver.cpp:662] [void StopHTTPServer()] [http] Stopping HTTP server
+2026-11-08T00:31:54.948453Z [shutoff] [httpserver.cpp:664] [void StopHTTPServer()] [http] Waiting for HTTP worker threads to exit
+2026-11-08T00:31:54.948674Z [shutoff] [httpserver.cpp:695] [void StopHTTPServer()] [http] Waiting for HTTP event thread to exit
+2026-11-08T00:31:54.948684Z [http] [httpserver.cpp:378] [void ThreadHTTP(event_base*)] [http] Exited http event loop
+2026-11-08T00:31:54.948744Z [shutoff] [httpserver.cpp:702] [void StopHTTPServer()] [http] Stopped HTTP server
+2026-11-08T00:31:54.949404Z [shutoff] [net.cpp:2793] [void CConnman::DumpAddresses()] [net] Flushed 0 addresses to peers.dat  0ms
+2026-11-08T00:31:54.949458Z [scheduler] [util/thread.cpp:22] [void util::TraceThread(std::string_view, std::function<void()>)] scheduler thread exit
+2026-11-08T00:31:54.949639Z [shutoff] [node/mempool_persist.cpp:237] [bool node::DumpMempool(const CTxMemPool&, const fs::path&, fsbridge::FopenFn, bool)] Writing 0 mempool transactions to file...
+2026-11-08T00:31:54.949644Z [shutoff] [node/mempool_persist.cpp:247] [bool node::DumpMempool(const CTxMemPool&, const fs::path&, fsbridge::FopenFn, bool)] Writing 0 unbroadcast transactions to file.
+2026-11-08T00:31:54.949952Z [shutoff] [node/mempool_persist.cpp:262] [bool node::DumpMempool(const CTxMemPool&, const fs::path&, fsbridge::FopenFn, bool)] Writing 0 mempool prioritizations to file...
+2026-11-08T00:31:54.949988Z [shutoff] [node/mempool_persist.cpp:297] [bool node::DumpMempool(const CTxMemPool&, const fs::path&, fsbridge::FopenFn, bool)] Dumped mempool: 0.000s to copy, 0.000s to dump, 27 bytes dumped to file
+2026-11-08T00:31:54.949994Z [shutoff] [policy/fees.cpp:1066] [void CBlockPolicyEstimator::FlushUnconfirmed()] [estimatefee] Recorded 0 unconfirmed txs from mempool in 0.000s
+2026-11-08T00:31:54.950888Z [shutoff] [policy/fees.cpp:963] [bool CBlockPolicyEstimator::FlushFeeEstimates() const] Flushed fee estimates to fee_estimates.dat.
+2026-11-08T00:31:54.950902Z [shutoff] [logging/timer.h:58] [void BCLog::Timer<TimeType>::Log(const std::string&) [with TimeType = std::chrono::duration<long int, std::ratio<1, 1000> >; std::string = std::__cxx11::basic_string<char>]] [bench] FlushStateToDisk: write block and undo data to disk started
+2026-11-08T00:31:54.951047Z [shutoff] [logging/timer.h:58] [void BCLog::Timer<TimeType>::Log(const std::string&) [with TimeType = std::chrono::duration<long int, std::ratio<1, 1000> >; std::string = std::__cxx11::basic_string<char>]] [bench] FlushStateToDisk: write block and undo data to disk completed (0.14ms)
+2026-11-08T00:31:54.951051Z [shutoff] [logging/timer.h:58] [void BCLog::Timer<TimeType>::Log(const std::string&) [with TimeType = std::chrono::duration<long int, std::ratio<1, 1000> >; std::string = std::__cxx11::basic_string<char>]] [bench] FlushStateToDisk: write block index to disk started
+2026-11-08T00:31:54.951247Z [shutoff] [logging/timer.h:58] [void BCLog::Timer<TimeType>::Log(const std::string&) [with TimeType = std::chrono::duration<long int, std::ratio<1, 1000> >; std::string = std::__cxx11::basic_string<char>]] [bench] FlushStateToDisk: write block index to disk completed (0.19ms)
+2026-11-08T00:31:54.951257Z [shutoff] [logging/timer.h:58] [void BCLog::Timer<TimeType>::Log(const std::string&) [with TimeType = std::chrono::duration<long int, std::ratio<1, 1000> >; std::string = std::__cxx11::basic_string<char>]] [bench] BatchWrite: write coins cache to disk (0 out of 0 cached coins) started
+2026-11-08T00:31:54.951261Z [shutoff] [txdb.cpp:194] [virtual bool CCoinsViewDB::BatchWrite(CoinsViewCacheCursor&, const uint256&)] [coindb] Writing final batch of 0.00 MiB
+2026-11-08T00:31:54.951270Z [shutoff] [txdb.cpp:196] [virtual bool CCoinsViewDB::BatchWrite(CoinsViewCacheCursor&, const uint256&)] [coindb] Committed 0 changed transaction outputs (out of 0) to coin database...
+2026-11-08T00:31:54.951273Z [shutoff] [logging/timer.h:58] [void BCLog::Timer<TimeType>::Log(const std::string&) [with TimeType = std::chrono::duration<long int, std::ratio<1, 1000> >; std::string = std::__cxx11::basic_string<char>]] [bench] BatchWrite: write coins cache to disk (0 out of 0 cached coins) completed (0.01ms)
+2026-11-08T00:31:54.951283Z [shutoff] [validationinterface.cpp:285] [void ValidationSignals::ChainStateFlushed(ChainstateRole, const CBlockLocator&)] [validation] Enqueuing ChainStateFlushed: block hash=521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360
+2026-11-08T00:31:54.951292Z [shutoff] [init.cpp:413] [Shutdown(node::NodeContext&)::<lambda(const char*)>] Shutdown: shielded state already sealed at tip height=0 hash=521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360 (after scheduler stop)
+2026-11-08T00:31:54.951295Z [shutoff] [validationinterface.cpp:285] [ValidationSignals::ChainStateFlushed(ChainstateRole, const CBlockLocator&)::<lambda()>] [validation] ChainStateFlushed: block hash=521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360
+2026-11-08T00:31:54.951301Z [shutoff] [logging/timer.h:58] [void BCLog::Timer<TimeType>::Log(const std::string&) [with TimeType = std::chrono::duration<long int, std::ratio<1, 1000> >; std::string = std::__cxx11::basic_string<char>]] [bench] FlushStateToDisk: write block and undo data to disk started
+2026-11-08T00:31:54.951468Z [shutoff] [logging/timer.h:58] [void BCLog::Timer<TimeType>::Log(const std::string&) [with TimeType = std::chrono::duration<long int, std::ratio<1, 1000> >; std::string = std::__cxx11::basic_string<char>]] [bench] FlushStateToDisk: write block and undo data to disk completed (0.16ms)
+2026-11-08T00:31:54.951475Z [shutoff] [logging/timer.h:58] [void BCLog::Timer<TimeType>::Log(const std::string&) [with TimeType = std::chrono::duration<long int, std::ratio<1, 1000> >; std::string = std::__cxx11::basic_string<char>]] [bench] FlushStateToDisk: write block index to disk started
+2026-11-08T00:31:54.951693Z [shutoff] [logging/timer.h:58] [void BCLog::Timer<TimeType>::Log(const std::string&) [with TimeType = std::chrono::duration<long int, std::ratio<1, 1000> >; std::string = std::__cxx11::basic_string<char>]] [bench] FlushStateToDisk: write block index to disk completed (0.21ms)
+2026-11-08T00:31:54.951705Z [shutoff] [logging/timer.h:58] [void BCLog::Timer<TimeType>::Log(const std::string&) [with TimeType = std::chrono::duration<long int, std::ratio<1, 1000> >; std::string = std::__cxx11::basic_string<char>]] [bench] BatchWrite: write coins cache to disk (0 out of 0 cached coins) started
+2026-11-08T00:31:54.951710Z [shutoff] [txdb.cpp:194] [virtual bool CCoinsViewDB::BatchWrite(CoinsViewCacheCursor&, const uint256&)] [coindb] Writing final batch of 0.00 MiB
+2026-11-08T00:31:54.951717Z [shutoff] [txdb.cpp:196] [virtual bool CCoinsViewDB::BatchWrite(CoinsViewCacheCursor&, const uint256&)] [coindb] Committed 0 changed transaction outputs (out of 0) to coin database...
+2026-11-08T00:31:54.951721Z [shutoff] [logging/timer.h:58] [void BCLog::Timer<TimeType>::Log(const std::string&) [with TimeType = std::chrono::duration<long int, std::ratio<1, 1000> >; std::string = std::__cxx11::basic_string<char>]] [bench] BatchWrite: write coins cache to disk (0 out of 0 cached coins) completed (0.01ms)
+2026-11-08T00:31:54.951729Z [shutoff] [validationinterface.cpp:285] [void ValidationSignals::ChainStateFlushed(ChainstateRole, const CBlockLocator&)] [validation] Enqueuing ChainStateFlushed: block hash=521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360
+2026-11-08T00:31:54.951754Z [prevout.00] [util/thread.cpp:22] [void util::TraceThread(std::string_view, std::function<void()>)] prevout.00 thread exit
+2026-11-08T00:31:54.951779Z [prevout.01] [util/thread.cpp:22] [void util::TraceThread(std::string_view, std::function<void()>)] prevout.01 thread exit
+2026-11-08T00:31:54.964713Z [shutoff] [init.cpp:567] [void Shutdown(node::NodeContext&)] Shutdown: done

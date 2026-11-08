@@ -1,0 +1,2112 @@
+BTX daemon version v0.34.16
+
+The BTX daemon (btxd, legacy alias: bitcoind) is a headless program that connects to the BTX network to validate and relay transactions and blocks, as well as relaying addresses.
+
+It provides the backbone of the BTX network and its RPC, REST and ZMQ services can provide various transaction, block and address-related services.
+
+There is an optional wallet component which provides transaction services.
+
+It can be used in a headless environment or as part of a server setup.
+
+Usage: btxd [options]
+
+Options:
+
+  -alertnotify=<cmd>
+       Execute command when an alert is raised (%s in cmd is replaced by
+       message)
+
+  -allowignoredconf
+       For backwards compatibility, treat an unused btx.conf file in the
+       datadir as a warning, not an error.
+
+  -allowsinglekeytrustedmirror
+       Allow a mainnet trusted mirror to start with N<2 or M<2 (default: 0).
+       That topology is a single stolen WIF hijacking ExactReplay skip.
+       Transition override only; logged and alarming. Consensus+pin is
+       never refused for 1-of-1 (the pin is telemetry).
+
+  -allowunpinnedshieldedsnapshot
+       Allow loadtxoutset to load an assumeutxo snapshot whose shielded section
+       (pool balance + nullifier set + commitment tree) has no consensus
+       pin for its height (default: 0). An unpinned shielded section is
+       trusted from the snapshot source and not validated against a
+       consensus pin; set to 1 only for explicitly trusted
+       repair/bootstrap material.
+
+  -allowunverifiablematmulconsensus
+       Allow consensus-mode catch-up ExactReplay when the local device did not
+       self-qualify (startup canary / production goldens miss). Startup
+       still warns and withholds NODE_MATMUL_CONSENSUS. Mining stays
+       fail-closed. Catch-up still fully ExactReplays every body before
+       ConnectTip, on the available CUDA/Metal GEMM if present,
+       otherwise on CPU. Without this flag a canary miss zeros the GEMM
+       and digest_requests stays 0 (a live consensus-archive node:
+       buffer_pool_uninitialized). Do not treat this as skipping
+       ExactReplay.
+
+  -assumevalid=<hex>
+       If this block is in the chain assume that it and its ancestors are valid
+       and potentially skip script verification for their transactions
+       while still checking other consensus rules (0 to verify all,
+       default:
+       0a51fccfd75d2051e94be1a8cc5abff8b86ac53d0cc134680f286fe769aa2129,
+       testnet3:
+       f2bc3fb2eca6aa6059c4d0178b56efe038d46aa440d406905ef752179aa0e1a4,
+       testnet4:
+       f2bc3fb2eca6aa6059c4d0178b56efe038d46aa440d406905ef752179aa0e1a4,
+       signet:
+       0000000000000000000000000000000000000000000000000000000000000000,
+       shieldedv2dev:
+       0000000000000000000000000000000000000000000000000000000000000000)
+
+  -automining
+       When mining is enabled, only run it while the governor reports spare
+       accelerator capacity (default: 0). Does not enable mining by
+       itself except together with -gen or an explicit miner.
+
+  -autoupdate
+       Enable signed source auto-update polling (default: 1 on mainnet, 0 on
+       test chains, and 0 when -proxy is set or -onlynet excludes ipv4
+       and ipv6). Checks are direct HTTPS connections from this host and
+       do not use -proxy, -onion or -onlynet. The updater silently
+       no-ops unless the manifest signature and installer script hash
+       verify.
+
+  -autoupdatecohort=<n>
+       Pin this node's staged-rollout cohort to n in [0,99] (e.g. 0 for an
+       early canary). A signed release with rollout_percent P is applied
+       only when the cohort is < P. Default: derived stably from the
+       datadir.
+
+  -autoupdateinitialdelay=<n>
+       Seconds to wait after startup before the first auto-update check
+       (default: 30)
+
+  -autoupdateinitialjitter=<n>
+       Maximum extra random seconds added to the startup auto-update check, to
+       prevent fleet stampedes without delaying urgent releases by a
+       full poll interval (default: 60)
+
+  -autoupdateinterval=<n>
+       Seconds between auto-update checks (default: 1800)
+
+  -autoupdatemanifesturl=<url>
+       Signed auto-update manifest URL (default: https://btx.dev/version.txt)
+
+  -autoupdatepubkey=<hex>
+       Release public key (hex) for version.txt signatures, in the scheme set
+       by -autoupdatepubkeyalgo. Set to 0 to make auto-update inert.
+
+  -autoupdatepubkeyalgo=<scheme>
+       Release signature scheme: ml-dsa-44 or slh-dsa-128s (default:
+       ml-dsa-44). Classical secp256k1 is not accepted.
+
+  -autoupdatepython=<path>
+       Python interpreter used only for HTTPS manifest/signature/script
+       fetching. It is started with -I (isolated mode) (default:
+       python3).
+
+  -autoupdaterequirescripthash
+       Require the signed manifest to include script_sha256/install_sha256
+       matching the downloaded installer before execution (default: 1).
+
+  -autoupdateretryinterval=<n>
+       Initial seconds before retrying transient auto-update fetch,
+       signature-download, script-download, or launch failures. Retries
+       back off from this value (default: 300)
+
+  -autoupdateseamless
+       If enabled, launch the verified installer script for a newer signed
+       release (default: 1). If disabled, only log that a verified
+       update exists.
+
+  -autoupdatetelemetry
+       Attach privacy-minimized auto-update request metrics query parameters:
+       update-flow marker, client version, platform, architecture, and
+       rollout cohort. No wallet data, addresses, peer IPs, txids, or
+       persistent client ID are sent by default (default: 1).
+
+  -autoupdatetelemetryclientid
+       Also attach a persistent random auto-update client UUID stored under the
+       datadir. This is useful for controlled release cohorts but is off
+       by default for privacy/GDPR minimization.
+
+  -autoupdatetrustedorigin=<origin>
+       Trusted auto-update origin. Manifest, signature, and installer URLs must
+       all stay on this origin (default: https://btx.dev)
+
+  -backgroundonbattery
+       Allow background mining/preservation on battery (default: 0).
+
+  -backgroundonmetered
+       Allow background seeding/preservation on metered networks (default: 0).
+
+  -blockfilterindex=<type>
+       Maintain an index of compact filters by block (default: 0, values:
+       basic, v0). If <type> is not supplied or if <type> = 1, certain
+       indexes are enabled (currently just basic).
+
+  -blocknotify=<cmd>
+       Execute command when the best block changes (%s in cmd is replaced by
+       block hash)
+
+  -blockreconstructionextratxn=<n>
+       Extra transactions to keep in memory for compact block reconstructions
+       (default: 32768)
+
+  -blockreconstructionextratxnsize=<n>
+       Upper limit of memory usage (in megabytes) for keeping extra
+       transactions in memory for compact block reconstructions
+       (default: 10)
+
+  -blocksdir=<dir>
+       Specify directory to hold blocks subdirectory for *.dat files (default:
+       <datadir>)
+
+  -blocksonly
+       Whether to reject transactions from network peers. Disables automatic
+       broadcast and rebroadcast of transactions, unless the source peer
+       has the 'forcerelay' permission. RPC transactions are not
+       affected. Do not use this on a mining or submit node: the signer
+       will not see your winning blocks promptly (default: 0)
+
+  -blocksxor
+       Whether an XOR-key applies to blocksdir *.dat files. The created XOR-key
+       will be zeros for an existing blocksdir or when `-blocksxor=0` is
+       set, and random for a freshly initialized blocksdir. (default: 1)
+
+  -cadenceburstmax=<n>
+       While this node's validated tip is live, hold ConnectTip/GETDATA so a
+       dumped burst cannot jump more than this many blocks ahead of
+       wall-clock 90s cadence (default: 3 on mainnet emergency, 0
+       elsewhere; 0 disables). Local policy, not consensus. See
+       doc/design/0.34-dump-and-run-reorg.md.
+
+  -coinstatsindex
+       Maintain coinstats index used by the gettxoutsetinfo RPC (default: 0).
+       Unsupported in this release: shielded value flows break the
+       transparent unclaimed-rewards identity and previously
+       crash-looped the node. Enabling this option is rejected at
+       startup.
+
+  -conf=<file>
+       Specify path to read-only configuration file. Relative paths will be
+       prefixed by datadir location (only useable from command line, not
+       configuration file) (default: btx.conf)
+
+  -confrw=<file>
+       Specify read/write configuration file. Relative paths will be prefixed
+       by the network-specific datadir location (default: btx_rw.conf)
+
+  -corepolicy
+       Use BTX policy defaults (default: 0)
+
+  -daemon
+       Run in the background as a daemon and accept commands (default: 0)
+
+  -daemonwait
+       Wait for initialization to be finished before exiting. This implies
+       -daemon (default: 0)
+
+  -datadir=<dir>
+       Specify data directory
+
+  -dbbatchsize
+       Maximum database write batch size in bytes (default: 67108864)
+
+  -dbcache=<n>
+       Maximum database cache size <n> MiB (minimum 4, default: 450). Make sure
+       you have enough RAM. In addition, unused memory allocated to the
+       mempool is shared with this cache (see -maxmempool).
+
+  -dbfilesize
+       Target size of files within databases, in MiB (1 to 1024, default: 64).
+
+  -debuglogfile=<file>
+       Specify location of debug log file (default: debug.log). Relative paths
+       will be prefixed by a net-specific datadir location. Pass
+       -nodebuglogfile to disable writing the log to a file.
+
+  -deepforkautoresolve
+       Default-on LOCAL POLICY (non-consensus): auto-migrate this node to an
+       HONEST deep (> park depth) strictly-heavier competing fork using
+       network observation (seen live block-by-block as our tip climbed,
+       sustained, still fresh, no attestation quorum on either fork),
+       instead of parking and requiring manual invalidateblock. Refuses
+       a flash-revealed or paced dump-and-run and fails safe to PARK +
+       the deep-reorg warning when signals are ambiguous. Fork-choice
+       preference only; block validity and ExactReplay-before-ConnectTip
+       are unchanged. Set 0 to disable (proactive miners who intervene
+       manually). Only effective under the PARK deep-reorg action.
+
+  -deepforkautoresolvefreshness=<s>
+       Deep-fork auto-resolve: maximum age in seconds of the newest suffix
+       block's first-seen; older means not live, so park (default 180).
+
+  -deepforkautoresolveheightslack=<n>
+       Deep-fork auto-resolve: max blocks this node's tip may have already led
+       a suffix block's height when the block was first seen and still
+       count it as seen-live (default 2). The unforgeable dump
+       discriminator.
+
+  -deepforkautoresolvesustain=<s>
+       Deep-fork auto-resolve: minimum wall-clock seconds the competing suffix
+       must have been observed extending before it may be auto-followed
+       (default 1800).
+
+  -fastshieldedstartup
+       Zero-downtime restart: when matching persisted shielded state is
+       available at startup, restore it without forcing the full
+       cross-chain shielded audit (default: 1). The persisted state
+       reaching the restore path already had its frontier root/size
+       matched to the tip and its commitment index/anchor windows
+       validated; settlement/netting metadata may still be synchronized
+       from available blocks, and per-block consensus still runs on
+       newly connected blocks. Set to 0 to force the thorough full-chain
+       drift sync + audit on every restart.
+
+  -governorcooldownseconds=<n>
+       Seconds after a mining pause before resume is considered (default: 10).
+
+  -governoridleseconds=<n>
+       Seconds of low GPU utilization before opportunistic mining resumes
+       (default: 30).
+
+  -help
+       Print this help message and exit (also -h or -?)
+
+  -includeconf=<file>
+       Specify additional configuration file, relative to the -datadir path
+       (only useable from configuration file, not command line)
+
+  -loadblock=<file>
+       Imports blocks from external file on startup
+
+  -localfinalitydepth=<n>
+       Report practical local finality after this many confirmations in
+       mining/difficulty RPCs (default: active -reorgprotectionprofile
+       finality depth, emergency=72, standard=12). This is not consensus
+       finality. Must be >= 1.
+
+  -lowmem=<n>
+       If system available memory falls below <n> MiB, flush caches (0 to
+       disable, default: 0)
+
+  -matmulasyncverify
+       Run the MatMul v4.4 ENC-DR reference recompute for P2P block deliveries
+       on a bounded background worker pool instead of the network
+       message thread (default: 1). Only effective on networks where the
+       v4 fork height is set; verdicts are identical either way (the
+       recompute is a pure function of the header) — this only changes
+       WHICH thread computes them. Set to 0 to force the historical
+       fully-synchronous path.
+
+  -matmulattestationblocklist=<hex>
+       Compressed secp256k1 public key whose ExactReplay attestations are never
+       counted, even if the key is also in -matmultrustedpubkey. Repeat
+       for multiple keys. Manual emergency hijack control only; never
+       auto-populated from peer counts or open-attestor majority.
+       Starting or adding a block that leaves fewer than
+       -matmultrustedthreshold unblocked pin members is refused
+       (fail-closed). Runtime adds persist; unblocking a persisted key
+       requires editing the durable record. Restart without this flag
+       unblocks config-only keys.
+
+  -matmulattestationserve
+       Serve GETMMATTEST from the local attestation store (default: 1 when a
+       local signing key is configured or when
+       -matmulvalidation=trusted, otherwise 0). Trusted mirrors
+       cache-and-forward signatures they have already accepted; they
+       never SignAuthoritative. A local signer serves the live tip
+       window to any peer. Archive / trusted-mirror catch-up peers may
+       also receive cached or SignAuthoritative signatures for the
+       active chain inside a short catch-up window; IBD historical scans
+       stay ignored so they cannot saturate the signer uplink. Consensus
+       signers may set this to 0 to isolate signing from public
+       GETMMATTEST fan-in; newly signed attestations are still pushed to
+       connected peers. Aggressive GETMMATTEST / MMATTEST (rate-limit
+       exhaustion or historical scans of a signer) is penalized: the
+       peer is disconnected and banned for 24h. When no signature is
+       cached, a serving consensus signer with a local
+       ExactReplay-success bit may regenerate its own statement;
+       otherwise a rate-limited background ExactReplay may be queued for
+       canonical Profile-1 blocks.
+
+  -matmulattestationsignerkey=<wif>
+       UNSAFE/deprecated convenience form for the archive-validator WIF key;
+       command lines may leak through process listings. Prefer
+       -matmulattestationsignerkeyfile.
+
+  -matmulattestationsignerkeyfile=<file>
+       Archive-validator file containing exactly one WIF signing key. Relative
+       paths resolve under the network datadir. The corresponding public
+       key is added to the configured signer set. Protect this file as
+       an online validation key.
+
+  -matmulattestationsignerpqfile=<file>
+       Archive-validator file containing an ML-DSA-44 ExactReplay signing key:
+       two hex lines (1312-byte public key, then 2560-byte secret key),
+       or one hex line of public||secret (3872 bytes). Relative paths
+       resolve under the network datadir. The public key is added to the
+       PQ pin when it is not already listed. Protect this file as an
+       online validation key.
+
+  -matmulopenattestors
+       Hear cryptographically valid ExactReplay attestations from keys outside
+       -matmultrustedpubkey (default: 0). Off until the open-speak
+       directory is rate-limited. A new key is listed as admitted after
+       it co-signs a hash that already has pin quorum; that directory is
+       not MatMul authority. A serving node also answers GETMMATTEST
+       with up to 4 heard statements, after its pinned ones. Only
+       trusted mirrors skip ExactReplay on pin M-of-N; consensus miners
+       never skip because a pin signed, and the pin is not
+       FindMostWorkChain or getblocktemplate fork choice on consensus.
+       Set to 1 to enable the directory.
+
+  -matmulopenthreshold=<n>
+       Directory open-quorum signal: distinct pinned-or-admitted unfrozen keys
+       (default: max(M, 2)). Reported by getmatmulattestors; never
+       replaces -matmultrustedthreshold and never skips ExactReplay.
+
+  -matmulrcadmission
+       Require a P2P-only Poseidon2 rcadmit ticket before an untrusted peer may
+       consume an RC ExactReplay slot (default: 1). Local RPC and NoBan
+       peers bypass this policy; no blockchain bytes are added.
+
+  -matmulrcconfirmcpu
+       Diagnostic only (default: 0). A qualified device digest mismatch stays a
+       retryable local failure and is not a consensus rejection, so a
+       faulty GPU cannot permanently reject an honest block. With 1,
+       that mismatch may queue a background portable CPU ExactReplay off
+       the accelerator lease. Execution failures remain retryable. Does
+       not disable explicit cpu-diagnostic or auto-fallback execution.
+
+  -matmulrcexecution=<mode>
+       Select local MatMul RC ExactReplay execution: strict-device requires a
+       production-qualified device and forbids CPU fallback;
+       auto-fallback permits device-to-CPU fallback for
+       pre-activation/testing; cpu-diagnostic explicitly runs the
+       portable oracle (default: strict-device on a chain with a finite
+       RC activation height, auto-fallback while RC activation is
+       disabled). Only strict-device with a currently qualified
+       production provider advertises NODE_MATMUL_CONSENSUS.
+
+  -matmulrcheaderfirst
+       Begin admitted near-tip RC ExactReplay from the immutable block header
+       while compact/full block transactions transfer and validate
+       (default: 1). The early verdict grants no chainwork; complete
+       block validation remains authoritative.
+
+  -matmulrcprovisionalrelay
+       Relay a tightly bounded admitted direct child of the authenticated tip
+       to high-bandwidth peers while ExactReplay runs (default: 1).
+       Provisional headers receive no chainwork credit and cannot be
+       mined on.
+
+  -matmultrustedpqpubkey=<hex>
+       ML-DSA-44 (1312-byte) public key trusted to attest successful Profile-1
+       ExactReplay. Repeat for additional independent pin members; each
+       must be distinct. Counted in N alongside -matmultrustedpubkey.
+       Does not change consensus ExactReplay: only trusted mirrors skip
+       GPU on pin quorum. Empty keeps the live secp pin.
+
+  -matmultrustedpubkey=<hex>
+       Compressed secp256k1 public key trusted to attest successful Profile-1
+       ExactReplay. Repeat for N signers; each must be distinct.
+       Required with -matmulvalidation=trusted unless
+       -matmultrustedpqpubkey is set. Mainnet trusted mirrors require at
+       least 2 independent signers and M=2 (a 1-of-1 quorum is
+       ExactReplay skip authority). Pass -allowsinglekeytrustedmirror=1
+       only as an explicit transition override. ML-DSA-44 pin members
+       from -matmultrustedpqpubkey count toward N independently.
+
+  -matmultrustedthreshold=<n>
+       Required distinct trusted signatures (M) for one block, 1..N (default:
+       1). On mainnet with -matmulvalidation=trusted, M<2 or N<2 is
+       refused: above the Profile-1 activation height the quorum
+       replaces the MatMul proof-of-work check, so a 1-of-1 quorum makes
+       one key the node's sole proof-of-work authority. Override with
+       -allowsinglekeytrustedmirror=1. On -matmulvalidation=consensus
+       the pin is telemetry and never skips ExactReplay. Configure 2
+       independent signers with M=2.
+
+  -matmultrustedwaitms=<n>
+       Maximum time a trusted-mirror block may remain parked awaiting an M-of-N
+       attestation quorum before the attempt is left retryable
+       (non-punitive), in milliseconds (default: 60000, maximum:
+       600000). Does not block the verify worker: many blocks may await
+       quorum concurrently.
+
+  -matmulvalidation=<mode>
+       Select MatMul transcript verification mode: consensus (default),
+       trusted, relay, economic, or spv. trusted performs ordinary
+       block/body/script validation but replaces local Profile-1
+       ExactReplay with an explicitly configured M-of-N signed
+       archive-validator quorum; it is an operator-trusted mirror, not
+       an independently validating full node. relay is the 0.34 public
+       discovery node: ADDR only, not MatMul authority, not a chain-tip
+       oracle, and it never requests or serves GETMMATTEST. Mainnet
+       allows consensus, trusted, and relay. Economic/SPV still skip
+       MatMul authority and remain forbidden on mainnet.
+
+  -maxmempool=<n>
+       Keep the transaction memory pool below <n> megabytes (default: 1024)
+
+  -maxorphantx=<n>
+       Keep at most <n> unconnectable transactions in memory (default: 200)
+
+  -maxreorgdepthpark=<n>
+       Park/refuse automatic switch when a candidate branch would reorganize
+       more than this many blocks and parking is enabled (default: 6 for
+       emergency; disabled for other built-in profiles). Must be >= 1.
+
+  -maxreorgdepthwarn=<n>
+       Warn/alarm when a candidate branch would reorganize more than this many
+       blocks (default: active -reorgprotectionprofile warn depth,
+       standard=3). Must be >= 1.
+
+  -mempoolexpiry=<n>
+       Do not keep transactions in the mempool longer than <n> hours (default:
+       336)
+
+  -minimumchainwork=<hex>
+       Minimum work assumed to exist on a valid chain in hex (default:
+       00000000000000000000000000000000000000000000000000030b4f85e66df7,
+       testnet3:
+       0000000000000000000000000000000000000000000000000000000000000000,
+       testnet4:
+       0000000000000000000000000000000000000000000000000000000000000000,
+       signet:
+       0000000000000000000000000000000000000000000000000000000000000000,
+       shieldedv2dev:
+       0000000000000000000000000000000000000000000000000000000000000000)
+
+  -miningmaxintensity=<percent>
+       Governor mining intensity cap 0-100 (default: 100).
+
+  -mmsketchcache=<n>
+       Number of MatMul v4.4 ENC-DR sketch-cache entries to retain in memory
+       (~8 MiB each; default: 8, 0 to disable). STRICTLY non-consensus
+       and best-effort: the cache only lets this node verify blocks via
+       the cheap Freivalds path and serve getmmsketch to peers;
+       validation always falls back to the exact digest recompute when
+       it is empty.
+
+  -modelbind=<ip:port>
+       PQ1 peer listen address passed to the owned helper (default:
+       0.0.0.0:29447, or off with -listen=0). Empty/0/off = unix RPC
+       only. This is not an unauthenticated model upload or inference
+       API. The helper maps it with PCP/NAT-PMP only when -natpmp is on.
+       Does not advertise NODE_MODEL_HOST.
+
+  -modeld=<path>
+       Path to packaged btx-modeld. Alias of -modelhelper. Default: next to the
+       running btxd / libexec/btx-modeld. A missing explicit path does
+       not spawn a substitute.
+
+  -modeldir=<dir>
+       Isolated model store (default: <datadir>/modelnet). Never
+       wallet/chainstate.
+
+  -modelfollowpeers
+       Follow FREE models announced by -modelpeer / addmodelnode / TTL'd PEX
+       into spare quota (default: 1).
+
+  -modelfreespacereserve=<size>
+       AUTO free-space reserve override (default: about 10% of filesystem
+       capacity; not raised to 32GiB).
+
+  -modelhelper=<path>
+       Path to packaged btx-modeld. Default: next to the running btxd /
+       libexec/btx-modeld.
+
+  -modelhost=auto|1|0|true|false
+       Serve seeded artifacts. auto (and explicit 1/true) wait for proven
+       reachability before NODE_MODEL_HOST. Never advertised merely
+       because the helper is running. Default: 0.
+
+  -modellandiscovery
+       Discover model transport peers on private LAN interfaces using bounded
+       multicast hints (default: 1 when the model helper listens). Every
+       peer still requires strict PQ1. Never modifies monetary AddrMan.
+
+  -modelnet
+       Enable the Native Model Network (default: 1 when compiled
+       WITH_MODELNET). btxd starts a supervised btx-modeld helper. Model
+       failure never stops monetary consensus. Disable with -modelnet=0
+       / -nomodelnet.
+
+  -modelnetrequired
+       Fail btxd startup if the model helper cannot initialize (default: 0).
+       Leave off so money keeps working when the helper is missing.
+
+  -modelpeer=<host:port>
+       Model-plane bootstrap contact passed to the owned helper (repeatable).
+       When unset, resolve chainparams ModelDNSSeeds() (empty until a
+       crawl publishes DNS names; no compiled-in host or address).
+       Alias: -modelseednode. Monetary DNS seeds and MDPEERS hints are
+       not dialed.
+
+  -modelpreserverare
+       Fetch qualified under-replicated public models into spare quota
+       (default: 0).
+
+  -modelprofile=personal|infrastructure|mirror|custom
+       Operator config preset for
+       storage/seed/follow/preserve/relay/index/host-auto. Ordinary args
+       only; no monetary, search, consensus, or bounty privilege.
+       Persisted under modeldir/operator_profile.json.
+
+  -modelrelay
+       Advertise NODE_MODEL_RELAY as an unauthenticated discovery hint
+       (default: 0). Enable with -modelrelay=1. Never MatMul authority,
+       never a chain source, never a wallet. Artifact endpoints are not
+       inserted into monetary AddrMan.
+
+  -modelrpcsocket=<path>
+       Unix socket for btx-modeld JSON-RPC (default:
+       <datadir>/modelnet/modeld.sock). If set explicitly, btxd connects
+       and does not spawn or kill that helper. Otherwise btxd owns a
+       child btx-modeld.
+
+  -modelseed=auto|manual|off
+       Demand-seed after intentional import/getmodel (default: auto).
+
+  -modelseednode=<host:port>
+       Alias of -modelpeer.
+
+  -modelstorage=<size>
+       Model payload budget: auto (packaged default), 0, or 80GiB. AUTO sizes
+       against the model-store filesystem.
+
+  -modelstorageautocap=<size>
+       AUTO hard cap (default: 512GiB).
+
+  -modeluploadlimit=<bps>
+       Aggregate model upload cap. auto = governor ceiling. 0 = connection
+       ceilings only.
+
+  -modelwatch=<dir>
+       Auto-host GGUF/SafeTensors/EXL3 dropped in this directory (watch-folder
+       analog). Empty = off.
+
+  -offerattestedutxosnapshot=<file>
+       Offer this attested UTXO snapshot over P2P from startup, as the
+       offerattestedutxosnapshot RPC does at runtime (an RPC offer is
+       held in memory and is gone after a restart). Use with
+       -offerattestedutxosnapshotmanifest. Relative paths resolve under
+       the network datadir. The files get the same checks as the RPC; if
+       a check fails the node starts without an offer and logs the
+       reason.
+
+  -offerattestedutxosnapshotmanifest=<file>
+       Signed manifest for -offerattestedutxosnapshot. Relative paths resolve
+       under the network datadir.
+
+  -par=<n>
+       Set the number of script verification threads (0 = auto, up to 15, <0 =
+       leave that many cores free, default: 0)
+
+  -parkdeepreorg
+       Per-node deep-reorg parking action override (NON-CONSENSUS). When 1 and
+       -maxreorgdepthpark/profile park depth is set, the node refuses to
+       auto-switch to a branch deeper than that depth and stays on its
+       current tip pending operator action. When 0, it follows the
+       automated fork-choice policy and only alarms/defers by
+       hysteresis. When unset, the selected profile decides (the default
+       emergency profile parks beyond depth 6). Explicit 0 conflicts
+       with -reorgpolicy=bounded.
+
+  -persistmempool
+       Whether to save the mempool on shutdown and load on restart (default: 1)
+
+  -persistmempoolv1
+       Whether a mempool.dat file created by -persistmempool or the savemempool
+       RPC will be written in the legacy format (version 1) or the
+       current format (version 2). This temporary option will be removed
+       in the future. (default: 0)
+
+  -pid=<file>
+       Specify pid file. Relative paths will be prefixed by a net-specific
+       datadir location. (default: btxd.pid)
+
+  -prevoutfetchthreads=<n>
+       Set the number of threads used to prefetch block input prevouts from the
+       chainstate database (0 disables, up to 16, default: 2). Negative
+       values are rejected.
+
+  -prune=<n>
+       Reduce storage requirements by enabling pruning (deleting) of old
+       blocks. This allows the pruneblockchain RPC to be called to
+       delete specific blocks and enables automatic pruning of old
+       blocks if a target size in MiB is provided. This mode is
+       incompatible with -txindex. Warning: Reverting this setting
+       requires re-downloading the entire blockchain. (default: 0 =
+       disable pruning blocks, 1 = allow manual pruning via RPC, >=550 =
+       automatically prune block files to stay under the specified
+       target size in MiB)
+
+  -pruneduringinit=<n>
+       Temporarily adjusts the -prune setting until initial sync completes.
+       Ignored if pruning is disabled. (default: -1 = same value as
+       -prune)
+
+  -randomtiebreak
+       Selfish-mining mitigation: when two blocks tie at equal total work,
+       choose between them using a per-node random key (Hash(secret-seed
+       || blockhash)) instead of first-seen-wins. Node-local policy on
+       equal-work tips only; does not change consensus, needs no fork
+       activation, and cannot stop a true >50%% attacker. (default: 1)
+
+  -reindex
+       If enabled, wipe chain state and block index, and rebuild them from
+       blk*.dat files on disk. Also wipe and rebuild other optional
+       indexes that are active. If an assumeutxo snapshot was loaded,
+       its chainstate will be wiped as well. The snapshot can then be
+       reloaded via RPC. Setting this to auto automatically reindexes
+       the block database if it is corrupted.
+
+  -reindex-chainstate
+       If enabled, wipe chain state, and rebuild it from blk*.dat files on
+       disk. If an assumeutxo snapshot was loaded, its chainstate will
+       be wiped as well. The snapshot can then be reloaded via RPC.
+       Note: this does not rerun all contextual block checks; use
+       -reindex for full historical re-validation after changing MatMul
+       validation mode.
+
+  -reorghysteresisdepth=<n>
+       Require extra work before auto-switching to a late branch that would
+       reorganize more than this many blocks (default: active
+       -reorgprotectionprofile hysteresis depth; built-in profiles use
+       0, so any depth-1-or-deeper rewrite needs extra work). Set to 0
+       to protect every active-chain rewrite; use
+       -reorghysteresisworkmargin=0 to disable. Must be >= 0.
+
+  -reorghysteresisworkmargin=<n>
+       Extra work margin, in current-tip block equivalents, required for
+       shallow reorg hysteresis (default: active -reorgprotectionprofile
+       margin; standard/emergency=2). Set to 0 to disable hysteresis
+       while keeping warnings/optional parking.
+
+  -reorgnormaldepth=<n>
+       Bounded-policy ordinary automatic reorg depth (default: 6, range 1..999,
+       must be <= -reorgrecoverymaxdepth).
+
+  -reorgpolicy=<mode>
+       Local automatic-reorg policy (NON-CONSENSUS): legacy (default), observe,
+       or bounded. Legacy keeps park and deep-fork auto-resolve, so an
+       ExactReplay-verified deeper fork can still activate. Bounded is
+       an explicit opt-in: it keeps ordinary reorgs within
+       -reorgnormaldepth (default 6) and, only after a local stall,
+       within -reorgrecoverymaxdepth (default 72), and a heavier valid
+       chain beyond that ceiling stays parked until an explicit
+       one-transition repair. Observe reports the bounded decision and
+       still uses legacy activation. BTX has no finality gadget, so the
+       hard recovery ceiling is not the unattended default. This does
+       not change block validity and does not require a signer or
+       trusted peer.
+
+  -reorgprotectionprofile=<mode>
+       Per-node reorg/finality profile: emergency (default), standard, miner
+       (alias for standard), archive, balanced, or strict. Emergency
+       parks rewrites deeper than 6 blocks; standard/strict warn after
+       3-block rewrites, balanced warns after 12, and archive alarms
+       after 72. Use -parkdeepreorg=0 to disable emergency parking. This
+       is local fork-choice policy, not block validity.
+
+  -reorgrecoverymaxdepth=<n>
+       Bounded-policy hard automatic recovery ceiling (default: 72, range
+       1..999). ExactReplay, attestations, and a one-time repair do not
+       raise it.
+
+  -reorgstallseconds=<n>
+       Seconds without a forward connection before bounded stall recovery may
+       arm (default: 900).
+
+  -resetshieldedstate
+       One-shot repair: wipe the on-disk shielded_state directory at startup
+       and force a single clean rebuild of shielded validation state
+       from local block data (default: 0). Supported replacement for
+       manually moving shielded_state aside when a prior shielded
+       rebuild was interrupted/corrupted; block files and wallets are
+       untouched. Pass once, let the rebuild finish (watch the
+       'RebuildShieldedState: replaying ...' progress lines), then
+       remove it. Requires intact local block data; if blocks are
+       pruned/corrupt use a snapshot or -reindex instead.
+
+  -resourcegovernor=<mode>
+       Local resource governor: auto, performance, balanced, eco, manual, or
+       off to deny all governed work including mining (default: auto).
+       There is no ungoverned mining mode. Never consensus.
+
+  -retainshieldedcommitmentindex
+       Keep the shielded commitment-position index in the local LevelDB store
+       across restart and snapshot recovery (default: 1). Set this to 0
+       only if you explicitly want the slower externalized-retention
+       posture that rebuilds the index in memory after restart in
+       exchange for lower retained shielded-state growth.
+
+  -settings=<file>
+       Specify path to dynamic settings data file. Can be disabled with
+       -nosettings. File is written at runtime and not meant to be
+       edited by users (use btx.conf instead for custom settings).
+       Relative paths will be prefixed by datadir location. (default:
+       settings.json)
+
+  -shieldedstartupaudit
+       Audit restored shielded state against historical block data during
+       startup (default: 1). Applies when -fastshieldedstartup is
+       disabled or cannot be taken: set to 0 to keep the persisted-state
+       drift sync but skip the cross-chain audit. Consensus checks still
+       run for newly connected blocks.
+
+  -shieldedstate
+       Open the shielded LevelDB stores (nullifiers, commitments,
+       account_registry) even after nShieldedPoolDisableHeight (default:
+       0, auto). Past the pool-disable flag-day those stores are not
+       required for consensus: spends are invalid, so nullifiers and
+       membership proofs cannot be presented. Explorers and indexers
+       that still want the historical view pass -shieldedstate=1.
+
+  -shutdownnotify=<cmd>
+       Execute command immediately before beginning shutdown. The need for
+       shutdown may be urgent, so be careful not to delay it long (if
+       the command doesn't require interaction with the server, consider
+       having it fork into the background).
+
+  -softwareexpiry
+       Stop working after this POSIX timestamp (default: 1857151480)
+
+  -startupnotify=<cmd>
+       Execute command on startup.
+
+  -txindex
+       Maintain a full transaction index, used by the getrawtransaction rpc
+       call (default: 0)
+
+  -version
+       Print version and exit
+
+Connection options:
+
+  -addnode=<ip>
+       Add a node to connect to and attempt to keep the connection open (see
+       the addnode RPC help for more info). This option can be specified
+       multiple times to add multiple nodes; connections are limited to
+       8 at a time and are counted separately from the -maxconnections
+       limit.
+
+  -allowdangerousnoban
+       Allow broad -whitelist=noban ranges (default: 0)
+
+  -asmap=<file>
+       Specify asn mapping used for bucketing of the peers (default:
+       ip_asn.map). Relative paths will be prefixed by the net-specific
+       datadir location. No map ships in the tree (same as Bitcoin
+       Core); enable once the reachable peer set spans more than one
+       ASN. A stale map can make eclipse easier.
+
+  -bantime=<n>
+       Default duration (in seconds) of manually configured bans (default:
+       86400)
+
+  -bind=<addr>[:<port>][=onion]
+       Bind to given address and always listen on it (default: 0.0.0.0). Use
+       [host]:port notation for IPv6. Append =onion to tag any incoming
+       connections to that address and port as incoming Tor connections
+       (default: 127.0.0.1:19336=onion, testnet3: 127.0.0.1:29336=onion,
+       testnet4: 127.0.0.1:48334=onion, signet: 127.0.0.1:38334=onion,
+       regtest: 127.0.0.1:18445=onion, shieldedv2dev:
+       127.0.0.1:19445=onion)
+
+  -cjdnsreachable
+       If set, then this host is configured for CJDNS (connecting to fc00::/8
+       addresses would lead us to the CJDNS network, see doc/cjdns.md)
+       (default: 0)
+
+  -connect=<ip>
+       Connect only to the specified node; -noconnect disables automatic
+       connections (the rules for this peer are the same as for
+       -addnode). This option can be specified multiple times to connect
+       to multiple nodes.
+
+  -dandelion
+       Enable Dandelion++ privacy relay (default: 1)
+
+  -discover
+       Discover own IP addresses (default: 1 when listening and no -externalip
+       or -proxy)
+
+  -discoveryrelayhideaddr=<ip>
+       Do not learn, GETADDR, or getnodeaddresses this IP. Repeatable. Use on
+       discovery relays and trusted archives to hide GPU attestor
+       addresses that advertise CONSENSUS without ARCHIVE (serve=0).
+       Relays InitError if -addnode/-connect/-seednode targets a hidden
+       address.
+
+  -dns
+       Allow DNS lookups for -addnode, -seednode and -connect (default: 1)
+
+  -dnsseed
+       Query for peer addresses via DNS lookup, if low on addresses (default: 1
+       unless -connect used or -maxconnections=0)
+
+  -externalip=<ip>
+       Specify your own public address
+
+  -feefilter
+       Tell other nodes to filter invs to us by our mempool min fee (default:
+       1)
+
+  -fixedseeds
+       Allow fixed seeds if DNS seeds don't provide peers (default: 1)
+
+  -forcednsseed
+       Always query for peer addresses via DNS lookup (default: 0)
+
+  -i2pacceptincoming
+       Whether to accept inbound I2P connections (default: 1). Ignored if
+       -i2psam is not set. Listening for inbound I2P connections is done
+       through the SAM proxy, not by binding to a local address and
+       port.
+
+  -i2psam=<ip:port>
+       I2P SAM proxy to reach I2P peers and accept I2P connections (default:
+       none)
+
+  -listen
+       Accept connections from outside (default: 1 if no -proxy, -connect or
+       -maxconnections=0)
+
+  -listenonion
+       Automatically create Tor onion service (default: 1)
+
+  -matmulrcenforcementheight=<n>
+       Chain height at which MatMul v4.7 Epoch-A peer protocol version
+       enforcement activates. Default 2147483647 (INT32_MAX) leaves
+       enforcement disabled so upgraded nodes do not self-partition from
+       800001 peers. Lower only when the network has coordinated an
+       upgrade.
+
+  -maxconnections=<n>
+       Maintain at most <n> automatic connections to peers (default: 125). This
+       limit does not apply to connections manually added via -addnode
+       or the addnode RPC, which have a separate limit of 8.
+
+  -maxreceivebuffer=<n>
+       Maximum per-connection receive buffer, <n>*1000 bytes (default: 5000)
+
+  -maxsendbuffer=<n>
+       Maximum per-connection memory usage for the send buffer, <n>*1000 bytes
+       (default: 1000)
+
+  -maxuploadtarget=<n>
+       Tries to keep outbound traffic under the given target per 24h. Limit
+       does not apply to peers with 'download' permission or blocks
+       created within past week. 0 = no limit (default: 0M). Optional
+       suffix units [k|K|m|M|g|G|t|T] (default: M). Lowercase is 1000
+       base while uppercase is 1024 base
+
+  -minmatmulrcversion=<n>
+       Minimum peer protocol version required to follow the MatMul v4.7 Epoch-A
+       chain. Peers below this version are disconnected once the chain
+       tip passes the enforcement height. (default: 800002)
+
+  -minsmilev2version=<n>
+       Minimum peer protocol version required for SMILE v2 shielded
+       transactions. Peers below this version are disconnected once the
+       chain tip passes the enforcement height. (default: 800001)
+
+  -natpmp
+       Use PCP or NAT-PMP to map the listening port (default: 1)
+
+  -networkactive
+       Enable all P2P network activity (default: 1). Can be changed by the
+       setnetworkactive RPC command
+
+  -onion=<ip:port|path>
+       Use separate SOCKS5 proxy to reach peers via Tor onion services, set
+       -noonion to disable (default: -proxy). May be a local file path
+       prefixed with 'unix:'.
+
+  -onlynet=<net>
+       Make automatic outbound connections only to network <net> (ipv4, ipv6,
+       onion, i2p, cjdns). Inbound and manual connections are not
+       affected by this option. It can be specified multiple times to
+       allow multiple networks.
+
+  -peerblockfilters
+       Serve compact block filters to peers per BIP 157 (default: 0)
+
+  -peerbloomfilters
+       Support filtering of blocks and transactions with bloom filters
+       (default: localhost only)
+
+  -peertimeout=<n>
+       Specify a p2p connection timeout delay in seconds. After connecting to a
+       peer, wait this amount of time before considering disconnection
+       based on inactivity (minimum: 1, default: 60)
+
+  -port=<port>
+       Listen for connections on <port> (default: 19335, testnet3: 29335,
+       testnet4: 48333, signet: 38333, regtest: 18444, shieldedv2dev:
+       19444). Not relevant for I2P (see doc/i2p.md). If set to a value
+       x, the default onion listening port will be set to x+1.
+
+  -proxy=<ip>[:<port>]|unix:<path>[=<network>]
+       Connect through SOCKS5 proxy, set -noproxy to disable. May be a local
+       file path prefixed with 'unix:' if the proxy supports it. Could
+       end in =network to set the proxy only for that network. The
+       network can be any of ipv4, ipv6, tor or cjdns. (default:
+       disabled)
+
+  -proxyrandomize
+       Randomize credentials for every proxy connection. This enables Tor
+       stream isolation (default: 1)
+
+  -seednode=<ip>
+       Connect to a node to retrieve peer addresses, and disconnect. This
+       option can be specified multiple times to connect to multiple
+       nodes. During startup, seednodes will be tried before dnsseeds.
+
+  -timeout=<n>
+       Specify socket connection timeout in milliseconds. If an initial attempt
+       to connect is unsuccessful after this amount of time, drop it
+       (minimum: 1, default: 5000)
+
+  -torcontrol=<ip>:<port>
+       Tor control host and port to use if onion listening enabled (default:
+       127.0.0.1:9051). If no port is specified, the default port of
+       9051 will be used.
+
+  -torexecute=<command>
+       Tor command to use if not already running (default: tor)
+
+  -torpassword=<pass>
+       Tor control port password (default: empty)
+
+  -txreconciliation
+       Enable transaction reconciliations per BIP 330 (default: 0)
+
+  -uaappend=<uafragment>
+       Append literal string to the user agent string (should only be used for
+       software embedding)
+
+  -uacomment=<cmt>
+       Append comment to the user agent string
+
+  -uaspoof=<ua>
+       Replace entire user agent string with custom identifier (should be
+       formatted '/Name:Version/Name:Version/.../' as specified in BIP
+       14)
+
+  -v2onlyclearnet
+       Disallow outbound v1 connections on IPV4/IPV6 (default: 0). Enable this
+       option only if you really need it. Use -listen=0 to disable
+       inbound connections since they can be unencrypted.
+
+  -v2pqhybrid
+       On v2 (BIP324) connections, advertise and use the post-quantum hybrid
+       X25519+ML-KEM-768 key upgrade with peers that also support it
+       (default: 1). Disabling makes this node behave as a stock-BIP324
+       v2 peer; peers that do support it still fall back gracefully.
+
+  -v2pqonly
+       Require the post-quantum hybrid X25519+ML-KEM-768 upgrade on every
+       connection (default: 0). Peers that do not complete the hybrid
+       handshake (legacy v2, or v1) are disconnected instead of served
+       over an X25519-only/unencrypted link. The key derivation is
+       unchanged (still hybrid); enable only once your peers support it,
+       as it can partition you from non-upgraded nodes. Implies
+       -v2pqhybrid.
+
+  -v2transport
+       Support v2 transport (default: 1)
+
+  -whitebind=<[permissions@]addr>
+       Bind to the given address and add permission flags to the peers
+       connecting to it. Use [host]:port notation for IPv6. Allowed
+       permissions: bloomfilter (allow requesting BIP37 filtered blocks
+       and transactions), blockfilters (serve compact block filters to
+       peers per BIP157), noban (do not ban for misbehavior; implies
+       download), forcerelay (relay transactions that are already in the
+       mempool; implies relay), relay (relay even in -blocksonly mode,
+       and unlimited transaction announcements), mempool (allow
+       requesting BIP35 mempool contents), download (allow getheaders
+       during IBD, no disconnect after maxuploadtarget limit), addr
+       (responses to GETADDR avoid hitting the cache and contain random
+       records with the most up-to-date info), forceinbound (when
+       connections are full, attempt to evict a random unprotected
+       inbound peer to open a slot; implies noban). Specify multiple
+       permissions separated by commas (default:
+       download,noban,mempool,relay). Can be specified multiple times.
+
+  -whitelist=<[permissions@]IP address or network>
+       Add permission flags to the peers using the given IP address (e.g.
+       1.2.3.4) or CIDR-notated network (e.g. 1.2.3.0/24). Uses the same
+       permissions as -whitebind. Implicit whitelist permissions are
+       download,mempool,addr plus relay/forcerelay knobs; noban must be
+       explicit. Additional flags "in" and "out" control whether
+       permissions apply to incoming connections and/or outgoing
+       (default: incoming only). Specifying "out" without "in" replaces
+       that inbound default rather than adding to it; noban without
+       inbound will not protect inbound peers from MatMul near-tip
+       disconnects. Can be specified multiple times.
+
+Wallet options:
+
+  -addresstype
+       What type of addresses to use (supported: "p2mr", default: "p2mr")
+
+  -autoshieldcoinbase
+       Automatically shield mature coinbase outputs into the shielded pool when
+       a new block arrives (default: false). Historical/pre-sunset
+       opt-in for fund preservation: mined rewards stay as post-quantum
+       transparent (P2MR, ML-DSA/SLH-DSA) outputs, which carry no
+       shielded-proof soundness exposure, unless the operator chooses
+       privacy before the sunset. Even when enabled, auto-shielding does
+       not begin until the configured C-002 shielded-pool hardening
+       height activates (block 123,000 on mainnet; see
+       -autoshieldcoinbaseminheight) and is inert once shielded pool
+       credits are disabled by consensus.
+
+  -autoshieldcoinbaseminheight=<n>
+       Do not auto-shield coinbase below this block height (default: the
+       configured C-002 shielded-pool hardening height, 123000 on
+       mainnet). Lower it (e.g. 0) only on test networks where C-002 is
+       effectively active early.
+
+  -avoidpartialspends
+       Group outputs by address, selecting many (possibly all) or none, instead
+       of selecting on a per-output basis. Privacy is improved as
+       addresses are mostly swept with fewer transactions and outputs
+       are aggregated in clean change addresses. It may result in higher
+       fees due to less optimal coin selection caused by this added
+       limitation and possibly a larger-than-necessary number of inputs
+       being used. Always enabled for wallets with "avoid_reuse"
+       enabled, otherwise default: 0.
+
+  -bridgependingconfirmdepth=<n>
+       Keep active bridge recovery records until settlement/refund reaches at
+       least <n> confirmations before archiving (default: 20)
+
+  -changetype
+       What type of change to use (supported: "p2mr").
+
+  -consolidatefeerate=<amt>
+       The maximum feerate (in BTX/kvB) at which transaction building may use
+       more inputs than strictly necessary so that the wallet's UTXO
+       pool can be reduced (default: 0.0001).
+
+  -disablewallet
+       Do not load the wallet and disable wallet RPC calls
+
+  -discardfee=<amt>
+       The fee rate (in BTX/kvB) that indicates your tolerance for discarding
+       change by adding it to the fee (default: 0.0001). Note: An output
+       is discarded if it is dust at this rate, but we will always
+       discard up to the dust relay fee and a discard fee above that is
+       limited by the fee estimate for the longest target
+
+  -exchange-watchonly
+       BCP/1: refuse in-process private signing. Wallets must be descriptor +
+       disable_private_keys (external signer or imported deposit pool).
+       See doc/integrations/bcp1.md
+
+  -fallbackfee=<amt>
+       A fee rate (in BTX/kvB) that will be used when fee estimation has
+       insufficient data. 0 to entirely disable the fallbackfee feature.
+       (default: 0.00001)
+
+  -keypool=<n>
+       Set key pool size to <n> (default: 20). Each new index derives an ML-DSA
+       key and, on the default descriptor, an SLH-DSA public key,
+       because the address commits to both. SLH-DSA public keys are the
+       slow part of createwallet and keypoolrefill. Warning: Smaller
+       sizes may increase the risk of losing funds when restoring from
+       an old backup, if none of the addresses in the original keypool
+       have been used.
+
+  -maxapsfee=<n>
+       Spend up to this amount in additional (absolute) fees (in BTX) if it
+       allows the use of partial spend avoidance (default: 0.00)
+
+  -mintxfee=<amt>
+       Fee rates (in BTX/kvB) smaller than this are considered zero fee for
+       transaction creation (default: 0.00001)
+
+  -paytxfee=<amt>
+       Fee rate (in BTX/kvB) to add to transactions you send (default: 0.00)
+
+  -shieldedringsize=<n>
+       Default shielded send/ingress ring size to build in the wallet
+       (supported: 8..32, default: 8). Larger supported ring sizes
+       remain available without a wire-format change.
+
+  -signer=<cmd>
+       External signing tool, see doc/external-signer.md
+
+  -signerfingerprint=<hex>
+       Preferred external signer fingerprint when multiple devices are
+       connected
+
+  -spendzeroconfchange
+       Spend unconfirmed change when sending transactions (default: 1)
+
+  -txconfirmtarget=<n>
+       If paytxfee is not set, include enough fee so transactions begin
+       confirmation on average within n blocks (default: 144)
+
+  -wallet=<path>
+       Specify wallet path to load at startup. Can be used multiple times to
+       load multiple wallets. Path is to a directory containing wallet
+       data and log files. If the path is not absolute, it is
+       interpreted relative to <walletdir>. This only loads existing
+       wallets and does not create new ones. For backwards compatibility
+       this also accepts names of existing top-level data files in
+       <walletdir>.
+
+  -walletbroadcast
+       Make the wallet broadcast transactions (default: 1)
+
+  -walletdepositnotify=<cmd>
+       BCP/1: execute command when a wallet deposit changes. %s=txid, %e=event
+       name (deposit.detected, …), %j=JSON object
+       (chain/txid/vout/amount_atoms/status/…). Does not add ZMQ
+       topics. %w=wallet name (not on windows).
+
+  -walletdir=<dir>
+       Specify directory to hold wallets (default: <datadir>/wallets if it
+       exists, otherwise <datadir>)
+
+  -walletimplicitsegwit
+       Support segwit when restoring wallet backups and importing keys
+       (default: 0)
+
+  -walletnotify=<cmd>
+       Execute command when a wallet transaction changes. %s in cmd is replaced
+       by TxID, %w is replaced by wallet name, %b is replaced by the
+       hash of the block including the transaction (set to 'unconfirmed'
+       if the transaction is not included) and %h is replaced by the
+       block height (-1 if not included). %w is not currently
+       implemented on windows. On systems where %w is supported, it
+       should NOT be quoted because this would break shell escaping used
+       to invoke the command.
+
+  -walletrbf
+       Send transactions with full-RBF opt-in enabled (RPC only, default: 1)
+
+  -walletreorgholdblocks=<n>
+       After any block disconnect/reorg, report wallet settlement_safe=false
+       and settlement-safe balances as zero until this many additional
+       blocks have built after the observed reorg hold anchor (default:
+       12, 0 disables the block component). This is wallet/service
+       policy and does not change consensus validity or legacy
+       trusted-balance semantics.
+
+  -walletreorgholdseconds=<n>
+       After any block disconnect/reorg, keep wallet settlement_safe reporting
+       disabled for at least this many seconds after the reorg is
+       observed (default: 3600, 0 disables the time component). This
+       prevents a premined replacement branch from burning down the hold
+       before services can react.
+
+  -walletreorgsafetydepth=<n>
+       Minimum confirmations wallet RPCs report as settlement-safe for
+       reorg-aware services (default: 12). This does not change
+       consensus validity or legacy trusted-balance semantics.
+
+Wallet debugging/testing options:
+
+  -unsafesqlitesync
+       Set SQLite synchronous=OFF to disable waiting for the database to sync
+       to disk. This is unsafe and can cause data loss and corruption.
+       This option is only used by tests to improve their performance
+       (default: false)
+
+  -walletcrosschain
+       Allow reusing wallet files across chains (default: 0)
+
+  -walletrejectlongchains
+       Wallet will not create transactions that violate mempool chain limits
+       (default: 1)
+
+ZeroMQ notification options:
+
+  -zmqpubhashblock=<address>
+       Enable publish hash block in <address>
+
+  -zmqpubhashblockhwm=<n>
+       Set publish hash block outbound message high water mark (default: 1000)
+
+  -zmqpubhashtx=<address>
+       Enable publish hash transaction in <address>
+
+  -zmqpubhashtxhwm=<n>
+       Set publish hash transaction outbound message high water mark (default:
+       1000)
+
+  -zmqpubhashwallettx=<address>
+       Enable publish hash wallet transaction in <address>
+
+  -zmqpubhashwallettxhwm=<n>
+       Set publish hash wallet transaction outbound message high water mark
+       (default: 1000)
+
+  -zmqpubrawblock=<address>
+       Enable publish raw block in <address>
+
+  -zmqpubrawblockhwm=<n>
+       Set publish raw block outbound message high water mark (default: 1000)
+
+  -zmqpubrawtx=<address>
+       Enable publish raw transaction in <address>
+
+  -zmqpubrawtxhwm=<n>
+       Set publish raw transaction outbound message high water mark (default:
+       1000)
+
+  -zmqpubrawwallettx=<address>
+       Enable publish raw wallet transaction in <address>
+
+  -zmqpubrawwallettxhwm=<n>
+       Set publish raw wallet transaction outbound message high water mark
+       (default: 1000)
+
+  -zmqpubsequence=<address>
+       Enable publish hash block and tx sequence in <address>
+
+  -zmqpubsequencehwm=<n>
+       Set publish hash sequence message high water mark (default: 1000)
+
+Debugging/Testing options:
+
+  -acceptstalefeeestimates
+       Read fee estimates even if they are stale (regtest only; default: 0) fee
+       estimates are considered stale if they are 60 hours old
+
+  -acquisitionstallseconds=<n>
+       TEST-ONLY. Override the RB-16 acquisition-escape staleness window in
+       seconds (default: 600). Ignored on mainnet. Only changes how long
+       a frozen node waits before the escape valve may arm -- never any
+       validation, ExactReplay, or migration gate. Intended solely to
+       speed up regtest/testnet convergence tests; do NOT use in
+       production. Must be >= 1.
+
+  -autoupdatedevorigin
+       Allow non-HTTPS auto-update origins for local testing only.
+
+  -capturemessages
+       Capture all P2P messages to disk
+
+  -checkaddrman=<n>
+       Run addrman consistency checks every <n> operations. Use 0 to disable.
+       (default: 0)
+
+  -checkblockindex
+       Do a consistency check for the block tree, chainstate, and other
+       validation data structures every <n> operations. Use 0 to
+       disable. (default: 0, regtest: 1)
+
+  -checkblocks=<n>
+       How many blocks to check at startup (default: 6, 0 = all)
+
+  -checklevel=<n>
+       How thorough the block verification of -checkblocks is: level 0 reads
+       the blocks from disk, level 1 verifies block validity, level 2
+       verifies undo data, level 3 checks disconnection of tip blocks,
+       level 4 tries to reconnect the blocks, each level includes the
+       checks of the previous levels (0-4, default: 3)
+
+  -checkmempool=<n>
+       Run mempool consistency checks every <n> transactions. Use 0 to disable.
+       (default: 0, regtest: 1)
+
+  -checkpoints
+       Enable rejection of any forks from the known historical chain until
+       block 228000 (default: 1)
+
+  -debug=<category>
+       Output debug and trace logging (default: -nodebug, supplying <category>
+       is optional). If <category> is not supplied or if <category> is 1
+       or "all", output all debug logging. If <category> is 0 or "none",
+       any other categories are ignored. Other valid values for
+       <category> are: addrman, autoupdate, bench, blockstorage,
+       cmpctblock, coindb, dandelion, estimatefee, http, i2p, ipc,
+       leveldb, libevent, mempool, mempoolrej, mining, modelnet, net,
+       proxy, prune, qt, rand, reindex, rpc, scan, selectcoins, tor,
+       txpackages, txreconciliation, validation, walletdb, zmq. This
+       option can be specified multiple times to output multiple
+       categories.
+
+  -debugexclude=<category>
+       Exclude debug and trace logging for a category. Can be used in
+       conjunction with -debug=1 to output debug and trace logging for
+       all categories except the specified category. This option can be
+       specified multiple times to exclude multiple categories. This
+       takes priority over "-debug"
+
+  -deprecatedrpc=<method>
+       Allows deprecated RPC method(s) to be used
+
+  -enablecomputeproductionwork
+       Allow solvecomputequalification to execute the production Profile-1
+       workload locally (default: 0). The workload is large; leave this
+       off unless a campaign is intended.
+
+  -enablecomputetestprofiles
+       Expose the regtest-only toy compute profile btx-rc-p1e-toy-v1 (default:
+       0). Refused outside regtest. Toy units cannot settle mainnet
+       agreements.
+
+  -fastprune
+       Use smaller block files and lower minimum prune height for testing
+       purposes
+
+  -help-debug
+       Print help message with debugging options and exit
+
+  -limitancestorcount=<n>
+       Do not accept transactions if number of in-mempool ancestors is <n> or
+       more (default: 100)
+
+  -limitancestorsize=<n>
+       Do not accept transactions whose size with all in-mempool ancestors
+       exceeds <n> kilobytes (default: 1024)
+
+  -limitdescendantcount=<n>
+       Do not accept transactions if any ancestor would have <n> or more
+       in-mempool descendants (default: 100)
+
+  -limitdescendantsize=<n>
+       Do not accept transactions if any ancestor would have more than <n>
+       kilobytes of in-mempool descendants (default: 1024).
+
+  -logips
+       Include IP addresses in debug output (default: 0)
+
+  -loglevel=<level>|<category>:<level>
+       Set the global or per-category severity level for logging categories
+       enabled with the -debug configuration option or the logging RPC.
+       Possible values are info, debug, trace (default=debug). The
+       following levels are always logged: error, warning, info. If
+       <category>:<level> is supplied, the setting will override the
+       global one and may be specified multiple times to set multiple
+       category-specific levels. <category> can be: addrman, autoupdate,
+       bench, blockstorage, cmpctblock, coindb, dandelion, estimatefee,
+       http, i2p, ipc, leveldb, libevent, mempool, mempoolrej, mining,
+       modelnet, net, proxy, prune, qt, rand, reindex, rpc, scan,
+       selectcoins, tor, txpackages, txreconciliation, validation,
+       walletdb, zmq.
+
+  -loglevelalways
+       Always prepend a category and level (default: 0)
+
+  -logratelimit
+       Apply rate limiting to unconditional logging to mitigate disk-filling
+       attacks (default: 1)
+
+  -logsourcelocations
+       Prepend debug output with name of the originating source location
+       (source file, line number and function name) (default: 0)
+
+  -logthreadnames
+       Prepend debug output with name of the originating thread (default: 0)
+
+  -logtimemicros
+       Add microsecond precision to debug timestamps (default: 0)
+
+  -logtimestamps
+       Prepend debug output with timestamp (default: 1)
+
+  -maxsigcachesize=<n>
+       Limit sum of signature cache and script execution cache sizes to <n> MiB
+       (default: 128)
+
+  -maxtipage=<n>
+       Maximum tip age in seconds to consider node in initial block download
+       (default: 2592000). A stalled chain whose tip is older than this
+       looks like IBD after restart. Historical catch-up still
+       suppresses INV floods; age-only IBD still announces the tip.
+       Miners on a stalled chain should raise this until
+       getblockchaininfo.initialblockdownload is false.
+
+  -maxtxfee=<amt>
+       Maximum total fees (in BTX) to use in a single wallet transaction;
+       setting this too low may abort large transactions (default: 0.10)
+
+  -mocktime=<n>
+       Replace actual time with UNIX epoch time (default: 0)
+
+  -printpriority
+       Log transaction priority and fee rate in BTX/kvB when mining blocks
+       (default: 0)
+
+  -printtoconsole
+       Send trace/debug info to console (default: 1 when no -daemon. To disable
+       logging to file, set -nodebuglogfile)
+
+  -shrinkdebugfile
+       Shrink debug log file on client startup (default: 1 when no -debug)
+
+  -stopafterblockimport
+       Stop running after importing blocks from disk (default: 0)
+
+  -stopatheight
+       Stop running after reaching the given height in the main chain (default:
+       0)
+
+  -test=<option>
+       Pass a test-only option. Options include : addrman (use deterministic
+       addrman), matmulstrict (enable full MatMul PoW validation on
+       regtest), kawpowstrict (deprecated alias for matmulstrict),
+       matmuldgw (enable MatMul DGW retargeting with a finite
+       fast-mining window on regtest),
+       reindex_after_failure_noninteractive_yes (When asked for a
+       reindex after failure interactively, simulate as-if answered with
+       'yes'), bip94 (enforce BIP94 consensus rules).
+
+  -testactivationheight=name@height.
+       Set the activation height of 'name' (segwit, bip34, dersig, cltv, csv).
+       (regtest-only)
+
+Chain selection options:
+
+  -chain=<chain>
+       Use the chain <chain> (default: main). Allowed values: main, test,
+       testnet4, signet, regtest, shieldedv2dev
+
+  -mldsadisableheight=<n>
+       Set ML-DSA consensus disable height for regtest (regtest-only)
+
+  -regtest
+       Enter regression test mode, which uses a special chain in which blocks
+       can be solved instantly. This is intended for regression testing
+       tools and app development. Equivalent to -chain=regtest.
+
+  -regtestbmx4cheight=<n>
+       Override regtest MatMul v4.2 ENC-BMX4C encoding-profile activation
+       height (regtest-only)
+
+  -regtestcontenteliminationheight=<n>
+       Override regtest content-elimination hard-fork height (regtest-only)
+
+  -regtestdrltheight=<n>
+       Override regtest MatMul v4.4-LT Rank-1 ENC-DR-LT encoding-profile
+       activation height; must be >= the (possibly also-overridden)
+       ENC-BMX4C height (regtest-only)
+
+  -regtestemptyblocksubsidypenaltyheight=<n>
+       Override regtest empty-block subsidy-penalty activation height
+       (regtest-only)
+
+  -regtestgenesisbits=<hex>
+       Override regtest genesis nBits field (4 bytes, 8 hex chars,
+       regtest-only)
+
+  -regtestgenesisnonce=<n>
+       Override regtest genesis nNonce field (regtest-only)
+
+  -regtestgenesisntime=<n>
+       Override regtest genesis nTime field (regtest-only)
+
+  -regtestgenesisversion=<n>
+       Override regtest genesis nVersion field (regtest-only)
+
+  -regtesthtlcpreimage32height=<n>
+       Override regtest activation height of the P2MR HTLC 32-byte preimage
+       consensus rule (regtest-only, default: 0)
+
+  -regtestmatmulaserthalflife=<n>
+       Override regtest MatMul ASERT half-life in seconds (regtest-only)
+
+  -regtestmatmulaserthalflifeupgrade=<n>
+       Override regtest MatMul ASERT half-life upgrade value in seconds
+       (regtest-only)
+
+  -regtestmatmulaserthalflifeupgradeheight=<n>
+       Override regtest MatMul ASERT half-life upgrade height (regtest-only)
+
+  -regtestmatmulbindingheight=<n>
+       Override regtest MatMul Freivalds transcript-binding activation height
+       (regtest-only)
+
+  -regtestmatmuldimension=<n>
+       Override regtest MatMul matrix dimension (regtest-only)
+
+  -regtestmatmulflatsketchreplay
+       Re-select the legacy FLAT_SKETCH_INBLOCK MatMul v4 carriage instead of
+       the v4.4 ENC-DR digest-only carriage (regtest-only; golden-vector
+       replay / differential testing)
+
+  -regtestmatmulltmaxpending=<n>
+       Override the MatMul v4.4-LT pending verification job cap on regtest
+       (regtest-only admission-boundary testing)
+
+  -regtestmatmulltsealaspow=<0|1>
+       Select the MatMul v4.4-LT lottery object on regtest: Q* Phase B window
+       seal (1, default) or Phase-A per-nonce digest (0); requires a
+       live -regtestdrltheight when enabled
+
+  -regtestmatmulmaxpending=<n>
+       Override the EncDr pending verification job cap
+       (nMatMulMaxPendingVerifications) on regtest (regtest-only
+       admission-boundary testing)
+
+  -regtestmatmulnoiserank=<n>
+       Override regtest MatMul low-rank noise rank (regtest-only)
+
+  -regtestmatmulnonceseedheight=<n>
+       Override regtest MatMul nonce-bound seed activation height
+       (regtest-only)
+
+  -regtestmatmulparentmtpseedheight=<n>
+       Override regtest MatMul parent-MTP-bound seed activation height
+       (regtest-only)
+
+  -regtestmatmulprehashepsilonbitsupgrade=<n>
+       Override regtest MatMul pre-hash epsilon upgrade bits (regtest-only)
+
+  -regtestmatmulprehashepsilonbitsupgradeheight=<n>
+       Override regtest MatMul pre-hash epsilon upgrade height (regtest-only)
+
+  -regtestmatmulproductdigestheight=<n>
+       Override regtest MatMul product-committed digest activation height
+       (regtest-only)
+
+  -regtestmatmulproofassumevalidminage=<n>
+       Override the regtest MatMul v4.4 ENC-DR assumevalid buried-RECOMPUTE
+       trust minimum equivalent-time age in seconds (regtest-only;
+       production default is the 2-week DoS guard). Below the
+       assumevalid block, blocks older than this skip the digest
+       recompute
+
+  -regtestmatmulproofprunedepth=<n>
+       LEGACY (inert since v4.4 ENC-DR): override the regtest MatMul
+       proof-prune window in blocks. The segregated-proof store was
+       deleted; no code consumes this value (regtest-only, retained for
+       arg compatibility)
+
+  -regtestmatmulrequireproductpayload=<0|1>
+       Override whether regtest MatMul blocks must carry a product payload
+       (regtest-only)
+
+  -regtestmatmultranscriptblocksize=<n>
+       Override regtest MatMul transcript block size (regtest-only)
+
+  -regtestmatmulv4dimension=<n>
+       Override regtest MatMul v4 matrix dimension n (regtest-only)
+
+  -regtestmatmulv4height=<n>
+       Override regtest MatMul v4 hard-fork activation height (regtest-only)
+
+  -regtestmatmulv4maxdimension=<n>
+       Override regtest MatMul v4 accepted-dimension ceiling, to exercise
+       production-scale dimensions like 4096 (regtest-only)
+
+  -regtestmsgstart=<hex>
+       Override regtest message-start magic as 4 bytes (8 hex chars,
+       regtest-only)
+
+  -regtestport=<port>
+       Override regtest default P2P port (regtest-only)
+
+  -regtestrccoupledheight=<n>
+       Override regtest MatMul ENC_RC_COUPLED activation height; must be >= the
+       (possibly also-overridden) MatMul v4 height and, when ENC_RC is
+       also live, >= -regtestrcheight (regtest-only; public nets keep
+       the coupled height at INT32_MAX)
+
+  -regtestrccoupledprofile=<2|3>
+       Select ENC_RC_COUPLED consensus shape family on regtest: 2=V2 (default),
+       3=V3. Invalid values fail closed (ResolveRCCoupParams → zero
+       params / reject). Pair with -regtestrccoupledtoydims
+       (regtest-only; public nets default to profile 3 = V3 production)
+
+  -regtestrccoupledtoydims=<0|1>
+       Use CI-scale toy ENC_RC_COUPLED dims on regtest when the coupled profile
+       is live (1) instead of medium/production dims (0). Cross with
+       -regtestrccoupledprofile: 2×1=toy-V2, 2×0=medium-V2,
+       3×1=medium-V3-CI, 3×0=production-V3 (regtest-only)
+
+  -regtestrcheight=<n>
+       Override regtest MatMul ENC_RC (Resident Curriculum) activation height;
+       must be >= the (possibly also-overridden) MatMul v4 height
+       (regtest-only; public-net heights are fixed in chainparams, with
+       testnet/signet disabled)
+
+  -regtestrcmaxpending=<n>
+       Override the Profile-1 RC pending verification job cap
+       (nMatMulRCMaxPendingVerifications) on regtest. Applied after the
+       default RC unthrottle so a functional test can still exhaust the
+       cap (regtest-only admission-boundary testing)
+
+  -regtestrcprofile=<1|2>
+       Select the ENC_RC episode profile on regtest: 1=MatMul v4.7 Epoch-A base
+       dimensions and ExactReplay authority (default), 2=future
+       proof-authoritative datacenter dimensions (rounds=8, L=24,
+       b_seq=87552; ~16x per-episode MAC). Pair with a finite RC height
+       (and -regtestrctoydims for CI-scale mining) to exercise
+       activation. Invalid values (!={1,2}) fail closed at construction
+       (regtest-only; public mainnet fixes Profile 1 and its
+       release-selected height in chainparams)
+
+  -regtestrctoydims=<0|1>
+       Use CI-scale toy ENC_RC episode dims on regtest when ENC_RC is live (1)
+       instead of consensus production dims (0); required for practical
+       mining when -regtestrcheight is finite (regtest-only)
+
+  -regtestrcunifiedheight=<n>
+       Legacy PR89 regression switch: set ENC_RC episode + ENC_RC_COUPLED to
+       the SAME regtest height. MatMul v4.7 does not use this as a
+       public activation model; its epochs require separate reviewed
+       heights. Equivalent to -regtestrcheight=n
+       -regtestrccoupledheight=n; a later granular override may refine
+       one component (regtest-only; public nets never enable the coupled
+       profile)
+
+  -regtestreorgprotectionstartheight=<n>
+       Override regtest local reorg-protection activation height (regtest-only)
+
+  -regtestshieldedbridgetagactivationheight=<n>
+       Override regtest shielded bridge-tag activation height (regtest-only)
+
+  -regtestshieldedc002activationheight=<n>
+       Override regtest C-002 shielded proof / SLH-DSA FIPS-205 activation
+       height (regtest-only)
+
+  -regtestshieldeddirectsendpublicflowdisableheight=<n>
+       Override regtest proofless transparent-funded V2_SEND public-flow
+       disable height (regtest-only)
+
+  -regtestshieldedmatrictdisableheight=<n>
+       Override regtest shielded MatRiCT disable height (regtest-only)
+
+  -regtestshieldedpoolcreditdisableheight=<n>
+       Override regtest shielded bridge-credit disable height (regtest-only)
+
+  -regtestshieldedpooldisableheight=<n>
+       Override regtest shielded pool disable height (regtest-only). At/after
+       this height shielded ingress and egress are consensus-invalid and
+       shielded state is not opened unless -shieldedstate=1.
+
+  -regtestshieldedpq128upgradeheight=<n>
+       Override regtest shielded PQ128 upgrade height (regtest-only)
+
+  -regtestshieldedrecoveryexitactivationheight=<n>
+       Override regtest RECOVERY_EXIT activation height (regtest-only)
+
+  -regtestshieldedrecoveryexitfrozenroot=<hex>
+       Override regtest RECOVERY_EXIT frozen membership root, 32-byte hex
+       (regtest-only)
+
+  -regtestshieldedsmilericecodecdisableheight=<n>
+       Override regtest shielded SMILE Rice codec disable height (regtest-only)
+
+  -regtestshieldedspendpathrecoveryactivationheight=<n>
+       Override regtest spend-path recovery activation height (regtest-only)
+
+  -regtestshieldedsunsetheight=<n>
+       Override regtest shielded sunset height (regtest-only)
+
+  -regtestshieldedtxbindingactivationheight=<n>
+       Override regtest shielded tx-binding activation height (regtest-only)
+
+  -regtestshieldedunshieldvelocityactivationheight=<n>
+       Override regtest unshield velocity-cap activation height (regtest-only)
+
+  -regtestshieldedunshieldvelocityendheight=<n>
+       Override regtest unshield velocity-cap end height (exclusive,
+       regtest-only)
+
+  -regtestshieldedunshieldvelocitymincap=<amt>
+       Override regtest unshield velocity minimum cap amount in BTX
+       (regtest-only)
+
+  -regtestshieldedunshieldvelocitymincapheight=<n>
+       Override regtest unshield velocity minimum-cap activation height
+       (regtest-only)
+
+  -regtestshieldedv2sendzerooutputexitactivationheight=<n>
+       Override regtest zero-output V2_SEND shielded-exit activation height
+       (regtest-only)
+
+  -shieldedv2dev
+       Use the isolated shieldedv2dev development chain. Equivalent to
+       -chain=shieldedv2dev.
+
+  -signet
+       Use the signet chain. Equivalent to -chain=signet. Note that the network
+       is defined by the -signetchallenge parameter
+
+  -signetblocktime
+       Difficulty adjustment will target a block time of the given amount in
+       seconds (only for custom signet networks, must have
+       -signetchallenge set; defaults to 10 minutes)
+
+  -signetchallenge
+       Blocks must satisfy the given script to be considered valid (only for
+       signet networks; defaults to the global default signet test
+       network challenge)
+
+  -signetseednode
+       Specify a seed node for the signet network, in the hostname[:port]
+       format, e.g. sig.net:1234 (may be used multiple times to specify
+       multiple seed nodes; defaults to the global default signet test
+       network seed node(s))
+
+  -testnet
+       Use the testnet3 chain. Equivalent to -chain=test. Support for testnet3
+       is deprecated and will be removed in an upcoming release.
+       Consider moving to testnet4 now by using -testnet4.
+
+  -testnet4
+       Use the testnet4 chain. Equivalent to -chain=testnet4.
+
+  -vbparams=deployment:start:end[:min_activation_height]
+       Use given start/end times and min_activation_height for specified
+       version bits deployment (regtest-only)
+
+Node relay options:
+
+  -acceptnonstddatacarrier
+       Relay and mine non-OP_RETURN datacarrier injection (default: 0)
+
+  -acceptnonstdtxn
+       Relay and mine "non-standard" transactions (default: 0)
+
+  -acceptunknownwitness
+       Relay transactions sending to unknown/future witness script versions
+       (default: 1)
+
+  -bytespersigop
+       Equivalent bytes per sigop in transactions for relay and mining
+       (default: 20)
+
+  -bytespersigopstrict
+       Minimum bytes per sigop in transactions we relay and mine (default: 20)
+
+  -datacarrier
+       Relay and mine data carrier (OP_RETURN) transactions. BTX is a
+       financial-only chain and rejects non-coinbase data-carrier
+       outputs at relay by default (default: 0)
+
+  -datacarriercost
+       Treat extra data in transactions as at least N vbytes per actual byte
+       (default: 1)
+
+  -datacarrierfullcount
+       Apply datacarriersize limit to all known datacarrier methods (default:
+       1)
+
+  -datacarriersize
+       Maximum size of data in data carrier transactions we relay and mine, in
+       bytes (default: 83)
+
+  -dustdynamic=off|[<multiplier>*]target:<blocks>|[<multiplier>*]mempool:<kvB>
+       Automatically raise dustrelayfee based on either the expected fee to be
+       mined within <blocks> blocks, or to be within the best <kvB> kvB
+       of this node's mempool. If unspecified, multiplier is 3.
+       (default: off)
+
+  -dustrelayfee=<amt>
+       Fee rate (in BTX/kvB) used to define dust, the value of an output such
+       that it will cost more than its value in fees at this fee rate to
+       spend it. (default: 0.00003)
+
+  -incrementalrelayfee=<amt>
+       Fee rate (in BTX/kvB) used to define cost of relay, used for mempool
+       limiting and replacement policy. (default: 0.00001)
+
+  -maxscriptsize
+       Maximum size of scripts (including the entire witness stack) we relay
+       and mine, in bytes (default: 1650)
+
+  -maxtxlegacysigops
+       Maximum number of legacy sigops allowed in transactions we relay and
+       mine, as measured by BIP54 (default: 2500)
+
+  -mempoolfullrbf
+       Accept transaction replace-by-fee without requiring replaceability
+       signaling (default: 1)
+
+  -mempoolreplacement
+       Set to 0 to disable RBF entirely, "fee,optin" to honour RBF opt-out
+       signal, or "fee,-optin" to always RBF aka full RBF (default:
+       fee,-optin)
+
+  -mempooltruc
+       Behaviour for transactions requesting TRUC limits: "reject" the
+       transactions entirely, "accept" them just like any other, or
+       "enforce" to impose their requested restrictions (default:
+       accept)
+
+  -minrelaycoinblocks=<n>
+       Minimum "coin blocks" (measured in sat per block) that a transaction
+       must be spending to be relayed (default: 0)
+
+  -minrelaymaturity=<n>
+       Minimum number of blocks that inputs must mature before being spent in
+       transactions we relay (default: 0)
+
+  -minrelaytxfee=<amt>
+       Fees (in BTX/kvB) smaller than this are considered zero fee for
+       relaying, mining and transaction creation (default: 0.00001)
+
+  -permitbareanchor
+       Relay transactions that only have ephemeral anchor outputs (default: 1)
+
+  -permitbaredatacarrier
+       Relay transactions that only have data carrier outputs (default: 0)
+
+  -permitbaremultisig
+       Relay transactions creating non-P2SH multisig outputs (default: 0)
+
+  -permitbarepubkey
+       Relay legacy pubkey outputs (default: 0)
+
+  -permitephemeral=<options>
+       Relay transaction packages that include ephemeral outputs defined by
+       comma-separated options (prefix each by '-' to force off):
+       "anchor" to allow minimal anyone-can-spend anchors, "send" to
+       allow ordinary output types to be considered ephemeral, and
+       "dust" to allow for dust-amount outputs rather than strictly
+       zero-value (default: anchor,-send,-dust)
+
+  -rejectparasites
+       Refuse to relay or mine parasitic overlay protocols (default: 1)
+
+  -rejecttokens
+       Refuse to relay or mine transactions involving non-BTX tokens
+       (runes/OLGA overlays). BTX is a financial-only chain and rejects
+       these by default (default: 1)
+
+  -spkreuse=<policy>
+       Either "allow" to relay/mine transactions reusing addresses or other
+       pubkey scripts, or "conflict" to treat them as exclusive prior to
+       being mined (default: allow)
+
+  -whitelistforcerelay
+       Add 'forcerelay' permission to whitelisted peers with default
+       permissions. This will relay transactions even if the
+       transactions were already in the mempool. (default: 0)
+
+  -whitelistrelay
+       Add 'relay' permission to whitelisted peers with default permissions.
+       This will accept relayed transactions even when not relaying
+       transactions (default: 1)
+
+Block creation options:
+
+  -blockmaxsize=<n>
+       Set maximum block size in bytes (default: 24000000)
+
+  -blockmaxtemplatetxs=<n>
+       Maximum number of mempool transactions to select into locally-created
+       block templates before returning work. Use 0 for unlimited
+       selection. (default: 25)
+
+  -blockmaxweight=<n>
+       Set maximum BIP141 block weight (default: 24000000)
+
+  -blockmintxfee=<amt>
+       Set lowest fee rate (in BTX/kvB) for transactions to be included in
+       block creation. (default: 0.00001)
+
+  -blockprioritysize=<n>
+       Set maximum size of high-priority/low-fee transactions in bytes
+       (default: 0)
+
+  -blockreservedweight=<n>
+       Reserve space for the fixed-size block header plus the largest coinbase
+       transaction the mining software may add to the block. (default:
+       8000).
+
+  -blockversion=<n>
+       Override block version to test forking scenarios
+
+  -miningchainguard
+       Report local mining stale-tip and reorg-hysteresis risk using outbound
+       peer signals, and request peer recovery when unhealthy; this
+       guard no longer blocks getblocktemplate or local block generation
+       (default: 1 on mainnet, 0 on test chains)
+
+  -miningchainguarddefaultmesh
+       When local mining chain_guard is unhealthy, periodically enroll the
+       configured mining peer mesh (-miningpeermesh, or the compiled
+       defaults when unset) into the runtime addnode set so daemon-only
+       mining nodes converge without an external supervisor (default: 1
+       on mainnet when -miningchainguard is enabled)
+
+  -miningchainguarddeferredreorgwatchseconds=<n>
+       Seconds to keep local mining chain_guard in warning state after reorg
+       hysteresis defers a competing branch and no later reorg/rejection
+       has resolved it; 0 disables this warning (default: 900)
+
+  -miningchainguardmaxmediangap=<n>
+       Maximum block gap between the local tip and the median outbound peer tip
+       before local-behind or local-ahead warnings trigger (default: 2)
+
+  -miningchainguardmeshrefreshseconds=<n>
+       Minimum seconds between automatic default mining peer mesh enrollment
+       attempts while local mining chain_guard is unhealthy; 0 disables
+       daemon-side mesh refresh (default: 60)
+
+  -miningchainguardminneartippeers=<n>
+       Outbound peers that should be within -miningchainguardneartipwindow
+       blocks of the local tip before local mining chain_guard reports
+       healthy (default: 2)
+
+  -miningchainguardminpeers=<n>
+       Outbound peers with usable tip heights expected before local mining
+       chain_guard reports healthy (default: 3)
+
+  -miningchainguardneartipwindow=<n>
+       Block window used to count near-tip outbound peers for local mining
+       chain-alignment status (default: 2)
+
+  -miningchainguardstalepeerseconds=<n>
+       Seconds after which lagging peers without fresh block signals are
+       ignored by local mining chain-alignment status (default: 120)
+
+  -miningmaxheaderlag=<n>
+       Best-header lag advisory threshold reported in mining diagnostics;
+       header lag no longer blocks getblocktemplate by itself (default:
+       3 on mainnet and 0 on other chains).
+
+  -miningmaxpeersyncheightlag=<n>
+       Maximum sync-height lag, in blocks, used for mining peer diagnostics
+       (default: 1 on mainnet and 0 on other chains).
+
+  -miningminoutboundpeers=<n>
+       Outbound-peer advisory threshold reported in mining diagnostics; peer
+       count no longer blocks getblocktemplate by itself (default: 3 on
+       mainnet and 0 on other chains).
+
+  -miningminsyncedoutboundpeers=<n>
+       Synced-outbound-peer advisory threshold reported in mining diagnostics;
+       peer lag no longer blocks getblocktemplate by itself (default: 2
+       on mainnet and 0 on other chains).
+
+  -miningpeermesh=<host:port>
+       Peers the mining chain guard will manually connect to when the miner
+       mesh degrades (repeatable). When set, replaces the compiled
+       default mesh entirely so a fork can point this at its own hosts
+       and operators can opt out of the bundled domains. Manual
+       connections receive inbound-authority exemptions (IsManualConn /
+       NoBan) that ordinary peers do not. Default when unset:
+       node.btx.dev:19335, node.btxchain.org:19335,
+       node.btx.tools:19335. Does not change DNS seeds or trusted-mode
+       pin keys.
+
+RPC server options:
+
+  -computequalificationfile=<file>
+       Path to the Pay With Compute qualification registry (default:
+       <netdir>/compute_qualifications.dat). Relative paths resolve
+       under the network datadir.
+
+  -matmulservicechallengefile=<file>
+       Path to the persistent MatMul service challenge registry. Relative paths
+       are resolved under the network datadir. Point multiple service
+       nodes at the same shared file to let getmatmulservicechallenge
+       issuance and redeemmatmulserviceproof redemption work across the
+       cluster. (default: <netdir>/matmul_service_challenges.dat)
+
+  -rest
+       Accept public REST requests (default: 0)
+
+  -rpcallowip=<ip>
+       Allow JSON-RPC connections from specified source. Valid values for <ip>
+       are a single IP (e.g. 1.2.3.4), a network/netmask (e.g.
+       1.2.3.4/255.255.255.0), a network/CIDR (e.g. 1.2.3.4/24), all
+       ipv4 (0.0.0.0/0), or all ipv6 (::/0). RFC4193 is allowed only if
+       -cjdnsreachable=0. This option can be specified multiple times
+
+  -rpcauth=<userpw>[:wallet]
+       Username and HMAC-SHA-256 hashed password for JSON-RPC connections. The
+       field <userpw> comes in the format: <USERNAME>:<SALT>$<HASH>. A
+       canonical python script is included in share/rpcauth. The client
+       then connects normally using the
+       rpcuser=<USERNAME>/rpcpassword=<PASSWORD> pair of arguments. A
+       single wallet name can also be specified to restrict access to
+       only that wallet, or '-' to deny all wallet access. This option
+       can be specified multiple times
+
+  -rpcauthfile=<userpw>
+       A file with a single lines with same format as rpcauth. This option can
+       be specified multiple times
+
+  -rpcbind=<addr>[:port]
+       Bind to given address to listen for JSON-RPC connections. Do not expose
+       the RPC server to untrusted networks such as the public internet!
+       This option is ignored unless -rpcallowip is also passed. Port is
+       optional and overrides -rpcport. Use [host]:port notation for
+       IPv6. This option can be specified multiple times (default:
+       127.0.0.1 and ::1 i.e., localhost)
+
+  -rpccookiefile=<loc>
+       Location of the auth cookie. Relative paths will be prefixed by a
+       net-specific datadir location. (default: data dir)
+
+  -rpccookieperms=<readable-by>
+       Set permissions on the RPC auth cookie file so that it is readable by
+       [owner|group|all] (default: owner [via umask 0077])
+
+  -rpcdoccheck
+       Throw a non-fatal error at runtime if the documentation for an RPC is
+       incorrect (default: 0)
+
+  -rpcpassword=<pw>
+       Password for JSON-RPC connections. UNSAFE on the command line; process
+       listings leak it. Prefer cookie authentication or hashed
+       -rpcauth.
+
+  -rpcport=<port>
+       Listen for JSON-RPC connections on <port> (default: 19334, testnet3:
+       29334, testnet4: 48332, signet: 38332, regtest: 18443,
+       shieldedv2dev: 19443)
+
+  -rpcservertimeout=<n>
+       Timeout during HTTP requests (default: 600)
+
+  -rpcthreads=<n>
+       Set the number of threads to service RPC calls (default: 16).
+       stop/uptime/getrpcinfo/help/getmemoryinfo run on one extra
+       dedicated control thread so they complete if the ordinary workers
+       are blocked.
+
+  -rpcuser=<user>
+       Username for JSON-RPC connections
+
+  -rpcwhitelist=<whitelist>
+       Set a whitelist to filter incoming RPC calls for a specific user. The
+       field <whitelist> comes in the format: <USERNAME>:<rpc 1>,<rpc
+       2>,...,<rpc n>. If multiple whitelists are set for a given user,
+       they are set-intersected. See -rpcwhitelistdefault documentation
+       for information on default whitelist behavior.
+
+  -rpcwhitelistdefault
+       Sets default behavior for rpc whitelisting. Unless rpcwhitelistdefault
+       is set to 0, if any -rpcwhitelist is set, the rpc server acts as
+       if all rpc users are subject to empty-unless-otherwise-specified
+       whitelists. If rpcwhitelistdefault is set to 1 and no
+       -rpcwhitelist is set, rpc server acts as if all rpc users are
+       subject to empty whitelists.
+
+  -rpcworkqueue=<n>
+       Set the maximum depth of the work queue to service RPC calls (default:
+       256)
+
+  -server
+       Accept command line and JSON-RPC commands
+
+Statistic options:
+
+  -statsenable
+       Enable statistics (default: 1 for GUI, 0 otherwise)
+
+  -statsmaxmemorytarget=<n>
+       Set the memory limit target for statistics in bytes (default: 10485760)
+
