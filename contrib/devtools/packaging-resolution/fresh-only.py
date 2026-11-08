@@ -99,7 +99,10 @@ try:
  s['prior_gui_evidence_reused']={'run':42458568275,'scope':'Unchanged Atlas/wrapper/root inputs; no GUI execution in this run'}
  s['complete']=True
  (outputs/'provenance.json').write_text(json.dumps(s,indent=2)+'\n')
-except Exception as e:s['error']=repr(e)
+except Exception as e:
+ import traceback
+ s['error']=repr(e);s['traceback']=traceback.format_exc()
+ (out/'exception.log').write_text(s['traceback'])
 finally:
  remaining=[]
  for process in Path('/proc').iterdir():
