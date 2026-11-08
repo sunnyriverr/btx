@@ -10,7 +10,7 @@ def sha(path):
 def link_target(workspace,path,target):
  resolved=(path.parent/target).resolve()
  assert any(resolved.is_relative_to((workspace/root).resolve()) for root in ROOTS),'Link escapes checkpoint roots: '+str(path.relative_to(workspace))+' -> '+target
- return os.path.relpath(target,path.parent) if Path(target).is_absolute() else target
+ return os.path.relpath(resolved,path.parent.resolve()) if Path(target).is_absolute() else target
 
 def snapshot(workspace):
  rows={}
