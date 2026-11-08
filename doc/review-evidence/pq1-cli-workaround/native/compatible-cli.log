@@ -1,0 +1,32 @@
+Running 2 test cases...
+[1;34;49mEntering test module "pq1_component"
+[0;39;49m[1;34;49mwork/btx-lanes/session-2/priority-after440/native/test.cpp:14: Entering test case "pq1_handshake_mlkem768"
+[0;39;49mwork/btx-lanes/session-2/priority-after440/native/test.cpp:27: [1;32;49minfo: check 'openssl mldsa44 cert failed rc=0 bin=/opt/homebrew/opt/openssl@3/bin/openssl -----
+' has passed[0;39;49m
+work/btx-lanes/session-2/priority-after440/native/test.cpp:32: [1;32;49minfo: check '' has passed[0;39;49m
+work/btx-lanes/session-2/priority-after440/native/test.cpp:33: [1;32;49minfo: check '' has passed[0;39;49m
+work/btx-lanes/session-2/priority-after440/native/test.cpp:35: [1;32;49minfo: check server.LoadSelfSignedMlDsa(cert_pem, key_pem, err) has passed[0;39;49m
+work/btx-lanes/session-2/priority-after440/native/test.cpp:36: [1;32;49minfo: check client.LoadSelfSignedMlDsa(cert_pem, key_pem, err) has passed[0;39;49m
+work/btx-lanes/session-2/priority-after440/native/test.cpp:38: [1;32;49minfo: check '' has passed[0;39;49m
+work/btx-lanes/session-2/priority-after440/native/test.cpp:39: [1;32;49minfo: check modelnet::IsStrictPq1(n) has passed[0;39;49m
+[1;36;49mPQ1 group=MLKEM768 cipher=TLS_AES_256_GCM_SHA384 ver=TLSv1.3[0;39;49m
+[1;34;49mwork/btx-lanes/session-2/priority-after440/native/test.cpp:14: Leaving test case "pq1_handshake_mlkem768"; testing time: 30782us
+[0;39;49m[1;34;49mwork/btx-lanes/session-2/priority-after440/native/test.cpp:42: Entering test case "pq1_rejects_hybrid_peer"
+[0;39;49mwork/btx-lanes/session-2/priority-after440/native/test.cpp:45: [1;32;49minfo: check client.Ready() has passed[0;39;49m
+work/btx-lanes/session-2/priority-after440/native/test.cpp:47: [1;32;49minfo: check rogue has passed[0;39;49m
+work/btx-lanes/session-2/priority-after440/native/test.cpp:50: [1;32;49minfo: check SSL_CTX_ctrl(rogue, 92, 0, (char *)("X25519MLKEM768")) == 1 has passed[0;39;49m
+work/btx-lanes/session-2/priority-after440/native/test.cpp:54: [1;32;49minfo: check BIO_new_bio_pair(&b1, 0, &b2, 0) == 1 has passed[0;39;49m
+work/btx-lanes/session-2/priority-after440/native/test.cpp:65: [1;32;49minfo: check !(rc_c == 1 && rc_s == 1) has passed[0;39;49m
+[1;34;49mwork/btx-lanes/session-2/priority-after440/native/test.cpp:42: Leaving test case "pq1_rejects_hybrid_peer"; testing time: 361us
+[0;39;49m[1;34;49mLeaving test module "pq1_component"; testing time: 31158us
+[0;39;49m
+Test module "pq1_component" has passed with:
+  2 test cases out of 2 passed
+  12 assertions out of 12 passed
+
+  Test case "pq1_handshake_mlkem768" has passed with:
+    7 assertions out of 7 passed
+
+  Test case "pq1_rejects_hybrid_peer" has passed with:
+    5 assertions out of 5 passed
+

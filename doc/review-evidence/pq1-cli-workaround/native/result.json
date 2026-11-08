@@ -1,0 +1,61 @@
+{
+  "binary_sha256": "6d2a050b23026ea0ee898fe4c65d5d7685f6281421f62c356dec3b042cb4e808",
+  "platform": "macOS arm64 component adapter",
+  "cases": [
+    {
+      "label": "old-cli",
+      "override": "/usr/bin/openssl",
+      "exit": 201,
+      "expected_signature": true,
+      "args": [
+        "$WORKSPACE/work/btx-lanes/session-2/priority-after440/native/pq1-test",
+        "--run_test=pq1_handshake_mlkem768",
+        "--log_level=all",
+        "--report_level=detailed"
+      ],
+      "version": "LibreSSL 3.3.6"
+    },
+    {
+      "label": "compatible-cli",
+      "override": "/opt/homebrew/opt/openssl@3/bin/openssl",
+      "exit": 0,
+      "expected_signature": true,
+      "args": [
+        "$WORKSPACE/work/btx-lanes/session-2/priority-after440/native/pq1-test",
+        "--run_test=pq1_handshake_mlkem768,pq1_rejects_hybrid_peer",
+        "--log_level=all",
+        "--report_level=detailed"
+      ],
+      "version": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)"
+    },
+    {
+      "label": "invalid-cli",
+      "override": "/nonexistent-pq1-openssl",
+      "exit": 201,
+      "expected_signature": true,
+      "args": [
+        "$WORKSPACE/work/btx-lanes/session-2/priority-after440/native/pq1-test",
+        "--run_test=pq1_handshake_mlkem768",
+        "--log_level=all",
+        "--report_level=detailed"
+      ],
+      "version": null
+    },
+    {
+      "label": "default-selection",
+      "override": null,
+      "exit": 0,
+      "expected_signature": true,
+      "args": [
+        "$WORKSPACE/work/btx-lanes/session-2/priority-after440/native/pq1-test",
+        "--run_test=pq1_handshake_mlkem768,pq1_rejects_hybrid_peer",
+        "--log_level=all",
+        "--report_level=detailed"
+      ],
+      "version": null
+    }
+  ],
+  "libraries": "$WORKSPACE/work/btx-lanes/session-2/priority-after440/native/pq1-test:\n\t/opt/homebrew/opt/openssl@3/lib/libssl.3.dylib (compatibility version 3.0.0, current version 3.0.0)\n\t/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib (compatibility version 3.0.0, current version 3.0.0)\n\t/usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 2000.67.0)\n\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)\n",
+  "runtime_removed": true,
+  "all_expected": true
+}
