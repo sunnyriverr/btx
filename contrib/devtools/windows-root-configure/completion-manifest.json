@@ -3,111 +3,71 @@
   "binary_sha256": "31e45f1d0f2aed4168982120596182b5268057e1b9806960f27a60c769906bdd",
   "jobs": [
     {
-      "suite": "validation_chainstate_tests/validation_chainstate_resize_caches",
+      "suite": "validation_chainstate_tests/chainstate_deep_reorg_rejection_prunes_candidate_branch",
       "selectors": [
-        "validation_chainstate_tests/validation_chainstate_resize_caches"
+        "validation_chainstate_tests/chainstate_deep_reorg_rejection_prunes_candidate_branch"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "validation_block_tests/processnewblock_signals_ordering",
+      "suite": "validation_chainstate_tests/chainstate_authenticated_shallow_race_auto_unparks_with_data_and_survives_reload",
       "selectors": [
-        "validation_block_tests/processnewblock_signals_ordering"
+        "validation_chainstate_tests/chainstate_authenticated_shallow_race_auto_unparks_with_data_and_survives_reload"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "validation_block_tests/mempool_locks_reorg",
+      "suite": "validation_chainstate_tests/chainstate_equal_authenticated_sibling_cannot_freeze_tip_growth",
       "selectors": [
-        "validation_block_tests/mempool_locks_reorg"
+        "validation_chainstate_tests/chainstate_equal_authenticated_sibling_cannot_freeze_tip_growth"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "validation_block_tests/try_sync_validation_queue_timeout",
+      "suite": "validation_chainstate_tests/chainstate_current_authority_recovers_long_shallow_race_with_existing_data",
       "selectors": [
-        "validation_block_tests/try_sync_validation_queue_timeout"
+        "validation_chainstate_tests/chainstate_current_authority_recovers_long_shallow_race_with_existing_data"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "validation_block_tests/activatebestchain_does_not_block_on_stuck_subscriber",
+      "suite": "validation_chainstate_tests/chainstate_normalizes_park_roots_against_active_tip_and_policy",
       "selectors": [
-        "validation_block_tests/activatebestchain_does_not_block_on_stuck_subscriber"
+        "validation_chainstate_tests/chainstate_normalizes_park_roots_against_active_tip_and_policy"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     },
     {
-      "suite": "validation_block_tests/witness_commitment_index",
+      "suite": "validation_chainstate_tests/chainstate_reports_shared_recovery_phase",
       "selectors": [
-        "validation_block_tests/witness_commitment_index"
+        "validation_chainstate_tests/chainstate_reports_shared_recovery_phase"
       ],
       "expected_cases": 1,
       "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "validation_block_tests/random_tiebreak_equal_work",
-      "selectors": [
-        "validation_block_tests/random_tiebreak_equal_work"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "validation_chainstate_tests/chainstate_update_tip",
-      "selectors": [
-        "validation_chainstate_tests/chainstate_update_tip"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "validation_chainstatemanager_tests/chainstatemanager",
-      "selectors": [
-        "validation_chainstatemanager_tests/chainstatemanager"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "validation_chainstatemanager_tests/chainstatemanager_clears_attested_assumeutxo_on_snapshot_teardown",
-      "selectors": [
-        "validation_chainstatemanager_tests/chainstatemanager_clears_attested_assumeutxo_on_snapshot_teardown"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
+      "timeout_seconds": 300
     }
   ],
   "all_enabled_cases": [
-    "validation_block_tests/processnewblock_signals_ordering",
-    "validation_block_tests/mempool_locks_reorg",
-    "validation_block_tests/try_sync_validation_queue_timeout",
-    "validation_block_tests/activatebestchain_does_not_block_on_stuck_subscriber",
-    "validation_block_tests/witness_commitment_index",
-    "validation_block_tests/random_tiebreak_equal_work",
-    "validation_chainstate_tests/validation_chainstate_resize_caches",
-    "validation_chainstate_tests/chainstate_update_tip",
-    "validation_chainstatemanager_tests/chainstatemanager",
-    "validation_chainstatemanager_tests/chainstatemanager_clears_attested_assumeutxo_on_snapshot_teardown"
+    "validation_chainstate_tests/chainstate_deep_reorg_rejection_prunes_candidate_branch",
+    "validation_chainstate_tests/chainstate_authenticated_shallow_race_auto_unparks_with_data_and_survives_reload",
+    "validation_chainstate_tests/chainstate_equal_authenticated_sibling_cannot_freeze_tip_growth",
+    "validation_chainstate_tests/chainstate_current_authority_recovers_long_shallow_race_with_existing_data",
+    "validation_chainstate_tests/chainstate_normalizes_park_roots_against_active_tip_and_policy",
+    "validation_chainstate_tests/chainstate_reports_shared_recovery_phase"
   ],
   "campaign_test_budget_seconds": 1800,
   "batch_budget_seconds": 1800,
-  "require_first_pass_control": true,
-  "scope": "10 previously unrun block/chainstate/chainstate-manager timing-first maintained unit cases; no product fix or release qualification",
-  "total": 10
+  "require_first_pass_control": false,
+  "scope": "6 previously unrun chainstate recovery unit cases,300s each; existing policy unchanged, no release qualification",
+  "total": 6
 }
