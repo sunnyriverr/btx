@@ -59,6 +59,23 @@ def main():
         state['package_before']=files()
         assert state['package_before']=={n:v['sha256'] for n,v in provenance['candidate_files'].items()}, 'Candidate extraction differs from assembly manifest'
         assert not package_processes()
+        # Trace an optional host display prerequisite before node/app execution.
+        import re
+        qt_loader_env=dict(env,LD_LIBRARY_PATH=str(package/'lib/qt-private')+':'+str(package/'lib'))
+        plugin=package/'lib/qt-private/qt6/plugins/platforms/libqxcb.so'
+        probe=subprocess.run(['ldd',str(plugin)],env=qt_loader_env,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=20)
+        (out/'qt-plugin-before.log').write_text(probe.stdout)
+        missing=re.findall(r'^\s*(\S+) => not found',probe.stdout,re.M)
+        state['qt_plugin_missing_before']=sorted(set(missing))
+        if missing:
+            # Only this declared host library may be supplied; any other missing dependency stops the recipe.
+            assert set(missing)=={'libxkbcommon-x11.so.0'},'Unexpected host display dependency'
+            with (out/'host-display-prerequisite.log').open('wb') as log:
+                installed=subprocess.run(['sudo','apt-get','install','-y','--no-install-recommends','libxkbcommon-x11-0'],stdout=log,stderr=subprocess.STDOUT,timeout=120)
+            assert installed.returncode==0
+            after=subprocess.check_output(['ldd',str(plugin)],env=qt_loader_env,text=True,stderr=subprocess.STDOUT,timeout=20)
+            (out/'qt-plugin-after.log').write_text(after)
+            assert 'not found' not in after
         with socket.socket() as sock: sock.bind(('127.0.0.1',0));port=sock.getsockname()[1]
         node=start([package/'bin/btxd','-regtest','-datadir='+str(runtime/'node'),'-server=1',
                     '-rpcbind=127.0.0.1','-rpcallowip=127.0.0.1','-rpcport='+str(port),
@@ -86,7 +103,7 @@ def main():
             assert match and not Path(match.group(1)).resolve().is_relative_to(package.resolve())
             state['atlas_host_resolution'][soname]=match.group(1)
         with (out/'qt-version.log').open('wb') as log:
-            qt_control=subprocess.run([str(package/'bin/btx-qt'),'-version'],env=env,stdout=log,stderr=subprocess.STDOUT,timeout=30)
+            qt_control=subprocess.run([str(package/'bin/btx-qt'),'-version'],env=dict(env,QT_DEBUG_PLUGINS='1'),stdout=log,stderr=subprocess.STDOUT,timeout=30)
         state['qt_version_control_exit']=qt_control.returncode
         assert qt_control.returncode==0,'Candidate Qt launcher control failed'
         app=start([package/'bin/btx-atlas'],'atlas',env)
