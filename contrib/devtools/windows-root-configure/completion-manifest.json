@@ -3,1211 +3,1251 @@
   "binary_sha256": "31e45f1d0f2aed4168982120596182b5268057e1b9806960f27a60c769906bdd",
   "jobs": [
     {
-      "suite": "swarm_notnixl_tests/0",
+      "suite": "swarm_notnobytes_tests/0",
       "selectors": [
-        "swarm_notnixl_tests/empty_page_id_is_nixl",
-        "swarm_notnixl_tests/want_transfer_without_nixl_is_engine_absent",
-        "swarm_notnixl_tests/want_transfer_with_nixl_is_held"
+        "swarm_notnobytes_tests/empty_transfer_id_is_transfer",
+        "swarm_notnobytes_tests/want_publish_is_unmeasured",
+        "swarm_notnobytes_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnixl_tests/1",
+      "suite": "swarm_notnobytespub2_tests/0",
       "selectors": [
-        "swarm_notnixl_tests/nixl_present_without_transfer_is_noted"
+        "swarm_notnobytespub2_tests/empty_sample_id_is_sample",
+        "swarm_notnobytespub2_tests/want_publish_is_held",
+        "swarm_notnobytespub2_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnocache2_tests/0",
+      "selectors": [
+        "swarm_notnocache2_tests/empty_cache_id_is_cache",
+        "swarm_notnocache2_tests/want_share_is_alone",
+        "swarm_notnocache2_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnocache_tests/0",
+      "selectors": [
+        "swarm_notnocache_tests/empty_cache_id",
+        "swarm_notnocache_tests/cache_off",
+        "swarm_notnocache_tests/want_publish_while_on"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnocache_tests/1",
+      "selectors": [
+        "swarm_notnocache_tests/on_and_plain"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnixlabs_tests/0",
+      "suite": "swarm_notnocachealone2_tests/0",
       "selectors": [
-        "swarm_notnixlabs_tests/empty_adapter_id_is_adapter",
-        "swarm_notnixlabs_tests/want_move_is_engine_absent",
-        "swarm_notnixlabs_tests/plain_note_is_noted"
+        "swarm_notnocachealone2_tests/empty_cache_id",
+        "swarm_notnocachealone2_tests/want_share_true",
+        "swarm_notnocachealone2_tests/neither_empty_nor_want_share"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notno14400_tests/0",
+      "suite": "swarm_notnocachealone_tests/0",
       "selectors": [
-        "swarm_notno14400_tests/empty_channel_id_is_channel",
-        "swarm_notno14400_tests/want_close_is_not_wallclock",
-        "swarm_notno14400_tests/plain_note_is_noted"
+        "swarm_notnocachealone_tests/empty_cache_id_is_cache",
+        "swarm_notnocachealone_tests/coupled_is_stands_alone_when_want_share_is_false",
+        "swarm_notnocachealone_tests/want_share_is_held"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notno160blk_tests/0",
+      "suite": "swarm_notnocachealone_tests/1",
       "selectors": [
-        "swarm_notno160blk_tests/empty_channel_id_is_channel",
-        "swarm_notno160blk_tests/want_close_is_not_wallclock",
-        "swarm_notno160blk_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notno160s_tests/0",
-      "selectors": [
-        "swarm_notno160s_tests/empty_clock_id_is_clock",
-        "swarm_notno160s_tests/blocks_not_160_is_not_guarantee",
-        "swarm_notno160s_tests/blocks_160_with_want_wallclock_is_not_guarantee"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notno160s_tests/1",
-      "selectors": [
-        "swarm_notno160s_tests/blocks_160_plain_is_noted"
+        "swarm_notnocachealone_tests/plain_note_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notno51grad2_tests/0",
+      "suite": "swarm_notnocallerate2_tests/0",
       "selectors": [
-        "swarm_notno51grad2_tests/empty_vote_id_is_vote",
-        "swarm_notno51grad2_tests/majority_is_not_graduated",
-        "swarm_notno51grad2_tests/want_graduate_is_held"
+        "swarm_notnocallerate2_tests/empty_engine_id_is_engine",
+        "swarm_notnocallerate2_tests/caller_rate_is_not_advertised",
+        "swarm_notnocallerate2_tests/want_advertise_is_held"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notno51grad2_tests/1",
+      "suite": "swarm_notnocallerate2_tests/1",
       "selectors": [
-        "swarm_notno51grad2_tests/plain_note_is_noted"
+        "swarm_notnocallerate2_tests/plain_note_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notno51hide2_tests/0",
+      "suite": "swarm_notnocanary_tests/0",
       "selectors": [
-        "swarm_notno51hide2_tests/empty_vote_id_is_vote",
-        "swarm_notno51hide2_tests/majority_is_not_hidden",
-        "swarm_notno51hide2_tests/want_hide_is_held"
+        "swarm_notnocanary_tests/empty_canary_id_is_canary",
+        "swarm_notnocanary_tests/want_run_is_not_run",
+        "swarm_notnocanary_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notno51hide2_tests/1",
+      "suite": "swarm_notnocanaryreg_tests/0",
       "selectors": [
-        "swarm_notno51hide2_tests/plain_note_is_noted"
+        "swarm_notnocanaryreg_tests/empty_run_id_is_run",
+        "swarm_notnocanaryreg_tests/regression_without_want_publish_is_canary",
+        "swarm_notnocanaryreg_tests/want_publish_is_block"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnocanaryreg_tests/1",
+      "selectors": [
+        "swarm_notnocanaryreg_tests/plain_note_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notno51vote2_tests/0",
+      "suite": "swarm_notnocap1_tests/0",
       "selectors": [
-        "swarm_notno51vote2_tests/empty_vote_id_is_vote",
-        "swarm_notno51vote2_tests/majority_is_not_graduated",
-        "swarm_notno51vote2_tests/want_graduate_is_held"
+        "swarm_notnocap1_tests/empty_node_id",
+        "swarm_notnocap1_tests/thread_count_below_1",
+        "swarm_notnocap1_tests/want_apply_at_1"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notno51vote2_tests/1",
+      "suite": "swarm_notnocap1_tests/1",
       "selectors": [
-        "swarm_notno51vote2_tests/plain_note_is_noted"
+        "swarm_notnocap1_tests/plain_1"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notno604800_tests/0",
+      "suite": "swarm_notnocap2_tests/0",
       "selectors": [
-        "swarm_notno604800_tests/empty_channel_id_is_channel",
-        "swarm_notno604800_tests/want_close_is_not_wallclock",
-        "swarm_notno604800_tests/plain_note_is_noted"
+        "swarm_notnocap2_tests/empty_cap_id_is_cap",
+        "swarm_notnocap2_tests/covered_false_is_not_acted_when_want_act_is_false",
+        "swarm_notnocap2_tests/want_act_is_held"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notno6720_tests/0",
+      "suite": "swarm_notnocap2_tests/1",
       "selectors": [
-        "swarm_notno6720_tests/empty_spacing_id_is_spacing",
-        "swarm_notno6720_tests/blocks_not_6720_is_not_guarantee",
-        "swarm_notno6720_tests/blocks_6720_with_want_guarantee_is_not_guarantee"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notno6720_tests/1",
-      "selectors": [
-        "swarm_notno6720_tests/blocks_6720_plain_is_noted"
+        "swarm_notnocap2_tests/plain_note_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notno90_tests/0",
+      "suite": "swarm_notnocapab2_tests/0",
       "selectors": [
-        "swarm_notno90_tests/empty_spacing_id_is_spacing",
-        "swarm_notno90_tests/seconds_not_90_is_not_guarantee",
-        "swarm_notno90_tests/seconds_90_with_want_guarantee_is_not_guarantee"
+        "swarm_notnocapab2_tests/empty_cap_id_is_cap",
+        "swarm_notnocapab2_tests/uncovered_true_is_not_acted_when_want_act_is_false",
+        "swarm_notnocapab2_tests/want_act_is_held"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notno90_tests/1",
+      "suite": "swarm_notnocapab2_tests/1",
       "selectors": [
-        "swarm_notno90_tests/seconds_90_plain_is_noted"
+        "swarm_notnocapab2_tests/plain_note_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notno90blk2_tests/0",
+      "suite": "swarm_notnocapability_tests/0",
       "selectors": [
-        "swarm_notno90blk2_tests/empty_clock_id_is_clock",
-        "swarm_notno90blk2_tests/want_guarantee_is_held",
-        "swarm_notno90blk2_tests/plain_note_is_noted"
+        "swarm_notnocapability_tests/empty_action_id_is_action",
+        "swarm_notnocapability_tests/covered_false_is_authority_when_want_act_is_false",
+        "swarm_notnocapability_tests/want_act_is_held"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notno90s_tests/0",
+      "suite": "swarm_notnocapability_tests/1",
       "selectors": [
-        "swarm_notno90s_tests/empty_spacing_id_is_spacing",
-        "swarm_notno90s_tests/seconds_not_90_is_not_guarantee",
-        "swarm_notno90s_tests/seconds_90_with_want_guarantee_is_not_guarantee"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notno90s_tests/1",
-      "selectors": [
-        "swarm_notno90s_tests/seconds_90_plain_is_noted"
+        "swarm_notnocapability_tests/plain_note_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notno90sec2_tests/0",
+      "suite": "swarm_notnocapact2_tests/0",
       "selectors": [
-        "swarm_notno90sec2_tests/empty_block_id_is_block",
-        "swarm_notno90sec2_tests/wall_clock_is_not_guaranteed",
-        "swarm_notno90sec2_tests/want_guarantee_is_held"
+        "swarm_notnocapact2_tests/empty_capability_id_is_capability",
+        "swarm_notnocapact2_tests/uncovered_true_is_not_acted_when_want_act_is_false",
+        "swarm_notnocapact2_tests/want_act_is_held"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notno90sec2_tests/1",
+      "suite": "swarm_notnocapact2_tests/1",
       "selectors": [
-        "swarm_notno90sec2_tests/plain_note_is_noted"
+        "swarm_notnocapact2_tests/plain_note_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoablate2_tests/0",
+      "suite": "swarm_notnocatalog_tests/0",
       "selectors": [
-        "swarm_notnoablate2_tests/empty_run_id",
-        "swarm_notnoablate2_tests/want_publish",
-        "swarm_notnoablate2_tests/noted"
+        "swarm_notnocatalog_tests/empty_entry_id_is_entry",
+        "swarm_notnocatalog_tests/want_authority_is_not_authority",
+        "swarm_notnocatalog_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoablate_tests/0",
+      "suite": "swarm_notnochallenge_tests/0",
       "selectors": [
-        "swarm_notnoablate_tests/empty_run_id",
-        "swarm_notnoablate_tests/want_change_not_changed",
-        "swarm_notnoablate_tests/noted_clears_err"
+        "swarm_notnochallenge_tests/empty_challenge_id",
+        "swarm_notnochallenge_tests/missing_one_flag_is_held",
+        "swarm_notnochallenge_tests/want_move_with_all_three_true"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoablation2_tests/0",
+      "suite": "swarm_notnochallenge_tests/1",
       "selectors": [
-        "swarm_notnoablation2_tests/empty_study_id_is_study",
-        "swarm_notnoablation2_tests/want_publish_is_held",
-        "swarm_notnoablation2_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notnoablation_tests/0",
-      "selectors": [
-        "swarm_notnoablation_tests/empty_bench_id_is_bench",
-        "swarm_notnoablation_tests/want_publish_is_unmeasured",
-        "swarm_notnoablation_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notnoabortscan_tests/0",
-      "selectors": [
-        "swarm_notnoabortscan_tests/empty_field_id_is_field",
-        "swarm_notnoabortscan_tests/wrong_type_aborts_even_without_scan",
-        "swarm_notnoabortscan_tests/want_scan_is_held"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notnoabortscan_tests/1",
-      "selectors": [
-        "swarm_notnoabortscan_tests/plain_note_is_noted"
+        "swarm_notnochallenge_tests/quiet_note_all_three_true"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoabsent_tests/0",
+      "suite": "swarm_notnochallinfo2_tests/0",
       "selectors": [
-        "swarm_notnoabsent_tests/empty_engine_id_is_engine",
-        "swarm_notnoabsent_tests/absent_engine_is_engine_absent",
-        "swarm_notnoabsent_tests/want_move_with_present_is_engine_absent"
+        "swarm_notnochallinfo2_tests/empty_challenge_id",
+        "swarm_notnochallinfo2_tests/uninformative_want_move_false",
+        "swarm_notnochallinfo2_tests/want_move_uninformative_false"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoabsent_tests/1",
+      "suite": "swarm_notnochallinfo2_tests/1",
       "selectors": [
-        "swarm_notnoabsent_tests/plain_present_is_noted"
+        "swarm_notnochallinfo2_tests/noted_neither"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoaccount_tests/0",
+      "suite": "swarm_notnochannel_tests/0",
       "selectors": [
-        "swarm_notnoaccount_tests/empty_ledger_id_is_ledger",
-        "swarm_notnoaccount_tests/real_money_is_real_money_when_want_pay_is_false",
-        "swarm_notnoaccount_tests/want_pay_is_accounting_only"
+        "swarm_notnochannel_tests/empty_channel_id_is_channel",
+        "swarm_notnochannel_tests/want_open_second_is_one_channel",
+        "swarm_notnochannel_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoaccount_tests/1",
+      "suite": "swarm_notnochannelone2_tests/0",
       "selectors": [
-        "swarm_notnoaccount_tests/plain_note_is_noted"
+        "swarm_notnochannelone2_tests/empty_channel_id_is_channel",
+        "swarm_notnochannelone2_tests/second_channel_is_not_opened",
+        "swarm_notnochannelone2_tests/want_open_is_held"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnochannelone2_tests/1",
+      "selectors": [
+        "swarm_notnochannelone2_tests/plain_note_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoaccounting2_tests/0",
+      "suite": "swarm_notnocheck2_tests/0",
       "selectors": [
-        "swarm_notnoaccounting2_tests/empty_ledger_id_is_ledger",
-        "swarm_notnoaccounting2_tests/want_settle_is_held",
-        "swarm_notnoaccounting2_tests/plain_note_is_noted"
+        "swarm_notnocheck2_tests/empty_claim_id_is_claim",
+        "swarm_notnocheck2_tests/checkpoint_only_is_not_trust_even_when_want_trust_is_false",
+        "swarm_notnocheck2_tests/want_trust_is_held"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoacctonly_tests/0",
+      "suite": "swarm_notnocheck2_tests/1",
       "selectors": [
-        "swarm_notnoacctonly_tests/empty_mesh_id_is_mesh",
-        "swarm_notnoacctonly_tests/want_pay_is_accounting",
-        "swarm_notnoacctonly_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notnoactivate_tests/0",
-      "selectors": [
-        "swarm_notnoactivate_tests/empty_book_id_is_book",
-        "swarm_notnoactivate_tests/verified_false_is_not_verified_when_want_activate_is_false",
-        "swarm_notnoactivate_tests/want_activate_is_held"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notnoactivate_tests/1",
-      "selectors": [
-        "swarm_notnoactivate_tests/plain_note_is_noted"
+        "swarm_notnocheck2_tests/plain_claim_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoadmin_tests/0",
+      "suite": "swarm_notnocheck_tests/0",
       "selectors": [
-        "swarm_notnoadmin_tests/empty_admin_id_is_admin",
-        "swarm_notnoadmin_tests/want_move_refund_is_refused",
-        "swarm_notnoadmin_tests/plain_note_is_noted"
+        "swarm_notnocheck_tests/empty_step_id_is_step",
+        "swarm_notnocheck_tests/unsaved_is_no_checkpoint",
+        "swarm_notnocheck_tests/want_resume_with_saved_is_no_checkpoint"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoadminheight2_tests/0",
+      "suite": "swarm_notnocheck_tests/1",
       "selectors": [
-        "swarm_notnoadminheight2_tests/empty_admin_id_yields_admin",
-        "swarm_notnoadminheight2_tests/want_move_true_yields_held",
-        "swarm_notnoadminheight2_tests/neither_yields_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notnoadminmove2_tests/0",
-      "selectors": [
-        "swarm_notnoadminmove2_tests/empty_refund_id_is_refund",
-        "swarm_notnoadminmove2_tests/admin_without_want_move_is_not_moved",
-        "swarm_notnoadminmove2_tests/want_move_is_held"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notnoadminmove2_tests/1",
-      "selectors": [
-        "swarm_notnoadminmove2_tests/plain_note_is_noted"
+        "swarm_notnocheck_tests/plain_saved_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoadv_tests/0",
+      "suite": "swarm_notnochild_tests/0",
       "selectors": [
-        "swarm_notnoadv_tests/empty_pool_id_is_pool",
-        "swarm_notnoadv_tests/unfunded_is_unfunded",
-        "swarm_notnoadv_tests/want_advertise_while_funded_is_unfunded"
+        "swarm_notnochild_tests/empty_manifest_id_is_manifest",
+        "swarm_notnochild_tests/child_mismatch_is_incomplete_when_want_stream_is_false",
+        "swarm_notnochild_tests/want_stream_is_held"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoadv_tests/1",
+      "suite": "swarm_notnochild_tests/1",
       "selectors": [
-        "swarm_notnoadv_tests/funded_plain_is_noted"
+        "swarm_notnochild_tests/plain_note_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoadvert2_tests/0",
+      "suite": "swarm_notnochurn2_tests/0",
       "selectors": [
-        "swarm_notnoadvert2_tests/empty_sample_id_is_sample",
-        "swarm_notnoadvert2_tests/caller_rate_is_not_advertised",
-        "swarm_notnoadvert2_tests/want_advertise_is_held"
+        "swarm_notnochurn2_tests/empty_peer_id",
+        "swarm_notnochurn2_tests/churned",
+        "swarm_notnochurn2_tests/want_send"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoadvert2_tests/1",
+      "suite": "swarm_notnochurn2_tests/1",
       "selectors": [
-        "swarm_notnoadvert2_tests/plain_note_is_noted"
+        "swarm_notnochurn2_tests/plain_note"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoadvert_tests/0",
+      "suite": "swarm_notnochurn_tests/0",
       "selectors": [
-        "swarm_notnoadvert_tests/empty_engine_id_is_engine",
-        "swarm_notnoadvert_tests/caller_rate_without_advertise_is_unmeasured",
-        "swarm_notnoadvert_tests/want_advertise_is_unmeasured"
+        "swarm_notnochurn_tests/empty_worker_id_is_worker",
+        "swarm_notnochurn_tests/gone_is_held",
+        "swarm_notnochurn_tests/want_pay_while_present_is_held"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoadvert_tests/1",
+      "suite": "swarm_notnochurn_tests/1",
       "selectors": [
-        "swarm_notnoadvert_tests/plain_note_is_noted"
+        "swarm_notnochurn_tests/plain_note_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoagree2_tests/0",
+      "suite": "swarm_notnochurnpeer_tests/0",
       "selectors": [
-        "swarm_notnoagree2_tests/empty",
-        "swarm_notnoagree2_tests/agreed",
-        "swarm_notnoagree2_tests/want_settle_without_agreement"
+        "swarm_notnochurnpeer_tests/empty_peer_id",
+        "swarm_notnochurnpeer_tests/churned",
+        "swarm_notnochurnpeer_tests/want_send"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoagree2_tests/1",
+      "suite": "swarm_notnochurnpeer_tests/1",
       "selectors": [
-        "swarm_notnoagree2_tests/plain_without_agreement"
+        "swarm_notnochurnpeer_tests/plain_note"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoagree3_tests/0",
+      "suite": "swarm_notnochurnsend2_tests/0",
       "selectors": [
-        "swarm_notnoagree3_tests/empty",
-        "swarm_notnoagree3_tests/agreement",
-        "swarm_notnoagree3_tests/want_settle_without_agreement"
+        "swarm_notnochurnsend2_tests/empty_peer_id",
+        "swarm_notnochurnsend2_tests/churned",
+        "swarm_notnochurnsend2_tests/want_send"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoagree3_tests/1",
+      "suite": "swarm_notnochurnsend2_tests/1",
       "selectors": [
-        "swarm_notnoagree3_tests/plain_without_agreement"
+        "swarm_notnochurnsend2_tests/plain_note"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoagree_tests/0",
+      "suite": "swarm_notnockpt2_tests/0",
       "selectors": [
-        "swarm_notnoagree_tests/empty",
-        "swarm_notnoagree_tests/agreed",
-        "swarm_notnoagree_tests/want_settle_without_agreement"
+        "swarm_notnockpt2_tests/empty_run_id",
+        "swarm_notnockpt2_tests/want_save",
+        "swarm_notnockpt2_tests/plain_note"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoagree_tests/1",
+      "suite": "swarm_notnockpt_tests/0",
       "selectors": [
-        "swarm_notnoagree_tests/plain_without_agreement"
+        "swarm_notnockpt_tests/empty_step_id",
+        "swarm_notnockpt_tests/want_save",
+        "swarm_notnockpt_tests/plain_note"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnockptonly2_tests/0",
+      "selectors": [
+        "swarm_notnockptonly2_tests/empty_claim_id_is_claim",
+        "swarm_notnockptonly2_tests/checkpoint_only_is_not_trust_even_when_want_trust_is_false",
+        "swarm_notnockptonly2_tests/want_trust_is_held"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnockptonly2_tests/1",
+      "selectors": [
+        "swarm_notnockptonly2_tests/plain_claim_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoassumed_tests/0",
+      "suite": "swarm_notnockptsave2_tests/0",
       "selectors": [
-        "swarm_notnoassumed_tests/empty_run_id_is_run",
-        "swarm_notnoassumed_tests/assumed_without_publish_is_unmeasured",
-        "swarm_notnoassumed_tests/want_publish_is_held"
+        "swarm_notnockptsave2_tests/empty_run_id",
+        "swarm_notnockptsave2_tests/want_save",
+        "swarm_notnockptsave2_tests/plain_note"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoassumed_tests/1",
+      "suite": "swarm_notnoclaim32_tests/0",
       "selectors": [
-        "swarm_notnoassumed_tests/plain_note_is_noted"
+        "swarm_notnoclaim32_tests/empty_claim_id_is_claim",
+        "swarm_notnoclaim32_tests/bad_length_is_not_claimed",
+        "swarm_notnoclaim32_tests/want_claim_is_held"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnoclaim32_tests/1",
+      "selectors": [
+        "swarm_notnoclaim32_tests/plain_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoassurance_tests/0",
+      "suite": "swarm_notnoclaimkey_tests/0",
       "selectors": [
-        "swarm_notnoassurance_tests/empty_route_id_is_route",
-        "swarm_notnoassurance_tests/want_proof_is_not_work_proof",
-        "swarm_notnoassurance_tests/plain_note_is_noted"
+        "swarm_notnoclaimkey_tests/empty_claim_id_is_claim",
+        "swarm_notnoclaimkey_tests/not_signer_is_not_signer",
+        "swarm_notnoclaimkey_tests/want_claim_is_refused"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoatomsboth2_tests/0",
+      "suite": "swarm_notnoclaimkey_tests/1",
       "selectors": [
-        "swarm_notnoatomsboth2_tests/empty_atom_id_is_atoms",
-        "swarm_notnoatomsboth2_tests/both_roles_without_want_book_is_held",
-        "swarm_notnoatomsboth2_tests/want_book_is_held"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notnoatomsboth2_tests/1",
-      "selectors": [
-        "swarm_notnoatomsboth2_tests/plain_note_is_noted"
+        "swarm_notnoclaimkey_tests/signer_plain_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoattest_tests/0",
+      "suite": "swarm_notnoclear2_tests/0",
       "selectors": [
-        "swarm_notnoattest_tests/empty_report_id_is_report",
-        "swarm_notnoattest_tests/want_pass_is_unqualified",
-        "swarm_notnoattest_tests/plain_note_is_noted"
+        "swarm_notnoclear2_tests/empty_batch_id_is_batch",
+        "swarm_notnoclear2_tests/want_clear_is_not_paid",
+        "swarm_notnoclear2_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoauthor2_tests/0",
+      "suite": "swarm_notnoclear_tests/0",
       "selectors": [
-        "swarm_notnoauthor2_tests/empty_report_id",
-        "swarm_notnoauthor2_tests/author_not_signer",
-        "swarm_notnoauthor2_tests/want_sign"
+        "swarm_notnoclear_tests/empty_batch_id_is_batch",
+        "swarm_notnoclear_tests/want_broadcast_is_not_broadcast",
+        "swarm_notnoclear_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoauthor2_tests/1",
+      "suite": "swarm_notnoclearing_tests/0",
       "selectors": [
-        "swarm_notnoauthor2_tests/plain_note"
+        "swarm_notnoclearing_tests/empty_batch_id_is_batch",
+        "swarm_notnoclearing_tests/want_pay_is_netted",
+        "swarm_notnoclearing_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnoclose1602_tests/0",
+      "selectors": [
+        "swarm_notnoclose1602_tests/empty_channel_id_is_channel",
+        "swarm_notnoclose1602_tests/margin_blocks_other_than_160_is_capped",
+        "swarm_notnoclose1602_tests/want_close_at_160_is_capped"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnoclose1602_tests/1",
+      "selectors": [
+        "swarm_notnoclose1602_tests/plain_160_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoauthor3_tests/0",
+      "suite": "swarm_notnoclose160_tests/0",
       "selectors": [
-        "swarm_notnoauthor3_tests/empty_report_id",
-        "swarm_notnoauthor3_tests/self_sign_not_signed",
-        "swarm_notnoauthor3_tests/want_sign"
+        "swarm_notnoclose160_tests/empty_channel_id_is_channel",
+        "swarm_notnoclose160_tests/want_close_is_held",
+        "swarm_notnoclose160_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoauthor3_tests/1",
+      "suite": "swarm_notnoclose_tests/0",
       "selectors": [
-        "swarm_notnoauthor3_tests/plain_note"
+        "swarm_notnoclose_tests/empty_channel_id_is_channel",
+        "swarm_notnoclose_tests/want_broadcast_is_not_broadcast",
+        "swarm_notnoclose_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnoclosemargin2_tests/0",
+      "selectors": [
+        "swarm_notnoclosemargin2_tests/empty_channel_id_is_channel",
+        "swarm_notnoclosemargin2_tests/want_shrink_is_held",
+        "swarm_notnoclosemargin2_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnocltv_tests/0",
+      "selectors": [
+        "swarm_notnocltv_tests/empty",
+        "swarm_notnocltv_tests/first_edge",
+        "swarm_notnocltv_tests/want_add_cltv_on_later_edge"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnocltv_tests/1",
+      "selectors": [
+        "swarm_notnocltv_tests/plain_later_edge"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoauthor_tests/0",
+      "suite": "swarm_notnocltvfirst2_tests/0",
       "selectors": [
-        "swarm_notnoauthor_tests/empty_report_id",
-        "swarm_notnoauthor_tests/self_signed",
-        "swarm_notnoauthor_tests/want_sign"
+        "swarm_notnocltvfirst2_tests/empty",
+        "swarm_notnocltvfirst2_tests/first_edge",
+        "swarm_notnocltvfirst2_tests/want_add"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoauthor_tests/1",
+      "suite": "swarm_notnocltvfirst2_tests/1",
       "selectors": [
-        "swarm_notnoauthor_tests/plain_note"
+        "swarm_notnocltvfirst2_tests/plain_later_edge"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoauthorrep2_tests/0",
+      "suite": "swarm_notnocltvzero2_tests/0",
       "selectors": [
-        "swarm_notnoauthorrep2_tests/empty_report_id",
-        "swarm_notnoauthorrep2_tests/same_author_not_signed",
-        "swarm_notnoauthorrep2_tests/want_sign"
+        "swarm_notnocltvzero2_tests/empty",
+        "swarm_notnocltvzero2_tests/first_edge",
+        "swarm_notnocltvzero2_tests/want_add"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoauthorrep2_tests/1",
+      "suite": "swarm_notnocltvzero2_tests/1",
       "selectors": [
-        "swarm_notnoauthorrep2_tests/plain_note"
+        "swarm_notnocltvzero2_tests/plain_later_edge"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoautospend_tests/0",
+      "suite": "swarm_notnocohort2_tests/0",
       "selectors": [
-        "swarm_notnoautospend_tests/empty_mandate_id_is_mandate",
-        "swarm_notnoautospend_tests/want_arm_is_zero",
-        "swarm_notnoautospend_tests/plain_note_is_noted"
+        "swarm_notnocohort2_tests/empty_cohort_id_is_cohort",
+        "swarm_notnocohort2_tests/inclusive_is_stays_when_want_drop_is_false",
+        "swarm_notnocohort2_tests/want_drop_is_held"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoautospent2_tests/0",
+      "suite": "swarm_notnocohort2_tests/1",
       "selectors": [
-        "swarm_notnoautospent2_tests/empty_spend_id_is_spend",
-        "swarm_notnoautospent2_tests/want_set_is_held",
-        "swarm_notnoautospent2_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notnoavg_tests/0",
-      "selectors": [
-        "swarm_notnoavg_tests/empty_branch_id_is_branch",
-        "swarm_notnoavg_tests/incompatible_without_want_average_is_separate",
-        "swarm_notnoavg_tests/want_average_with_compatible_is_held"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notnoavg_tests/1",
-      "selectors": [
-        "swarm_notnoavg_tests/plain_compatible_note_is_noted"
+        "swarm_notnocohort2_tests/plain_note_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoavgfork_tests/0",
+      "suite": "swarm_notnocohort_tests/0",
       "selectors": [
-        "swarm_notnoavgfork_tests/empty_branch_id_is_branch",
-        "swarm_notnoavgfork_tests/incompatible_without_want_average_is_fork",
-        "swarm_notnoavgfork_tests/want_average_with_compatible_is_fork"
+        "swarm_notnocohort_tests/empty_cohort_id_is_cohort",
+        "swarm_notnocohort_tests/now_equal_until_is_expired",
+        "swarm_notnocohort_tests/want_spend_inside_window_is_held"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoavgfork_tests/1",
+      "suite": "swarm_notnocohort_tests/1",
       "selectors": [
-        "swarm_notnoavgfork_tests/plain_compatible_note_is_noted"
+        "swarm_notnocohort_tests/inside_window_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoavgweight2_tests/0",
+      "suite": "swarm_notnocohortexp2_tests/0",
       "selectors": [
-        "swarm_notnoavgweight2_tests/empty_run_id_is_run",
-        "swarm_notnoavgweight2_tests/want_average_is_held",
-        "swarm_notnoavgweight2_tests/plain_note_is_noted"
+        "swarm_notnocohortexp2_tests/empty_cohort_id_is_cohort",
+        "swarm_notnocohortexp2_tests/want_exclude_is_held",
+        "swarm_notnocohortexp2_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnobalance4_tests/0",
+      "suite": "swarm_notnocohortinc2_tests/0",
       "selectors": [
-        "swarm_notnobalance4_tests/empty_ledger_id_is_ledger",
-        "swarm_notnobalance4_tests/want_merge_is_held",
-        "swarm_notnobalance4_tests/plain_note_is_noted"
+        "swarm_notnocohortinc2_tests/empty_cohort_id_is_cohort",
+        "swarm_notnocohortinc2_tests/inclusive_is_stays_when_want_exclude_is_false",
+        "swarm_notnocohortinc2_tests/want_exclude_is_held"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnobalance_tests/0",
+      "suite": "swarm_notnocohortinc2_tests/1",
       "selectors": [
-        "swarm_notnobalance_tests/empty_ledger_id_is_ledger",
-        "swarm_notnobalance_tests/mixed_books_is_separate",
-        "swarm_notnobalance_tests/want_combine_is_held"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notnobalance_tests/1",
-      "selectors": [
-        "swarm_notnobalance_tests/plain_note_is_noted"
+        "swarm_notnocohortinc2_tests/plain_note_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnobase_tests/0",
+      "suite": "swarm_notnocollat_tests/0",
       "selectors": [
-        "swarm_notnobase_tests/empty_run_id_is_run",
-        "swarm_notnobase_tests/want_publish_is_unmeasured",
-        "swarm_notnobase_tests/run_without_publish_is_noted"
+        "swarm_notnocollat_tests/empty_book_id_is_book",
+        "swarm_notnocollat_tests/reused_without_want_book_is_not_booked",
+        "swarm_notnocollat_tests/want_book_is_held"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnobattery2_tests/0",
+      "suite": "swarm_notnocollat_tests/1",
       "selectors": [
-        "swarm_notnobattery2_tests/empty_node_id",
-        "swarm_notnobattery2_tests/battery",
-        "swarm_notnobattery2_tests/want_run"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notnobattery2_tests/1",
-      "selectors": [
-        "swarm_notnobattery2_tests/noted"
+        "swarm_notnocollat_tests/plain_note_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnobatterydrain2_tests/0",
+      "suite": "swarm_notnocollateral2_tests/0",
       "selectors": [
-        "swarm_notnobatterydrain2_tests/empty_governor_id_is_governor",
-        "swarm_notnobatterydrain2_tests/battery_true_want_keep_false_is_drained",
-        "swarm_notnobatterydrain2_tests/want_keep_true_battery_false_is_held"
+        "swarm_notnocollateral2_tests/empty_collateral_id_is_collateral",
+        "swarm_notnocollateral2_tests/reused_without_want_book_is_same_atoms",
+        "swarm_notnocollateral2_tests/want_book_is_held"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnobatterydrain2_tests/1",
+      "suite": "swarm_notnocollateral2_tests/1",
       "selectors": [
-        "swarm_notnobatterydrain2_tests/neither_is_noted"
+        "swarm_notnocollateral2_tests/plain_note_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnobcast_tests/0",
+      "suite": "swarm_notnocompatfam2_tests/0",
       "selectors": [
-        "swarm_notnobcast_tests/empty_tx_id_is_tx",
-        "swarm_notnobcast_tests/want_mainnet_is_mainnet",
-        "swarm_notnobcast_tests/plain_note_is_noted"
+        "swarm_notnocompatfam2_tests/empty_family_id",
+        "swarm_notnocompatfam2_tests/membership_without_want_share",
+        "swarm_notnocompatfam2_tests/want_share_without_membership"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoblock_tests/0",
+      "suite": "swarm_notnocompatfam2_tests/1",
       "selectors": [
-        "swarm_notnoblock_tests/empty",
-        "swarm_notnoblock_tests/safety_fail",
-        "swarm_notnoblock_tests/want_publish"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notnoblock_tests/1",
-      "selectors": [
-        "swarm_notnoblock_tests/plain"
+        "swarm_notnocompatfam2_tests/plain_note"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnoblockspace2_tests/0",
+      "suite": "swarm_notnoconfcount_tests/0",
       "selectors": [
-        "swarm_notnoblockspace2_tests/empty_chain_id_is_chain",
-        "swarm_notnoblockspace2_tests/want_guarantee_is_held",
-        "swarm_notnoblockspace2_tests/plain_note_is_noted"
+        "swarm_notnoconfcount_tests/empty_tx_id_is_tx",
+        "swarm_notnoconfcount_tests/want_broadcast_is_not_broadcast",
+        "swarm_notnoconfcount_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnobody32_tests/0",
+      "suite": "swarm_notnoconfirm_tests/0",
       "selectors": [
-        "swarm_notnobody32_tests/empty_body_id",
-        "swarm_notnobody32_tests/wrong_size",
-        "swarm_notnobody32_tests/exact_size_want_store"
+        "swarm_notnoconfirm_tests/empty_tx_id_is_tx",
+        "swarm_notnoconfirm_tests/want_broadcast_is_confirmed_without_broadcast",
+        "swarm_notnoconfirm_tests/plain_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnobody32_tests/1",
+      "suite": "swarm_notnoconflict_tests/0",
       "selectors": [
-        "swarm_notnobody32_tests/exact_size_plain"
+        "swarm_notnoconflict_tests/empty",
+        "swarm_notnoconflict_tests/conflicting",
+        "swarm_notnoconflict_tests/want_settle_without_conflict"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnoconflict_tests/1",
+      "selectors": [
+        "swarm_notnoconflict_tests/plain_without_conflict"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnobody_tests/0",
+      "suite": "swarm_notnocoord_tests/0",
       "selectors": [
-        "swarm_notnobody_tests/empty_body_id",
-        "swarm_notnobody_tests/wrong_size",
-        "swarm_notnobody_tests/exact_size_want_store"
+        "swarm_notnocoord_tests/empty_node_id_is_node",
+        "swarm_notnocoord_tests/coordinator_off_is_held",
+        "swarm_notnocoord_tests/want_skip_while_on_is_held"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnobody_tests/1",
+      "suite": "swarm_notnocoord_tests/1",
       "selectors": [
-        "swarm_notnobody_tests/exact_size_plain"
+        "swarm_notnocoord_tests/on_and_plain_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnobodycap2_tests/0",
+      "suite": "swarm_notnocoordstay2_tests/0",
       "selectors": [
-        "swarm_notnobodycap2_tests/empty_body_id",
-        "swarm_notnobodycap2_tests/want_raise",
-        "swarm_notnobodycap2_tests/noted"
+        "swarm_notnocoordstay2_tests/empty_row_id_is_row",
+        "swarm_notnocoordstay2_tests/coordinator_gone_is_stays_when_want_drop_is_false",
+        "swarm_notnocoordstay2_tests/want_drop_is_held"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnobodycap_tests/0",
+      "suite": "swarm_notnocoordstay2_tests/1",
       "selectors": [
-        "swarm_notnobodycap_tests/empty_body_id",
-        "swarm_notnobodycap_tests/over_cap",
-        "swarm_notnobodycap_tests/want_accept"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notnobodycap_tests/1",
-      "selectors": [
-        "swarm_notnobodycap_tests/noted"
+        "swarm_notnocoordstay2_tests/plain_note_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnobroadcast2_tests/0",
+      "suite": "swarm_notnocost2_tests/0",
       "selectors": [
-        "swarm_notnobroadcast2_tests/empty_tx_id_is_tx",
-        "swarm_notnobroadcast2_tests/want_broadcast_is_held",
-        "swarm_notnobroadcast2_tests/plain_note_is_noted"
+        "swarm_notnocost2_tests/empty_cost_id_is_cost",
+        "swarm_notnocost2_tests/unmeasured_is_not_charged_when_want_charge_is_false",
+        "swarm_notnocost2_tests/want_charge_is_held"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_notnobroadcast_tests/0",
+      "suite": "swarm_notnocost2_tests/1",
       "selectors": [
-        "swarm_notnobroadcast_tests/empty_chain_id_is_chain",
-        "swarm_notnobroadcast_tests/mainnet_is_not_broadcast",
-        "swarm_notnobroadcast_tests/want_broadcast_is_held"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_notnobroadcast_tests/1",
-      "selectors": [
-        "swarm_notnobroadcast_tests/plain_note_is_noted"
+        "swarm_notnocost2_tests/plain_note_is_noted"
       ],
       "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnocost_tests/0",
+      "selectors": [
+        "swarm_notnocost_tests/empty_run_id_is_run",
+        "swarm_notnocost_tests/unmeasured_is_unmeasured_when_want_charge_is_false",
+        "swarm_notnocost_tests/want_charge_is_held"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnocost_tests/1",
+      "selectors": [
+        "swarm_notnocost_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnocostcharge2_tests/0",
+      "selectors": [
+        "swarm_notnocostcharge2_tests/empty_cost_id_is_cost",
+        "swarm_notnocostcharge2_tests/unmeasured_is_not_charged_when_want_charge_is_false",
+        "swarm_notnocostcharge2_tests/want_charge_is_held"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnocostcharge2_tests/1",
+      "selectors": [
+        "swarm_notnocostcharge2_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnocputhread2_tests/0",
+      "selectors": [
+        "swarm_notnocputhread2_tests/empty_node_id_is_node",
+        "swarm_notnocputhread2_tests/requested_65_is_capped",
+        "swarm_notnocputhread2_tests/want_raise_requested_64_is_capped"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnocputhread2_tests/1",
+      "selectors": [
+        "swarm_notnocputhread2_tests/quiet_note_requested_64_is_noted"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnocrash_tests/0",
+      "selectors": [
+        "swarm_notnocrash_tests/empty_node_id_is_node",
+        "swarm_notnocrash_tests/crashed_is_held",
+        "swarm_notnocrash_tests/want_spend_while_not_crashed_is_held"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnocrash_tests/1",
+      "selectors": [
+        "swarm_notnocrash_tests/plain_is_noted"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_notnocred_tests/0",
+      "selectors": [
+        "swarm_notnocred_tests/empty_cred_id_is_cred",
+        "swarm_notnocred_tests/want_use_is_refused",
+        "swarm_notnocred_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     }
   ],
   "all_enabled_cases": [
-    "swarm_notnixl_tests/empty_page_id_is_nixl",
-    "swarm_notnixl_tests/want_transfer_without_nixl_is_engine_absent",
-    "swarm_notnixl_tests/want_transfer_with_nixl_is_held",
-    "swarm_notnixl_tests/nixl_present_without_transfer_is_noted",
-    "swarm_notnixlabs_tests/empty_adapter_id_is_adapter",
-    "swarm_notnixlabs_tests/want_move_is_engine_absent",
-    "swarm_notnixlabs_tests/plain_note_is_noted",
-    "swarm_notno14400_tests/empty_channel_id_is_channel",
-    "swarm_notno14400_tests/want_close_is_not_wallclock",
-    "swarm_notno14400_tests/plain_note_is_noted",
-    "swarm_notno160blk_tests/empty_channel_id_is_channel",
-    "swarm_notno160blk_tests/want_close_is_not_wallclock",
-    "swarm_notno160blk_tests/plain_note_is_noted",
-    "swarm_notno160s_tests/empty_clock_id_is_clock",
-    "swarm_notno160s_tests/blocks_not_160_is_not_guarantee",
-    "swarm_notno160s_tests/blocks_160_with_want_wallclock_is_not_guarantee",
-    "swarm_notno160s_tests/blocks_160_plain_is_noted",
-    "swarm_notno51grad2_tests/empty_vote_id_is_vote",
-    "swarm_notno51grad2_tests/majority_is_not_graduated",
-    "swarm_notno51grad2_tests/want_graduate_is_held",
-    "swarm_notno51grad2_tests/plain_note_is_noted",
-    "swarm_notno51hide2_tests/empty_vote_id_is_vote",
-    "swarm_notno51hide2_tests/majority_is_not_hidden",
-    "swarm_notno51hide2_tests/want_hide_is_held",
-    "swarm_notno51hide2_tests/plain_note_is_noted",
-    "swarm_notno51vote2_tests/empty_vote_id_is_vote",
-    "swarm_notno51vote2_tests/majority_is_not_graduated",
-    "swarm_notno51vote2_tests/want_graduate_is_held",
-    "swarm_notno51vote2_tests/plain_note_is_noted",
-    "swarm_notno604800_tests/empty_channel_id_is_channel",
-    "swarm_notno604800_tests/want_close_is_not_wallclock",
-    "swarm_notno604800_tests/plain_note_is_noted",
-    "swarm_notno6720_tests/empty_spacing_id_is_spacing",
-    "swarm_notno6720_tests/blocks_not_6720_is_not_guarantee",
-    "swarm_notno6720_tests/blocks_6720_with_want_guarantee_is_not_guarantee",
-    "swarm_notno6720_tests/blocks_6720_plain_is_noted",
-    "swarm_notno90_tests/empty_spacing_id_is_spacing",
-    "swarm_notno90_tests/seconds_not_90_is_not_guarantee",
-    "swarm_notno90_tests/seconds_90_with_want_guarantee_is_not_guarantee",
-    "swarm_notno90_tests/seconds_90_plain_is_noted",
-    "swarm_notno90blk2_tests/empty_clock_id_is_clock",
-    "swarm_notno90blk2_tests/want_guarantee_is_held",
-    "swarm_notno90blk2_tests/plain_note_is_noted",
-    "swarm_notno90s_tests/empty_spacing_id_is_spacing",
-    "swarm_notno90s_tests/seconds_not_90_is_not_guarantee",
-    "swarm_notno90s_tests/seconds_90_with_want_guarantee_is_not_guarantee",
-    "swarm_notno90s_tests/seconds_90_plain_is_noted",
-    "swarm_notno90sec2_tests/empty_block_id_is_block",
-    "swarm_notno90sec2_tests/wall_clock_is_not_guaranteed",
-    "swarm_notno90sec2_tests/want_guarantee_is_held",
-    "swarm_notno90sec2_tests/plain_note_is_noted",
-    "swarm_notnoablate2_tests/empty_run_id",
-    "swarm_notnoablate2_tests/want_publish",
-    "swarm_notnoablate2_tests/noted",
-    "swarm_notnoablate_tests/empty_run_id",
-    "swarm_notnoablate_tests/want_change_not_changed",
-    "swarm_notnoablate_tests/noted_clears_err",
-    "swarm_notnoablation2_tests/empty_study_id_is_study",
-    "swarm_notnoablation2_tests/want_publish_is_held",
-    "swarm_notnoablation2_tests/plain_note_is_noted",
-    "swarm_notnoablation_tests/empty_bench_id_is_bench",
-    "swarm_notnoablation_tests/want_publish_is_unmeasured",
-    "swarm_notnoablation_tests/plain_note_is_noted",
-    "swarm_notnoabortscan_tests/empty_field_id_is_field",
-    "swarm_notnoabortscan_tests/wrong_type_aborts_even_without_scan",
-    "swarm_notnoabortscan_tests/want_scan_is_held",
-    "swarm_notnoabortscan_tests/plain_note_is_noted",
-    "swarm_notnoabsent_tests/empty_engine_id_is_engine",
-    "swarm_notnoabsent_tests/absent_engine_is_engine_absent",
-    "swarm_notnoabsent_tests/want_move_with_present_is_engine_absent",
-    "swarm_notnoabsent_tests/plain_present_is_noted",
-    "swarm_notnoaccount_tests/empty_ledger_id_is_ledger",
-    "swarm_notnoaccount_tests/real_money_is_real_money_when_want_pay_is_false",
-    "swarm_notnoaccount_tests/want_pay_is_accounting_only",
-    "swarm_notnoaccount_tests/plain_note_is_noted",
-    "swarm_notnoaccounting2_tests/empty_ledger_id_is_ledger",
-    "swarm_notnoaccounting2_tests/want_settle_is_held",
-    "swarm_notnoaccounting2_tests/plain_note_is_noted",
-    "swarm_notnoacctonly_tests/empty_mesh_id_is_mesh",
-    "swarm_notnoacctonly_tests/want_pay_is_accounting",
-    "swarm_notnoacctonly_tests/plain_note_is_noted",
-    "swarm_notnoactivate_tests/empty_book_id_is_book",
-    "swarm_notnoactivate_tests/verified_false_is_not_verified_when_want_activate_is_false",
-    "swarm_notnoactivate_tests/want_activate_is_held",
-    "swarm_notnoactivate_tests/plain_note_is_noted",
-    "swarm_notnoadmin_tests/empty_admin_id_is_admin",
-    "swarm_notnoadmin_tests/want_move_refund_is_refused",
-    "swarm_notnoadmin_tests/plain_note_is_noted",
-    "swarm_notnoadminheight2_tests/empty_admin_id_yields_admin",
-    "swarm_notnoadminheight2_tests/want_move_true_yields_held",
-    "swarm_notnoadminheight2_tests/neither_yields_noted",
-    "swarm_notnoadminmove2_tests/empty_refund_id_is_refund",
-    "swarm_notnoadminmove2_tests/admin_without_want_move_is_not_moved",
-    "swarm_notnoadminmove2_tests/want_move_is_held",
-    "swarm_notnoadminmove2_tests/plain_note_is_noted",
-    "swarm_notnoadv_tests/empty_pool_id_is_pool",
-    "swarm_notnoadv_tests/unfunded_is_unfunded",
-    "swarm_notnoadv_tests/want_advertise_while_funded_is_unfunded",
-    "swarm_notnoadv_tests/funded_plain_is_noted",
-    "swarm_notnoadvert2_tests/empty_sample_id_is_sample",
-    "swarm_notnoadvert2_tests/caller_rate_is_not_advertised",
-    "swarm_notnoadvert2_tests/want_advertise_is_held",
-    "swarm_notnoadvert2_tests/plain_note_is_noted",
-    "swarm_notnoadvert_tests/empty_engine_id_is_engine",
-    "swarm_notnoadvert_tests/caller_rate_without_advertise_is_unmeasured",
-    "swarm_notnoadvert_tests/want_advertise_is_unmeasured",
-    "swarm_notnoadvert_tests/plain_note_is_noted",
-    "swarm_notnoagree2_tests/empty",
-    "swarm_notnoagree2_tests/agreed",
-    "swarm_notnoagree2_tests/want_settle_without_agreement",
-    "swarm_notnoagree2_tests/plain_without_agreement",
-    "swarm_notnoagree3_tests/empty",
-    "swarm_notnoagree3_tests/agreement",
-    "swarm_notnoagree3_tests/want_settle_without_agreement",
-    "swarm_notnoagree3_tests/plain_without_agreement",
-    "swarm_notnoagree_tests/empty",
-    "swarm_notnoagree_tests/agreed",
-    "swarm_notnoagree_tests/want_settle_without_agreement",
-    "swarm_notnoagree_tests/plain_without_agreement",
-    "swarm_notnoassumed_tests/empty_run_id_is_run",
-    "swarm_notnoassumed_tests/assumed_without_publish_is_unmeasured",
-    "swarm_notnoassumed_tests/want_publish_is_held",
-    "swarm_notnoassumed_tests/plain_note_is_noted",
-    "swarm_notnoassurance_tests/empty_route_id_is_route",
-    "swarm_notnoassurance_tests/want_proof_is_not_work_proof",
-    "swarm_notnoassurance_tests/plain_note_is_noted",
-    "swarm_notnoatomsboth2_tests/empty_atom_id_is_atoms",
-    "swarm_notnoatomsboth2_tests/both_roles_without_want_book_is_held",
-    "swarm_notnoatomsboth2_tests/want_book_is_held",
-    "swarm_notnoatomsboth2_tests/plain_note_is_noted",
-    "swarm_notnoattest_tests/empty_report_id_is_report",
-    "swarm_notnoattest_tests/want_pass_is_unqualified",
-    "swarm_notnoattest_tests/plain_note_is_noted",
-    "swarm_notnoauthor2_tests/empty_report_id",
-    "swarm_notnoauthor2_tests/author_not_signer",
-    "swarm_notnoauthor2_tests/want_sign",
-    "swarm_notnoauthor2_tests/plain_note",
-    "swarm_notnoauthor3_tests/empty_report_id",
-    "swarm_notnoauthor3_tests/self_sign_not_signed",
-    "swarm_notnoauthor3_tests/want_sign",
-    "swarm_notnoauthor3_tests/plain_note",
-    "swarm_notnoauthor_tests/empty_report_id",
-    "swarm_notnoauthor_tests/self_signed",
-    "swarm_notnoauthor_tests/want_sign",
-    "swarm_notnoauthor_tests/plain_note",
-    "swarm_notnoauthorrep2_tests/empty_report_id",
-    "swarm_notnoauthorrep2_tests/same_author_not_signed",
-    "swarm_notnoauthorrep2_tests/want_sign",
-    "swarm_notnoauthorrep2_tests/plain_note",
-    "swarm_notnoautospend_tests/empty_mandate_id_is_mandate",
-    "swarm_notnoautospend_tests/want_arm_is_zero",
-    "swarm_notnoautospend_tests/plain_note_is_noted",
-    "swarm_notnoautospent2_tests/empty_spend_id_is_spend",
-    "swarm_notnoautospent2_tests/want_set_is_held",
-    "swarm_notnoautospent2_tests/plain_note_is_noted",
-    "swarm_notnoavg_tests/empty_branch_id_is_branch",
-    "swarm_notnoavg_tests/incompatible_without_want_average_is_separate",
-    "swarm_notnoavg_tests/want_average_with_compatible_is_held",
-    "swarm_notnoavg_tests/plain_compatible_note_is_noted",
-    "swarm_notnoavgfork_tests/empty_branch_id_is_branch",
-    "swarm_notnoavgfork_tests/incompatible_without_want_average_is_fork",
-    "swarm_notnoavgfork_tests/want_average_with_compatible_is_fork",
-    "swarm_notnoavgfork_tests/plain_compatible_note_is_noted",
-    "swarm_notnoavgweight2_tests/empty_run_id_is_run",
-    "swarm_notnoavgweight2_tests/want_average_is_held",
-    "swarm_notnoavgweight2_tests/plain_note_is_noted",
-    "swarm_notnobalance4_tests/empty_ledger_id_is_ledger",
-    "swarm_notnobalance4_tests/want_merge_is_held",
-    "swarm_notnobalance4_tests/plain_note_is_noted",
-    "swarm_notnobalance_tests/empty_ledger_id_is_ledger",
-    "swarm_notnobalance_tests/mixed_books_is_separate",
-    "swarm_notnobalance_tests/want_combine_is_held",
-    "swarm_notnobalance_tests/plain_note_is_noted",
-    "swarm_notnobase_tests/empty_run_id_is_run",
-    "swarm_notnobase_tests/want_publish_is_unmeasured",
-    "swarm_notnobase_tests/run_without_publish_is_noted",
-    "swarm_notnobattery2_tests/empty_node_id",
-    "swarm_notnobattery2_tests/battery",
-    "swarm_notnobattery2_tests/want_run",
-    "swarm_notnobattery2_tests/noted",
-    "swarm_notnobatterydrain2_tests/empty_governor_id_is_governor",
-    "swarm_notnobatterydrain2_tests/battery_true_want_keep_false_is_drained",
-    "swarm_notnobatterydrain2_tests/want_keep_true_battery_false_is_held",
-    "swarm_notnobatterydrain2_tests/neither_is_noted",
-    "swarm_notnobcast_tests/empty_tx_id_is_tx",
-    "swarm_notnobcast_tests/want_mainnet_is_mainnet",
-    "swarm_notnobcast_tests/plain_note_is_noted",
-    "swarm_notnoblock_tests/empty",
-    "swarm_notnoblock_tests/safety_fail",
-    "swarm_notnoblock_tests/want_publish",
-    "swarm_notnoblock_tests/plain",
-    "swarm_notnoblockspace2_tests/empty_chain_id_is_chain",
-    "swarm_notnoblockspace2_tests/want_guarantee_is_held",
-    "swarm_notnoblockspace2_tests/plain_note_is_noted",
-    "swarm_notnobody32_tests/empty_body_id",
-    "swarm_notnobody32_tests/wrong_size",
-    "swarm_notnobody32_tests/exact_size_want_store",
-    "swarm_notnobody32_tests/exact_size_plain",
-    "swarm_notnobody_tests/empty_body_id",
-    "swarm_notnobody_tests/wrong_size",
-    "swarm_notnobody_tests/exact_size_want_store",
-    "swarm_notnobody_tests/exact_size_plain",
-    "swarm_notnobodycap2_tests/empty_body_id",
-    "swarm_notnobodycap2_tests/want_raise",
-    "swarm_notnobodycap2_tests/noted",
-    "swarm_notnobodycap_tests/empty_body_id",
-    "swarm_notnobodycap_tests/over_cap",
-    "swarm_notnobodycap_tests/want_accept",
-    "swarm_notnobodycap_tests/noted",
-    "swarm_notnobroadcast2_tests/empty_tx_id_is_tx",
-    "swarm_notnobroadcast2_tests/want_broadcast_is_held",
-    "swarm_notnobroadcast2_tests/plain_note_is_noted",
-    "swarm_notnobroadcast_tests/empty_chain_id_is_chain",
-    "swarm_notnobroadcast_tests/mainnet_is_not_broadcast",
-    "swarm_notnobroadcast_tests/want_broadcast_is_held",
-    "swarm_notnobroadcast_tests/plain_note_is_noted"
+    "swarm_notnobytes_tests/empty_transfer_id_is_transfer",
+    "swarm_notnobytes_tests/want_publish_is_unmeasured",
+    "swarm_notnobytes_tests/plain_note_is_noted",
+    "swarm_notnobytespub2_tests/empty_sample_id_is_sample",
+    "swarm_notnobytespub2_tests/want_publish_is_held",
+    "swarm_notnobytespub2_tests/plain_note_is_noted",
+    "swarm_notnocache2_tests/empty_cache_id_is_cache",
+    "swarm_notnocache2_tests/want_share_is_alone",
+    "swarm_notnocache2_tests/plain_note_is_noted",
+    "swarm_notnocache_tests/empty_cache_id",
+    "swarm_notnocache_tests/cache_off",
+    "swarm_notnocache_tests/want_publish_while_on",
+    "swarm_notnocache_tests/on_and_plain",
+    "swarm_notnocachealone2_tests/empty_cache_id",
+    "swarm_notnocachealone2_tests/want_share_true",
+    "swarm_notnocachealone2_tests/neither_empty_nor_want_share",
+    "swarm_notnocachealone_tests/empty_cache_id_is_cache",
+    "swarm_notnocachealone_tests/coupled_is_stands_alone_when_want_share_is_false",
+    "swarm_notnocachealone_tests/want_share_is_held",
+    "swarm_notnocachealone_tests/plain_note_is_noted",
+    "swarm_notnocallerate2_tests/empty_engine_id_is_engine",
+    "swarm_notnocallerate2_tests/caller_rate_is_not_advertised",
+    "swarm_notnocallerate2_tests/want_advertise_is_held",
+    "swarm_notnocallerate2_tests/plain_note_is_noted",
+    "swarm_notnocanary_tests/empty_canary_id_is_canary",
+    "swarm_notnocanary_tests/want_run_is_not_run",
+    "swarm_notnocanary_tests/plain_note_is_noted",
+    "swarm_notnocanaryreg_tests/empty_run_id_is_run",
+    "swarm_notnocanaryreg_tests/regression_without_want_publish_is_canary",
+    "swarm_notnocanaryreg_tests/want_publish_is_block",
+    "swarm_notnocanaryreg_tests/plain_note_is_noted",
+    "swarm_notnocap1_tests/empty_node_id",
+    "swarm_notnocap1_tests/thread_count_below_1",
+    "swarm_notnocap1_tests/want_apply_at_1",
+    "swarm_notnocap1_tests/plain_1",
+    "swarm_notnocap2_tests/empty_cap_id_is_cap",
+    "swarm_notnocap2_tests/covered_false_is_not_acted_when_want_act_is_false",
+    "swarm_notnocap2_tests/want_act_is_held",
+    "swarm_notnocap2_tests/plain_note_is_noted",
+    "swarm_notnocapab2_tests/empty_cap_id_is_cap",
+    "swarm_notnocapab2_tests/uncovered_true_is_not_acted_when_want_act_is_false",
+    "swarm_notnocapab2_tests/want_act_is_held",
+    "swarm_notnocapab2_tests/plain_note_is_noted",
+    "swarm_notnocapability_tests/empty_action_id_is_action",
+    "swarm_notnocapability_tests/covered_false_is_authority_when_want_act_is_false",
+    "swarm_notnocapability_tests/want_act_is_held",
+    "swarm_notnocapability_tests/plain_note_is_noted",
+    "swarm_notnocapact2_tests/empty_capability_id_is_capability",
+    "swarm_notnocapact2_tests/uncovered_true_is_not_acted_when_want_act_is_false",
+    "swarm_notnocapact2_tests/want_act_is_held",
+    "swarm_notnocapact2_tests/plain_note_is_noted",
+    "swarm_notnocatalog_tests/empty_entry_id_is_entry",
+    "swarm_notnocatalog_tests/want_authority_is_not_authority",
+    "swarm_notnocatalog_tests/plain_note_is_noted",
+    "swarm_notnochallenge_tests/empty_challenge_id",
+    "swarm_notnochallenge_tests/missing_one_flag_is_held",
+    "swarm_notnochallenge_tests/want_move_with_all_three_true",
+    "swarm_notnochallenge_tests/quiet_note_all_three_true",
+    "swarm_notnochallinfo2_tests/empty_challenge_id",
+    "swarm_notnochallinfo2_tests/uninformative_want_move_false",
+    "swarm_notnochallinfo2_tests/want_move_uninformative_false",
+    "swarm_notnochallinfo2_tests/noted_neither",
+    "swarm_notnochannel_tests/empty_channel_id_is_channel",
+    "swarm_notnochannel_tests/want_open_second_is_one_channel",
+    "swarm_notnochannel_tests/plain_note_is_noted",
+    "swarm_notnochannelone2_tests/empty_channel_id_is_channel",
+    "swarm_notnochannelone2_tests/second_channel_is_not_opened",
+    "swarm_notnochannelone2_tests/want_open_is_held",
+    "swarm_notnochannelone2_tests/plain_note_is_noted",
+    "swarm_notnocheck2_tests/empty_claim_id_is_claim",
+    "swarm_notnocheck2_tests/checkpoint_only_is_not_trust_even_when_want_trust_is_false",
+    "swarm_notnocheck2_tests/want_trust_is_held",
+    "swarm_notnocheck2_tests/plain_claim_is_noted",
+    "swarm_notnocheck_tests/empty_step_id_is_step",
+    "swarm_notnocheck_tests/unsaved_is_no_checkpoint",
+    "swarm_notnocheck_tests/want_resume_with_saved_is_no_checkpoint",
+    "swarm_notnocheck_tests/plain_saved_is_noted",
+    "swarm_notnochild_tests/empty_manifest_id_is_manifest",
+    "swarm_notnochild_tests/child_mismatch_is_incomplete_when_want_stream_is_false",
+    "swarm_notnochild_tests/want_stream_is_held",
+    "swarm_notnochild_tests/plain_note_is_noted",
+    "swarm_notnochurn2_tests/empty_peer_id",
+    "swarm_notnochurn2_tests/churned",
+    "swarm_notnochurn2_tests/want_send",
+    "swarm_notnochurn2_tests/plain_note",
+    "swarm_notnochurn_tests/empty_worker_id_is_worker",
+    "swarm_notnochurn_tests/gone_is_held",
+    "swarm_notnochurn_tests/want_pay_while_present_is_held",
+    "swarm_notnochurn_tests/plain_note_is_noted",
+    "swarm_notnochurnpeer_tests/empty_peer_id",
+    "swarm_notnochurnpeer_tests/churned",
+    "swarm_notnochurnpeer_tests/want_send",
+    "swarm_notnochurnpeer_tests/plain_note",
+    "swarm_notnochurnsend2_tests/empty_peer_id",
+    "swarm_notnochurnsend2_tests/churned",
+    "swarm_notnochurnsend2_tests/want_send",
+    "swarm_notnochurnsend2_tests/plain_note",
+    "swarm_notnockpt2_tests/empty_run_id",
+    "swarm_notnockpt2_tests/want_save",
+    "swarm_notnockpt2_tests/plain_note",
+    "swarm_notnockpt_tests/empty_step_id",
+    "swarm_notnockpt_tests/want_save",
+    "swarm_notnockpt_tests/plain_note",
+    "swarm_notnockptonly2_tests/empty_claim_id_is_claim",
+    "swarm_notnockptonly2_tests/checkpoint_only_is_not_trust_even_when_want_trust_is_false",
+    "swarm_notnockptonly2_tests/want_trust_is_held",
+    "swarm_notnockptonly2_tests/plain_claim_is_noted",
+    "swarm_notnockptsave2_tests/empty_run_id",
+    "swarm_notnockptsave2_tests/want_save",
+    "swarm_notnockptsave2_tests/plain_note",
+    "swarm_notnoclaim32_tests/empty_claim_id_is_claim",
+    "swarm_notnoclaim32_tests/bad_length_is_not_claimed",
+    "swarm_notnoclaim32_tests/want_claim_is_held",
+    "swarm_notnoclaim32_tests/plain_is_noted",
+    "swarm_notnoclaimkey_tests/empty_claim_id_is_claim",
+    "swarm_notnoclaimkey_tests/not_signer_is_not_signer",
+    "swarm_notnoclaimkey_tests/want_claim_is_refused",
+    "swarm_notnoclaimkey_tests/signer_plain_is_noted",
+    "swarm_notnoclear2_tests/empty_batch_id_is_batch",
+    "swarm_notnoclear2_tests/want_clear_is_not_paid",
+    "swarm_notnoclear2_tests/plain_note_is_noted",
+    "swarm_notnoclear_tests/empty_batch_id_is_batch",
+    "swarm_notnoclear_tests/want_broadcast_is_not_broadcast",
+    "swarm_notnoclear_tests/plain_note_is_noted",
+    "swarm_notnoclearing_tests/empty_batch_id_is_batch",
+    "swarm_notnoclearing_tests/want_pay_is_netted",
+    "swarm_notnoclearing_tests/plain_note_is_noted",
+    "swarm_notnoclose1602_tests/empty_channel_id_is_channel",
+    "swarm_notnoclose1602_tests/margin_blocks_other_than_160_is_capped",
+    "swarm_notnoclose1602_tests/want_close_at_160_is_capped",
+    "swarm_notnoclose1602_tests/plain_160_is_noted",
+    "swarm_notnoclose160_tests/empty_channel_id_is_channel",
+    "swarm_notnoclose160_tests/want_close_is_held",
+    "swarm_notnoclose160_tests/plain_note_is_noted",
+    "swarm_notnoclose_tests/empty_channel_id_is_channel",
+    "swarm_notnoclose_tests/want_broadcast_is_not_broadcast",
+    "swarm_notnoclose_tests/plain_note_is_noted",
+    "swarm_notnoclosemargin2_tests/empty_channel_id_is_channel",
+    "swarm_notnoclosemargin2_tests/want_shrink_is_held",
+    "swarm_notnoclosemargin2_tests/plain_note_is_noted",
+    "swarm_notnocltv_tests/empty",
+    "swarm_notnocltv_tests/first_edge",
+    "swarm_notnocltv_tests/want_add_cltv_on_later_edge",
+    "swarm_notnocltv_tests/plain_later_edge",
+    "swarm_notnocltvfirst2_tests/empty",
+    "swarm_notnocltvfirst2_tests/first_edge",
+    "swarm_notnocltvfirst2_tests/want_add",
+    "swarm_notnocltvfirst2_tests/plain_later_edge",
+    "swarm_notnocltvzero2_tests/empty",
+    "swarm_notnocltvzero2_tests/first_edge",
+    "swarm_notnocltvzero2_tests/want_add",
+    "swarm_notnocltvzero2_tests/plain_later_edge",
+    "swarm_notnocohort2_tests/empty_cohort_id_is_cohort",
+    "swarm_notnocohort2_tests/inclusive_is_stays_when_want_drop_is_false",
+    "swarm_notnocohort2_tests/want_drop_is_held",
+    "swarm_notnocohort2_tests/plain_note_is_noted",
+    "swarm_notnocohort_tests/empty_cohort_id_is_cohort",
+    "swarm_notnocohort_tests/now_equal_until_is_expired",
+    "swarm_notnocohort_tests/want_spend_inside_window_is_held",
+    "swarm_notnocohort_tests/inside_window_is_noted",
+    "swarm_notnocohortexp2_tests/empty_cohort_id_is_cohort",
+    "swarm_notnocohortexp2_tests/want_exclude_is_held",
+    "swarm_notnocohortexp2_tests/plain_note_is_noted",
+    "swarm_notnocohortinc2_tests/empty_cohort_id_is_cohort",
+    "swarm_notnocohortinc2_tests/inclusive_is_stays_when_want_exclude_is_false",
+    "swarm_notnocohortinc2_tests/want_exclude_is_held",
+    "swarm_notnocohortinc2_tests/plain_note_is_noted",
+    "swarm_notnocollat_tests/empty_book_id_is_book",
+    "swarm_notnocollat_tests/reused_without_want_book_is_not_booked",
+    "swarm_notnocollat_tests/want_book_is_held",
+    "swarm_notnocollat_tests/plain_note_is_noted",
+    "swarm_notnocollateral2_tests/empty_collateral_id_is_collateral",
+    "swarm_notnocollateral2_tests/reused_without_want_book_is_same_atoms",
+    "swarm_notnocollateral2_tests/want_book_is_held",
+    "swarm_notnocollateral2_tests/plain_note_is_noted",
+    "swarm_notnocompatfam2_tests/empty_family_id",
+    "swarm_notnocompatfam2_tests/membership_without_want_share",
+    "swarm_notnocompatfam2_tests/want_share_without_membership",
+    "swarm_notnocompatfam2_tests/plain_note",
+    "swarm_notnoconfcount_tests/empty_tx_id_is_tx",
+    "swarm_notnoconfcount_tests/want_broadcast_is_not_broadcast",
+    "swarm_notnoconfcount_tests/plain_note_is_noted",
+    "swarm_notnoconfirm_tests/empty_tx_id_is_tx",
+    "swarm_notnoconfirm_tests/want_broadcast_is_confirmed_without_broadcast",
+    "swarm_notnoconfirm_tests/plain_note_is_noted",
+    "swarm_notnoconflict_tests/empty",
+    "swarm_notnoconflict_tests/conflicting",
+    "swarm_notnoconflict_tests/want_settle_without_conflict",
+    "swarm_notnoconflict_tests/plain_without_conflict",
+    "swarm_notnocoord_tests/empty_node_id_is_node",
+    "swarm_notnocoord_tests/coordinator_off_is_held",
+    "swarm_notnocoord_tests/want_skip_while_on_is_held",
+    "swarm_notnocoord_tests/on_and_plain_is_noted",
+    "swarm_notnocoordstay2_tests/empty_row_id_is_row",
+    "swarm_notnocoordstay2_tests/coordinator_gone_is_stays_when_want_drop_is_false",
+    "swarm_notnocoordstay2_tests/want_drop_is_held",
+    "swarm_notnocoordstay2_tests/plain_note_is_noted",
+    "swarm_notnocost2_tests/empty_cost_id_is_cost",
+    "swarm_notnocost2_tests/unmeasured_is_not_charged_when_want_charge_is_false",
+    "swarm_notnocost2_tests/want_charge_is_held",
+    "swarm_notnocost2_tests/plain_note_is_noted",
+    "swarm_notnocost_tests/empty_run_id_is_run",
+    "swarm_notnocost_tests/unmeasured_is_unmeasured_when_want_charge_is_false",
+    "swarm_notnocost_tests/want_charge_is_held",
+    "swarm_notnocost_tests/plain_note_is_noted",
+    "swarm_notnocostcharge2_tests/empty_cost_id_is_cost",
+    "swarm_notnocostcharge2_tests/unmeasured_is_not_charged_when_want_charge_is_false",
+    "swarm_notnocostcharge2_tests/want_charge_is_held",
+    "swarm_notnocostcharge2_tests/plain_note_is_noted",
+    "swarm_notnocputhread2_tests/empty_node_id_is_node",
+    "swarm_notnocputhread2_tests/requested_65_is_capped",
+    "swarm_notnocputhread2_tests/want_raise_requested_64_is_capped",
+    "swarm_notnocputhread2_tests/quiet_note_requested_64_is_noted",
+    "swarm_notnocrash_tests/empty_node_id_is_node",
+    "swarm_notnocrash_tests/crashed_is_held",
+    "swarm_notnocrash_tests/want_spend_while_not_crashed_is_held",
+    "swarm_notnocrash_tests/plain_is_noted",
+    "swarm_notnocred_tests/empty_cred_id_is_cred",
+    "swarm_notnocred_tests/want_use_is_refused",
+    "swarm_notnocred_tests/plain_note_is_noted"
   ],
   "campaign_test_budget_seconds": 1800,
   "batch_budget_seconds": 1800,
   "require_first_pass_control": true,
-  "scope": "Previously unrun Swarm negative invariants and admission/accounting guard maintained unit cases; no live operations",
-  "total": 216
+  "scope": "Previously unrun Swarm byte/capability/catalog/checkpoint/commit/credit negative boundary maintained unit cases; no live operations",
+  "total": 220
 }
