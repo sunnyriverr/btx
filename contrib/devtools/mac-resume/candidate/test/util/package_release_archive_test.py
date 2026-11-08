@@ -668,6 +668,32 @@ class BundleQtGuiTest(unittest.TestCase):
         result, _ = self._mac_deploy_fixture("WARNING: informational message\n")
         self.assertTrue(result.is_file())
 
+    def test_macos_plugin_only_frameworks_are_additional_roots(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = pathlib.Path(tmp)
+            binary = root / "btx-qt"
+            binary.write_bytes(b"fixture")
+            calls = []
+            def deploy(args, **kwargs):
+                calls.append(args)
+                if len(calls) == 1:
+                    plugin = root / "release/btx-qt.app/Contents/PlugIns/iconengines/plugin.dylib"
+                    plugin.parent.mkdir(parents=True)
+                    plugin.write_bytes(b"fixture")
+                    return subprocess.CompletedProcess(args, 0, "", "ERROR: Cannot resolve rpath QtSvg.framework")
+                return subprocess.CompletedProcess(args, 0, "", "")
+            with mock.patch.object(self.module, "_macdeployqt", return_value=pathlib.Path("/qt/bin/macdeployqt")), \
+                 mock.patch.object(self.module.subprocess, "run", side_effect=deploy), \
+                 mock.patch.object(self.module.subprocess, "check_output", return_value=""), \
+                 mock.patch.object(self.module.subprocess, "check_call") as edit, \
+                 mock.patch.object(self.module.shutil, "which", return_value=None):
+                self.module.deploy_macos_qt_app(binary, root / "release", "test")
+            self.assertEqual(len(calls), 2)
+            self.assertIn("-no-plugins", calls[1])
+            self.assertTrue(any(arg.startswith("-executable=") for arg in calls[1]))
+            self.assertIn("-add_rpath", edit.call_args_list[0].args[0])
+            self.assertIn("-delete_rpath", edit.call_args_list[-1].args[0])
+
     def test_direct_private_dependency_survives_host_branch_cut(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = pathlib.Path(tmp)

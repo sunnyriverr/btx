@@ -345,7 +345,36 @@ def deploy_macos_qt_app(source_binary: Path, release_root: Path, version: str) -
     )
     diagnostics = result.stdout + result.stderr
     if any(line.lstrip().startswith("ERROR:") for line in diagnostics.splitlines()):
-        raise RuntimeError("macdeployqt reported an incomplete deployment: " + diagnostics)
+        errors = [line.strip() for line in diagnostics.splitlines()
+                  if line.lstrip().startswith("ERROR:")]
+        if any(not line.startswith(("ERROR: Cannot resolve rpath", "ERROR:  using"))
+               for line in errors):
+            raise RuntimeError("macdeployqt reported an incomplete deployment: " + diagnostics)
+        # Some split Qt installations omit plugin-only frameworks from the
+        # first pass. Treat the staged plugins as additional dependency roots.
+        plugins = sorted((app / "Contents" / "PlugIns").rglob("*.dylib"))
+        if not plugins:
+            raise RuntimeError("macdeployqt reported an incomplete deployment: " + diagnostics)
+        search_path = str(deploy_tool.parent.parent / "lib")
+        adjusted = []
+        try:
+            for plugin in plugins:
+                loads = subprocess.check_output(["otool", "-l", str(plugin)], text=True)
+                if f"path {search_path} (offset" not in loads:
+                    subprocess.check_call(["install_name_tool", "-add_rpath", search_path, str(plugin)])
+                    adjusted.append(plugin)
+            result = subprocess.run(
+                [str(deploy_tool), str(app), "-always-overwrite", "-no-plugins",
+                 *[f"-executable={plugin}" for plugin in plugins],
+                 f"-libpath={search_path}"],
+                check=True, capture_output=True, text=True,
+            )
+            diagnostics = result.stdout + result.stderr
+            if any(line.lstrip().startswith("ERROR:") for line in diagnostics.splitlines()):
+                raise RuntimeError("macdeployqt reported an incomplete deployment: " + diagnostics)
+        finally:
+            for plugin in adjusted:
+                subprocess.check_call(["install_name_tool", "-delete_rpath", search_path, str(plugin)])
     _rewrite_homebrew_ids(app)
     if shutil.which("codesign"):
         subprocess.check_call(["codesign", "--force", "--deep", "--sign", "-", str(app)])
