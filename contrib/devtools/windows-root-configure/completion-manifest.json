@@ -3,1501 +3,1537 @@
   "binary_sha256": "31e45f1d0f2aed4168982120596182b5268057e1b9806960f27a60c769906bdd",
   "jobs": [
     {
-      "suite": "swarm_evolve_adopt_tests/0",
+      "suite": "swarm_faultseq_tests/0",
       "selectors": [
-        "swarm_evolve_adopt_tests/adopt_sets_the_parent_and_average_leaves_it"
+        "swarm_faultseq_tests/earned_42_steps_all_twenty",
+        "swarm_faultseq_tests/restart_after_refusal_keeps_earned",
+        "swarm_faultseq_tests/step_before_begin_does_not_apply"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_fiatkeep_tests/0",
+      "selectors": [
+        "swarm_fiatkeep_tests/empty_quote",
+        "swarm_fiatkeep_tests/fiat_not_balance",
+        "swarm_fiatkeep_tests/want_book_held"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_fiatkeep_tests/1",
+      "selectors": [
+        "swarm_fiatkeep_tests/noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_evolve_continue_tests/0",
+      "suite": "swarm_fiatquote_tests/0",
       "selectors": [
-        "swarm_evolve_continue_tests/continue_opens_generation_two_after_adopt_and_pay_stays_local"
+        "swarm_fiatquote_tests/empty_quote_id_is_quote",
+        "swarm_fiatquote_tests/empty_currency_is_quote",
+        "swarm_fiatquote_tests/negative_atoms_are_quote"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_evolve_experience_tests/0",
+      "suite": "swarm_fiatquote_tests/1",
       "selectors": [
-        "swarm_evolve_experience_tests/only_public_and_synthetic_trajectories_are_stored"
+        "swarm_fiatquote_tests/usd_is_not_btx",
+        "swarm_fiatquote_tests/usd_want_balance_is_still_not_btx",
+        "swarm_fiatquote_tests/want_balance_is_held"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_evolve_generation_tests/0",
+      "suite": "swarm_fiatquote_tests/2",
       "selectors": [
-        "swarm_evolve_generation_tests/generation_two_trains_and_recover_keeps_earned_atoms"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_evolve_graduate_tests/0",
-      "selectors": [
-        "swarm_evolve_graduate_tests/realm_promotion_does_not_graduate"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_evolve_measure_tests/0",
-      "selectors": [
-        "swarm_evolve_measure_tests/measure_refuses_until_two_distinct_reports_agree",
-        "swarm_evolve_measure_tests/an_accepting_pair_keeps_both_scores"
+        "swarm_fiatquote_tests/btx_quote_is_noted",
+        "swarm_fiatquote_tests/zero_atoms_are_noted"
       ],
       "expected_cases": 2,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_evolve_recover_tests/0",
+      "suite": "swarm_firstcltv_tests/0",
       "selectors": [
-        "swarm_evolve_recover_tests/recover_drops_the_coordinator_and_keeps_earned_atoms"
+        "swarm_firstcltv_tests/empty_edge_id_is_edge",
+        "swarm_firstcltv_tests/first_edge_is_not_added",
+        "swarm_firstcltv_tests/want_add_is_held"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_firstcltv_tests/1",
+      "selectors": [
+        "swarm_firstcltv_tests/plain_edge_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_evolve_train_tests/0",
+      "suite": "swarm_firstedge_tests/0",
       "selectors": [
-        "swarm_evolve_train_tests/one_integer_step_is_stored_and_a_second_is_replay"
+        "swarm_firstedge_tests/empty_edge_is_edge",
+        "swarm_firstedge_tests/first_edge_is_no_fee",
+        "swarm_firstedge_tests/want_charge_is_held"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_firstedge_tests/1",
+      "selectors": [
+        "swarm_firstedge_tests/plain_note_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_exactstall_tests/0",
+      "suite": "swarm_flag01_tests/0",
       "selectors": [
-        "swarm_exactstall_tests/empty_chain_id_is_chain",
-        "swarm_exactstall_tests/want_mine_is_held",
-        "swarm_exactstall_tests/want_mine_false_is_noted"
+        "swarm_flag01_tests/empty_artifact_id_is_artifact",
+        "swarm_flag01_tests/hash_len_not_32_is_hash",
+        "swarm_flag01_tests/closed_license_is_license"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_execnbhd_fallback_tests/0",
+      "suite": "swarm_flag01_tests/1",
       "selectors": [
-        "swarm_execnbhd_fallback_tests/empty_peer_is_peer",
-        "swarm_execnbhd_fallback_tests/named_peer_is_not_connected_and_is_not_stored",
-        "swarm_execnbhd_fallback_tests/fallback_does_not_change_an_existing_seat"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_execnbhd_identity_tests/0",
-      "selectors": [
-        "swarm_execnbhd_identity_tests/empty_id_is_neighborhood_and_stores_nothing",
-        "swarm_execnbhd_identity_tests/first_id_is_stored",
-        "swarm_execnbhd_identity_tests/same_id_is_replay_and_different_id_is_held"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_execnbhd_offer_tests/0",
-      "selectors": [
-        "swarm_execnbhd_offer_tests/empty_peer_is_peer_and_stores_nothing",
-        "swarm_execnbhd_offer_tests/negative_rtt_is_rtt_and_stores_nothing",
-        "swarm_execnbhd_offer_tests/empty_domain_is_domain_and_stores_nothing"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_execnbhd_offer_tests/1",
-      "selectors": [
-        "swarm_execnbhd_offer_tests/unauthorized_is_not_authorized_before_compat",
-        "swarm_execnbhd_offer_tests/incompatible_is_not_compat_and_stores_nothing",
-        "swarm_execnbhd_offer_tests/offer_stores_the_peer_and_does_not_seat"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_execnbhd_offer_tests/2",
-      "selectors": [
-        "swarm_execnbhd_offer_tests/second_offer_is_replay_and_keeps_the_first_record"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_execnbhd_remote_tests/0",
-      "selectors": [
-        "swarm_execnbhd_remote_tests/two_absent_domains_are_remote_and_a_third_is_not",
-        "swarm_execnbhd_remote_tests/domain_already_nearby_cannot_fill_a_remote_slot",
-        "swarm_execnbhd_remote_tests/equal_rtt_remote_tie_breaks_by_peer_id"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_execnbhd_remote_tests/1",
-      "selectors": [
-        "swarm_execnbhd_remote_tests/one_new_domain_still_returns_true"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_execnbhd_seat_tests/0",
-      "selectors": [
-        "swarm_execnbhd_seat_tests/five_peers_in_one_domain_seat_four_nearby",
-        "swarm_execnbhd_seat_tests/equal_rtt_tie_breaks_by_ascending_peer_id",
-        "swarm_execnbhd_seat_tests/boundary_tie_uses_bytewise_peer_id"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_execnbhd_seat_tests/1",
-      "selectors": [
-        "swarm_execnbhd_seat_tests/fewer_than_four_still_seats_and_seat_replaces",
-        "swarm_execnbhd_seat_tests/empty_book_seats_nothing"
+        "swarm_flag01_tests/want_pass_is_unqualified",
+        "swarm_flag01_tests/open_artifact_is_staged"
       ],
       "expected_cases": 2,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_execnbhd_share_tests/0",
+      "suite": "swarm_flag02_tests/0",
       "selectors": [
-        "swarm_execnbhd_share_tests/different_domains_are_not_compat_and_move_no_bytes",
-        "swarm_execnbhd_share_tests/same_domain_returns_true_and_moves_no_bytes",
-        "swarm_execnbhd_share_tests/unknown_or_unseated_peer_is_not_seated"
+        "swarm_flag02_tests/empty_family_id_is_family",
+        "swarm_flag02_tests/empty_peer_id_is_family",
+        "swarm_flag02_tests/manual_config_is_manual"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_execnbhd_share_tests/1",
+      "suite": "swarm_flag02_tests/1",
       "selectors": [
-        "swarm_execnbhd_share_tests/nearby_and_remote_domains_do_not_share"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_executor_tests/0",
-      "selectors": [
-        "swarm_executor_tests/a_remote_manifest_does_not_start_a_host_interpreter"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_experience_tests/0",
-      "selectors": [
-        "swarm_experience_tests/private_refusal_stores_nothing",
-        "swarm_experience_tests/public_reward_is_one_at_threshold",
-        "swarm_experience_tests/synthetic_reward_is_zero_below_threshold"
+        "swarm_flag02_tests/want_connect_is_no_socket",
+        "swarm_flag02_tests/want_pass_is_unqualified",
+        "swarm_flag02_tests/plain_join_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_experience_tests/1",
+      "suite": "swarm_flag03_tests/0",
       "selectors": [
-        "swarm_experience_tests/replay_keeps_the_first_outcome",
-        "swarm_experience_tests/enqueue_follows_insertion_order",
-        "swarm_experience_tests/bytes_moved_stay_zero"
+        "swarm_flag03_tests/empty_task_a_is_task",
+        "swarm_flag03_tests/empty_task_b_is_task",
+        "swarm_flag03_tests/empty_leader_id_is_task"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_explore_tests/0",
+      "suite": "swarm_flag03_tests/1",
       "selectors": [
-        "swarm_explore_tests/empty_pool_id_is_explore",
-        "swarm_explore_tests/slots_below_one_is_explore",
-        "swarm_explore_tests/exploration_ppm_out_of_range_is_explore"
+        "swarm_flag03_tests/same_task_is_same_task",
+        "swarm_flag03_tests/want_run_is_not_run",
+        "swarm_flag03_tests/want_pass_is_unqualified"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_explore_tests/1",
+      "suite": "swarm_flag03_tests/2",
       "selectors": [
-        "swarm_explore_tests/candidate_count_below_one_is_explore",
-        "swarm_explore_tests/explore_wins_over_illustration_and_want_assign",
-        "swarm_explore_tests/other_splits_are_illustration"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_explore_tests/2",
-      "selectors": [
-        "swarm_explore_tests/ppm_bounds_that_are_not_the_illustration_stay_illustration",
-        "swarm_explore_tests/illustration_wins_when_want_assign_is_true",
-        "swarm_explore_tests/want_assign_on_the_known_illustration_is_held"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_explore_tests/3",
-      "selectors": [
-        "swarm_explore_tests/known_illustration_is_noted"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_exploreill_tests/0",
-      "selectors": [
-        "swarm_exploreill_tests/empty_run_id_is_run",
-        "swarm_exploreill_tests/want_assign_is_held",
-        "swarm_exploreill_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fabric_tests/0",
-      "selectors": [
-        "swarm_fabric_tests/prefix_mismatch_is_not_an_absent_engine",
-        "swarm_fabric_tests/a_lan_card_advertises_only_a_public_mapping"
+        "swarm_flag03_tests/not_durable_is_lost",
+        "swarm_flag03_tests/durable_distinct_tasks_are_persisted"
       ],
       "expected_cases": 2,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fallback_tests/0",
+      "suite": "swarm_flag04_tests/0",
       "selectors": [
-        "swarm_fallback_tests/empty_peer_id_is_fallback",
-        "swarm_fallback_tests/negative_rtt_is_fallback",
-        "swarm_fallback_tests/fallback_wins_over_want_connect"
+        "swarm_flag04_tests/empty_cache_id_is_cache",
+        "swarm_flag04_tests/missing_baseline_is_unmeasured",
+        "swarm_flag04_tests/missing_reuse_is_unmeasured"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fallback_tests/1",
+      "suite": "swarm_flag04_tests/1",
       "selectors": [
-        "swarm_fallback_tests/unauthorized_is_unauthorized",
-        "swarm_fallback_tests/unauthorized_wins_over_want_connect",
-        "swarm_fallback_tests/unauthorized_wins_over_inside_chosen"
+        "swarm_flag04_tests/neither_measured_is_unmeasured",
+        "swarm_flag04_tests/want_publish_is_held",
+        "swarm_flag04_tests/want_pass_is_unqualified"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fallback_tests/2",
+      "suite": "swarm_flag04_tests/2",
       "selectors": [
-        "swarm_fallback_tests/inside_chosen_is_not_fallback",
-        "swarm_fallback_tests/not_fallback_wins_over_want_connect",
-        "swarm_fallback_tests/want_connect_is_held"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fallback_tests/3",
-      "selectors": [
-        "swarm_fallback_tests/authorized_outside_chosen_is_noted"
+        "swarm_flag04_tests/measured_note_is_noted"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fallconn_tests/0",
+      "suite": "swarm_flag05_tests/0",
       "selectors": [
-        "swarm_fallconn_tests/empty_peer_id_is_peer",
-        "swarm_fallconn_tests/fallback_true_want_connect_false_is_not_connected",
-        "swarm_fallconn_tests/want_connect_true_fallback_false_is_held"
+        "swarm_flag05_tests/empty_agent_id_is_agent",
+        "swarm_flag05_tests/empty_task_id_is_agent",
+        "swarm_flag05_tests/empty_ids_win_over_later_flags"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fallconn_tests/1",
+      "suite": "swarm_flag05_tests/1",
       "selectors": [
-        "swarm_fallconn_tests/fallback_false_want_connect_false_is_noted"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_familyadmit_admit_tests/0",
-      "selectors": [
-        "swarm_familyadmit_admit_tests/matching_family_stores_the_peer",
-        "swarm_familyadmit_admit_tests/two_peers_may_share_one_family",
-        "swarm_familyadmit_admit_tests/distinct_families_stay_with_their_peers"
+        "swarm_flag05_tests/not_authorized_is_unauthorized",
+        "swarm_flag05_tests/not_synthetic_or_public_is_unauthorized",
+        "swarm_flag05_tests/unauthorized_even_if_want_record"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_familyadmit_compat_tests/0",
+      "suite": "swarm_flag05_tests/2",
       "selectors": [
-        "swarm_familyadmit_compat_tests/empty_peer_or_family_is_family_and_stores_nothing",
-        "swarm_familyadmit_compat_tests/false_compatibility_stores_nothing",
-        "swarm_familyadmit_compat_tests/missing_compatibility_claim_is_not_admitted"
+        "swarm_flag05_tests/want_record_is_not_recorded",
+        "swarm_flag05_tests/want_pass_is_unqualified",
+        "swarm_flag05_tests/authorized_public_note_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_familyadmit_compat_tests/1",
+      "suite": "swarm_flag06_tests/0",
       "selectors": [
-        "swarm_familyadmit_compat_tests/refused_attempt_leaves_a_stored_peer_in_place"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_familyadmit_link_tests/0",
-      "selectors": [
-        "swarm_familyadmit_link_tests/connected_is_false_before_and_after_admit",
-        "swarm_familyadmit_link_tests/false_compatibility_does_not_connect",
-        "swarm_familyadmit_link_tests/replay_and_seed_hold_do_not_connect"
+        "swarm_flag06_tests/empty_worker_a_is_worker",
+        "swarm_flag06_tests/empty_worker_b_is_worker",
+        "swarm_flag06_tests/empty_workers_win_over_later_flags"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_familyadmit_replay_tests/0",
+      "suite": "swarm_flag06_tests/1",
       "selectors": [
-        "swarm_familyadmit_replay_tests/duplicate_peer_is_replay_and_keeps_the_first_family",
-        "swarm_familyadmit_replay_tests/a_different_peer_is_not_a_replay",
-        "swarm_familyadmit_replay_tests/a_bad_second_attempt_does_not_replace_the_family"
+        "swarm_flag06_tests/same_worker_is_same_worker",
+        "swarm_flag06_tests/same_worker_wins_over_later_flags",
+        "swarm_flag06_tests/want_pair_is_out_of_scope"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_familyadmit_seed_tests/0",
+      "suite": "swarm_flag06_tests/2",
       "selectors": [
-        "swarm_familyadmit_seed_tests/dns_seeds_start_empty_and_addseed_is_held",
-        "swarm_familyadmit_seed_tests/admit_does_not_fill_dns_seeds"
+        "swarm_flag06_tests/want_pair_wins_over_checkpoint_and_pass",
+        "swarm_flag06_tests/missing_checkpoint_is_no_checkpoint",
+        "swarm_flag06_tests/missing_checkpoint_wins_over_want_pass"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flag06_tests/3",
+      "selectors": [
+        "swarm_flag06_tests/want_pass_is_unqualified",
+        "swarm_flag06_tests/distinct_workers_are_noted"
       ],
       "expected_cases": 2,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_familycat_tests/0",
+      "suite": "swarm_flag07_tests/0",
       "selectors": [
-        "swarm_familycat_tests/empty_family_id_is_family",
-        "swarm_familycat_tests/private_family_want_list_is_not_published",
-        "swarm_familycat_tests/want_publish_public_is_held"
+        "swarm_flag07_tests/empty_parent_id_is_parent",
+        "swarm_flag07_tests/empty_candidate_a_is_parent",
+        "swarm_flag07_tests/empty_candidate_b_is_parent"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_familycat_tests/1",
+      "suite": "swarm_flag07_tests/1",
       "selectors": [
-        "swarm_familycat_tests/want_list_without_publish_is_noted",
-        "swarm_familycat_tests/neither_publish_nor_list_is_noted"
+        "swarm_flag07_tests/empty_parent_wins_over_later_flags",
+        "swarm_flag07_tests/equal_candidates_are_same_candidate",
+        "swarm_flag07_tests/equal_candidates_win_over_strategy_and_pass"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flag07_tests/2",
+      "selectors": [
+        "swarm_flag07_tests/same_strategy_when_not_different",
+        "swarm_flag07_tests/same_strategy_wins_over_not_evolved_and_want_pass",
+        "swarm_flag07_tests/not_from_real_run_is_not_evolved"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flag07_tests/3",
+      "selectors": [
+        "swarm_flag07_tests/not_evolved_even_if_want_pass",
+        "swarm_flag07_tests/want_pass_is_unqualified",
+        "swarm_flag07_tests/distinct_names_are_noted_not_a_descendant"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flag08_tests/0",
+      "selectors": [
+        "swarm_flag08_tests/empty_candidate_id_is_candidate",
+        "swarm_flag08_tests/empty_evaluator_id_is_candidate",
+        "swarm_flag08_tests/empty_author_id_is_candidate"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flag08_tests/1",
+      "selectors": [
+        "swarm_flag08_tests/empty_evaluator_and_author_stay_candidate",
+        "swarm_flag08_tests/same_evaluator_is_same_evaluator",
+        "swarm_flag08_tests/not_withheld_is_not_withheld"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flag08_tests/2",
+      "selectors": [
+        "swarm_flag08_tests/failed_is_retained_and_not_graduated",
+        "swarm_flag08_tests/want_score_is_not_scored",
+        "swarm_flag08_tests/want_pass_is_unqualified"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flag08_tests/3",
+      "selectors": [
+        "swarm_flag08_tests/withheld_independent_note_is_noted"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flag09_tests/0",
+      "selectors": [
+        "swarm_flag09_tests/empty_descendant_id_is_descendant",
+        "swarm_flag09_tests/not_qualified_is_no_cert_even_if_want_cert",
+        "swarm_flag09_tests/not_real_run_is_no_cert_even_if_want_cert"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flag09_tests/1",
+      "selectors": [
+        "swarm_flag09_tests/want_realm_is_not_realm",
+        "swarm_flag09_tests/want_cert_is_held",
+        "swarm_flag09_tests/want_pass_is_unqualified"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flag09_tests/2",
+      "selectors": [
+        "swarm_flag09_tests/qualified_real_descendant_is_noted"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flag10_tests/0",
+      "selectors": [
+        "swarm_flag10_tests/empty_node_id_is_node",
+        "swarm_flag10_tests/empty_descendant_id_is_node",
+        "swarm_flag10_tests/empty_previous_id_is_no_rollback"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flag10_tests/1",
+      "selectors": [
+        "swarm_flag10_tests/want_adopt_is_not_adopted_and_previous_id_stays",
+        "swarm_flag10_tests/want_pass_is_unqualified",
+        "swarm_flag10_tests/subscribed_second_node_is_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flag11_tests/0",
+      "selectors": [
+        "swarm_flag11_tests/empty_invoice_id",
+        "swarm_flag11_tests/not_regtest",
+        "swarm_flag11_tests/want_mine_refused"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flag11_tests/1",
+      "selectors": [
+        "swarm_flag11_tests/want_settle_unbroadcast",
+        "swarm_flag11_tests/want_pass_unqualified",
+        "swarm_flag11_tests/noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flag12_tests/0",
+      "selectors": [
+        "swarm_flag12_tests/empty_survivor_id_is_node",
+        "swarm_flag12_tests/empty_work_id_is_node",
+        "swarm_flag12_tests/both_ids_empty_is_node"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flag12_tests/1",
+      "selectors": [
+        "swarm_flag12_tests/want_pass_is_unqualified",
+        "swarm_flag12_tests/not_durable_is_lost",
+        "swarm_flag12_tests/want_continue_is_durable"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flag12_tests/2",
+      "selectors": [
+        "swarm_flag12_tests/otherwise_noted"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flag13_tests/0",
+      "selectors": [
+        "swarm_flag13_tests/empty_parent_id_is_parent",
+        "swarm_flag13_tests/empty_cycle_id_is_parent",
+        "swarm_flag13_tests/not_graduated_is_not_graduated"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flag13_tests/1",
+      "selectors": [
+        "swarm_flag13_tests/first_cycle_is_first_only",
+        "swarm_flag13_tests/want_repeat_is_not_repeated",
+        "swarm_flag13_tests/want_pass_is_unqualified"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flag13_tests/2",
+      "selectors": [
+        "swarm_flag13_tests/plain_note_is_noted"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flagdrive_tests/0",
+      "selectors": [
+        "swarm_flagdrive_tests/empty_lineage_is_lineage_at_acquire",
+        "swarm_flagdrive_tests/unseen_hardware_at_join_stays_unqualified",
+        "swarm_flagdrive_tests/want_pass_at_train_stays_held"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flagdrive_tests/1",
+      "selectors": [
+        "swarm_flagdrive_tests/acquire_advances_to_join_noted",
+        "swarm_flagdrive_tests/repeat_stays_repeat_noted"
       ],
       "expected_cases": 2,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_familydir_tests/0",
+      "suite": "swarm_flagship_order_tests/0",
       "selectors": [
-        "swarm_familydir_tests/empty_family_id_is_family",
-        "swarm_familydir_tests/want_publish_is_held",
-        "swarm_familydir_tests/want_publish_false_is_noted"
+        "swarm_flagship_order_tests/join_before_acquire_is_order",
+        "swarm_flagship_order_tests/empty_evidence_on_join_is_evidence_before_order",
+        "swarm_flagship_order_tests/later_stage_before_its_predecessor_is_order"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_familyonly_tests/0",
+      "suite": "swarm_flagship_order_tests/1",
       "selectors": [
-        "swarm_familyonly_tests/empty_page_id_is_family",
-        "swarm_familyonly_tests/same_family_incompatible_want_share_is_family_not_compat",
-        "swarm_familyonly_tests/different_family_compatible_want_share_is_separate"
+        "swarm_flagship_order_tests/order_keeps_the_prefix_already_stored",
+        "swarm_flagship_order_tests/misspelled_stage_is_stage_not_order",
+        "swarm_flagship_order_tests/repeat_before_the_prefix_is_order"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_familyonly_tests/1",
+      "suite": "swarm_flagship_order_tests/2",
       "selectors": [
-        "swarm_familyonly_tests/compatible_same_family_want_share_is_held",
-        "swarm_familyonly_tests/compatible_same_family_without_share_is_noted"
+        "swarm_flagship_order_tests/after_rollback_opens_a_hole_a_later_record_is_order",
+        "swarm_flagship_order_tests/the_next_stage_after_a_prefix_is_accepted"
       ],
       "expected_cases": 2,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault01_tests/0",
+      "suite": "swarm_flagship_pass_tests/0",
       "selectors": [
-        "swarm_fault01_tests/empty_coord_id_is_coord",
-        "swarm_fault01_tests/empty_work_id_is_coord",
-        "swarm_fault01_tests/both_ids_empty_is_coord"
+        "swarm_flagship_pass_tests/pass_train_before_any_record_is_not_passed",
+        "swarm_flagship_pass_tests/pass_train_after_record_is_not_passed_and_gpu_passed_stays_false",
+        "swarm_flagship_pass_tests/every_listed_stage_is_not_passed"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault01_tests/1",
+      "suite": "swarm_flagship_pass_tests/1",
       "selectors": [
-        "swarm_fault01_tests/want_commit_is_stale_and_preserves_payment",
-        "swarm_fault01_tests/want_commit_without_payment_claim_is_stale",
-        "swarm_fault01_tests/pending_not_durable_is_lost_and_preserves_payment"
+        "swarm_flagship_pass_tests/unknown_stage_is_stage",
+        "swarm_flagship_pass_tests/pass_pay_does_not_set_pay_passed",
+        "swarm_flagship_pass_tests/pass_does_not_clear_recorded_evidence"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault01_tests/2",
+      "suite": "swarm_flagship_pass_tests/2",
       "selectors": [
-        "swarm_fault01_tests/pending_not_durable_without_payment_claim_is_lost",
-        "swarm_fault01_tests/durable_want_reassign_is_reassigned_and_preserves_payment",
-        "swarm_fault01_tests/durable_want_reassign_without_payment_claim"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault01_tests/3",
-      "selectors": [
-        "swarm_fault01_tests/durable_is_durable_and_preserves_payment",
-        "swarm_fault01_tests/durable_without_payment_claim",
-        "swarm_fault01_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault01_tests/4",
-      "selectors": [
-        "swarm_fault01_tests/plain_note_without_payment_claim_is_noted"
+        "swarm_flagship_pass_tests/pass_after_every_stage_is_recorded_is_still_not_passed"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault02_tests/0",
+      "suite": "swarm_flagship_record_tests/0",
       "selectors": [
-        "swarm_fault02_tests/empty_lease_id_is_lease",
-        "swarm_fault02_tests/empty_old_epoch_is_lease",
-        "swarm_fault02_tests/empty_new_epoch_is_lease"
+        "swarm_flagship_record_tests/fresh_cursor_points_at_acquire_and_stays_dark",
+        "swarm_flagship_record_tests/empty_evidence_is_evidence_and_stores_nothing",
+        "swarm_flagship_record_tests/unknown_stage_is_stage_and_stores_nothing"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault02_tests/1",
+      "suite": "swarm_flagship_record_tests/1",
       "selectors": [
-        "swarm_fault02_tests/want_commit_is_stale",
-        "swarm_fault02_tests/unexpired_lease_is_held",
-        "swarm_fault02_tests/same_epoch_is_same_epoch"
+        "swarm_flagship_record_tests/unknown_stage_beats_empty_evidence",
+        "swarm_flagship_record_tests/record_acquire_stores_evidence_and_advances",
+        "swarm_flagship_record_tests/records_all_thirteen_in_order_then_next_is_empty"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault02_tests/2",
+      "suite": "swarm_flagship_record_tests/2",
       "selectors": [
-        "swarm_fault02_tests/durable_expired_replacement_is_replaced",
-        "swarm_fault02_tests/expired_without_durable_is_lost"
+        "swarm_flagship_record_tests/unknown_inspectors_are_empty",
+        "swarm_flagship_record_tests/blank_evidence_check_does_not_trim",
+        "swarm_flagship_record_tests/same_evidence_text_may_be_used_on_two_stages"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flagship_record_tests/3",
+      "selectors": [
+        "swarm_flagship_record_tests/passed_stays_false_after_every_record"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flagship_replay_tests/0",
+      "selectors": [
+        "swarm_flagship_replay_tests/same_evidence_again_is_replay_and_keeps_the_first",
+        "swarm_flagship_replay_tests/different_evidence_is_conflict_and_keeps_the_first",
+        "swarm_flagship_replay_tests/empty_evidence_on_a_recorded_stage_is_evidence_not_replay"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flagship_replay_tests/1",
+      "selectors": [
+        "swarm_flagship_replay_tests/replay_does_not_move_next_stage",
+        "swarm_flagship_replay_tests/conflict_on_a_later_stage_keeps_the_prefix",
+        "swarm_flagship_replay_tests/third_record_of_the_original_evidence_is_replay"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_flagship_replay_tests/2",
+      "selectors": [
+        "swarm_flagship_replay_tests/case_difference_is_conflict",
+        "swarm_flagship_replay_tests/replay_and_conflict_do_not_pass"
       ],
       "expected_cases": 2,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault03_tests/0",
+      "suite": "swarm_flagship_rollback_tests/0",
       "selectors": [
-        "swarm_fault03_tests/empty_epoch_id_is_epoch",
-        "swarm_fault03_tests/empty_current_epoch_is_epoch",
-        "swarm_fault03_tests/both_epochs_empty_is_epoch"
+        "swarm_flagship_rollback_tests/unknown_stage_is_stage_and_deletes_nothing",
+        "swarm_flagship_rollback_tests/rollback_evaluate_keeps_acquire_through_evolve_and_clears_the_rest",
+        "swarm_flagship_rollback_tests/rollback_acquire_clears_every_stage"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault03_tests/1",
+      "suite": "swarm_flagship_rollback_tests/1",
       "selectors": [
-        "swarm_fault03_tests/mismatched_epoch_is_stale",
-        "swarm_fault03_tests/want_commit_is_stale",
-        "swarm_fault03_tests/durable_matching_epoch_is_durable"
+        "swarm_flagship_rollback_tests/rollback_repeat_clears_only_repeat",
+        "swarm_flagship_rollback_tests/rollback_of_a_clear_stage_still_returns_true",
+        "swarm_flagship_rollback_tests/after_rollback_the_stage_can_be_recorded_again"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault03_tests/2",
+      "suite": "swarm_flagship_rollback_tests/2",
       "selectors": [
-        "swarm_fault03_tests/matching_epoch_without_durable_is_noted"
+        "swarm_flagship_rollback_tests/rollback_join_keeps_acquire_and_clears_the_suffix"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault04_tests/0",
+      "suite": "swarm_flatcap_tests/0",
       "selectors": [
-        "swarm_fault04_tests/empty_job_id",
-        "swarm_fault04_tests/no_checkpoint",
-        "swarm_fault04_tests/want_publish_held"
+        "swarm_flatcap_tests/empty_manifest",
+        "swarm_flatcap_tests/want_raise_held",
+        "swarm_flatcap_tests/noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault04_tests/1",
+      "suite": "swarm_follow_tests/0",
       "selectors": [
-        "swarm_fault04_tests/durable_local",
-        "swarm_fault04_tests/noted"
+        "swarm_follow_tests/follow_stages_a_compatible_head_and_pin_does_not"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_forkavg_tests/0",
+      "selectors": [
+        "swarm_forkavg_tests/empty_branch",
+        "swarm_forkavg_tests/incompatible_not_averaged",
+        "swarm_forkavg_tests/want_average_held"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_forkavg_tests/1",
+      "selectors": [
+        "swarm_forkavg_tests/noted"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_forknote_tests/0",
+      "selectors": [
+        "swarm_forknote_tests/empty_left_id_is_fork",
+        "swarm_forknote_tests/empty_right_id_is_fork",
+        "swarm_forknote_tests/empty_left_digest_is_fork"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_forknote_tests/1",
+      "selectors": [
+        "swarm_forknote_tests/empty_right_digest_is_fork",
+        "swarm_forknote_tests/empty_fields_win_over_want_average",
+        "swarm_forknote_tests/want_average_with_equal_digests_is_refused"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_forknote_tests/2",
+      "selectors": [
+        "swarm_forknote_tests/want_average_wins_over_divergent_digests",
+        "swarm_forknote_tests/divergent_digests_are_not_averaged",
+        "swarm_forknote_tests/matching_digests_are_noted"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_form_directory_tests/0",
+      "selectors": [
+        "swarm_form_directory_tests/empty_modeldir_is_modeldir_and_creates_nothing",
+        "swarm_form_directory_tests/symlink_swarm_is_symlink_and_is_not_written",
+        "swarm_form_directory_tests/missing_swarm_directory_is_created"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_form_directory_tests/1",
+      "selectors": [
+        "swarm_form_directory_tests/existing_swarm_directory_is_left_in_place"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_form_discovery_tests/0",
+      "selectors": [
+        "swarm_form_discovery_tests/false_compat_is_not_admitted_and_does_not_connect",
+        "swarm_form_discovery_tests/matching_family_is_admitted_without_connecting",
+        "swarm_form_discovery_tests/different_family_without_compat_claim_is_not_false_compat"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_form_election_tests/0",
+      "selectors": [
+        "swarm_form_election_tests/epoch_starts_at_one_and_empty_candidate_stores_nothing",
+        "swarm_form_election_tests/only_an_admitted_member_can_be_coordinator",
+        "swarm_form_election_tests/stale_epoch_does_not_replace_the_leader"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_form_limits_tests/0",
+      "selectors": [
+        "swarm_form_limits_tests/limits_stay_closed_before_any_form",
+        "swarm_form_limits_tests/form_discover_and_claim_still_move_nothing"
       ],
       "expected_cases": 2,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault05_tests/0",
+      "suite": "swarm_form_membership_tests/0",
       "selectors": [
-        "swarm_fault05_tests/empty_worker_or_work_is_worker",
-        "swarm_fault05_tests/result_sent_without_durable_is_lost",
-        "swarm_fault05_tests/durable_want_reassign_is_reassigned"
+        "swarm_form_membership_tests/first_form_writes_local_membership",
+        "swarm_form_membership_tests/second_form_keeps_the_first_membership",
+        "swarm_form_membership_tests/torn_membership_is_set_aside_and_formed_again"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault05_tests/1",
+      "suite": "swarm_form_membership_tests/1",
       "selectors": [
-        "swarm_fault05_tests/result_sent_and_durable_is_durable",
-        "swarm_fault05_tests/otherwise_noted"
+        "swarm_form_membership_tests/membership_with_spend_is_not_replaced",
+        "swarm_form_membership_tests/membership_symlink_is_not_written_through"
       ],
       "expected_cases": 2,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault06_tests/0",
+      "suite": "swarm_form_plane_tests/0",
       "selectors": [
-        "swarm_fault06_tests/empty_receipt_id_is_receipt",
-        "swarm_fault06_tests/seen_before_durable_is_replay_and_preserves_payment",
-        "swarm_fault06_tests/seen_before_without_durable_or_payment_is_replay"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault06_tests/1",
-      "selectors": [
-        "swarm_fault06_tests/want_accept_is_held_and_preserves_payment",
-        "swarm_fault06_tests/want_accept_without_payment_claim_is_held",
-        "swarm_fault06_tests/durable_is_durable_and_preserves_payment"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault06_tests/2",
-      "selectors": [
-        "swarm_fault06_tests/durable_without_payment_claim",
-        "swarm_fault06_tests/plain_receipt_is_noted",
-        "swarm_fault06_tests/plain_receipt_without_payment_claim_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault07_tests/0",
-      "selectors": [
-        "swarm_fault07_tests/empty_page_id_is_page",
-        "swarm_fault07_tests/missing_owner_is_incomplete",
-        "swarm_fault07_tests/want_transfer_is_held"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault07_tests/1",
-      "selectors": [
-        "swarm_fault07_tests/durable_is_durable",
-        "swarm_fault07_tests/plain_note_is_noted"
+        "swarm_form_plane_tests/observer_entry_forms_once_and_keeps_the_plane_local",
+        "swarm_form_plane_tests/symlink_model_swarm_does_not_receive_a_membership"
       ],
       "expected_cases": 2,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault08_tests/0",
+      "suite": "swarm_forward_forward_tests/0",
       "selectors": [
-        "swarm_fault08_tests/empty_page_id_is_page",
-        "swarm_fault08_tests/truncated_is_prefix_mismatch",
-        "swarm_fault08_tests/incompatible_is_prefix_mismatch"
+        "swarm_forward_forward_tests/unknown_channel_is_channel",
+        "swarm_forward_forward_tests/empty_payment_and_low_amount_store_nothing",
+        "swarm_forward_forward_tests/short_liquidity_stays"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault08_tests/1",
+      "suite": "swarm_forward_forward_tests/1",
       "selectors": [
-        "swarm_fault08_tests/truncated_with_want_accept_is_prefix_mismatch",
-        "swarm_fault08_tests/incompatible_with_want_accept_is_prefix_mismatch",
-        "swarm_fault08_tests/want_accept_is_held"
+        "swarm_forward_forward_tests/margin_failure_stores_nothing",
+        "swarm_forward_forward_tests/forward_allowed_refusal_stores_nothing",
+        "swarm_forward_forward_tests/one_successful_forward_then_replay"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault08_tests/2",
+      "suite": "swarm_forward_forward_tests/2",
       "selectors": [
-        "swarm_fault08_tests/compatible_page_is_noted"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault09_tests/0",
-      "selectors": [
-        "swarm_fault09_tests/empty_artifact_id",
-        "swarm_fault09_tests/incomplete_even_when_want_accept",
-        "swarm_fault09_tests/want_accept_is_held"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault09_tests/1",
-      "selectors": [
-        "swarm_fault09_tests/complete_without_accept_is_noted"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault10_tests/0",
-      "selectors": [
-        "swarm_fault10_tests/empty_candidate_id_is_candidate",
-        "swarm_fault10_tests/interrupted_is_gate_even_if_want_promote",
-        "swarm_fault10_tests/want_promote_is_held"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault10_tests/1",
-      "selectors": [
-        "swarm_fault10_tests/durable_is_recovered",
-        "swarm_fault10_tests/otherwise_noted"
+        "swarm_forward_forward_tests/same_payment_forwards_once_per_channel",
+        "swarm_forward_forward_tests/margin_refusal_can_be_retried"
       ],
       "expected_cases": 2,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault11_tests/0",
+      "suite": "swarm_forward_open_tests/0",
       "selectors": [
-        "swarm_fault11_tests/empty_candidate_id",
-        "swarm_fault11_tests/regressed_even_when_want_roll",
-        "swarm_fault11_tests/want_roll_held"
+        "swarm_forward_open_tests/empty_channel_is_channel_and_stores_nothing",
+        "swarm_forward_open_tests/liquidity_below_one_is_liquidity",
+        "swarm_forward_open_tests/second_open_is_replay_and_keeps_first_liquidity"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault11_tests/1",
+      "suite": "swarm_forward_policy_tests/0",
       "selectors": [
-        "swarm_fault11_tests/noted"
+        "swarm_forward_policy_tests/qualified_stays_false"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault12_tests/0",
+      "suite": "swarm_fourbal_tests/0",
       "selectors": [
-        "swarm_fault12_tests/empty_report_id_is_report",
-        "swarm_fault12_tests/conflict_is_quorum_even_if_want_settle",
-        "swarm_fault12_tests/not_distinct_evaluators_is_quorum"
+        "swarm_fourbal_tests/empty_ledger_is_ledger",
+        "swarm_fourbal_tests/negative_escrow_is_range",
+        "swarm_fourbal_tests/want_merge_is_held"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault12_tests/1",
+      "suite": "swarm_fourbal_tests/1",
       "selectors": [
-        "swarm_fault12_tests/not_distinct_domains_is_quorum",
-        "swarm_fault12_tests/want_settle_is_held",
-        "swarm_fault12_tests/otherwise_noted"
+        "swarm_fourbal_tests/plain_record_is_noted"
       ],
-      "expected_cases": 3,
+      "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault13_tests/0",
+      "suite": "swarm_fourbook_tests/0",
       "selectors": [
-        "swarm_fault13_tests/empty_earn_id_is_earn",
-        "swarm_fault13_tests/want_settle_is_held",
-        "swarm_fault13_tests/earned_not_durable_is_lost"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault13_tests/1",
-      "selectors": [
-        "swarm_fault13_tests/earned_and_durable_is_earned",
-        "swarm_fault13_tests/otherwise_noted"
+        "swarm_fourbook_tests/credit_earned_and_escrow_stay_distinct",
+        "swarm_fourbook_tests/unknown_bucket_and_nonpositive_atoms_leave_balances"
       ],
       "expected_cases": 2,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault14_tests/0",
+      "suite": "swarm_fourscale_average_tests/0",
       "selectors": [
-        "swarm_fault14_tests/empty_channel_id_is_channel",
-        "swarm_fault14_tests/unsigned_even_if_want_broadcast_or_mature",
-        "swarm_fault14_tests/want_broadcast_is_held"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault14_tests/1",
-      "selectors": [
-        "swarm_fault14_tests/disrupted_or_mature_is_not_live",
-        "swarm_fault14_tests/otherwise_noted"
+        "swarm_fourscale_average_tests/average_before_open_is_not_averaged",
+        "swarm_fourscale_average_tests/average_after_steps_leaves_each_step"
       ],
       "expected_cases": 2,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault15_tests/0",
+      "suite": "swarm_fourscale_bytes_tests/0",
       "selectors": [
-        "swarm_fault15_tests/empty_batch_id",
-        "swarm_fault15_tests/channel_count_one",
-        "swarm_fault15_tests/measure_refused_even_if_broadcast"
+        "swarm_fourscale_bytes_tests/bytes_stay_zero_and_gpu_stays_false"
       ],
-      "expected_cases": 3,
+      "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault15_tests/1",
+      "suite": "swarm_fourscale_graduate_tests/0",
       "selectors": [
-        "swarm_fault15_tests/broadcast_held",
-        "swarm_fault15_tests/noted"
+        "swarm_fourscale_graduate_tests/graduate_before_open_is_realm",
+        "swarm_fourscale_graduate_tests/graduate_after_steps_leaves_steps_and_stays_ungraduated"
       ],
       "expected_cases": 2,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault16_tests/0",
+      "suite": "swarm_fourscale_open_tests/0",
       "selectors": [
-        "swarm_fault16_tests/empty_pool_a_is_pool",
-        "swarm_fault16_tests/empty_pool_b_is_pool",
-        "swarm_fault16_tests/empty_collateral_id_is_pool"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault16_tests/1",
-      "selectors": [
-        "swarm_fault16_tests/all_ids_empty_is_pool",
-        "swarm_fault16_tests/equal_pools_are_collateral_reuse_even_if_want_reserve",
-        "swarm_fault16_tests/same_collateral_is_collateral_reuse_even_if_want_reserve"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault16_tests/2",
-      "selectors": [
-        "swarm_fault16_tests/equal_pools_and_same_collateral_are_collateral_reuse",
-        "swarm_fault16_tests/want_reserve_is_held_and_clears_err",
-        "swarm_fault16_tests/plain_note_is_noted_and_clears_err"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault17_tests/0",
-      "selectors": [
-        "swarm_fault17_tests/empty_member_id_is_member",
-        "swarm_fault17_tests/empty_page_id_is_member",
-        "swarm_fault17_tests/both_ids_empty_is_member"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault17_tests/1",
-      "selectors": [
-        "swarm_fault17_tests/revoked_with_want_read_is_revoked",
-        "swarm_fault17_tests/revoked_without_want_read_is_revoked",
-        "swarm_fault17_tests/want_read_is_held"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault17_tests/2",
-      "selectors": [
-        "swarm_fault17_tests/plain_note_is_noted"
+        "swarm_fourscale_open_tests/open_plants_four_scales_at_step_zero"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_fault18_tests/0",
+      "suite": "swarm_fourscale_replay_tests/0",
       "selectors": [
-        "swarm_fault18_tests/empty_dataset_id_is_dataset",
-        "swarm_fault18_tests/empty_job_id_is_dataset",
-        "swarm_fault18_tests/both_ids_empty_is_dataset"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault18_tests/1",
-      "selectors": [
-        "swarm_fault18_tests/withdrawn_is_not_started_even_if_want_train",
-        "swarm_fault18_tests/withdrawn_without_want_train_is_not_started",
-        "swarm_fault18_tests/want_train_is_held"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault18_tests/2",
-      "selectors": [
-        "swarm_fault18_tests/otherwise_noted"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault19_tests/0",
-      "selectors": [
-        "swarm_fault19_tests/empty_peer_id_is_peer",
-        "swarm_fault19_tests/false_compat_is_family_not_compat_even_if_want_share",
-        "swarm_fault19_tests/false_compat_without_want_share_is_family_not_compat"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault19_tests/1",
-      "selectors": [
-        "swarm_fault19_tests/want_share_when_actually_compatible_is_held",
-        "swarm_fault19_tests/want_share_when_not_advertised_is_held",
-        "swarm_fault19_tests/plain_note_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault19_tests/2",
-      "selectors": [
-        "swarm_fault19_tests/matching_compat_without_share_is_noted"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault20_tests/0",
-      "selectors": [
-        "swarm_fault20_tests/empty_coord_id_is_coord",
-        "swarm_fault20_tests/both_ids_empty_is_coord",
-        "swarm_fault20_tests/empty_survivor_with_claim_is_no_survivor"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault20_tests/1",
-      "selectors": [
-        "swarm_fault20_tests/empty_survivor_without_claim_is_no_survivor",
-        "swarm_fault20_tests/not_durable_with_claim_is_lost",
-        "swarm_fault20_tests/not_durable_without_claim_is_lost"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault20_tests/2",
-      "selectors": [
-        "swarm_fault20_tests/durable_want_continue_with_claim",
-        "swarm_fault20_tests/durable_want_continue_without_claim",
-        "swarm_fault20_tests/durable_without_continue_with_claim_is_noted"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault20_tests/3",
-      "selectors": [
-        "swarm_fault20_tests/durable_without_continue_without_claim_is_noted"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_fault_tests/0",
-      "selectors": [
-        "swarm_fault_tests/stale_epoch_commits_nothing",
-        "swarm_fault_tests/coordinator_gone_with_and_without_a_durable_claim",
-        "swarm_fault_tests/collateral_reuse_moves_no_bytes"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_faultboard_admit_tests/0",
-      "selectors": [
-        "swarm_faultboard_admit_tests/dataset_withdrawn_does_not_start_a_run",
-        "swarm_faultboard_admit_tests/false_compat_is_not_admitted",
-        "swarm_faultboard_admit_tests/permanent_gone_without_claim_or_earned_is_lost"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_faultboard_admit_tests/1",
-      "selectors": [
-        "swarm_faultboard_admit_tests/permanent_gone_keeps_earned_and_claim",
-        "swarm_faultboard_admit_tests/revoked_read_and_idle_flags_stay_closed"
+        "swarm_fourscale_replay_tests/second_open_is_replay_and_leaves_steps",
+        "swarm_fourscale_replay_tests/second_open_before_any_step_keeps_zeros"
       ],
       "expected_cases": 2,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_faultboard_cache_tests/0",
+      "suite": "swarm_fourscale_step_tests/0",
       "selectors": [
-        "swarm_faultboard_cache_tests/cache_owner_gone_is_held",
-        "swarm_faultboard_cache_tests/truncated_cache_is_incomplete",
-        "swarm_faultboard_cache_tests/partial_piece_is_piece"
+        "swarm_fourscale_step_tests/one_step_on_daily_leaves_the_others_at_zero",
+        "swarm_fourscale_step_tests/each_known_scale_increments_alone",
+        "swarm_fourscale_step_tests/step_before_open_is_scale_and_stores_nothing"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_faultboard_cache_tests/1",
+      "suite": "swarm_fourscale_step_tests/1",
       "selectors": [
-        "swarm_faultboard_cache_tests/revoked_read_is_not_read",
-        "swarm_faultboard_cache_tests/cache_refusals_leave_bytes_at_zero"
+        "swarm_fourscale_step_tests/unknown_scale_is_scale_and_stores_nothing"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_frontier_tests/0",
+      "selectors": [
+        "swarm_frontier_tests/holdout_leak_is_refused_and_other_pools_may_begin",
+        "swarm_frontier_tests/a_negative_result_is_retained_for_its_pool",
+        "swarm_frontier_tests/the_sole_author_cannot_move_fitness"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_frontier_tests/1",
+      "selectors": [
+        "swarm_frontier_tests/an_uninformative_challenge_is_refused",
+        "swarm_frontier_tests/two_channels_stay_visible",
+        "swarm_frontier_tests/pin_does_not_adopt_the_staged_candidate"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_frontier_tests/2",
+      "selectors": [
+        "swarm_frontier_tests/influence_over_the_cap_is_refused",
+        "swarm_frontier_tests/a_prompt_contribution_is_refused",
+        "swarm_frontier_tests/graduation_does_not_promote_a_realm_or_admit_exact_replay"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_frontier_tests/3",
+      "selectors": [
+        "swarm_frontier_tests/promotion_ids_are_domain_separated_and_require_evidence",
+        "swarm_frontier_tests/anomaly_quarantine_safety_and_training_grant"
       ],
       "expected_cases": 2,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_faultboard_coordinator_tests/0",
+      "suite": "swarm_frozenpairs_tests/0",
       "selectors": [
-        "swarm_faultboard_coordinator_tests/fresh_board_has_no_claim_and_epoch_zero",
-        "swarm_faultboard_coordinator_tests/coordinator_gone_without_a_claim_is_lost",
-        "swarm_faultboard_coordinator_tests/keep_claim_is_durable_across_coordinator_gone"
+        "swarm_frozenpairs_tests/empty_model_id_is_pairs",
+        "swarm_frozenpairs_tests/negative_pair_count_is_pairs",
+        "swarm_frozenpairs_tests/want_unfreeze_with_eight_pairs_is_frozen"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_faultboard_coordinator_tests/1",
+      "suite": "swarm_frozenpairs_tests/1",
       "selectors": [
-        "swarm_faultboard_coordinator_tests/replace_coordinator_stores_only_a_greater_epoch",
-        "swarm_faultboard_coordinator_tests/resume_stale_commits_nothing",
-        "swarm_faultboard_coordinator_tests/permanent_gone_keeps_claim_or_earned"
+        "swarm_frozenpairs_tests/seven_pairs_is_frozen",
+        "swarm_frozenpairs_tests/eight_pairs_without_unfreeze_is_noted"
+      ],
+      "expected_cases": 2,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_fsdpheld_tests/0",
+      "selectors": [
+        "swarm_fsdpheld_tests/empty_job_is_job",
+        "swarm_fsdpheld_tests/want_run_is_held",
+        "swarm_fsdpheld_tests/want_run_false_is_noted"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_faultboard_pay_tests/0",
+      "suite": "swarm_fsdphold_bytes_tests/0",
       "selectors": [
-        "swarm_faultboard_pay_tests/keep_earned_stores_non_negative_atoms_without_moving_them",
-        "swarm_faultboard_pay_tests/pay_crash_holds_an_existing_row_and_creates_nothing",
-        "swarm_faultboard_pay_tests/refund_mature_is_broadcast_forbidden"
-      ],
-      "expected_cases": 3,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_faultboard_pay_tests/1",
-      "selectors": [
-        "swarm_faultboard_pay_tests/earned_row_is_never_deleted"
+        "swarm_fsdphold_bytes_tests/bytes_stay_zero"
       ],
       "expected_cases": 1,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_faultboard_promote_tests/0",
+      "suite": "swarm_fsdphold_empty_tests/0",
       "selectors": [
-        "swarm_faultboard_promote_tests/promotion_interrupted_keeps_the_active_head",
-        "swarm_faultboard_promote_tests/empty_previous_is_not_staged",
-        "swarm_faultboard_promote_tests/canary_regress_restores_previous_and_appends_rollback"
+        "swarm_fsdphold_empty_tests/empty_request_is_fsdp_and_stores_nothing",
+        "swarm_fsdphold_empty_tests/empty_name_leaves_a_stored_request_in_place"
+      ],
+      "expected_cases": 2,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_fsdphold_replay_tests/0",
+      "selectors": [
+        "swarm_fsdphold_replay_tests/second_request_of_the_same_name_is_replay",
+        "swarm_fsdphold_replay_tests/empty_name_is_fsdp_before_replay",
+        "swarm_fsdphold_replay_tests/replay_keeps_the_first_when_another_name_is_stored"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_faultboard_promote_tests/1",
+      "suite": "swarm_fsdphold_request_tests/0",
       "selectors": [
-        "swarm_faultboard_promote_tests/conflicting_reports_are_not_averaged"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_faultboard_reorg_tests/0",
-      "selectors": [
-        "swarm_faultboard_reorg_tests/reserve_before_reorg_stores_one_amount",
-        "swarm_faultboard_reorg_tests/reorg_freezes_and_later_reserve_stores_nothing",
-        "swarm_faultboard_reorg_tests/reserve_after_reorg_with_nothing_stored_is_frozen"
+        "swarm_fsdphold_request_tests/stored_request_stays_stopped",
+        "swarm_fsdphold_request_tests/a_second_distinct_name_is_stored_beside_the_first",
+        "swarm_fsdphold_request_tests/space_and_code_word_are_stored_and_stay_stopped"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_faultboard_reorg_tests/1",
+      "suite": "swarm_fsjail_tests/0",
       "selectors": [
-        "swarm_faultboard_reorg_tests/double_collateral_stores_once",
-        "swarm_faultboard_reorg_tests/reserve_and_double_collateral_share_one_slot",
-        "swarm_faultboard_reorg_tests/double_collateral_after_reorg_can_still_store_once"
+        "swarm_fsjail_tests/empty_helper_or_root",
+        "swarm_fsjail_tests/helper_not_regular_file",
+        "swarm_fsjail_tests/network_not_denied"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_faultboard_worker_tests/0",
+      "suite": "swarm_fsjail_tests/1",
       "selectors": [
-        "swarm_faultboard_worker_tests/keep_result_keeps_the_first_receipt",
-        "swarm_faultboard_worker_tests/worker_disconnect_keeps_a_result_and_deletes_nothing",
-        "swarm_faultboard_worker_tests/duplicate_receipt_distinguishes_replay_conflict_and_unknown"
+        "swarm_fsjail_tests/path_outside_or_dotdot",
+        "swarm_fsjail_tests/zero_tree_limit"
+      ],
+      "expected_cases": 2,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_fundscript_tests/0",
+      "selectors": [
+        "swarm_fundscript_tests/empty_or_unbound_template_is_refused",
+        "swarm_fundscript_tests/bound_template_verifies_for_matching_witness",
+        "swarm_fundscript_tests/bound_template_rejects_unsatisfied_witness"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_faultboard_worker_tests/1",
+      "suite": "swarm_fundsign_tests/0",
       "selectors": [
-        "swarm_faultboard_worker_tests/gpu_crash_holds_the_checkpoint_and_does_not_save"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_faultjournal_tests/0",
-      "selectors": [
-        "swarm_faultjournal_tests/twenty_faults_keep_earned_atoms_and_move_no_bytes"
-      ],
-      "expected_cases": 1,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "swarm_faultmore_tests/0",
-      "selectors": [
-        "swarm_faultmore_tests/replacement_during_expiry",
-        "swarm_faultmore_tests/durable_worker_disconnect",
-        "swarm_faultmore_tests/payment_crash_with_durable_earn"
+        "swarm_fundsign_tests/empty_scheduler_id_is_witness",
+        "swarm_fundsign_tests/empty_scheduler_id_wins_over_sign_and_broadcast",
+        "swarm_fundsign_tests/scheduler_signs_is_sign_refused"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "swarm_faultmore_tests/1",
+      "suite": "swarm_fundsign_tests/1",
       "selectors": [
-        "swarm_faultmore_tests/mass_exit_reorg"
+        "swarm_fundsign_tests/scheduler_signs_wins_over_want_broadcast",
+        "swarm_fundsign_tests/want_broadcast_is_broadcast_forbidden",
+        "swarm_fundsign_tests/plain_note_is_noted"
       ],
-      "expected_cases": 1,
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_fwdfee_tests/0",
+      "selectors": [
+        "swarm_fwdfee_tests/empty_hop_id_is_fee",
+        "swarm_fwdfee_tests/amount_zero_is_fee",
+        "swarm_fwdfee_tests/sender_first_edge_is_no_fee"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_fwdfee_tests/1",
+      "selectors": [
+        "swarm_fwdfee_tests/ppm_note_is_one_hundred_five",
+        "swarm_fwdfee_tests/one_atom_one_ppm_rounds_up_to_one"
+      ],
+      "expected_cases": 2,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_generation_allocate_tests/0",
+      "selectors": [
+        "swarm_generation_allocate_tests/bad_slots_and_explore_store_nothing",
+        "swarm_generation_allocate_tests/exploration_share_is_integer_division"
+      ],
+      "expected_cases": 2,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_generation_candidate_tests/0",
+      "selectors": [
+        "swarm_generation_candidate_tests/empty_candidate_fields_store_nothing",
+        "swarm_generation_candidate_tests/produce_stores_the_hash_and_verify_checks_the_parent"
+      ],
+      "expected_cases": 2,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_generation_continue_tests/0",
+      "selectors": [
+        "swarm_generation_continue_tests/continue_without_an_adopted_head_leaves_the_parent",
+        "swarm_generation_continue_tests/full_generation_adopts_code_stable_and_continue_advances_the_parent",
+        "swarm_generation_continue_tests/code_stable_is_distinct_from_general_stable"
+      ],
+      "expected_cases": 3,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "swarm_generation_eligible_tests/0",
+      "selectors": [
+        "swarm_generation_eligible_tests/eligibility_starts_false_and_needs_both_grants",
+        "swarm_generation_eligible_tests/both_grants_mark_the_family_eligible"
+      ],
+      "expected_cases": 2,
       "lane": "other",
       "timeout_seconds": 180
     }
   ],
   "all_enabled_cases": [
-    "swarm_evolve_adopt_tests/adopt_sets_the_parent_and_average_leaves_it",
-    "swarm_evolve_continue_tests/continue_opens_generation_two_after_adopt_and_pay_stays_local",
-    "swarm_evolve_experience_tests/only_public_and_synthetic_trajectories_are_stored",
-    "swarm_evolve_generation_tests/generation_two_trains_and_recover_keeps_earned_atoms",
-    "swarm_evolve_graduate_tests/realm_promotion_does_not_graduate",
-    "swarm_evolve_measure_tests/measure_refuses_until_two_distinct_reports_agree",
-    "swarm_evolve_measure_tests/an_accepting_pair_keeps_both_scores",
-    "swarm_evolve_recover_tests/recover_drops_the_coordinator_and_keeps_earned_atoms",
-    "swarm_evolve_train_tests/one_integer_step_is_stored_and_a_second_is_replay",
-    "swarm_exactstall_tests/empty_chain_id_is_chain",
-    "swarm_exactstall_tests/want_mine_is_held",
-    "swarm_exactstall_tests/want_mine_false_is_noted",
-    "swarm_execnbhd_fallback_tests/empty_peer_is_peer",
-    "swarm_execnbhd_fallback_tests/named_peer_is_not_connected_and_is_not_stored",
-    "swarm_execnbhd_fallback_tests/fallback_does_not_change_an_existing_seat",
-    "swarm_execnbhd_identity_tests/empty_id_is_neighborhood_and_stores_nothing",
-    "swarm_execnbhd_identity_tests/first_id_is_stored",
-    "swarm_execnbhd_identity_tests/same_id_is_replay_and_different_id_is_held",
-    "swarm_execnbhd_offer_tests/empty_peer_is_peer_and_stores_nothing",
-    "swarm_execnbhd_offer_tests/negative_rtt_is_rtt_and_stores_nothing",
-    "swarm_execnbhd_offer_tests/empty_domain_is_domain_and_stores_nothing",
-    "swarm_execnbhd_offer_tests/unauthorized_is_not_authorized_before_compat",
-    "swarm_execnbhd_offer_tests/incompatible_is_not_compat_and_stores_nothing",
-    "swarm_execnbhd_offer_tests/offer_stores_the_peer_and_does_not_seat",
-    "swarm_execnbhd_offer_tests/second_offer_is_replay_and_keeps_the_first_record",
-    "swarm_execnbhd_remote_tests/two_absent_domains_are_remote_and_a_third_is_not",
-    "swarm_execnbhd_remote_tests/domain_already_nearby_cannot_fill_a_remote_slot",
-    "swarm_execnbhd_remote_tests/equal_rtt_remote_tie_breaks_by_peer_id",
-    "swarm_execnbhd_remote_tests/one_new_domain_still_returns_true",
-    "swarm_execnbhd_seat_tests/five_peers_in_one_domain_seat_four_nearby",
-    "swarm_execnbhd_seat_tests/equal_rtt_tie_breaks_by_ascending_peer_id",
-    "swarm_execnbhd_seat_tests/boundary_tie_uses_bytewise_peer_id",
-    "swarm_execnbhd_seat_tests/fewer_than_four_still_seats_and_seat_replaces",
-    "swarm_execnbhd_seat_tests/empty_book_seats_nothing",
-    "swarm_execnbhd_share_tests/different_domains_are_not_compat_and_move_no_bytes",
-    "swarm_execnbhd_share_tests/same_domain_returns_true_and_moves_no_bytes",
-    "swarm_execnbhd_share_tests/unknown_or_unseated_peer_is_not_seated",
-    "swarm_execnbhd_share_tests/nearby_and_remote_domains_do_not_share",
-    "swarm_executor_tests/a_remote_manifest_does_not_start_a_host_interpreter",
-    "swarm_experience_tests/private_refusal_stores_nothing",
-    "swarm_experience_tests/public_reward_is_one_at_threshold",
-    "swarm_experience_tests/synthetic_reward_is_zero_below_threshold",
-    "swarm_experience_tests/replay_keeps_the_first_outcome",
-    "swarm_experience_tests/enqueue_follows_insertion_order",
-    "swarm_experience_tests/bytes_moved_stay_zero",
-    "swarm_explore_tests/empty_pool_id_is_explore",
-    "swarm_explore_tests/slots_below_one_is_explore",
-    "swarm_explore_tests/exploration_ppm_out_of_range_is_explore",
-    "swarm_explore_tests/candidate_count_below_one_is_explore",
-    "swarm_explore_tests/explore_wins_over_illustration_and_want_assign",
-    "swarm_explore_tests/other_splits_are_illustration",
-    "swarm_explore_tests/ppm_bounds_that_are_not_the_illustration_stay_illustration",
-    "swarm_explore_tests/illustration_wins_when_want_assign_is_true",
-    "swarm_explore_tests/want_assign_on_the_known_illustration_is_held",
-    "swarm_explore_tests/known_illustration_is_noted",
-    "swarm_exploreill_tests/empty_run_id_is_run",
-    "swarm_exploreill_tests/want_assign_is_held",
-    "swarm_exploreill_tests/plain_note_is_noted",
-    "swarm_fabric_tests/prefix_mismatch_is_not_an_absent_engine",
-    "swarm_fabric_tests/a_lan_card_advertises_only_a_public_mapping",
-    "swarm_fallback_tests/empty_peer_id_is_fallback",
-    "swarm_fallback_tests/negative_rtt_is_fallback",
-    "swarm_fallback_tests/fallback_wins_over_want_connect",
-    "swarm_fallback_tests/unauthorized_is_unauthorized",
-    "swarm_fallback_tests/unauthorized_wins_over_want_connect",
-    "swarm_fallback_tests/unauthorized_wins_over_inside_chosen",
-    "swarm_fallback_tests/inside_chosen_is_not_fallback",
-    "swarm_fallback_tests/not_fallback_wins_over_want_connect",
-    "swarm_fallback_tests/want_connect_is_held",
-    "swarm_fallback_tests/authorized_outside_chosen_is_noted",
-    "swarm_fallconn_tests/empty_peer_id_is_peer",
-    "swarm_fallconn_tests/fallback_true_want_connect_false_is_not_connected",
-    "swarm_fallconn_tests/want_connect_true_fallback_false_is_held",
-    "swarm_fallconn_tests/fallback_false_want_connect_false_is_noted",
-    "swarm_familyadmit_admit_tests/matching_family_stores_the_peer",
-    "swarm_familyadmit_admit_tests/two_peers_may_share_one_family",
-    "swarm_familyadmit_admit_tests/distinct_families_stay_with_their_peers",
-    "swarm_familyadmit_compat_tests/empty_peer_or_family_is_family_and_stores_nothing",
-    "swarm_familyadmit_compat_tests/false_compatibility_stores_nothing",
-    "swarm_familyadmit_compat_tests/missing_compatibility_claim_is_not_admitted",
-    "swarm_familyadmit_compat_tests/refused_attempt_leaves_a_stored_peer_in_place",
-    "swarm_familyadmit_link_tests/connected_is_false_before_and_after_admit",
-    "swarm_familyadmit_link_tests/false_compatibility_does_not_connect",
-    "swarm_familyadmit_link_tests/replay_and_seed_hold_do_not_connect",
-    "swarm_familyadmit_replay_tests/duplicate_peer_is_replay_and_keeps_the_first_family",
-    "swarm_familyadmit_replay_tests/a_different_peer_is_not_a_replay",
-    "swarm_familyadmit_replay_tests/a_bad_second_attempt_does_not_replace_the_family",
-    "swarm_familyadmit_seed_tests/dns_seeds_start_empty_and_addseed_is_held",
-    "swarm_familyadmit_seed_tests/admit_does_not_fill_dns_seeds",
-    "swarm_familycat_tests/empty_family_id_is_family",
-    "swarm_familycat_tests/private_family_want_list_is_not_published",
-    "swarm_familycat_tests/want_publish_public_is_held",
-    "swarm_familycat_tests/want_list_without_publish_is_noted",
-    "swarm_familycat_tests/neither_publish_nor_list_is_noted",
-    "swarm_familydir_tests/empty_family_id_is_family",
-    "swarm_familydir_tests/want_publish_is_held",
-    "swarm_familydir_tests/want_publish_false_is_noted",
-    "swarm_familyonly_tests/empty_page_id_is_family",
-    "swarm_familyonly_tests/same_family_incompatible_want_share_is_family_not_compat",
-    "swarm_familyonly_tests/different_family_compatible_want_share_is_separate",
-    "swarm_familyonly_tests/compatible_same_family_want_share_is_held",
-    "swarm_familyonly_tests/compatible_same_family_without_share_is_noted",
-    "swarm_fault01_tests/empty_coord_id_is_coord",
-    "swarm_fault01_tests/empty_work_id_is_coord",
-    "swarm_fault01_tests/both_ids_empty_is_coord",
-    "swarm_fault01_tests/want_commit_is_stale_and_preserves_payment",
-    "swarm_fault01_tests/want_commit_without_payment_claim_is_stale",
-    "swarm_fault01_tests/pending_not_durable_is_lost_and_preserves_payment",
-    "swarm_fault01_tests/pending_not_durable_without_payment_claim_is_lost",
-    "swarm_fault01_tests/durable_want_reassign_is_reassigned_and_preserves_payment",
-    "swarm_fault01_tests/durable_want_reassign_without_payment_claim",
-    "swarm_fault01_tests/durable_is_durable_and_preserves_payment",
-    "swarm_fault01_tests/durable_without_payment_claim",
-    "swarm_fault01_tests/plain_note_is_noted",
-    "swarm_fault01_tests/plain_note_without_payment_claim_is_noted",
-    "swarm_fault02_tests/empty_lease_id_is_lease",
-    "swarm_fault02_tests/empty_old_epoch_is_lease",
-    "swarm_fault02_tests/empty_new_epoch_is_lease",
-    "swarm_fault02_tests/want_commit_is_stale",
-    "swarm_fault02_tests/unexpired_lease_is_held",
-    "swarm_fault02_tests/same_epoch_is_same_epoch",
-    "swarm_fault02_tests/durable_expired_replacement_is_replaced",
-    "swarm_fault02_tests/expired_without_durable_is_lost",
-    "swarm_fault03_tests/empty_epoch_id_is_epoch",
-    "swarm_fault03_tests/empty_current_epoch_is_epoch",
-    "swarm_fault03_tests/both_epochs_empty_is_epoch",
-    "swarm_fault03_tests/mismatched_epoch_is_stale",
-    "swarm_fault03_tests/want_commit_is_stale",
-    "swarm_fault03_tests/durable_matching_epoch_is_durable",
-    "swarm_fault03_tests/matching_epoch_without_durable_is_noted",
-    "swarm_fault04_tests/empty_job_id",
-    "swarm_fault04_tests/no_checkpoint",
-    "swarm_fault04_tests/want_publish_held",
-    "swarm_fault04_tests/durable_local",
-    "swarm_fault04_tests/noted",
-    "swarm_fault05_tests/empty_worker_or_work_is_worker",
-    "swarm_fault05_tests/result_sent_without_durable_is_lost",
-    "swarm_fault05_tests/durable_want_reassign_is_reassigned",
-    "swarm_fault05_tests/result_sent_and_durable_is_durable",
-    "swarm_fault05_tests/otherwise_noted",
-    "swarm_fault06_tests/empty_receipt_id_is_receipt",
-    "swarm_fault06_tests/seen_before_durable_is_replay_and_preserves_payment",
-    "swarm_fault06_tests/seen_before_without_durable_or_payment_is_replay",
-    "swarm_fault06_tests/want_accept_is_held_and_preserves_payment",
-    "swarm_fault06_tests/want_accept_without_payment_claim_is_held",
-    "swarm_fault06_tests/durable_is_durable_and_preserves_payment",
-    "swarm_fault06_tests/durable_without_payment_claim",
-    "swarm_fault06_tests/plain_receipt_is_noted",
-    "swarm_fault06_tests/plain_receipt_without_payment_claim_is_noted",
-    "swarm_fault07_tests/empty_page_id_is_page",
-    "swarm_fault07_tests/missing_owner_is_incomplete",
-    "swarm_fault07_tests/want_transfer_is_held",
-    "swarm_fault07_tests/durable_is_durable",
-    "swarm_fault07_tests/plain_note_is_noted",
-    "swarm_fault08_tests/empty_page_id_is_page",
-    "swarm_fault08_tests/truncated_is_prefix_mismatch",
-    "swarm_fault08_tests/incompatible_is_prefix_mismatch",
-    "swarm_fault08_tests/truncated_with_want_accept_is_prefix_mismatch",
-    "swarm_fault08_tests/incompatible_with_want_accept_is_prefix_mismatch",
-    "swarm_fault08_tests/want_accept_is_held",
-    "swarm_fault08_tests/compatible_page_is_noted",
-    "swarm_fault09_tests/empty_artifact_id",
-    "swarm_fault09_tests/incomplete_even_when_want_accept",
-    "swarm_fault09_tests/want_accept_is_held",
-    "swarm_fault09_tests/complete_without_accept_is_noted",
-    "swarm_fault10_tests/empty_candidate_id_is_candidate",
-    "swarm_fault10_tests/interrupted_is_gate_even_if_want_promote",
-    "swarm_fault10_tests/want_promote_is_held",
-    "swarm_fault10_tests/durable_is_recovered",
-    "swarm_fault10_tests/otherwise_noted",
-    "swarm_fault11_tests/empty_candidate_id",
-    "swarm_fault11_tests/regressed_even_when_want_roll",
-    "swarm_fault11_tests/want_roll_held",
-    "swarm_fault11_tests/noted",
-    "swarm_fault12_tests/empty_report_id_is_report",
-    "swarm_fault12_tests/conflict_is_quorum_even_if_want_settle",
-    "swarm_fault12_tests/not_distinct_evaluators_is_quorum",
-    "swarm_fault12_tests/not_distinct_domains_is_quorum",
-    "swarm_fault12_tests/want_settle_is_held",
-    "swarm_fault12_tests/otherwise_noted",
-    "swarm_fault13_tests/empty_earn_id_is_earn",
-    "swarm_fault13_tests/want_settle_is_held",
-    "swarm_fault13_tests/earned_not_durable_is_lost",
-    "swarm_fault13_tests/earned_and_durable_is_earned",
-    "swarm_fault13_tests/otherwise_noted",
-    "swarm_fault14_tests/empty_channel_id_is_channel",
-    "swarm_fault14_tests/unsigned_even_if_want_broadcast_or_mature",
-    "swarm_fault14_tests/want_broadcast_is_held",
-    "swarm_fault14_tests/disrupted_or_mature_is_not_live",
-    "swarm_fault14_tests/otherwise_noted",
-    "swarm_fault15_tests/empty_batch_id",
-    "swarm_fault15_tests/channel_count_one",
-    "swarm_fault15_tests/measure_refused_even_if_broadcast",
-    "swarm_fault15_tests/broadcast_held",
-    "swarm_fault15_tests/noted",
-    "swarm_fault16_tests/empty_pool_a_is_pool",
-    "swarm_fault16_tests/empty_pool_b_is_pool",
-    "swarm_fault16_tests/empty_collateral_id_is_pool",
-    "swarm_fault16_tests/all_ids_empty_is_pool",
-    "swarm_fault16_tests/equal_pools_are_collateral_reuse_even_if_want_reserve",
-    "swarm_fault16_tests/same_collateral_is_collateral_reuse_even_if_want_reserve",
-    "swarm_fault16_tests/equal_pools_and_same_collateral_are_collateral_reuse",
-    "swarm_fault16_tests/want_reserve_is_held_and_clears_err",
-    "swarm_fault16_tests/plain_note_is_noted_and_clears_err",
-    "swarm_fault17_tests/empty_member_id_is_member",
-    "swarm_fault17_tests/empty_page_id_is_member",
-    "swarm_fault17_tests/both_ids_empty_is_member",
-    "swarm_fault17_tests/revoked_with_want_read_is_revoked",
-    "swarm_fault17_tests/revoked_without_want_read_is_revoked",
-    "swarm_fault17_tests/want_read_is_held",
-    "swarm_fault17_tests/plain_note_is_noted",
-    "swarm_fault18_tests/empty_dataset_id_is_dataset",
-    "swarm_fault18_tests/empty_job_id_is_dataset",
-    "swarm_fault18_tests/both_ids_empty_is_dataset",
-    "swarm_fault18_tests/withdrawn_is_not_started_even_if_want_train",
-    "swarm_fault18_tests/withdrawn_without_want_train_is_not_started",
-    "swarm_fault18_tests/want_train_is_held",
-    "swarm_fault18_tests/otherwise_noted",
-    "swarm_fault19_tests/empty_peer_id_is_peer",
-    "swarm_fault19_tests/false_compat_is_family_not_compat_even_if_want_share",
-    "swarm_fault19_tests/false_compat_without_want_share_is_family_not_compat",
-    "swarm_fault19_tests/want_share_when_actually_compatible_is_held",
-    "swarm_fault19_tests/want_share_when_not_advertised_is_held",
-    "swarm_fault19_tests/plain_note_is_noted",
-    "swarm_fault19_tests/matching_compat_without_share_is_noted",
-    "swarm_fault20_tests/empty_coord_id_is_coord",
-    "swarm_fault20_tests/both_ids_empty_is_coord",
-    "swarm_fault20_tests/empty_survivor_with_claim_is_no_survivor",
-    "swarm_fault20_tests/empty_survivor_without_claim_is_no_survivor",
-    "swarm_fault20_tests/not_durable_with_claim_is_lost",
-    "swarm_fault20_tests/not_durable_without_claim_is_lost",
-    "swarm_fault20_tests/durable_want_continue_with_claim",
-    "swarm_fault20_tests/durable_want_continue_without_claim",
-    "swarm_fault20_tests/durable_without_continue_with_claim_is_noted",
-    "swarm_fault20_tests/durable_without_continue_without_claim_is_noted",
-    "swarm_fault_tests/stale_epoch_commits_nothing",
-    "swarm_fault_tests/coordinator_gone_with_and_without_a_durable_claim",
-    "swarm_fault_tests/collateral_reuse_moves_no_bytes",
-    "swarm_faultboard_admit_tests/dataset_withdrawn_does_not_start_a_run",
-    "swarm_faultboard_admit_tests/false_compat_is_not_admitted",
-    "swarm_faultboard_admit_tests/permanent_gone_without_claim_or_earned_is_lost",
-    "swarm_faultboard_admit_tests/permanent_gone_keeps_earned_and_claim",
-    "swarm_faultboard_admit_tests/revoked_read_and_idle_flags_stay_closed",
-    "swarm_faultboard_cache_tests/cache_owner_gone_is_held",
-    "swarm_faultboard_cache_tests/truncated_cache_is_incomplete",
-    "swarm_faultboard_cache_tests/partial_piece_is_piece",
-    "swarm_faultboard_cache_tests/revoked_read_is_not_read",
-    "swarm_faultboard_cache_tests/cache_refusals_leave_bytes_at_zero",
-    "swarm_faultboard_coordinator_tests/fresh_board_has_no_claim_and_epoch_zero",
-    "swarm_faultboard_coordinator_tests/coordinator_gone_without_a_claim_is_lost",
-    "swarm_faultboard_coordinator_tests/keep_claim_is_durable_across_coordinator_gone",
-    "swarm_faultboard_coordinator_tests/replace_coordinator_stores_only_a_greater_epoch",
-    "swarm_faultboard_coordinator_tests/resume_stale_commits_nothing",
-    "swarm_faultboard_coordinator_tests/permanent_gone_keeps_claim_or_earned",
-    "swarm_faultboard_pay_tests/keep_earned_stores_non_negative_atoms_without_moving_them",
-    "swarm_faultboard_pay_tests/pay_crash_holds_an_existing_row_and_creates_nothing",
-    "swarm_faultboard_pay_tests/refund_mature_is_broadcast_forbidden",
-    "swarm_faultboard_pay_tests/earned_row_is_never_deleted",
-    "swarm_faultboard_promote_tests/promotion_interrupted_keeps_the_active_head",
-    "swarm_faultboard_promote_tests/empty_previous_is_not_staged",
-    "swarm_faultboard_promote_tests/canary_regress_restores_previous_and_appends_rollback",
-    "swarm_faultboard_promote_tests/conflicting_reports_are_not_averaged",
-    "swarm_faultboard_reorg_tests/reserve_before_reorg_stores_one_amount",
-    "swarm_faultboard_reorg_tests/reorg_freezes_and_later_reserve_stores_nothing",
-    "swarm_faultboard_reorg_tests/reserve_after_reorg_with_nothing_stored_is_frozen",
-    "swarm_faultboard_reorg_tests/double_collateral_stores_once",
-    "swarm_faultboard_reorg_tests/reserve_and_double_collateral_share_one_slot",
-    "swarm_faultboard_reorg_tests/double_collateral_after_reorg_can_still_store_once",
-    "swarm_faultboard_worker_tests/keep_result_keeps_the_first_receipt",
-    "swarm_faultboard_worker_tests/worker_disconnect_keeps_a_result_and_deletes_nothing",
-    "swarm_faultboard_worker_tests/duplicate_receipt_distinguishes_replay_conflict_and_unknown",
-    "swarm_faultboard_worker_tests/gpu_crash_holds_the_checkpoint_and_does_not_save",
-    "swarm_faultjournal_tests/twenty_faults_keep_earned_atoms_and_move_no_bytes",
-    "swarm_faultmore_tests/replacement_during_expiry",
-    "swarm_faultmore_tests/durable_worker_disconnect",
-    "swarm_faultmore_tests/payment_crash_with_durable_earn",
-    "swarm_faultmore_tests/mass_exit_reorg"
+    "swarm_faultseq_tests/earned_42_steps_all_twenty",
+    "swarm_faultseq_tests/restart_after_refusal_keeps_earned",
+    "swarm_faultseq_tests/step_before_begin_does_not_apply",
+    "swarm_fiatkeep_tests/empty_quote",
+    "swarm_fiatkeep_tests/fiat_not_balance",
+    "swarm_fiatkeep_tests/want_book_held",
+    "swarm_fiatkeep_tests/noted",
+    "swarm_fiatquote_tests/empty_quote_id_is_quote",
+    "swarm_fiatquote_tests/empty_currency_is_quote",
+    "swarm_fiatquote_tests/negative_atoms_are_quote",
+    "swarm_fiatquote_tests/usd_is_not_btx",
+    "swarm_fiatquote_tests/usd_want_balance_is_still_not_btx",
+    "swarm_fiatquote_tests/want_balance_is_held",
+    "swarm_fiatquote_tests/btx_quote_is_noted",
+    "swarm_fiatquote_tests/zero_atoms_are_noted",
+    "swarm_firstcltv_tests/empty_edge_id_is_edge",
+    "swarm_firstcltv_tests/first_edge_is_not_added",
+    "swarm_firstcltv_tests/want_add_is_held",
+    "swarm_firstcltv_tests/plain_edge_is_noted",
+    "swarm_firstedge_tests/empty_edge_is_edge",
+    "swarm_firstedge_tests/first_edge_is_no_fee",
+    "swarm_firstedge_tests/want_charge_is_held",
+    "swarm_firstedge_tests/plain_note_is_noted",
+    "swarm_flag01_tests/empty_artifact_id_is_artifact",
+    "swarm_flag01_tests/hash_len_not_32_is_hash",
+    "swarm_flag01_tests/closed_license_is_license",
+    "swarm_flag01_tests/want_pass_is_unqualified",
+    "swarm_flag01_tests/open_artifact_is_staged",
+    "swarm_flag02_tests/empty_family_id_is_family",
+    "swarm_flag02_tests/empty_peer_id_is_family",
+    "swarm_flag02_tests/manual_config_is_manual",
+    "swarm_flag02_tests/want_connect_is_no_socket",
+    "swarm_flag02_tests/want_pass_is_unqualified",
+    "swarm_flag02_tests/plain_join_is_noted",
+    "swarm_flag03_tests/empty_task_a_is_task",
+    "swarm_flag03_tests/empty_task_b_is_task",
+    "swarm_flag03_tests/empty_leader_id_is_task",
+    "swarm_flag03_tests/same_task_is_same_task",
+    "swarm_flag03_tests/want_run_is_not_run",
+    "swarm_flag03_tests/want_pass_is_unqualified",
+    "swarm_flag03_tests/not_durable_is_lost",
+    "swarm_flag03_tests/durable_distinct_tasks_are_persisted",
+    "swarm_flag04_tests/empty_cache_id_is_cache",
+    "swarm_flag04_tests/missing_baseline_is_unmeasured",
+    "swarm_flag04_tests/missing_reuse_is_unmeasured",
+    "swarm_flag04_tests/neither_measured_is_unmeasured",
+    "swarm_flag04_tests/want_publish_is_held",
+    "swarm_flag04_tests/want_pass_is_unqualified",
+    "swarm_flag04_tests/measured_note_is_noted",
+    "swarm_flag05_tests/empty_agent_id_is_agent",
+    "swarm_flag05_tests/empty_task_id_is_agent",
+    "swarm_flag05_tests/empty_ids_win_over_later_flags",
+    "swarm_flag05_tests/not_authorized_is_unauthorized",
+    "swarm_flag05_tests/not_synthetic_or_public_is_unauthorized",
+    "swarm_flag05_tests/unauthorized_even_if_want_record",
+    "swarm_flag05_tests/want_record_is_not_recorded",
+    "swarm_flag05_tests/want_pass_is_unqualified",
+    "swarm_flag05_tests/authorized_public_note_is_noted",
+    "swarm_flag06_tests/empty_worker_a_is_worker",
+    "swarm_flag06_tests/empty_worker_b_is_worker",
+    "swarm_flag06_tests/empty_workers_win_over_later_flags",
+    "swarm_flag06_tests/same_worker_is_same_worker",
+    "swarm_flag06_tests/same_worker_wins_over_later_flags",
+    "swarm_flag06_tests/want_pair_is_out_of_scope",
+    "swarm_flag06_tests/want_pair_wins_over_checkpoint_and_pass",
+    "swarm_flag06_tests/missing_checkpoint_is_no_checkpoint",
+    "swarm_flag06_tests/missing_checkpoint_wins_over_want_pass",
+    "swarm_flag06_tests/want_pass_is_unqualified",
+    "swarm_flag06_tests/distinct_workers_are_noted",
+    "swarm_flag07_tests/empty_parent_id_is_parent",
+    "swarm_flag07_tests/empty_candidate_a_is_parent",
+    "swarm_flag07_tests/empty_candidate_b_is_parent",
+    "swarm_flag07_tests/empty_parent_wins_over_later_flags",
+    "swarm_flag07_tests/equal_candidates_are_same_candidate",
+    "swarm_flag07_tests/equal_candidates_win_over_strategy_and_pass",
+    "swarm_flag07_tests/same_strategy_when_not_different",
+    "swarm_flag07_tests/same_strategy_wins_over_not_evolved_and_want_pass",
+    "swarm_flag07_tests/not_from_real_run_is_not_evolved",
+    "swarm_flag07_tests/not_evolved_even_if_want_pass",
+    "swarm_flag07_tests/want_pass_is_unqualified",
+    "swarm_flag07_tests/distinct_names_are_noted_not_a_descendant",
+    "swarm_flag08_tests/empty_candidate_id_is_candidate",
+    "swarm_flag08_tests/empty_evaluator_id_is_candidate",
+    "swarm_flag08_tests/empty_author_id_is_candidate",
+    "swarm_flag08_tests/empty_evaluator_and_author_stay_candidate",
+    "swarm_flag08_tests/same_evaluator_is_same_evaluator",
+    "swarm_flag08_tests/not_withheld_is_not_withheld",
+    "swarm_flag08_tests/failed_is_retained_and_not_graduated",
+    "swarm_flag08_tests/want_score_is_not_scored",
+    "swarm_flag08_tests/want_pass_is_unqualified",
+    "swarm_flag08_tests/withheld_independent_note_is_noted",
+    "swarm_flag09_tests/empty_descendant_id_is_descendant",
+    "swarm_flag09_tests/not_qualified_is_no_cert_even_if_want_cert",
+    "swarm_flag09_tests/not_real_run_is_no_cert_even_if_want_cert",
+    "swarm_flag09_tests/want_realm_is_not_realm",
+    "swarm_flag09_tests/want_cert_is_held",
+    "swarm_flag09_tests/want_pass_is_unqualified",
+    "swarm_flag09_tests/qualified_real_descendant_is_noted",
+    "swarm_flag10_tests/empty_node_id_is_node",
+    "swarm_flag10_tests/empty_descendant_id_is_node",
+    "swarm_flag10_tests/empty_previous_id_is_no_rollback",
+    "swarm_flag10_tests/want_adopt_is_not_adopted_and_previous_id_stays",
+    "swarm_flag10_tests/want_pass_is_unqualified",
+    "swarm_flag10_tests/subscribed_second_node_is_noted",
+    "swarm_flag11_tests/empty_invoice_id",
+    "swarm_flag11_tests/not_regtest",
+    "swarm_flag11_tests/want_mine_refused",
+    "swarm_flag11_tests/want_settle_unbroadcast",
+    "swarm_flag11_tests/want_pass_unqualified",
+    "swarm_flag11_tests/noted",
+    "swarm_flag12_tests/empty_survivor_id_is_node",
+    "swarm_flag12_tests/empty_work_id_is_node",
+    "swarm_flag12_tests/both_ids_empty_is_node",
+    "swarm_flag12_tests/want_pass_is_unqualified",
+    "swarm_flag12_tests/not_durable_is_lost",
+    "swarm_flag12_tests/want_continue_is_durable",
+    "swarm_flag12_tests/otherwise_noted",
+    "swarm_flag13_tests/empty_parent_id_is_parent",
+    "swarm_flag13_tests/empty_cycle_id_is_parent",
+    "swarm_flag13_tests/not_graduated_is_not_graduated",
+    "swarm_flag13_tests/first_cycle_is_first_only",
+    "swarm_flag13_tests/want_repeat_is_not_repeated",
+    "swarm_flag13_tests/want_pass_is_unqualified",
+    "swarm_flag13_tests/plain_note_is_noted",
+    "swarm_flagdrive_tests/empty_lineage_is_lineage_at_acquire",
+    "swarm_flagdrive_tests/unseen_hardware_at_join_stays_unqualified",
+    "swarm_flagdrive_tests/want_pass_at_train_stays_held",
+    "swarm_flagdrive_tests/acquire_advances_to_join_noted",
+    "swarm_flagdrive_tests/repeat_stays_repeat_noted",
+    "swarm_flagship_order_tests/join_before_acquire_is_order",
+    "swarm_flagship_order_tests/empty_evidence_on_join_is_evidence_before_order",
+    "swarm_flagship_order_tests/later_stage_before_its_predecessor_is_order",
+    "swarm_flagship_order_tests/order_keeps_the_prefix_already_stored",
+    "swarm_flagship_order_tests/misspelled_stage_is_stage_not_order",
+    "swarm_flagship_order_tests/repeat_before_the_prefix_is_order",
+    "swarm_flagship_order_tests/after_rollback_opens_a_hole_a_later_record_is_order",
+    "swarm_flagship_order_tests/the_next_stage_after_a_prefix_is_accepted",
+    "swarm_flagship_pass_tests/pass_train_before_any_record_is_not_passed",
+    "swarm_flagship_pass_tests/pass_train_after_record_is_not_passed_and_gpu_passed_stays_false",
+    "swarm_flagship_pass_tests/every_listed_stage_is_not_passed",
+    "swarm_flagship_pass_tests/unknown_stage_is_stage",
+    "swarm_flagship_pass_tests/pass_pay_does_not_set_pay_passed",
+    "swarm_flagship_pass_tests/pass_does_not_clear_recorded_evidence",
+    "swarm_flagship_pass_tests/pass_after_every_stage_is_recorded_is_still_not_passed",
+    "swarm_flagship_record_tests/fresh_cursor_points_at_acquire_and_stays_dark",
+    "swarm_flagship_record_tests/empty_evidence_is_evidence_and_stores_nothing",
+    "swarm_flagship_record_tests/unknown_stage_is_stage_and_stores_nothing",
+    "swarm_flagship_record_tests/unknown_stage_beats_empty_evidence",
+    "swarm_flagship_record_tests/record_acquire_stores_evidence_and_advances",
+    "swarm_flagship_record_tests/records_all_thirteen_in_order_then_next_is_empty",
+    "swarm_flagship_record_tests/unknown_inspectors_are_empty",
+    "swarm_flagship_record_tests/blank_evidence_check_does_not_trim",
+    "swarm_flagship_record_tests/same_evidence_text_may_be_used_on_two_stages",
+    "swarm_flagship_record_tests/passed_stays_false_after_every_record",
+    "swarm_flagship_replay_tests/same_evidence_again_is_replay_and_keeps_the_first",
+    "swarm_flagship_replay_tests/different_evidence_is_conflict_and_keeps_the_first",
+    "swarm_flagship_replay_tests/empty_evidence_on_a_recorded_stage_is_evidence_not_replay",
+    "swarm_flagship_replay_tests/replay_does_not_move_next_stage",
+    "swarm_flagship_replay_tests/conflict_on_a_later_stage_keeps_the_prefix",
+    "swarm_flagship_replay_tests/third_record_of_the_original_evidence_is_replay",
+    "swarm_flagship_replay_tests/case_difference_is_conflict",
+    "swarm_flagship_replay_tests/replay_and_conflict_do_not_pass",
+    "swarm_flagship_rollback_tests/unknown_stage_is_stage_and_deletes_nothing",
+    "swarm_flagship_rollback_tests/rollback_evaluate_keeps_acquire_through_evolve_and_clears_the_rest",
+    "swarm_flagship_rollback_tests/rollback_acquire_clears_every_stage",
+    "swarm_flagship_rollback_tests/rollback_repeat_clears_only_repeat",
+    "swarm_flagship_rollback_tests/rollback_of_a_clear_stage_still_returns_true",
+    "swarm_flagship_rollback_tests/after_rollback_the_stage_can_be_recorded_again",
+    "swarm_flagship_rollback_tests/rollback_join_keeps_acquire_and_clears_the_suffix",
+    "swarm_flatcap_tests/empty_manifest",
+    "swarm_flatcap_tests/want_raise_held",
+    "swarm_flatcap_tests/noted",
+    "swarm_follow_tests/follow_stages_a_compatible_head_and_pin_does_not",
+    "swarm_forkavg_tests/empty_branch",
+    "swarm_forkavg_tests/incompatible_not_averaged",
+    "swarm_forkavg_tests/want_average_held",
+    "swarm_forkavg_tests/noted",
+    "swarm_forknote_tests/empty_left_id_is_fork",
+    "swarm_forknote_tests/empty_right_id_is_fork",
+    "swarm_forknote_tests/empty_left_digest_is_fork",
+    "swarm_forknote_tests/empty_right_digest_is_fork",
+    "swarm_forknote_tests/empty_fields_win_over_want_average",
+    "swarm_forknote_tests/want_average_with_equal_digests_is_refused",
+    "swarm_forknote_tests/want_average_wins_over_divergent_digests",
+    "swarm_forknote_tests/divergent_digests_are_not_averaged",
+    "swarm_forknote_tests/matching_digests_are_noted",
+    "swarm_form_directory_tests/empty_modeldir_is_modeldir_and_creates_nothing",
+    "swarm_form_directory_tests/symlink_swarm_is_symlink_and_is_not_written",
+    "swarm_form_directory_tests/missing_swarm_directory_is_created",
+    "swarm_form_directory_tests/existing_swarm_directory_is_left_in_place",
+    "swarm_form_discovery_tests/false_compat_is_not_admitted_and_does_not_connect",
+    "swarm_form_discovery_tests/matching_family_is_admitted_without_connecting",
+    "swarm_form_discovery_tests/different_family_without_compat_claim_is_not_false_compat",
+    "swarm_form_election_tests/epoch_starts_at_one_and_empty_candidate_stores_nothing",
+    "swarm_form_election_tests/only_an_admitted_member_can_be_coordinator",
+    "swarm_form_election_tests/stale_epoch_does_not_replace_the_leader",
+    "swarm_form_limits_tests/limits_stay_closed_before_any_form",
+    "swarm_form_limits_tests/form_discover_and_claim_still_move_nothing",
+    "swarm_form_membership_tests/first_form_writes_local_membership",
+    "swarm_form_membership_tests/second_form_keeps_the_first_membership",
+    "swarm_form_membership_tests/torn_membership_is_set_aside_and_formed_again",
+    "swarm_form_membership_tests/membership_with_spend_is_not_replaced",
+    "swarm_form_membership_tests/membership_symlink_is_not_written_through",
+    "swarm_form_plane_tests/observer_entry_forms_once_and_keeps_the_plane_local",
+    "swarm_form_plane_tests/symlink_model_swarm_does_not_receive_a_membership",
+    "swarm_forward_forward_tests/unknown_channel_is_channel",
+    "swarm_forward_forward_tests/empty_payment_and_low_amount_store_nothing",
+    "swarm_forward_forward_tests/short_liquidity_stays",
+    "swarm_forward_forward_tests/margin_failure_stores_nothing",
+    "swarm_forward_forward_tests/forward_allowed_refusal_stores_nothing",
+    "swarm_forward_forward_tests/one_successful_forward_then_replay",
+    "swarm_forward_forward_tests/same_payment_forwards_once_per_channel",
+    "swarm_forward_forward_tests/margin_refusal_can_be_retried",
+    "swarm_forward_open_tests/empty_channel_is_channel_and_stores_nothing",
+    "swarm_forward_open_tests/liquidity_below_one_is_liquidity",
+    "swarm_forward_open_tests/second_open_is_replay_and_keeps_first_liquidity",
+    "swarm_forward_policy_tests/qualified_stays_false",
+    "swarm_fourbal_tests/empty_ledger_is_ledger",
+    "swarm_fourbal_tests/negative_escrow_is_range",
+    "swarm_fourbal_tests/want_merge_is_held",
+    "swarm_fourbal_tests/plain_record_is_noted",
+    "swarm_fourbook_tests/credit_earned_and_escrow_stay_distinct",
+    "swarm_fourbook_tests/unknown_bucket_and_nonpositive_atoms_leave_balances",
+    "swarm_fourscale_average_tests/average_before_open_is_not_averaged",
+    "swarm_fourscale_average_tests/average_after_steps_leaves_each_step",
+    "swarm_fourscale_bytes_tests/bytes_stay_zero_and_gpu_stays_false",
+    "swarm_fourscale_graduate_tests/graduate_before_open_is_realm",
+    "swarm_fourscale_graduate_tests/graduate_after_steps_leaves_steps_and_stays_ungraduated",
+    "swarm_fourscale_open_tests/open_plants_four_scales_at_step_zero",
+    "swarm_fourscale_replay_tests/second_open_is_replay_and_leaves_steps",
+    "swarm_fourscale_replay_tests/second_open_before_any_step_keeps_zeros",
+    "swarm_fourscale_step_tests/one_step_on_daily_leaves_the_others_at_zero",
+    "swarm_fourscale_step_tests/each_known_scale_increments_alone",
+    "swarm_fourscale_step_tests/step_before_open_is_scale_and_stores_nothing",
+    "swarm_fourscale_step_tests/unknown_scale_is_scale_and_stores_nothing",
+    "swarm_frontier_tests/holdout_leak_is_refused_and_other_pools_may_begin",
+    "swarm_frontier_tests/a_negative_result_is_retained_for_its_pool",
+    "swarm_frontier_tests/the_sole_author_cannot_move_fitness",
+    "swarm_frontier_tests/an_uninformative_challenge_is_refused",
+    "swarm_frontier_tests/two_channels_stay_visible",
+    "swarm_frontier_tests/pin_does_not_adopt_the_staged_candidate",
+    "swarm_frontier_tests/influence_over_the_cap_is_refused",
+    "swarm_frontier_tests/a_prompt_contribution_is_refused",
+    "swarm_frontier_tests/graduation_does_not_promote_a_realm_or_admit_exact_replay",
+    "swarm_frontier_tests/promotion_ids_are_domain_separated_and_require_evidence",
+    "swarm_frontier_tests/anomaly_quarantine_safety_and_training_grant",
+    "swarm_frozenpairs_tests/empty_model_id_is_pairs",
+    "swarm_frozenpairs_tests/negative_pair_count_is_pairs",
+    "swarm_frozenpairs_tests/want_unfreeze_with_eight_pairs_is_frozen",
+    "swarm_frozenpairs_tests/seven_pairs_is_frozen",
+    "swarm_frozenpairs_tests/eight_pairs_without_unfreeze_is_noted",
+    "swarm_fsdpheld_tests/empty_job_is_job",
+    "swarm_fsdpheld_tests/want_run_is_held",
+    "swarm_fsdpheld_tests/want_run_false_is_noted",
+    "swarm_fsdphold_bytes_tests/bytes_stay_zero",
+    "swarm_fsdphold_empty_tests/empty_request_is_fsdp_and_stores_nothing",
+    "swarm_fsdphold_empty_tests/empty_name_leaves_a_stored_request_in_place",
+    "swarm_fsdphold_replay_tests/second_request_of_the_same_name_is_replay",
+    "swarm_fsdphold_replay_tests/empty_name_is_fsdp_before_replay",
+    "swarm_fsdphold_replay_tests/replay_keeps_the_first_when_another_name_is_stored",
+    "swarm_fsdphold_request_tests/stored_request_stays_stopped",
+    "swarm_fsdphold_request_tests/a_second_distinct_name_is_stored_beside_the_first",
+    "swarm_fsdphold_request_tests/space_and_code_word_are_stored_and_stay_stopped",
+    "swarm_fsjail_tests/empty_helper_or_root",
+    "swarm_fsjail_tests/helper_not_regular_file",
+    "swarm_fsjail_tests/network_not_denied",
+    "swarm_fsjail_tests/path_outside_or_dotdot",
+    "swarm_fsjail_tests/zero_tree_limit",
+    "swarm_fundscript_tests/empty_or_unbound_template_is_refused",
+    "swarm_fundscript_tests/bound_template_verifies_for_matching_witness",
+    "swarm_fundscript_tests/bound_template_rejects_unsatisfied_witness",
+    "swarm_fundsign_tests/empty_scheduler_id_is_witness",
+    "swarm_fundsign_tests/empty_scheduler_id_wins_over_sign_and_broadcast",
+    "swarm_fundsign_tests/scheduler_signs_is_sign_refused",
+    "swarm_fundsign_tests/scheduler_signs_wins_over_want_broadcast",
+    "swarm_fundsign_tests/want_broadcast_is_broadcast_forbidden",
+    "swarm_fundsign_tests/plain_note_is_noted",
+    "swarm_fwdfee_tests/empty_hop_id_is_fee",
+    "swarm_fwdfee_tests/amount_zero_is_fee",
+    "swarm_fwdfee_tests/sender_first_edge_is_no_fee",
+    "swarm_fwdfee_tests/ppm_note_is_one_hundred_five",
+    "swarm_fwdfee_tests/one_atom_one_ppm_rounds_up_to_one",
+    "swarm_generation_allocate_tests/bad_slots_and_explore_store_nothing",
+    "swarm_generation_allocate_tests/exploration_share_is_integer_division",
+    "swarm_generation_candidate_tests/empty_candidate_fields_store_nothing",
+    "swarm_generation_candidate_tests/produce_stores_the_hash_and_verify_checks_the_parent",
+    "swarm_generation_continue_tests/continue_without_an_adopted_head_leaves_the_parent",
+    "swarm_generation_continue_tests/full_generation_adopts_code_stable_and_continue_advances_the_parent",
+    "swarm_generation_continue_tests/code_stable_is_distinct_from_general_stable",
+    "swarm_generation_eligible_tests/eligibility_starts_false_and_needs_both_grants",
+    "swarm_generation_eligible_tests/both_grants_mark_the_family_eligible"
   ],
   "campaign_test_budget_seconds": 1800,
   "batch_budget_seconds": 1800,
   "require_first_pass_control": true,
-  "scope": "Previously unrun evolution/executor/fallback/family/fault-recovery Swarm maintained unit cases; no live operations",
-  "total": 277
+  "scope": "Previously unrun fault-sequence/flags/order/replay/rollback/formation/frontier/fs/generation Swarm maintained unit cases; no live operations",
+  "total": 291
 }
