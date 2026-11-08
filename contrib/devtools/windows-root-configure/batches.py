@@ -104,6 +104,9 @@ def run():
                 raise RuntimeError('Selection/report/resource boundary requires review before more execution')
             if len(R['batch_results']) == 1 and M.get('require_first_pass_control', True):
                 assert outcome['state'] == 'passed', 'Initial real selector/XML control failed'
+                assert all(int(v.get('assertions_passed','0')) > 0 for c,v in outcome['cases'].items() if c in selectors), 'Initial grouping control has an empty test body'
+                R['mixed_suite_pilot'] = dict(passed=True, cases=len(selectors), suites=len({c.split('/')[0]for c in selectors}), substantive_assertions=True, owned_processes=active)
+                save_progress()
             print('CHECKPOINT', job['suite'], outcome['state'], len(outcome['cases']), flush=True)
         else:
             R['campaign_stop'] = 'ALL_PENDING_JOBS_ATTEMPTED'
