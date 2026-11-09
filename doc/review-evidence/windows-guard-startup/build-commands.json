@@ -1,0 +1,72 @@
+[
+  {
+    "label": "component-configure",
+    "command": [
+      "cmake",
+      "-S",
+      "D:\\btx-native-035\\guard-regression-driver",
+      "-B",
+      "D:\\btx-native-035\\guard-component-build",
+      "-G",
+      "Ninja",
+      "-DCMAKE_C_COMPILER=clang-cl",
+      "-DCMAKE_CXX_COMPILER=clang-cl",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded",
+      "-DBTX_SOURCE_ROOT=D:\\a\\btx\\btx\\btx",
+      "-DBTX_INTEGRATED_SOURCE=D:\\a\\btx\\btx\\btx",
+      "-DSQLite3_INCLUDE_DIR=D:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\include",
+      "-DSQLite3_LIBRARY=D:\\btx-native-035\\vcpkg-installed\\x64-windows-static\\lib\\sqlite3.lib"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 10.17,
+    "log_sha256": "770ee1d895148bd43dd4f05c909faafab7944a326b86d9184bf54ffb79fe4e67",
+    "budget_stop": null
+  },
+  {
+    "label": "candidate-unit-build",
+    "command": [
+      "cmake",
+      "--build",
+      "D:\\btx-native-035\\project-build",
+      "--target",
+      "btxd",
+      "btx-cli",
+      "btx-tx",
+      "btx-util",
+      "btx-open",
+      "btx-modeld",
+      "btx-guardd",
+      "btx-security",
+      "test_btx",
+      "--parallel",
+      "4",
+      "--",
+      "-k",
+      "1"
+    ],
+    "cwd": "D:\\btx-native-035\\project-build",
+    "exit": 0,
+    "seconds": 32.24,
+    "log_sha256": "7b7fe3a31dd5adbc90d3a21969f98753993676b2ab7603a64d6a8d716bd197b5",
+    "budget_stop": null
+  },
+  {
+    "label": "component-candidate-build",
+    "command": [
+      "cmake",
+      "--build",
+      "D:\\btx-native-035\\guard-component-build",
+      "--target",
+      "security-native-ipc",
+      "--parallel",
+      "4"
+    ],
+    "cwd": "D:\\a\\btx\\btx\\btx",
+    "exit": 0,
+    "seconds": 12.25,
+    "log_sha256": "5e551ceb54d98c35d1cd9fa93aa190474dbac5b254caf1c7a7ad37fe8e55409c",
+    "budget_stop": null
+  }
+]
