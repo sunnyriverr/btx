@@ -64,7 +64,9 @@ def main():
   assert not run(['git','status','--porcelain','--untracked-files=no'],'successor-clean',cwd=src).strip()
   r['source_updated']=True;r['changed_source_files']=changed
   assert run(['g++','-dumpfullversion'],'gcc').strip()=='11.4.0'
-  assert run(['pkg-config','--modversion','Qt6Core'],'qt').strip()=='6.2.4'
+  qtpaths=next((x for x in ['/usr/bin/qtpaths6','/usr/lib/qt6/bin/qtpaths','/usr/lib/qt6/bin/qtpaths6'] if Path(x).is_file()),None)
+  assert qtpaths,'Qt paths tool absent'
+  assert run([qtpaths,'--query','QT_VERSION'],'qt').strip()=='6.2.4'
   assert 'OpenSSL 3.5.9' in run([w/'gui-pilot-runtime/openssl/bin/openssl','version'],'openssl')
   run(['dpkg-query','-W'],'installed-packages');r['toolchain_verified']=True
   before={str(x.relative_to(build)):sha(x) for x in build.rglob('*.o')}
