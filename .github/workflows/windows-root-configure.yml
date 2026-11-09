@@ -1,11 +1,11 @@
-name: Native Windows resumable dac9 build
+name: Native Windows dac9 node guard lifecycle
 permissions:
   contents: read
 jobs:
   configure:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: windows-2025
-    timeout-minutes: 240
+    timeout-minutes: 30
     env:
       BTX_NATIVE_ROOT: D:\btx-native-035
     steps:
@@ -149,7 +149,7 @@ jobs:
           D:\btx-native-035\vcpkg-installed
 
           '
-        key: btx356-currentfull-v1-f67683b78d6f574e58d1f9813a3e2429eb1b30ac884d2ff3f4421f8029611103-42413581374
+        key: btx356-dac9-build-v1-42584109380
     - name: Require existing exact-profile checkpoint for restore proof
       shell: pwsh
       env:
@@ -158,7 +158,7 @@ jobs:
         cache; refusing fresh rebuild" }
 
         '
-    - name: Verify exact saved37472 source profile and5885objects
+    - name: Verify and restore exact saved dac9 build
       id: prepare
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -177,12 +177,12 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/full.py prepare
+        python controls/contrib/devtools/windows-root-configure/lifecycle.py prepare
 
         exit /b %errorlevel%
 
         '
-    - name: Configure check plan then build security guard node and units
+    - name: Configure exact dac9 release and inspect bounded Ninja plan
       id: release_plan
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -201,26 +201,16 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/release-build.py plan
+        python controls/contrib/devtools/windows-root-configure/release-plan.py plan
 
         exit /b %errorlevel%
 
         '
-    - name: Preserve verified partial or complete target build separately
-      if: always() && steps.release_plan.outputs.checkpoint_valid == 'true'
-      uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
-      with:
-        path: 'D:\btx-native-035\project-build
-
-          D:\btx-native-035\vcpkg-installed
-
-          '
-        key: ${{ steps.release_plan.outputs.checkpoint_key }}
     - name: Preserve configure and dry-run evidence
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
       if: always()
       with:
-        name: native-windows-dac9-build
+        name: native-windows-dac9-lifecycle
         path: D:\btx-native-035\evidence\
         retention-days: 14
 'on':
