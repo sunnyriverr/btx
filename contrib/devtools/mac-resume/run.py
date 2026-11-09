@@ -48,7 +48,8 @@ def plugin_cases(root,label,patched):
  run(['codesign','--force','--sign','-',probe],label+'-sign-probe')
  env['DYLD_PRINT_LIBRARIES']='1';results=[]
  try:
-  cases=[('platforms/libqcocoa.dylib',True,None),('styles/libqmacstyle.dylib',True,None),('iconengines/libqsvgicon.dylib',patched,'QtSvg'),('imageformats/libqpdf.dylib',patched,'QtPdf'),('platforminputcontexts/libqtvirtualkeyboardplugin.dylib',patched,'QtVirtualKeyboard')]
+  cases=[(str(x.relative_to(app/'Contents/PlugIns')),True,None) for x in sorted((app/'Contents/PlugIns').rglob('*.dylib'))]
+  assert len(cases)>=20
   for i,(name,expected,missing) in enumerate(cases):
    status,text=run([probe,app/'Contents/PlugIns'/name],label+'-plugin-'+str(i),20,False)
    lines=[x for x in text.splitlines() if x.startswith('{')];assert len(lines)==1
@@ -60,34 +61,89 @@ def plugin_cases(root,label,patched):
   env.pop('DYLD_PRINT_LIBRARIES',None);probe.unlink()
  after={str(p.relative_to(root)):sha(p) for p in root.rglob('*') if p.is_file() and not p.is_symlink()};assert before==after
  return {'cases':results,'package_bytes_unchanged':True,'files':len(before),'ambient_homebrew_loads':False}
+def extract(archive,where):
+ where.mkdir()
+ with tarfile.open(archive) as t:t.extractall(where,filter='data')
+ roots=list(where.iterdir());assert len(roots)==1;return roots[0]
+def inspect_images(root):
+ images=[]
+ for p in root.rglob('*'):
+  if not p.is_file() or p.is_symlink():continue
+  with p.open('rb') as f:head=f.read(4)
+  if head!=b'\xcf\xfa\xed\xfe':continue
+  index=str(len(images));arch=run(['lipo','-archs',p],'arch-'+index)[1].strip();assert arch=='arm64'
+  run(['codesign','--verify','--strict',p],'signature-'+index)
+  loads=run(['otool','-L',p],'dependencies-'+index)[1];assert '/opt/homebrew/' not in loads and '/usr/local/opt/' not in loads
+  lc=run(['otool','-l',p],'loadcommands-'+index)[1]
+  floors=re.findall(r'\bminos (\d+(?:\.\d+)+)',lc);assert floors
+  for floor in floors:assert tuple(map(int,floor.split('.')[:2]))<=(15,8)
+  images.append({'path':str(p.relative_to(root)),'sha256':sha(p),'architecture':arch,'minimum_os':floors})
+ assert len(images)>=85;state['images']=images;save()
+def lifecycle(root,label,expected):
+ folder=out/label;folder.mkdir()
+ code,text=run([sys.executable,Path(__file__).with_name('case.py'),root,folder,label],label+'-case',300,False)
+ result=json.loads((folder/'result.json').read_text());assert result['runtime_removed'] and not result['cleanup_remaining']
+ if expected:assert code==0 and result['passed'] and result['guard_contract_pass']
+ else:
+  assert code!=0 and len(result['boots'])==2
+  assert all(not b['guard']['ready'] and all(x['pass'] for x in b['health']) for b in result['boots'])
+  assert 'packaged guard actually answers' in result['error']
+ return {'exit':code,'passed':result['passed'],'guard_contract_pass':result.get('guard_contract_pass'),'boots':len(result['boots']),'runtime_removed':result['runtime_removed']}
+def gui(root,name):
+ folder=w/('gui-'+name);folder.mkdir();home=folder/'home';home.mkdir();data=folder/'data';data.mkdir()
+ ge=dict(env,HOME=str(home),TMPDIR=str(folder),DYLD_PRINT_LIBRARIES='1')
+ if name=='atlas':args=[root/'bin/btx-atlas']
+ else:args=[root/'bin/btx-qt','-regtest','-datadir='+str(data),'-disablewallet','-server=0','-listen=0','-networkactive=0','-connect=0','-dnsseed=0','-discover=0','-natpmp=0','-modelbind=off','-modelhost=0','-modelseed=off','-modelfollowpeers=0','-modellandiscovery=0','-modelstorage=16MiB']
+ log=out/(name+'-gui.log');result={'window_seen':False,'screenshot':False}
+ with log.open('w') as f:
+  proc=subprocess.Popen(list(map(str,args)),env=ge,cwd=folder,stdout=f,stderr=subprocess.STDOUT,start_new_session=True);tracked=OwnedProcesses(proc)
+  try:
+   deadline=time.monotonic()+45
+   while time.monotonic()<deadline:
+    tracked.update();assert proc.poll() is None,(name,proc.returncode)
+    _,text=run([w/'window-probe',str(proc.pid)],name+'-window',5)
+    windows=json.loads(text)
+    visible=[x for x in windows if x.get('kCGWindowLayer')==0 and x.get('kCGWindowBounds',{}).get('Width',0)>300]
+    if visible:
+     result.update(window_seen=True,windows=visible)
+     time.sleep(3)
+     code,_=run(['screencapture','-x','-l',str(visible[0]['kCGWindowNumber']),out/(name+'-window.png')],name+'-capture',10,False)
+     result['screenshot']=code==0 and (out/(name+'-window.png')).is_file();break
+    time.sleep(1)
+  except Exception as e:result['error']=repr(e)
+  finally:result['cleanup']=tracked.stop();assert not result['cleanup']['processes']
+ text=log.read_text();result['ambient_loads']=[x for x in text.splitlines() if x.startswith('dyld[') and ('/opt/homebrew/' in x or '/usr/local/opt/' in x)]
+ assert not result['ambient_loads'];shutil.rmtree(folder);return result
 try:
  assert json.loads((w/'mac-config-records/result.json').read_text())['complete']
  archives=list((w/'package-input').rglob('*.tar.gz'));assert len(archives)==1
- archive=archives[0];assert sha(archive)=='de76a82d1e59fe12bbb8dba9cbc7e7de5167c150acfb754e3d6cb13eb8f2d50d'
- baseline=w/'baseline';baseline.mkdir()
- with tarfile.open(archive) as t:t.extractall(baseline,filter='data')
- root=next(baseline.iterdir());state['before']=plugin_cases(root,'before',False);save()
+ archive=archives[0];assert sha(archive)=='1f38442ac8d7253abdad32ed5aa5d76567d81f9d617517093d55bee903ce3b53'
+ baseline=extract(archive,w/'without452');assert not (baseline/'libexec/btx-guardd').exists()
+ state['baseline_guard']=lifecycle(baseline,'without452',False);save()
  stage=w/'staged-bin';stage.mkdir()
  untar_binaries(w/'cmake-binaries',inputs['cmake']['available_executables'],stage)
  untar_binaries(w/'atlas-binaries',{'btx-atlas':inputs['atlas']['executable']},stage)
  protected={p.name:sha(p) for p in stage.iterdir()};assert len(protected)==18
- for relative in ['scripts/release/bundle_qt_gui.py','test/util/package_release_archive_test.py']:
+ for relative in ['scripts/release/bundle_qt_gui.py','test/util/package_release_archive_test.py','scripts/release/package_release_archive.py']:
   shutil.copy2(Path(__file__).parent/'candidate'/relative,src/relative)
- changes=run(['git','-C',src,'diff','--name-only'],'candidate-changes')[1].splitlines();assert sorted(changes)==['scripts/release/bundle_qt_gui.py','test/util/package_release_archive_test.py']
- patch=run(['git','-C',src,'diff','--binary'],'candidate-patch')[1];(out/'candidate.patch').write_text(patch)
+ patch=run(['git','-C',src,'diff','--binary'],'combined-patch')[1];(out/'combined.patch').write_text(patch)
  run([sys.executable,src/'test/util/package_release_archive_test.py'],'maintained-unit-suite',180)
- args=[sys.executable,src/'scripts/release/package_release_archive.py','--platform-id','macos-arm64-metal','--version','0.34.16','--btxd',stage/'btxd','--btx-cli',stage/'btx-cli','--btx-util',stage/'btx-util','--metal-lib-dir',root/'libexec/metal','--source-root',src,'--require-gui','--require-model-helpers','--output-dir',retained]
- run(args,'candidate-assemble',600)
+ run([sys.executable,src/'scripts/release/package_release_archive.py','--platform-id','macos-arm64-metal','--version','0.34.16','--btxd',stage/'btxd','--btx-cli',stage/'btx-cli','--btx-util',stage/'btx-util','--metal-lib-dir',baseline/'libexec/metal','--source-root',src,'--require-gui','--require-model-helpers','--output-dir',retained],'combined-assemble',600)
  candidate=list(retained.glob('*.tar.gz'));assert len(candidate)==1
- run([sys.executable,src/'scripts/release/verify_release_btxd.py','--archive',candidate[0],'--require-model-helpers'],'candidate-stock-check',600)
- extracted=w/'candidate-extracted';extracted.mkdir()
- with tarfile.open(candidate[0]) as t:t.extractall(extracted,filter='data')
- newroot=next(extracted.iterdir());state['after']=plugin_cases(newroot,'after',True)
+ run([sys.executable,src/'scripts/release/verify_release_btxd.py','--archive',candidate[0],'--require-model-helpers'],'combined-stock-check',600)
+ root=extract(candidate[0],w/'combined-extracted')
+ assert (root/'libexec/btx-guardd').is_file() and not (root/'libexec/btx-guardd').is_symlink()
+ assert (root/'libexec/btx-guardd').samefile(root/'libexec/btx-guardd.real')
+ assert all((root/'bin'/n).is_file() for n in protected)
+ assert len(list((root/'libexec/metal').glob('*.metallib')))==7
+ state['all_plugin_loads']=plugin_cases(root,'combined',True);inspect_images(root)
+ state['combined_lifecycle']=lifecycle(root,'with452',True);save()
+ run(['xcrun','clang','-fobjc-arc',Path(__file__).with_name('window.m'),'-framework','Foundation','-framework','CoreGraphics','-o',w/'window-probe'],'compile-window-probe',90)
+ before={str(p.relative_to(root)):sha(p) for p in root.rglob('*') if p.is_file()}
+ state['gui']={name:gui(root,name) for name in ['atlas','qt']}
+ after={str(p.relative_to(root)):sha(p) for p in root.rglob('*') if p.is_file()};assert before==after
  assert protected=={p.name:sha(p) for p in stage.iterdir()}
- frameworks=['QtSvg','QtPdf','QtVirtualKeyboardQml','QtVirtualKeyboard']
- assert all((newroot/f'btx-qt.app/Contents/Frameworks/{name}.framework/Versions/A/{name}').is_file() for name in frameworks)
- # Stock checker remains authoritative; no custom dependency exemption.
- state.update(complete=True,producer_binaries_unchanged=True,original_archive_unchanged=sha(archive)=='de76a82d1e59fe12bbb8dba9cbc7e7de5167c150acfb754e3d6cb13eb8f2d50d',candidate_archive_sha256=sha(candidate[0]),candidate_patch_sha256=sha(out/'candidate.patch'),frameworks_present=frameworks,node_started=False,app_launched=False,pr452_included=False)
+ state.update(complete=True,package_bytes_unchanged=True,producer_binaries_unchanged=True,original_archive_unchanged=sha(archive)=='1f38442ac8d7253abdad32ed5aa5d76567d81f9d617517093d55bee903ce3b53',candidate_archive_sha256=sha(candidate[0]),combined_patch_sha256=sha(out/'combined.patch'),pr452_included=True,visual_review_pending=True)
 except Exception as e:state['error']=repr(e);state['traceback']=traceback.format_exc()
 finally:save()
 sys.exit(0 if state.get('complete') else 1)
