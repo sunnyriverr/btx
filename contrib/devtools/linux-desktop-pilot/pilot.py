@@ -77,7 +77,12 @@ def main():
   assert 'WITH_QT_VERSION:STRING=6' in cache
   r['configured']=True
   newcmd=run(['ninja','-C',build,'-t','commands','btx-qt'],'new-commands')
-  dry=run(['ninja','-C',build,'-d','explain','-n','btx-qt'],'dry-plan',120)
+  glob=run(['cmake','-P',build/'CMakeFiles/VerifyGlobs.cmake'],'verify-globs',120,cwd=build)
+  assert 'GLOB mismatch!' not in glob
+  observed=out/'observed.ninja';shutil.copy2(build/'build.ninja',observed)
+  assert sha(observed)==sha(build/'build.ninja')
+  dry=run(['ninja','-C',build,'-f',observed,'-d','explain','-n','btx-qt'],'dry-plan',120)
+  assert 'Re-running CMake' not in dry and 'Re-checking globbed' not in dry,'Incomplete regeneration-only plan'
   r['plan_captured']=True;r['planned_step_lines']=[s for s in dry.splitlines() if s.startswith('[')]
   r['compile_command_set_changed']=oldcmd!=newcmd
   r['objects_before']=len(before);r['objects_unchanged']=before=={str(x.relative_to(build)):sha(x) for x in build.rglob('*.o')}
