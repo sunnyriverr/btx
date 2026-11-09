@@ -1,4 +1,4 @@
-name: Native Windows CPU solvers reference batches
+name: Native Windows MatRiCT timeout recovery
 permissions:
   contents: read
 jobs:
@@ -166,7 +166,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Verify saved binary and75never-selected CPU solver cases
+    - name: Verify saved binary and20missing MatRiCT final verdicts
       id: ready
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -188,7 +188,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Run75CPU solver cases in eight bounded groups
+    - name: Recover20missing results in nine bounded groups
       id: units
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"

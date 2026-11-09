@@ -3,225 +3,123 @@
   "binary_sha256": "31e45f1d0f2aed4168982120596182b5268057e1b9806960f27a60c769906bdd",
   "jobs": [
     {
-      "suite": "matmul_noise_tests",
+      "suite": "matrict_adversarial_tests/recovery-01",
       "selectors": [
-        "matmul_noise_tests/noise_deterministic",
-        "matmul_noise_tests/noise_rank_bounded",
-        "matmul_noise_tests/noise_elements_in_field",
-        "matmul_noise_tests/noise_different_sigma_differ",
-        "matmul_noise_tests/noise_generation_profile_matches_platform_capability",
-        "matmul_noise_tests/noise_r_independent_of_b",
-        "matmul_noise_tests/noise_derived_seed_pinned_EL",
-        "matmul_noise_tests/noise_derived_seed_pinned_ER",
-        "matmul_noise_tests/noise_derived_seed_pinned_FL",
-        "matmul_noise_tests/noise_derived_seed_pinned_FR",
-        "matmul_noise_tests/noise_domain_separation_all_seeds_distinct",
-        "matmul_noise_tests/noise_EL_pinned_elements",
-        "matmul_noise_tests/noise_ER_pinned_elements",
-        "matmul_noise_tests/noise_first_element_domain_separation",
-        "matmul_noise_tests/noise_index_uses_factor_column_count",
-        "matmul_noise_tests/noise_all_elements_in_field",
-        "matmul_noise_tests/noise_cross_platform_consistency"
+        "matrict_adversarial_tests/m1_inflation_outputs_exceed_inputs",
+        "matrict_adversarial_tests/m1_fee_mismatch_rejected",
+        "matrict_adversarial_tests/m1_zero_input_positive_output",
+        "matrict_adversarial_tests/m2_same_note_same_nullifier",
+        "matrict_adversarial_tests/m2_different_notes_different_nullifiers",
+        "matrict_adversarial_tests/m2_different_keys_different_nullifiers"
       ],
-      "expected_cases": 17,
+      "expected_cases": 6,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "matmul_v4_batch_tests",
+      "suite": "matrict_adversarial_tests/recovery-02",
       "selectors": [
-        "matmul_v4_batch_tests/limb_combine_matches_direct_combine_random",
-        "matmul_v4_batch_tests/limb_combine_matches_direct_combine_extremes",
-        "matmul_v4_batch_tests/limb_bound_window",
-        "matmul_v4_batch_tests/stacked_combine_slices_equal_per_nonce_combine",
-        "matmul_v4_batch_tests/batched_miner_matches_single_nonce_reference",
-        "matmul_v4_batch_tests/batched_miner_two_phase_retains_only_winner_payloads",
-        "matmul_v4_batch_tests/batched_miner_matches_reference_under_seed_churn",
-        "matmul_v4_batch_tests/batched_miner_fails_closed_on_template_mismatch",
-        "matmul_v4_batch_tests/batched_miner_rejects_invalid_dims",
-        "matmul_v4_batch_tests/operands_a_u_v_are_template_scoped_b_is_nonce_fresh"
-      ],
-      "expected_cases": 10,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "matmul_v4_bmx4_batch_tests",
-      "selectors": [
-        "matmul_v4_bmx4_batch_tests/bmx4c_batched_miner_matches_single_nonce_reference",
-        "matmul_v4_bmx4_batch_tests/bmx4c_batched_miner_matches_reference_under_seed_churn",
-        "matmul_v4_bmx4_batch_tests/bmx4c_batched_miner_fails_closed_on_template_mismatch",
-        "matmul_v4_bmx4_batch_tests/bmx4c_batched_miner_rejects_invalid_dims"
+        "matrict_adversarial_tests/m2_tampered_nullifier_rejected",
+        "matrict_adversarial_tests/m3_wrong_spending_key_rejected",
+        "matrict_adversarial_tests/m3_tampered_ring_members_rejected",
+        "matrict_adversarial_tests/m3_tampered_real_ring_member_rejected"
       ],
       "expected_cases": 4,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "matmul_v4_exact_float_tests",
+      "suite": "matrict_adversarial_tests/recovery-03",
       "selectors": [
-        "matmul_v4_exact_float_tests/slice_digits_exact_and_recompose_for_all_s8_values",
-        "matmul_v4_exact_float_tests/format_exactness_predicate",
-        "matmul_v4_exact_float_tests/max_exact_accum_block_derivation",
-        "matmul_v4_exact_float_tests/gemm_via_slices_matches_integer_gemm_random",
-        "matmul_v4_exact_float_tests/gemm_via_slices_high_magnitude_and_block_boundary",
-        "matmul_v4_exact_float_tests/exact_product_via_float_matches_reference",
-        "matmul_v4_exact_float_tests/combine_via_float_matches_limb_tensor_high_magnitude",
-        "matmul_v4_exact_float_tests/sketch_via_float_matches_consensus_reference"
-      ],
-      "expected_cases": 8,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "matmul_v4_fast_exact_tests",
-      "selectors": [
-        "matmul_v4_fast_exact_tests/rectangular_matches_classical",
-        "matmul_v4_fast_exact_tests/lt_range_boundary_matches_classical",
-        "matmul_v4_fast_exact_tests/fails_closed_on_s8_transform_overflow_or_odd_shape"
+        "matrict_adversarial_tests/m4_ring_signature_substitution_rejected",
+        "matrict_adversarial_tests/m4_balance_proof_substitution_rejected",
+        "matrict_adversarial_tests/m4_range_proof_substitution_rejected"
       ],
       "expected_cases": 3,
       "lane": "other",
       "timeout_seconds": 180
     },
     {
-      "suite": "matmul_pow_tests",
+      "suite": "matrict_adversarial_tests/recovery-04",
       "selectors": [
-        "matmul_pow_tests/solve_finds_proof_regtest",
-        "matmul_pow_tests/solve_proof_verifies",
-        "matmul_pow_tests/solve_runtime_clamps_worker_threads",
-        "matmul_pow_tests/solve_runtime_budget_expiry_tracks_mock_time",
-        "matmul_pow_tests/solve_stops_when_time_budget_expires",
-        "matmul_pow_tests/pow_state_sigma_matches_header_sigma",
-        "matmul_pow_tests/verify_rejects_wrong_seed_a",
-        "matmul_pow_tests/verify_rejects_wrong_seed_b",
-        "matmul_pow_tests/verify_rejects_tampered_digest",
-        "matmul_pow_tests/verify_rejects_changed_previous_block_hash",
-        "matmul_pow_tests/verify_rejects_changed_bits",
-        "matmul_pow_tests/verify_rejects_bad_dimension",
-        "matmul_pow_tests/verify_commitment_only",
-        "matmul_pow_tests/solve_max_tries_zero",
-        "matmul_pow_tests/solve_increments_nonce",
-        "matmul_pow_tests/simulated_miners_with_equal_workers_have_balanced_win_share",
-        "matmul_pow_tests/simulated_miners_win_in_proportion_to_worker_share",
-        "matmul_pow_tests/denoise_recovers_product",
-        "matmul_pow_tests/denoise_zero_noise_identity",
-        "matmul_pow_tests/denoise_cost_quadratic_r",
-        "matmul_pow_tests/low_rank_kernel_profile_reports_amx_experiment_gate",
-        "matmul_pow_tests/solve_digest_parity_with_amx_experiment_toggle",
-        "matmul_pow_tests/low_rank_kernel_profile_can_force_disable_amx"
-      ],
-      "expected_cases": 23,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "matmul_accelerated_solver_tests",
-      "selectors": [
-        "matmul_accelerated_solver_tests/cpu_digest_matches_canonical_reference",
-        "matmul_accelerated_solver_tests/cpu_product_digest_matches_canonical_reference",
-        "matmul_accelerated_solver_tests/prepared_digest_inputs_match_direct_path",
-        "matmul_accelerated_solver_tests/prepared_product_digest_inputs_match_direct_path",
-        "matmul_accelerated_solver_tests/prepared_batch_digest_matches_direct_cpu_sequence",
-        "matmul_accelerated_solver_tests/prepared_batch_product_digest_matches_direct_cpu_sequence",
-        "matmul_accelerated_solver_tests/backend_runtime_stats_track_cpu_digest_requests",
-        "matmul_accelerated_solver_tests/strict_regtest_warning_repro_cpu_digest_matches_logged_vector"
-      ],
-      "expected_cases": 8,
-      "lane": "other",
-      "timeout_seconds": 180
-    },
-    {
-      "suite": "matmul_v4_determinism_vectors",
-      "selectors": [
-        "matmul_v4_determinism_vectors/golden_vectors_are_reproducible_and_match_pins",
-        "matmul_v4_determinism_vectors/adjacent_nonce_vectors_diverge"
+        "matrict_adversarial_tests/m4_challenge_seed_substitution_rejected",
+        "matrict_adversarial_tests/m5_cross_tx_replay_rejected"
       ],
       "expected_cases": 2,
       "lane": "other",
-      "timeout_seconds": 300
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "matrict_adversarial_tests/recovery-05",
+      "selectors": [
+        "matrict_adversarial_tests/m6_minimal_1in_1out"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "matrict_adversarial_tests/recovery-06",
+      "selectors": [
+        "matrict_adversarial_tests/m6_three_in_two_out"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "matrict_adversarial_tests/recovery-07",
+      "selectors": [
+        "matrict_adversarial_tests/m6_large_amounts"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "matrict_adversarial_tests/recovery-08",
+      "selectors": [
+        "matrict_adversarial_tests/m6_deterministic_proof"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
+    },
+    {
+      "suite": "matrict_adversarial_tests/recovery-09",
+      "selectors": [
+        "matrict_adversarial_tests/m6_empty_proof_invalid"
+      ],
+      "expected_cases": 1,
+      "lane": "other",
+      "timeout_seconds": 180
     }
   ],
   "all_enabled_cases": [
-    "matmul_noise_tests/noise_deterministic",
-    "matmul_noise_tests/noise_rank_bounded",
-    "matmul_noise_tests/noise_elements_in_field",
-    "matmul_noise_tests/noise_different_sigma_differ",
-    "matmul_noise_tests/noise_generation_profile_matches_platform_capability",
-    "matmul_noise_tests/noise_r_independent_of_b",
-    "matmul_noise_tests/noise_derived_seed_pinned_EL",
-    "matmul_noise_tests/noise_derived_seed_pinned_ER",
-    "matmul_noise_tests/noise_derived_seed_pinned_FL",
-    "matmul_noise_tests/noise_derived_seed_pinned_FR",
-    "matmul_noise_tests/noise_domain_separation_all_seeds_distinct",
-    "matmul_noise_tests/noise_EL_pinned_elements",
-    "matmul_noise_tests/noise_ER_pinned_elements",
-    "matmul_noise_tests/noise_first_element_domain_separation",
-    "matmul_noise_tests/noise_index_uses_factor_column_count",
-    "matmul_noise_tests/noise_all_elements_in_field",
-    "matmul_noise_tests/noise_cross_platform_consistency",
-    "matmul_v4_batch_tests/limb_combine_matches_direct_combine_random",
-    "matmul_v4_batch_tests/limb_combine_matches_direct_combine_extremes",
-    "matmul_v4_batch_tests/limb_bound_window",
-    "matmul_v4_batch_tests/stacked_combine_slices_equal_per_nonce_combine",
-    "matmul_v4_batch_tests/batched_miner_matches_single_nonce_reference",
-    "matmul_v4_batch_tests/batched_miner_two_phase_retains_only_winner_payloads",
-    "matmul_v4_batch_tests/batched_miner_matches_reference_under_seed_churn",
-    "matmul_v4_batch_tests/batched_miner_fails_closed_on_template_mismatch",
-    "matmul_v4_batch_tests/batched_miner_rejects_invalid_dims",
-    "matmul_v4_batch_tests/operands_a_u_v_are_template_scoped_b_is_nonce_fresh",
-    "matmul_v4_bmx4_batch_tests/bmx4c_batched_miner_matches_single_nonce_reference",
-    "matmul_v4_bmx4_batch_tests/bmx4c_batched_miner_matches_reference_under_seed_churn",
-    "matmul_v4_bmx4_batch_tests/bmx4c_batched_miner_fails_closed_on_template_mismatch",
-    "matmul_v4_bmx4_batch_tests/bmx4c_batched_miner_rejects_invalid_dims",
-    "matmul_v4_exact_float_tests/slice_digits_exact_and_recompose_for_all_s8_values",
-    "matmul_v4_exact_float_tests/format_exactness_predicate",
-    "matmul_v4_exact_float_tests/max_exact_accum_block_derivation",
-    "matmul_v4_exact_float_tests/gemm_via_slices_matches_integer_gemm_random",
-    "matmul_v4_exact_float_tests/gemm_via_slices_high_magnitude_and_block_boundary",
-    "matmul_v4_exact_float_tests/exact_product_via_float_matches_reference",
-    "matmul_v4_exact_float_tests/combine_via_float_matches_limb_tensor_high_magnitude",
-    "matmul_v4_exact_float_tests/sketch_via_float_matches_consensus_reference",
-    "matmul_v4_fast_exact_tests/rectangular_matches_classical",
-    "matmul_v4_fast_exact_tests/lt_range_boundary_matches_classical",
-    "matmul_v4_fast_exact_tests/fails_closed_on_s8_transform_overflow_or_odd_shape",
-    "matmul_pow_tests/solve_finds_proof_regtest",
-    "matmul_pow_tests/solve_proof_verifies",
-    "matmul_pow_tests/solve_runtime_clamps_worker_threads",
-    "matmul_pow_tests/solve_runtime_budget_expiry_tracks_mock_time",
-    "matmul_pow_tests/solve_stops_when_time_budget_expires",
-    "matmul_pow_tests/pow_state_sigma_matches_header_sigma",
-    "matmul_pow_tests/verify_rejects_wrong_seed_a",
-    "matmul_pow_tests/verify_rejects_wrong_seed_b",
-    "matmul_pow_tests/verify_rejects_tampered_digest",
-    "matmul_pow_tests/verify_rejects_changed_previous_block_hash",
-    "matmul_pow_tests/verify_rejects_changed_bits",
-    "matmul_pow_tests/verify_rejects_bad_dimension",
-    "matmul_pow_tests/verify_commitment_only",
-    "matmul_pow_tests/solve_max_tries_zero",
-    "matmul_pow_tests/solve_increments_nonce",
-    "matmul_pow_tests/simulated_miners_with_equal_workers_have_balanced_win_share",
-    "matmul_pow_tests/simulated_miners_win_in_proportion_to_worker_share",
-    "matmul_pow_tests/denoise_recovers_product",
-    "matmul_pow_tests/denoise_zero_noise_identity",
-    "matmul_pow_tests/denoise_cost_quadratic_r",
-    "matmul_pow_tests/low_rank_kernel_profile_reports_amx_experiment_gate",
-    "matmul_pow_tests/solve_digest_parity_with_amx_experiment_toggle",
-    "matmul_pow_tests/low_rank_kernel_profile_can_force_disable_amx",
-    "matmul_accelerated_solver_tests/cpu_digest_matches_canonical_reference",
-    "matmul_accelerated_solver_tests/cpu_product_digest_matches_canonical_reference",
-    "matmul_accelerated_solver_tests/prepared_digest_inputs_match_direct_path",
-    "matmul_accelerated_solver_tests/prepared_product_digest_inputs_match_direct_path",
-    "matmul_accelerated_solver_tests/prepared_batch_digest_matches_direct_cpu_sequence",
-    "matmul_accelerated_solver_tests/prepared_batch_product_digest_matches_direct_cpu_sequence",
-    "matmul_accelerated_solver_tests/backend_runtime_stats_track_cpu_digest_requests",
-    "matmul_accelerated_solver_tests/strict_regtest_warning_repro_cpu_digest_matches_logged_vector",
-    "matmul_v4_determinism_vectors/golden_vectors_are_reproducible_and_match_pins",
-    "matmul_v4_determinism_vectors/adjacent_nonce_vectors_diverge"
+    "matrict_adversarial_tests/m1_inflation_outputs_exceed_inputs",
+    "matrict_adversarial_tests/m1_fee_mismatch_rejected",
+    "matrict_adversarial_tests/m1_zero_input_positive_output",
+    "matrict_adversarial_tests/m2_same_note_same_nullifier",
+    "matrict_adversarial_tests/m2_different_notes_different_nullifiers",
+    "matrict_adversarial_tests/m2_different_keys_different_nullifiers",
+    "matrict_adversarial_tests/m2_tampered_nullifier_rejected",
+    "matrict_adversarial_tests/m3_wrong_spending_key_rejected",
+    "matrict_adversarial_tests/m3_tampered_ring_members_rejected",
+    "matrict_adversarial_tests/m3_tampered_real_ring_member_rejected",
+    "matrict_adversarial_tests/m4_ring_signature_substitution_rejected",
+    "matrict_adversarial_tests/m4_balance_proof_substitution_rejected",
+    "matrict_adversarial_tests/m4_range_proof_substitution_rejected",
+    "matrict_adversarial_tests/m4_challenge_seed_substitution_rejected",
+    "matrict_adversarial_tests/m5_cross_tx_replay_rejected",
+    "matrict_adversarial_tests/m6_minimal_1in_1out",
+    "matrict_adversarial_tests/m6_three_in_two_out",
+    "matrict_adversarial_tests/m6_large_amounts",
+    "matrict_adversarial_tests/m6_deterministic_proof",
+    "matrict_adversarial_tests/m6_empty_proof_invalid"
   ],
   "campaign_test_budget_seconds": 1800,
   "batch_budget_seconds": 1800,
   "require_first_pass_control": false,
-  "scope": "75 never-selected CPU noise/batch/exact arithmetic/pow/digest/reference vector cases;180s/group except300sCPUvectors;1800s campaign; no GPU/snapshot qualification",
-  "total": 75
+  "scope": "20 MatRiCT cases previously selected but without final XML after aggregate120s timeout;9 timing-informed groups,180s each,1800s campaign; no prior final pass repeated",
+  "total": 20
 }
