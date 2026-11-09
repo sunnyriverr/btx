@@ -34,9 +34,6 @@ def run():
     R.update(unit_data=str(data), status='BATCHES_RUNNING', batch_results=[], unit_invoked=True)
     s.need('unit-bash-version', [str(Path('C:/Program Files/Git/bin/bash.exe')), '--version'],30)
     R['runtime_binary_sha256']=M['binary_sha256']
-    assert os.environ.get('BTX_EXTENDED_CHAINSTATE_TESTS') == '1'
-    R['extended_snapshot_environment'] = {'BTX_EXTENDED_CHAINSTATE_TESTS': '1', 'activation_overrides': [], 'file_backed_fixture': True, 'native_free_bytes': shutil.disk_usage('D:/').free}
-    assert R['extended_snapshot_environment']['native_free_bytes'] > 4*1024**3
     R['process_tree_policy'] = 'Nested private Windows job; no breakaway; kill descendants on controller exit'
     child = subprocess.Popen([sys.executable, '-c', 'import time;time.sleep(1)'])
     assert tree.active() >= 2
@@ -117,13 +114,6 @@ def run():
         save_progress()
     finally:
         R['test_wall_seconds'] = round(time.monotonic() - start, 2)
-        tails=[]
-        for debug in sorted(data.rglob('debug.log'))[:8]:
-            with debug.open('rb') as f:
-                f.seek(max(0, debug.stat().st_size - 256*1024)); content=f.read(256*1024)
-            target=s.E/('snapshot-debug-tail-'+str(len(tails))+'.log');target.write_bytes(content)
-            tails.append({'relative_path': str(debug.relative_to(data)), 'original_bytes':debug.stat().st_size, 'tail_bytes':len(content), 'tail_sha256':sha(target)})
-        R['snapshot_debug_tails']=tails
         for key, value in prior.items():
             if value is None: os.environ.pop(key, None)
             else: os.environ[key] = value

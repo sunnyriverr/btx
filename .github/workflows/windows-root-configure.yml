@@ -1,4 +1,4 @@
-name: Native Windows extended snapshot single-case pilot
+name: Native Windows basic MatMul pending acceptance
 permissions:
   contents: read
 jobs:
@@ -166,7 +166,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Verify saved binary for one extended snapshot body
+    - name: Verify saved binary and 138 never-selected basic cases
       id: ready
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -188,7 +188,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Run one real-schedule snapshot body with 900 second limit
+    - name: Run 138 CPU cases in seven bounded groups
       id: units
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
@@ -211,8 +211,6 @@ jobs:
 
         '
       if: success() && steps.ready.outcome == 'success'
-      env:
-        BTX_EXTENDED_CHAINSTATE_TESTS: '1'
     - name: Verify source objects dependencies and runtime cleanup
       id: verification
       shell: cmd
