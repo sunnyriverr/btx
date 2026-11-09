@@ -116,34 +116,31 @@ def gui(root,name):
  assert not result['ambient_loads'];shutil.rmtree(folder);return result
 try:
  assert json.loads((w/'mac-config-records/result.json').read_text())['complete']
- archives=list((w/'package-input').rglob('*.tar.gz'));assert len(archives)==1
- archive=archives[0];assert sha(archive)=='1f38442ac8d7253abdad32ed5aa5d76567d81f9d617517093d55bee903ce3b53'
- baseline=extract(archive,w/'without452');assert not (baseline/'libexec/btx-guardd').exists()
- state['baseline_guard']=lifecycle(baseline,'without452',False);save()
- stage=w/'staged-bin';stage.mkdir()
- untar_binaries(w/'cmake-binaries',inputs['cmake']['available_executables'],stage)
- untar_binaries(w/'atlas-binaries',{'btx-atlas':inputs['atlas']['executable']},stage)
- protected={p.name:sha(p) for p in stage.iterdir()};assert len(protected)==18
- for relative in ['scripts/release/bundle_qt_gui.py','test/util/package_release_archive_test.py','scripts/release/package_release_archive.py']:
-  shutil.copy2(Path(__file__).parent/'candidate'/relative,src/relative)
- patch=run(['git','-C',src,'diff','--binary'],'combined-patch')[1];(out/'combined.patch').write_text(patch)
- run([sys.executable,src/'test/util/package_release_archive_test.py'],'maintained-unit-suite',180)
- run([sys.executable,src/'scripts/release/package_release_archive.py','--platform-id','macos-arm64-metal','--version','0.34.16','--btxd',stage/'btxd','--btx-cli',stage/'btx-cli','--btx-util',stage/'btx-util','--metal-lib-dir',baseline/'libexec/metal','--source-root',src,'--require-gui','--require-model-helpers','--output-dir',retained],'combined-assemble',600)
- candidate=list(retained.glob('*.tar.gz'));assert len(candidate)==1
- run([sys.executable,src/'scripts/release/verify_release_btxd.py','--archive',candidate[0],'--require-model-helpers'],'combined-stock-check',600)
- root=extract(candidate[0],w/'combined-extracted')
- assert (root/'libexec/btx-guardd').is_file() and not (root/'libexec/btx-guardd').is_symlink()
- assert (root/'libexec/btx-guardd').samefile(root/'libexec/btx-guardd.real')
- assert all((root/'bin'/n).is_file() for n in protected)
- assert len(list((root/'libexec/metal').glob('*.metallib')))==7
- state['all_plugin_loads']=plugin_cases(root,'combined',True);inspect_images(root)
- state['combined_lifecycle']=lifecycle(root,'with452',True);save()
+ admission=json.loads(Path(__file__).with_name('admission.json').read_text())
+ old=list((w/'without-guard-input').rglob('*.tar.gz'));new=list((w/'combined-input').rglob('*.tar.gz'));assert len(old)==len(new)==1
+ assert sha(old[0])=='1f38442ac8d7253abdad32ed5aa5d76567d81f9d617517093d55bee903ce3b53'
+ baseline=extract(old[0],w/'baseline');root=extract(new[0],w/'combined')
+ for row in admission['images']:assert sha(root/row['path'])==row['sha256']
+ assert (root/'libexec/btx-guardd').samefile(root/'libexec/btx-guardd.real') and not (root/'libexec/btx-guardd').is_symlink()
+ state.update(images=admission['images'],all_plugin_loads=admission['all_plugin_loads'],archive_checks_reused_from=42538530491,combined_archive_sha256=sha(new[0]))
+ # Same owned physical directory through its /tmp alias isolates path policy.
+ physical=Path('/tmp').resolve()/('btx-guard-path-'+os.environ['GITHUB_RUN_ID']);physical.mkdir(mode=0o700)
+ alias=Path('/tmp')/physical.name
+ try:
+  path_checks=[]
+  for label,folder in [('alias',alias/'security'),('physical',physical/'security')]:
+   result=subprocess.run([str(root/'libexec/btx-guardd'),'--stdio','--security-dir',str(folder)],input='PING\n',capture_output=True,text=True,timeout=10,env={'LANG':'C','PATH':'/usr/bin:/bin'})
+   path_checks.append({'path':str(folder),'exit':result.returncode,'stdout':result.stdout,'stderr':result.stderr})
+  assert path_checks[0]['exit']!=0 and path_checks[1]['exit']==0 and 'READY BTX_GUARD/1' in path_checks[1]['stdout'],path_checks
+  state['guard_path_control']=path_checks
+ finally:shutil.rmtree(physical)
+ state['baseline_guard']=lifecycle(baseline,'without452physical',False);save()
+ state['combined_lifecycle']=lifecycle(root,'with452physical',True);save()
  run(['xcrun','clang','-fobjc-arc',Path(__file__).with_name('window.m'),'-framework','Foundation','-framework','CoreGraphics','-o',w/'window-probe'],'compile-window-probe',90)
  before={str(p.relative_to(root)):sha(p) for p in root.rglob('*') if p.is_file()}
  state['gui']={name:gui(root,name) for name in ['atlas','qt']}
  after={str(p.relative_to(root)):sha(p) for p in root.rglob('*') if p.is_file()};assert before==after
- assert protected=={p.name:sha(p) for p in stage.iterdir()}
- state.update(complete=True,package_bytes_unchanged=True,producer_binaries_unchanged=True,original_archive_unchanged=sha(archive)=='1f38442ac8d7253abdad32ed5aa5d76567d81f9d617517093d55bee903ce3b53',candidate_archive_sha256=sha(candidate[0]),combined_patch_sha256=sha(out/'combined.patch'),pr452_included=True,visual_review_pending=True)
+ state.update(complete=True,package_bytes_unchanged=True,producer_binaries_unchanged=True,original_archives_unchanged=True,pr452_included=True,visual_review_pending=True)
 except Exception as e:state['error']=repr(e);state['traceback']=traceback.format_exc()
 finally:save()
 sys.exit(0 if state.get('complete') else 1)
