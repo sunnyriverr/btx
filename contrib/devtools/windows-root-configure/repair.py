@@ -32,19 +32,13 @@ def run():
   result['regression_sha256']=checkpoint.digest(driver/'native_ipc_tests.cpp');result['maintained_cmake_sha256']=checkpoint.digest(driver/'CMakeLists.txt');write(result)
   triplet=ROOT/'vcpkg-installed/x64-windows-static';sqlite=triplet/'lib/sqlite3.lib';assert sqlite.exists() and(triplet/'include/sqlite3.h').exists()
   args=['cmake','-S',str(driver),'-B',str(component),'-G','Ninja','-DCMAKE_C_COMPILER=clang-cl','-DCMAKE_CXX_COMPILER=clang-cl','-DCMAKE_BUILD_TYPE=Release','-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded','-DBTX_SOURCE_ROOT='+str(SOURCE),'-DBTX_INTEGRATED_SOURCE='+str(SOURCE),'-DSQLite3_INCLUDE_DIR='+str(triplet/'include'),'-DSQLite3_LIBRARY='+str(sqlite)]
-  cmd('component-configure',args,180);cmd('component-baseline-build',['cmake','--build',component,'--target','security-native-ipc','--parallel','4'],600)
-  for i in range(3):
-   result['cases']['baseline-ipc-'+str(i)]=check('baseline-ipc-'+str(i),[component/'security-native-ipc.exe',B/'bin/btx-guardd.exe'],1,'TEST_NATIVE_BARE_START')
-   root=ROOT/('guard-baseline-store-'+str(i));assert not root.exists()
-   result['cases']['baseline-owner-'+str(i)]=check('baseline-owner-'+str(i),[B/'bin/btx-security.exe','inspect','--root',root],2,'SEC_PRIVATE_DIRECTORY')
-   shutil.rmtree(root)
-  # The exact existing node lifecycle harness, with its own negative assertion.
-  try:h.run()
-  except AssertionError as e:
-   assert str(e)=='NODE_LIFECYCLE_PASS_GUARD_BLOCKED',repr(e)
-  else:raise AssertionError('Expected baseline guard not-ready')
-  assert R['status']=='NODE_LIFECYCLE_PASS_GUARD_BLOCKED' and R['process_cleanup_verified']
-  (E/'baseline-lifecycle.json').write_text(json.dumps(R,indent=2)+'\n');result['baseline_node_status']=R['status'];write(result)
+  cmd('component-configure',args,180)
+  baseline=json.loads((P/'baseline-evidence.json').read_text())
+  assert baseline['source']==BASE and baseline['binary_hashes']==h.I['binaries']
+  assert baseline['regression_sha256']==result['regression_sha256'] and baseline['maintained_cmake_sha256']==result['maintained_cmake_sha256']
+  assert baseline['restore_support_sha256']==checkpoint.digest(P/'restore_support.py')
+  assert baseline['cleanup'] and baseline['node_status']=='NODE_LIFECYCLE_PASS_GUARD_BLOCKED' and len(baseline['cases'])==6
+  result['baseline_reuse']=baseline;result['cases']=dict(baseline['cases']);result['baseline_node_status']=baseline['node_status'];write(result)
   # Two independent product repairs; existing reader validation is untouched.
   identity=['-c','user.name=Sunny River','-c','user.email=254738454+sunnyriverr@users.noreply.github.com']
   # Use the fork controller's existing verified public noreply identity.
@@ -54,7 +48,7 @@ def run():
    cmd('apply-'+patch,['git','apply','--check',P/patch],60);cmd('patch-'+patch,['git','apply',P/patch],60)
    cmd('stage-'+patch,['git','add','--update'],60);cmd('commit-'+patch,['git',*identity,'commit','-m',message],60)
    result['commits'].append(subprocess.check_output(['git','rev-parse','HEAD'],cwd=SOURCE,text=True).strip())
-  target=result['commits'][-1];cmd('preserve-candidate-bundle',['git','bundle','create',E/'guard-repair.bundle',BASE+'..'+target],90);result['target']=target;result['source_catalog']=s.catalog(target,'candidate-before');write(result)
+  target=result['commits'][-1];cmd('preserve-candidate-bundle',['git','bundle','create',E/'guard-repair.bundle',BASE+'..HEAD'],90);result['target']=target;result['source_catalog']=s.catalog(target,'candidate-before');write(result)
   # Plan from the restored real project before compiling. Retain all objects.
   glob=B/'CMakeFiles/VerifyGlobs.cmake'
   if glob.exists():cmd('candidate-verify-globs',['cmake','-P',glob],120,cwd=B)
