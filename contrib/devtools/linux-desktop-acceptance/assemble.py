@@ -80,7 +80,7 @@ try:
  # Drop only empty directories; the release writer owns archive metadata.
  for d in sorted(root.rglob('*'),key=lambda x:len(x.parts),reverse=True):
   if d.is_dir() and not d.is_symlink() and not any(d.iterdir()):d.rmdir()
- packager=load('current_packager',Path(__file__).with_name('package_release_archive.py'))
+ packager=load('current_packager',w/'scripts/release/package_release_archive.py')
  archive=dst/'btx-linux-gui-candidate.tar.gz';packager.write_tar_gz(archive,root)
  s['candidate_archive_sha256']=sha(archive);s['archive_checker_sha256']=sha(checker)
  s['gate_exit']=run([sys.executable,checker,'--archive',archive,'--no-launch','--require-model-helpers'],'archive-gate')
