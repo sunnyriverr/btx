@@ -32,9 +32,9 @@ def run():
   result['regression_sha256']=checkpoint.digest(driver/'native_ipc_tests.cpp');result['maintained_cmake_sha256']=checkpoint.digest(driver/'CMakeLists.txt');write(result)
   triplet=ROOT/'vcpkg-installed/x64-windows-static';sqlite=triplet/'lib/sqlite3.lib';assert sqlite.exists() and(triplet/'include/sqlite3.h').exists()
   args=['cmake','-S',str(driver),'-B',str(component),'-G','Ninja','-DCMAKE_C_COMPILER=clang-cl','-DCMAKE_CXX_COMPILER=clang-cl','-DCMAKE_BUILD_TYPE=Release','-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded','-DBTX_SOURCE_ROOT='+str(SOURCE),'-DBTX_INTEGRATED_SOURCE='+str(SOURCE),'-DSQLite3_INCLUDE_DIR='+str(triplet/'include'),'-DSQLite3_LIBRARY='+str(sqlite)]
-  cmd('component-configure',args,180);cmd('component-baseline-build',['cmake','--build',component,'--target','security-native-ipc','btx-guardd-security','--parallel','4'],600)
+  cmd('component-configure',args,180);cmd('component-baseline-build',['cmake','--build',component,'--target','security-native-ipc','--parallel','4'],600)
   for i in range(3):
-   result['cases']['baseline-ipc-'+str(i)]=check('baseline-ipc-'+str(i),[component/'security-native-ipc.exe',component/'btx-guardd-security.exe'],1,'TEST_NATIVE_BARE_START')
+   result['cases']['baseline-ipc-'+str(i)]=check('baseline-ipc-'+str(i),[component/'security-native-ipc.exe',B/'bin/btx-guardd.exe'],1,'TEST_NATIVE_BARE_START')
    root=ROOT/('guard-baseline-store-'+str(i));assert not root.exists()
    result['cases']['baseline-owner-'+str(i)]=check('baseline-owner-'+str(i),[B/'bin/btx-security.exe','inspect','--root',root],2,'SEC_PRIVATE_DIRECTORY')
    shutil.rmtree(root)
@@ -64,9 +64,9 @@ def run():
   result['product_compilation_invoked']=True;write(result)
   cmd('candidate-unit-build',['cmake','--build',B,'--target','btxd','btx-cli','btx-tx','btx-util','btx-open','btx-modeld','btx-guardd','btx-security','test_btx','--parallel','4','--','-k','1'],1200,cwd=B)
   result['candidate_binaries']={n:checkpoint.digest(B/'bin'/(n+'.exe'))for n in h.I['binaries']};write(result)
-  cmd('component-candidate-build',['cmake','--build',component,'--target','security-native-ipc','btx-guardd-security','--parallel','4'],600)
+  cmd('component-candidate-build',['cmake','--build',component,'--target','security-native-ipc','--parallel','4'],600)
   for i in range(3):
-   result['cases']['candidate-ipc-'+str(i)]=check('candidate-ipc-'+str(i),[component/'security-native-ipc.exe',component/'btx-guardd-security.exe'],0,'"failed":0')
+   result['cases']['candidate-ipc-'+str(i)]=check('candidate-ipc-'+str(i),[component/'security-native-ipc.exe',B/'bin/btx-guardd.exe'],0,'"failed":0')
    root=ROOT/('guard-candidate-store-'+str(i));assert not root.exists()
    result['cases']['candidate-owner-'+str(i)]=check('candidate-owner-'+str(i),[B/'bin/btx-security.exe','inspect','--root',root],0)
    status=json.loads((E/('candidate-owner-'+str(i)+'.log')).read_text());assert status['journal_valid']and status['automatic_spend_atoms']=='0'
