@@ -1,4 +1,4 @@
-name: Native Windows dac9 node guard lifecycle
+name: Native Windows guard startup diagnostic
 permissions:
   contents: read
 jobs:
@@ -177,13 +177,13 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/lifecycle.py prepare
+        python controls/contrib/devtools/windows-root-configure/diagnostic.py prepare
 
         exit /b %errorlevel%
 
         '
-    - name: Run disposable node RPC restart and owned guard lifecycle
-      id: runtime
+    - name: Isolate built guard stdio and security initialization
+      id: diagnostic
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
         Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
@@ -201,7 +201,7 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/lifecycle.py run
+        python controls/contrib/devtools/windows-root-configure/diagnostic.py run
 
         exit /b %errorlevel%
 
@@ -225,7 +225,7 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/lifecycle.py verify
+        python controls/contrib/devtools/windows-root-configure/diagnostic.py verify
 
         exit /b %errorlevel%
 
@@ -235,7 +235,7 @@ jobs:
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
       if: always()
       with:
-        name: native-windows-dac9-lifecycle
+        name: native-windows-guard-diagnostic
         path: D:\btx-native-035\evidence\
         retention-days: 14
 'on':
