@@ -33,9 +33,12 @@ jobs:
           run-id: 42452742962
           github-token: ${{ github.token }}
           path: saved-checkpoint
+          merge-multiple: true
       - name: Restore, configure and dry-plan only
         timeout-minutes: 12
-        run: python3 contrib/devtools/linux-desktop-pilot/pilot.py
+        run: |
+          find saved-checkpoint -maxdepth 3 -type f -printf "%P\n"
+          python3 contrib/devtools/linux-desktop-pilot/pilot.py
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
