@@ -1,0 +1,53 @@
+{
+  "verdict": "retained_Atlas_reuse_supported_as_source_equivalent_component",
+  "old_source": "ff5f3f04ea11f044594987fc6be043ff68b136ad",
+  "current_source": "dac9aee53520bd49ed320ec7a49b9072fc7d88d9",
+  "gui_atlas_tree": "a0bab679e2e6af917609f14b1c473e69a1fadcf4",
+  "artifact": 13602388841,
+  "artifact_sha256": "d4704f64128cda7effc83dfb33cd52c6b7da7775b7ddb08d4d5f649ea6154341",
+  "binary_sha256": "720a718afbe1d8e282345057acc7ff22af5121de1f004b57f644565cbb0ad8be",
+  "build_recipe": "cargo +1.95.0 build --locked --release -p btx-atlas in gui/atlas, Ubuntu22 baseline; prior source_clean and ABI pass",
+  "boundaries": {
+    "workspace": [
+      "crates/atlas-core",
+      "src-tauri"
+    ],
+    "only_path_dependency": "src-tauri -> ../crates/atlas-core",
+    "frontendDist": "src-tauri/../web",
+    "build_script": "tauri_build manifest/permission generation only",
+    "ancestor_cargo_overrides": [],
+    "rust_files_scanned": 19,
+    "include_env_path_hits": {
+      "gui/atlas/crates/atlas-core/src/settings.rs": [
+        {
+          "line": 7,
+          "text": "const CATALOG: &str = include_str!(\"../../../schemas/node-settings.json\");"
+        }
+      ],
+      "gui/atlas/src-tauri/src/commands.rs": [
+        {
+          "line": 23,
+          "text": "json!({\"application\":\"BTX Atlas\",\"version\":env!(\"CARGO_PKG_VERSION\"),\"base\":\"18ea826ee3d82edf65a274c00316bd118ed731d2\",\"connected\":c.is_some(),\"chain\":c.as_ref().map(|x|&x.chain),\"epoch\":c.as_ref().map(|x|x.epoch),\"qualification\":\"SOURCE_CANDIDATE_NOT_RELEASE_QUALIFIED\",\"assistant\":lock(&state.agent)?.view()}),"
+        }
+      ]
+    },
+    "resolved_embed_inputs": {
+      "settings_include": "gui/atlas/schemas/node-settings.json, within identical subtree",
+      "CARGO_PKG_VERSION": "0.1.0 from identical workspace package manifest",
+      "tauri_assets_permissions": "gui/atlas/web and src-tauri capabilities/permissions/icons, all within identical subtree"
+    }
+  },
+  "limits": [
+    "Source equivalence and exact retained-byte reuse, not a clean rebuild of the entire dac9 release.",
+    "Cargo registry/tool/system inputs are the original retained artifact provenance; this audit does not claim independent bit reproducibility.",
+    "Candidate archive still must verify downloaded artifact and binary hashes, current runtime dependency closure, actual Linux UI/local connection behavior.",
+    "Host GTK/WebKit/tray/portal libraries are runtime inputs and remain a native current-candidate test boundary."
+  ],
+  "evidence": [
+    "current-release-scope/reuse-inventory.json",
+    "rebuild/checkpoint/execution/atlas-reuse-receipt.json",
+    "rebuild/compile/atlas.py",
+    "rebuild/compile/atlas-verified-summary.json",
+    "https://github.com/btxchain/btx/tree/dac9aee53520bd49ed320ec7a49b9072fc7d88d9/gui/atlas"
+  ]
+}
