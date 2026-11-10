@@ -72,8 +72,18 @@ def main():
     ninja = profile["tools"]["ninja"]["path"]
     glob = BUILD / "CMakeFiles/VerifyGlobs.cmake"
     if glob.exists():
-        command("verify-globs", [profile["tools"]["cmake"]["path"],"-P",str(glob)], BUILD)
-    plan = command("candidate-plan", [ninja,"-n","-d","explain","btxd"], BUILD)
+        assert "GLOB mismatch!" not in command(
+            "verify-globs", [profile["tools"]["cmake"]["path"],"-P",str(glob)], BUILD
+        )
+    # A Ninja dry run treats CMake's forced glob-check input as dirty
+    # even after its standalone check passed. Use an unedited copy of
+    # the verified graph so its self-regeneration edge does not mask
+    # the actual plan for this one .cpp change.
+    manifest = RECORDS / "pr467-build.ninja"
+    shutil.copyfile(BUILD / "build.ninja", manifest)
+    state["manifest_sha256"] = checkpoint.digest(manifest)
+    assert state["manifest_sha256"] == "d5c9f1da48829c4f5d8321730897b0eda9265579ea9de11b374d4992329d7348"
+    plan = command("candidate-plan", [ninja,"-f",str(manifest),"-n","-d","explain","btxd"], BUILD)
     actions = re.findall(r"^\[\d+/\d+\].*",plan,re.M)
     state["planned_actions"] = actions
     save()
@@ -82,10 +92,11 @@ def main():
     assert "stored deps info out of date" not in plan and "Re-running CMake" not in plan
     state["status"] = "INCREMENTAL_RELINK"
     save()
-    command("candidate-build", [ninja,"-j2","-k1","btxd"], BUILD, timeout=420)
+    command("candidate-build", [ninja,"-f",str(manifest),"-j2","-k1","btxd"], BUILD, timeout=420)
     state["candidate_sha256"] = checkpoint.digest(BIN)
     assert state["candidate_sha256"] != BASE_EXE
     assert checkpoint.digest(baseline) == BASE_EXE
+    manifest.unlink()
     state["status"] = "INCREMENTAL_BUILD_COMPLETE"
     save()
 
