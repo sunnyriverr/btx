@@ -73,7 +73,7 @@
 +        20, 1, 100000, 1, &accepted);
 +    if (!accepted) return;
 +    if (QMessageBox::question(this, tr("Recover missing payments"),
-+            tr("Refill this wallet's address range and scan all available history? "
++            tr("Refill this wallet's address range and scan from genesis to the current tip? "
 +               "This can take a long time. Required pruned blocks cannot be recovered. "
 +               "The wallet may remain unlocked until the scan finishes or cancellation completes."),
 +            QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel) != QMessageBox::Yes) return;
@@ -201,7 +201,7 @@
  #include <wallet/spend.h>
  #include <wallet/wallet.h>
  
-@@ -147,6 +148,63 @@
+@@ -147,6 +148,69 @@
      return result;
  }
  
@@ -253,7 +253,13 @@
 +            UniValue params(UniValue::VARR);
 +            params.push_back(0);
 +            params.push_back(UniValue());
-+            RescanWallet(*m_wallet, params, m_reserver);
++            const auto [tip, height] = WITH_LOCK(m_wallet->cs_wallet,
++                return std::pair{m_wallet->GetLastBlockHash(), m_wallet->GetLastBlockHeight()});
++            const UniValue scan = RescanWallet(*m_wallet, params, m_reserver);
++            if (scan["stop_height"].isNull() || scan["stop_height"].getInt<int>() != height ||
++                WITH_LOCK(m_wallet->cs_wallet, return m_wallet->GetLastBlockHash()) != tip) {
++                throw std::runtime_error("Chain changed during recovery. Check the results and retry.");
++            }
 +        } catch (...) {
 +            finish();
 +            throw;
@@ -265,7 +271,7 @@
  class WalletImpl : public Wallet
  {
  public:
-@@ -166,6 +224,10 @@
+@@ -166,6 +230,10 @@
          return m_wallet->ChangeWalletPassphrase(old_wallet_passphrase, new_wallet_passphrase);
      }
      void abortRescan() override { m_wallet->AbortRescan(); }
@@ -278,7 +284,7 @@
      }
 --- a/src/wallet/rpc/transactions.cpp
 +++ b/src/wallet/rpc/transactions.cpp
-@@ -1059,43 +1059,10 @@
+@@ -1059,43 +1059,9 @@
      };
  }
  
@@ -321,12 +327,11 @@
 -
 +UniValue RescanWallet(CWallet& wallet, const UniValue& params, const WalletRescanReserver& reserver)
 +{
-+    AssertLockHeld(wallet.m_relock_mutex);
 +    CWallet* pwallet = &wallet;
      int start_height = 0;
      std::optional<int> stop_height;
      uint256 start_block;
-@@ -1106,15 +1073,15 @@
+@@ -1106,15 +1072,15 @@
          EnsureWalletIsUnlocked(*pwallet);
          int tip_height = pwallet->GetLastBlockHeight();
  
@@ -346,7 +351,7 @@
              if (*stop_height < 0 || *stop_height > tip_height) {
                  throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid stop_height");
              } else if (*stop_height < start_height) {
-@@ -1167,6 +1134,46 @@
+@@ -1167,6 +1133,46 @@
      response.pushKV("start_height", start_height);
      response.pushKV("stop_height", result.last_scanned_height ? *result.last_scanned_height : UniValue());
      return response;
@@ -401,7 +406,7 @@
  void EnsureWalletIsUnlocked(const CWallet&);
 +
 +/** Shared implementation used by the RPC and explicit Qt recovery.
-+ * Caller holds m_relock_mutex and owns the scan reservation. */
++ * Caller owns the scan reservation; this function acquires m_relock_mutex. */
 +UniValue RescanWallet(CWallet& wallet, const UniValue& params, const WalletRescanReserver& reserver);
  WalletContext& EnsureWalletContext(const std::any& context);
  LegacyScriptPubKeyMan& EnsureLegacyScriptPubKeyMan(CWallet& wallet, bool also_create = false);
