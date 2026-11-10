@@ -29,14 +29,20 @@ jobs:
           sudo apt-get install -y --no-install-recommends build-essential cmake ninja-build pkg-config python3 perl libboost-dev libevent-dev libsqlite3-dev libzmq3-dev libqrencode-dev qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools libwebkit2gtk-4.1-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev librsvg2-bin libxdo-dev patchelf
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
-          artifact-ids: 13727074975
-          run-id: 42738874911
+          artifact-ids: 13765914928
+          run-id: 42819257272
           github-token: ${{ github.token }}
           path: saved-checkpoint
           merge-multiple: true
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: qt-recovery-build-records
+          run-id: 42819257272
+          github-token: ${{ github.token }}
+          path: prior-build
       - name: Build the recovery candidate
         timeout-minutes: 23
-        run: python3 build.py
+        run: python3 build-incremental.py
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:

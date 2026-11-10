@@ -264,7 +264,7 @@ index ece86e2..446c1e9 100644
  Q_SIGNALS:
      void setPrivacy(bool privacy);
 diff --git a/src/wallet/interfaces.cpp b/src/wallet/interfaces.cpp
-index 1896313..2a46ed1 100644
+index 1896313..8029d15 100644
 --- a/src/wallet/interfaces.cpp
 +++ b/src/wallet/interfaces.cpp
 @@ -30,6 +30,7 @@
@@ -275,7 +275,7 @@ index 1896313..2a46ed1 100644
  #include <wallet/spend.h>
  #include <wallet/wallet.h>
  
-@@ -147,6 +148,75 @@ WalletTxOut MakeWalletTxOut(const CWallet& wallet,
+@@ -147,6 +148,77 @@ WalletTxOut MakeWalletTxOut(const CWallet& wallet,
      return result;
  }
  
@@ -290,7 +290,9 @@ index 1896313..2a46ed1 100644
 +    {
 +        LOCK2(m_wallet->m_relock_mutex, m_wallet->cs_wallet);
 +        // A newer walletpassphrase call owns its own timed relock.
-+        if (m_relock && m_wallet->nRelockTime == m_relock_time) m_wallet->Lock();
++        if (m_relock && (m_wallet->nRelockTime == 0 || m_wallet->nRelockTime == m_relock_time)) {
++            m_wallet->Lock();
++        }
 +        m_relock = false;
 +    }
 +
@@ -351,7 +353,7 @@ index 1896313..2a46ed1 100644
  class WalletImpl : public Wallet
  {
  public:
-@@ -166,6 +236,10 @@ public:
+@@ -166,6 +238,10 @@ public:
          return m_wallet->ChangeWalletPassphrase(old_wallet_passphrase, new_wallet_passphrase);
      }
      void abortRescan() override { m_wallet->AbortRescan(); }
