@@ -1,0 +1,64 @@
+name: Native Windows wallet export full volume comparison
+on:
+  push:
+    branches: [codex/ci-pr467-windows-wallet-export]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  compare:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: windows-2025
+    timeout-minutes: 22
+    steps:
+      - name: Preserve checkout bytes
+        shell: pwsh
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.longpaths true
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: dac9aee53520bd49ed320ec7a49b9072fc7d88d9
+          path: btx
+          persist-credentials: false
+      - name: Download the immutable Session 1 checkpoint
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: 13753839322
+          run-id: 42798773622
+          github-token: ${{ github.token }}
+          merge-multiple: true
+          path: portable-input
+      - name: Verify and restore the portable archive
+        shell: pwsh
+        timeout-minutes: 5
+        run: |
+          New-Item -ItemType Directory -Path pr467-records -Force | Out-Null
+          python restore_portable.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Guard the plan and relink the changed wallet object
+        shell: cmd
+        timeout-minutes: 10
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
+          if not defined BTX_VS exit /b 2
+          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+          if errorlevel 1 exit /b %errorlevel%
+          set "PATH=C:\Program Files\LLVM\bin;%PATH%"
+          set "CL="
+          set "_CL_="
+          python build_matrix.py
+      - name: Compare wallet export and verify the retry restores
+        timeout-minutes: 6
+        shell: pwsh
+        run: ./wallet-volume.ps1
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: pr467-wallet-matrix
+          path: pr467-records
+          retention-days: 7
