@@ -8,7 +8,7 @@ permissions:
 jobs:
   observe:
     runs-on: ubuntu-22.04
-    timeout-minutes: 18
+    timeout-minutes: 23
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -23,10 +23,15 @@ jobs:
         with:
           python-version: '3.12'
       - name: Native Qt desktop prerequisites
-        timeout-minutes: 5
+        timeout-minutes: 8
         run: |
-          sudo apt-get -o Acquire::Retries=1 update
-          sudo apt-get install -y --no-install-recommends gcc xvfb xauth dbus-x11 openbox xdotool python3-pyatspi at-spi2-core scrot qt6-qpa-plugins libqt6core6 libqt6gui6 libqt6widgets6 libqt6network6 libqt6dbus6 libqt6svg6 libxcb-xinerama0 libxkbcommon-x11-0 libqrencode4 libevent-core-2.1-7 libevent-extra-2.1-7 libevent-pthreads-2.1-7 libopengl0 libsqlite3-0 libzmq5
+          for file in /etc/apt/sources.list /etc/apt/sources.list.d/*.sources /etc/apt/sources.list.d/*.list; do
+            if [ -f "$file" ]; then
+              sudo sed -i -e 's|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g' "$file"
+            fi
+          done
+          sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=12 -o Acquire::https::Timeout=12 update
+          sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=12 -o Acquire::https::Timeout=12 install -y --no-install-recommends gcc xvfb xauth dbus-x11 openbox xdotool python3-pyatspi at-spi2-core scrot qt6-qpa-plugins libqt6core6 libqt6gui6 libqt6widgets6 libqt6network6 libqt6dbus6 libqt6svg6 libxcb-xinerama0 libxkbcommon-x11-0 libqrencode4 libevent-core-2.1-7 libevent-extra-2.1-7 libevent-pthreads-2.1-7 libopengl0 libsqlite3-0 libzmq5
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
           name: wallet-recovery-qualification-binaries
@@ -36,19 +41,17 @@ jobs:
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
           name: qt-recovery-binaries
-          run-id: 42811596794
+          run-id: 42813245392
           github-token: ${{ github.token }}
           path: candidate/bin
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
           name: qt-recovery-build-records
-          run-id: 42811596794
+          run-id: 42813245392
           github-token: ${{ github.token }}
           path: verified-build
       - name: Exercise recovery on the same disposable wallet fixture
         timeout-minutes: 9
-        env:
-          RECOVERY_BASELINE_ONLY: "1"
         run: python3 observe.py
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
