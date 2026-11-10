@@ -1,0 +1,52 @@
+"""Restore only a new hosted copy, configure/dry-plan; no product compile."""
+from pathlib import Path
+import os,json,sys,subprocess,tarfile,shutil,time
+from checkpoint import sha,restore_timestamps,verify_restored
+BASE='dac9aee53520bd49ed320ec7a49b9072fc7d88d9'
+ARCHIVE='90391b49487f57e3c820200f28142e6873b0fecbb2a2d4b82091e48050437176'
+def main():
+ w=Path(os.environ['GITHUB_WORKSPACE']).resolve();out=w/'campaign-config-records';out.mkdir(exist_ok=True);r={'product_compiled':False,'product_executed':False,'commands':[]}
+ def run(args,label,cwd=None):
+  start=time.monotonic()
+  with (out/(label+'.log')).open('wb') as f:p=subprocess.run(list(map(str,args)),cwd=cwd,stdout=f,stderr=subprocess.STDOUT,timeout=180)
+  r['commands'].append({'label':label,'exit':p.returncode,'seconds':time.monotonic()-start});assert p.returncode==0,label
+  return (out/(label+'.log')).read_text(errors='replace')
+ try:
+  assert shutil.disk_usage(w).free>10*1024**3
+  saved=w/'saved-checkpoint';m=json.loads((saved/'manifest.json').read_text());archive=saved/'build-state.tar.gz'
+  assert sha(archive)==ARCHIVE==m['archive_sha256'] and m['identity']['source']==BASE and Path(m['workspace'])==w
+  assert not (w/'product').exists() and not (w/'gui-pilot-runtime').exists()
+  with tarfile.open(archive) as t:t.extractall(w,filter='data')
+  restore_timestamps(w,m);verify_restored(w,m);r['restore_verified']=True
+  src=w/'product';build=w/'gui-pilot-runtime/qtbuild';git=w/'accepted-source/.git';assert git.is_dir()
+  shutil.copytree(git,src/'.git');assert run(['git','rev-parse','HEAD'],'base-head',src).strip()==BASE
+  assert not run(['git','status','--porcelain','--untracked-files=no'],'base-clean',src).strip()
+  assert run(['g++','-dumpfullversion'],'compiler').strip()=='11.4.0'
+  assert 'OpenSSL 3.5.9' in run([w/'gui-pilot-runtime/openssl/bin/openssl','version'],'openssl')
+  before={str(f.relative_to(build)):sha(f) for f in build.rglob('*.o')};r['objects_before']=len(before)
+  def plan(label):
+   run(['cmake','-S',src,'-B',build],label+'-configure')
+   cache=(build/'CMakeCache.txt').read_text();assert 'WITH_MODELNET:BOOL=ON' in cache and str(w/'gui-pilot-runtime/openssl/lib/libcrypto.a') in cache
+   run(['cmake','-P',build/'CMakeFiles/VerifyGlobs.cmake'],label+'-globs',build)
+   path=out/(label+'.ninja');shutil.copy2(build/'build.ninja',path)
+   dry=run(['ninja','-C',build,'-f',path,'-d','explain','-n','btx-modeld'],label+'-plan')
+   assert 'Re-running CMake' not in dry and 'Re-checking globbed' not in dry
+   r[label+'_steps']=[l for l in dry.splitlines() if l.startswith('[')]
+   run(['ninja','-C',build,'-t','commands','btx-modeld'],label+'-commands')
+  plan('base')
+  patch=Path(__file__).with_name('candidate.patch');r['patch_sha256']=sha(patch)
+  run(['git','apply','--check',patch],'patch-check',src);run(['git','apply',patch],'patch-apply',src)
+  names=run(['git','diff','--name-only'],'changed-files',src).splitlines()
+  # New untracked test is inspected explicitly in addition to the tracked diff.
+  assert set(names)=={'src/modelnet/release.cpp','src/test/CMakeLists.txt'}
+  assert (src/'src/test/modelnet_release_store_tests.cpp').is_file()
+  assert sha(src/'src/modelnet/helper.cpp')==m['rows']['product/src/modelnet/helper.cpp']['sha256']
+  run(['git','add','src/modelnet/release.cpp','src/test/CMakeLists.txt','src/test/modelnet_release_store_tests.cpp'],'integration-index',src)
+  r['integration_tree']=run(['git','write-tree'],'integration-tree',src).strip();plan('candidate')
+  r['objects_unchanged']=before=={str(f.relative_to(build)):sha(f) for f in build.rglob('*.o')}
+  r['archive_unchanged']=sha(archive)==ARCHIVE;assert r['objects_unchanged'] and r['archive_unchanged']
+  r['pass']=True
+ except Exception as e:r['error']=repr(e);r['pass']=False
+ finally:(out/'result.json').write_text(json.dumps(r,indent=2)+'\n')
+ return 0 if r['pass'] else 1
+if __name__=='__main__':raise SystemExit(main())

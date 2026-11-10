@@ -1,31 +1,56 @@
-name: Campaign persistence checkpoint feasibility
-on:
-  push:
-    branches: [codex/ci-campaign-persistence-plan]
+name: Campaign persistence restore and dry build plan
 permissions:
   contents: read
   actions: read
 jobs:
   inspect:
     runs-on: ubuntu-22.04
-    timeout-minutes: 8
+    timeout-minutes: 18
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-        with:
-          persist-credentials: false
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
-        with:
-          artifact-ids: 13714209829
-          run-id: 42708038748
-          github-token: ${{ github.token }}
-          merge-multiple: true
-          path: saved-checkpoint
-      - name: Inspect immutable manifest and build graph without compilation
-        timeout-minutes: 3
-        run: python3 contrib/devtools/campaign-persistence/inspect_checkpoint.py
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
-        if: always()
-        with:
-          name: campaign-persistence-plan-records
-          path: campaign-plan-records
-          retention-days: 14
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      with:
+        persist-credentials: false
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      with:
+        repository: btxchain/btx
+        ref: dac9aee53520bd49ed320ec7a49b9072fc7d88d9
+        path: accepted-source
+        persist-credentials: false
+    - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+      with:
+        python-version: '3.12'
+    - name: Standard baseline prerequisites
+      timeout-minutes: 8
+      run: 'sudo sed -i ''s|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g''
+        /etc/apt/sources.list
+
+        sudo apt-get -o Acquire::http::Timeout=15 -o Acquire::https::Timeout=15 -o
+        Acquire::Retries=1 update
+
+        sudo apt-get install -y --no-install-recommends build-essential cmake ninja-build
+        pkg-config python3 perl libboost-dev libevent-dev libsqlite3-dev libzmq3-dev
+        libqrencode-dev qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools
+        qt6-l10n-tools libwebkit2gtk-4.1-dev libgtk-3-dev libayatana-appindicator3-dev
+        librsvg2-dev librsvg2-bin libxdo-dev patchelf
+
+        '
+    - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+      with:
+        artifact-ids: 13714209829
+        run-id: 42708038748
+        github-token: ${{ github.token }}
+        merge-multiple: true
+        path: saved-checkpoint
+    - name: Restore verified private copy and capture exact helper dry plans
+      timeout-minutes: 7
+      run: python3 contrib/devtools/campaign-persistence/configure.py
+    - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+      if: always()
+      with:
+        name: campaign-persistence-config-records
+        path: campaign-config-records
+        retention-days: 14
+'on':
+  push:
+    branches:
+    - codex/ci-campaign-persistence-plan
