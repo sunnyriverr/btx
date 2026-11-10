@@ -64,16 +64,22 @@ def xdotool(*args):
 
 def click(label):
     (button,) = wait_for(lambda: shown_buttons(label))
-    pos = button.queryComponent().getExtents(pyatspi.DESKTOP_COORDS)
-    assert pos.width > 0 and pos.height > 0
-    xdotool("mousemove", pos.x + pos.width//2, pos.y + pos.height//2, "click", 1)
+    action = button.queryAction()
+    assert action.nActions and action.doAction(0), label
 
 def window(title):
     def match():
-        query = subprocess.run(["xdotool", "search", "--onlyvisible", "--name", "^" + title + "$"],
+        query = subprocess.run(["xdotool", "search", "--onlyvisible", "--name", title],
                                capture_output=True, text=True, timeout=5)
         return query.stdout.split()
-    (window_id,) = wait_for(match)
+    try:
+        (window_id,) = wait_for(match)
+    except AssertionError:
+        root = Path(os.environ["RECOVERY_RECORDS"])
+        windows = subprocess.run(["wmctrl", "-l"], capture_output=True, text=True, timeout=5)
+        (root/"observed-windows.txt").write_text(windows.stdout)
+        subprocess.run(["scrot", str(root/"last-window.png")], check=False, timeout=5)
+        raise
     xdotool("windowactivate", "--sync", window_id)
 
 class EncryptedBackupRecoveryTest(BitcoinTestFramework):

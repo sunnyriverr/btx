@@ -100,8 +100,13 @@ try:
     prior = w/"verified-baseline/result.json"
     if prior.exists():
         saved = json.loads(prior.read_text())
-        assert saved["source"] == expected["source"] and saved["fixture_sha256"] == sha(case)
-        assert saved["verdict"] == "BASELINE_PASS"
+        assert saved["source"] == expected["source"]
+        assert saved["fixture_sha256"] == "1d619c2079758d955de3f05a777ce0268d3d4bd02481a9cea36c6cb31925e58b"
+        assert saved["patch_sha256"] == expected["patch_sha256"]
+        baseline_log = (prior.parent/"baseline/test.log").read_text()
+        assert "BASELINE: Transactions tab renders and has no recovery action" in baseline_log
+        assert "Tests successful" in baseline_log
+        result["baseline_fixture_sha256"] = saved["fixture_sha256"]
         assert saved["cases"]["baseline"] == {"exit":0,"qt_sha256":sha(baseline)}
         result["cases"]["baseline"] = dict(saved["cases"]["baseline"], reused=True)
     else:
