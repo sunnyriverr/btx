@@ -254,7 +254,7 @@
 +            params.push_back(0);
 +            params.push_back(UniValue());
 +            const auto [tip, height] = WITH_LOCK(m_wallet->cs_wallet,
-+                return std::pair{m_wallet->GetLastBlockHash(), m_wallet->GetLastBlockHeight()});
++                return std::make_pair(m_wallet->GetLastBlockHash(), m_wallet->GetLastBlockHeight()));
 +            const UniValue scan = RescanWallet(*m_wallet, params, m_reserver);
 +            if (scan["stop_height"].isNull() || scan["stop_height"].getInt<int>() != height ||
 +                WITH_LOCK(m_wallet->cs_wallet, return m_wallet->GetLastBlockHash()) != tip) {
