@@ -108,7 +108,7 @@ def verify():
 def linkcause():
  import re
  assert R['status']=='PREFLIGHT_PASS';tree=ProcessTree();globals()['tree']=tree
- manifest=B/'build.ninja';original=manifest.read_bytes();text=original.decode();match=re.search(r'(?m)^build bin/test_btx\.exe:.*?(?=\n\n)',text,re.S);assert match
+ manifest=B/'build.ninja';original=manifest.read_bytes();text=original.decode().replace('\r\n','\n');match=re.search(r'(?m)^build bin/test_btx\.exe:.*?(?=\n\n)',text,re.S);assert match
  block=match.group(0);assert '  LINK_FLAGS ='in block
  # Back up only files the single link can mutate; all object/library bytes stay read-only.
  backup=ROOT/'rc-link-originals';assert not backup.exists();backup.mkdir();saved={}
