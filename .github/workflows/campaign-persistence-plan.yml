@@ -1,11 +1,11 @@
-name: Campaign persistence restore and dry build plan
+name: Campaign persistence paired helper build
 permissions:
   contents: read
   actions: read
 jobs:
   inspect:
     runs-on: ubuntu-22.04
-    timeout-minutes: 18
+    timeout-minutes: 45
     steps:
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       with:
@@ -41,16 +41,30 @@ jobs:
         github-token: ${{ github.token }}
         merge-multiple: true
         path: saved-checkpoint
-    - name: Restore verified private copy and capture exact helper dry plans
-      timeout-minutes: 7
-      run: python3 contrib/devtools/campaign-persistence/configure.py
+    - name: Bounded serial helper-only builds
+      timeout-minutes: 32
+      run: python3 contrib/devtools/campaign-persistence/build_helpers.py
     - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
       if: always()
       with:
-        name: campaign-persistence-config-records
-        path: campaign-config-records
+        name: campaign-build-records
+        path: campaign-build-records
         retention-days: 14
+    - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+      if: always()
+      with:
+        name: campaign-helper-binaries
+        path: campaign-helper-binaries
+        retention-days: 14
+        compression-level: 6
+    - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+      if: always()
+      with:
+        name: campaign-build-state
+        path: campaign-build-state
+        retention-days: 14
+        compression-level: 0
 'on':
   push:
     branches:
-    - codex/ci-campaign-persistence-plan
+    - codex/ci-campaign-persistence-build
