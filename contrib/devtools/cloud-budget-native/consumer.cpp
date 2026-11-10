@@ -2,6 +2,7 @@
 #include <modelnet/s3_store.h>
 #include <univalue.h>
 #include <util/fs.h>
+#include <util/translation.h>
 #include <csignal>
 #include <exception>
 #include <fstream>
@@ -9,6 +10,8 @@
 #include <stdexcept>
 #include <sys/resource.h>
 #include <vector>
+// Same executable-owned translation hook as src/modeld.cpp.
+const TranslateFn G_TRANSLATION_FUN{nullptr};
 using namespace modelnet;
 constexpr int64_t DAY=86400LL*20000+3600;
 void require(bool x,const std::string& why){if(!x)throw std::runtime_error(why);}
