@@ -14,7 +14,7 @@ class EncryptedBackupRecoveryProbe(BitcoinTestFramework):
         parser.add_argument('--diagnostic-mining',action='store_true',help='Explicit economic/cpu-diagnostic test policy; not default-consensus qualification')
     def set_test_params(self):
         self.num_nodes=1;self.setup_clean_chain=True
-        args=['-keypool=4','-modelnet=0','-autoshieldcoinbase=0','-listen=0','-connect=0','-dnsseed=0']
+        args=['-keypool=4','-modelnet=0','-autoshieldcoinbase=0','-connect=0','-dnsseed=0']
         if self.options.diagnostic_mining:args+=['-matmulvalidation=economic','-matmulrcexecution=cpu-diagnostic']
         self.extra_args=[args]
     def skip_test_if_missing_module(self):self.skip_if_no_wallet();self.skip_if_no_sqlite()
