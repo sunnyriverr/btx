@@ -1,0 +1,36 @@
+{
+  "utc": "2026-11-10T08:16:39.302037+00:00",
+  "verdict": "Sound to retain this as an attributed native Windows before failure at the intended SignAuthoritative call, provided it is described as std::system_error rather than a measured10s hang. A candidate pass is still required; do not treat generic abort/timeout as equivalent.",
+  "observed": {
+    "run": 42780444882,
+    "source_tree": "cf51281bcfc0f6fbfb09fd04d86388a742769aa5",
+    "binary_sha256": "1e4dcc935c931c4b423c7422a1255efcb71a47faaffbb29980fbcc8d2687b4b1",
+    "selector": "matmul_trusted_mirror_tests/local_pq_vote_persists_and_survives_restart",
+    "exit": 201,
+    "wall_seconds": 0.516,
+    "xml_result": "aborted",
+    "xml_assertions_passed": 3,
+    "xml_assertions_failed": 1,
+    "checkpoint": 3978,
+    "exception": "std::system_error: resource deadlock would occur",
+    "archive_sha256": "9234f6309b04e27da51045eeb25cb24b4029621556d18ef7a58ba1d4b75e3d18"
+  },
+  "attribution": [
+    "Exact maintained selector entered. ML-DSA key generation line179, Configure3971 and OpenPersistence3972 pass before the exception.",
+    "Last checkpoint3978 is the BOOST_CHECK containing CallWithDeadline(SignAuthoritative...), not setup or reload. CallWithDeadline joins and rethrows the worker exception through future.get at206.",
+    "Baseline PersistAfterPqMutation972 holds g_mutex through PersistDurablePqAttestations976, which calls Store902 and relocks g_mutex261. Accepted localPQ signing reaches this function. Candidate changes exactly this lock scope/order.",
+    "This is source-plus-checkpoint attribution, not a captured native stack at the individual mutex. It establishes failure at the intended supported API; same-test candidate success strengthens causal attribution."
+  ],
+  "recommended_oracle": [
+    "Keep existing deadline exit1 branch. Add a separate explicitly named Windows recursive-lock exception branch; never alter generic passing-case classifier.",
+    "Require budget_stop null, exit201, Running1testcase, exact selector entry/fatal-error selector and literal class std::system_error: resource deadlock would occur; reject any other error/exception.",
+    "Require complete XML with exactly the expected case, result aborted,3passed/1failed for this local case; exact keygen/Configure/OpenPersistence success log lines and checkpoint3978.",
+    "Receiver needs its own exact pre-call setup/checkpoint mapping, not a blanket local-case exception whitelist. Validate received-call checkpoint and all relevant setup assertions from immutable candidate test source.",
+    "Require candidate complete XML exit0/all assertions/no budget stop and unchanged identical test source/object. Preserve positive and negative quorum plus reload assertions; retain secp control on candidate.",
+    "Reuse initial baseline secp11assertPASS and baseline local failure; do not rerun them merely to get a green job. Finish unrun receiver baseline and3candidate cases with evidence lineage explicit."
+  ],
+  "limits": [
+    "Candidate and receiver unrun in first job. No fullWindowsunit/node restart qualification. No native individual-lock stack was captured. No additional product fix or public post authorized."
+  ],
+  "blockers": []
+}
