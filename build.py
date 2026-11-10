@@ -7,7 +7,7 @@ import subprocess
 import tarfile
 from pathlib import Path
 
-from checkpoint import restore_timestamps, sha, verify_restored
+from checkpoint import restore_timestamps, sha, verify_restored, create
 
 BASE = "dac9aee53520bd49ed320ec7a49b9072fc7d88d9"
 CHECKPOINT = "d95dc41e4a6bfd3e81fdaeefbc57deead3cace244089e21b6f46f2b29e4e866c"
@@ -88,4 +88,11 @@ except Exception as exc:
     state["error"] = repr(exc)
     raise
 finally:
+    if state.get("phase") in ("compile", "retain", "built"):
+        try:
+            checkpoint = create(w, w/"compiled-checkpoint",
+                                {"source":BASE,"patch_sha256":state["patch_sha256"],"phase":state["phase"]})
+            state["successor_checkpoint_sha256"] = checkpoint["archive_sha256"]
+        except Exception as exc:
+            state["checkpoint_error"] = repr(exc)
     (out/"result.json").write_text(json.dumps(state, indent=2) + "\n")
