@@ -1,0 +1,68 @@
+{
+  "status": "BEFORE_AFTER_AND_RETRY_PASS",
+  "cap_bytes": 67108864,
+  "variants": {
+    "baseline": {
+      "cases": {
+        "normal": {
+          "bytes": 573,
+          "schema_valid": true,
+          "restored": false
+        },
+        "existing_file_refusal": {
+          "code": -8,
+          "bytes_unchanged": true
+        },
+        "full": {
+          "success": true,
+          "rpc_error_code": null,
+          "write_error": false,
+          "remaining_file_bytes": 0
+        },
+        "retry": {
+          "bytes": 573,
+          "schema_valid": true,
+          "restored": true,
+          "same_destination": true,
+          "manual_partial_removal": true
+        }
+      },
+      "sha256": "095647294208a3c534e84f8c399b73d1a5f8daa8e4e9f0b5426d6f899cf775f4",
+      "free_bytes_at_fault": 0,
+      "outcome": "FALSE_SUCCESS",
+      "node_clean_exit": true,
+      "runtime_removed": true
+    },
+    "candidate": {
+      "cases": {
+        "normal": {
+          "bytes": 573,
+          "schema_valid": true,
+          "restored": false
+        },
+        "existing_file_refusal": {
+          "code": -8,
+          "bytes_unchanged": true
+        },
+        "full": {
+          "success": null,
+          "rpc_error_code": -4,
+          "write_error": true,
+          "remaining_file_bytes": null
+        },
+        "retry": {
+          "bytes": 573,
+          "schema_valid": true,
+          "restored": true,
+          "same_destination": true,
+          "manual_partial_removal": false
+        }
+      },
+      "sha256": "7e3128228cc5e0d0defcb3394def2dca95636cfaa08da74707f2476e38b9ece4",
+      "free_bytes_at_fault": 0,
+      "outcome": "FAILURE_AND_CLEANUP",
+      "node_clean_exit": true,
+      "runtime_removed": true
+    }
+  }
+}
