@@ -1,0 +1,9 @@
+{
+  "first_run": 42738874911,
+  "product_result": "candidate not qualified; baseline controls and exact final missing-warning failure valid",
+  "cause": "shutil.copy2 preserved candidate source mtime older than freshly built baseline object. Ninja did not rebuild wallet.cpp; all baseline/candidate binary hashes identical.",
+  "candidate_compile_log": "build-plan/run-42738874911/wallet-qualification-records/candidate-build.log",
+  "correction": "Use copyfile plus current mtime, assert source newer than wallet object, require dry plan wallet.cpp.o, require changed object and daemon hashes before any candidate native test.",
+  "baseline_reuse": "Retain exact prior log/binary/test hashes; do not repeat completed baseline native test.",
+  "input_and_cleanup": "Source candidate and regression unchanged; previous input checkpoint preserved and runtime/process cleanup passed."
+}

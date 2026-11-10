@@ -1,0 +1,104 @@
+{
+  "source": "dac9aee53520bd49ed320ec7a49b9072fc7d88d9",
+  "commands": [
+    {
+      "label": "candidate-dry-plan",
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.500235822999997
+    },
+    {
+      "label": "candidate-build",
+      "exit": 0,
+      "stop": null,
+      "seconds": 47.516820618999986
+    },
+    {
+      "label": "candidate-version",
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.5002233710000041
+    },
+    {
+      "label": "candidate-dependencies",
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.500198714999982
+    },
+    {
+      "label": "candidate-test",
+      "exit": 0,
+      "stop": null,
+      "seconds": 39.012620233999996
+    }
+  ],
+  "test_pass": true,
+  "case_sha256": "018fb524954a5351ecbd09a13b7de02b66f1169a3f9c9b9620959468954e3d04",
+  "source_wallet_before": "f863116cd1d7e61a994388f84760cb02907fb57b3bcce235470c03f1b8d0ee66",
+  "baseline_reused_from": {
+    "run": 42738874911,
+    "result_sha256": "6a0a474417e0d96fdb0fc67b1e66a3499987d1e3620426e64467e6fa2468e796",
+    "test_log_sha256": "0f81548c985316891abc8b1c2334cc324835aecb70137ca302584ca270bfa841",
+    "same_case_bytes": true
+  },
+  "builds": {
+    "baseline": {
+      "wallet_sha256": "f863116cd1d7e61a994388f84760cb02907fb57b3bcce235470c03f1b8d0ee66",
+      "binaries": {
+        "btx-cli": "921c54e5f0c92745b42bd63711bf404f9e50b7be3d39e2d82916d0439b9633c8",
+        "btx-qt": "6ccaea4d1c1e36347111ce2d2f411aee4da49062a075e1dbe35ea00473ce97a7",
+        "btxd": "ffd6c2dc95df0111a8152b5d5f82244190cad2323981376ffed7c21a1cfd9fc6"
+      }
+    },
+    "candidate": {
+      "wallet_sha256": "417d83b4170a3e329982d280e4f344aeacb8e33f25dc70effdf3464f0649b58f",
+      "binaries": {
+        "btx-cli": "921c54e5f0c92745b42bd63711bf404f9e50b7be3d39e2d82916d0439b9633c8",
+        "btx-qt": "adcee730987a4c4de211e9676da150f45ed6ab532917e3f407e548db193d852c",
+        "btxd": "8dff632adc84a02407b1502e192184f39ae5f4520c60cd34ad9bc7d5fc9c542a"
+      }
+    }
+  },
+  "tests": {
+    "baseline": {
+      "exit": 1,
+      "expected_verdict": true,
+      "control_markers": {
+        "CONTROL: original locked encrypted wallet recognizes both receipts": true,
+        "CONTROL: plain backup recovers both receipts without encrypted recovery warning": true,
+        "RECOVERY: explicit refill/rescan restores exact receipts at same tip; relock succeeds": true
+      },
+      "reused": true
+    },
+    "candidate": {
+      "exit": 0,
+      "expected_verdict": true,
+      "control_markers": {
+        "CONTROL: original locked encrypted wallet recognizes both receipts": true,
+        "CONTROL: plain backup recovers both receipts without encrypted recovery warning": true,
+        "RECOVERY: explicit refill/rescan restores exact receipts at same tip; relock succeeds": true
+      }
+    }
+  },
+  "wallet_object_rebuilt": true,
+  "source_after_verified": true,
+  "input_checkpoint_unchanged": true,
+  "cleanup_before": [],
+  "cleanup_signals": [],
+  "cleanup_remaining": [],
+  "runtime_removed": true,
+  "retained_binaries": {
+    "baseline/bin/btx-cli": "921c54e5f0c92745b42bd63711bf404f9e50b7be3d39e2d82916d0439b9633c8",
+    "baseline/bin/btx-qt": "6ccaea4d1c1e36347111ce2d2f411aee4da49062a075e1dbe35ea00473ce97a7",
+    "baseline/bin/btxd": "ffd6c2dc95df0111a8152b5d5f82244190cad2323981376ffed7c21a1cfd9fc6",
+    "candidate/bin/btx-cli": "921c54e5f0c92745b42bd63711bf404f9e50b7be3d39e2d82916d0439b9633c8",
+    "candidate/bin/btx-qt": "adcee730987a4c4de211e9676da150f45ed6ab532917e3f407e548db193d852c",
+    "candidate/bin/btxd": "8dff632adc84a02407b1502e192184f39ae5f4520c60cd34ad9bc7d5fc9c542a"
+  },
+  "cleanup_ok": true,
+  "successor_checkpoint": {
+    "archive_sha256": "3404e5a869c3ea2c12c00f86bf5674d35916e2c83054bd7c0ab0864947d45e1b",
+    "entries": 20639
+  },
+  "qualified": true
+}

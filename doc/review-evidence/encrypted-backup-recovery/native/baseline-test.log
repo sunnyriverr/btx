@@ -1,0 +1,24 @@
+2026-11-10T01:54:52.060000Z TestFramework (INFO): PRNG seed is: 2634402628716340743
+2026-11-10T01:54:52.061000Z TestFramework (INFO): Initializing test directory /home/runner/work/btx/btx/wallet-qualification-runtime/baseline
+2026-11-10T01:55:23.025000Z TestFramework (INFO): CONTROL: original locked encrypted wallet recognizes both receipts
+2026-11-10T01:55:23.824000Z TestFramework (INFO): CONTROL: plain backup recovers both receipts without encrypted recovery warning
+2026-11-10T01:55:24.994000Z TestFramework (INFO): RECOVERY: explicit refill/rescan restores exact receipts at same tip; relock succeeds
+2026-11-10T01:55:24.994000Z TestFramework (ERROR): Unexpected exception
+Traceback (most recent call last):
+  File "/home/runner/work/btx/btx/product/test/functional/test_framework/test_framework.py", line 142, in main
+    self.run_test()
+  File "/home/runner/work/btx/btx/contrib/devtools/wallet-recovery-plan/candidate/test/functional/wallet_encrypted_backup_recovery.py", line 143, in run_test
+    assert_equal(warnings.count(RECOVERY_WARNING), 1)
+  File "/home/runner/work/btx/btx/product/test/functional/test_framework/util.py", line 77, in assert_equal
+    raise AssertionError("not(%s)" % " == ".join(str(arg) for arg in (thing1, thing2) + args))
+AssertionError: not(0 == 1)
+2026-11-10T01:55:25.046000Z TestFramework (INFO): Not stopping nodes as test failed. The dangling processes will be cleaned up later.
+2026-11-10T01:55:25.046000Z TestFramework (WARNING): Not cleaning up dir /home/runner/work/btx/btx/wallet-qualification-runtime/baseline
+2026-11-10T01:55:25.046000Z TestFramework (ERROR): Test failed. Test logging available at /home/runner/work/btx/btx/wallet-qualification-runtime/baseline/test_framework.log
+2026-11-10T01:55:25.046000Z TestFramework (ERROR): 
+2026-11-10T01:55:25.046000Z TestFramework (ERROR): Hint: Call /home/runner/work/btx/btx/product/test/functional/combine_logs.py '/home/runner/work/btx/btx/wallet-qualification-runtime/baseline' to consolidate all logs
+2026-11-10T01:55:25.046000Z TestFramework (ERROR): 
+2026-11-10T01:55:25.046000Z TestFramework (ERROR): If this failure happened unexpectedly or intermittently, please file a bug and provide a link or upload of the combined log.
+2026-11-10T01:55:25.046000Z TestFramework (ERROR): https://github.com/btxchain/btx/issues
+2026-11-10T01:55:25.046000Z TestFramework (ERROR): 
+[node 0] Cleaning up leftover process
