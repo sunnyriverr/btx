@@ -38,6 +38,11 @@ try:
     verify_restored(w, manifest)
     accepted = w / "accepted-source"
     assert run(["git", "rev-parse", "HEAD"], "accepted-head", 20, accepted).strip() == BASE
+    # The retained failed #486 candidate left one edited source with baseline
+    # objects. Validate the known edit, then restore it in this isolated copy.
+    wallet = source / "src/wallet/wallet.cpp"
+    assert sha(wallet) == "417d83b4170a3e329982d280e4f344aeacb8e33f25dc70effdf3464f0649b58f"
+    shutil.copyfile(accepted / "src/wallet/wallet.cpp", wallet)
     for name in run(["git", "ls-files"], "accepted-files", 20, accepted).splitlines():
         a, b = accepted / name, source / name
         if a.is_symlink():
@@ -54,8 +59,10 @@ try:
     state["baseline_binaries"] = before
     patch = w / "candidate.patch"
     state["patch_sha256"] = sha(patch)
-    run(["git", "apply", "--check", patch], "patch-check", 30, source)
-    run(["git", "apply", patch], "patch-apply", 30, source)
+    run(["git", "apply", "--check", "--directory=product", patch], "patch-check", 30, w)
+    run(["git", "apply", "--directory=product", patch], "patch-apply", 30, w)
+    expected = json.loads((w/"candidate-files.json").read_text())
+    assert all(sha(source/name) == digest for name, digest in expected.items())
     state["phase"] = "build-plan"
     run(["cmake", "-P", build/"CMakeFiles/VerifyGlobs.cmake"], "verify-globs", 120, build)
     ninja = out / "observed.ninja"
