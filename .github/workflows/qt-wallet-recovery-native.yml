@@ -1,0 +1,56 @@
+name: Qt wallet recovery native acceptance
+on:
+  push:
+    branches: [codex/ci-qt-wallet-recovery-native]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  observe:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: dac9aee53520bd49ed320ec7a49b9072fc7d88d9
+          path: accepted-source
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Native Qt desktop prerequisites
+        timeout-minutes: 5
+        run: |
+          sudo apt-get -o Acquire::Retries=1 update
+          sudo apt-get install -y --no-install-recommends gcc xvfb xauth dbus-x11 openbox xdotool python3-pyatspi at-spi2-core scrot libqt6core6 libqt6gui6 libqt6widgets6 libqt6network6 libqt6dbus6 libqt6svg6 libxcb-xinerama0 libxkbcommon-x11-0 libqrencode4 libevent-2.1-7 libevent-pthreads-2.1-7 libsqlite3-0 libzmq5
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: wallet-recovery-qualification-binaries
+          run-id: 42738874911
+          github-token: ${{ github.token }}
+          path: prior-binaries
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: qt-recovery-binaries
+          run-id: 42811596794
+          github-token: ${{ github.token }}
+          path: candidate/bin
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: qt-recovery-build-records
+          run-id: 42811596794
+          github-token: ${{ github.token }}
+          path: verified-build
+      - name: Exercise recovery on the same disposable wallet fixture
+        timeout-minutes: 9
+        run: python3 observe.py
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: qt-recovery-native-records
+          path: native-records
+          retention-days: 7
