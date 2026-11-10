@@ -121,9 +121,20 @@ def linkcause():
   for mode in ['ICF','NOICF']:
    mapfile=E/(mode+'.map');updated=re.sub(r'(?m)^(  LINK_FLAGS = .*)$',lambda m:m.group(1)+' /OPT:'+mode+' /MAP:"'+str(mapfile)+'"'+(' /VERBOSE:ICF'if mode=='ICF'else''),block,count=1)
    assert updated!=block;manifest.write_text(text[:match.start()]+updated+text[match.end():],encoding='utf-8',newline='')
-   s.need(mode+'-dry-run',['ninja','-C',str(B),'-n','bin/test_btx.exe'],60)
-   dry=(E/(mode+'-dry-run.log')).read_text();steps=[l for l in dry.splitlines()if re.match(r'\[\d+/\d+\]',l)];assert len(steps)==1 and 'Linking CXX executable bin' in steps[0] and 'test_btx.exe'in steps[0],steps
-   row=execute(tree,mode+'-link',['ninja','-C',str(B),'-v','bin/test_btx.exe'],360,memory=4*1024**3);assert row['exit']==0 and not row['budget_stop'];assert mapfile.exists()
+   rule=block.splitlines()[0].split(': ',1)[1].split()[0];assert rule.startswith('CXX_EXECUTABLE_LINKER__test_btx_')
+   def database(expand):
+    args=['ninja','-C',str(B),'-t','compdb']+(['-x']if expand else[])+[rule]
+    raw=subprocess.check_output(args,text=True,timeout=45);(E/(mode+('-expanded'if expand else'-saved')+'-link-command.json')).write_text(raw);db=json.loads(raw);assert len(db)==1;return db[0]['command']
+   command=database(False);expanded=database(True);assert 'link.exe'in command.lower()and '/OPT:'+mode in expanded and not re.search(r'(?i)(?:clang-cl|cl)\.exe',command)
+   rsp=list(re.finditer(r'@(?:"[^"]+"|[^\s"]+)',command));assert len(rsp)<=1
+   if rsp:
+    token=rsp[0];prefix=command[:token.start()];suffix=command[token.end():];assert expanded.startswith(prefix)and expanded.endswith(suffix)
+    content=expanded[len(prefix):len(expanded)-len(suffix)if suffix else None];assert content and '.obj'in content
+    response=E/(mode+'-link.rsp');response.write_text(content,encoding='utf-8');command=prefix+'@"'+str(response)+'"'+suffix
+   else:assert command==expanded
+   assert len(command)<7000,'Refuse overlong cmd line rather than changing link inputs'
+   batch=E/(mode+'-link.cmd');batch.write_text('@echo off\ncd /d "'+str(B)+'"\n'+command+'\nexit /b %errorlevel%\n',encoding='utf-8')
+   row=execute(tree,mode+'-link',['cmd.exe','/d','/c',str(batch)],360,memory=4*1024**3);assert row['exit']==0 and not row['budget_stop'];assert mapfile.exists()
    relevant=[l for l in mapfile.read_text(errors='replace').splitlines()if 'OracleGemmS8S8@'in l or 'IndependentOracleGemmS8S8@'in l]
    (E/(mode+'-callback-map.txt')).write_text('\n'.join(relevant)+'\n')
    # Read actual image addresses from the map, not compiler-folded C++ pointer comparisons.
