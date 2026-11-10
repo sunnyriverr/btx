@@ -1,0 +1,786 @@
+{
+  "utc": "2026-11-10T09:20:19.032792+00:00",
+  "decision": "Finish local #356 evidence consolidation with partial native acceptance. No additional native run selected.",
+  "stock_source": "dac9aee53520bd49ed320ec7a49b9072fc7d88d9",
+  "stock_binary_sha256": "446a2d951095f9274a083af475a504c6f7ebd5c50782e2cb69a6150459ab4b00",
+  "source_compare": "https://github.com/btxchain/btx/compare/36ab4300...dac9aee5",
+  "source_compare_summary": {
+    "older": "36ab43008cac48aa5c8410e4b70d90a249196a33",
+    "commits_ahead": 28,
+    "changed_files": [
+      ".github/workflows/release-atlas-binaries.yml",
+      "contrib/modelnet/cuda_qual_worker.cu",
+      "contrib/modelnet/e2e-cuda-granite-fit.sh",
+      "contrib/modelnet/e2e-parallel-prod.sh",
+      "doc/modelnet/cuda-not-run.md",
+      "doc/modelnet/howto.md",
+      "doc/release-notes-0.34.16.md",
+      "doc/review-evidence/macos-package-acceptance/README.md",
+      "doc/review-evidence/macos-package-acceptance/atlas-window.png",
+      "doc/review-evidence/macos-package-acceptance/combined.json",
+      "doc/review-evidence/macos-package-acceptance/deployment.json",
+      "doc/review-evidence/macos-package-acceptance/maintained-unit-suite.log",
+      "doc/review-evidence/macos-package-acceptance/manifest.json",
+      "doc/review-evidence/macos-package-acceptance/qt-window.png",
+      "scripts/release/bundle_qt_gui.py",
+      "scripts/release/package_release_archive.py",
+      "scripts/release/support_files.txt",
+      "scripts/release/verify_release_btxd.py",
+      "src/matmul/matmul_v4_rc_stage3_multirow_v11_unified_verifier_air.h",
+      "src/modelnet/guard_supervisor.cpp",
+      "src/modelnet/helper.cpp",
+      "src/modelnet/security_v2/broker.cpp",
+      "src/modelnet/security_v2/common.cpp",
+      "src/modelnet/security_v2/common.h",
+      "src/modelnet/security_v2/trust.cpp",
+      "src/net_processing.cpp",
+      "src/node/autoupdate.cpp",
+      "src/pow.cpp",
+      "src/rpc/client.cpp",
+      "src/script/descriptor.cpp",
+      "src/script/descriptor.h",
+      "src/test/CMakeLists.txt",
+      "src/test/autoupdate_tests.cpp",
+      "src/test/fuzz/utxo_snapshot.cpp",
+      "src/test/matmul_v4_rc_stage3_multirow_v11_merkle_fold_tests.cpp",
+      "src/test/matmul_v4_rc_stage3_multirow_v11_unified_verifier_air_tests.cpp",
+      "src/test/matmul_v4_rc_stage3_registry_membership_air_tests.cpp",
+      "src/test/peerman_tests.cpp",
+      "src/test/rpc_tests.cpp",
+      "src/test/shielded_wallet_chunk_discovery_tests.cpp",
+      "src/wallet/rpc/backup.cpp",
+      "src/wallet/scriptpubkeyman.cpp",
+      "src/wallet/scriptpubkeyman.h",
+      "src/wallet/shielded_rpc.cpp",
+      "src/wallet/shielded_wallet.cpp",
+      "src/wallet/shielded_wallet.h",
+      "src/wallet/spend.cpp",
+      "src/wallet/test/pq_wallet_tests.cpp",
+      "src/wallet/test/spend_tests.cpp",
+      "src/wallet/wallet.cpp",
+      "test/functional/feature_model_security_v2.py",
+      "test/functional/wallet_verifywalletintegrity.py",
+      "test/util/model_security/CMakeLists.txt",
+      "test/util/model_security/full_store_recovery_tests.cpp",
+      "test/util/model_security/native_ipc_busy_store_tests.cpp",
+      "test/util/model_security/native_ipc_tests.cpp",
+      "test/util/model_security/security_tests.cpp",
+      "test/util/package_release_archive_test.py",
+      "test/util/verify_release_btxd_test.py"
+    ]
+  },
+  "jpp_report": {
+    "url": "https://github.com/btxchain/btx/pull/432#issuecomment-6750408409",
+    "sha256": "93fc1c2c62cef63cb297a70f661701ff3ca827949b15b8bc4e5854c07b806c22",
+    "profile": "Windows 11 x64, clang-cl 20.1.8, MSVC 14.44, SDK 10.0.26100, WITH_MODELNET=ON, GUI OFF",
+    "suites": {
+      "pass": 2544,
+      "failed": 28,
+      "timeout": 1,
+      "cut": 3,
+      "not_started": 31,
+      "absent": 1
+    },
+    "per_case_manifest_available": false
+  },
+  "stock_case_account_sha256": "0ffd791d6432a67c85c18faf341a42ff1d0e2796520ba6c32c76bb495eec077e",
+  "stock_totals": {
+    "case_names": 15403,
+    "default_enabled": 15402,
+    "executed_pass": 30,
+    "executed_nonpass": 1,
+    "unrun_on_exact_stock": 15372
+  },
+  "named_failure_suite_mapping": [
+    {
+      "suite": "fs_tests",
+      "jpp_category": "environment_or_resource",
+      "stock_registered_cases": 6,
+      "stock_results": {
+        "UNRUN": 6
+      },
+      "case_account_dispositions": {
+        "older_source_compatible_to37472_only": 6
+      },
+      "stock_executed": [],
+      "older_nonpass": [],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "modelnet_035_wan_endpoint_tests",
+      "jpp_category": "environment_or_resource",
+      "stock_registered_cases": 6,
+      "stock_results": {
+        "UNRUN": 6
+      },
+      "case_account_dispositions": {
+        "older_source_modelnet_only": 6
+      },
+      "stock_executed": [],
+      "older_nonpass": [],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "modelnet_ahp_acq_exec_tests",
+      "jpp_category": "environment_or_resource",
+      "stock_registered_cases": 10,
+      "stock_results": {
+        "UNRUN": 10
+      },
+      "case_account_dispositions": {
+        "older_source_modelnet_only": 9,
+        "older_source_nonpass": 1
+      },
+      "stock_executed": [],
+      "older_nonpass": [
+        {
+          "selector": "modelnet_ahp_acq_exec_tests/ahp_acq_08_unreadable_component_is_refused",
+          "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+          "reason": "error_precedence_IO_ERROR_vs_SYMLINK_REFUSED"
+        }
+      ],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "modelnet_ahp_acq_plan_tests",
+      "jpp_category": "environment_or_resource",
+      "stock_registered_cases": 13,
+      "stock_results": {
+        "UNRUN": 13
+      },
+      "case_account_dispositions": {
+        "older_source_modelnet_only": 13
+      },
+      "stock_executed": [],
+      "older_nonpass": [],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "modelnet_hosting_tests",
+      "jpp_category": "environment_or_resource",
+      "stock_registered_cases": 57,
+      "stock_results": {
+        "UNRUN": 57
+      },
+      "case_account_dispositions": {
+        "older_source_modelnet_only": 57
+      },
+      "stock_executed": [],
+      "older_nonpass": [],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "pq_phase4_tests",
+      "jpp_category": "environment_or_resource",
+      "stock_registered_cases": 69,
+      "stock_results": {
+        "UNRUN": 69
+      },
+      "case_account_dispositions": {
+        "prior_source_reviewed_baseline": 45,
+        "prior_source_nonpass": 24
+      },
+      "stock_executed": [],
+      "older_nonpass": [
+        {
+          "selector": "pq_phase4_tests/external_signer_command_args_are_not_shell_quoted",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_enumerate_defaults_without_p2mr_capabilities",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_enumerate_duplicate_does_not_hide_later_signer",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_enumerate_parses_p2mr_capabilities",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_preserves_existing_psbt_input_metadata",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_rejects_conflicting_p2mr_bip32_derivation",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_rejects_conflicting_p2mr_csfs_message",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_rejects_conflicting_selected_leaf_metadata",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_rejects_conflicting_signer_p2mr_merkle_root",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_rejects_invalid_p2mr_csfs_sig_size",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_rejects_invalid_p2mr_partial_sig_size",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_rejects_modified_unsigned_tx",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_rejects_nonmatching_fingerprint_p2mr_csfs_signature_pubkey",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_rejects_p2mr_csfs_signature_without_message",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_rejects_p2mr_material_for_non_p2mr_input",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_rejects_p2mr_material_without_prevout_script",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_rejects_p2mr_partial_sig_for_unselected_leaf_hash",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_rejects_partial_sig_pubkey_with_nonmatching_fingerprint",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_rejects_unexpected_p2mr_bip32_derivation",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_rejects_unexpected_p2mr_csfs_message",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_rejects_unexpected_p2mr_csfs_signature_pubkey",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_rejects_unexpected_p2mr_partial_sig_pubkey",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_rejects_unsupported_selected_leaf_version",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        },
+        {
+          "selector": "pq_phase4_tests/external_signer_rejects_wrong_leaf_sig_when_signer_omits_leaf_metadata",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        }
+      ],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "modelnet_tests",
+      "jpp_category": "environment_or_resource",
+      "stock_registered_cases": 29,
+      "stock_results": {
+        "UNRUN": 29
+      },
+      "case_account_dispositions": {
+        "older_source_modelnet_only": 28,
+        "older_source_nonpass": 1
+      },
+      "stock_executed": [],
+      "older_nonpass": [
+        {
+          "selector": "modelnet_tests/pq1_handshake_mlkem768",
+          "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+          "reason": "external_OpenSSL_CLI_prerequisite"
+        }
+      ],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "modelnet_ainode_notes_tests",
+      "jpp_category": "environment_or_resource",
+      "stock_registered_cases": 1,
+      "stock_results": {
+        "UNRUN": 1
+      },
+      "case_account_dispositions": {
+        "older_source_nonpass": 1
+      },
+      "stock_executed": [],
+      "older_nonpass": [
+        {
+          "selector": "modelnet_ainode_notes_tests/tls_identity_has_the_cli_extensions",
+          "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+          "reason": "external_OpenSSL_CLI_prerequisite"
+        }
+      ],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "matmul_v4_rc_stage3_semantic_endpoint_receipt_intake_tests",
+      "jpp_category": "environment_or_resource",
+      "stock_registered_cases": 7,
+      "stock_results": {
+        "UNRUN": 7
+      },
+      "case_account_dispositions": {
+        "unrun_original_inventory": 7
+      },
+      "stock_executed": [],
+      "older_nonpass": [],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "matmul_v4_rc_stage3_v13_deep_source_logup_parent_tests",
+      "jpp_category": "environment_or_resource",
+      "stock_registered_cases": 8,
+      "stock_results": {
+        "UNRUN": 8
+      },
+      "case_account_dispositions": {
+        "unrun_original_inventory": 8
+      },
+      "stock_executed": [],
+      "older_nonpass": [],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "validation_chainstate_tests",
+      "jpp_category": "known_cross_platform_or_later_change",
+      "stock_registered_cases": 62,
+      "stock_results": {
+        "UNRUN": 62
+      },
+      "case_account_dispositions": {
+        "prior_source_no_screen_flag": 61,
+        "prior_source_nonpass": 1
+      },
+      "stock_executed": [],
+      "older_nonpass": [
+        {
+          "selector": "validation_chainstate_tests/chainstate_signer_progress_child_when_best_header_is_competing_fork",
+          "prior_source": "37472d88c1e0d7dd88ac92e1c698351a0a7e9bd7",
+          "reason": "24mock-signer and1Proc08 fixes have separate native before/after evidence; known cross-platform signer-progress assertion remains. Preserve actual baseline outcome, not a stock failure rerun or stock pass."
+        }
+      ],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "matmul_v4_rc_stage3_registry_membership_air_tests",
+      "jpp_category": "known_cross_platform_or_later_change",
+      "stock_registered_cases": 3,
+      "stock_results": {
+        "UNRUN": 2,
+        "passed": 1
+      },
+      "case_account_dispositions": {
+        "unrun_original_inventory": 2,
+        "native_stock_dac9_pass": 1
+      },
+      "stock_executed": [
+        {
+          "selector": "matmul_v4_rc_stage3_registry_membership_air_tests/malformed_registry_claims_and_goldilocks_aliases_are_rejected",
+          "result": "passed"
+        }
+      ],
+      "older_nonpass": [],
+      "same_named_test_file_changed": true
+    },
+    {
+      "suite": "matmul_v4_rc_stage3_multirow_v11_unified_verifier_air_tests",
+      "jpp_category": "known_cross_platform_or_later_change",
+      "stock_registered_cases": 15,
+      "stock_results": {
+        "UNRUN": 15
+      },
+      "case_account_dispositions": {
+        "unrun_original_inventory": 15
+      },
+      "stock_executed": [],
+      "older_nonpass": [],
+      "same_named_test_file_changed": true
+    },
+    {
+      "suite": "lightwatch_tests",
+      "jpp_category": "jpp_untraced_windows",
+      "stock_registered_cases": 6,
+      "stock_results": {
+        "UNRUN": 6
+      },
+      "case_account_dispositions": {
+        "older_source_compatible_to37472_only": 5,
+        "older_source_nonpass": 1
+      },
+      "stock_executed": [],
+      "older_nonpass": [
+        {
+          "selector": "lightwatch_tests/lightwatch_file_cut_at_a_line_end_is_refused",
+          "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+          "reason": "known_CRLF_fixture"
+        }
+      ],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "modelnet_jit_mat_tests",
+      "jpp_category": "jpp_untraced_windows",
+      "stock_registered_cases": 14,
+      "stock_results": {
+        "UNRUN": 14
+      },
+      "case_account_dispositions": {
+        "older_source_modelnet_only": 13,
+        "older_source_nonpass": 1
+      },
+      "stock_executed": [],
+      "older_nonpass": [
+        {
+          "selector": "modelnet_jit_mat_tests/jit_mat_05_unsafe_hardlink",
+          "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+          "reason": "Windows_inode_fixture_assumption"
+        }
+      ],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "modelnet_erasure_io_tests",
+      "jpp_category": "jpp_untraced_windows",
+      "stock_registered_cases": 3,
+      "stock_results": {
+        "UNRUN": 3
+      },
+      "case_account_dispositions": {
+        "older_source_modelnet_only": 2,
+        "older_source_nonpass": 1
+      },
+      "stock_executed": [],
+      "older_nonpass": [
+        {
+          "selector": "modelnet_erasure_io_tests/erasure_io_repair_stripe_from_files_sha384",
+          "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+          "reason": "erasure_replacement_contract_unresolved"
+        }
+      ],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "modelnet_ahp_comp04_tests",
+      "jpp_category": "jpp_untraced_windows",
+      "stock_registered_cases": 1,
+      "stock_results": {
+        "UNRUN": 1
+      },
+      "case_account_dispositions": {
+        "older_source_nonpass": 1
+      },
+      "stock_executed": [],
+      "older_nonpass": [
+        {
+          "selector": "modelnet_ahp_comp04_tests/ahp_comp_04_helper_down",
+          "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+          "reason": "POSIX_message_expectation_on_Windows"
+        }
+      ],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "matmul_v4_rc_tests",
+      "jpp_category": "jpp_untraced_windows",
+      "stock_registered_cases": 92,
+      "stock_results": {
+        "UNRUN": 89,
+        "failed": 1,
+        "passed": 2
+      },
+      "case_account_dispositions": {
+        "unrun_original_inventory": 89,
+        "native_stock_dac9_nonpass": 1,
+        "native_stock_dac9_pass": 2
+      },
+      "stock_executed": [
+        {
+          "selector": "matmul_v4_rc_tests/rc_strict_independent_same_digest_rejects_false_header",
+          "result": "failed"
+        },
+        {
+          "selector": "matmul_v4_rc_tests/rc_strict_same_callback_cannot_masquerade_as_independent",
+          "result": "passed"
+        },
+        {
+          "selector": "matmul_v4_rc_tests/rc_t1_golden_episode_digest_stable",
+          "result": "passed"
+        }
+      ],
+      "older_nonpass": [],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "acc03_tests",
+      "jpp_category": "jpp_untraced_windows",
+      "stock_registered_cases": 1,
+      "stock_results": {
+        "UNRUN": 1
+      },
+      "case_account_dispositions": {
+        "older_source_compatible_to37472_only": 1
+      },
+      "stock_executed": [],
+      "older_nonpass": [],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "modelnet_ahp_comp_tests",
+      "jpp_category": "jpp_untraced_windows",
+      "stock_registered_cases": 6,
+      "stock_results": {
+        "UNRUN": 6
+      },
+      "case_account_dispositions": {
+        "older_source_modelnet_only": 6
+      },
+      "stock_executed": [],
+      "older_nonpass": [],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "modelnet_035_disk_tests",
+      "jpp_category": "jpp_untraced_windows",
+      "stock_registered_cases": 9,
+      "stock_results": {
+        "UNRUN": 9
+      },
+      "case_account_dispositions": {
+        "older_source_nonpass": 2,
+        "older_source_modelnet_only": 7
+      },
+      "stock_executed": [],
+      "older_nonpass": [
+        {
+          "selector": "modelnet_035_disk_tests/contribution_links_survive_reload_and_snapshot",
+          "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+          "reason": "snapshot_export_callback_failure_unattributed"
+        },
+        {
+          "selector": "modelnet_035_disk_tests/integer_train_survives_reload_and_snapshot",
+          "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+          "reason": "snapshot_export_callback_failure_unattributed"
+        }
+      ],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "modelnet_bounty_tests",
+      "jpp_category": "jpp_untraced_windows",
+      "stock_registered_cases": 9,
+      "stock_results": {
+        "UNRUN": 9
+      },
+      "case_account_dispositions": {
+        "older_source_modelnet_only": 6,
+        "older_source_nonpass": 3
+      },
+      "stock_executed": [],
+      "older_nonpass": [
+        {
+          "selector": "modelnet_bounty_tests/bounty_fund_chain_eval_agent",
+          "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+          "reason": "stopped_investigation_preserved"
+        },
+        {
+          "selector": "modelnet_bounty_tests/bounty_search_health_feed_store_rpc",
+          "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+          "reason": "stopped_investigation_preserved"
+        },
+        {
+          "selector": "modelnet_bounty_tests/bounty_wallet_fund_001_to_024",
+          "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+          "reason": "stopped_investigation_preserved"
+        }
+      ],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "modelnet_cr11_tco_tests",
+      "jpp_category": "jpp_untraced_windows",
+      "stock_registered_cases": 11,
+      "stock_results": {
+        "UNRUN": 11
+      },
+      "case_account_dispositions": {
+        "older_source_modelnet_only": 10,
+        "older_source_nonpass": 1
+      },
+      "stock_executed": [],
+      "older_nonpass": [
+        {
+          "selector": "modelnet_cr11_tco_tests/cr11_tco_11_break_even_is_exact",
+          "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+          "reason": "null_result_contract_unresolved"
+        }
+      ],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "modelnet_first_run_tests",
+      "jpp_category": "jpp_untraced_windows",
+      "stock_registered_cases": 27,
+      "stock_results": {
+        "UNRUN": 27
+      },
+      "case_account_dispositions": {
+        "older_source_modelnet_only": 26,
+        "older_source_nonpass": 1
+      },
+      "stock_executed": [],
+      "older_nonpass": [
+        {
+          "selector": "modelnet_first_run_tests/setmodelprofile_live_host_auto_does_not_advertise_empty",
+          "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+          "reason": "RPC_fixture_field_contract_unresolved"
+        }
+      ],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "modelnet_infra_tests",
+      "jpp_category": "jpp_untraced_windows",
+      "stock_registered_cases": 15,
+      "stock_results": {
+        "UNRUN": 15
+      },
+      "case_account_dispositions": {
+        "older_source_modelnet_only": 14,
+        "older_source_nonpass": 1
+      },
+      "stock_executed": [],
+      "older_nonpass": [
+        {
+          "selector": "modelnet_infra_tests/infra_12_profile_restart_persist",
+          "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+          "reason": "filesystem_attribute_failure_unattributed"
+        }
+      ],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "modelnet_jit_peer_tests",
+      "jpp_category": "jpp_untraced_windows",
+      "stock_registered_cases": 16,
+      "stock_results": {
+        "UNRUN": 16
+      },
+      "case_account_dispositions": {
+        "older_source_modelnet_only": 15,
+        "older_source_nonpass": 1
+      },
+      "stock_executed": [],
+      "older_nonpass": [
+        {
+          "selector": "modelnet_jit_peer_tests/JIT_PEER_06",
+          "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+          "reason": "optional_NIXL_fabric_assumption"
+        }
+      ],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "modelnet_r6_erasure_tests",
+      "jpp_category": "jpp_untraced_windows",
+      "stock_registered_cases": 21,
+      "stock_results": {
+        "UNRUN": 21
+      },
+      "case_account_dispositions": {
+        "older_source_modelnet_only": 20,
+        "older_source_nonpass": 1
+      },
+      "stock_executed": [],
+      "older_nonpass": [
+        {
+          "selector": "modelnet_r6_erasure_tests/r6_b_repair_restart_completes",
+          "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+          "reason": "erasure_replacement_contract_unresolved"
+        }
+      ],
+      "same_named_test_file_changed": false
+    },
+    {
+      "suite": "peerman_tests",
+      "jpp_category": "jpp_untraced_windows",
+      "stock_registered_cases": 135,
+      "stock_results": {
+        "UNRUN": 133,
+        "passed": 2
+      },
+      "case_account_dispositions": {
+        "prior_source_reviewed_baseline": 133,
+        "native_stock_dac9_pass": 2
+      },
+      "stock_executed": [
+        {
+          "selector": "peerman_tests/dropped_deep_holes_stay_fetch_suppressed_across_tip_moves",
+          "result": "passed"
+        },
+        {
+          "selector": "peerman_tests/dropped_historical_holes_stay_fetch_suppressed_past_one_window",
+          "result": "passed"
+        }
+      ],
+      "older_nonpass": [],
+      "same_named_test_file_changed": true
+    }
+  ],
+  "candidates": {
+    "485": {
+      "head": "813d562929742636a36e34fe40ddfd0c8d712819",
+      "state": "open",
+      "merged": false
+    },
+    "487": {
+      "head": "6d269ab5372268d89f9f1ed213c0a63337ce71b1",
+      "state": "open",
+      "merged": false
+    },
+    "478": {
+      "head": "309ad5d2bb5f148aba22666fa8b7db2ced7ed08d",
+      "state": "open",
+      "merged": false
+    }
+  },
+  "additional_execution": {
+    "tests": 0,
+    "builds": 0,
+    "reason": "Known current stock guard and independent-oracle failures have attributed native before/after evidence on open candidates. One more unchanged run does not resolve adoption, full-suite coverage, the toolchain contract or native Windows helper support."
+  },
+  "posting": "Consolidated handoff prepared locally; existing publication hold remains."
+}
