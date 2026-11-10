@@ -187,6 +187,11 @@ class EncryptedBackupRecoveryTest(BitcoinTestFramework):
         profile.mkdir(mode=0o700)
         for name in ("runtime", "config", "data"):
             (profile/name).mkdir(mode=0o700)
+        # The framework creates a default wallet and loads it on startup.
+        # Remove other disposable wallets from startup before testing selection.
+        for name in node.listwallets():
+            if name != "encrypted-restored":
+                node.unloadwallet(name, False)
         self.stop_node(0)
         node.args[0] = qt
         self.start_node(0, extra_args=node.extra_args + [
