@@ -1,16 +1,17 @@
 diff --git a/doc/qt-wallet-recovery.md b/doc/qt-wallet-recovery.md
 new file mode 100644
-index 0000000..682a4a2
+index 0000000..40d625b
 --- /dev/null
 +++ b/doc/qt-wallet-recovery.md
-@@ -0,0 +1,48 @@
+@@ -0,0 +1,49 @@
 +# Recover missing payments in Qt
 +
 +Open the selected wallet's Transactions page and choose **Recover missing payments**.
 +Choose a finite number of new keys per descriptor large enough to cover addresses
 +used since the backup. Confirm the full-history scan and unlock when prompted.
-+The scan ends at the chain tip captured at its start. Ordinary new blocks do not
-+extend the job. A reorganisation of that recovery range reports incomplete.
++The scan follows the tip using the existing rescanblockchain behavior and replays
++mempool transactions. New blocks may extend the job. A reorganisation of the
++starting recovery range reports incomplete.
 +
 +Cancel is available during preparation and scanning. Cancellation is cooperative.
 +Key derivation or a current block read may finish before it takes effect. Partial
@@ -84,7 +85,7 @@ index 4a9b3b3..78ff7ec 100644
  
      //! Back up wallet.
 diff --git a/src/qt/walletview.cpp b/src/qt/walletview.cpp
-index 7def0d1..2a1d8eb 100644
+index 7def0d1..558c0cb 100644
 --- a/src/qt/walletview.cpp
 +++ b/src/qt/walletview.cpp
 @@ -25,6 +25,10 @@
@@ -133,7 +134,7 @@ index 7def0d1..2a1d8eb 100644
 +    if (QMessageBox::question(this, tr("Recover missing payments"),
 +            tr("Refill this wallet's address range and scan from genesis to the current tip? "
 +               "This can take a long time. Required pruned blocks cannot be recovered. "
-+               "New blocks do not extend this scan. Cancel takes effect at a safe point; "
++               "New blocks may extend this scan. Cancel takes effect at a safe point; "
 +               "the wallet may remain unlocked until the scan or cancellation completes."),
 +            QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel) != QMessageBox::Yes) return;
 +
@@ -264,7 +265,7 @@ index ece86e2..446c1e9 100644
  Q_SIGNALS:
      void setPrivacy(bool privacy);
 diff --git a/src/wallet/interfaces.cpp b/src/wallet/interfaces.cpp
-index 1896313..8029d15 100644
+index 1896313..3197820 100644
 --- a/src/wallet/interfaces.cpp
 +++ b/src/wallet/interfaces.cpp
 @@ -30,6 +30,7 @@
@@ -333,11 +334,11 @@ index 1896313..8029d15 100644
 +                return std::make_pair(m_wallet->GetLastBlockHash(), m_wallet->GetLastBlockHeight()));
 +            UniValue params(UniValue::VARR);
 +            params.push_back(0);
-+            params.push_back(height);
++            params.push_back(UniValue());
 +            const UniValue scan = RescanWallet(*m_wallet, params, m_reserver);
 +            const uint256 current_tip = WITH_LOCK(m_wallet->cs_wallet, return m_wallet->GetLastBlockHash());
 +            uint256 ancestor;
-+            if (scan["stop_height"].isNull() || scan["stop_height"].getInt<int>() != height ||
++            if (scan["stop_height"].isNull() || scan["stop_height"].getInt<int>() < height ||
 +                !m_wallet->chain().findAncestorByHeight(current_tip, height, FoundBlock().hash(ancestor)) ||
 +                ancestor != tip) {
 +                throw std::runtime_error("The recovery range changed during a reorganisation. Retry recovery.");

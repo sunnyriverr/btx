@@ -14,7 +14,7 @@ try:
     manifest=json.loads((w/"saved-checkpoint/manifest.json").read_text())
     prior=json.loads((w/"prior-build/result.json").read_text())
     assert prior["phase"]=="built"
-    assert prior["patch_sha256"]=="ed3119f49ef601f6dec9428255e1d26b84ac92eef686b77e0dd1b812ed7b7171"
+    assert prior["patch_sha256"]=="0feec3c9eddcb419c948011e6aefb1743487e7d2711a31e0d65c224d6041be08"
     assert sha(archive)==manifest["archive_sha256"]==prior["successor_checkpoint_sha256"]
     assert manifest["identity"]["patch_sha256"]==prior["patch_sha256"]
     assert Path(manifest["workspace"])==w and shutil.disk_usage(w).free>10*1024**3
@@ -24,22 +24,25 @@ try:
     old=json.loads((w/"prior-files.json").read_text())
     new=json.loads((w/"candidate-files.json").read_text())
     for name,h in old.items():assert sha(source/name)==h,name
-    assert [n for n in new if new[n]!=old[n]]==["src/wallet/interfaces.cpp"]
+    delta=sorted(n for n in new if new[n]!=old[n])
+    assert delta==["doc/qt-wallet-recovery.md","src/qt/walletview.cpp","src/wallet/interfaces.cpp"]
     for name in run(["git","ls-files"],"accepted-files",cwd=w/"accepted-source").splitlines():
         if name not in old and (w/"accepted-source"/name).is_file():
             assert sha(source/name)==sha(w/"accepted-source"/name),name
     assert sha(build/"bin/btx-qt")==prior["candidate_qt"]
     assert run(["g++","-dumpfullversion"],"compiler").strip()=="11.4.0"
     assert "OpenSSL 3.5.9" in run([w/"gui-pilot-runtime/openssl/bin/openssl","version"],"openssl")
-    target=source/"src/wallet/interfaces.cpp"
-    shutil.copyfile(w/"interfaces.cpp",target);target.touch()
+    for name in delta:
+        target=source/name
+        shutil.copyfile(w/"overlay"/name,target)
+        target.touch()
     assert all(sha(source/name)==h for name,h in new.items())
     run(["cmake","-P",build/"CMakeFiles/VerifyGlobs.cmake"],"verify-globs",cwd=build)
     observed=out/"observed.ninja";shutil.copy2(build/"build.ninja",observed)
     plan=run(["ninja","-C",build,"-f",observed,"-n","btx-qt"],"build-plan")
     assert "interfaces.cpp.o" in plan
     state["planned_steps"]=sum(x.startswith("[") for x in plan.splitlines())
-    assert state["planned_steps"]<=10
+    assert state["planned_steps"]<=12
     state.update(phase="compile",patch_sha256=sha(w/"candidate.patch"),baseline_binaries=prior["baseline_binaries"])
     run(["ninja","-C",build,"-j2","btx-qt"],"compile",300)
     state["candidate_qt"]=sha(build/"bin/btx-qt")
