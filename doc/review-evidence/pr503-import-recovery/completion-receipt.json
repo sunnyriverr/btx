@@ -1,0 +1,74 @@
+{
+  "utc": "2026-11-10T23:28:27.771565+00:00",
+  "verdict": "IMPORT_RETRY_FALSE_SUCCESS_AND_ORPHAN_AFTER_CLEAN_RESTART",
+  "run": 42921100457,
+  "controller": "12763af1bbf4b1877bfeb1e01e61f3805f33d63f",
+  "base": "dac9aee53520bd49ed320ec7a49b9072fc7d88d9",
+  "source": "08fd0a6245598e8f9fedc6dac97629310335dd2d",
+  "source_tree": "1fa445dd7b06901baf7888b97e6dbf79ac02ef0e",
+  "binary_sha256": "2752a364a568d7032743c7020c2f9b621db97df32dbb5cffc81d6aecbda128dd",
+  "fixture_sha256": "fcfb2d3c0b963fd11880b588552ac7eb76bc814a8e0a36e4a985d7c65e7dde71",
+  "original_checkpoint_sha256": "90391b49487f57e3c820200f28142e6873b0fecbb2a2d4b82091e48050437176",
+  "original_checkpoint_unchanged": true,
+  "stock_binary_reused": true,
+  "stock_executed_in_this_test": false,
+  "build_actions": 13,
+  "compile_seconds": 900.734457805,
+  "healthy_control_pass": true,
+  "experiment_complete": true,
+  "recovery_acceptance_pass": false,
+  "fault": "Nonempty disposable catalog.json.tmp directory causes catalog output open failure; payload storage otherwise healthy",
+  "first_reply": {
+    "jsonrpc": "1.0",
+    "id": 5,
+    "result": null,
+    "error": {
+      "code": "IMPORT_FAILED",
+      "message": "catalog write failed",
+      "schema_version": 2
+    }
+  },
+  "retry_acknowledged": true,
+  "retry_durable_before_stop": false,
+  "after_restart_model_b_present": false,
+  "postrestart_reply": {
+    "jsonrpc": "1.0",
+    "id": 11,
+    "result": null,
+    "error": {
+      "code": "IMPORT_FAILED",
+      "message": "destination artifact exists",
+      "schema_version": 2
+    }
+  },
+  "old_model_unchanged_and_exportable": true,
+  "new_model_bytes_committed_before_error_verified": true,
+  "new_model_bytes_intact_after_restart": true,
+  "new_model_export_error": "NOT_FOUND",
+  "observation_healed_catalog": false,
+  "clean_shutdown_healed_catalog": false,
+  "cleanup": {
+    "both_owned_runtimes_removed": true,
+    "forced_signals": []
+  },
+  "evidence": {
+    "build_collection": "collection-42921100457-model-import-build-records.json",
+    "native_collection": "collection-42921100457-model-import-native-records.json",
+    "summary": "run-42921100457/summary.json"
+  },
+  "limits": [
+    "One native Ubuntu22 x86_64 helper sequence with healthy control",
+    "Accepted35byte SafeTensors storage/catalog fixtures, not inference qualification",
+    "Temporary-output open failure, not physical full disk or power loss",
+    "Clean restart, no crash test",
+    "No repaired product, stock before/after comparison, nodeHTTP, peers, network inference, wallet, Windows, Mac or full-suite qualification",
+    "Pre-restart pinmodel workaround source-supported but untested; conditional postrestart recovery paths not qualified"
+  ],
+  "next": "Review exact observation and coordinate a focused import-transaction repair with repch1c. User holds product fixes and upstream posting.",
+  "result_review": "result-review.md",
+  "retained_candidate_artifact": {
+    "id": 13812902387,
+    "expires_at": "2026-11-24T23:26:53Z",
+    "run": 42921100457
+  }
+}
