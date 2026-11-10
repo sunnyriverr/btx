@@ -186,6 +186,7 @@ class EncryptedBackupRecoveryTest(BitcoinTestFramework):
         assert_equal(receipts(wallet, case["addresses"])[0], before_receipts)
 
         tip = node.getbestblockhash()
+        genesis = node.getblockhash(0)
         root = Path(os.environ["RECOVERY_RECORDS"])
         gate, observed = root/"delay.gate", root/"delay.observed"
         qt = os.environ["RECOVERY_QT"]
@@ -209,7 +210,9 @@ class EncryptedBackupRecoveryTest(BitcoinTestFramework):
                 "LC_ALL": "C.UTF-8",
                 "LD_PRELOAD": os.environ["RECOVERY_DELAY_LIBRARY"],
                 "BTX_RECOVERY_DELAY_GATE": str(gate),
-                "BTX_RECOVERY_DELAY_OBSERVED": str(observed)})
+                "BTX_RECOVERY_DELAY_OBSERVED": str(observed),
+                "BTX_RECOVERY_SCAN_LOG": str(node.datadir_path/"regtest/debug.log"),
+                "BTX_RECOVERY_SCAN_MARKER": "[encrypted-restored] Rescan started from block " + genesis})
         assert_equal(node.listwallets(), ["encrypted-restored"])
         wallet = node.get_wallet_rpc("encrypted-restored")
         assert_equal(receipts(wallet, case["addresses"])[0], before_receipts)
@@ -244,7 +247,13 @@ class EncryptedBackupRecoveryTest(BitcoinTestFramework):
         try:
             begin()
             wait_for(observed.is_file)
-            click("Cancel")
+            try:
+                click("Cancel")
+            except AssertionError:
+                windows = subprocess.run(["wmctrl", "-l"], capture_output=True, text=True, timeout=5)
+                (root/"observed-windows.txt").write_text(windows.stdout)
+                subprocess.run(["scrot", str(root/"cancel-window.png")], check=False, timeout=5)
+                raise
         finally:
             gate.unlink(missing_ok=True)
         window("Recovery incomplete")
