@@ -1,4 +1,4 @@
-name: Native Windows RC registration diagnostic
+name: Native Windows RC link cause diagnostic
 permissions:
   contents: read
 jobs:
@@ -204,7 +204,7 @@ jobs:
         exit /b %errorlevel%
 
         '
-    - name: Run three scoped RC cases from saved stock binary
+    - name: Inspect folded callback addresses and bounded no-folding controls
       id: run
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe"
@@ -257,7 +257,7 @@ jobs:
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
       if: always()
       with:
-        name: native-windows-rc-registration
+        name: native-windows-rc-link-cause
         path: D:\btx-native-035\evidence\
         retention-days: 14
 'on':

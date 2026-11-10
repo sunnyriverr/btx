@@ -105,11 +105,66 @@ def verify():
   R['runtime_data_removed']=not data.exists()
  h.verify();R['whole_cache_unchanged']=True;remember();assert not survivors
 
+def linkcause():
+ import re
+ assert R['status']=='PREFLIGHT_PASS';tree=ProcessTree();globals()['tree']=tree
+ manifest=B/'build.ninja';original=manifest.read_bytes();text=original.decode();match=re.search(r'(?m)^build bin/test_btx\.exe:.*?(?=\n\n)',text,re.S);assert match
+ block=match.group(0);assert '  LINK_FLAGS ='in block
+ # Back up only files the single link can mutate; all object/library bytes stay read-only.
+ backup=ROOT/'rc-link-originals';assert not backup.exists();backup.mkdir();saved={}
+ names=['project-build/build.ninja','project-build/.ninja_log','project-build/.ninja_deps','project-build/bin/test_btx.exe','project-build/bin/test_btx.pdb','project-build/lib/test_btx.lib','project-build/lib/test_btx.exp']
+ for i,n in enumerate(names):
+  f=ROOT/n;saved[n]={'exists':f.exists(),'mtime':f.stat().st_mtime_ns if f.exists()else None}
+  if f.exists():shutil.copyfile(f,backup/str(i))
+ R['link_cause']={'source_changed':False,'compiled_objects_requested':0,'variants':[]};remember()
+ try:
+  for mode in ['ICF','NOICF']:
+   mapfile=E/(mode+'.map');updated=re.sub(r'(?m)^(  LINK_FLAGS = .*)$',lambda m:m.group(1)+' /OPT:'+mode+' /MAP:"'+str(mapfile)+'"'+(' /VERBOSE:ICF'if mode=='ICF'else''),block,count=1)
+   assert updated!=block;manifest.write_text(text[:match.start()]+updated+text[match.end():],encoding='utf-8',newline='')
+   s.need(mode+'-dry-run',['ninja','-C',str(B),'-n','bin/test_btx.exe'],60)
+   dry=(E/(mode+'-dry-run.log')).read_text();steps=[l for l in dry.splitlines()if re.match(r'\[\d+/\d+\]',l)];assert len(steps)==1 and 'Linking CXX executable bin' in steps[0] and 'test_btx.exe'in steps[0],steps
+   row=execute(tree,mode+'-link',['ninja','-C',str(B),'-v','bin/test_btx.exe'],360,memory=4*1024**3);assert row['exit']==0 and not row['budget_stop'];assert mapfile.exists()
+   relevant=[l for l in mapfile.read_text(errors='replace').splitlines()if 'OracleGemmS8S8@'in l or 'IndependentOracleGemmS8S8@'in l]
+   (E/(mode+'-callback-map.txt')).write_text('\n'.join(relevant)+'\n')
+   # Read actual image addresses from the map, not compiler-folded C++ pointer comparisons.
+   addresses={}
+   for line in relevant:
+    parts=line.split()
+    if len(parts)>=3:
+     name=parts[1];kind='alternate'if '?IndependentOracleGemmS8S8@'in name else 'primary'if '?OracleGemmS8S8@'in name else None
+     if kind:assert kind not in addresses;addresses[kind]=parts[2]
+   assert set(addresses)=={'primary','alternate'},relevant
+   item={'mode':mode,'binary_sha256':h.checkpoint.digest(B/'bin/test_btx.exe'),'callback_addresses':addresses,'same_image_address':len(set(addresses.values()))==1,'map_sha256':h.checkpoint.digest(mapfile)};R['link_cause']['variants'].append(item);remember()
+   if mode=='ICF':assert item['same_image_address'],'Folding hypothesis disproved; stop before second relink'
+  assert not item['same_image_address'],'NOICF did not distinguish callbacks'
+  data=Path('D:/rc'+os.environ['GITHUB_RUN_ID']);assert not data.exists();data.mkdir();R['unit_data']=str(data);prior=dict(os.environ);R['link_cause']['controls']=[]
+  try:
+   for k in list(os.environ):
+    if k.startswith('BTX_MATMUL_'):os.environ.pop(k,None)
+   os.environ.update(M['environment'])
+   for i,selector in enumerate([M['selectors'][2],M['selectors'][1]],1):
+    root=data/str(i);root.mkdir();tmp=root/'t';tmp.mkdir();os.environ['TMP']=os.environ['TEMP']=str(tmp);label='NOICF-control-'+str(i);report=E/(label+'.xml')
+    args=[B/'bin/test_btx.exe','--run_test='+selector,'--log_level=test_suite','--report_level=detailed','--report_format=XML','--report_sink='+str(report),'--catch_system_errors=yes','--','-testdatadir='+str(root)]
+    row=execute(tree,label,args,60);result=outcome([selector],(E/(label+'.log')).read_text(errors='replace'),report.read_text(errors='replace')if report.exists()else'',row['exit'],row['budget_stop']);result.update(selector=selector,seconds=row['seconds']);R['link_cause']['controls'].append(result);remember();assert result['state']=='passed',result
+  finally:
+   os.environ.clear();os.environ.update(prior)
+   if data.exists():shutil.rmtree(data)
+   R['unit_data']=None;R['link_cause']['runtime_removed']=not data.exists()
+ finally:
+  assert not h.processes()
+  for i,n in enumerate(names):
+   f=ROOT/n
+   if saved[n]['exists']:shutil.copyfile(backup/str(i),f);os.utime(f,ns=(saved[n]['mtime'],saved[n]['mtime']))
+   elif f.exists():f.unlink()
+  shutil.rmtree(backup);R['link_cause']['original_outputs_restored']=True;remember()
+ h.verify();R['status']='LINK_CAUSE_DIAGNOSTIC_COMPLETE';remember()
+ (E/'link-cause.json').write_text(json.dumps(R['link_cause'],indent=2)+'\n')
+
 try:
  stage=sys.argv[1]
  if stage=='prepare':h.prepare()
  elif stage=='preflight':preflight()
- elif stage=='run':run()
+ elif stage=='run':linkcause()
  elif stage=='verify':verify()
  else:raise ValueError(stage)
 except BaseException as e:R.setdefault('failures',[]).append({'stage':sys.argv[1],'error':repr(e)});remember();raise
