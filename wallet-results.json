@@ -1,0 +1,72 @@
+{
+  "status": "BEFORE_AFTER_AND_RETRY_PASS",
+  "cap_bytes": 67108864,
+  "variants": {
+    "baseline": {
+      "cases": {
+        "normal": {
+          "bytes": 952,
+          "complete_jsonl": true,
+          "labels": 8,
+          "sha256": "ad0c038e89096c0cfc4575f0d8f116815624d19e801d05fa932a40da6d9166e3"
+        },
+        "existing_file_refusal": {
+          "code": -8,
+          "bytes_unchanged": true
+        },
+        "full": {
+          "success": true,
+          "rpc_error_code": null,
+          "write_error": false,
+          "remaining_file_bytes": 0
+        },
+        "retry": {
+          "bytes": 952,
+          "complete_jsonl": true,
+          "labels": 8,
+          "sha256": "ad0c038e89096c0cfc4575f0d8f116815624d19e801d05fa932a40da6d9166e3",
+          "same_destination": true,
+          "manual_partial_removal": true
+        }
+      },
+      "sha256": "095647294208a3c534e84f8c399b73d1a5f8daa8e4e9f0b5426d6f899cf775f4",
+      "free_bytes_at_fault": 0,
+      "outcome": "FALSE_SUCCESS",
+      "node_clean_exit": true,
+      "runtime_removed": true
+    },
+    "candidate": {
+      "cases": {
+        "normal": {
+          "bytes": 952,
+          "complete_jsonl": true,
+          "labels": 8,
+          "sha256": "ad0c038e89096c0cfc4575f0d8f116815624d19e801d05fa932a40da6d9166e3"
+        },
+        "existing_file_refusal": {
+          "code": -8,
+          "bytes_unchanged": true
+        },
+        "full": {
+          "success": false,
+          "rpc_error_code": -4,
+          "write_error": true,
+          "remaining_file_bytes": null
+        },
+        "retry": {
+          "bytes": 952,
+          "complete_jsonl": true,
+          "labels": 8,
+          "sha256": "ad0c038e89096c0cfc4575f0d8f116815624d19e801d05fa932a40da6d9166e3",
+          "same_destination": true,
+          "manual_partial_removal": false
+        }
+      },
+      "sha256": "e1bb466767134b819ae1cd5fcd941f662961c911bc48c0a92e0f4fb671ae0dac",
+      "free_bytes_at_fault": 0,
+      "outcome": "FAILURE_AND_CLEANUP",
+      "node_clean_exit": true,
+      "runtime_removed": true
+    }
+  }
+}
