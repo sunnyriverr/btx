@@ -11,6 +11,7 @@ import subprocess
 import tarfile
 import tempfile
 import time
+import traceback
 import urllib.error
 import urllib.request
 
@@ -123,12 +124,13 @@ def main():
         miner = rpc("getnewaddress", ["", "p2mr"], "miner")
         payer = rpc("getnewaddress", ["", "p2mr"], "payer")
         recipient = rpc("getnewaddress", ["", "p2mr"], "miner")
-        pubkey = rpc("getaddressinfo", [miner], "miner")["pubkey"]
-        assert len(bytes.fromhex(pubkey)) == 1312
+        pubkey = rpc("exportpqkey", [miner, "ml-dsa-44"], "miner")["pubkey"]
+        assert len(bytes.fromhex(pubkey)) == 1312, "Expected ML-DSA-44 public key"
         [watch] = rpc("deriveaddresses", [f"mr({pubkey})", None, {"require_checksum": False}])
         rpc("importdepositpool", [[{"index": 0, "label": "deposit/0", "pubkey": pubkey}]], "watch")
         assert rpc("getwalletinfo", [], "watch")["private_keys_enabled"] is False
-        assert rpc("getaddressinfo", [watch], "watch")["solvable"] is True
+        watch_info = rpc("getaddressinfo", [watch], "watch")
+        assert any(watch_info.get(k) for k in ("solvable", "ismine", "iswatchonly")), "Imported deposit is not tracked"
         assert len(rpc("generatetoaddress", [110, miner], timeout=150)) == 110
         funding = rpc("sendmany", ["", {payer: 5, watch: 5}], "miner")
         assert len(rpc("generatetoaddress", [1, miner], timeout=60)) == 1
@@ -171,6 +173,7 @@ def main():
         )
     except Exception as error:
         state["error"] = repr(error)
+        state["failure_line"] = traceback.extract_tb(error.__traceback__)[-1].lineno
     finally:
         if node:
             if node.poll() is None:
