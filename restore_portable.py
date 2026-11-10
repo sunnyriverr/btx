@@ -1,9 +1,11 @@
 """Restore an exact, branch-independent checkpoint inside the disposable runner."""
+import hashlib
 import json
 import os
 from pathlib import Path, PurePosixPath
 import shutil
 import subprocess
+import urllib.request
 
 import checkpoint
 
@@ -44,6 +46,21 @@ else:
     shutil.copyfile(pinned, toolchain)
     manifest_time = (source_root / "project-build/build.ninja").stat().st_mtime_ns
     os.utime(toolchain, ns=(manifest_time - 1_000_000_000, manifest_time - 1_000_000_000))
+# The preserved Ninja link rule runs vcpkg's applocal command.
+# Reuse the exact official executable from the retained native profile.
+vcpkg = source_root / "vcpkg/vcpkg.exe"
+vcpkg_sha = "191ee64b0887af80aad3eff6c5e888ab733d3ef2182885ed4747b4574c201834"
+if not vcpkg.exists():
+    req = urllib.request.Request(
+        "https://api.github.com/repos/microsoft/vcpkg-tool/releases/assets/690264732",
+        headers={"Accept":"application/octet-stream", "User-Agent":"btx-pinned-native-tool",
+                 "X-GitHub-Api-Version":"2022-11-28"},
+    )
+    with urllib.request.urlopen(req, timeout=60) as response:
+        content = response.read(8 * 1024**2)
+    assert len(content) == 6836024 and hashlib.sha256(content).hexdigest() == vcpkg_sha
+    vcpkg.write_bytes(content)
+assert checkpoint.digest(vcpkg) == vcpkg_sha
 for name, digest in {
     "include/openssl/opensslv.h": "df513ae26e8baebbc641ba19f3d16f3e9ac0895cb092c81a39e1669f7fcb9c5c",
     "lib/libssl.lib": "860ce6dd4edf55af8a82a958afb9bae9cd025f3ef7e263bcc266d79cdd5179e8",
@@ -54,5 +71,5 @@ marker = source_root / "project-build/btx-checkpoint.json"
 assert checkpoint.digest(marker) == "2482100da1abb82abda529df0223f815ee8f498fd8cfb470f0803f865db4bdec"
 (records / "restore-portable.json").write_text(json.dumps(
     {"artifact": contract["artifact"], "run": contract["run"], "payload_sha256": contract["payload_sha256"],
-     "archive_members": len(members), "top_levels": sorted(top_levels), "marker_sha256": checkpoint.digest(marker)},
+     "vcpkg_sha256": vcpkg_sha, "archive_members": len(members), "top_levels": sorted(top_levels), "marker_sha256": checkpoint.digest(marker)},
     indent=2) + "\n")
