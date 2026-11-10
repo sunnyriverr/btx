@@ -1,0 +1,70 @@
+name: Campaign persistence paired helper build
+permissions:
+  contents: read
+  actions: read
+jobs:
+  inspect:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 45
+    steps:
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      with:
+        persist-credentials: false
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      with:
+        repository: btxchain/btx
+        ref: dac9aee53520bd49ed320ec7a49b9072fc7d88d9
+        path: accepted-source
+        persist-credentials: false
+    - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+      with:
+        python-version: '3.12'
+    - name: Standard baseline prerequisites
+      timeout-minutes: 8
+      run: 'sudo sed -i ''s|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g''
+        /etc/apt/sources.list
+
+        sudo apt-get -o Acquire::http::Timeout=15 -o Acquire::https::Timeout=15 -o
+        Acquire::Retries=1 update
+
+        sudo apt-get install -y --no-install-recommends build-essential cmake ninja-build
+        pkg-config python3 perl libboost-dev libevent-dev libsqlite3-dev libzmq3-dev
+        libqrencode-dev qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools
+        qt6-l10n-tools libwebkit2gtk-4.1-dev libgtk-3-dev libayatana-appindicator3-dev
+        librsvg2-dev librsvg2-bin libxdo-dev patchelf
+
+        '
+    - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+      with:
+        artifact-ids: 13714209829
+        run-id: 42708038748
+        github-token: ${{ github.token }}
+        merge-multiple: true
+        path: saved-checkpoint
+    - name: Bounded serial helper-only builds
+      timeout-minutes: 32
+      run: python3 contrib/devtools/campaign-persistence/build_helpers.py
+    - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+      if: always()
+      with:
+        name: campaign-build-records
+        path: campaign-build-records
+        retention-days: 14
+    - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+      if: always()
+      with:
+        name: campaign-helper-binaries
+        path: campaign-helper-binaries
+        retention-days: 14
+        compression-level: 6
+    - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+      if: always()
+      with:
+        name: campaign-build-state
+        path: campaign-build-state
+        retention-days: 14
+        compression-level: 0
+'on':
+  push:
+    branches:
+    - codex/ci-campaign-persistence-build

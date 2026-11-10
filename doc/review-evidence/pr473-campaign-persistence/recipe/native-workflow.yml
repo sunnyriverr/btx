@@ -1,0 +1,44 @@
+name: Campaign persistence real helper save and restart
+on:
+  push:
+    branches: [codex/ci-campaign-persistence-native]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  native:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: campaign-helper-binaries
+          run-id: 42787985840
+          github-token: ${{ github.token }}
+          path: helper-input
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: campaign-build-records
+          run-id: 42787985840
+          github-token: ${{ github.token }}
+          path: build-input
+      - name: Native helper runtime prerequisites
+        timeout-minutes: 4
+        run: |
+          sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g' /etc/apt/sources.list
+          sudo apt-get -o Acquire::http::Timeout=15 -o Acquire::https::Timeout=15 -o Acquire::Retries=1 update
+          sudo apt-get -o Acquire::http::Timeout=15 -o Acquire::https::Timeout=15 -o Acquire::Retries=1 install -y --no-install-recommends strace libsqlite3-0 libevent-2.1-7 libzmq5 libgomp1
+      - name: Verify result contract and run identical real helper journeys
+        timeout-minutes: 6
+        run: |
+          python3 contrib/devtools/campaign-persistence/result_contract.py
+          timeout --signal=TERM --kill-after=10s 310s python3 contrib/devtools/campaign-persistence/run_native.py
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: campaign-native-records
+          path: campaign-native-records
+          retention-days: 14
