@@ -32,6 +32,21 @@ jobs:
           done
           sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=12 -o Acquire::https::Timeout=12 update
           sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=12 -o Acquire::https::Timeout=12 install -y --no-install-recommends gcc xvfb xauth dbus-x11 openbox xdotool wmctrl python3-pyatspi at-spi2-core scrot qt6-qpa-plugins libqt6core6 libqt6gui6 libqt6widgets6 libqt6network6 libqt6dbus6 libqt6svg6 libxcb-xinerama0 libxkbcommon-x11-0 libqrencode4 libevent-core-2.1-7 libevent-extra-2.1-7 libevent-pthreads-2.1-7 libopengl0 libsqlite3-0 libzmq5
+      - name: Wait for the exact bounded build
+        timeout-minutes: 6
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for attempt in $(seq 1 30); do
+            state=$(gh api repos/sunnyriverr/btx/actions/runs/42821051260 --jq '.status')
+            if [ "$state" = completed ]; then
+              conclusion=$(gh api repos/sunnyriverr/btx/actions/runs/42821051260 --jq '.conclusion')
+              test "$conclusion" = success
+              exit
+            fi
+            sleep 10
+          done
+          exit 1
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
           name: wallet-recovery-qualification-binaries
@@ -41,13 +56,13 @@ jobs:
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
           name: qt-recovery-binaries
-          run-id: 42813245392
+          run-id: 42821051260
           github-token: ${{ github.token }}
           path: candidate/bin
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
           name: qt-recovery-build-records
-          run-id: 42813245392
+          run-id: 42821051260
           github-token: ${{ github.token }}
           path: verified-build
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093

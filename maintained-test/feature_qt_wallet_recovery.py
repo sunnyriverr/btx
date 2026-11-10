@@ -9,10 +9,13 @@ import os
 import subprocess
 import time
 from pathlib import Path
-import pyatspi
+try:
+    import pyatspi
+except ImportError:
+    pyatspi = None
 
 from test_framework.authproxy import JSONRPCException
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import BitcoinTestFramework, SkipTest
 from test_framework.util import assert_equal, assert_raises_rpc_error
 
 
@@ -85,6 +88,10 @@ def window(title):
 class EncryptedBackupRecoveryTest(BitcoinTestFramework):
     def add_options(self, parser):
         self.add_wallet_options(parser, legacy=False)
+        parser.add_argument("--qt-binary", help="Native btx-qt binary; requires a Linux X11 session")
+        parser.add_argument("--qt-records", help="Directory for native Qt test observations")
+        parser.add_argument("--expect-action-absent", action="store_true",
+                            help="Record the pre-change absence control instead of testing recovery")
 
     def set_test_params(self):
         self.num_nodes = 1
@@ -100,6 +107,11 @@ class EncryptedBackupRecoveryTest(BitcoinTestFramework):
     def skip_test_if_missing_module(self):
         self.skip_if_no_wallet()
         self.skip_if_no_sqlite()
+        if pyatspi is None or not os.environ.get("DISPLAY") or not self.options.qt_binary:
+            raise SkipTest("Requires --qt-binary, X11, pyatspi and the native Qt test tools")
+        binary = Path(self.options.qt_binary)
+        if not binary.is_file() or not os.access(binary, os.X_OK):
+            raise AssertionError("Requested Qt executable is unavailable")
 
     def run_test(self):
         node = self.nodes[0]
@@ -187,9 +199,15 @@ class EncryptedBackupRecoveryTest(BitcoinTestFramework):
 
         tip = node.getbestblockhash()
         genesis = node.getblockhash(0)
-        root = Path(os.environ["RECOVERY_RECORDS"])
+        root = Path(self.options.qt_records) if self.options.qt_records else node.datadir_path/"qt-records"
+        root.mkdir(mode=0o700, parents=True, exist_ok=True)
+        os.environ["RECOVERY_RECORDS"] = str(root)
+        library = root/"scan-delay.so"
+        subprocess.run(["cc", "-Wall", "-Wextra", "-Werror", "-fPIC", "-shared",
+                        str(Path(__file__).with_name("qt_recovery_delay.c")),
+                        "-o", str(library), "-ldl"], check=True, timeout=30)
         gate, observed = root/"delay.gate", root/"delay.observed"
-        qt = os.environ["RECOVERY_QT"]
+        qt = str(Path(self.options.qt_binary).resolve())
         profile = node.datadir_path / "isolated-qt"
         profile.mkdir(mode=0o700)
         for name in ("runtime", "config", "data"):
@@ -208,7 +226,7 @@ class EncryptedBackupRecoveryTest(BitcoinTestFramework):
                 "XDG_CONFIG_HOME": str(profile/"config"),
                 "XDG_DATA_HOME": str(profile/"data"),
                 "LC_ALL": "C.UTF-8",
-                "LD_PRELOAD": os.environ["RECOVERY_DELAY_LIBRARY"],
+                "LD_PRELOAD": str(library),
                 "BTX_RECOVERY_DELAY_GATE": str(gate),
                 "BTX_RECOVERY_DELAY_OBSERVED": str(observed),
                 "BTX_RECOVERY_SCAN_LOG": str(node.datadir_path/"regtest/debug.log"),
@@ -227,12 +245,12 @@ class EncryptedBackupRecoveryTest(BitcoinTestFramework):
         xdotool("windowactivate", "--sync", ids[0])
         xdotool("key", "alt+4")
         wait_for(lambda: shown_buttons("Export"))
-        if os.environ["RECOVERY_VARIANT"] == "baseline":
+        if self.options.expect_action_absent:
             assert not shown_buttons("Recover missing payments")
             self.log.info("BASELINE: Transactions tab renders and has no recovery action")
             return
 
-        def begin(unlock=True):
+        def begin(unlock=True, cancel_unlock=False):
             click("Recover missing payments")
             window("Recover missing payments")
             xdotool("key", "Return")  # Accept the displayed finite default of 20.
@@ -240,13 +258,26 @@ class EncryptedBackupRecoveryTest(BitcoinTestFramework):
             if not unlock:
                 return
             window("Unlock wallet")
+            if cancel_unlock:
+                xdotool("key", "Escape")
+                return
             xdotool("type", "--clearmodifiers", "--", passphrase)
             xdotool("key", "Return")
 
-        gate.touch()
+        begin(cancel_unlock=True)
+        wait_for(lambda: wallet.getwalletinfo()["scanning"] is False)
+        assert_raises_rpc_error(-13, "walletpassphrase", wallet.keypoolrefill)
+        self.log.info("CONTROL: cancelled unlock released recovery reservation and stayed locked")
+
+        def arm_delay():
+            observed.unlink(missing_ok=True)
+            gate.write_text(str((node.datadir_path/"regtest/debug.log").stat().st_size))
+
+        arm_delay()
         try:
             begin()
             wait_for(observed.is_file)
+            assert_raises_rpc_error(-4, "currently rescanning", wallet.rescanblockchain, 0)
             try:
                 click("Cancel")
             except AssertionError:
@@ -283,6 +314,27 @@ class EncryptedBackupRecoveryTest(BitcoinTestFramework):
         wallet.walletlock()
         self.log.info("CONTROL: direct RPC rescan still reaches the same tip and preserves both receipts")
         self.log.info("CONTROL: action preserved an existing unlock and its RPC relock policy")
+
+        # Hold a real scan read, then extend the chain and grant a newer RPC
+        # unlock. The GUI operation must complete its original range and leave
+        # the newer unlock under its own timer.
+        arm_delay()
+        try:
+            begin()
+            wait_for(observed.is_file)
+            wallet.walletpassphrase(passphrase, 600)
+            before_height = node.getblockcount()
+            self.generatetoaddress(node, 1, mining_address, sync_fun=self.no_op)
+            assert_equal(node.getblockcount(), before_height + 1)
+        finally:
+            gate.unlink(missing_ok=True)
+        window("Recovery complete")
+        xdotool("key", "Return")
+        assert_equal(receipts(wallet, case["addresses"]), (case["expected"], Decimal(3)))
+        wallet.keypoolrefill(1)
+        wallet.walletlock()
+        self.log.info("CONTROL: new block and newer RPC unlock survived the recovery completion")
+
 
 
 if __name__ == "__main__":

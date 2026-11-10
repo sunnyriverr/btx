@@ -11,13 +11,15 @@ w = Path(os.environ["GITHUB_WORKSPACE"])
 out = w/"native-records"
 out.mkdir()
 source = w/"accepted-source"
-case = source/"test/functional/qt_recovery_fixture.py"
-shutil.copyfile(w/"qt_recovery_fixture.py", case)
+case = source/"test/functional/feature_qt_wallet_recovery.py"
+shutil.copyfile(w/"maintained-test/feature_qt_wallet_recovery.py", case)
+shutil.copyfile(w/"maintained-test/qt_recovery_delay.c", case.with_name("qt_recovery_delay.c"))
 expected = json.loads((w/"verified-build/result.json").read_text())
 assert expected["source"] == "dac9aee53520bd49ed320ec7a49b9072fc7d88d9" and expected["phase"] == "built"
-library = w/"scan-delay.so"
-subprocess.run(["cc","-Wall","-Wextra","-Werror","-fPIC","-shared",w/"scan-delay.c","-o",library,"-ldl"],
-               check=True, timeout=30)
+qualification = json.loads((w/"qualification-input.json").read_text())
+assert expected["patch_sha256"] == qualification["patch_sha256"]
+assert hashlib.sha256(case.read_bytes()).hexdigest() == qualification["test_sha256"]
+assert hashlib.sha256(case.with_name("qt_recovery_delay.c").read_bytes()).hexdigest() == qualification["delay_sha256"]
 result = {"source": expected["source"], "patch_sha256": expected["patch_sha256"], "cases": {}}
 def sha(path):
     with path.open("rb") as stream:
@@ -26,8 +28,7 @@ def sha(path):
 def run(variant, qt):
     records = out/variant
     records.mkdir()
-    env = dict(os.environ, RECOVERY_QT=str(qt), RECOVERY_VARIANT=variant, RECOVERY_RECORDS=str(records),
-               RECOVERY_DELAY_LIBRARY=str(library))
+    env = dict(os.environ)
     for path in (qt, w/"candidate/bin/btxd", w/"candidate/bin/btx-cli"):
         path.chmod(0o755)
     ini = configparser.ConfigParser()
@@ -44,10 +45,24 @@ def run(variant, qt):
     config = records/"config.ini"
     with config.open("w") as f:
         ini.write(f)
+    if variant == "candidate":
+        skip_runtime = w/"isolated-native-skip"
+        with (records/"skip-control.log").open("wb") as skip_log:
+            skipped = subprocess.run(
+                ["/usr/bin/python3", str(case), "--descriptors", "--configfile="+str(config),
+                 "--tmpdir="+str(skip_runtime)],
+                stdout=skip_log, stderr=subprocess.STDOUT, timeout=30)
+        assert skipped.returncode == 77
+        assert "Test Skipped:" in (records/"skip-control.log").read_text()
+        shutil.rmtree(skip_runtime, ignore_errors=True)
+        result["unconfigured_native_test_exit"] = 77
     tmp = w/f"isolated-{variant}"
     cmd = ["dbus-run-session","--","xvfb-run","-a","-s","-screen 0 1440x1000x24 -nolisten tcp",
            "sh","-ec", 'openbox >/dev/null 2>&1 & exec /usr/bin/python3 "$@"', "sh", str(case),
-           "--descriptors", "--configfile="+str(config),"--tmpdir="+str(tmp),"--nocleanup"]
+           "--descriptors", "--configfile="+str(config),"--tmpdir="+str(tmp),"--nocleanup",
+           "--qt-binary="+str(qt), "--qt-records="+str(records)]
+    if variant == "baseline":
+        cmd.append("--expect-action-absent")
     with (records/"test.log").open("wb") as log:
         process = subprocess.Popen(cmd, env=env, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
         try:
@@ -78,6 +93,8 @@ def run(variant, qt):
         assert "CANDIDATE: retry recovered both exact outpoints at the same tip and relocked" in log
         assert "CONTROL: action preserved an existing unlock and its RPC relock policy" in log
         assert "CONTROL: direct RPC rescan still reaches the same tip and preserves both receipts" in log
+        assert "CONTROL: new block and newer RPC unlock survived the recovery completion" in log
+        assert "CONTROL: cancelled unlock released recovery reservation and stayed locked" in log
 
 try:
     baseline = w/"prior-binaries/baseline/bin/btx-qt"
@@ -102,7 +119,7 @@ try:
         saved = json.loads(prior.read_text())
         assert saved["source"] == expected["source"]
         assert saved["fixture_sha256"] == "1d619c2079758d955de3f05a777ce0268d3d4bd02481a9cea36c6cb31925e58b"
-        assert saved["patch_sha256"] == expected["patch_sha256"]
+        result["baseline_original_patch_sha256"] = saved["patch_sha256"]
         baseline_log = (prior.parent/"baseline/test.log").read_text()
         assert "BASELINE: Transactions tab renders and has no recovery action" in baseline_log
         assert "Tests successful" in baseline_log

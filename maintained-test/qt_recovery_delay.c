@@ -1,3 +1,6 @@
+// Copyright (c) 2026 The Bitcoin Core developers
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
 /* Test-only delay for an actual read of an owned regtest block file. */
 #define _GNU_SOURCE
 #include <dlfcn.h>
@@ -19,6 +22,16 @@ static int scanner_started(void)
     off_t end = lseek(fd, 0, SEEK_END);
     char tail[32768];
     off_t start = end > (off_t)(sizeof(tail)-1) ? end - (off_t)(sizeof(tail)-1) : 0;
+    const char *gate = getenv("BTX_RECOVERY_DELAY_GATE");
+    int gate_fd = gate ? open(gate, O_RDONLY | O_CLOEXEC) : -1;
+    if (gate_fd >= 0) {
+        char offset[32] = {0};
+        if (read(gate_fd, offset, sizeof(offset)-1) > 0) {
+            off_t minimum = (off_t)strtoll(offset, NULL, 10);
+            if (minimum > start) start = minimum;
+        }
+        close(gate_fd);
+    }
     ssize_t n = pread(fd, tail, sizeof(tail)-1, start);
     close(fd);
     if (n <= 0) return 0;
