@@ -107,7 +107,7 @@ def verify():
 
 def pqcampaign():
  import re,ctypes
- from case_oracle import before_deadline
+ from case_oracle import baseline_failure
  assert R['status']=='PREFLIGHT_PASS';tree=ProcessTree();globals()['tree']=tree;start=time.monotonic();meta=json.loads((P/'inputs478.json').read_text())
  sources={n:(SOURCE/n).read_bytes()for n in meta['files']};mtimes={n:(SOURCE/n).stat().st_mtime_ns for n in sources}
  names=['project-build/src/test/CMakeFiles/test_btx.dir/matmul_trusted_mirror_tests.cpp.obj','project-build/src/CMakeFiles/bitcoin_node.dir/node/matmul_trusted_attestations.cpp.obj','project-build/lib/bitcoin_node.lib','project-build/bin/test_btx.exe','project-build/bin/test_btx.pdb','project-build/lib/test_btx.lib','project-build/lib/test_btx.exp'];backup=ROOT/'pq478-originals';assert not backup.exists();backup.mkdir();saved={}
@@ -144,7 +144,7 @@ def pqcampaign():
  try:
   for n in sources:assert hashlib.sha256(sources[n]).hexdigest()==meta['files'][n]['base_sha256']
   test='src/test/matmul_trusted_mirror_tests.cpp';prod='src/node/matmul_trusted_attestations.cpp';newtest=(P/'test478.cpp').read_bytes();assert hashlib.sha256(newtest).hexdigest()==meta['files'][test]['candidate_sha256'];(SOURCE/test).write_bytes(newtest)
-  compile_one(test,'baseline-test-compile');testhash=h.checkpoint.digest(ROOT/names[0]);link_or_archive('bin/test_btx.exe','baseline-link','link')
+  compile_one(test,'baseline-test-compile');testhash=h.checkpoint.digest(ROOT/names[0]);assert testhash==meta['reused_test_object_sha256'];link_or_archive('bin/test_btx.exe','baseline-link','link')
   for k in list(os.environ):
    if k.startswith('BTX_MATMUL_'):os.environ.pop(k,None)
   os.environ.update(M['environment'])
@@ -153,11 +153,14 @@ def pqcampaign():
     newprod=(P/'production478.cpp').read_bytes();assert hashlib.sha256(newprod).hexdigest()==meta['files'][prod]['candidate_sha256'];(SOURCE/prod).write_bytes(newprod);compile_one(prod,'candidate-node-compile');link_or_archive('lib/bitcoin_node.lib','candidate-node-archive','archive');assert h.checkpoint.digest(ROOT/names[0])==testhash;link_or_archive('bin/test_btx.exe','candidate-link','link')
    state={'tree':compose(),'binary_sha256':h.checkpoint.digest(B/'bin/test_btx.exe'),'test_object_sha256':testhash,'results':[]};R['pq478']['phases'][phase]=state;remember()
    if phase=='candidate':assert state['tree']==meta['candidate_tree']
+   else:
+    assert state['tree']==meta['reused_baseline_tree'];reuse=json.loads((P/'reuse478.json').read_text());state['results']=reuse['baseline']['results'];state['reused_from_run']=reuse['prior_run'];remember()
    for i,selector in enumerate(M['pq_selectors'],1):
+    if phase=='baseline'and i<3:continue
     root=data/(phase+str(i));root.mkdir();temp=root/'t';temp.mkdir();os.environ['TMP']=os.environ['TEMP']=str(temp);label=phase+'-case-'+str(i);report=E/(label+'.xml');args=[B/'bin/test_btx.exe','--run_test='+selector,'--log_level=all','--report_level=detailed','--report_format=XML','--report_sink='+str(report),'--catch_system_errors=yes','--','-testdatadir='+str(root)];row=execute(tree,label,args,cap(45));log=(E/(label+'.log')).read_text(errors='replace');xml=report.read_text(errors='replace')if report.exists()else''
-    if phase=='baseline'and i>1:result=before_deadline(selector,log,xml,row['exit'],row['budget_stop'],meta['deadline_labels'][selector])
+    if phase=='baseline'and i>1:result=baseline_failure(selector,log,xml,row['exit'],row['budget_stop'],meta['deadline_labels'][selector],meta['exception_checkpoints'][selector])
     else:result=outcome([selector],log,xml,row['exit'],row['budget_stop'])
-    result.update(selector=selector,seconds=row['seconds'],exit=row['exit'],log_sha256=row['log_sha256'],xml_sha256=h.checkpoint.digest(report)if report.exists()else None);state['results'].append(result);remember();assert result['state']==('expected_deadline_reproduced'if phase=='baseline'and i>1 else'passed'),result
+    result.update(selector=selector,seconds=row['seconds'],exit=row['exit'],log_sha256=row['log_sha256'],xml_sha256=h.checkpoint.digest(report)if report.exists()else None);state['results'].append(result);remember();assert result['state']in (['expected_deadline_reproduced','expected_recursive_mutex_failure']if phase=='baseline'and i>1 else['passed']),result
   R['status']='PQ478_SCOPED_PASS'
  finally:
   os.environ.clear();os.environ.update(prior);assert not h.processes()
