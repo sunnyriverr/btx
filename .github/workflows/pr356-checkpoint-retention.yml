@@ -21,6 +21,7 @@ jobs:
           artifact-ids: '13753839322'
           run-id: '42798773622'
           github-token: ${{ github.token }}
+          merge-multiple: true
           path: original
       - name: Verify source archive checksum and identity
         working-directory: original
@@ -54,6 +55,7 @@ jobs:
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
           artifact-ids: ${{ steps.retain.outputs.artifact-id }}
+          merge-multiple: true
           path: retained
       - name: Verify retained archive checksum and receipt
         env:
