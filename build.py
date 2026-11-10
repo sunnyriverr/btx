@@ -94,6 +94,10 @@ try:
         if expected.is_file(): assert sha(source/name) == sha(expected), name
     actual_source = {str(p.relative_to(source)): sha(p) for p in source.rglob("*") if p.is_file() and not p.is_symlink()}
     expected_source = {n: sha(w/"accepted-source"/n) for n in names if (w/"accepted-source"/n).is_file()}
+    differences = {"extra": sorted(set(actual_source)-set(expected_source)), "missing": sorted(set(expected_source)-set(actual_source)), "changed": sorted(n for n in set(actual_source)&set(expected_source) if actual_source[n]!=expected_source[n])}
+    (out/"source-differences.json").write_text(json.dumps(differences,indent=2)+"\n")
+    (out/"source-before.json").write_text(json.dumps(actual_source,sort_keys=True,indent=2)+"\n")
+    print("Source differences:", json.dumps(differences), flush=True)
     assert actual_source == expected_source, "Full source tree differs from base plus #498"
     assert all(actual_source[n] == h for n,h in files498.items())
     (out/"source-before.json").write_text(json.dumps(actual_source, sort_keys=True, indent=2)+"\n")
