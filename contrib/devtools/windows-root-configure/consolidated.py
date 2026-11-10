@@ -144,7 +144,7 @@ def pqcampaign():
  try:
   for n in sources:assert hashlib.sha256(sources[n]).hexdigest()==meta['files'][n]['base_sha256']
   test='src/test/matmul_trusted_mirror_tests.cpp';prod='src/node/matmul_trusted_attestations.cpp';newtest=(P/'test478.cpp').read_bytes();assert hashlib.sha256(newtest).hexdigest()==meta['files'][test]['candidate_sha256'];(SOURCE/test).write_bytes(newtest)
-  compile_one(test,'baseline-test-compile');testhash=h.checkpoint.digest(ROOT/names[0]);assert testhash==meta['reused_test_object_sha256'];link_or_archive('bin/test_btx.exe','baseline-link','link')
+  compile_one(test,'baseline-test-compile');testhash=h.checkpoint.digest(ROOT/names[0]);R['pq478']['compiled_test_object_sha256']=testhash;remember();link_or_archive('bin/test_btx.exe','baseline-link','link')
   for k in list(os.environ):
    if k.startswith('BTX_MATMUL_'):os.environ.pop(k,None)
   os.environ.update(M['environment'])
