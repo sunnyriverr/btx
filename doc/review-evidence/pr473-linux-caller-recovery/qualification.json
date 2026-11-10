@@ -1,0 +1,60 @@
+{
+  "utc": "2026-11-10T22:57:19.772093+00:00",
+  "verdict": "scoped_linux_helper_save_error_retry_restart_pass",
+  "source": "07c588fe22545dff59a4744701ae9e01c7854cf9",
+  "source_tree": "4d445f29749c6e795c09b555c763c7585725d9e8",
+  "base": "dac9aee53520bd49ed320ec7a49b9072fc7d88d9",
+  "run": 42916052312,
+  "fixture": "85b122b61250aa921294478ac4b09ae3fd8f22d9",
+  "candidate_binary_sha256": "4f8b9a145819fde0b7849a00fd5911fe1130df23440a2f9012a99eaa73ed8693",
+  "compile_actions": 9,
+  "retained_checkpoint_restore_verified": true,
+  "retained_archive_unchanged": true,
+  "successor_checkpoint_sha256": "0206f4c1b13ae96cb7289cde8adbe3e39c4709990d6b9cc473bcfdea9df51cdf",
+  "successor_restore_verified": false,
+  "successor_artifact": 13809614206,
+  "old_baseline": {
+    "head": "15b337e2b0ab523fb59f181356f88a4283ed2cd8",
+    "native_run": 42789096988,
+    "binary_sha256": "46cad5ba2317b73b9cd9008292fbc22a7b3a249f21628e131a1fe705a61294b3",
+    "outcome": "Acknowledged increment lost on restart; previous file preserved",
+    "reused": true
+  },
+  "comparison_limit": "Original fault/RPC/live-state/restart boundary reused. Updated runner adds shared feed persistence and same-request retry assertions, so the complete final harness was not executed on the old head.",
+  "platform": "Ubuntu22.04 x86_64 GCC11.4.0 OpenSSL3.5.9, exact current CMake helper target; real Unix RPC",
+  "fault": "RLIMIT_FSIZE=8633 on disposable helper with SIGXFSZ ignored; actual partial write then EFBIG traced. Held through clean stop, removed on restart.",
+  "fault_reply": {
+    "jsonrpc": "1.0",
+    "id": 8,
+    "result": null,
+    "error": {
+      "code": "INTERNAL",
+      "message": "cannot save campaigns.json; pledge not recorded",
+      "schema_version": 2
+    }
+  },
+  "initial_amount": 1,
+  "fault_memory_amount": 1,
+  "restart_amount": 1,
+  "retry_delta": 10000000,
+  "retry_persisted_amount": 10000001,
+  "rejected_increment_not_resurrected": true,
+  "same_request_retry_once": true,
+  "clean_shutdown": true,
+  "owned_runtime_removed": true,
+  "cleanup_signals": [],
+  "leftovers": [],
+  "artifact_hashes": {
+    "updated-build-records": "bfe238084ef5153fa2246adbed2b9e5304008912c22a9a4c8e9e91b58845da74",
+    "updated-native-records": "307362bbc36f91e6a4e5b710718735943350542ea609518c0ef1c137c5e44f8b"
+  },
+  "scope_limits": [
+    "One process-level candidate sequence; earlier baseline observation reused",
+    "File-size fault, not physical disk exhaustion",
+    "No btxd HTTP proxy, wallet, peers, inference, spending, full suite or release qualification",
+    "Other mutation callers and concurrent-writer regression remain author-reported Mac coverage, not rerun here",
+    "No Windows or macOS run in this qualification"
+  ],
+  "upstream_publication": false,
+  "next": "Ready for one short evidence-backed results reply on473 when user authorizes publication. Preserve repch1c credit and limits."
+}
