@@ -1,0 +1,72 @@
+{
+  "utc": "2026-11-10T07:40:47.122054+00:00",
+  "task": "atlas_native_wallet_entry_acceptance",
+  "status": "scoped_native_qualification_complete",
+  "source": "f6b2ac8e606789d69c5d7a4edbf21ff11826b557",
+  "base": "dac9aee53520bd49ed320ec7a49b9072fc7d88d9",
+  "run": 42776427615,
+  "fixture": "ac4a9890be5a6503d1a7f04076c96311a7e5ea59",
+  "artifact_id": 13744077565,
+  "artifact_zip_sha256": "2d196144ec347722ccab78ea568262e9f3ee1e15b7c009ba063e10224eccc58b",
+  "profile": "Ubuntu24 x86_64 X11 virtual desktop; wallet-enabled isolated regtest; keypool=1; Modelnet off; no blocks/funds",
+  "binaries": {
+    "baseline": "a6765f554ecacfd32f80d2fc2f3a4d221fabd0ae18c47dd616ee5113d09d21df",
+    "candidate_producer": "b84d12beed2361927c81880735c177eb53a789f02482e39486f859b9c8e3ce02",
+    "candidate_deployed": "b2b2d57fbc61207a1412aea8cb63bf86481648942b16957791eabec1ead30714",
+    "node": "bdd9273c2dcbf804a717e16bdcc4c08288f16c31cde59726f01924178487cb83",
+    "cli": "2e1c1d30cca4bb6eba4f7ecca02f133a7fe0abbe668640e0e29d2040d2dad49a"
+  },
+  "archive_sha256": "0caaa7d2d762d51bde262bff0bfb3965f58cc09bb1726b034783608930d3d633",
+  "oracle": {
+    "overall": "PASS",
+    "baseline_expected_failure": true,
+    "missing_candidate_observations": [],
+    "cleanup_pass": true
+  },
+  "offline_classifier": {
+    "valid": 1,
+    "negative_controls": 58,
+    "pass": true
+  },
+  "remote_recipe_files_verified": {
+    ".github/workflows/atlas480-native-wallet.yml": "1d18847420225c9c1b049b8781a0bedcebbeaa7639222ca53a9f352f6059af14",
+    "contrib/devtools/atlas480-native/run.py": "94f7411c8a6beee1fe0869180fafe6122bacc10180e58e8bcfd1687f96acd083",
+    "contrib/devtools/atlas480-native/ui.py": "6dfb2d035d9e7454f64b47e9a318ff0ea76e30de326d56b6bce7f8037a664eeb",
+    "contrib/devtools/atlas480-native/result_handling.py": "f064c7e4092211126f3cb95bd14912628bee1406adb1933afbe86f000983d668"
+  },
+  "images_visually_inspected": [
+    "baseline-panel.png",
+    "cancel.png",
+    "approve.png",
+    "send-composer.png"
+  ],
+  "raw_result": "native/run-42776427615/atlas480-native-records/result.json",
+  "collection": "native/final-collection.json",
+  "node_and_original_caches_untouched": true,
+  "protected_package_files_unchanged": true,
+  "cleanup": {
+    "signals": [],
+    "remaining": [],
+    "runtime_removed": true,
+    "node_clean_exit": true
+  },
+  "fresh_coverage": {
+    "head": "f6b2ac8e606789d69c5d7a4edbf21ff11826b557",
+    "comments": 0,
+    "reviews": 0,
+    "private_external_work_unknown": true
+  },
+  "limits": [
+    "One baseline/candidate native sequence on Ubuntu24 virtual X11; not Mac/Windows",
+    "Explicit keypool=1 and zero blocks/funds/peers; Modelnet off",
+    "Existing native unlock form inspected; intended passphrase tested through independent RPC",
+    "No payment/signing/broadcast, release/full-suite/hardware qualification",
+    "New build checkpoint retained but restoration not verified"
+  ],
+  "saved_ui_response_verified": {
+    "ok": true,
+    "exact_wallet_name": true
+  },
+  "review": "reviews/final-evidence-review.md",
+  "original_receipt_sha256": "ef95729b47e87bcb8871358fe4d26fd2c472dffe0f63356a5874ec4aa6b29f1c"
+}

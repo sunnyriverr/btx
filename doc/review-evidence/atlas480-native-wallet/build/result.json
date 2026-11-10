@@ -1,0 +1,1214 @@
+{
+  "source": "f6b2ac8e606789d69c5d7a4edbf21ff11826b557",
+  "base": "dac9aee53520bd49ed320ec7a49b9072fc7d88d9",
+  "commands": [
+    {
+      "label": "toolchain",
+      "exit": 0,
+      "seconds": 8.00822009999996,
+      "stop": null,
+      "args": [
+        "rustup",
+        "toolchain",
+        "install",
+        "1.95.0",
+        "--profile",
+        "minimal"
+      ]
+    },
+    {
+      "label": "rustc",
+      "exit": 0,
+      "seconds": 1.0011524499999496,
+      "stop": null,
+      "args": [
+        "rustc",
+        "+1.95.0",
+        "--version"
+      ]
+    },
+    {
+      "label": "cargo",
+      "exit": 0,
+      "seconds": 1.0011596969999914,
+      "stop": null,
+      "args": [
+        "cargo",
+        "+1.95.0",
+        "--version"
+      ]
+    },
+    {
+      "label": "pkg-config",
+      "exit": 0,
+      "seconds": 1.0011522709999667,
+      "stop": null,
+      "args": [
+        "pkg-config",
+        "--modversion",
+        "gtk+-3.0",
+        "webkit2gtk-4.1",
+        "javascriptcoregtk-4.1",
+        "ayatana-appindicator3-0.1"
+      ]
+    },
+    {
+      "label": "metadata",
+      "exit": 0,
+      "seconds": 1.0011747959999866,
+      "stop": null,
+      "args": [
+        "cargo",
+        "+1.95.0",
+        "metadata",
+        "--locked",
+        "--format-version",
+        "1",
+        "--no-deps"
+      ]
+    },
+    {
+      "label": "fetch",
+      "exit": 0,
+      "seconds": 5.005151812000008,
+      "stop": null,
+      "args": [
+        "cargo",
+        "+1.95.0",
+        "fetch",
+        "--locked"
+      ]
+    },
+    {
+      "label": "compile",
+      "exit": 0,
+      "seconds": 217.22331606899996,
+      "stop": null,
+      "args": [
+        "cargo",
+        "+1.95.0",
+        "build",
+        "--locked",
+        "--release",
+        "-p",
+        "btx-atlas",
+        "-j2"
+      ]
+    },
+    {
+      "label": "component-ldd",
+      "exit": 0,
+      "seconds": 1.001142231000017,
+      "stop": null,
+      "args": [
+        "ldd",
+        "/home/runner/work/btx/btx/atlas480-target/release/btx-atlas"
+      ]
+    }
+  ],
+  "fresh_build": true,
+  "original_cache_accessed": false,
+  "working_node_accessed": false,
+  "build_inputs": {
+    "Cargo.lock": "10d3f615fa31d95a9ce3af457615117cbe1db6229ebde40e008e3060b659051c",
+    "Cargo.toml": "eddb365cc7ef4da8b70b199fc68bb06e2b080aacd36d52453f32c28782cd9334",
+    "src-tauri/Cargo.toml": "c31d2ebba89c56eda5b07a04cc377167a358b92662217bb946915be95da36572",
+    "src-tauri/build.rs": "5925467aa8f2f116e702a2504fa4dbbc8f7fc162b40b70c10314369ec83cc53a",
+    "src-tauri/tauri.conf.json": "a1494107ae2da4a82a54d686157e72ae6654ff804f28ae2a05ae50894073e4c2",
+    "src-tauri/src/main.rs": "6e590efb8e842baa06c6ccc782fa6575dcfc17cb72b97affbed7a25efcf57570"
+  },
+  "native_inputs_unchanged": true,
+  "web_inputs": {
+    "web/app.js": "3305f4756256953d0fe726e424392741b716016429969b42ab30b176756bce4f",
+    "web/index.html": "7fdf82a5251e755e3a7947492b2a84c1cc9a94028a054037b60d2807dbe35efc",
+    "web/style.css": "c66c615b2676d5daf9a227caad43f3dcf307ab125fd37cc99824f3e849b65d33",
+    "web/mark.svg": "5ac1e1c935d2a6f269ba956d1f60a35aaa3870e94671022363d3380550f2a5fc",
+    "web/components/assistant.js": "9591317a38b8c6aef84b8724b22fe73d4c456287dedd1263bca5028b13c71a0d",
+    "web/components/ui.js": "287e3830d2edea4aadad5f4886d45316d11f9b8d20a40fbd5c4b5fafc703c5cf",
+    "web/components/openui-panel.js": "9e66f005b10df210ded405ffd7b8bb422226b722246888fc07689a3c771f2bbd",
+    "web/components/surfaces.js": "7a3ac236cbdd05e182b340f052b84623fe61341debeee51c32e250e185c5b274",
+    "web/locales/de_CH.json": "59f0e91136292db03088a914bb725ecbbc68ff488ce4272346d59791b36e91b0",
+    "web/locales/fil.json": "6f44633253bbdcee65c81d2b786473b45e7d6c72aa07e2a8337a8347cbacc396",
+    "web/locales/zh.json": "719345f092b912cc063bc5a4c05e9da0421886523a3c2add2732ea878001451e",
+    "web/locales/sr@latin.json": "42e68998112ccc9396bc186a971fb1088f162217c14ab116a53a8c7d08eeb9eb",
+    "web/locales/zh_Hant.json": "d87dc2598f4a3cc48156f7c3568a411ccf0a0bc8078ade41688cdbe1517fc731",
+    "web/locales/cy.json": "991225f193fafa4d8f7851a456fb8a90921e242c9cd1eab775036f3c816b53af",
+    "web/locales/sk.json": "9917122c0b97b5831e1311ef87a0c5fa05049aa68d3dd3c3323c5384ac9c4c36",
+    "web/locales/ko.json": "b6f6ce59ad3195c4f296eafde6d2f696369f7b09c70e5b6a416f00e5517ab6a9",
+    "web/locales/ta.json": "b02a4bf6b4a24225701f2bce52f72db4cc58fbf468ae95ee2e25d4e00690d8c6",
+    "web/locales/mn.json": "0a8dd31188f01928aa33dc02c2b19fdb1511a6a25609769cc23f4395cd8d6296",
+    "web/locales/az@latin.json": "92b1170f0361b240f577f3efa6fed6a8cc36b169e3b44fda13bb7cba4320c8f8",
+    "web/locales/km.json": "d296223cefa501c638f461a7e011ae641a21eae4b2191d9537846aade27a2a44",
+    "web/locales/zh_TW.json": "d87dc2598f4a3cc48156f7c3568a411ccf0a0bc8078ade41688cdbe1517fc731",
+    "web/locales/ps.json": "fec6998989df53b89808882dac0d9f6a13d3cf63ce406b94105d57146febb8c1",
+    "web/locales/br.json": "1c144b81e31935072747f834ace4cbdd8cdc0e1c55214ca4fb402409e0af489d",
+    "web/locales/bg.json": "594affd49dc7b97d6d9e3774620c057fe8ec13148484375d8cb043f960a67e2a",
+    "web/locales/gu.json": "5984ff6f3b853b7dfb40424250437251e78bb36bbd908bc7db01df354d7ab8d6",
+    "web/locales/tr.json": "ccc6b52451914ef06bc6f0a66664abfc52e03b42561da7ecb43cdc1b8af32dd6",
+    "web/locales/uz.json": "6778b658eeb5615a7d2a7d8416691ee2648be576bd2b8244d5fe2e91db1cb42c",
+    "web/locales/hak.json": "d87dc2598f4a3cc48156f7c3568a411ccf0a0bc8078ade41688cdbe1517fc731",
+    "web/locales/zh_CN.json": "719345f092b912cc063bc5a4c05e9da0421886523a3c2add2732ea878001451e",
+    "web/locales/es.json": "744151585279f97760ddbd2dc572120359b784b13835e42ffe79e9d5cc8a9ab1",
+    "web/locales/tl.json": "ccd8c47db27538c4afa0ad9adc8e82f20ce420a7a529ac2db024aa67d51b3939",
+    "web/locales/bs.json": "42e68998112ccc9396bc186a971fb1088f162217c14ab116a53a8c7d08eeb9eb",
+    "web/locales/eo.json": "a15ef95b79a061af54b48c469b4235b2962241d49fc995e794220585a6fab472",
+    "web/locales/eu.json": "a265bf121d95829a774967579c2cc593e636ba58003221746e79e841cfca51c6",
+    "web/locales/da.json": "6ccdc496515fb8848f6d295937920a79cb22518e1aaf9fc186aa17b4bfda5305",
+    "web/locales/gl.json": "42aa6e581fbd4bd4c9e975296b1350158c9dfd7463ec6b8398f489026b9819a6",
+    "web/locales/nb.json": "e48ce06565f0b5469fa37b01574add24676d9fad350aa921a0690e8d638e6810",
+    "web/locales/it.json": "cea68da12849cd775e9c1078012bb6c3c8fb6808d34671328c7d1994dbdb245c",
+    "web/locales/sq.json": "d015bbf911e1e7b00454934422bb0195c4d5967457abdd057080addbb7a07b80",
+    "web/locales/te.json": "36617b7547716ef03fd8bbf99ab65835cf855cdea49df69d0c8166eaaa84ed47",
+    "web/locales/ky.json": "5852c4f12f40466791015834fcd6167f099b13dccbd1119aeddbc3c657f9bd77",
+    "web/locales/lt.json": "bf94f247399c2603835a2f607c55c97142d48b6199ff48910a364c9fccf3e514",
+    "web/locales/sr@ijekavianlatin.json": "949aa0df4806be4665c878507913bc2ce949d9b0e5693f03236e60e8f342e400",
+    "web/locales/is.json": "970eddd6fd17fa273ddd7285cd7adb0cc4188aa8f906e250a2430f5e099358c3",
+    "web/locales/th.json": "d402d9bc89224ba808cbbe9664166022bcb925330dc08f01ab79dc155ea329da",
+    "web/locales/ca.json": "a0cd4167a72f7255b7bb04ff072dabcd51acd2aa1d1fd342492a4d0568314177",
+    "web/locales/mg.json": "bf1cb91990cc605da5db464000c62a023d238ddd9b9ee0528a70461b02123885",
+    "web/locales/cmn.json": "d87dc2598f4a3cc48156f7c3568a411ccf0a0bc8078ade41688cdbe1517fc731",
+    "web/locales/sn.json": "d4d83878109f65e52a1619c88a09d8671a1990d929047a9e0d55f5374155bc8a",
+    "web/locales/bn.json": "2f9cdf34d31727b58f4f968b2dea7394ca147ffbd28354d237443a0fc8ba2a4f",
+    "web/locales/el.json": "a1e44cdf1ed077a1803ea76474fbce500e1c4d966f1c06b803da1422fec89811",
+    "web/locales/lv.json": "8afdbaf405307b26d0b490a3824dd72e6922f7f0326f2209fdcc60c7bcce2861",
+    "web/locales/es_SV.json": "a2d3672dfde0272ac33004fb1e1e0c60d6bbe23aa8a360bad3970be09c7072b5",
+    "web/locales/pl.json": "94211c2989546a27ab0663063054133a8f9fd4982f109dbad7ec0affd0fb8f91",
+    "web/locales/uz@Latn.json": "6778b658eeb5615a7d2a7d8416691ee2648be576bd2b8244d5fe2e91db1cb42c",
+    "web/locales/fr.json": "09b537ed0779b111cb4bd0f2a3b78f3bdb371e820f91b6c4fb5b9c9d30f4a0aa",
+    "web/locales/es_DO.json": "a2d3672dfde0272ac33004fb1e1e0c60d6bbe23aa8a360bad3970be09c7072b5",
+    "web/locales/uz@Cyrl.json": "6778b658eeb5615a7d2a7d8416691ee2648be576bd2b8244d5fe2e91db1cb42c",
+    "web/locales/uk.json": "0a3b5d2e1debcd053dae892abc0f31b379f33cb5fa82546da16d7140bc50716a",
+    "web/locales/tk.json": "f3858c8f56e66ad523bcbe587a7bd6c9ab02f7257b4ef3ec619fe90bafd76116",
+    "web/locales/sr.json": "949aa0df4806be4665c878507913bc2ce949d9b0e5693f03236e60e8f342e400",
+    "web/locales/es_VE.json": "a2d3672dfde0272ac33004fb1e1e0c60d6bbe23aa8a360bad3970be09c7072b5",
+    "web/locales/az.json": "92b1170f0361b240f577f3efa6fed6a8cc36b169e3b44fda13bb7cba4320c8f8",
+    "web/locales/ur.json": "d81f303abd66aad3f3126d96ed568fcecd8fb6506cb52e7b3d9806c20a125247",
+    "web/locales/sm.json": "e4472053ab9a7f8df9bc6701987ca21a6e6d4e87a6630794acd89ad2162ff9a0",
+    "web/locales/sl.json": "91aca732b4dbf1474eaa26d61aed8857cb8bcd7754aaa570ca396359386c78d9",
+    "web/locales/be.json": "b1989bec0e04323f6bf153785be38fe5443ab2020d024bc41ffb5d6c13ee848e",
+    "web/locales/sv.json": "17b5c25ffd6abb6a27f4c6f1653a2c0a06072077d815b29c8c8054c903fa93b3",
+    "web/locales/mk.json": "c938c7585e71651c19334d70f063581810495fd54fa868a7bd7f1b4b07d023b3",
+    "web/locales/si.json": "4dd3df7476dfd7ce75b23bbb7a8a1e206ba3dce77f3a249a3ccdf0980fcb54fd",
+    "web/locales/kk.json": "dc5c801677d262fd5056fb89b897a1344c464bc4648d3ec9a0327b02c56699f0",
+    "web/locales/ka.json": "b6e1e86ab747a8362e428cf16cd4afa286de22a819ddf0cbaf44a0c129bd6fbb",
+    "web/locales/ro.json": "9242b52b411ff836c1a0537396c869454cb8eb3cb51ecdb8d6c581cbe1e7c0a3",
+    "web/locales/et.json": "eeb44d96a6a91d8df82f755f68305456c7e9a72de919d1ba03e721f487ffeb6e",
+    "web/locales/es_CL.json": "a2d3672dfde0272ac33004fb1e1e0c60d6bbe23aa8a360bad3970be09c7072b5",
+    "web/locales/zh_HK.json": "d87dc2598f4a3cc48156f7c3568a411ccf0a0bc8078ade41688cdbe1517fc731",
+    "web/locales/pt_BR.json": "8a8fa9b78ce1053da83dca24ffa294245dc58dcc0c6b9e39070d1223f6abb9fb",
+    "web/locales/ja.json": "0a2e80ede15b2b26651d288f25c0352a95f06ce88cb36a801dd5176a935b08bd",
+    "web/locales/ms.json": "21eca12fb0514730a0e88a921947f75c5e4a0a585733eb32ee90ff98431f4311",
+    "web/locales/ru.json": "06ae6e015285bc5e14a810235ee39c9540f4f5b930e4abef4e6ef6af65d85b5f",
+    "web/locales/zh_Hans.json": "719345f092b912cc063bc5a4c05e9da0421886523a3c2add2732ea878001451e",
+    "web/locales/fi.json": "dd9778f439a9784f4930d4e6a9da67f2e4ad7a6e010c9913341bd2d66cb15b6b",
+    "web/locales/es_CO.json": "a2d3672dfde0272ac33004fb1e1e0c60d6bbe23aa8a360bad3970be09c7072b5",
+    "web/locales/hr.json": "42e68998112ccc9396bc186a971fb1088f162217c14ab116a53a8c7d08eeb9eb",
+    "web/locales/kk@latin.json": "dc5c801677d262fd5056fb89b897a1344c464bc4648d3ec9a0327b02c56699f0",
+    "web/locales/szl.json": "bbbc58d92982944270b1f14839a35347ba45dd056f71c92b4513279614113a3a",
+    "web/locales/ga.json": "f229f08d87deed789e8a4063b0ad036bb49093ae5feedc78451a10a852ffb74b",
+    "web/locales/en.json": "2eff57c437637fe96f7987ec071d9dd760833d4c8b4d28c825d6bf84e3b51a56",
+    "web/locales/ga_IE.json": "f229f08d87deed789e8a4063b0ad036bb49093ae5feedc78451a10a852ffb74b",
+    "web/locales/id.json": "ae1bca26463732fbfcb5b15e55251cfc4eeffd93eb631669bf842b2b101a4a83",
+    "web/locales/he.json": "64c7e84111cf53481185eb1c63d4bb888e26845cf0d9c57d17751d4bb6c2662d",
+    "web/locales/yue.json": "d87dc2598f4a3cc48156f7c3568a411ccf0a0bc8078ade41688cdbe1517fc731",
+    "web/locales/hu.json": "967bf856244511f7e7d7d78f9dc88350cba05004c6d25ae329748a18597322f6",
+    "web/locales/pt.json": "8a8fa9b78ce1053da83dca24ffa294245dc58dcc0c6b9e39070d1223f6abb9fb",
+    "web/locales/cs.json": "c6f6012e4f07c31ae4cd02cf768d3f90ba46d157b4ff47bb09ae5a9c39a733da",
+    "web/vendor/OPENUI-LICENSE.txt": "b6bdd2d3d161722fb3f3afc039114cfa9f3236f036e1c98e0853bc3a85f6cd9e",
+    "web/vendor/openui-lang.js": "04d3aece5960fc67cf2c48bd3a7787eabd8c7d89672b1c108a888752ead39f50",
+    "web/workers/layout.js": "0f6c74e8ebaca93acb2310a2719fbb81dbdec458f6d672c47792f31500ff12e8",
+    "web/views/work.js": "fda1d82a33c0ffea83c8e799ef0ee4c0b272d439522f9898e5fa6019b9724068",
+    "web/views/operations.js": "b077ddef420001a004df75cf58484aecde36082d021ab3953e704c09228da3f7",
+    "web/views/models.js": "821fc0c26d7c022f7df4cd214f7642255ad51b212303cdd221087612784b9086",
+    "web/views/observations.js": "372c12b8ab358b1d44f2094f4345c431c2e92b9cb6892203cf800a0a9e5f746b",
+    "web/views/research.js": "4c876368861c27a8c3d064eb7715d8f0d8b0ff00c72c33c9734090af21fce051",
+    "web/views/wallet.js": "db68e5d33540983d1f28acfce6ce7492eb19fa6a9c20095d5cdd75aa3f42d4a6",
+    "web/views/atlas.js": "358167e503ffec08fcd7371d5c37a28054e6fab46f52fb2b2d240fbbed107688",
+    "web/views/settings.js": "96e45c3ac9229e2ba433aadf43c3d967ec40fcd156c6898e6a4c6203a8af6250",
+    "web/views/model-panels.js": "da64dca01399a5c75d66199a299eb39230cfd3eafe27d1e37e2772674f03069c",
+    "web/views/network.js": "bc44cadfb6c78f2411bf8081d33b5ed334ba0ce8a457c0e1a227798faadb40e2",
+    "web/render/scene.js": "cddee4affa51ff056f0bbf7c7fc6a77721d4d182adffe807c2b97809599c1261",
+    "web/render/math.js": "81a5b35d13f71e1059641fc42c0f763163ce805ae248df4fd6810b4ab375a54b",
+    "web/neuronlab/scene.js": "e2589e2990a856c523488bf59a64439601ca26e1e3ae72c6b96e487339548300",
+    "web/neuronlab/style.css": "a00eff6d21f78209285fc81d1f63bb24ff9391748fa4ecf5f706a49f41ad8327",
+    "web/neuronlab/recorded-fixture.js": "0131da60340eb4370aad9c3979e89011ad19c198b56f384ac22044a43bc24a26",
+    "web/neuronlab/view.js": "1531763032335ca6b98ce252bec3f503da8e42653b8bdc0de9e5257ba1356d0f",
+    "web/neuronlab/contract.js": "abe46df69059627d6137db0aca52cbc5975a6a7b68d21625ef2535f7caac4a40",
+    "web/neuronlab/science/scatter.js": "6fe251b7efeaf37bf75ba23e49366f5b5684000b6f829a23f7985441af2d1e76",
+    "web/neuronlab/science/embedding-data.js": "c14037dafa11e4ab74743157c39efa3dfd4232e8ba1afd3439c9916067b9988d",
+    "web/neuronlab/science/scatter-worker.js": "9cf2beea4cf003251a9d16d6d4fc00c5bdb3b29885527b1f0912ccc2352ca826",
+    "web/neuronlab/science/view.js": "8248f19ea77714dad61bbe39dcf8e78483bfea136c874ddcb75eeab63ecb6160",
+    "web/core/qt-surface.js": "2268d1bd30c36e9de68232d99ddb3a272890a07a1b9c64c30e4e448e5f2a55d9",
+    "web/core/graph.js": "0c3689dba705549f31be200451d1ccd9d309efc2e423995865262bb757bb59ce",
+    "web/core/uri.js": "b2843ae9d2f329b61c3b4d577bdd4b5bc322c23f25eb6be6d1d153d8a8e02be0",
+    "web/core/catalog.js": "d4ba5ea6c2965aab2d259b832f418479bbc19b844d6eeb4229760d33282982c6",
+    "web/core/workflow.js": "67f15bea91ef2352bf19fc457fb747c7b1cf514b463d4d1258215ba0d3878b76",
+    "web/core/store.js": "b39ab9499957777d145d9c0450773a79d7cc980105a6344df1adaf81776be333",
+    "web/core/model-status.js": "405545997dbdb063e263188d3443ede8e3e2dae5a949d83fa57441a614881ed7",
+    "web/core/openui-prompt.json": "fc195fe59fab9331448a50ccc10732be594a23aa594804d97fbdf92cf469f1f5",
+    "web/core/qt-gaps.js": "390ddc06ab3b2b7377d6f92bc2b2a47877fa312ea0d00ee94b2a29a0acfebab4",
+    "web/core/json.js": "f44398c60cd5a27369bc725b935c5993a8995f125af89834f8f7e01a94d21f3f",
+    "web/core/i18n.js": "284fc7e92374c6d29d7f19c9856ea1dc89da69247d6fef263e06c7d08449d26d",
+    "web/core/money.js": "fb7770d9465bf840faa489f7be1077561bf5be3dfba91bf4d4afe080d41cf3e1",
+    "web/core/palette.js": "9ce39785c10c4eedefd7a030b4d4ee80771f1b4209ba422f4c8f3a64aea4e108",
+    "web/core/settings-catalog.js": "2a9a54dcaaf23719d7704633b9ecac8b3bd3474b459fd26f64f4476decfc1e29",
+    "web/core/openui-schema.json": "f6de9e6a8b4dd2ea43cdc82abaacb73a0eec96c61e49acb5c4e5e409d11fd5e2",
+    "web/core/receive-history.js": "52a79ea3005cec7be4897a914d94821935b1e2f0c762b69a19c30cfc8ab32568",
+    "web/core/mempool.js": "f9e3943dd43bd5d04660cdafbae44994fcbe1fdf2bb400679a8d1bfd3bc83dc0",
+    "web/core/observe.js": "f3224faf7126cdc5afed6642a09898bd7566c5878553e830a2fae0a31ea7633a",
+    "web/core/bridge.js": "04390e200c829c22d7eceaf23fa5e9a88ef94f97163d6793d6a1764a08f2b76b",
+    "web/core/network.js": "7ddd64abf848778b8649a871c76240fbae46ebfecc66fa1b66302bf1ab0ea138",
+    "web/core/openui.js": "07e46bf6141c3727c12b923842cd9387fd762476d3245f05b18c6e741e53e7fd",
+    "web/core/surface.js": "53a66ae11d754623631f305583603851be7995b235f9fa79144748beff5294e0",
+    "web/core/capture.js": "179ad3f95dc54191ff1900b9e75369088803df3cd3da8cde61fbab83bf34b191",
+    "web/core/wallet-qt.js": "48cee3f0a44c3e70f952b0860e85382c249b0593e4ba35a006eb51f0d3e7b013",
+    "web/fixtures/demo.js": "7b9db7b5f80cc53e936cf46d9d8db850a77410360beab669c43ee4b78c82f380",
+    "schemas/operations.json": "4265d30209840fed9a605bd4fac855f3c421b814846dd32681c1ff4621c07f5f",
+    "schemas/node-settings.json": "2a4ad6a995b04501df9124d1536388cc0a9b9d0f1dc3f4c2f12b0f91c98b327b"
+  },
+  "build_plan_verified": true,
+  "binary_sha256": "b84d12beed2361927c81880735c177eb53a789f02482e39486f859b9c8e3ce02",
+  "compiled": true,
+  "abi_inventory": [
+    {
+      "path": "/home/runner/work/btx/btx/atlas480-target/release/btx-atlas",
+      "sha256": "b84d12beed2361927c81880735c177eb53a789f02482e39486f859b9c8e3ce02",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libwayland-client.so.0",
+      "sha256": "30a119138d812d6e1c3280a7c2d5a9f49f13ae07b31cda2beb397da4f68f6d54",
+      "versions": {
+        "GLIBC": "2.28"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgdk-3.so.0",
+      "sha256": "65444438dce4b145a61cdf9ccee7dd3feb2ae249c939056eff89c04d8766e5a7",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so.0",
+      "sha256": "c9b29b64bff5f913438def9ffa26ea972245b89cd61dc9d2388bc1d1540412ef",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libcairo.so.2",
+      "sha256": "62328c06e62439ce52ee03a7e7fa44ebe33a39a56d22b8c96ffc7c7e1eaf0d19",
+      "versions": {
+        "GLIBC": "2.35"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgobject-2.0.so.0",
+      "sha256": "05a94d6be0a50dba15a579f3ad1f5c6ec12c8d303f3b715a665fd27824ca523e",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libglib-2.0.so.0",
+      "sha256": "86acf2c843bcfaf5e8c24ab959737960c797da53b41658dc8ec6f257c786048c",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libdbus-1.so.3",
+      "sha256": "a3d53f7215af9860f3466b94cd8fe3e95c253c46df164dea62af9b9def93dcea",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libwebkit2gtk-4.1.so.0",
+      "sha256": "f11fd878a05c1e43a80b986702949bc0bd36f848f926c14dabc32dee40cbb9f3",
+      "versions": {
+        "GLIBC": "2.35",
+        "GLIBCXX": "3.4.30",
+        "CXXABI": "1.3.9"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgtk-3.so.0",
+      "sha256": "7d48175fd1550f8b77119e77775073f10b5fd736e62efea25f6484fb97b15c57",
+      "versions": {
+        "GLIBC": "2.33"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libsoup-3.0.so.0",
+      "sha256": "aa02ab998740d5d52fa205c95a4f33ad2ac82908f26e1ef17b0d705375f8374b",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgio-2.0.so.0",
+      "sha256": "b63a477916c1f95de4b2c80bb4f5940a59ebc5860793d93b271448e90edbfe52",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libjavascriptcoregtk-4.1.so.0",
+      "sha256": "ce30e117a86cad0225515b58c6b845ce28d56793197a469bb33ac4f82e2c4464",
+      "versions": {
+        "GLIBC": "2.35",
+        "GLIBCXX": "3.4.30",
+        "CXXABI": "1.3.9"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "sha256": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+      "versions": {
+        "GLIBC": "2.35"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libm.so.6",
+      "sha256": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+      "versions": {
+        "GLIBC": "2.35"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libc.so.6",
+      "sha256": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+      "versions": {
+        "GLIBC": "2.35"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libffi.so.8",
+      "sha256": "247da4d5d34a91cadcdd6282be4c4644fcb8af001334d2b8a82ecda435418cbf",
+      "versions": {
+        "GLIBC": "2.27"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libpangocairo-1.0.so.0",
+      "sha256": "f8ca87d7af66241aae432050c679e61d726a6542cb47a1333ce248c0d14c2448",
+      "versions": {
+        "GLIBC": "2.4"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libpango-1.0.so.0",
+      "sha256": "de79fa0f427b7f0e4eaec7246393435535541bb3b0333f0c71b65d73f07602e1",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libcairo-gobject.so.2",
+      "sha256": "edecf402c8e98ed8d8eb3a7e4b9df27671678b7f7b786bdf243a4c84c003b9b1",
+      "versions": {}
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libfontconfig.so.1",
+      "sha256": "7d688909aab1c566b60832045fef012ea118ff7ee189df87608fbff999d3bd0d",
+      "versions": {
+        "GLIBC": "2.33"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libXinerama.so.1",
+      "sha256": "2db9101cec47fe2f00fe27dedf3325ad47e9e8d8f4a552c8ca5f04d6271bd172",
+      "versions": {
+        "GLIBC": "2.4"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libXi.so.6",
+      "sha256": "dc46e4ed45e94b521486438d902b2c360e50bd162849448b53adc7143fa1cb84",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libXrandr.so.2",
+      "sha256": "237b8560e61e4c2d244ea21b4d2e0cd9614de26ce284f7258646897940d8e796",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libXcursor.so.1",
+      "sha256": "a66dc7552a800690b9ff1e7e5026b2ec3f0c359603fe0267f82cc4a6f984f5ac",
+      "versions": {
+        "GLIBC": "2.4"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libXcomposite.so.1",
+      "sha256": "4eea309674b05930c58bb4c8d2588c049ebae4fc0ce27fd06abe3a5fed9e6f91",
+      "versions": {
+        "GLIBC": "2.4"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libXdamage.so.1",
+      "sha256": "2e059ebfa3ed4d37e85c7924529d4c2cf7f3890786acd806b308c2b56571bc20",
+      "versions": {
+        "GLIBC": "2.4"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libXfixes.so.3",
+      "sha256": "3e03576f262820fe27a8cfbcf4d8a2f3bbb5f1df55290e91643794a8147dffb7",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libxkbcommon.so.0",
+      "sha256": "26773f54626af26f5f26f0279a9748ea2445c1adcfef50a7d572c9b54575bd86",
+      "versions": {
+        "GLIBC": "2.33"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libwayland-cursor.so.0",
+      "sha256": "1bf8bf6af96711611300c6a9be353af93ee89e208a2431eb6a894222d314c7b2",
+      "versions": {
+        "GLIBC": "2.28"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libwayland-egl.so.1",
+      "sha256": "c776f338f3dfbbb7056253dde27e08ff851cd3eb269fb57ea9b04b81f56d6ec3",
+      "versions": {
+        "GLIBC": "2.2.5"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libX11.so.6",
+      "sha256": "e23ed094eaf0a74a822a6d9d14eee628ab9f7ec08aecbf20ffd803f019ff6e98",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libXext.so.6",
+      "sha256": "d61399986f565c00c090a1f222019db7b40f42eaf2d93834136d6234c16ec465",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libepoxy.so.0",
+      "sha256": "bc592509279dab19668583d47e2edc2b1c6ae9b93ed7ed1a2cef9810b0ad263d",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libfribidi.so.0",
+      "sha256": "91879069d84de2889086ad44dfc088405e7e7065e1220c1a122f8970fb1f29a9",
+      "versions": {
+        "GLIBC": "2.4"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgmodule-2.0.so.0",
+      "sha256": "1019fc28ced6829f22b446a091ecb5b76b9fa3b3c458bc6ea936c1d328302cb5",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libpng16.so.16",
+      "sha256": "0c55d5776d3382cb7859ff48fcf813e0c3b27f33c46f9364633748830246c723",
+      "versions": {
+        "GLIBC": "2.29"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libjpeg.so.8",
+      "sha256": "2cfbcf67051b3efd1bf634af7d0b65a47dda98ff61ba793a87415ed554731344",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libpixman-1.so.0",
+      "sha256": "f6b5d0cabb6fd4b1007edbfdff4a0601f6631aa66595a89aa4f0128958661dd0",
+      "versions": {
+        "GLIBC": "2.29"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libfreetype.so.6",
+      "sha256": "c338538f8d90eb85217e8525ab363e68e79b46d3c8acc0b6824190e032687e5f",
+      "versions": {
+        "GLIBC": "2.33"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libxcb-shm.so.0",
+      "sha256": "722e13a0a26551dd9f11b930c4632c9e51d2e9f743315d45c1b665356950d42d",
+      "versions": {
+        "GLIBC": "2.4"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libxcb.so.1",
+      "sha256": "aabc489094abd96c876d1c989a2da8a8aa6d28f5a676c4a84dd6d0a0c34aec5d",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libxcb-render.so.0",
+      "sha256": "116b70d1eef6cbad17bec65091b19fce427dc009a6213cee796935fa6a9ce520",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libXrender.so.1",
+      "sha256": "2415c0b512d332522625bc65bcc5e05dba93c2e3418329ded2855111fb0cf723",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libz.so.1",
+      "sha256": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libpcre.so.3",
+      "sha256": "baae995e98223eee1afe6c640f21bdbba91b9c170584ce766418b59810d98a93",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libsystemd.so.0",
+      "sha256": "40c7e0a11f089d712f0462df20e75e968c734a5813c4546f149c11a2f837d88c",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libwebpmux.so.3",
+      "sha256": "28f3105333cf1a45fa80629665667dbdfcac5cb9a51694a2ce33dea858a3e5fa",
+      "versions": {
+        "GLIBC": "2.29"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libexpat.so.1",
+      "sha256": "683e2e41db14581194bf1f6616e95a8f02cd4ab599f0fba807e46325ec01d21f",
+      "versions": {
+        "GLIBC": "2.25"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libicui18n.so.70",
+      "sha256": "24fa78caa9b66c10c90711c51089f45273b643f132031172d54a3e98d711d48e",
+      "versions": {
+        "GLIBC": "2.29",
+        "GLIBCXX": "3.4",
+        "CXXABI": "1.3.8"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libharfbuzz.so.0",
+      "sha256": "da47b2baefbb4e6e6058fec0c4dd0bc9d31703d94150c17c9615288188f4a118",
+      "versions": {
+        "GLIBC": "2.33"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libicuuc.so.70",
+      "sha256": "4683f3623dc47a92e862dc3c8770caff81c9f4c7e116bb672fc439737b06d88a",
+      "versions": {
+        "GLIBC": "2.34",
+        "GLIBCXX": "3.4.11",
+        "CXXABI": "1.3.8"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libatk-1.0.so.0",
+      "sha256": "65831ad344b15dae860a3c73dbe97512b05e54d3566948f5bc633f67216ffd97",
+      "versions": {
+        "GLIBC": "2.4"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libxml2.so.2",
+      "sha256": "8c2a993fe42a16e94f9054f1b9cbeccea50b6ed377359e9d3da04cbb2470f225",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libsqlite3.so.0",
+      "sha256": "f5a7fc236f80f3185608d14e9f4dea3e3fd647582e123e8a00f253629fe16830",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libxslt.so.1",
+      "sha256": "926ce009a8640b6d3c30d97667ce2eb226d77f030887223208d868f963938ddd",
+      "versions": {
+        "GLIBC": "2.33"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/liblcms2.so.2",
+      "sha256": "ebd9d2736f4b45a9b1a6b8e196eb766b724b400c4d6883f5890597abb9dbaad4",
+      "versions": {
+        "GLIBC": "2.29"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libwoff2dec.so.1.0.2",
+      "sha256": "0815ab1155260dc0a0de93d483eb4ff095d5b9a62c3e5682a87d87d26b36776c",
+      "versions": {
+        "GLIBC": "2.14",
+        "GLIBCXX": "3.4.29",
+        "CXXABI": "1.3"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgcrypt.so.20",
+      "sha256": "82f7902f4cffbb89540c09cdb3045d8026548ae4c811d003f25e7b74a6de9d9c",
+      "versions": {
+        "GLIBC": "2.33"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgstallocators-1.0.so.0",
+      "sha256": "4a039e3814da1989503e715c04c13e323fbcb556f4429adedc70e6c13a166ff1",
+      "versions": {
+        "GLIBC": "2.4"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgstapp-1.0.so.0",
+      "sha256": "d52735c5d4cbe507b6a9bbf54566d004d3d7048d74f4131871849158034a5d9c",
+      "versions": {
+        "GLIBC": "2.4"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgstbase-1.0.so.0",
+      "sha256": "92080cccbc9cac9bf38eca2bff0fdf65e02fa6145a41ede28637aa2a67162db5",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgstreamer-1.0.so.0",
+      "sha256": "8f238839a55c56c603b4aa933969ec581cf9d9de8482bf1ac5398a7f9e800051",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgstpbutils-1.0.so.0",
+      "sha256": "de911055200a7cf328e0ee9eb06ea98a05820eafba98b2780264a0cf9d10500f",
+      "versions": {
+        "GLIBC": "2.33"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgstaudio-1.0.so.0",
+      "sha256": "747ac97f51f7e0e9c66b991f114dedcce2a84c302a164a0139659f0f83729453",
+      "versions": {
+        "GLIBC": "2.29"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgsttag-1.0.so.0",
+      "sha256": "cd99c70524a2c86615239d960f2ebbbb7672f1438128e8b989927c3c7b5b40c1",
+      "versions": {
+        "GLIBC": "2.29"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgstvideo-1.0.so.0",
+      "sha256": "8e82df599ec035bfb99d63047753ee55cb40cabb13f9e25000a9c29060e608e6",
+      "versions": {
+        "GLIBC": "2.29"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgstgl-1.0.so.0",
+      "sha256": "3841bcae1fa9cb5e28345dbc58fc5b4f880b23ffe057c01c2d0233d4a7eff018",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgstfft-1.0.so.0",
+      "sha256": "98e43bc32a5f0ea306b7fb9c153d1bfc900cdd0aa3f69c5d2a779e0482250608",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libwebpdemux.so.2",
+      "sha256": "2f45e064033dea262cb8708c845cd0d4d32a19bd05e72b33cf5ec36ee3294b0c",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libwebp.so.7",
+      "sha256": "2cff2529eb932c3b81ef6a344b99a5412c893d3f672a7d28f986a8d08c8b2ccb",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libharfbuzz-icu.so.0",
+      "sha256": "6c8e56ce7f61fc3bad823616c8584f3e98ce5cb994a25ddc6f7a08855b9cc882",
+      "versions": {
+        "GLIBC": "2.4"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libenchant-2.so.2",
+      "sha256": "47261f4bfe24b52d56e4e3973d66b42c8df3c48429362e5c7e3f90a7d9aab770",
+      "versions": {
+        "GLIBC": "2.33"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libsecret-1.so.0",
+      "sha256": "596a51073e24172166c26ee459b2794c6506c20f4b5a0fbd806adb228dd3f2ae",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libtasn1.so.6",
+      "sha256": "f198a1272ca6a071b313646ae65fc1942628df8caebe07e4c377b15b68903358",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libhyphen.so.0",
+      "sha256": "857574eb017908187f18024bce2395c5948720beb4e783d8d222d9700a8ab67a",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libwayland-server.so.0",
+      "sha256": "ce73bdce7d0953f4f045a232f5351ba386be24d3a4aa5f00149f346e4d639003",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libmanette-0.2.so.0",
+      "sha256": "84f43706a847105efee03cc92f16a46e9041ec2d4519684a32ceffa0e072e940",
+      "versions": {
+        "GLIBC": "2.4"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libseccomp.so.2",
+      "sha256": "0a10b36f83b58889352ef9de563fddeb80ba649d6a7108f32f31cfb08693e2a3",
+      "versions": {
+        "GLIBC": "2.4"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgbm.so.1",
+      "sha256": "c0e634db4bc3c8dc6a4a6c83ce52fec78848fd7e2af7b428203048b88933f453",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libdrm.so.2",
+      "sha256": "bab1e283c0fdd19eae10db2522fdc5806f0efee3c175e5e8bb1bc1b478c7e2b1",
+      "versions": {
+        "GLIBC": "2.33"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libstdc++.so.6",
+      "sha256": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+      "versions": {
+        "GLIBC": "2.34",
+        "GLIBCXX": "3.4.30",
+        "CXXABI": "1.3.13"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libatk-bridge-2.0.so.0",
+      "sha256": "13670b19f87dbf32b697104cb5019c91ad886d8122e8d645c27162c97e41e877",
+      "versions": {
+        "GLIBC": "2.7"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libpangoft2-1.0.so.0",
+      "sha256": "158f0b0d7de5fdadf4b6671f97f69e84fa2eec827bb0416788a54dea41b85b39",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libpsl.so.5",
+      "sha256": "95ca960ec3417da3d9505c8d2c6f0e9b7caf79ab900f6099a6bd938cf91069c5",
+      "versions": {
+        "GLIBC": "2.33"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libbrotlidec.so.1",
+      "sha256": "b877956d7814d95fb37473002f46a43fe7f09bebb48a41312c329c65631622b5",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgssapi_krb5.so.2",
+      "sha256": "a8c1a62a7b925e198c5fb8f8123bb2900c235dd678d6dbf0c1e0b5f06175e84b",
+      "versions": {
+        "GLIBC": "2.33"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libnghttp2.so.14",
+      "sha256": "3b9cae3346ad67fbe962fa1ed73f358e125604a3ad7bb11626fa712ccefe6ee2",
+      "versions": {
+        "GLIBC": "2.17"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libmount.so.1",
+      "sha256": "b6e4a8ddc851b58e7f8c93945f875439d2a14a8809efde17b028c4e2db6af328",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libselinux.so.1",
+      "sha256": "624eb1e6a7510e0983e9caa1bbf3e1966acb64fd6d3ad4db94528addbe1e7224",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libatomic.so.1",
+      "sha256": "d4a3c900a38ad280bb34003fbf8326fff53229d4bc4fc368bd48783b74680a36",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libthai.so.0",
+      "sha256": "f8459dcadb747e81e21cad576f8143d7e794671689e2aac0edb1b319f548293a",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libuuid.so.1",
+      "sha256": "4472cf91dbc01395761fb45d0f4b25f6241406fe54cbf540c13755a3706a7b17",
+      "versions": {
+        "GLIBC": "2.25"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libXau.so.6",
+      "sha256": "98343a8324ea62ed75a13c923ed5dea96b7a8ad41aeba9f18126c4cbf7178064",
+      "versions": {
+        "GLIBC": "2.33"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libXdmcp.so.6",
+      "sha256": "1dc3ff1269a5ede69ef9a8ec2436d73fccbcd10531055b359292e0bde4e29b46",
+      "versions": {
+        "GLIBC": "2.4"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/liblzma.so.5",
+      "sha256": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libzstd.so.1",
+      "sha256": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/liblz4.so.1",
+      "sha256": "65f47a3dc2cec5f938379b7b625f0621657bf1254551895d22462c6a204cbad8",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libcap.so.2",
+      "sha256": "00e8d9ef4e9c081a3c8d8164cfd06165937c9bcb6d4f9b47c6dcfa53d9e52046",
+      "versions": {
+        "GLIBC": "2.33"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgraphite2.so.3",
+      "sha256": "1d9215d0099e87da7ed9e1a9c2064fdb1da270253b869721ea0580a00657b723",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libicudata.so.70",
+      "sha256": "c1404396288e178c8db2f30203cb8150e4d2c14cacee9a2883e0092f45399cc8",
+      "versions": {}
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libwoff2common.so.1.0.2",
+      "sha256": "024cbebf1b88326826b4541e510829f685604caa337d224e7cfb1261b5f42784",
+      "versions": {
+        "GLIBC": "2.4",
+        "GLIBCXX": "3.4"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgpg-error.so.0",
+      "sha256": "ed682e103b671d628ef11f19f8a5b772b8d2501ba26e4b80c055331a4c4d8dfc",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libunwind.so.8",
+      "sha256": "5d1f6f104f79698e137c9f17c4b0317dfd96816c0eb6a87c50619a41472ca382",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libdw.so.1",
+      "sha256": "5672258f6357d1f66ca9a1344677fbdd69ff155cf162c8e5b94068086a909df7",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/liborc-0.4.so.0",
+      "sha256": "78021ddd71ece000879a92b854ae2c060898eafe606ad5f38d2889882d42d731",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libGL.so.1",
+      "sha256": "92e6ea9f8caa3c265f3ef141a122a18f7d2e27d6e5fd2b490cfea83262df745e",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libEGL.so.1",
+      "sha256": "69816a7062d7d624144472f5ef71f5b23732b9003df7472662920602e62805db",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libX11-xcb.so.1",
+      "sha256": "d7f9e86161421311a1023c44295a88b4a00b6ecbd20c416fc71895f43e358a0a",
+      "versions": {}
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgudev-1.0.so.0",
+      "sha256": "87e1ea9da3129a0baf391a08f014e70e803c22a21017f3499fc3549855583686",
+      "versions": {
+        "GLIBC": "2.33"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libevdev.so.2",
+      "sha256": "9699894e6afae47dc72717448456c9fff8c42747911aa5ce73eaede9bbbbb0ee",
+      "versions": {
+        "GLIBC": "2.33"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libxcb-randr.so.0",
+      "sha256": "942a242b33c80ab4a5ce6d3db62d12f8856589860fa1986248b046850e58a80e",
+      "versions": {
+        "GLIBC": "2.4"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libatspi.so.0",
+      "sha256": "e1df48522f75baa048beb637c749708536bb6459d7dc8e9df12736f003fb2a88",
+      "versions": {
+        "GLIBC": "2.7"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libunistring.so.2",
+      "sha256": "9c28d59500f186fc28bf7e77e9b1a71129f66731c52ac1e974b9acd1a760911a",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libidn2.so.0",
+      "sha256": "1420c60a18189fb2e7bb4b8da1409564b0c1c46c59df5bbb0c23339bb961403a",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libbrotlicommon.so.1",
+      "sha256": "617035f98d836e37ccaefdd5fe56b45ef4f5e10460c5b4f68c2d488e5a62766f",
+      "versions": {
+        "GLIBC": "2.2.5"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libkrb5.so.3",
+      "sha256": "ecc1a3b592c3685e330499aba8eac3b635e9be80b99fa65b2ef3e4f0b2d8a166",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libk5crypto.so.3",
+      "sha256": "d3c3d1c5415f09918c67a5bb23cf5004aa9524b916003655af4a2bb15627760a",
+      "versions": {
+        "GLIBC": "2.33"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libcom_err.so.2",
+      "sha256": "f196091d8ec9790b4cd203ecdb0eab3b242d35ae8625ead7962d0a944a8fdfa5",
+      "versions": {
+        "GLIBC": "2.17"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libkrb5support.so.0",
+      "sha256": "add5050d2a960ab105b568c714849d1e771cf2bd67a46dbfcc068a99de80eeec",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libblkid.so.1",
+      "sha256": "0aa92efdef9d9419f49b784c9377e3fa09c6e4247162ff8b581934b891fcfa0f",
+      "versions": {
+        "GLIBC": "2.33"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libpcre2-8.so.0",
+      "sha256": "f887eed7d0df7073f3d8bdc9e60d35082453b10165cf45359b5019e33ba2b9ec",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libdatrie.so.1",
+      "sha256": "bb12f6deede55959973954640ed050ec758de674a73c19715adcd6202abb8dcd",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libbsd.so.0",
+      "sha256": "e4ad21c203d8e8b9b7f49071311339af6b438026e1ad236403e3b379b022f23d",
+      "versions": {
+        "GLIBC": "2.33"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libelf.so.1",
+      "sha256": "89a10cfe5c07353235f80dbff50f4602b89811bed7b19621c3a4023157eb1c85",
+      "versions": {
+        "GLIBC": "2.33"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libbz2.so.1.0",
+      "sha256": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+      "versions": {
+        "GLIBC": "2.4"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libGLdispatch.so.0",
+      "sha256": "a4f2642498fba54d2f39e90ca3daa94340cdd52198473185a5285608ae318cb6",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libGLX.so.0",
+      "sha256": "19ad2625b20a3afe6f5e55f9acd1e18e0dfc81b0965d7d3f2181a05b6d48edbf",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libudev.so.1",
+      "sha256": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libkeyutils.so.1",
+      "sha256": "ad20d5fb89df5297073b46373c65bfbb01f33a00b4949894055d29a7fcf00900",
+      "versions": {
+        "GLIBC": "2.14"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libresolv.so.2",
+      "sha256": "7230adfc1d3676f2485bec78f2d5c916d6becb15bc554ff95901f46800215194",
+      "versions": {
+        "GLIBC": "2.34"
+      }
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libmd.so.0",
+      "sha256": "bb376813876bb214535bbbdac70f2c0c4b00baecb81557dab78a79518248df06",
+      "versions": {
+        "GLIBC": "2.33"
+      }
+    }
+  ],
+  "glibc_offenders": [],
+  "abi_pass": true,
+  "source_clean": true,
+  "retained_state": {
+    "sha256": "1a14b3cd9362ccbf413ae4d5f2c9b43b1e4b2ff7f747c604540972f60003439f",
+    "files": 31613,
+    "restore_verified": false
+  },
+  "pass": true
+}

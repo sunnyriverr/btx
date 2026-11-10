@@ -1,0 +1,60 @@
+name: Atlas480 native disposable wallet journey
+on:
+  push:
+    branches: [codex/ci-atlas480-native-wallet]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: linux-current-desktop-candidate
+          run-id: 42720680125
+          github-token: ${{ github.token }}
+          path: candidate-input
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: atlas480-candidate-binary
+          run-id: 42773507615
+          github-token: ${{ github.token }}
+          path: candidate-binary
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: atlas480-build-records
+          run-id: 42773507615
+          github-token: ${{ github.token }}
+          path: build-input
+      - name: Native runtime prerequisites
+        timeout-minutes: 6
+        run: |
+          sudo apt-get -o Acquire::http::Timeout=15 -o Acquire::https::Timeout=15 -o Acquire::Retries=1 update
+          sudo apt-get -o Acquire::http::Timeout=15 -o Acquire::https::Timeout=15 -o Acquire::Retries=1 install -y --no-install-recommends libwebkit2gtk-4.1-0 libgtk-3-0t64 libevent-dev libsqlite3-0 libzmq5 libgomp1 libopengl0 libxkbcommon-x11-0 libayatana-appindicator3-1 xdg-desktop-portal xdg-desktop-portal-gtk zenity xvfb xauth dbus-x11 openbox scrot wmctrl xdotool python3-pyatspi at-spi2-core patchelf
+      - name: Offline classifier controls
+        run: python3 contrib/devtools/atlas480-native/result_handling.py
+      - name: Actual native baseline and candidate wallet journey
+        timeout-minutes: 9
+        env:
+          BTX_RUN_ATLAS_WALLET: explicit-native-authorisation
+        run: |
+          export XDG_CURRENT_DESKTOP=Openbox XDG_SESSION_TYPE=x11
+          export XDG_RUNTIME_DIR="$RUNNER_TEMP/atlas480-desktop-runtime"
+          export XDG_CONFIG_HOME="$RUNNER_TEMP/atlas480-desktop-config"
+          mkdir -p "$XDG_RUNTIME_DIR" "$XDG_CONFIG_HOME/xdg-desktop-portal" atlas480-native-records
+          chmod 700 "$XDG_RUNTIME_DIR"
+          printf '[preferred]\ndefault=gtk\n' > "$XDG_CONFIG_HOME/xdg-desktop-portal/portals.conf"
+          timeout --signal=TERM --kill-after=10s 480s dbus-run-session -- xvfb-run -a -s '-screen 0 1600x1200x24 -nolisten tcp' sh -ec 'dbus-update-activation-environment DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_RUNTIME_DIR XDG_CONFIG_HOME; timeout 20s gdbus call --session --dest org.freedesktop.portal.Desktop --object-path /org/freedesktop/portal/desktop --method org.freedesktop.DBus.Properties.Get org.freedesktop.portal.FileChooser version > "$GITHUB_WORKSPACE/portal-preflight.log"; openbox > /tmp/atlas480-openbox.log 2>&1 & exec /usr/bin/python3 contrib/devtools/atlas480-native/run.py'
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: atlas480-native-wallet-records
+          path: |
+            atlas480-native-records
+            portal-preflight.log
+          retention-days: 14

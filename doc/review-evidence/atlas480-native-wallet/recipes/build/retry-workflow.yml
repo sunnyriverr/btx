@@ -1,0 +1,54 @@
+name: Bounded Atlas480 native candidate build
+on:
+  push:
+    branches: [codex/ci-atlas480-native-build]
+permissions:
+  contents: read
+jobs:
+  candidate:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: f6b2ac8e606789d69c5d7a4edbf21ff11826b557
+          path: product
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: dac9aee53520bd49ed320ec7a49b9072fc7d88d9
+          path: accepted-source
+          persist-credentials: false
+      - name: Proven native Atlas prerequisites
+        timeout-minutes: 8
+        run: |
+          sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g' /etc/apt/sources.list
+          sudo apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=15 -o Acquire::https::Timeout=15 update
+          sudo apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=15 -o Acquire::https::Timeout=15 install -y --no-install-recommends build-essential pkg-config libwebkit2gtk-4.1-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev librsvg2-bin libxdo-dev patchelf
+      - name: Verify locked plan then bounded candidate build
+        timeout-minutes: 28
+        run: python3 contrib/devtools/atlas480-build/run.py
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: atlas480-build-records
+          path: atlas480-build-records
+          retention-days: 14
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: atlas480-candidate-binary
+          path: atlas480-binary
+          retention-days: 14
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: atlas480-build-state
+          path: atlas480-build-state
+          compression-level: 0
+          retention-days: 14
