@@ -1,0 +1,67 @@
+name: Preserve verified Windows checkpoint
+on:
+  push:
+    branches: [codex/ci-pr356-checkpoint-retention]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  retain:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 12
+    env:
+      PAYLOAD_SHA256: b39f7040b7595584d4d4fbe751a69883e073faf7be22a37a0fcfcaac25190476
+      MARKER_SHA256: 2482100da1abb82abda529df0223f815ee8f498fd8cfb470f0803f865db4bdec
+      PAYLOAD_BYTES: '2960610304'
+    steps:
+      - name: Download the verified #467 portable baseline
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: '13753839322'
+          run-id: '42798773622'
+          github-token: ${{ github.token }}
+          path: original
+      - name: Verify source archive checksum and identity
+        working-directory: original
+        run: |
+          set -euo pipefail
+          test "$(stat -c '%s' checkpoint.tar)" = "$PAYLOAD_BYTES"
+          printf '%s  checkpoint.tar\n' "$PAYLOAD_SHA256" | sha256sum --check
+          python3 - <<'PY'
+          import json, os
+          with open('receipt.json', encoding='utf-8-sig') as f:
+              receipt = json.load(f)
+          assert receipt['payload'] == 'checkpoint.tar'
+          assert receipt['sha256'] == os.environ['PAYLOAD_SHA256']
+          assert receipt['marker'] == os.environ['MARKER_SHA256']
+          assert receipt['bytes'] == int(os.environ['PAYLOAD_BYTES'])
+          assert str(receipt['run']) == '42798773622'
+          print('Verified original checkpoint payload and export receipt.')
+          PY
+      - name: Retain the exact payload and receipt
+        id: retain
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: pr356-retained-dac9-checkpoint
+          path: |
+            original/checkpoint.tar
+            original/receipt.json
+          if-no-files-found: error
+          compression-level: 1
+          retention-days: 14
+      - name: Read back the new artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: ${{ steps.retain.outputs.artifact-id }}
+          path: retained
+      - name: Verify retained archive checksum and receipt
+        env:
+          RETAINED_ID: ${{ steps.retain.outputs.artifact-id }}
+        run: |
+          set -euo pipefail
+          test -n "$RETAINED_ID"
+          test "$(stat -c '%s' retained/checkpoint.tar)" = "$PAYLOAD_BYTES"
+          printf '%s  retained/checkpoint.tar\n' "$PAYLOAD_SHA256" | sha256sum --check
+          cmp original/receipt.json retained/receipt.json
+          printf 'Artifact %s read back with payload SHA-256 %s and identical receipt.\n' "$RETAINED_ID" "$PAYLOAD_SHA256"
