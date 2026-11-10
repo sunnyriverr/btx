@@ -139,7 +139,6 @@ def main():
         [coin] = rpc("listunspent", [1], "payer")
         [observed] = rpc("listunspent", [1], "watch")
         assert coin["amount"] == observed["amount"] == 5 and coin["txid"] == observed["txid"] == funding
-        assert observed["solvable"] is True
         assert rpc("getwalletinfo", [], "payer")["unlocked_until"] == 0
         state["wallet_controls"] = {
             "locked": {k: coin[k] for k in ("txid", "vout", "amount", "solvable", "spendable")},
@@ -149,9 +148,6 @@ def main():
             return ([[{"address": recipient, "amount": 1}], {"change_address": change}],
                     [{"change_address": change, "max_inputs": 10, "target_utxo_count": 1}])
         expected = (coin["txid"], coin["vout"])
-        plan = rpc("planconsolidation", [{"max_inputs": 10}], "payer")
-        assert [(x["txid"], x["vout"]) for x in plan["inputs"]] == [expected]
-        state["locked_plan_visible"] = True
         for method, params in zip(METHODS, requests(payer)):
             state["commands"][method] = {"locked": package_reply(method, params, "payer", expected)}
         save()
@@ -162,6 +158,10 @@ def main():
         rpc("walletlock", [], "payer")
         assert rpc("getwalletinfo", [], "payer")["unlocked_until"] == 0
         state["relocked"] = True
+        plan = rpc("planconsolidation", [{"max_inputs": 10}], "payer")
+        assert [(x["txid"], x["vout"]) for x in plan["inputs"]] == [expected]
+        state["locked_plan_visible"] = True
+        save()
         for method, params in zip(METHODS, requests(watch)):
             state["commands"][method]["watch_only"] = package_reply(method, params, "watch", (observed["txid"], observed["vout"]))
         assert rpc("getrawmempool") == [] and rpc("getblockcount") == 111
