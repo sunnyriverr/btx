@@ -160,5 +160,13 @@ def file_path(path):
     subprocess.run(['xdotool','key','--clearmodifiers','ctrl+l'],check=True,timeout=5)
     time.sleep(.3)
     subprocess.run(['xdotool','type','--clearmodifiers','--',str(path)],check=True,timeout=5)
-    wait(lambda:str(path) in text(),10)
+    def path_entered():
+        # Read only this non-secret native picker location, never general editable values.
+        for n in controls():
+            try:
+                if n.getRoleName() in ('entry','text') and n.getState().contains(pyatspi.STATE_EDITABLE):
+                    if n.queryText().getText(0,-1)==str(path):return True
+            except Exception:pass
+        return False
+    wait(path_entered,10)
     click('Select')

@@ -195,6 +195,11 @@ def main():
   except Exception:state['diagnostic']='Static UI could not be safely captured'
  finally:
   if app and app.poll() is None:
+   # Close a test-owned picker/approval normally if an observation failed mid-dialog.
+   try:
+    if "Choose this BTX node's RPC .cookie file" in ui.text():ui.press('Cancel')
+    elif ui.find(lambda n:'Authorize exact operation' in n.name):ui.native_press(ui.native_dialog('Authorize exact operation'),'cancel')
+   except Exception:pass
    try:subprocess.run(['wmctrl','-c','BTX'],timeout=5,check=True);app.wait(timeout=15)
    except Exception:pass
   if node and node.poll() is None:
