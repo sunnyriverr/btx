@@ -92,7 +92,13 @@ try:
     for name in names:
         expected = w / "accepted-source" / name
         if expected.is_file(): assert sha(source/name) == sha(expected), name
-    actual_source = {str(p.relative_to(source)): sha(p) for p in source.rglob("*") if p.is_file() and not p.is_symlink()}
+    # Track links by target as well as by content. is_file() follows links;
+    # excluding only the restored side would falsely reject tracked PQ sources.
+    source_links = {str(p.relative_to(source)):os.readlink(p) for p in source.rglob("*") if p.is_symlink()}
+    expected_links = {n:os.readlink(w/"accepted-source"/n) for n in names if (w/"accepted-source"/n).is_symlink()}
+    (out/"source-links.json").write_text(json.dumps({"actual":source_links,"expected":expected_links},indent=2)+"\n")
+    assert source_links == expected_links, "Source symlink targets differ"
+    actual_source = {str(p.relative_to(source)): sha(p) for p in source.rglob("*") if p.is_file()}
     expected_source = {n: sha(w/"accepted-source"/n) for n in names if (w/"accepted-source"/n).is_file()}
     differences = {"extra": sorted(set(actual_source)-set(expected_source)), "missing": sorted(set(expected_source)-set(actual_source)), "changed": sorted(n for n in set(actual_source)&set(expected_source) if actual_source[n]!=expected_source[n])}
     (out/"source-differences.json").write_text(json.dumps(differences,indent=2)+"\n")
@@ -128,7 +134,7 @@ try:
     assert after.count(insertion) == 1 and after.replace(insertion, "", 1) == before
     (source/DELTA).write_bytes(content); (source/DELTA).touch()
     after_source = dict(actual_source); after_source[DELTA] = ENCRYPT
-    assert {str(p.relative_to(source)):sha(p) for p in source.rglob("*") if p.is_file() and not p.is_symlink()} == after_source
+    assert {str(p.relative_to(source)):sha(p) for p in source.rglob("*") if p.is_file()} == after_source
     (out/"source-after.json").write_text(json.dumps(after_source, sort_keys=True, indent=2)+"\n")
     run(["cmake", "-P", build/"CMakeFiles/VerifyGlobs.cmake"], "verify-globs", cwd=build)
     observed = out/"observed.ninja"; shutil.copy2(build/"build.ninja", observed)
