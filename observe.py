@@ -84,6 +84,15 @@ try:
     assert sha(baseline) == expected["baseline_binaries"]["btx-qt"]
     assert sha(candidate) == expected["candidate_qt"]
     assert all(sha(w/"candidate/bin"/n) == expected["baseline_binaries"][n] for n in ("btxd","btx-cli"))
+    for label, path in {
+        "baseline-qt": baseline, "candidate-qt": candidate,
+        "daemon": w/"candidate/bin/btxd", "cli": w/"candidate/bin/btx-cli",
+        "qt-xcb": Path("/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqxcb.so"),
+    }.items():
+        assert path.is_file(), path
+        loaded = subprocess.check_output(["ldd", path], text=True, timeout=20)
+        (out/(label+"-ldd.log")).write_text(loaded)
+        assert "not found" not in loaded, label
     run("baseline", baseline)
     run("candidate", candidate)
     result["verdict"] = "PASS"
