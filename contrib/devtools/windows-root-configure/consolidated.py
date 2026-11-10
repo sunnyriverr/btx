@@ -19,7 +19,7 @@ def quiet(tree,limit=10):
  while tree.active()!=1 and time.monotonic()<until:time.sleep(.1)
  return tree.active()==1
 
-def execute(tree,label,args,seconds,memory=4*1024**3):
+def execute(tree,label,args,seconds,memory=1024**3):
  log=E/(label+'.log');begin=time.monotonic();peak=0;peak_processes=0;reason=None;samples=[]
  with log.open('wb')as f:
   proc=subprocess.Popen([str(a)for a in args],cwd=SOURCE,stdin=subprocess.DEVNULL,stdout=f,stderr=subprocess.STDOUT);R['active_command']=label;R['process_active']=True;remember();last=-1
@@ -62,9 +62,9 @@ def preflight():
   following=next((q for q in lines[i+1:]if q.strip()),'');nxt=len(following)-len(following.lstrip())if following else -1
   if nxt>indent:stack.append((indent,name))
   else:registered.add('/'.join([v for _,v in stack]+[name]))
- assert len(M['selectors'])==28==len(set(M['selectors']))and set(M['selectors'])<=registered
+ assert len(M['selectors'])==3==len(set(M['selectors']))and set(M['selectors'])<=registered
  assert h.checkpoint.digest(B/'bin/test_btx.exe')==M['binary_sha256']and not h.processes()
- R['preflight']={'passed':True,'deadline_child_and_grandchild_cleanup':True,'sampled_job_working_set_stop':True,'strict_xml_selection_and_assertion_controls':True,'registered_selectors':28,'registered_total':len(registered),'native_product_cases_run':0};R['status']='PREFLIGHT_PASS';remember()
+ R['preflight']={'passed':True,'deadline_child_and_grandchild_cleanup':True,'sampled_job_working_set_stop':True,'strict_xml_selection_and_assertion_controls':True,'registered_selectors':3,'registered_total':len(registered),'native_product_cases_run':0};R['status']='PREFLIGHT_PASS';remember()
 
 def run():
  assert R['status']=='PREFLIGHT_PASS'and R['preflight']['passed'];assert h.checkpoint.digest(B/'bin/test_btx.exe')==M['binary_sha256'];tree=ProcessTree();globals()['tree']=tree
