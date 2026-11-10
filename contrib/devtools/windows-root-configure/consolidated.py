@@ -19,10 +19,10 @@ def quiet(tree,limit=10):
  while tree.active()!=1 and time.monotonic()<until:time.sleep(.1)
  return tree.active()==1
 
-def execute(tree,label,args,seconds,memory=1024**3):
+def execute(tree,label,args,seconds,memory=1024**3,cwd=None):
  log=E/(label+'.log');begin=time.monotonic();peak=0;peak_processes=0;reason=None;samples=[]
  with log.open('wb')as f:
-  proc=subprocess.Popen([str(a)for a in args],cwd=SOURCE,stdin=subprocess.DEVNULL,stdout=f,stderr=subprocess.STDOUT);R['active_command']=label;R['process_active']=True;remember();last=-1
+  proc=subprocess.Popen([str(a)for a in args],cwd=cwd or SOURCE,stdin=subprocess.DEVNULL,stdout=f,stderr=subprocess.STDOUT);R['active_command']=label;R['process_active']=True;remember();last=-1
   try:
    while proc.poll()is None:
     total,pids=tree.working_set();peak=max(peak,total);peak_processes=max(peak_processes,len(pids));elapsed=time.monotonic()-begin;resources=s.resources()
@@ -132,9 +132,18 @@ def linkcause():
     content=expanded[len(prefix):len(expanded)-len(suffix)if suffix else None];assert content and '.obj'in content
     response=E/(mode+'-link.rsp');response.write_text(content,encoding='utf-8');command=prefix+'@"'+str(response)+'"'+suffix
    else:assert command==expanded
-   assert len(command)<7000,'Refuse overlong cmd line rather than changing link inputs'
-   batch=E/(mode+'-link.cmd');batch.write_text('@echo off\ncd /d "'+str(B)+'"\n'+command+'\nexit /b %errorlevel%\n',encoding='utf-8')
-   row=execute(tree,mode+'-link',['cmd.exe','/d','/c',str(batch)],360,memory=4*1024**3);assert row['exit']==0 and not row['budget_stop'];assert mapfile.exists()
+   # Use the exact linker argument vector; CMake's wrapper expands the huge RSP on Windows.
+   import ctypes
+   tail=command.split(' -- ',1)[1].split(' && ',1)[0]
+   argc=ctypes.c_int();parse=ctypes.windll.shell32.CommandLineToArgvW;parse.argtypes=[ctypes.c_wchar_p,ctypes.POINTER(ctypes.c_int)];parse.restype=ctypes.POINTER(ctypes.c_wchar_p)
+   ptr=parse(tail,ctypes.byref(argc));assert ptr
+   try:argv=[ptr[i]for i in range(argc.value)]
+   finally:ctypes.windll.kernel32.LocalFree(ptr)
+   assert Path(argv[0]).name.lower()=='lld-link.exe'and sum(x.startswith('@')for x in argv)==1
+   assert '/out:bin\\test_btx.exe'in argv and '/INCREMENTAL:NO'in argv
+   argv.append('/MANIFEST:EMBED,ID=1')
+   (E/(mode+'-direct-argv.json')).write_text(json.dumps(argv,indent=2)+'\n')
+   row=execute(tree,mode+'-link',argv,360,memory=4*1024**3,cwd=B);assert row['exit']==0 and not row['budget_stop'];assert mapfile.exists()
    relevant=[l for l in mapfile.read_text(errors='replace').splitlines()if 'OracleGemmS8S8@'in l or 'IndependentOracleGemmS8S8@'in l]
    (E/(mode+'-callback-map.txt')).write_text('\n'.join(relevant)+'\n')
    # Read actual image addresses from the map, not compiler-folded C++ pointer comparisons.
