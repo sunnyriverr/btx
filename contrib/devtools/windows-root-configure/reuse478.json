@@ -1,9 +1,12 @@
 {
-  "prior_run": 42780444882,
+  "prior_runs": [
+    42780444882,
+    42782255924
+  ],
   "baseline": {
     "tree": "cf51281bcfc0f6fbfb09fd04d86388a742769aa5",
-    "binary_sha256": "1e4dcc935c931c4b423c7422a1255efcb71a47faaffbb29980fbcc8d2687b4b1",
-    "test_object_sha256": "d79bb3d3254f5e68f818fd303e4b680eab85d2890553099b56e81b82fc6d9b64",
+    "binary_sha256": "d91e1e2e26a36557354c2ce185c8178afe7521d805f21a43a34ca742fa3637bc",
+    "test_object_sha256": "daa38d6b2ef0fa610afa441ad2f5d937dcaa91937be69f0d93f1aa5103000a8f",
     "results": [
       {
         "exit": 0,
@@ -35,9 +38,19 @@
         "exit": 201,
         "log_sha256": "9db0fc908296524df7f5f0349bc05e7324c34dc251ec96d9533d8f23d642c494",
         "xml_sha256": "d629e06d871d13053677eaa26f0b82bb8d06da01246d73ce488b7d910ab63bc5"
+      },
+      {
+        "state": "expected_recursive_mutex_failure",
+        "oracle": "exact Windows deadlock exception at maintained call checkpoint; all prerequisite assertions pass; complete single-case aborted XML",
+        "partial_xml_allowed_only_for_this_failure": false,
+        "selector": "matmul_trusted_mirror_tests/received_pq_votes_persist_and_survive_restart",
+        "seconds": 1.328,
+        "exit": 201,
+        "log_sha256": "6afd26c9e7a7e99a1afef36d2d65216617f6d594180c8fb67620bb6a578c2ca8",
+        "xml_sha256": "7789bbe8a3b2ce541a386803bbebfd912d91108b98cb288c4b8e5af73bf4d80d"
       }
-    ]
+    ],
+    "reused_from_run": 42780444882
   },
-  "archive_sha256": "9234f6309b04e27da51045eeb25cb24b4029621556d18ef7a58ba1d4b75e3d18",
-  "reason": "Exact Windows recursive-mutex exception attributed after key/config/database setup at maintained SignAuthoritative call; passing baseline control and local failure retained. No product/test source change."
+  "note": "Baseline results:secp/local from42780444882, receiver from42782255924. Exact identical testsource/profile; fresh compiled objects differ across hosted runs. Candidate-only execution; no baseline repeats."
 }

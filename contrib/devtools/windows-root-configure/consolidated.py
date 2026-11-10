@@ -135,7 +135,16 @@ def pqcampaign():
   assert rule.startswith('CXX_STATIC_LIBRARY_LINKER__bitcoin_node_')if kind=='archive'else rule.startswith('CXX_EXECUTABLE_LINKER__test_btx_')
   def db(expand):
    raw=subprocess.check_output(['ninja','-C',str(B),'-t','compdb']+(['-x']if expand else[])+[rule],text=True,timeout=45);(E/(label+('-expanded'if expand else'-saved')+'.json')).write_text(raw);rows=json.loads(raw);assert len(rows)==1;return rows[0]['command']
-  command=db(False);expanded=db(True);assert '/OPT:NOICF'not in command.upper();tokens=list(re.finditer(r'@(?:"[^"]+"|[^\s"]+)',command));assert len(tokens)==1;t=tokens[0];prefix=command[:t.start()];suffix=command[t.end():];assert expanded.startswith(prefix)and expanded.endswith(suffix);rsp=E/(label+'.rsp');rsp.write_text(expanded[len(prefix):len(expanded)-len(suffix)],encoding='utf-8');command=prefix+'@"'+str(rsp)+'"'+suffix
+  command=db(False);expanded=db(True);assert '/OPT:NOICF'not in command.upper()
+  if kind=='archive':
+   assert command==expanded and '@'not in command
+   tool=re.search(r'(?i)("[^"\n]*(?:llvm-lib|lib)\.exe"|[^\s"]*(?:llvm-lib|lib)\.exe)\s+.*?(?=\s+&&|$)',command);assert tool
+   args=argv(tool.group());assert Path(args[0]).name.lower()=='llvm-lib.exe'
+   assert any(x.lower().replace('\\','/')=='/out:lib/bitcoin_node.lib'for x in args)
+   expected=match.group().splitlines()[0].split(': ',1)[1].split(' || ',1)[0].split()[1:]
+   assert args[4:]==expected and all((B/x).is_file()for x in expected)
+   (E/(label+'-argv.json')).write_text(json.dumps(args,indent=2)+'\n');row=execute(tree,label,args,cap(120),memory=4*1024**3,cwd=B);assert row['exit']==0 and not row['budget_stop'];return
+  tokens=list(re.finditer(r'@(?:"[^"]+"|[^\s"]+)',command));assert len(tokens)==1;t=tokens[0];prefix=command[:t.start()];suffix=command[t.end():];assert expanded.startswith(prefix)and expanded.endswith(suffix);rsp=E/(label+'.rsp');rsp.write_text(expanded[len(prefix):len(expanded)-len(suffix)],encoding='utf-8');command=prefix+'@"'+str(rsp)+'"'+suffix
   if kind=='link':args=argv(command.split(' -- ',1)[1].split(' && ',1)[0]);assert Path(args[0]).name.lower()=='lld-link.exe';args.append('/MANIFEST:EMBED,ID=1')
   else:
    tool=re.search(r'(?i)("[^"\n]*(?:llvm-lib|lib)\.exe"|[^\s"]*(?:llvm-lib|lib)\.exe)\s+.*?(?=\s+&&|$)',command);assert tool,command;args=argv(tool.group());assert Path(args[0]).name.lower()in ['llvm-lib.exe','lib.exe'];assert any(x.lower().replace('\\','/')=='/out:lib/bitcoin_node.lib'for x in args)
@@ -144,11 +153,12 @@ def pqcampaign():
  try:
   for n in sources:assert hashlib.sha256(sources[n]).hexdigest()==meta['files'][n]['base_sha256']
   test='src/test/matmul_trusted_mirror_tests.cpp';prod='src/node/matmul_trusted_attestations.cpp';newtest=(P/'test478.cpp').read_bytes();assert hashlib.sha256(newtest).hexdigest()==meta['files'][test]['candidate_sha256'];(SOURCE/test).write_bytes(newtest)
-  compile_one(test,'baseline-test-compile');testhash=h.checkpoint.digest(ROOT/names[0]);R['pq478']['compiled_test_object_sha256']=testhash;remember();link_or_archive('bin/test_btx.exe','baseline-link','link')
+  compile_one(test,'baseline-test-compile');testhash=h.checkpoint.digest(ROOT/names[0]);R['pq478']['compiled_test_object_sha256']=testhash;remember()
+  reuse=json.loads((P/'reuse478.json').read_text());R['pq478']['phases']['baseline']=reuse['baseline'];R['pq478']['baseline_reuse_note']=reuse['note'];remember()
   for k in list(os.environ):
    if k.startswith('BTX_MATMUL_'):os.environ.pop(k,None)
   os.environ.update(M['environment'])
-  for phase in ['baseline','candidate']:
+  for phase in ['candidate']:
    if phase=='candidate':
     newprod=(P/'production478.cpp').read_bytes();assert hashlib.sha256(newprod).hexdigest()==meta['files'][prod]['candidate_sha256'];(SOURCE/prod).write_bytes(newprod);compile_one(prod,'candidate-node-compile');link_or_archive('lib/bitcoin_node.lib','candidate-node-archive','archive');assert h.checkpoint.digest(ROOT/names[0])==testhash;link_or_archive('bin/test_btx.exe','candidate-link','link')
    state={'tree':compose(),'binary_sha256':h.checkpoint.digest(B/'bin/test_btx.exe'),'test_object_sha256':testhash,'results':[]};R['pq478']['phases'][phase]=state;remember()
