@@ -62,9 +62,9 @@ def preflight():
   following=next((q for q in lines[i+1:]if q.strip()),'');nxt=len(following)-len(following.lstrip())if following else -1
   if nxt>indent:stack.append((indent,name))
   else:registered.add('/'.join([v for _,v in stack]+[name]))
- assert len(M['selectors'])==3==len(set(M['selectors']))and set(M['selectors'])<=registered
+ assert len(M['selectors'])==1==len(set(M['selectors']))and set(M['selectors'])<=registered
  assert h.checkpoint.digest(B/'bin/test_btx.exe')==M['binary_sha256']and not h.processes()
- R['preflight']={'passed':True,'deadline_child_and_grandchild_cleanup':True,'sampled_job_working_set_stop':True,'strict_xml_selection_and_assertion_controls':True,'registered_selectors':3,'registered_total':len(registered),'native_product_cases_run':0};R['status']='PREFLIGHT_PASS';remember()
+ R['preflight']={'passed':True,'deadline_child_and_grandchild_cleanup':True,'sampled_job_working_set_stop':True,'strict_xml_selection_and_assertion_controls':True,'registered_selectors':1,'registered_total':len(registered),'native_product_cases_run':0};R['status']='PREFLIGHT_PASS';remember()
 
 def run():
  assert R['status']=='PREFLIGHT_PASS'and R['preflight']['passed'];assert h.checkpoint.digest(B/'bin/test_btx.exe')==M['binary_sha256'];tree=ProcessTree();globals()['tree']=tree
@@ -105,69 +105,77 @@ def verify():
   R['runtime_data_removed']=not data.exists()
  h.verify();R['whole_cache_unchanged']=True;remember();assert not survivors
 
-def fixturefix():
+def pqcampaign():
  import re,ctypes
- assert R['status']=='PREFLIGHT_PASS';tree=ProcessTree();globals()['tree']=tree
- inputs=json.loads((P/'patch-inputs.json').read_text());file=SOURCE/inputs['file'];assert h.checkpoint.digest(file)==inputs['before_sha256'];source_bytes=file.read_bytes();source_mtime=file.stat().st_mtime_ns
- names=['project-build/src/test/CMakeFiles/test_btx.dir/matmul_v4_rc_tests.cpp.obj','project-build/bin/test_btx.exe','project-build/bin/test_btx.pdb','project-build/lib/test_btx.lib','project-build/lib/test_btx.exp'];backup=ROOT/'rc-fixture-originals';assert not backup.exists();backup.mkdir();saved={}
+ from case_oracle import before_deadline
+ assert R['status']=='PREFLIGHT_PASS';tree=ProcessTree();globals()['tree']=tree;start=time.monotonic();meta=json.loads((P/'inputs478.json').read_text())
+ sources={n:(SOURCE/n).read_bytes()for n in meta['files']};mtimes={n:(SOURCE/n).stat().st_mtime_ns for n in sources}
+ names=['project-build/src/test/CMakeFiles/test_btx.dir/matmul_trusted_mirror_tests.cpp.obj','project-build/src/CMakeFiles/bitcoin_node.dir/node/matmul_trusted_attestations.cpp.obj','project-build/lib/bitcoin_node.lib','project-build/bin/test_btx.exe','project-build/bin/test_btx.pdb','project-build/lib/test_btx.lib','project-build/lib/test_btx.exp'];backup=ROOT/'pq478-originals';assert not backup.exists();backup.mkdir();saved={}
  for i,n in enumerate(names):
   f=ROOT/n;saved[n]={'exists':f.exists(),'mtime':f.stat().st_mtime_ns if f.exists()else None}
   if f.exists():shutil.copyfile(f,backup/str(i))
+ def cap(limit):
+  remaining=600-(time.monotonic()-start);assert remaining>5,'Whole campaign budget';return min(limit,remaining)
  def argv(command):
-  argc=ctypes.c_int();parse=ctypes.windll.shell32.CommandLineToArgvW;parse.argtypes=[ctypes.c_wchar_p,ctypes.POINTER(ctypes.c_int)];parse.restype=ctypes.POINTER(ctypes.c_wchar_p);ptr=parse(command,ctypes.byref(argc));assert ptr
+  argc=ctypes.c_int();fn=ctypes.windll.shell32.CommandLineToArgvW;fn.argtypes=[ctypes.c_wchar_p,ctypes.POINTER(ctypes.c_int)];fn.restype=ctypes.POINTER(ctypes.c_wchar_p);ptr=fn(command,ctypes.byref(argc));assert ptr
   try:return [ptr[i]for i in range(argc.value)]
   finally:ctypes.windll.kernel32.LocalFree(ptr)
- R['fixture_fix']={'compiled_objects':0,'relinks':0,'normal_optimized_link':True,'baseline_reused_run':42735908793,'controls':[]};remember()
- try:
-  s.need('fixture-apply-check',['git','apply','--check',str(P/'fixture.patch')],30);s.need('fixture-apply',['git','apply',str(P/'fixture.patch')],30);assert h.checkpoint.digest(file)==inputs['after_sha256']
-  s.need('fixture-diff-check',['git','diff','--check'],30);changed=subprocess.check_output(['git','diff','--name-only'],cwd=SOURCE,text=True).splitlines();assert changed==[inputs['file']]
-  (E/'fixture.patch').write_bytes((P/'fixture.patch').read_bytes());(E/'patch-inputs.json').write_text(json.dumps(inputs,indent=2)+'\n')
-  env=dict(os.environ);index=ROOT/'rc-fixture-index';assert not index.exists();env['GIT_INDEX_FILE']=str(index)
+ def compose():
+  env=dict(os.environ);index=ROOT/'pq478-index';assert not index.exists();env['GIT_INDEX_FILE']=str(index)
   try:
-   subprocess.run(['git','read-tree',h.TARGET],cwd=SOURCE,env=env,check=True);subprocess.run(['git','add','--',inputs['file']],cwd=SOURCE,env=env,check=True);R['fixture_fix']['tested_tree']=subprocess.check_output(['git','write-tree'],cwd=SOURCE,env=env,text=True).strip()
+   subprocess.run(['git','read-tree',h.TARGET],cwd=SOURCE,env=env,check=True);subprocess.run(['git','add','--',*sources],cwd=SOURCE,env=env,check=True);return subprocess.check_output(['git','write-tree'],cwd=SOURCE,env=env,text=True).strip()
   finally:
    if index.exists():index.unlink()
-  commands=json.loads((B/'compile_commands.json').read_text());selected=[x for x in commands if x['file'].replace('\\','/').endswith('/src/test/matmul_v4_rc_tests.cpp')];assert len(selected)==1;compile_argv=argv(selected[0]['command']);assert Path(compile_argv[0]).name.lower()=='clang-cl.exe'and '/O2'in compile_argv and '-c'in compile_argv
-  (E/'exact-compile-command.json').write_text(json.dumps(selected[0],indent=2)+'\n');row=execute(tree,'fixture-single-compile',compile_argv,240,memory=4*1024**3,cwd=B);assert row['exit']==0 and not row['budget_stop'];R['fixture_fix']['compiled_objects']=1;R['fixture_fix']['candidate_object_sha256']=h.checkpoint.digest(ROOT/names[0]);remember()
-  manifest=(B/'build.ninja').read_text();match=re.search(r'(?m)^build bin/test_btx\.exe:.*?(?=\n\n)',manifest,re.S);assert match;rule=match.group().splitlines()[0].split(': ',1)[1].split()[0];assert rule.startswith('CXX_EXECUTABLE_LINKER__test_btx_')
-  def database(expand):
-   args=['ninja','-C',str(B),'-t','compdb']+(['-x']if expand else[])+[rule];raw=subprocess.check_output(args,text=True,timeout=45);(E/('normal-'+('expanded'if expand else'saved')+'-link-command.json')).write_text(raw);db=json.loads(raw);assert len(db)==1;return db[0]['command']
-  command=database(False);expanded=database(True);assert '/OPT:NOICF'not in command.upper()and '/OPT:ICF'not in command.upper();tokens=list(re.finditer(r'@(?:"[^"]+"|[^\s"]+)',command));assert len(tokens)==1;t=tokens[0];prefix=command[:t.start()];suffix=command[t.end():];assert expanded.startswith(prefix)and expanded.endswith(suffix);response=E/'normal-link.rsp';response.write_text(expanded[len(prefix):len(expanded)-len(suffix)],encoding='utf-8');command=prefix+'@"'+str(response)+'"'+suffix
-  link_argv=argv(command.split(' -- ',1)[1].split(' && ',1)[0]);assert Path(link_argv[0]).name.lower()=='lld-link.exe'and '/INCREMENTAL:NO'in link_argv;mapfile=E/'normal.map';link_argv+=['/MANIFEST:EMBED,ID=1','/MAP:'+str(mapfile)];(E/'normal-direct-link-argv.json').write_text(json.dumps(link_argv,indent=2)+'\n')
-  row=execute(tree,'fixture-normal-link',link_argv,360,memory=4*1024**3,cwd=B);assert row['exit']==0 and not row['budget_stop'];R['fixture_fix']['relinks']=1;R['fixture_fix']['candidate_binary_sha256']=h.checkpoint.digest(B/'bin/test_btx.exe');R['fixture_fix']['map_sha256']=h.checkpoint.digest(mapfile)
-  lines=[l for l in mapfile.read_text(errors='replace').splitlines()if 'OracleGemmS8S8@'in l];(E/'normal-callback-map.txt').write_text('\n'.join(lines)+'\n');addresses={}
-  for line in lines:
-   parts=line.split()
-   if len(parts)>=3:
-    kind='alternate'if '?IndependentOracleGemmS8S8@'in parts[1]else'primary'if '?OracleGemmS8S8@'in parts[1]else None
-    if kind:assert kind not in addresses;addresses[kind]=parts[2]
-  assert len(addresses)==2 and len(set(addresses.values()))==2;R['fixture_fix']['callback_addresses']=addresses;mapfile.unlink();remember()
-  data=Path('D:/rf'+os.environ['GITHUB_RUN_ID']);assert not data.exists();data.mkdir();R['unit_data']=str(data);prior=dict(os.environ)
-  try:
-   for k in list(os.environ):
-    if k.startswith('BTX_MATMUL_'):os.environ.pop(k,None)
-   os.environ.update(M['environment'])
-   for i,selector in enumerate(M['fixture_selectors'],1):
-    root=data/str(i);root.mkdir();temp=root/'t';temp.mkdir();os.environ['TMP']=os.environ['TEMP']=str(temp);label='fixture-control-'+str(i);report=E/(label+'.xml');args=[B/'bin/test_btx.exe','--run_test='+selector,'--log_level=test_suite','--report_level=detailed','--report_format=XML','--report_sink='+str(report),'--catch_system_errors=yes','--','-testdatadir='+str(root)]
-    row=execute(tree,label,args,60);result=outcome([selector],(E/(label+'.log')).read_text(errors='replace'),report.read_text(errors='replace')if report.exists()else'',row['exit'],row['budget_stop']);result.update(selector=selector,seconds=row['seconds'],xml_sha256=h.checkpoint.digest(report)if report.exists()else None,log_sha256=row['log_sha256']);R['fixture_fix']['controls'].append(result);remember();assert result['state']=='passed',result
-  finally:
-   os.environ.clear();os.environ.update(prior)
-   if data.exists():shutil.rmtree(data)
-   R.pop('unit_data',None);R['fixture_fix']['runtime_removed']=not data.exists()
+ commands=json.loads((B/'compile_commands.json').read_text())
+ def compile_one(name,label):
+  rows=[x for x in commands if x['file'].replace('\\','/').endswith('/'+name)];assert len(rows)==1;args=argv(rows[0]['command']);assert Path(args[0]).name.lower()=='clang-cl.exe'and '/O2'in args
+  (E/(label+'-command.json')).write_text(json.dumps(rows[0],indent=2)+'\n');row=execute(tree,label,args,cap(180),memory=4*1024**3,cwd=B);assert row['exit']==0 and not row['budget_stop']
+ def link_or_archive(target,label,kind):
+  text=(B/'build.ninja').read_text();match=re.search(r'(?m)^build '+re.escape(target)+r':.*?(?=\n\n)',text,re.S);assert match;rule=match.group().splitlines()[0].split(': ',1)[1].split()[0]
+  assert rule.startswith('CXX_STATIC_LIBRARY_LINKER__bitcoin_node_')if kind=='archive'else rule.startswith('CXX_EXECUTABLE_LINKER__test_btx_')
+  def db(expand):
+   raw=subprocess.check_output(['ninja','-C',str(B),'-t','compdb']+(['-x']if expand else[])+[rule],text=True,timeout=45);(E/(label+('-expanded'if expand else'-saved')+'.json')).write_text(raw);rows=json.loads(raw);assert len(rows)==1;return rows[0]['command']
+  command=db(False);expanded=db(True);assert '/OPT:NOICF'not in command.upper();tokens=list(re.finditer(r'@(?:"[^"]+"|[^\s"]+)',command));assert len(tokens)==1;t=tokens[0];prefix=command[:t.start()];suffix=command[t.end():];assert expanded.startswith(prefix)and expanded.endswith(suffix);rsp=E/(label+'.rsp');rsp.write_text(expanded[len(prefix):len(expanded)-len(suffix)],encoding='utf-8');command=prefix+'@"'+str(rsp)+'"'+suffix
+  if kind=='link':args=argv(command.split(' -- ',1)[1].split(' && ',1)[0]);assert Path(args[0]).name.lower()=='lld-link.exe';args.append('/MANIFEST:EMBED,ID=1')
+  else:
+   tool=re.search(r'(?i)("[^"\n]*(?:llvm-lib|lib)\.exe"|[^\s"]*(?:llvm-lib|lib)\.exe)\s+.*?(?=\s+&&|$)',command);assert tool,command;args=argv(tool.group());assert Path(args[0]).name.lower()in ['llvm-lib.exe','lib.exe'];assert any(x.lower().replace('\\','/')=='/out:lib/bitcoin_node.lib'for x in args)
+  (E/(label+'-argv.json')).write_text(json.dumps(args,indent=2)+'\n');row=execute(tree,label,args,cap(120),memory=4*1024**3,cwd=B);assert row['exit']==0 and not row['budget_stop']
+ R['pq478']={'phases':{},'same_test_source_sha256':meta['files']['src/test/matmul_trusted_mirror_tests.cpp']['candidate_sha256']};remember();data=Path('D:/pq'+os.environ['GITHUB_RUN_ID']);assert not data.exists();data.mkdir();R['unit_data']=str(data);prior=dict(os.environ)
+ try:
+  for n in sources:assert hashlib.sha256(sources[n]).hexdigest()==meta['files'][n]['base_sha256']
+  test='src/test/matmul_trusted_mirror_tests.cpp';prod='src/node/matmul_trusted_attestations.cpp';newtest=(P/'test478.cpp').read_bytes();assert hashlib.sha256(newtest).hexdigest()==meta['files'][test]['candidate_sha256'];(SOURCE/test).write_bytes(newtest)
+  compile_one(test,'baseline-test-compile');testhash=h.checkpoint.digest(ROOT/names[0]);link_or_archive('bin/test_btx.exe','baseline-link','link')
+  for k in list(os.environ):
+   if k.startswith('BTX_MATMUL_'):os.environ.pop(k,None)
+  os.environ.update(M['environment'])
+  for phase in ['baseline','candidate']:
+   if phase=='candidate':
+    newprod=(P/'production478.cpp').read_bytes();assert hashlib.sha256(newprod).hexdigest()==meta['files'][prod]['candidate_sha256'];(SOURCE/prod).write_bytes(newprod);compile_one(prod,'candidate-node-compile');link_or_archive('lib/bitcoin_node.lib','candidate-node-archive','archive');assert h.checkpoint.digest(ROOT/names[0])==testhash;link_or_archive('bin/test_btx.exe','candidate-link','link')
+   state={'tree':compose(),'binary_sha256':h.checkpoint.digest(B/'bin/test_btx.exe'),'test_object_sha256':testhash,'results':[]};R['pq478']['phases'][phase]=state;remember()
+   if phase=='candidate':assert state['tree']==meta['candidate_tree']
+   for i,selector in enumerate(M['pq_selectors'],1):
+    root=data/(phase+str(i));root.mkdir();temp=root/'t';temp.mkdir();os.environ['TMP']=os.environ['TEMP']=str(temp);label=phase+'-case-'+str(i);report=E/(label+'.xml');args=[B/'bin/test_btx.exe','--run_test='+selector,'--log_level=all','--report_level=detailed','--report_format=XML','--report_sink='+str(report),'--catch_system_errors=yes','--','-testdatadir='+str(root)];row=execute(tree,label,args,cap(45));log=(E/(label+'.log')).read_text(errors='replace');xml=report.read_text(errors='replace')if report.exists()else''
+    if phase=='baseline'and i>1:result=before_deadline(selector,log,xml,row['exit'],row['budget_stop'],meta['deadline_labels'][selector])
+    else:result=outcome([selector],log,xml,row['exit'],row['budget_stop'])
+    result.update(selector=selector,seconds=row['seconds'],exit=row['exit'],log_sha256=row['log_sha256'],xml_sha256=h.checkpoint.digest(report)if report.exists()else None);state['results'].append(result);remember();assert result['state']==('expected_deadline_reproduced'if phase=='baseline'and i>1 else'passed'),result
+  R['status']='PQ478_SCOPED_PASS'
  finally:
-  assert not h.processes();file.write_bytes(source_bytes);os.utime(file,ns=(source_mtime,source_mtime))
+  os.environ.clear();os.environ.update(prior);assert not h.processes()
+  if data.exists():shutil.rmtree(data)
+  R.pop('unit_data',None);R['pq478']['runtime_removed']=not data.exists()
+  for n,b in sources.items():(SOURCE/n).write_bytes(b);os.utime(SOURCE/n,ns=(mtimes[n],mtimes[n]))
   for i,n in enumerate(names):
    f=ROOT/n
    if saved[n]['exists']:shutil.copyfile(backup/str(i),f);os.utime(f,ns=(saved[n]['mtime'],saved[n]['mtime']))
    elif f.exists():f.unlink()
-  shutil.rmtree(backup);R['fixture_fix']['source_and_outputs_restored']=True;remember()
- h.verify();R['status']='FIXTURE_REPAIR_QUALIFIED';remember();(E/'fixture-fix.json').write_text(json.dumps(R['fixture_fix'],indent=2)+'\n')
+  shutil.rmtree(backup);R['pq478']['source_outputs_restored']=True;remember()
+ h.verify();(E/'pq478.json').write_text(json.dumps(R['pq478'],indent=2)+'\n');remember()
 
 try:
  stage=sys.argv[1]
  if stage=='prepare':h.prepare()
  elif stage=='preflight':preflight()
- elif stage=='run':fixturefix()
+ elif stage=='run':pqcampaign()
  elif stage=='verify':verify()
  else:raise ValueError(stage)
 except BaseException as e:R.setdefault('failures',[]).append({'stage':sys.argv[1],'error':repr(e)});remember();raise
