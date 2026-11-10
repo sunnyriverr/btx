@@ -33,12 +33,12 @@ def text(root=None):
         except Exception:pass
     return '\n'.join(out)
 
-def descendants(root):
+def descendants(root,showing_only=True):
     result=[]
     def visit(n,depth=0):
         if depth>35 or len(result)>8000:return
         try:
-            if n.getState().contains(pyatspi.STATE_SHOWING):result.append(n)
+            if not showing_only or n.getState().contains(pyatspi.STATE_SHOWING):result.append(n)
             for child in n:
                 if child is not None:visit(child,depth+1)
         except Exception:pass
@@ -63,13 +63,30 @@ def activate(node):
     action=node.queryAction()
     if not action.nActions or not action.doAction(0):raise TimeoutError('Control action unavailable')
 
+def reachable(predicate,root=None):
+    matches=find(predicate,root)
+    if len(matches)==1:return matches[0]
+    # Long native web forms need ordinary focus/scroll, not a larger viewport or hidden-state action.
+    allnodes=descendants(root if root is not None else pyatspi.Registry.getDesktop(0),False)
+    candidates=[]
+    for n in allnodes:
+        try:
+            if predicate(n) and n.getState().contains(pyatspi.STATE_VISIBLE):candidates.append(n)
+        except Exception:pass
+    if len(candidates)!=1:raise TimeoutError('Control not uniquely accessible')
+    n=candidates[0]
+    assert n.getState().contains(pyatspi.STATE_ENABLED),'Control disabled'
+    assert n.queryComponent().grabFocus(),'Control focus refused'
+    wait(lambda:n.getState().contains(pyatspi.STATE_SHOWING),5)
+    return n
+
 def button(name,root=None,prefix=False):
-    return unique(lambda n:n.getRoleName() in ('push button','button','toggle button') and (n.name.startswith(name) if prefix else n.name==name),root)
+    return reachable(lambda n:n.getRoleName() in ('push button','button','toggle button') and (n.name.startswith(name) if prefix else n.name==name),root)
 
 def press(name,root=None,prefix=False):activate(button(name,root,prefix))
 
 def entry(name,root=None,prefix=False):
-    return unique(lambda n:n.getState().contains(pyatspi.STATE_EDITABLE) and (n.name.startswith(name) if prefix else n.name==name),root)
+    return reachable(lambda n:n.getState().contains(pyatspi.STATE_EDITABLE) and (n.name.startswith(name) if prefix else n.name==name),root)
 
 def type_value(node,value,private_path,secret=False):
     from pathlib import Path
