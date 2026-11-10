@@ -146,7 +146,7 @@ try:
     (out/"source-after.json").write_text(json.dumps(after_source, sort_keys=True, indent=2)+"\n")
     run(["cmake", "-P", build/"CMakeFiles/VerifyGlobs.cmake"], "verify-globs", cwd=build)
     observed = out/"observed.ninja"; shutil.copy2(build/"build.ninja", observed)
-    plan = run(["ninja", "-C", build, "-f", observed, "-n", "btx-qt", "btxd"], "build-plan")
+    plan = run(["ninja", "-C", build, "-f", observed, "-n", "btx-qt"], "build-plan")
     actions = [re.sub(r"^\[\d+/\d+\] ", "", s) for s in plan.splitlines() if s.startswith("[")]
     allowed = {
         "Generating bitcoin-build-info.h",
@@ -161,19 +161,20 @@ try:
     assert 3 <= len(actions) <= 9 and len(actions) == len(set(actions)), actions
     assert set(actions) <= allowed, actions
     assert allowed.intersection(actions) and any("rpc/encrypt.cpp.o" in s for s in actions)
-    assert all("Linking CXX executable bin/"+n in actions for n in ("btx-qt", "btxd"))
+    assert "Linking CXX executable bin/btx-qt" in actions
     state.update(phase="compile", planned_actions=actions, original_binaries={n:sha(originals/n) for n in ("btx-qt","btxd","btx-cli")})
     assert shutil.disk_usage(w).free > 2 * 1024**3
     # Exactly one serial compile invocation; no retry/reconfigure/broad fallback.
-    run(["ninja", "-C", build, "-f", observed, "-j1", "btx-qt", "btxd"], "compile", limit=600)
+    run(["ninja", "-C", build, "-f", observed, "-j1", "btx-qt"], "compile", limit=600)
     assert sha(cache) == state["profile"]["cache_sha256"]
     assert sha(build/"build.ninja") == state["profile"]["build_ninja_sha256"]
     assert sha(build/"bin/btx-cli") == sha(originals/"btx-cli")
     binaries = w/"compiled-binaries"; binaries.mkdir()
     for n in ("btx-qt", "btxd", "btx-cli"): shutil.copy2(build/"bin"/n, binaries/n)
     state["candidate_binaries"] = {n:sha(binaries/n) for n in ("btx-qt", "btxd", "btx-cli")}
-    assert all(state["candidate_binaries"][n] != state["original_binaries"][n] for n in ("btx-qt", "btxd"))
-    state.update(phase="built", checkpoint_sha256=ARCHIVE, encrypt499_sha256=ENCRYPT,
+    assert state["candidate_binaries"]["btx-qt"] != state["original_binaries"]["btx-qt"]
+    assert state["candidate_binaries"]["btxd"] == state["original_binaries"]["btxd"]
+    state.update(phase="built", native_control_in_qt_only=True, setup_daemon_unchanged=True, checkpoint_sha256=ARCHIVE, encrypt499_sha256=ENCRYPT,
                  source_before_manifest_sha256=sha(out/"source-before.json"), source_after_manifest_sha256=sha(out/"source-after.json"))
 except Exception as exc:
     state["error"] = repr(exc)
