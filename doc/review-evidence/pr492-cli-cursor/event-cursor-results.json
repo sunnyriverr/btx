@@ -1,0 +1,116 @@
+{
+  "stock_converter": "dac9aee53520bd49ed320ec7a49b9072fc7d88d9",
+  "pr_converter": "293be9ef3db97dc8cb6be8c503062b4ddf0b5f5c",
+  "native_helper_base": "cbf65894e6d61084527cd93e913a00c6794418dd",
+  "native_helper_sha256": "ec92facce2c381daa59c4ddabafc9d3f7a7d69d2b44279c3014df50712acf200",
+  "matched_relevant_source_sha256": {
+    "src/modelnet/model_watch.cpp": "bd233c5b4499f56a2142ffd6b532c8685f8933588b9fc2688003c86ea5ac78fe",
+    "src/modelnet/model_watch.h": "3350f3b6adb7a33dbe71a0a2d7aca6184fa3f70f3f31f386d5d8bcd040343f75",
+    "src/modelnet/event_journal.cpp": "98ee5793af6f524ac03cdf04f307850ae89acd468d7bec0825736b18b1a77752",
+    "src/modelnet/event_journal.h": "8d88cbdf3b8591f2e6b659a129281e42eacb63906ec362e62e0c3cc184ef44ba"
+  },
+  "matched_dispatch_sha256": "2fa583a142767b41dbce6f5a6ec9788a39a893ff00729188e59e51bc629d0770",
+  "wrapper_sha256": "fcd696b1da01e8ea3acc5f60b61d4c592b10fc5956b6d8221b3b43765508ed9c",
+  "fixture_sequences": [
+    41,
+    42,
+    43,
+    44
+  ],
+  "observations": [
+    {
+      "form": "omitted cursor control",
+      "wire_params": [],
+      "sequences": [
+        41,
+        42,
+        43,
+        44
+      ],
+      "cursor": "44"
+    },
+    {
+      "form": "documented direct object",
+      "wire_params": [
+        {
+          "cursor": 42
+        }
+      ],
+      "sequences": [
+        43,
+        44
+      ],
+      "cursor": "44"
+    },
+    {
+      "form": "direct JSON number compatibility fallback",
+      "wire_params": [
+        42
+      ],
+      "sequences": [
+        43,
+        44
+      ],
+      "cursor": "44"
+    },
+    {
+      "form": "stock converter input 42",
+      "wire_params": [
+        "42"
+      ],
+      "sequences": [
+        41,
+        42,
+        43,
+        44
+      ],
+      "cursor": "44"
+    },
+    {
+      "form": "stock converter input {\"cursor\":42}",
+      "wire_params": [
+        "{\"cursor\":42}"
+      ],
+      "sequences": [
+        43,
+        44
+      ],
+      "cursor": "44"
+    },
+    {
+      "form": "pr492 converter input 42",
+      "wire_params": [
+        "42"
+      ],
+      "sequences": [
+        41,
+        42,
+        43,
+        44
+      ],
+      "cursor": "44"
+    },
+    {
+      "form": "pr492 converter input {\"cursor\":42}",
+      "wire_params": [
+        "{\"cursor\":42}"
+      ],
+      "sequences": [
+        43,
+        44
+      ],
+      "cursor": "44"
+    },
+    {
+      "form": "release btx-model events --cursor 42",
+      "sequences": [
+        43,
+        44
+      ],
+      "next_cursor": "44"
+    }
+  ],
+  "helper_exit": 0,
+  "cleanup_verified": true,
+  "scope": "Real helper Unix RPC and stock/PR converter output, plus exact release wrapper. No btxd HTTP relay or full current-source helper build."
+}
