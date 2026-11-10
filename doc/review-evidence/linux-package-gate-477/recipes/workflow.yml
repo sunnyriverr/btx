@@ -1,0 +1,40 @@
+name: Native Linux package gate qualification
+on:
+  push:
+    branches: [codex/ci-linux-package-gate]
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: dac9aee53520bd49ed320ec7a49b9072fc7d88d9
+          path: base-source
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 0ef96ff0b7cfa2dfc62e35818a67fd6f6e1dd871
+          path: candidate-source
+          persist-credentials: false
+      - name: Native ELF tools
+        timeout-minutes: 3
+        run: |
+          sudo apt-get -o Acquire::Retries=1 update
+          sudo apt-get install -y --no-install-recommends build-essential binutils patchelf
+      - name: Same maintained cases on base and candidate
+        timeout-minutes: 11
+        run: python3 contrib/devtools/linux-package-gate/run.py
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: linux-package-gate-records
+          path: package-gate-records
+          retention-days: 14

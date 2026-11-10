@@ -1,0 +1,336 @@
+{
+  "base": "dac9aee53520bd49ed320ec7a49b9072fc7d88d9",
+  "head": "0ef96ff0b7cfa2dfc62e35818a67fd6f6e1dd871",
+  "cases": [
+    {
+      "phase": "baseline",
+      "case": "native-valid-bundle",
+      "method": "test_direct_guard_and_qt_keep_shared_and_private_dependencies",
+      "exit": 0,
+      "verdict": "PASS",
+      "gate_elf_count": null,
+      "log": "baseline-native-valid-bundle.log"
+    },
+    {
+      "phase": "baseline",
+      "case": "refuse-glibc",
+      "method": "test_packaging_refuses_any_elf_above_the_glibc_floor",
+      "exit": 1,
+      "verdict": "EXPECTED_BASELINE_FAILURE",
+      "gate_elf_count": null,
+      "log": "baseline-refuse-glibc.log"
+    },
+    {
+      "phase": "baseline",
+      "case": "refuse-glibcxx",
+      "method": "test_packaging_refuses_a_host_glibcxx_need_above_the_floor",
+      "exit": 1,
+      "verdict": "EXPECTED_BASELINE_FAILURE",
+      "gate_elf_count": null,
+      "log": "baseline-refuse-glibcxx.log"
+    },
+    {
+      "phase": "baseline",
+      "case": "refuse-external-plugin",
+      "method": "test_glibc_ceiling_reads_every_elf_not_only_bin_libexec_lib",
+      "exit": 1,
+      "verdict": "EXPECTED_BASELINE_FAILURE",
+      "gate_elf_count": null,
+      "log": "baseline-refuse-external-plugin.log"
+    },
+    {
+      "phase": "candidate",
+      "case": "native-valid-bundle",
+      "method": "test_direct_guard_and_qt_keep_shared_and_private_dependencies",
+      "exit": 0,
+      "verdict": "PASS",
+      "gate_elf_count": 8,
+      "log": "candidate-native-valid-bundle.log"
+    },
+    {
+      "phase": "candidate",
+      "case": "refuse-glibc",
+      "method": "test_packaging_refuses_any_elf_above_the_glibc_floor",
+      "exit": 0,
+      "verdict": "PASS",
+      "gate_elf_count": null,
+      "log": "candidate-refuse-glibc.log"
+    },
+    {
+      "phase": "candidate",
+      "case": "refuse-glibcxx",
+      "method": "test_packaging_refuses_a_host_glibcxx_need_above_the_floor",
+      "exit": 0,
+      "verdict": "PASS",
+      "gate_elf_count": null,
+      "log": "candidate-refuse-glibcxx.log"
+    },
+    {
+      "phase": "candidate",
+      "case": "refuse-external-plugin",
+      "method": "test_glibc_ceiling_reads_every_elf_not_only_bin_libexec_lib",
+      "exit": 0,
+      "verdict": "PASS",
+      "gate_elf_count": null,
+      "log": "candidate-refuse-external-plugin.log"
+    }
+  ],
+  "commands": [
+    {
+      "label": "tool-cc",
+      "args": [
+        "cc",
+        "--version"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.2001768929999912
+    },
+    {
+      "label": "tool-ldd",
+      "args": [
+        "ldd",
+        "--version"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.20015551300002699
+    },
+    {
+      "label": "tool-patchelf",
+      "args": [
+        "patchelf",
+        "--version"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.2001908960000378
+    },
+    {
+      "label": "tool-objdump",
+      "args": [
+        "objdump",
+        "--version"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.20017443699998694
+    },
+    {
+      "label": "tool-readelf",
+      "args": [
+        "readelf",
+        "--version"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.20014714599994932
+    },
+    {
+      "label": "base-source-head",
+      "args": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.20018769099999645
+    },
+    {
+      "label": "base-source-clean",
+      "args": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.4003210710000076
+    },
+    {
+      "label": "candidate-source-head",
+      "args": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.20020073400002047
+    },
+    {
+      "label": "candidate-source-clean",
+      "args": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.6004904380000085
+    },
+    {
+      "label": "baseline-test-overlay",
+      "args": [
+        "git",
+        "diff",
+        "--name-only"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.2001831540000012
+    },
+    {
+      "label": "baseline-native-valid-bundle",
+      "args": [
+        "python3",
+        "-I",
+        "test/util/package_release_archive_test.py",
+        "-v",
+        "PackageReleaseArchiveTest.test_direct_guard_and_qt_keep_shared_and_private_dependencies"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.6004367059999822
+    },
+    {
+      "label": "baseline-refuse-glibc",
+      "args": [
+        "python3",
+        "-I",
+        "test/util/package_release_archive_test.py",
+        "-v",
+        "PackageReleaseArchiveTest.test_packaging_refuses_any_elf_above_the_glibc_floor"
+      ],
+      "exit": 1,
+      "stop": null,
+      "seconds": 0.4002519840000218
+    },
+    {
+      "label": "baseline-refuse-glibcxx",
+      "args": [
+        "python3",
+        "-I",
+        "test/util/package_release_archive_test.py",
+        "-v",
+        "PackageReleaseArchiveTest.test_packaging_refuses_a_host_glibcxx_need_above_the_floor"
+      ],
+      "exit": 1,
+      "stop": null,
+      "seconds": 0.40029096300003175
+    },
+    {
+      "label": "baseline-refuse-external-plugin",
+      "args": [
+        "python3",
+        "-I",
+        "test/util/verify_release_btxd_test.py",
+        "-v",
+        "ArchiveContentGateTest.test_glibc_ceiling_reads_every_elf_not_only_bin_libexec_lib"
+      ],
+      "exit": 1,
+      "stop": null,
+      "seconds": 0.2001483779999944
+    },
+    {
+      "label": "candidate-native-valid-bundle",
+      "args": [
+        "python3",
+        "-I",
+        "test/util/package_release_archive_test.py",
+        "-v",
+        "PackageReleaseArchiveTest.test_direct_guard_and_qt_keep_shared_and_private_dependencies"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.6004228940000189
+    },
+    {
+      "label": "candidate-refuse-glibc",
+      "args": [
+        "python3",
+        "-I",
+        "test/util/package_release_archive_test.py",
+        "-v",
+        "PackageReleaseArchiveTest.test_packaging_refuses_any_elf_above_the_glibc_floor"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.40028812999997854
+    },
+    {
+      "label": "candidate-refuse-glibcxx",
+      "args": [
+        "python3",
+        "-I",
+        "test/util/package_release_archive_test.py",
+        "-v",
+        "PackageReleaseArchiveTest.test_packaging_refuses_a_host_glibcxx_need_above_the_floor"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.40192287300004637
+    },
+    {
+      "label": "candidate-refuse-external-plugin",
+      "args": [
+        "python3",
+        "-I",
+        "test/util/verify_release_btxd_test.py",
+        "-v",
+        "ArchiveContentGateTest.test_glibc_ceiling_reads_every_elf_not_only_bin_libexec_lib"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.20020716699997365
+    },
+    {
+      "label": "candidate-final-clean",
+      "args": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "exit": 0,
+      "stop": null,
+      "seconds": 0.20020736700001862
+    }
+  ],
+  "qualified": true,
+  "abi_override_absent": true,
+  "source_before": {
+    "base-source": {
+      "scripts/release/package_release_archive.py": "4175bd662432b2afbafc6ba0836ce4a7e27d8f737252c30bc3b05f9d06a6e757",
+      "scripts/release/verify_release_btxd.py": "7e114163b6dea6f8805e0255c4b099ef2daa20e8f7218c606e9b7c918d2e02c7",
+      "scripts/release/bundle_qt_gui.py": "8d2a76277f5656d709eddd238f4be9559cc472677ddd3dff4c349780dec21775"
+    },
+    "candidate-source": {
+      "scripts/release/package_release_archive.py": "2f3ad03bbd17ffa6941998f6fa77722be9c4ff6f8f63886399f49921a123fdd1",
+      "scripts/release/verify_release_btxd.py": "14381a4c9cc7cbb1199837617b5316a6b2a4c90f7dd0cf893aab2aa2d2e04b2c",
+      "scripts/release/bundle_qt_gui.py": "8d2a76277f5656d709eddd238f4be9559cc472677ddd3dff4c349780dec21775"
+    }
+  },
+  "test_hashes": {
+    "test/util/package_release_archive_test.py": "62d44ac4751c4575914c0df8857636b2aeb744be451b1088e1aaeeb59b418e50",
+    "test/util/verify_release_btxd_test.py": "a1a36d017ace1f9abf1f4252127b63c6aec93ea5847c15a4baa288ca462d70d3"
+  },
+  "source_after": {
+    "base-source": {
+      "scripts/release/package_release_archive.py": "4175bd662432b2afbafc6ba0836ce4a7e27d8f737252c30bc3b05f9d06a6e757",
+      "scripts/release/verify_release_btxd.py": "7e114163b6dea6f8805e0255c4b099ef2daa20e8f7218c606e9b7c918d2e02c7",
+      "scripts/release/bundle_qt_gui.py": "8d2a76277f5656d709eddd238f4be9559cc472677ddd3dff4c349780dec21775"
+    },
+    "candidate-source": {
+      "scripts/release/package_release_archive.py": "2f3ad03bbd17ffa6941998f6fa77722be9c4ff6f8f63886399f49921a123fdd1",
+      "scripts/release/verify_release_btxd.py": "14381a4c9cc7cbb1199837617b5316a6b2a4c90f7dd0cf893aab2aa2d2e04b2c",
+      "scripts/release/bundle_qt_gui.py": "8d2a76277f5656d709eddd238f4be9559cc472677ddd3dff4c349780dec21775"
+    }
+  },
+  "product_unchanged": true,
+  "native_tools_executed": true,
+  "leftover_processes": [],
+  "cleanup_signals": [],
+  "runtime_removed": true,
+  "seconds": 6.060910996000018
+}

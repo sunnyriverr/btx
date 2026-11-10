@@ -1,0 +1,148 @@
+{
+  "utc": "2026-11-10T06:19:51.224772+00:00",
+  "verdict": "Scoped native Linux package-gate qualification PASS",
+  "pr": 477,
+  "base": "dac9aee53520bd49ed320ec7a49b9072fc7d88d9",
+  "head": "0ef96ff0b7cfa2dfc62e35818a67fd6f6e1dd871",
+  "run": 42767279516,
+  "run_url": "https://github.com/sunnyriverr/btx/actions/runs/42767279516",
+  "fixture": "20ba73863d2dada6085533c2275252c974e585e5",
+  "cases": [
+    {
+      "phase": "baseline",
+      "case": "native-valid-bundle",
+      "method": "test_direct_guard_and_qt_keep_shared_and_private_dependencies",
+      "exit": 0,
+      "verdict": "PASS",
+      "gate_elf_count": null,
+      "log": "baseline-native-valid-bundle.log"
+    },
+    {
+      "phase": "baseline",
+      "case": "refuse-glibc",
+      "method": "test_packaging_refuses_any_elf_above_the_glibc_floor",
+      "exit": 1,
+      "verdict": "EXPECTED_BASELINE_FAILURE",
+      "gate_elf_count": null,
+      "log": "baseline-refuse-glibc.log"
+    },
+    {
+      "phase": "baseline",
+      "case": "refuse-glibcxx",
+      "method": "test_packaging_refuses_a_host_glibcxx_need_above_the_floor",
+      "exit": 1,
+      "verdict": "EXPECTED_BASELINE_FAILURE",
+      "gate_elf_count": null,
+      "log": "baseline-refuse-glibcxx.log"
+    },
+    {
+      "phase": "baseline",
+      "case": "refuse-external-plugin",
+      "method": "test_glibc_ceiling_reads_every_elf_not_only_bin_libexec_lib",
+      "exit": 1,
+      "verdict": "EXPECTED_BASELINE_FAILURE",
+      "gate_elf_count": null,
+      "log": "baseline-refuse-external-plugin.log"
+    },
+    {
+      "phase": "candidate",
+      "case": "native-valid-bundle",
+      "method": "test_direct_guard_and_qt_keep_shared_and_private_dependencies",
+      "exit": 0,
+      "verdict": "PASS",
+      "gate_elf_count": 8,
+      "log": "candidate-native-valid-bundle.log"
+    },
+    {
+      "phase": "candidate",
+      "case": "refuse-glibc",
+      "method": "test_packaging_refuses_any_elf_above_the_glibc_floor",
+      "exit": 0,
+      "verdict": "PASS",
+      "gate_elf_count": null,
+      "log": "candidate-refuse-glibc.log"
+    },
+    {
+      "phase": "candidate",
+      "case": "refuse-glibcxx",
+      "method": "test_packaging_refuses_a_host_glibcxx_need_above_the_floor",
+      "exit": 0,
+      "verdict": "PASS",
+      "gate_elf_count": null,
+      "log": "candidate-refuse-glibcxx.log"
+    },
+    {
+      "phase": "candidate",
+      "case": "refuse-external-plugin",
+      "method": "test_glibc_ceiling_reads_every_elf_not_only_bin_libexec_lib",
+      "exit": 0,
+      "verdict": "PASS",
+      "gate_elf_count": null,
+      "log": "candidate-refuse-external-plugin.log"
+    }
+  ],
+  "test_hashes": {
+    "test/util/package_release_archive_test.py": "62d44ac4751c4575914c0df8857636b2aeb744be451b1088e1aaeeb59b418e50",
+    "test/util/verify_release_btxd_test.py": "a1a36d017ace1f9abf1f4252127b63c6aec93ea5847c15a4baa288ca462d70d3"
+  },
+  "source_before": {
+    "base-source": {
+      "scripts/release/package_release_archive.py": "4175bd662432b2afbafc6ba0836ce4a7e27d8f737252c30bc3b05f9d06a6e757",
+      "scripts/release/verify_release_btxd.py": "7e114163b6dea6f8805e0255c4b099ef2daa20e8f7218c606e9b7c918d2e02c7",
+      "scripts/release/bundle_qt_gui.py": "8d2a76277f5656d709eddd238f4be9559cc472677ddd3dff4c349780dec21775"
+    },
+    "candidate-source": {
+      "scripts/release/package_release_archive.py": "2f3ad03bbd17ffa6941998f6fa77722be9c4ff6f8f63886399f49921a123fdd1",
+      "scripts/release/verify_release_btxd.py": "14381a4c9cc7cbb1199837617b5316a6b2a4c90f7dd0cf893aab2aa2d2e04b2c",
+      "scripts/release/bundle_qt_gui.py": "8d2a76277f5656d709eddd238f4be9559cc472677ddd3dff4c349780dec21775"
+    }
+  },
+  "source_after": {
+    "base-source": {
+      "scripts/release/package_release_archive.py": "4175bd662432b2afbafc6ba0836ce4a7e27d8f737252c30bc3b05f9d06a6e757",
+      "scripts/release/verify_release_btxd.py": "7e114163b6dea6f8805e0255c4b099ef2daa20e8f7218c606e9b7c918d2e02c7",
+      "scripts/release/bundle_qt_gui.py": "8d2a76277f5656d709eddd238f4be9559cc472677ddd3dff4c349780dec21775"
+    },
+    "candidate-source": {
+      "scripts/release/package_release_archive.py": "2f3ad03bbd17ffa6941998f6fa77722be9c4ff6f8f63886399f49921a123fdd1",
+      "scripts/release/verify_release_btxd.py": "14381a4c9cc7cbb1199837617b5316a6b2a4c90f7dd0cf893aab2aa2d2e04b2c",
+      "scripts/release/bundle_qt_gui.py": "8d2a76277f5656d709eddd238f4be9559cc472677ddd3dff4c349780dec21775"
+    }
+  },
+  "artifact": {
+    "id": 13740126987,
+    "node_id": "MDg6QXJ0aWZhY3QxMzc0MDEyNjk4Nw==",
+    "name": "linux-package-gate-records",
+    "size_in_bytes": 8886,
+    "url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/13740126987",
+    "archive_download_url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/13740126987/zip",
+    "expired": false,
+    "digest": "sha256:8c8818fd48497c5ea69f732874ab097f34d2d0a497e26db29b19545b7a1ddc92",
+    "created_at": "2026-11-10T06:17:03Z",
+    "updated_at": "2026-11-10T06:17:03Z",
+    "expires_at": "2026-11-24T06:17:02Z",
+    "workflow_run": {
+      "id": 42767279516,
+      "repository_id": 1440653358,
+      "head_repository_id": 1440653358,
+      "head_branch": "codex/ci-linux-package-gate",
+      "head_sha": "20ba73863d2dada6085533c2275252c974e585e5"
+    }
+  },
+  "artifact_sha256": "8c8818fd48497c5ea69f732874ab097f34d2d0a497e26db29b19545b7a1ddc92",
+  "all_raw_file_hashes_verified": true,
+  "saved_logs_independently_reclassified": true,
+  "native_gcc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "native_ldd": "ldd (Ubuntu GLIBC 2.39-0ubuntu8.9) 2.39",
+  "native_patchelf": "patchelf 0.18.0",
+  "runtime_seconds": 6.060910996000018,
+  "no_test_skips": true,
+  "product_source_unchanged": true,
+  "runtime_removed": true,
+  "leftover_processes": [],
+  "cleanup_signals": [],
+  "scope": "Four maintained cases/base+head on Ubuntu24.04x86_64. Small compiled ELF dependency fixtures with realcc/ldd/patchelf, not product binaries. Three intended baseline refusal failures; native valid controlPASS both; candidate4PASS and eight stagedELFschecked.",
+  "limits": "No full package/gate suite, real release archive rebuild, actualQt/Atlas/guard/node runtime, GUI, mainnet, Mac/Windows or release qualification. Original GUI archive remains unchanged.",
+  "upstream_publication": false,
+  "next": "One short scoped Tested ACK on477 with durable evidence branch when authorized; no native repeat or new implementation needed."
+}
