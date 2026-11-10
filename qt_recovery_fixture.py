@@ -257,7 +257,11 @@ class EncryptedBackupRecoveryTest(BitcoinTestFramework):
         window("Recovery complete")
         xdotool("key", "Return")
         wallet.keypoolrefill(1)  # An already-unlocked wallet is not relocked by the action.
+        rpc_scan = wallet.rescanblockchain(0)
+        assert_equal(rpc_scan["stop_height"], node.getblockcount())
+        assert_equal(receipts(wallet, case["addresses"]), (case["expected"], Decimal(3)))
         wallet.walletlock()
+        self.log.info("CONTROL: direct RPC rescan still reaches the same tip and preserves both receipts")
         self.log.info("CONTROL: action preserved an existing unlock and its RPC relock policy")
 
 

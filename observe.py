@@ -77,6 +77,7 @@ def run(variant, qt):
         assert "CANDIDATE: active scan cancelled, reservation released, wallet relocked" in log
         assert "CANDIDATE: retry recovered both exact outpoints at the same tip and relocked" in log
         assert "CONTROL: action preserved an existing unlock and its RPC relock policy" in log
+        assert "CONTROL: direct RPC rescan still reaches the same tip and preserves both receipts" in log
 
 try:
     baseline = w/"prior-binaries/baseline/bin/btx-qt"
@@ -84,18 +85,32 @@ try:
     assert sha(baseline) == expected["baseline_binaries"]["btx-qt"]
     assert sha(candidate) == expected["candidate_qt"]
     assert all(sha(w/"candidate/bin"/n) == expected["baseline_binaries"][n] for n in ("btxd","btx-cli"))
+    package_paths = subprocess.check_output(["dpkg-query", "-L", "qt6-qpa-plugins"], text=True, timeout=15)
+    (qpa,) = [Path(x) for x in package_paths.splitlines() if x.endswith("/platforms/libqxcb.so")]
+    result["fixture_sha256"] = sha(case)
     for label, path in {
         "baseline-qt": baseline, "candidate-qt": candidate,
         "daemon": w/"candidate/bin/btxd", "cli": w/"candidate/bin/btx-cli",
-        "qt-xcb": Path("/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqxcb.so"),
+        "qt-xcb": qpa,
     }.items():
         assert path.is_file(), path
         loaded = subprocess.check_output(["ldd", path], text=True, timeout=20)
         (out/(label+"-ldd.log")).write_text(loaded)
         assert "not found" not in loaded, label
-    run("baseline", baseline)
-    run("candidate", candidate)
-    result["verdict"] = "PASS"
+    prior = w/"verified-baseline/result.json"
+    if prior.exists():
+        saved = json.loads(prior.read_text())
+        assert saved["source"] == expected["source"] and saved["fixture_sha256"] == sha(case)
+        assert saved["verdict"] == "BASELINE_PASS"
+        assert saved["cases"]["baseline"] == {"exit":0,"qt_sha256":sha(baseline)}
+        result["cases"]["baseline"] = dict(saved["cases"]["baseline"], reused=True)
+    else:
+        run("baseline", baseline)
+    if os.environ.get("RECOVERY_BASELINE_ONLY") == "1":
+        result["verdict"] = "BASELINE_PASS"
+    else:
+        run("candidate", candidate)
+        result["verdict"] = "PASS"
 except Exception as exc:
     result["error"] = repr(exc)
     raise
