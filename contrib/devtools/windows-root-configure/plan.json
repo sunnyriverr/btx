@@ -1,0 +1,165 @@
+{
+  "utc": "2026-11-09T23:33:11.291902+00:00",
+  "scope": "Existing #356 current-release acceptance continuation; no execution or publication in scoping",
+  "source": "dac9aee53520bd49ed320ec7a49b9072fc7d88d9",
+  "binary_sha256": "446a2d951095f9274a083af475a504c6f7ebd5c50782e2cb69a6150459ab4b00",
+  "cache_id": 10223164157,
+  "checkpoint_sha256": "2482100da1abb82abda529df0223f815ee8f498fd8cfb470f0803f865db4bdec",
+  "stock_source_required": true,
+  "guard_candidate_evidence_separate": "PR485/813d5629/cache10262523573; not stock acceptance",
+  "groups": [
+    {
+      "id": "rpc-updater",
+      "selectors": [
+        "autoupdate_tests/unreadable_floor_is_refused_and_logged",
+        "rpc_tests/rpc_convert_include_sensitive_rows",
+        "rpc_tests/rpc_convert_model_identity_labels_are_literal",
+        "rpc_tests/rpc_convert_p2mr_psbt_remaining_rows",
+        "rpc_tests/rpc_convert_sendall_preferred_pq_algo_stays_text",
+        "rpc_tests/rpc_convert_string_alternative_of_multi_type_params"
+      ],
+      "group_limit_seconds": 180,
+      "rationale": "New typed-argument and updater-refusal paths; fake installer only.",
+      "cost_class": "Proposed ceiling, not measured target duration"
+    },
+    {
+      "id": "release-version",
+      "selectors": [
+        "modelnet_jit_safety_tests/JIT_SAFETY_07",
+        "modelnet_unique_todo_tests/unique_todo_gpu_attestor_untouched",
+        "modelnet_jit_tests/jit_api_priv_scale_journey_safety"
+      ],
+      "group_limit_seconds": 120,
+      "rationale": "Two pure version/path assertions and full maintained capability journey; stop=true daemon and no default worker-stack experiment.",
+      "cost_class": "Proposed ceiling, not measured target duration"
+    },
+    {
+      "id": "pq-wallet",
+      "selectors": [
+        "pq_wallet_tests/encrypted_import_persists_pq_seed_as_ciphertext",
+        "pq_wallet_tests/mismatched_pq_cache_does_not_leave_wallet_unlocked",
+        "pq_wallet_tests/multisig_pq_seed_persistence_roundtrip",
+        "pq_wallet_tests/watch_only_p2mr_wallet_with_cache_cannot_sign",
+        "pq_wallet_tests/wallet_lock_drops_pq_seeds_and_private_signing_cache",
+        "pq_wallet_tests/importdescriptors_refuses_pq_seed_when_private_keys_disabled"
+      ],
+      "group_limit_seconds": 300,
+      "rationale": "Changed lock/cache/seed/private-disabled import; adjacent legitimate signing/recovery controls. WalletTestingSetup does not mine100blocks.",
+      "cost_class": "Proposed ceiling, not measured target duration"
+    },
+    {
+      "id": "async-cpu",
+      "selectors": [
+        "pow_tests/matmul_solve_extends_prefetch_queue_for_tuned_multi_nonce_batches",
+        "pow_tests/matmul_solve_ignores_malformed_batch_size_env_suffix",
+        "pow_tests/matmul_solve_pipelines_next_nonce_preparation_when_async_enabled",
+        "pow_tests/matmul_solve_prefetches_following_single_nonce_batches_when_async_enabled",
+        "pow_tests/matmul_solve_processes_nonce_attempts_in_deterministic_batches_when_enabled",
+        "pow_tests/matmul_solve_respects_async_prepare_disable_override"
+      ],
+      "group_limit_seconds": 300,
+      "rationale": "Explicit CPU dimension16 pipeline completion ordering and routing/disable controls.",
+      "cost_class": "Proposed ceiling, not measured target duration"
+    },
+    {
+      "id": "stage3-nonprover",
+      "selectors": [
+        "matmul_v4_rc_stage3_registry_membership_air_tests/malformed_registry_claims_and_goldilocks_aliases_are_rejected",
+        "matmul_v4_rc_stage3_multirow_v11_merkle_fold_tests/one_query_shard_is_constant_width_and_quadratic"
+      ],
+      "group_limit_seconds": 180,
+      "rationale": "Changed AIR expectations with no prover call; does not qualify full proving.",
+      "cost_class": "Proposed ceiling, not measured target duration"
+    },
+    {
+      "id": "peer-tip-move",
+      "selectors": [
+        "peerman_tests/dropped_deep_holes_stay_fetch_suppressed_across_tip_moves",
+        "peerman_tests/dropped_historical_holes_stay_fetch_suppressed_past_one_window"
+      ],
+      "group_limit_seconds": 300,
+      "rationale": "New suppression regression and updated one-window bound control; synthetic replay hook, no GPU acceptance claim.",
+      "cost_class": "Proposed ceiling, not measured target duration"
+    },
+    {
+      "id": "wallet-cheap100",
+      "selectors": [
+        "shielded_wallet_chunk_discovery_tests/locked_wallet_cannot_sign_recovery_exit_until_unlock",
+        "shielded_wallet_chunk_discovery_tests/wallet_lock_wipes_shielded_spending_keys_until_unlock",
+        "spend_tests/deferred_sign_checks_chain_limits_on_signed_tx"
+      ],
+      "group_limit_seconds": 420,
+      "rationale": "Distinct default cheap TestChain100Setup, recovery activation deferred. Admit exact unchanged fixture; do not borrow failed expensive-snapshot profile.",
+      "cost_class": "Proposed ceiling, not measured target duration"
+    }
+  ],
+  "selectors": [
+    "autoupdate_tests/unreadable_floor_is_refused_and_logged",
+    "rpc_tests/rpc_convert_include_sensitive_rows",
+    "rpc_tests/rpc_convert_model_identity_labels_are_literal",
+    "rpc_tests/rpc_convert_p2mr_psbt_remaining_rows",
+    "rpc_tests/rpc_convert_sendall_preferred_pq_algo_stays_text",
+    "rpc_tests/rpc_convert_string_alternative_of_multi_type_params",
+    "modelnet_jit_safety_tests/JIT_SAFETY_07",
+    "modelnet_unique_todo_tests/unique_todo_gpu_attestor_untouched",
+    "modelnet_jit_tests/jit_api_priv_scale_journey_safety",
+    "pq_wallet_tests/encrypted_import_persists_pq_seed_as_ciphertext",
+    "pq_wallet_tests/mismatched_pq_cache_does_not_leave_wallet_unlocked",
+    "pq_wallet_tests/multisig_pq_seed_persistence_roundtrip",
+    "pq_wallet_tests/watch_only_p2mr_wallet_with_cache_cannot_sign",
+    "pq_wallet_tests/wallet_lock_drops_pq_seeds_and_private_signing_cache",
+    "pq_wallet_tests/importdescriptors_refuses_pq_seed_when_private_keys_disabled",
+    "pow_tests/matmul_solve_extends_prefetch_queue_for_tuned_multi_nonce_batches",
+    "pow_tests/matmul_solve_ignores_malformed_batch_size_env_suffix",
+    "pow_tests/matmul_solve_pipelines_next_nonce_preparation_when_async_enabled",
+    "pow_tests/matmul_solve_prefetches_following_single_nonce_batches_when_async_enabled",
+    "pow_tests/matmul_solve_processes_nonce_attempts_in_deterministic_batches_when_enabled",
+    "pow_tests/matmul_solve_respects_async_prepare_disable_override",
+    "matmul_v4_rc_stage3_registry_membership_air_tests/malformed_registry_claims_and_goldilocks_aliases_are_rejected",
+    "matmul_v4_rc_stage3_multirow_v11_merkle_fold_tests/one_query_shard_is_constant_width_and_quadratic",
+    "peerman_tests/dropped_deep_holes_stay_fetch_suppressed_across_tip_moves",
+    "peerman_tests/dropped_historical_holes_stay_fetch_suppressed_past_one_window",
+    "shielded_wallet_chunk_discovery_tests/locked_wallet_cannot_sign_recovery_exit_until_unlock",
+    "shielded_wallet_chunk_discovery_tests/wallet_lock_wipes_shielded_spending_keys_until_unlock",
+    "spend_tests/deferred_sign_checks_chain_limits_on_signed_tx"
+  ],
+  "total_selectors": 28,
+  "changed_path_old_pass_controls": [
+    "pq_wallet_tests/encrypted_import_persists_pq_seed_as_ciphertext",
+    "pq_wallet_tests/mismatched_pq_cache_does_not_leave_wallet_unlocked",
+    "pq_wallet_tests/multisig_pq_seed_persistence_roundtrip",
+    "pq_wallet_tests/watch_only_p2mr_wallet_with_cache_cannot_sign",
+    "pow_tests/matmul_solve_extends_prefetch_queue_for_tuned_multi_nonce_batches",
+    "pow_tests/matmul_solve_ignores_malformed_batch_size_env_suffix",
+    "pow_tests/matmul_solve_pipelines_next_nonce_preparation_when_async_enabled",
+    "pow_tests/matmul_solve_prefetches_following_single_nonce_batches_when_async_enabled",
+    "pow_tests/matmul_solve_processes_nonce_attempts_in_deterministic_batches_when_enabled",
+    "pow_tests/matmul_solve_respects_async_prepare_disable_override",
+    "peerman_tests/dropped_historical_holes_stay_fetch_suppressed_past_one_window"
+  ],
+  "group_limits_sum_seconds": 1800,
+  "whole_campaign_seconds": 1800,
+  "per_case_hard_ceiling_seconds": 180,
+  "run_order": "Sequential isolated groups/cases; no one-second batching or concurrent heavy proof jobs. Preserve per-case final XML/assertions and partial results.",
+  "environment": {
+    "BTX_MATMUL_BACKEND": "cpu",
+    "BTX_MATMUL_SOLVER_THREADS": "1"
+  },
+  "clear_inherited_overrides": [
+    "pipeline/prefetch and expensive-proof opt-ins except overrides set by each maintained test"
+  ],
+  "runtime_prerequisites": [
+    "Verify exact stock binary/source/tool profile and checkpoint hashes before restoring timestamps; cached objects remain intact.",
+    "Fresh inventory must contain all28 selectors and no final target verdict may already exist.",
+    "Verify CPU environment against actual source flags (ScopedMatMulBackend and ScopedMatMulSolverThreads); clear inherited overrides and record them.",
+    "Effective owned-process-tree monitor: 4GiB working-set stop,1.25GiB disk reserve, minimum1GiB availableRAM, per-case/group/whole-run deadlines and cleanup; validate runner/selector/XML bookkeeping before launch.",
+    "Stop/timeouts/skips are classified gaps, never passes; assert actual body assertions and exact announced/reported selector sets.",
+    "Recheck relevant upstream/peer coverage before dispatch. No source changes, rebuilt executables, snapshots, stopped investigations, GPU hardware claims or posting."
+  ],
+  "scoping_complete_for_this_batch": true,
+  "native_execution_authorized_by_this_receipt": false,
+  "native_run_started": false,
+  "batch_runner_preflight_pending": true,
+  "full_windows_acceptance_complete": false,
+  "source_change_gate": "If upstream head differs, map the delta before using this plan. Do not silently relabel stock results onto guard candidate."
+}

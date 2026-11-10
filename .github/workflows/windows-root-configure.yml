@@ -1,11 +1,11 @@
-name: Native Windows guard startup repair qualification
+name: Native Windows consolidated current-release acceptance
 permissions:
   contents: read
 jobs:
   configure:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: windows-2025
-    timeout-minutes: 45
+    timeout-minutes: 50
     env:
       BTX_NATIVE_ROOT: D:\btx-native-035
     steps:
@@ -175,13 +175,13 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/repair.py prepare
+        python controls/contrib/devtools/windows-root-configure/consolidated.py prepare
 
         exit /b %errorlevel%
 
         '
-    - name: Qualify identical native controls and real node-owned guard recovery
-      id: repair
+    - name: Validate ownership, resource limits, selectors and XML
+      id: preflight
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe"
         -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`)
@@ -199,24 +199,65 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/repair.py run
+        python controls/contrib/devtools/windows-root-configure/consolidated.py preflight
 
         exit /b %errorlevel%
 
         '
-    - name: Preserve verified successor build cache
-      uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
-      if: always() && steps.repair.outputs.checkpoint_valid == 'true'
-      with:
-        path: 'D:\btx-native-035\project-build
+    - name: Run seven bounded groups from saved stock binary
+      id: run
+      shell: cmd
+      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe"
+        -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`)
+        do set "BTX_VS=%%i"
 
-          D:\btx-native-035\vcpkg-installed'
-        key: ${{ steps.repair.outputs.checkpoint_key }}
-    - name: Retain focused qualification evidence
+        if not defined BTX_VS exit /b 2
+
+        call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+
+        if errorlevel 1 exit /b %errorlevel%
+
+        set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
+
+        set "CL="
+
+        set "_CL_="
+
+        python controls/contrib/devtools/windows-root-configure/consolidated.py run
+
+        exit /b %errorlevel%
+
+        '
+    - name: Verify unchanged cache and runtime cleanup
+      id: verify
+      shell: cmd
+      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe"
+        -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`)
+        do set "BTX_VS=%%i"
+
+        if not defined BTX_VS exit /b 2
+
+        call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+
+        if errorlevel 1 exit /b %errorlevel%
+
+        set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
+
+        set "CL="
+
+        set "_CL_="
+
+        python controls/contrib/devtools/windows-root-configure/consolidated.py verify
+
+        exit /b %errorlevel%
+
+        '
+      if: always() && steps.prepare.outcome == 'success'
+    - name: Retain consolidated acceptance evidence
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
       if: always()
       with:
-        name: native-windows-guard-repair
+        name: native-windows-consolidated-28
         path: D:\btx-native-035\evidence\
         retention-days: 14
 'on':

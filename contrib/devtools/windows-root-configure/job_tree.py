@@ -58,3 +58,35 @@ class ProcessTree:
         if not self.k.QueryInformationJobObject(self.handle, 1, c.byref(info), c.sizeof(info), None):
             raise c.WinError(c.get_last_error())
         return info.active_processes
+
+    def pids(self):
+        # JOBOBJECT_BASIC_PROCESS_ID_LIST has two DWORDs then ULONG_PTRs.
+        buf=c.create_string_buffer(8+4096*c.sizeof(c.c_size_t))
+        if not self.k.QueryInformationJobObject(self.handle,3,buf,c.sizeof(buf),None):
+            raise c.WinError(c.get_last_error())
+        count=c.cast(c.byref(buf,4),c.POINTER(w.DWORD))[0]
+        assert count<=4096
+        return list((c.c_size_t*count).from_buffer(buf,8))
+
+    def working_set(self):
+        class Memory(c.Structure):
+            _fields_=[('cb',w.DWORD),('faults',w.DWORD)]+[(name,c.c_size_t) for name in ['peak_ws','ws','peak_paged','paged','peak_nonpaged','nonpaged','pagefile','peak_pagefile']]
+        self.k.OpenProcess.argtypes=[w.DWORD,w.BOOL,w.DWORD];self.k.OpenProcess.restype=w.HANDLE
+        self.k.CloseHandle.argtypes=[w.HANDLE];self.k.CloseHandle.restype=w.BOOL
+        self.k.GetExitCodeProcess.argtypes=[w.HANDLE,c.POINTER(w.DWORD)];self.k.GetExitCodeProcess.restype=w.BOOL
+        ps=c.WinDLL('psapi',use_last_error=True);ps.GetProcessMemoryInfo.argtypes=[w.HANDLE,c.c_void_p,w.DWORD];ps.GetProcessMemoryInfo.restype=w.BOOL
+        total=0;sample=[]
+        for pid in self.pids():
+            handle=self.k.OpenProcess(0x0400|0x0010,False,pid)
+            if not handle:
+                if c.get_last_error()==87:continue # exited between job query and open
+                raise c.WinError(c.get_last_error())
+            try:
+                mem=Memory();mem.cb=c.sizeof(mem)
+                if not ps.GetProcessMemoryInfo(handle,c.byref(mem),c.sizeof(mem)):
+                    error=c.get_last_error();exit_code=w.DWORD()
+                    if self.k.GetExitCodeProcess(handle,c.byref(exit_code)) and exit_code.value!=259:continue
+                    raise c.WinError(error)
+                total+=mem.ws;sample.append({'pid':pid,'working_set':mem.ws})
+            finally:self.k.CloseHandle(handle)
+        return total,sample
