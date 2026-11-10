@@ -49,5 +49,10 @@
   "native_run_started": false,
   "batch_runner_preflight_pending": true,
   "full_windows_acceptance_complete": false,
-  "source_change_gate": "If upstream head differs, map the delta before using this plan. Do not silently relabel stock results onto guard candidate."
+  "source_change_gate": "If upstream head differs, map the delta before using this plan. Do not silently relabel stock results onto guard candidate.",
+  "fixture_selectors": [
+    "matmul_v4_rc_tests/rc_independent_oracle_matches_reference",
+    "matmul_v4_rc_tests/rc_strict_independent_same_digest_rejects_false_header",
+    "matmul_v4_rc_tests/rc_strict_same_callback_cannot_masquerade_as_independent"
+  ]
 }

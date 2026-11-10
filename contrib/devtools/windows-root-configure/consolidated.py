@@ -105,86 +105,69 @@ def verify():
   R['runtime_data_removed']=not data.exists()
  h.verify();R['whole_cache_unchanged']=True;remember();assert not survivors
 
-def linkcause():
- import re
+def fixturefix():
+ import re,ctypes
  assert R['status']=='PREFLIGHT_PASS';tree=ProcessTree();globals()['tree']=tree
- manifest=B/'build.ninja';original=manifest.read_bytes();text=original.decode().replace('\r\n','\n');match=re.search(r'(?m)^build bin/test_btx\.exe:.*?(?=\n\n)',text,re.S);assert match
- block=match.group(0);assert '  LINK_FLAGS ='in block
- # Back up only files the single link can mutate; all object/library bytes stay read-only.
- backup=ROOT/'rc-link-originals';assert not backup.exists();backup.mkdir();saved={}
- names=['project-build/build.ninja','project-build/.ninja_log','project-build/.ninja_deps','project-build/bin/test_btx.exe','project-build/bin/test_btx.pdb','project-build/lib/test_btx.lib','project-build/lib/test_btx.exp']
+ inputs=json.loads((P/'patch-inputs.json').read_text());file=SOURCE/inputs['file'];assert h.checkpoint.digest(file)==inputs['before_sha256'];source_bytes=file.read_bytes();source_mtime=file.stat().st_mtime_ns
+ names=['project-build/src/test/CMakeFiles/test_btx.dir/matmul_v4_rc_tests.cpp.obj','project-build/bin/test_btx.exe','project-build/bin/test_btx.pdb','project-build/lib/test_btx.lib','project-build/lib/test_btx.exp'];backup=ROOT/'rc-fixture-originals';assert not backup.exists();backup.mkdir();saved={}
  for i,n in enumerate(names):
   f=ROOT/n;saved[n]={'exists':f.exists(),'mtime':f.stat().st_mtime_ns if f.exists()else None}
   if f.exists():shutil.copyfile(f,backup/str(i))
- R['link_cause']={'source_changed':False,'compiled_objects_requested':0,'variants':[]};remember()
+ def argv(command):
+  argc=ctypes.c_int();parse=ctypes.windll.shell32.CommandLineToArgvW;parse.argtypes=[ctypes.c_wchar_p,ctypes.POINTER(ctypes.c_int)];parse.restype=ctypes.POINTER(ctypes.c_wchar_p);ptr=parse(command,ctypes.byref(argc));assert ptr
+  try:return [ptr[i]for i in range(argc.value)]
+  finally:ctypes.windll.kernel32.LocalFree(ptr)
+ R['fixture_fix']={'compiled_objects':0,'relinks':0,'normal_optimized_link':True,'baseline_reused_run':42735908793,'controls':[]};remember()
  try:
-  for mode in ['ICF','NOICF']:
-   mapfile=E/(mode+'.map');updated=re.sub(r'(?m)^(  LINK_FLAGS = .*)$',lambda m:m.group(1)+' /OPT:'+mode+' /MAP:"'+str(mapfile)+'"'+(' /VERBOSE:ICF'if mode=='ICF'else''),block,count=1)
-   assert updated!=block;manifest.write_text(text[:match.start()]+updated+text[match.end():],encoding='utf-8',newline='')
-   rule=block.splitlines()[0].split(': ',1)[1].split()[0];assert rule.startswith('CXX_EXECUTABLE_LINKER__test_btx_')
-   def database(expand):
-    args=['ninja','-C',str(B),'-t','compdb']+(['-x']if expand else[])+[rule]
-    raw=subprocess.check_output(args,text=True,timeout=45);(E/(mode+('-expanded'if expand else'-saved')+'-link-command.json')).write_text(raw);db=json.loads(raw);assert len(db)==1;return db[0]['command']
-   command=database(False);expanded=database(True);assert 'link.exe'in command.lower()and '/OPT:'+mode in expanded and not re.search(r'(?i)(?:clang-cl|cl)\.exe',command)
-   rsp=list(re.finditer(r'@(?:"[^"]+"|[^\s"]+)',command));assert len(rsp)<=1
-   if rsp:
-    token=rsp[0];prefix=command[:token.start()];suffix=command[token.end():];assert expanded.startswith(prefix)and expanded.endswith(suffix)
-    content=expanded[len(prefix):len(expanded)-len(suffix)if suffix else None];assert content and '.obj'in content
-    response=E/(mode+'-link.rsp');response.write_text(content,encoding='utf-8');command=prefix+'@"'+str(response)+'"'+suffix
-   else:assert command==expanded
-   # Use the exact linker argument vector; CMake's wrapper expands the huge RSP on Windows.
-   import ctypes
-   tail=command.split(' -- ',1)[1].split(' && ',1)[0]
-   argc=ctypes.c_int();parse=ctypes.windll.shell32.CommandLineToArgvW;parse.argtypes=[ctypes.c_wchar_p,ctypes.POINTER(ctypes.c_int)];parse.restype=ctypes.POINTER(ctypes.c_wchar_p)
-   ptr=parse(tail,ctypes.byref(argc));assert ptr
-   try:argv=[ptr[i]for i in range(argc.value)]
-   finally:ctypes.windll.kernel32.LocalFree(ptr)
-   assert Path(argv[0]).name.lower()=='lld-link.exe'and sum(x.startswith('@')for x in argv)==1
-   assert '/out:bin\\test_btx.exe'in argv and '/INCREMENTAL:NO'in argv
-   argv.append('/MANIFEST:EMBED,ID=1')
-   (E/(mode+'-direct-argv.json')).write_text(json.dumps(argv,indent=2)+'\n')
-   row=execute(tree,mode+'-link',argv,360,memory=4*1024**3,cwd=B);assert row['exit']==0 and not row['budget_stop'];assert mapfile.exists()
-   relevant=[l for l in mapfile.read_text(errors='replace').splitlines()if 'OracleGemmS8S8@'in l or 'IndependentOracleGemmS8S8@'in l]
-   (E/(mode+'-callback-map.txt')).write_text('\n'.join(relevant)+'\n')
-   # Read actual image addresses from the map, not compiler-folded C++ pointer comparisons.
-   addresses={}
-   for line in relevant:
-    parts=line.split()
-    if len(parts)>=3:
-     name=parts[1];kind='alternate'if '?IndependentOracleGemmS8S8@'in name else 'primary'if '?OracleGemmS8S8@'in name else None
-     if kind:assert kind not in addresses;addresses[kind]=parts[2]
-   assert set(addresses)=={'primary','alternate'},relevant
-   item={'mode':mode,'binary_sha256':h.checkpoint.digest(B/'bin/test_btx.exe'),'callback_addresses':addresses,'same_image_address':len(set(addresses.values()))==1,'map_sha256':h.checkpoint.digest(mapfile)};R['link_cause']['variants'].append(item);remember()
-   if mode=='ICF':assert item['same_image_address'],'Folding hypothesis disproved; stop before second relink'
-  assert not item['same_image_address'],'NOICF did not distinguish callbacks'
-  data=Path('D:/rc'+os.environ['GITHUB_RUN_ID']);assert not data.exists();data.mkdir();R['unit_data']=str(data);prior=dict(os.environ);R['link_cause']['controls']=[]
+  s.need('fixture-apply-check',['git','apply','--check',str(P/'fixture.patch')],30);s.need('fixture-apply',['git','apply',str(P/'fixture.patch')],30);assert h.checkpoint.digest(file)==inputs['after_sha256']
+  s.need('fixture-diff-check',['git','diff','--check'],30);changed=subprocess.check_output(['git','diff','--name-only'],cwd=SOURCE,text=True).splitlines();assert changed==[inputs['file']]
+  (E/'fixture.patch').write_bytes((P/'fixture.patch').read_bytes());(E/'patch-inputs.json').write_text(json.dumps(inputs,indent=2)+'\n')
+  env=dict(os.environ);index=ROOT/'rc-fixture-index';assert not index.exists();env['GIT_INDEX_FILE']=str(index)
+  try:
+   subprocess.run(['git','read-tree',h.TARGET],cwd=SOURCE,env=env,check=True);subprocess.run(['git','add','--',inputs['file']],cwd=SOURCE,env=env,check=True);R['fixture_fix']['tested_tree']=subprocess.check_output(['git','write-tree'],cwd=SOURCE,env=env,text=True).strip()
+  finally:
+   if index.exists():index.unlink()
+  commands=json.loads((B/'compile_commands.json').read_text());selected=[x for x in commands if x['file'].replace('\\','/').endswith('/src/test/matmul_v4_rc_tests.cpp')];assert len(selected)==1;compile_argv=argv(selected[0]['command']);assert Path(compile_argv[0]).name.lower()=='clang-cl.exe'and '/O2'in compile_argv and '-c'in compile_argv
+  (E/'exact-compile-command.json').write_text(json.dumps(selected[0],indent=2)+'\n');row=execute(tree,'fixture-single-compile',compile_argv,240,memory=4*1024**3,cwd=B);assert row['exit']==0 and not row['budget_stop'];R['fixture_fix']['compiled_objects']=1;R['fixture_fix']['candidate_object_sha256']=h.checkpoint.digest(ROOT/names[0]);remember()
+  manifest=(B/'build.ninja').read_text();match=re.search(r'(?m)^build bin/test_btx\.exe:.*?(?=\n\n)',manifest,re.S);assert match;rule=match.group().splitlines()[0].split(': ',1)[1].split()[0];assert rule.startswith('CXX_EXECUTABLE_LINKER__test_btx_')
+  def database(expand):
+   args=['ninja','-C',str(B),'-t','compdb']+(['-x']if expand else[])+[rule];raw=subprocess.check_output(args,text=True,timeout=45);(E/('normal-'+('expanded'if expand else'saved')+'-link-command.json')).write_text(raw);db=json.loads(raw);assert len(db)==1;return db[0]['command']
+  command=database(False);expanded=database(True);assert '/OPT:NOICF'not in command.upper()and '/OPT:ICF'not in command.upper();tokens=list(re.finditer(r'@(?:"[^"]+"|[^\s"]+)',command));assert len(tokens)==1;t=tokens[0];prefix=command[:t.start()];suffix=command[t.end():];assert expanded.startswith(prefix)and expanded.endswith(suffix);response=E/'normal-link.rsp';response.write_text(expanded[len(prefix):len(expanded)-len(suffix)],encoding='utf-8');command=prefix+'@"'+str(response)+'"'+suffix
+  link_argv=argv(command.split(' -- ',1)[1].split(' && ',1)[0]);assert Path(link_argv[0]).name.lower()=='lld-link.exe'and '/INCREMENTAL:NO'in link_argv;mapfile=E/'normal.map';link_argv+=['/MANIFEST:EMBED,ID=1','/MAP:'+str(mapfile)];(E/'normal-direct-link-argv.json').write_text(json.dumps(link_argv,indent=2)+'\n')
+  row=execute(tree,'fixture-normal-link',link_argv,360,memory=4*1024**3,cwd=B);assert row['exit']==0 and not row['budget_stop'];R['fixture_fix']['relinks']=1;R['fixture_fix']['candidate_binary_sha256']=h.checkpoint.digest(B/'bin/test_btx.exe');R['fixture_fix']['map_sha256']=h.checkpoint.digest(mapfile)
+  lines=[l for l in mapfile.read_text(errors='replace').splitlines()if 'OracleGemmS8S8@'in l];(E/'normal-callback-map.txt').write_text('\n'.join(lines)+'\n');addresses={}
+  for line in lines:
+   parts=line.split()
+   if len(parts)>=3:
+    kind='alternate'if '?IndependentOracleGemmS8S8@'in parts[1]else'primary'if '?OracleGemmS8S8@'in parts[1]else None
+    if kind:assert kind not in addresses;addresses[kind]=parts[2]
+  assert len(addresses)==2 and len(set(addresses.values()))==2;R['fixture_fix']['callback_addresses']=addresses;mapfile.unlink();remember()
+  data=Path('D:/rf'+os.environ['GITHUB_RUN_ID']);assert not data.exists();data.mkdir();R['unit_data']=str(data);prior=dict(os.environ)
   try:
    for k in list(os.environ):
     if k.startswith('BTX_MATMUL_'):os.environ.pop(k,None)
    os.environ.update(M['environment'])
-   for i,selector in enumerate([M['selectors'][2],M['selectors'][1]],1):
-    root=data/str(i);root.mkdir();tmp=root/'t';tmp.mkdir();os.environ['TMP']=os.environ['TEMP']=str(tmp);label='NOICF-control-'+str(i);report=E/(label+'.xml')
-    args=[B/'bin/test_btx.exe','--run_test='+selector,'--log_level=test_suite','--report_level=detailed','--report_format=XML','--report_sink='+str(report),'--catch_system_errors=yes','--','-testdatadir='+str(root)]
-    row=execute(tree,label,args,60);result=outcome([selector],(E/(label+'.log')).read_text(errors='replace'),report.read_text(errors='replace')if report.exists()else'',row['exit'],row['budget_stop']);result.update(selector=selector,seconds=row['seconds']);R['link_cause']['controls'].append(result);remember();assert result['state']=='passed',result
+   for i,selector in enumerate(M['fixture_selectors'],1):
+    root=data/str(i);root.mkdir();temp=root/'t';temp.mkdir();os.environ['TMP']=os.environ['TEMP']=str(temp);label='fixture-control-'+str(i);report=E/(label+'.xml');args=[B/'bin/test_btx.exe','--run_test='+selector,'--log_level=test_suite','--report_level=detailed','--report_format=XML','--report_sink='+str(report),'--catch_system_errors=yes','--','-testdatadir='+str(root)]
+    row=execute(tree,label,args,60);result=outcome([selector],(E/(label+'.log')).read_text(errors='replace'),report.read_text(errors='replace')if report.exists()else'',row['exit'],row['budget_stop']);result.update(selector=selector,seconds=row['seconds'],xml_sha256=h.checkpoint.digest(report)if report.exists()else None,log_sha256=row['log_sha256']);R['fixture_fix']['controls'].append(result);remember();assert result['state']=='passed',result
   finally:
    os.environ.clear();os.environ.update(prior)
    if data.exists():shutil.rmtree(data)
-   R['unit_data']=None;R['link_cause']['runtime_removed']=not data.exists()
+   R.pop('unit_data',None);R['fixture_fix']['runtime_removed']=not data.exists()
  finally:
-  assert not h.processes()
+  assert not h.processes();file.write_bytes(source_bytes);os.utime(file,ns=(source_mtime,source_mtime))
   for i,n in enumerate(names):
    f=ROOT/n
    if saved[n]['exists']:shutil.copyfile(backup/str(i),f);os.utime(f,ns=(saved[n]['mtime'],saved[n]['mtime']))
    elif f.exists():f.unlink()
-  shutil.rmtree(backup);R['link_cause']['original_outputs_restored']=True;remember()
- h.verify();R['status']='LINK_CAUSE_DIAGNOSTIC_COMPLETE';remember()
- (E/'link-cause.json').write_text(json.dumps(R['link_cause'],indent=2)+'\n')
+  shutil.rmtree(backup);R['fixture_fix']['source_and_outputs_restored']=True;remember()
+ h.verify();R['status']='FIXTURE_REPAIR_QUALIFIED';remember();(E/'fixture-fix.json').write_text(json.dumps(R['fixture_fix'],indent=2)+'\n')
 
 try:
  stage=sys.argv[1]
  if stage=='prepare':h.prepare()
  elif stage=='preflight':preflight()
- elif stage=='run':linkcause()
+ elif stage=='run':fixturefix()
  elif stage=='verify':verify()
  else:raise ValueError(stage)
 except BaseException as e:R.setdefault('failures',[]).append({'stage':sys.argv[1],'error':repr(e)});remember();raise
