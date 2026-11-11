@@ -19,7 +19,7 @@ def phase(name):
     (OUT/'result.json').write_text(json.dumps(receipt, indent=2)+'\n')
 
 
-def create_model(path):
+def create_model(path, wide=False):
     import torch
     from tokenizers import Tokenizer, models, pre_tokenizers
     from transformers import GPT2Config, GPT2LMHeadModel, PreTrainedTokenizerFast
@@ -30,7 +30,7 @@ def create_model(path):
     raw = Tokenizer(models.WordLevel(vocab, unk_token='[UNK]'))
     raw.pre_tokenizer = pre_tokenizers.Whitespace()
     tok = PreTrainedTokenizerFast(tokenizer_object=raw, unk_token='[UNK]', pad_token='[PAD]')
-    config = GPT2Config(vocab_size=len(vocab), n_positions=32, n_embd=24, n_layer=1, n_head=2,
+    config = GPT2Config(vocab_size=len(vocab), n_positions=32, n_embd=128 if wide else 24, n_layer=4 if wide else 1, n_head=2,
                         bos_token_id=None, eos_token_id=None, pad_token_id=1)
     GPT2LMHeadModel(config).eval().save_pretrained(path, safe_serialization=True)
     tok.save_pretrained(path)
@@ -127,9 +127,90 @@ def run(root):
         receipt['pass'] &= receipt['clean_shutdown']
 
 
+def interrupted_download(root):
+    from relay import Relay
+
+    binary, = (WORK/'package').glob('*/bin/btx-modeld')
+    real = binary.parent.parent/'libexec/btx-modeld.real'
+    receipt.update(wrapper_sha256=digest(binary),helper_sha256=digest(real))
+    model = root/'interruptionfixture'
+    create_model(model, wide=True)
+    expected = {p.name: digest(p,'sha384') for p in sorted(model.iterdir()) if p.is_file()}
+    total = sum((model/name).stat().st_size for name in expected)
+    with socket.socket() as sock:
+        sock.bind(('127.0.0.1',0))
+        port = sock.getsockname()[1]
+    publisher = Helper(binary,root/'publisher',OUT,'publisher',64<<20,hostport=port)
+    relay = Relay(port,rate=128<<10)
+    receiver = Helper(binary,root/'receiver',OUT,'receiver',64<<20,peer=f'127.0.0.1:{relay.port}')
+    try:
+        phase('start interrupted download from an empty library')
+        publisher.start()
+        receiver.start()
+        require(not receiver.ok('listmodels')['models'],'receiver was not empty')
+        item = publisher.ok('importmodel',[str(model),{'pin':True,'publish':True}])
+        uri = item['uri']
+        jid, _ = receiver.request(uri)
+        require(jid,'no download job')
+        until = time.monotonic()+30
+        while True:
+            job = receiver.job(jid)
+            if job.get('status')=='running' and 0 < job.get('bytes_committed',0) < total:
+                relay.call(relay.interrupt())
+                if relay.closed_streams:
+                    break
+                relay.call(relay.resume())
+            require(job.get('status') not in ('done','failed','cancelled')
+                    and time.monotonic()<until, f'did not interrupt active transfer: {job}')
+            time.sleep(.06)
+        receipt.update(committed_at_interrupt=job['bytes_committed'],total_bytes=total,
+                       interrupted_streams=relay.closed_streams,original_job_id=jid)
+        phase('hold publisher connection closed and observe job outcome')
+        time.sleep(1)
+        end = time.monotonic()+8
+        while True:
+            during = receiver.job(jid)
+            require(during.get('status')!='done','download finished while disconnected')
+            if during.get('status') in ('failed','cancelled') or time.monotonic()>=end:
+                break
+            time.sleep(.2)
+        receipt['outage_status'] = during.get('status')
+        relay.call(relay.resume())
+        phase('restore publisher connection and verify recovery')
+        if during.get('status') in ('failed','cancelled'):
+            recovered, _ = receiver.request(uri)
+        else:
+            recovered = jid
+        final = receiver.settled(recovered,40)
+        if final.get('status')=='failed' and recovered==jid:
+            recovered, _ = receiver.request(uri)
+            final = receiver.settled(recovered,40)
+        receipt.update(recovered_job_id=recovered,final_job=final)
+        require(final.get('status')=='done',f'recovery failed: {final}')
+        receipt['source_file_sha384'] = expected
+        receipt['recovered_file_sha384'] = checkout(receiver,uri,expected)
+        require(len(receiver.ok('listmodels')['models'])==1,'duplicate or missing model after retry')
+        receiver.stop()
+        publisher.stop()
+        receiver.start()
+        receipt['restart_file_sha384'] = checkout(receiver,uri,expected)
+        require(len(receiver.ok('listmodels')['models'])==1,'duplicate or missing model after restart')
+        receiver.stop()
+        receipt['pass'] = True
+    finally:
+        relay.close()
+        receiver.cleanup()
+        publisher.cleanup()
+        receipt['clean_shutdown'] = not any(h.forced or h.cleanup_error for h in (receiver,publisher))
+        receipt['pass'] &= receipt['clean_shutdown']
+
+
 try:
     with tempfile.TemporaryDirectory(prefix='btx-model-accept-') as name:
-        run(Path(name))
+        if os.environ.get('BTX_TEST_INTERRUPTION') == '1':
+            interrupted_download(Path(name))
+        else:
+            run(Path(name))
 except Exception as error:
     receipt['error'] = str(error)
     raise

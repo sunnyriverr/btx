@@ -31,12 +31,10 @@ jobs:
           engine/bin/pip install --disable-pip-version-check --retries 1 --index-url https://download.pytorch.org/whl/cpu torch==2.7.1
           engine/bin/pip install --disable-pip-version-check --retries 1 transformers==4.53.3 safetensors==0.5.3
           engine/bin/pip freeze > evidence/engine-versions.txt
-      - name: Run discover, retrieve, verify, generate and restart
+      - name: Interrupt one active download and verify recovery
         timeout-minutes: 4
         run: |
-          sudo ip address add 10.253.254.1/32 dev lo scope host
-          trap 'sudo ip address del 10.253.254.1/32 dev lo' EXIT
-          export BTX_TEST_PUBLISHER=10.253.254.1
+          export BTX_TEST_INTERRUPTION=1
           chmod +x generate_local.py
           PATH="$PWD/engine/bin:$PATH" BTX_MODEL_GENERATE="$PWD/generate_local.py" \
             HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 OMP_NUM_THREADS=1 engine/bin/python -u native_fixture.py
