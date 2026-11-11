@@ -9,7 +9,18 @@ apt-get install -y --no-install-recommends ca-certificates curl git build-essent
 git config --global --add safe.directory "$GITHUB_WORKSPACE/accepted-source"
 git config --global --add safe.directory "$GITHUB_WORKSPACE/product"
 getconf GNU_LIBC_VERSION
-python3 pilot.py
+# Match the interpreter and absolute CMake path of the verified checkpoint.
+python_setup=$(mktemp -d)
+curl -fsSL --retry 2 --max-time 150 \
+  https://github.com/actions/python-versions/releases/download/3.12.16-40260402378/python-3.12.16-linux-22.04-x64.tar.gz \
+  -o "$python_setup/ubuntu-python.tar.gz"
+echo "ebdd874c6bb02d1ade9069da60b6b09f8346ba0ae0db11e60e6ce90cf5542fb7  $python_setup/ubuntu-python.tar.gz" | sha256sum --check
+mkdir "$python_setup/unpacked"
+tar -xzf "$python_setup/ubuntu-python.tar.gz" -C "$python_setup/unpacked"
+(cd "$python_setup/unpacked" && RUNNER_TOOL_CACHE=/opt/hostedtoolcache bash setup.sh)
+builder_python=/opt/hostedtoolcache/Python/3.12.16/x64/bin/python3
+"$builder_python" -VV
+"$builder_python" pilot.py
 build="$GITHUB_WORKSPACE/gui-pilot-runtime/qtbuild"
 mapfile -t targets < <(python3 -c 'from build_targets import TARGETS; print(*TARGETS, sep="\n")')
 test "${#targets[@]}" -eq 17
