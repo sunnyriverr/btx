@@ -63,9 +63,11 @@ BOOST_AUTO_TEST_CASE(store_09_resume_quota_credits_verified_active_pieces)
     BOOST_CHECK(err.find("quota") != std::string::npos);
     BOOST_REQUIRE_MESSAGE(f.receiver.EnforceDownloadQuota(f.manifest, err), err);
     BOOST_CHECK_EQUAL(f.receiver.Store().UsedBytes(), f.first.size());
+    BOOST_REQUIRE(f.receiver.PinModel(f.entry.model_id, true, err));
     f.receiver.EndTransfer(f.entry.artifact_id);
     BOOST_CHECK(!f.receiver.EnforceDownloadQuota(f.manifest, err));
     f.receiver.BeginTransfer(f.entry.artifact_id);
+    BOOST_REQUIRE(f.receiver.PinModel(f.entry.model_id, false, err));
     BOOST_REQUIRE(f.receiver.EnforceDownloadQuota(f.manifest, err));
     f.receiver.SetQuotaBytes(f.size - 1);
     BOOST_CHECK(!f.receiver.EnforceDownloadQuota(f.manifest, err));
@@ -122,7 +124,8 @@ BOOST_AUTO_TEST_CASE(store_11_resume_quota_refuses_invalid_cached_credit)
         out.put(static_cast<char>(f.first[0] ^ 1));
     }
     BOOST_CHECK(!f.receiver.EnforceDownloadQuota(f.manifest, err));
-    BOOST_REQUIRE(f.receiver.Store().PutVerifiedPiece(f.entry.artifact_id, 0, 0, f.first,
-                                                     modelnet::ChunkLeaf(0, f.first), err));
+    BOOST_REQUIRE(f.receiver.Store().DeletePiece(f.entry.artifact_id, 0, 0, err));
+    BOOST_REQUIRE(f.receiver.PutFetchedPiece(f.entry.artifact_id, 0, 0, f.first, f.proof, f.size,
+                                           f.entry.core.files[0].pieces_root, err));
     BOOST_REQUIRE_MESSAGE(f.receiver.EnforceDownloadQuota(f.manifest, err), err);
 }
