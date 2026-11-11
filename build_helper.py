@@ -101,7 +101,7 @@ def main():
         patch=recipe/'catalog-repair.patch'
         assert sha(patch)=='0744bd6635efcfc2d51e1b3e874a3935556263acde312fe0a8eec049ef175588'
         run(['git','apply','--index','--whitespace=error',patch],'repair-apply',src)
-        assert run(['git','diff','HEAD','--name-only'],'repair-delta',src)=='src/modelnet/catalog.cpp'
+        assert run(['git','diff','HEAD','--name-only'],'repair-delta',src).strip()=='src/modelnet/catalog.cpp'
         run(['git','diff','HEAD','--check'],'repair-whitespace',src)
         result['author_tree']=TREE
         result['candidate_tree']=run(['git','write-tree'],'repair-tree',src).strip()
