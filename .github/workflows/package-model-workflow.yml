@@ -1,0 +1,45 @@
+name: Published Linux model workflow
+on:
+  push:
+    branches: [codex/ci-release-package-model-workflow]
+permissions:
+  contents: read
+jobs:
+  acceptance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Verify the public prerelease archive
+        timeout-minutes: 4
+        run: |
+          mkdir evidence
+          curl --fail --location --silent --show-error --max-time 150 \
+            https://github.com/btxchain/btx/releases/download/v0.34.16/btx-0.34.16-x86_64-linux-gnu.tar.gz -o btx.tar.gz
+          echo '0552bcbceef9fab5a6b9e24f26f4ccf7e615437e5d4c4af608a6247d5c21e6dc  btx.tar.gz' | sha256sum --check | tee evidence/archive-check.log
+          mkdir package
+          tar -xzf btx.tar.gz -C package
+          find package -path '*/bin/btx-modeld' -print | tee evidence/wrapper-path.log
+          uname -sm | tee evidence/platform.log
+          getconf GNU_LIBC_VERSION | tee -a evidence/platform.log
+      - name: Install CPU engine prerequisites
+        timeout-minutes: 6
+        run: |
+          python3 -m venv engine
+          engine/bin/pip install --disable-pip-version-check --retries 1 --index-url https://download.pytorch.org/whl/cpu torch==2.7.1
+          engine/bin/pip install --disable-pip-version-check --retries 1 transformers==4.53.3 safetensors==0.5.3
+          engine/bin/pip freeze > evidence/engine-versions.txt
+      - name: Run discover, retrieve, verify, generate and restart
+        timeout-minutes: 4
+        run: |
+          chmod +x generate_local.py
+          PATH="$PWD/engine/bin:$PATH" BTX_MODEL_GENERATE="$PWD/generate_local.py" \
+            HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 OMP_NUM_THREADS=1 engine/bin/python -u native_fixture.py
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: published-model-workflow
+          path: evidence
+          retention-days: 14
