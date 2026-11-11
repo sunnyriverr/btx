@@ -2,7 +2,7 @@
 import json
 import os
 from pathlib import Path
-import shlex
+import re
 import shutil
 import subprocess
 import tarfile
@@ -53,47 +53,65 @@ def build(candidate):
     source, cache = WORK / 'product', WORK / 'gui-pilot-runtime/qtbuild'
     assert sha(source / SOURCE) == SOURCE_SHA
     assert run(['g++', '-dumpfullversion'], 'compiler').strip() == '11.4.0'
-    commands = run(['ninja', '-C', cache, '-t', 'commands', 'btx-cli'], 'cached-commands').splitlines()
-    matches = [shlex.split(line) for line in commands if line.rstrip().endswith('-c ' + str(source / SOURCE))]
-    assert len(matches) == 1
-    cmd = matches[0]
-    assert cmd[0] == '/usr/bin/g++'
-    obj = WORK / 'candidate-cli.o'
-    flags = iter(cmd[1:])
-    kept = []
-    for flag in flags:
-        if flag in ('-MT', '-MF', '-o', '-c'):
-            next(flags)
-        elif flag != '-MD':
-            kept.append(flag)
-    compile_cmd = [cmd[0], *kept, '-o', str(obj), '-c', str(source / SOURCE)]
-    link_cmd = shlex.split(commands[-1])[2:-2]
-    assert link_cmd[0] == '/usr/bin/g++'
-    link_cmd = [arg for arg in link_cmd if arg != '-Wl,--unresolved-symbols=ignore-in-shared-libs']
-    original_objects = [i for i, arg in enumerate(link_cmd) if arg.endswith('/bitcoin-cli.cpp.o')]
-    assert len(original_objects) == 1
-    link_cmd[original_objects[0]] = str(obj)
-    link_cmd[link_cmd.index('-o') + 1] = str(candidate)
-    (OUT / 'admitted-plan.json').write_text(json.dumps([compile_cmd, link_cmd], indent=2)+'\n')
+    def profile():
+        cache_text = (cache / 'CMakeCache.txt').read_text().splitlines()
+        prefixes = ('CMAKE_BUILD_TYPE:', 'CMAKE_CXX_COMPILER:', 'CMAKE_C_COMPILER:',
+                    'CMAKE_CXX_FLAGS:', 'CMAKE_CXX_FLAGS_RELEASE:', 'OPENSSL_CRYPTO_LIBRARY:',
+                    'OPENSSL_SSL_LIBRARY:')
+        return {line.split('=', 1)[0]: line.split('=', 1)[1] for line in cache_text
+                if not line.startswith(('//', '#')) and (':BOOL=' in line or line.startswith(prefixes))}
+
+    before = profile()
+    assert before['BUILD_CLI:BOOL'] == 'OFF'
+    run(['cmake', '-S', source, '-B', cache, '-DBUILD_CLI=ON'], 'configure-cli', timeout=210)
+    before['BUILD_CLI:BOOL'] = 'ON'
+    after = profile()
+    assert all(after.get(k) == v for k, v in before.items()), {
+        k: (v, after.get(k)) for k, v in before.items() if after.get(k) != v
+    }
+    RESULT['cli_profile'] = after
+    run(['cmake', '-P', cache / 'CMakeFiles/VerifyGlobs.cmake'], 'verify-globs', cache)
+    ninja_file = OUT / 'configured.ninja'
+    shutil.copy2(cache / 'build.ninja', ninja_file)
+    ninja = ['ninja', '-C', cache, '-f', ninja_file]
+
+    def build_cli(label, output, max_steps):
+        plan = run([*ninja, '-n', 'btx-cli'], label + '-plan')
+        actions = [m[1] for line in plan.splitlines() if (m := re.match(r'\[\d+/\d+\] (.*)', line))]
+        assert 'Re-running CMake' not in plan and 'Re-checking globbed' not in plan
+        assert 0 < len(actions) <= max_steps and any('bitcoin-cli.cpp.o' in x for x in actions), actions
+        assert any('Linking CXX executable bin/btx-cli' in x for x in actions), actions
+        if label == 'candidate':
+            assert all('bitcoin-cli.cpp.o' in x or 'Linking CXX executable bin/btx-cli' in x for x in actions), actions
+        RESULT[label + '_actions'] = actions
+        run([*ninja, '-j2', 'btx-cli'], label + '-build', timeout=260)
+        output.parent.mkdir(exist_ok=True)
+        shutil.copy2(cache / 'bin/btx-cli', output)
+
+    baseline = WORK / 'baseline-bin/btx-cli'
+    build_cli('baseline', baseline, 25)
+    assert sha(source / SOURCE) == SOURCE_SHA
     patch = WORK / 'product.patch'
     run(['git', 'apply', '--check', patch], 'patch-check', source)
     run(['git', 'apply', patch], 'patch', source)
     RESULT.update(source_before=SOURCE_SHA, source_after=sha(source / SOURCE), patch_sha256=sha(patch))
-    run(compile_cmd, 'cli-compile', cache, timeout=240)
-    run(link_cmd, 'cli-link', cache, timeout=90)
+    build_cli('candidate', candidate, 2)
     assert sha(archive) == ARCHIVE
+    return baseline
 
 
-def qualify(candidate):
+def qualify(baseline, candidate):
     stock = WORK / 'saved-bin'
     assert sha(stock / 'btx-cli') == STOCK_CLI and sha(stock / 'btxd') == STOCK_DAEMON
-    candidate.parent.mkdir(exist_ok=True)
-    (candidate.parent / 'btxd').symlink_to(stock / 'btxd')
+    for binary in (baseline, candidate):
+        (binary.parent / 'btxd').symlink_to(stock / 'btxd')
     candidate_sha = sha(candidate)
-    RESULT['candidate_sha256'] = candidate_sha
+    baseline_sha = sha(baseline)
+    assert candidate_sha != baseline_sha
+    RESULT.update(candidate_sha256=candidate_sha, baseline_sha256=baseline_sha, daemon_sha256=STOCK_DAEMON)
     required = ('backup_named_archive_stdin', 'backup_named_wallet_stdin', 'backup_named_both_stdin', 'restore_named_stdin')
     for name, directory, cli_sha, expected_rc in (
-            ('baseline', stock, STOCK_CLI, 8), ('candidate', candidate.parent, candidate_sha, 0)):
+            ('baseline', baseline.parent, baseline_sha, 8), ('candidate', candidate.parent, candidate_sha, 0)):
         for binary in ('btxd', 'btx-cli'):
             assert 'not found' not in run(['ldd', directory / binary], f'{name}-{binary}-loader')
         case_output = OUT / name
@@ -129,8 +147,8 @@ def main():
     candidate = WORK / 'candidate-bin/btx-cli'
     candidate.parent.mkdir(exist_ok=True)
     try:
-        build(candidate)
-        qualify(candidate)
+        baseline = build(candidate)
+        qualify(baseline, candidate)
     except Exception as exc:
         RESULT['error'] = repr(exc)
         print(repr(exc), flush=True)
