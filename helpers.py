@@ -48,7 +48,8 @@ class Helper:
                 '-modellandiscovery=0', '-modelfollowpeers=0', '-modelnatpmp=0',
                 '-modelhost=0', '-modelseed=off', '-pwcchain=regtest']
         self.proc = subprocess.Popen(args, stdout=self.log, stderr=subprocess.STDOUT,
-            start_new_session=True, env=dict(os.environ, HOME=str(home),
+            start_new_session=True, restore_signals=False,
+            env=dict(os.environ, HOME=str(home),
                 XDG_DATA_HOME=str(home / 'data'), XDG_RUNTIME_DIR=str(self.root)))
         until = time.monotonic() + 30
         while not self.sock.exists():

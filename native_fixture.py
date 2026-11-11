@@ -33,6 +33,10 @@ def exercise(binary, output, candidate):
                 'expected complete ML-DSA-44 key files')
         cap = max(len(raw) + 128, 2561)
         label = 'retry-' + 'x' * (cap + 512)
+        status = Path(f'/proc/{helper.proc.pid}/status').read_text().splitlines()
+        ignored = next(row.split()[1] for row in status if row.startswith('SigIgn:'))
+        require(int(ignored, 16) & (1 << (signal.SIGXFSZ - 1)),
+                'helper must receive a write error instead of a termination signal')
         original = resource.prlimit(helper.proc.pid, resource.RLIMIT_FSIZE)
         try:
             resource.prlimit(helper.proc.pid, resource.RLIMIT_FSIZE, (cap, original[1]))
