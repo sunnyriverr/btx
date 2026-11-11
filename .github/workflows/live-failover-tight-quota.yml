@@ -24,23 +24,17 @@ jobs:
           sudo apt-get install -y --no-install-recommends libboost-dev libsqlite3-dev ninja-build strace
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
-          artifact-ids: 13750286693
-          run-id: 42787985840
+          artifact-ids: 13838960466
+          run-id: 42983418553
           github-token: ${{ github.token }}
           merge-multiple: true
-          path: checkpoint-input
-      - name: Relink only the changed helper and run the paired failover workflow
-        timeout-minutes: 29
-        run: python3 -u build.py
+          path: saved-bin
+      - name: Check cancellation and the lower quota on retained helpers
+        timeout-minutes: 5
+        run: python3 -u controls.py
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: live-failover-tight-quota-records
+          name: live-failover-tight-quota-controls
           path: repair-records
-          retention-days: 14
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
-        if: always()
-        with:
-          name: live-failover-tight-quota-binaries
-          path: repair-binaries
           retention-days: 14

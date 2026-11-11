@@ -240,6 +240,15 @@ def run(binary, expected_sha, out, root, permanent):
             require(all(receiver.pieces(artifact).get(k) == v for k, v in pieces.items()),
                     'cancel did not preserve saved pieces')
             r['cancelled_job'] = cancelled
+            end = time.monotonic() + 5
+            while True:
+                reply = receiver.rpc('removemodel', [uri])
+                if not reply.get('error'):
+                    require(reply['result']['removed'] is True, 'cancelled artifact removal result')
+                    break
+                require(time.monotonic() < end, 'cancelled artifact stayed active')
+                time.sleep(.1)
+            r['removed_after_cancel'] = True
             r['permanent_pass'] = True
         else:
             require(r['a_attempt'] and r['original_process'] and job.get('job_id') == jid,
