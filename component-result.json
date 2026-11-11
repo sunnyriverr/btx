@@ -1,0 +1,94 @@
+{
+  "status": "component_controls_pass",
+  "compile_command": [
+    "g++",
+    "-std=c++20",
+    "-O0",
+    "-Wall",
+    "-Wextra",
+    "/home/runner/work/btx/btx/component-records/consumer.cpp",
+    "-Wl,--wrap=fopen",
+    "-Wl,--wrap=fclose",
+    "-o",
+    "/home/runner/work/btx/btx/component-records/consumer"
+  ],
+  "receipt": {
+    "wallet_source_sha256": "2f60d36aed7045b505c3c408d8da0b9014cb7d925adf8c43a5636c5c3c1d181f",
+    "fs_source_sha256": "ef556c69d483fb2d1208ecb2f97f7557e28ac40b4a8815d565b8214a8c22d130",
+    "extracted_restore_sha256": "238245971a831a5b7c02dec8d69a1775875a37e75c7ddd90f7ff094b4fc1fd82",
+    "extracted_fopen_sha256": "16708570a50b6e6de2474e5af6b2510333b5598f1c6f0e4a430535caddaa455b",
+    "extracted_join_sha256": "88354d9eac5ff7e4b8a7fa45afe1db0bce78863ee7ec19bb39beb9d36d3267b1",
+    "source_text_replacements": [],
+    "providers": [
+      "WalletContext/Args/DatabaseOptions/DatabaseStatus",
+      "CWallet/LoadWallet stub (must remain uncalled)",
+      "ReadDatabaseArgs/GetWalletDir/TryCreateDirectories",
+      "bilingual_str/Untranslated/strprintf",
+      "fs path aliases/PathToString",
+      "Assume"
+    ],
+    "fault_seams": [
+      "linker --wrap=fopen: creates rival before real exclusive open",
+      "linker --wrap=fclose: real close then one injected EIO return"
+    ],
+    "scope": "Extracted Linux component, no SQLite/full wallet/Windows integration"
+  },
+  "compile_exit": 0,
+  "run_exit": 0,
+  "controls": [
+    {
+      "case": "no_load_success_keeps_complete_file",
+      "pass": true,
+      "error": "",
+      "seam_reached": false
+    },
+    {
+      "case": "no_load_capped_copy_cleans_owned_partial",
+      "pass": true,
+      "error": "Unexpected exception: Unable to write restored wallet file",
+      "seam_reached": false
+    },
+    {
+      "case": "no_load_same_name_retry",
+      "pass": true,
+      "error": "",
+      "seam_reached": false
+    },
+    {
+      "case": "no_load_close_result_failure_cleans_owned_file",
+      "pass": true,
+      "error": "Unexpected exception: Unable to close restored wallet file",
+      "seam_reached": true
+    },
+    {
+      "case": "no_load_retry_after_close_result_failure",
+      "pass": true,
+      "error": "",
+      "seam_reached": false
+    },
+    {
+      "case": "existing_complete_file_preserved",
+      "pass": true,
+      "error": "Failed to restore wallet. Database file exists in '/home/runner/work/btx/btx/component-records/runtime/success/wallet.dat'.",
+      "seam_reached": false
+    },
+    {
+      "case": "racing_exclusive_creation_preserves_other_file",
+      "pass": true,
+      "error": "Unexpected exception: Unable to create restored wallet file exclusively",
+      "seam_reached": true
+    },
+    {
+      "case": "missing_source_creates_nothing",
+      "pass": true,
+      "error": "Backup file does not exist",
+      "seam_reached": false
+    },
+    {
+      "case": "source_unchanged_and_load_never_called",
+      "pass": true,
+      "error": "",
+      "seam_reached": false
+    }
+  ]
+}

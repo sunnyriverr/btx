@@ -1,0 +1,569 @@
+{
+  "active_fault_case": "fault-new-directory",
+  "backup_after_all_cases": {
+    "exists": true,
+    "path": "/tmp/btx-restore-copy-org300zx/source.backup.dat",
+    "sha256": "1926fe6c30b84ec6fd2f8f170c2cbaac43fc9cd5918bc24257ddec7637d410e3",
+    "size": 20480
+  },
+  "backup_before": {
+    "exists": true,
+    "path": "/tmp/btx-restore-copy-org300zx/source.backup.dat",
+    "sha256": "1926fe6c30b84ec6fd2f8f170c2cbaac43fc9cd5918bc24257ddec7637d410e3",
+    "size": 20480
+  },
+  "classification": {
+    "checks": {
+      "existing_copy_failed_via_rpc": true,
+      "existing_directory_and_sentinel_preserved": true,
+      "existing_failed_output_removed": true,
+      "existing_limit_restored": true,
+      "existing_same_name_retry_and_reload": true,
+      "healthy_controls_completed": true,
+      "invalid_regular_backup_cleanup": true,
+      "new_copy_failed_observed": true,
+      "new_copy_failed_via_rpc": true,
+      "new_daemon_survived": true,
+      "new_failed_directory_removed": true,
+      "new_limit_restored_or_child_exited": true,
+      "new_same_name_retry_and_reload": true,
+      "normal_daemon_stop": true,
+      "observation_complete": true,
+      "owned_cleanup": true,
+      "preservation_controls": true,
+      "raw_backup_records_preserved": true,
+      "source_wallet_valid": true
+    },
+    "expect": "candidate",
+    "failed_checks": [],
+    "passed": true
+  },
+  "cleanup": {
+    "daemon_exit": 0,
+    "daemon_exited": true,
+    "errors": [],
+    "log_thread_finished": true,
+    "new_directory_product_exit_observed": false,
+    "normal_rpc_stop_requested": true,
+    "runtime_removed": true,
+    "sigkill_sent": false,
+    "sigterm_sent": false
+  },
+  "daemon_pid": 5245,
+  "discriminators": {
+    "backup_unchanged": true,
+    "capped_restore_failed": true,
+    "healthy_same_name_retry_refused_for_existing_database": false,
+    "nonempty_short_destination_left": false,
+    "preexisting_real_wallet_file_unchanged": true,
+    "sentinel_unchanged": true
+  },
+  "elapsed_seconds": 2.574,
+  "existing_wallet_file_control": {
+    "after": {
+      "exists": true,
+      "path": "/tmp/btx-restore-copy-org300zx/wallets/healthy-before/wallet.dat",
+      "sha256": "420afffdecf4b92f342dd3ff892bfa9500127b76306e2f1b328c71af0a37b2ba",
+      "size": 24576
+    },
+    "before": {
+      "exists": true,
+      "path": "/tmp/btx-restore-copy-org300zx/wallets/healthy-before/wallet.dat",
+      "sha256": "420afffdecf4b92f342dd3ff892bfa9500127b76306e2f1b328c71af0a37b2ba",
+      "size": 24576
+    },
+    "preserved": true
+  },
+  "expectation": "candidate",
+  "fault_cases": {
+    "fault-new-directory": {
+      "backup_after_copy": {
+        "exists": true,
+        "path": "/tmp/btx-restore-copy-org300zx/source.backup.dat",
+        "sha256": "1926fe6c30b84ec6fd2f8f170c2cbaac43fc9cd5918bc24257ddec7637d410e3",
+        "size": 20480
+      },
+      "copy_reply": {
+        "elapsed_seconds": 0.000587,
+        "error": {
+          "code": -4,
+          "message": "Unexpected exception: Unable to write restored wallet file"
+        },
+        "label": "fault-new-directory_capped_restore",
+        "success": false
+      },
+      "daemon_alive_after_copy": true,
+      "daemon_exit_after_copy": null,
+      "destination_after_copy": {
+        "exists": false,
+        "path": "/tmp/btx-restore-copy-org300zx/wallets/fault-new-directory/wallet.dat"
+      },
+      "destination_after_retry": {
+        "exists": true,
+        "path": "/tmp/btx-restore-copy-org300zx/wallets/fault-new-directory/wallet.dat",
+        "sha256": "8db81c19d1a4e2548cc59a8f112f8959f0d9a7cce9e221176d503b35efac0f97",
+        "size": 24576
+      },
+      "destination_before": {
+        "exists": false,
+        "path": "/tmp/btx-restore-copy-org300zx/wallets/fault-new-directory/wallet.dat"
+      },
+      "directory_after_copy": false,
+      "directory_before": false,
+      "directory_children_after_copy": [],
+      "limits_before": [
+        -1,
+        -1
+      ],
+      "limits_during": [
+        1024,
+        -1
+      ],
+      "limits_restored": [
+        -1,
+        -1
+      ],
+      "loaded_wallets_after_copy": [],
+      "retry_reply": {
+        "elapsed_seconds": 0.417258,
+        "label": "fault-new-directory_same_name_retry_without_manual_cleanup",
+        "result": {
+          "name": "fault-new-directory"
+        },
+        "success": true,
+        "wallet_verification": {
+          "after_unload_reload": {
+            "address": "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49",
+            "balance": "0E-8",
+            "ismine": true,
+            "labels": {
+              "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49": {
+                "purpose": "receive"
+              }
+            },
+            "wallet_name": "fault-new-directory"
+          },
+          "initial": {
+            "address": "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49",
+            "balance": "0E-8",
+            "ismine": true,
+            "labels": {
+              "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49": {
+                "purpose": "receive"
+              }
+            },
+            "wallet_name": "fault-new-directory"
+          }
+        }
+      }
+    },
+    "fault-target": {
+      "backup_after_copy": {
+        "exists": true,
+        "path": "/tmp/btx-restore-copy-org300zx/source.backup.dat",
+        "sha256": "1926fe6c30b84ec6fd2f8f170c2cbaac43fc9cd5918bc24257ddec7637d410e3",
+        "size": 20480
+      },
+      "copy_reply": {
+        "elapsed_seconds": 0.000521,
+        "error": {
+          "code": -4,
+          "message": "Unexpected exception: Unable to write restored wallet file"
+        },
+        "label": "fault-target_capped_restore",
+        "success": false
+      },
+      "daemon_alive_after_copy": true,
+      "daemon_exit_after_copy": null,
+      "destination_after_copy": {
+        "exists": false,
+        "path": "/tmp/btx-restore-copy-org300zx/wallets/fault-target/wallet.dat"
+      },
+      "destination_after_retry": {
+        "exists": true,
+        "path": "/tmp/btx-restore-copy-org300zx/wallets/fault-target/wallet.dat",
+        "sha256": "31cf712743683557e3339b3fb14737f0fbea00f6ea11ca9780599203cf1a3254",
+        "size": 24576
+      },
+      "destination_before": {
+        "exists": false,
+        "path": "/tmp/btx-restore-copy-org300zx/wallets/fault-target/wallet.dat"
+      },
+      "directory_after_copy": true,
+      "directory_before": true,
+      "directory_children_after_copy": [
+        "unrelated-sentinel.txt"
+      ],
+      "directory_preserved": true,
+      "limits_before": [
+        -1,
+        -1
+      ],
+      "limits_during": [
+        1024,
+        -1
+      ],
+      "limits_restored": [
+        -1,
+        -1
+      ],
+      "loaded_wallets_after_copy": [],
+      "retry_reply": {
+        "elapsed_seconds": 0.417173,
+        "label": "fault-target_same_name_retry_without_manual_cleanup",
+        "result": {
+          "name": "fault-target"
+        },
+        "success": true,
+        "wallet_verification": {
+          "after_unload_reload": {
+            "address": "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49",
+            "balance": "0E-8",
+            "ismine": true,
+            "labels": {
+              "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49": {
+                "purpose": "receive"
+              }
+            },
+            "wallet_name": "fault-target"
+          },
+          "initial": {
+            "address": "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49",
+            "balance": "0E-8",
+            "ismine": true,
+            "labels": {
+              "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49": {
+                "purpose": "receive"
+              }
+            },
+            "wallet_name": "fault-target"
+          }
+        }
+      },
+      "sentinel_after_copy": {
+        "exists": true,
+        "path": "/tmp/btx-restore-copy-org300zx/wallets/fault-target/unrelated-sentinel.txt",
+        "sha256": "fc6c7a66ef8e88f4ff2869b05a0d7263a04addbaf11dec24627fbda21a35eda9",
+        "size": 43
+      },
+      "sentinel_after_retry": {
+        "exists": true,
+        "path": "/tmp/btx-restore-copy-org300zx/wallets/fault-target/unrelated-sentinel.txt",
+        "sha256": "fc6c7a66ef8e88f4ff2869b05a0d7263a04addbaf11dec24627fbda21a35eda9",
+        "size": 43
+      },
+      "sentinel_preserved": true
+    }
+  },
+  "healthy_after": {
+    "after_unload_reload": {
+      "address": "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49",
+      "balance": "0E-8",
+      "ismine": true,
+      "labels": {
+        "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49": {
+          "purpose": "receive"
+        }
+      },
+      "wallet_name": "healthy-after"
+    },
+    "initial": {
+      "address": "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49",
+      "balance": "0E-8",
+      "ismine": true,
+      "labels": {
+        "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49": {
+          "purpose": "receive"
+        }
+      },
+      "wallet_name": "healthy-after"
+    }
+  },
+  "healthy_before": {
+    "after_unload_reload": {
+      "address": "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49",
+      "balance": "0E-8",
+      "ismine": true,
+      "labels": {
+        "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49": {
+          "purpose": "receive"
+        }
+      },
+      "wallet_name": "healthy-before"
+    },
+    "initial": {
+      "address": "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49",
+      "balance": "0E-8",
+      "ismine": true,
+      "labels": {
+        "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49": {
+          "purpose": "receive"
+        }
+      },
+      "wallet_name": "healthy-before"
+    }
+  },
+  "hypothesis_confirmed": false,
+  "inputs": {
+    "base_source": "dac9aee53520bd49ed320ec7a49b9072fc7d88d9",
+    "binary": "/home/runner/work/btx/btx/daemon-binaries/candidate",
+    "binary_sha256": "5e2ac42bf9eb57c8e042166124fd60c28274213e3aaface75313ff3b5c9db482",
+    "command": [
+      "/home/runner/work/btx/btx/daemon-binaries/candidate",
+      "-datadir=/tmp/btx-restore-copy-org300zx",
+      "-regtest=1",
+      "-server=1",
+      "-disablewallet=0",
+      "-walletdir=/tmp/btx-restore-copy-org300zx/wallets",
+      "-keypool=2",
+      "-modelnet=0",
+      "-networkactive=0",
+      "-listen=0",
+      "-connect=0",
+      "-dnsseed=0",
+      "-discover=0",
+      "-upnp=0",
+      "-natpmp=0",
+      "-walletbroadcast=0",
+      "-flushwallet=0",
+      "-persistmempool=0",
+      "-nosettings",
+      "-nodebuglogfile",
+      "-printtoconsole=1",
+      "-debug=rpc",
+      "-rpcport=55815",
+      "-rpcbind=127.0.0.1",
+      "-rpcallowip=127.0.0.1"
+    ],
+    "debug_file_disabled_by": "-nodebuglogfile (negated debuglogfile option)",
+    "expected_sha256": "5e2ac42bf9eb57c8e042166124fd60c28274213e3aaface75313ff3b5c9db482",
+    "fixture_sha256": "1ac1e7d10bae66329434b21dd80e72a9d4dd5cae61650403523f202655dd1f91",
+    "functional_root": "/home/runner/work/btx/btx/accepted-source/test/functional",
+    "rpc_port": 55815,
+    "runtime": "/tmp/btx-restore-copy-org300zx",
+    "soft_file_size_cap": 1024
+  },
+  "invalid_regular_backup_control": {
+    "after": {
+      "exists": true,
+      "path": "/tmp/btx-restore-copy-org300zx/invalid-regular-backup.dat",
+      "sha256": "02d9b8262591975d8f50572bcff46cfa8a14916dac409f7328bbf5f8f3401995",
+      "size": 44
+    },
+    "before": {
+      "exists": true,
+      "path": "/tmp/btx-restore-copy-org300zx/invalid-regular-backup.dat",
+      "sha256": "02d9b8262591975d8f50572bcff46cfa8a14916dac409f7328bbf5f8f3401995",
+      "size": 44
+    },
+    "existing_wallet_unchanged": true,
+    "reply": {
+      "elapsed_seconds": 0.000543,
+      "error": {
+        "code": -18,
+        "message": "Wallet file verification failed. Failed to load database path '/tmp/btx-restore-copy-org300zx/wallets/invalid-backup-control'. Data is not in recognized format."
+      },
+      "label": "invalid_regular_backup_refused",
+      "success": false
+    },
+    "target_directory_exists": false
+  },
+  "lifecycle_limit": "successful retry verified through unload/load; no whole-daemon restart",
+  "preservation_after_all_cases": {
+    "backup_unchanged": true,
+    "existing_real_wallet_unchanged": true,
+    "sentinel_unchanged": true,
+    "symlink_and_target_unchanged": true
+  },
+  "rpc_events": [
+    {
+      "elapsed_seconds": 0.41769,
+      "label": "healthy-before_restore",
+      "result": {
+        "name": "healthy-before"
+      },
+      "success": true
+    },
+    {
+      "elapsed_seconds": 0.000488,
+      "error": {
+        "code": -36,
+        "message": "Failed to restore wallet. Database file exists in '/tmp/btx-restore-copy-org300zx/wallets/healthy-before/wallet.dat'."
+      },
+      "label": "existing_wallet_file_refused",
+      "success": false
+    },
+    {
+      "elapsed_seconds": 0.000412,
+      "error": {
+        "code": -36,
+        "message": "Failed to restore wallet. Database file exists in '/tmp/btx-restore-copy-org300zx/wallets/symlink-target/wallet.dat'."
+      },
+      "label": "symlink_wallet_file_refused",
+      "success": false
+    },
+    {
+      "elapsed_seconds": 0.000543,
+      "error": {
+        "code": -18,
+        "message": "Wallet file verification failed. Failed to load database path '/tmp/btx-restore-copy-org300zx/wallets/invalid-backup-control'. Data is not in recognized format."
+      },
+      "label": "invalid_regular_backup_refused",
+      "success": false
+    },
+    {
+      "elapsed_seconds": 0.000521,
+      "error": {
+        "code": -4,
+        "message": "Unexpected exception: Unable to write restored wallet file"
+      },
+      "label": "fault-target_capped_restore",
+      "success": false
+    },
+    {
+      "elapsed_seconds": 0.417173,
+      "label": "fault-target_same_name_retry_without_manual_cleanup",
+      "result": {
+        "name": "fault-target"
+      },
+      "success": true,
+      "wallet_verification": {
+        "after_unload_reload": {
+          "address": "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49",
+          "balance": "0E-8",
+          "ismine": true,
+          "labels": {
+            "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49": {
+              "purpose": "receive"
+            }
+          },
+          "wallet_name": "fault-target"
+        },
+        "initial": {
+          "address": "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49",
+          "balance": "0E-8",
+          "ismine": true,
+          "labels": {
+            "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49": {
+              "purpose": "receive"
+            }
+          },
+          "wallet_name": "fault-target"
+        }
+      }
+    },
+    {
+      "elapsed_seconds": 0.003307,
+      "label": "fault-target_reload",
+      "result": {
+        "name": "fault-target"
+      },
+      "success": true
+    },
+    {
+      "elapsed_seconds": 0.417848,
+      "label": "healthy-after_restore",
+      "result": {
+        "name": "healthy-after"
+      },
+      "success": true
+    },
+    {
+      "elapsed_seconds": 0.000587,
+      "error": {
+        "code": -4,
+        "message": "Unexpected exception: Unable to write restored wallet file"
+      },
+      "label": "fault-new-directory_capped_restore",
+      "success": false
+    },
+    {
+      "elapsed_seconds": 0.417258,
+      "label": "fault-new-directory_same_name_retry_without_manual_cleanup",
+      "result": {
+        "name": "fault-new-directory"
+      },
+      "success": true,
+      "wallet_verification": {
+        "after_unload_reload": {
+          "address": "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49",
+          "balance": "0E-8",
+          "ismine": true,
+          "labels": {
+            "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49": {
+              "purpose": "receive"
+            }
+          },
+          "wallet_name": "fault-new-directory"
+        },
+        "initial": {
+          "address": "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49",
+          "balance": "0E-8",
+          "ismine": true,
+          "labels": {
+            "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49": {
+              "purpose": "receive"
+            }
+          },
+          "wallet_name": "fault-new-directory"
+        }
+      }
+    },
+    {
+      "elapsed_seconds": 0.003082,
+      "label": "fault-new-directory_reload",
+      "result": {
+        "name": "fault-new-directory"
+      },
+      "success": true
+    }
+  ],
+  "schema_version": 2,
+  "scope": "Linux zero-funds plain restore copy; kernel RLIMIT_FSIZE fault; no mining",
+  "source_wallet": {
+    "address": "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49",
+    "balance": "0E-8",
+    "ismine": true,
+    "labels": {
+      "btxrt1z3mml5nks2xc06ma6zqrnjshq8tycz29s55qhn0e8tqx4zffk8lfsnl4h49": {
+        "purpose": "receive"
+      }
+    },
+    "wallet_name": "source"
+  },
+  "startup": {
+    "chain": "regtest",
+    "connections": 0,
+    "height": 0,
+    "loaded_wallets": [],
+    "networkactive": false
+  },
+  "status": "observation_complete",
+  "symlink_wallet_control": {
+    "is_symlink": true,
+    "link_preserved": true,
+    "link_text": "/tmp/btx-restore-copy-org300zx/wallets/healthy-before/wallet.dat",
+    "reply": {
+      "elapsed_seconds": 0.000412,
+      "error": {
+        "code": -36,
+        "message": "Failed to restore wallet. Database file exists in '/tmp/btx-restore-copy-org300zx/wallets/symlink-target/wallet.dat'."
+      },
+      "label": "symlink_wallet_file_refused",
+      "success": false
+    },
+    "target_after": {
+      "exists": true,
+      "path": "/tmp/btx-restore-copy-org300zx/wallets/healthy-before/wallet.dat",
+      "sha256": "420afffdecf4b92f342dd3ff892bfa9500127b76306e2f1b328c71af0a37b2ba",
+      "size": 24576
+    },
+    "target_before": {
+      "exists": true,
+      "path": "/tmp/btx-restore-copy-org300zx/wallets/healthy-before/wallet.dat",
+      "sha256": "420afffdecf4b92f342dd3ff892bfa9500127b76306e2f1b328c71af0a37b2ba",
+      "size": 24576
+    },
+    "target_preserved": true
+  }
+}
