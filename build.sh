@@ -5,7 +5,7 @@ test "$VERSION_ID" = 22.04
 test "$(uname -m)" = x86_64
 export DEBIAN_FRONTEND=noninteractive
 apt-get -o Acquire::Retries=2 update
-apt-get install -y --no-install-recommends ca-certificates curl git build-essential cmake ninja-build pkg-config python3 perl libboost-dev libevent-dev libsqlite3-dev libzmq3-dev libqrencode-dev qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools libwebkit2gtk-4.1-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev librsvg2-bin libxdo-dev patchelf
+apt-get install -y --no-install-recommends ca-certificates curl git build-essential cmake ninja-build pkg-config python3 perl libboost-dev libevent-dev libsqlite3-dev libzmq3-dev libqrencode-dev qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools libwebkit2gtk-4.1-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev librsvg2-bin libxdo-dev patchelf imagemagick
 git config --global --add safe.directory "$GITHUB_WORKSPACE/accepted-source"
 git config --global --add safe.directory "$GITHUB_WORKSPACE/product"
 getconf GNU_LIBC_VERSION
@@ -30,6 +30,9 @@ ln -s "$tool_bin/ninja" /usr/local/bin/ninja
 build="$GITHUB_WORKSPACE/gui-pilot-runtime/qtbuild"
 mapfile -t targets < <(python3 -c 'from build_targets import TARGETS; print(*TARGETS, sep="\n")')
 test "${#targets[@]}" -eq 17
+# Run the generated Qt icon rule first so missing renderer tools fail cheaply.
+test -x /usr/bin/convert
+timeout --kill-after=10s 90s cmake --build "$build" --parallel 2 --target generate_ico
 timeout --kill-after=20s 68m cmake --build "$build" --parallel 2 --target "${targets[@]}"
 curl -fsSL https://sh.rustup.rs -o /tmp/btx-rustup-init.sh
 sh /tmp/btx-rustup-init.sh -y --profile minimal --default-toolchain none
