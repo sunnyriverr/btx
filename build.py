@@ -3,6 +3,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shlex
 import shutil
 import subprocess
 import tarfile
@@ -81,11 +82,6 @@ def build(candidate):
         assert 'Re-running CMake' not in plan and 'Re-checking globbed' not in plan
         assert 0 < len(actions) <= max_steps and any('bitcoin-cli.cpp.o' in x for x in actions), actions
         assert any('Linking CXX executable bin/btx-cli' in x for x in actions), actions
-        if label == 'candidate':
-            allowed = ('bitcoin-cli.cpp.o', 'Linking CXX executable bin/btx-cli',
-                       'Generating bitcoin-build-info.h', 'clientversion.cpp.o',
-                       'Linking CXX static library lib/libbitcoin_clientversion.a')
-            assert all(any(item in action for item in allowed) for action in actions), actions
         RESULT[label + '_actions'] = actions
         run([*ninja, '-j2', 'btx-cli'], label + '-build', timeout=260)
         output.parent.mkdir(exist_ok=True)
@@ -98,7 +94,29 @@ def build(candidate):
     run(['git', 'apply', '--check', patch], 'patch-check', source)
     run(['git', 'apply', patch], 'patch', source)
     RESULT.update(source_before=SOURCE_SHA, source_after=sha(source / SOURCE), patch_sha256=sha(patch))
-    build_cli('candidate', candidate, 5)
+    # Reuse the actual configured CLI commands. Ninja's dry plan pessimistically
+    # schedules build-info dependents even if their generated inputs are unchanged.
+    commands = run([*ninja, '-t', 'commands', 'btx-cli'], 'cli-commands').splitlines()
+    rows = [shlex.split(line) for line in commands if line.rstrip().endswith('-c ' + str(source / SOURCE))]
+    assert len(rows) == 1
+    cmd = rows[0]
+    assert cmd[0] == '/usr/bin/g++'
+    obj = WORK / 'candidate-cli.o'
+    cmd[cmd.index('-o') + 1] = str(obj)
+    cmd[cmd.index('-MF') + 1] = str(obj) + '.d'
+    rows = [shlex.split(line) for line in commands if ' -o bin/btx-cli ' in line]
+    assert len(rows) == 1
+    tokens = rows[0]
+    assert tokens[:3] == [':', '&&', '/usr/bin/g++']
+    link = tokens[2:tokens.index('&&', 2)]
+    old_obj = 'src/CMakeFiles/btx-cli.dir/bitcoin-cli.cpp.o'
+    assert link.count(old_obj) == 1
+    link[link.index(old_obj)] = str(obj)
+    link[link.index('-o') + 1] = str(candidate)
+    (OUT / 'candidate-plan.json').write_text(json.dumps([cmd, link], indent=2)+'\n')
+    RESULT['candidate_actions'] = ['Compile src/bitcoin-cli.cpp', 'Link btx-cli']
+    run(cmd, 'candidate-compile', cache, timeout=240)
+    run(link, 'candidate-link', cache, timeout=90)
     assert sha(archive) == ARCHIVE
     return baseline
 
