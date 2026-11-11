@@ -1,14 +1,14 @@
-name: Mac release checkpoint restore and Ninja plan
+name: Bounded Mac release compile
 on:
   push:
-    branches: [codex/ci-mac-current-restore-plan]
+    branches: [codex/ci-mac-current-build]
 permissions:
   contents: read
   actions: read
 jobs:
   restore:
     runs-on: macos-15
-    timeout-minutes: 55
+    timeout-minutes: 115
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -39,11 +39,37 @@ jobs:
       - name: Restore both checkpoints and inspect current dry plan
         timeout-minutes: 15
         run: python3 contrib/devtools/mac-current-pilot/pilot.py
+      - name: Compile CMake shipping targets with one worker
+        timeout-minutes: 35
+        run: python3 contrib/devtools/mac-current-build/cmake_chunk.py
+      - name: Compile Atlas with the locked toolchain and one worker
+        timeout-minutes: 40
+        run: python3 contrib/devtools/mac-current-build/cargo_chunk.py
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: mac-current-checkpoint-plan-records
+          name: mac-current-build-records
           path: |
             pilot-records
             mac-config-records
+            cmake-chunk-records
+            cargo-chunk-records
+          retention-days: 14
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: mac-current-build-outputs
+          path: |
+            cmake-chunk-binaries
+            cargo-chunk-binaries
+          if-no-files-found: ignore
+          retention-days: 14
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: mac-current-build-checkpoints
+          path: |
+            cmake-chunk-checkpoint
+            cargo-chunk-checkpoint
+          if-no-files-found: ignore
           retention-days: 14
