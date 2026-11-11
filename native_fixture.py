@@ -48,7 +48,7 @@ class Helper:
  def start(self):
   require(self.proc is None and not self.sock.exists(),'helper not cleanly stopped');self.starts+=1
   home=self.root/'home';home.mkdir(exist_ok=True)
-  args=[str(self.binary),'-modeldir='+str(self.store),'-modelrpcsocket='+str(self.sock),'-modelstorage='+str(self.cap),'-modelfollowpeers=0','-modellandiscovery=0','-modelnatpmp=0','-modelseed=off','-pwcchain=regtest']
+  args=[str(self.binary),'-modeldir='+str(self.store),'-modelrpcsocket='+str(self.sock),'-modelstorage='+str(self.cap),'-modelfollowpeers=0','-modellandiscovery=0','-modelnatpmp=0','-modelseed='+('auto' if self.hostport else 'off'),'-pwcchain=regtest']
   if self.hostport:args+=['-modelhost','-modelbind=127.0.0.1:'+str(self.hostport),'-modeluploadlimit=1MiB']
   else:args+=['-modelhost=0','-modelpeer='+self.peer]
   self.log=(self.out/(self.label+'-'+str(self.starts)+'.log')).open('wb')
@@ -61,7 +61,7 @@ class Helper:
    info=self.info()
    if info.get('helper_ready') and info.get('pq1_ready'):break
    require(time.monotonic()<end,'helper/PQ1 readiness');time.sleep(.1)
-  profile=self.ok('setmodelprofile',['custom',{'storage_bytes':self.cap,'follow_peers':False,'preserve_rare':False,'seed':'off'}]);require(profile.get('applied') is True,'profile unapplied')
+  profile=self.ok('setmodelprofile',['custom',{'storage_bytes':self.cap,'follow_peers':False,'preserve_rare':False,'seed':'auto' if self.hostport else 'off'}]);require(profile.get('applied') is True,'profile unapplied')
   while True:
    info=self.info();pol=info.get('propagation',{})
    if pol.get('storage_quota_bytes')==self.cap and pol.get('follow_configured_peers') is False and pol.get('preserve_rare') is False:break
@@ -124,7 +124,7 @@ def run(binary,out):
    b=struct.pack('<Q',len(header))+header;f.write(b);d.update(b)
    for offset in range(0,TOTAL_PAYLOAD,1<<20):b=hashlib.shake_256(('quota:'+str(offset)).encode()).digest(min(1<<20,TOTAL_PAYLOAD-offset));f.write(b);d.update(b)
   r['expected_sha384']=d.hexdigest();r['source_input_bytes']=path.stat().st_size
-  imp=source.ok('importmodel',[str(path),{'pin':True}]);uri=imp['uri'];artifact=imp['artifact_id'];model=imp['model_id'];r.update(uri=uri,artifact_id=artifact,model_id=model)
+  imp=source.ok('importmodel',[str(path),{'pin':True}]);require(imp.get('seeded') is True,'source not sharing imported model');r['source_import']=imp;uri=imp['uri'];artifact=imp['artifact_id'];model=imp['model_id'];r.update(uri=uri,artifact_id=artifact,model_id=model)
   fresh=Helper(binary,root/'fresh',out,'fresh',CAP,peer=endpoint);helpers.append(fresh);phase('fresh-fit control');fresh.start();jid,_=fresh.request(uri);r['fresh_job']=fresh.settled(jid,105);require(r['fresh_job']['status']=='done','fresh control failed');r['fresh']=completion(fresh,uri,r['expected_sha384']);fresh.stop();save()
   low=Helper(binary,root/'insufficient',out,'insufficient',64<<20,peer=endpoint);helpers.append(low);phase('insufficient-cap control');low.start();jid,_=low.request(uri);j=low.settled(jid,15);r['insufficient']={'cap':low.cap,'quota_error':quota_error(j),'job':j};require(r['insufficient']['quota_error'],'insufficient control did not refuse quota');low.stop()
   journey=Helper(binary,root/'journey',out,'journey',CAP,peer=endpoint);helpers.append(journey);phase('committing interrupted prefix');journey.start();jid,initial=journey.request(uri);end=time.monotonic()+30
