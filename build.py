@@ -84,7 +84,17 @@ def qualify(receipt):
     assert link[:2] == [':', '&&'] and link[-2:] == ['&&', ':']
     link = [arg for arg in link[2:-2] if arg != '-Wl,--unresolved-symbols=ignore-in-shared-libs']
     assert link[0] == '/usr/bin/g++'
-    link.insert(link.index('src/modelnet/CMakeFiles/btx-modeld.dir/__/modeld.cpp.o'), str(obj))
+    entry = 'src/modelnet/CMakeFiles/btx-modeld.dir/__/modeld.cpp.o'
+    # The release checkpoint predates the first link of this executable.
+    # Generate its missing entry object once, from the retained build graph.
+    assert entry in link
+    if not (cache / entry).is_file():
+        run(['ninja', '-C', cache, '-n', entry], 'shared-entry-plan')
+        run(['ninja', '-C', cache, '-j1', entry], 'shared-entry-compile', timeout=180)
+    link.insert(link.index(entry), str(obj))
+    missing = [arg for arg in link if arg.endswith(('.a', '.so', '.o'))
+               and arg != str(obj) and not (cache / arg).is_file()]
+    assert not missing, missing
     (OUT / 'paired-plan.json').write_text(json.dumps([compile_args, link], indent=2)+'\n')
     patch = WORK / 'identity-repair.patch'
     assert sha(patch) == PATCH
