@@ -4,9 +4,6 @@ archive=candidate-input/btx-linux-gui-candidate.tar.gz
 export BTX_CANDIDATE_SHA256
 BTX_CANDIDATE_SHA256=$(jq -er .candidate_archive_sha256 candidate-input/provenance.json)
 echo "$BTX_CANDIDATE_SHA256  $archive" | sha256sum --check
-python3 -m venv engine
-engine/bin/pip install --disable-pip-version-check --retries 1 --index-url https://download.pytorch.org/whl/cpu torch==2.7.1
-engine/bin/pip install --disable-pip-version-check --retries 1 transformers==4.53.3 safetensors==0.5.3
 mkdir package model-results
 tar -xzf "$archive" -C package
 engine/bin/pip freeze > model-results/engine-versions.txt
