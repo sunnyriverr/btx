@@ -1,0 +1,129 @@
+diff --git a/src/modelnet/helper.cpp b/src/modelnet/helper.cpp
+--- a/src/modelnet/helper.cpp
++++ b/src/modelnet/helper.cpp
+@@ -67,6 +67,7 @@
+ #include <netaddress.h>
+ #include <netbase.h>
+ #include <util/fs.h>
++#include <util/readwritefile.h>
+ #include <util/strencodings.h>
+ #ifndef _WIN32
+ #include <util/subprocess.h>
+@@ -7104,18 +7105,7 @@
+                 return false;
+             }
+             if (!outp.parent_path().empty()) fs::create_directories(outp.parent_path());
+-            std::ofstream f(outp, std::ios::trunc);
+-            if (!f) {
+-                err_code = "IO";
+-                err = "write link file";
+-                return false;
+-            }
+-            f << link.write(2, 0) << "\n";
+-            f.close();
+-            if (!f) {
+-                // A full disk can cut the file short at the write or at the close.
+-                std::error_code rm_ec;
+-                fs::remove(outp, rm_ec);
++            if (!WriteBinaryFileAtomically(outp, link.write(2, 0) + "\n")) {
+                 err_code = "IO";
+                 err = "write link file";
+                 return false;
+diff --git a/src/modelnet/helper_network02.cpp b/src/modelnet/helper_network02.cpp
+--- a/src/modelnet/helper_network02.cpp
++++ b/src/modelnet/helper_network02.cpp
+@@ -47,6 +47,7 @@
+ #include <crypto/hex_base.h>
+ #include <span.h>
+ #include <util/fs.h>
++#include <util/readwritefile.h>
+ #include <util/strencodings.h>
+ 
+ #include <algorithm>
+@@ -676,18 +677,8 @@
+             err_code = "SYMLINK_REFUSED";
+             return false;
+         }
+-        std::ofstream out(path, std::ios::binary | std::ios::trunc);
+-        if (!out) {
+-            err = "package write";
+-            err_code = "IO_ERROR";
+-            return false;
+-        }
+-        out.write(reinterpret_cast<const char*>(bytes.data()), static_cast<std::streamsize>(bytes.size()));
+-        out.close();
+-        if (!out) {
+-            // A full disk can cut the file short at the write or at the close.
+-            std::error_code rm_ec;
+-            fs::remove(path, rm_ec);
++        const std::string_view contents{reinterpret_cast<const char*>(bytes.data()), bytes.size()};
++        if (!WriteBinaryFileAtomically(path, contents)) {
+             err = "package write";
+             err_code = "IO_ERROR";
+             return false;
+diff --git a/src/util/readwritefile.cpp b/src/util/readwritefile.cpp
+--- a/src/util/readwritefile.cpp
++++ b/src/util/readwritefile.cpp
+@@ -5,12 +5,15 @@
+ 
+ #include <util/readwritefile.h>
+ 
++#include <random.h>
+ #include <util/fs.h>
++#include <util/fs_helpers.h>
+ 
+ #include <algorithm>
+ #include <cstdio>
+ #include <limits>
+ #include <string>
++#include <system_error>
+ #include <utility>
+ 
+ std::pair<bool,std::string> ReadBinaryFile(const fs::path &filename, size_t maxsize)
+@@ -48,3 +51,27 @@
+     }
+     return true;
+ }
++
++bool WriteBinaryFileAtomically(const fs::path& filename, std::string_view data)
++{
++    std::error_code ec;
++    const auto status = fs::symlink_status(filename, ec);
++    if (ec && ec != std::errc::no_such_file_or_directory) return false;
++    if (fs::exists(status) && !fs::is_regular_file(status)) return false;
++
++    FastRandomContext rng;
++    const fs::path tmp = filename.parent_path() / fs::PathFromString(".btx-export-" + std::to_string(rng.rand64()) + ".tmp");
++    FILE* file = fsbridge::fopen(tmp, "wbx");
++    if (!file) return false;
++    const bool written = data.empty() || std::fwrite(data.data(), 1, data.size(), file) == data.size();
++    const bool closed = std::fclose(file) == 0;
++    ec.clear();
++#ifndef WIN32
++    if (written && closed && fs::exists(status)) {
++        fs::permissions(tmp, status.permissions() & fs::perms::all, fs::perm_options::replace, ec);
++    }
++#endif
++    if (written && closed && !ec && RenameOver(tmp, filename)) return true;
++    fs::remove(tmp, ec);
++    return false;
++}
+diff --git a/src/util/readwritefile.h b/src/util/readwritefile.h
+--- a/src/util/readwritefile.h
++++ b/src/util/readwritefile.h
+@@ -9,6 +9,7 @@
+ 
+ #include <limits>
+ #include <string>
++#include <string_view>
+ #include <utility>
+ 
+ /** Read full contents of a file and return them in a std::string.
+@@ -25,4 +26,7 @@
+  */
+ bool WriteBinaryFile(const fs::path &filename, const std::string &data);
+ 
++//! Replace a regular file only after the new contents are written and closed.
++bool WriteBinaryFileAtomically(const fs::path& filename, std::string_view data);
++
+ #endif // BITCOIN_UTIL_READWRITEFILE_H
