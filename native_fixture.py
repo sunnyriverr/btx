@@ -1,5 +1,4 @@
 """Run the documented zero-wallet model workflow on the published helper."""
-import hashlib
 import json
 from pathlib import Path
 import socket
@@ -42,7 +41,7 @@ def generation(helper, uri):
             f'local generation did not complete: {result}')
     text = result.get('text', '')
     require(isinstance(text, str) and text.strip(), f'empty generated output: {result}')
-    return {'text':text, 'backend':result.get('backend'), 'device':result.get('device')}
+    return {'text':text, 'backend':result.get('backend'), 'device':result.get('adapter', {}).get('device')}
 
 
 def checkout(helper, uri, expected):
@@ -75,21 +74,27 @@ def run(root):
         uri = item['uri']
         require(item.get('seeded') and uri.startswith('btx://'),'publisher did not seed')
         receipt.update(model_id=item['model_id'],artifact_id=item['artifact_id'],uri=uri)
+        local = publisher.ok('searchmodels', [{'scope':'LOCAL','limit':20}])
+        require(uri in json.dumps(local['results']), 'publisher did not index the seeded model')
+        receipt['publisher_local_search'] = local
         phase('start packaged receiver with empty library')
         receiver.start()
         require(not receiver.ok('listmodels')['models'],'receiver was not empty')
         phase('discover publisher over documented network search')
-        end = time.monotonic()+20
+        end = time.monotonic()+10
+        receipt['discovery_pass'] = False
         while True:
             found = receiver.ok('searchmodels',[{'scope':'NETWORK','limit':20}])
             receipt['search'] = found
             matches = [card for card in found['results'] if card.get('model_id') == item['model_id']
                        or card.get('btx_uri') == uri or uri in json.dumps(card)]
             if matches and found.get('remote_count',0)>0:
+                receipt['discovery_pass'] = True
                 break
-            require(time.monotonic()<end,'known publisher missing from network search')
+            if time.monotonic() >= end:
+                break
             time.sleep(.4)
-        phase('download from discovered publisher')
+        phase('download from discovered publisher' if receipt['discovery_pass'] else 'known-share retrieval control after search failed')
         jid, initial = receiver.request(uri)
         require(jid,'download did not create a job')
         final = receiver.settled(jid,35)
@@ -109,7 +114,8 @@ def run(root):
         require(first == second,'deterministic generation changed after restart')
         receipt['after_restart'] = second
         receiver.stop()
-        receipt['pass'] = True
+        receipt['retrieve_generate_restart_pass'] = True
+        receipt['pass'] = receipt['discovery_pass']
     finally:
         receiver.cleanup()
         publisher.cleanup()
