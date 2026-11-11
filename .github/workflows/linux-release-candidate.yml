@@ -32,8 +32,12 @@ jobs:
           . /etc/os-release
           test "$VERSION_ID" = 24.04
           getconf GNU_LIBC_VERSION
-          sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=15 -o Acquire::https::Timeout=15 -o APT::Update::Error-Mode=any update
-          sudo apt-get install -y --no-install-recommends libwebkit2gtk-4.1-0 libgtk-3-0t64 libevent-dev libsqlite3-0 libzmq5 libgomp1 libopengl0 libxkbcommon-x11-0 libayatana-appindicator3-1 xdg-desktop-portal xdg-desktop-portal-gtk zenity xvfb xauth dbus-x11 openbox scrot wmctrl xdotool python3-pyatspi at-spi2-core python3-venv
+          getent ahostsv4 archive.ubuntu.com
+          sources="$RUNNER_TEMP/btx-runtime.sources"
+          printf '%s\n' 'Types: deb' 'URIs: http://archive.ubuntu.com/ubuntu/' 'Suites: noble noble-updates noble-security' 'Components: main universe' 'Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg' > "$sources"
+          apt_opts=(-o "Dir::Etc::sourcelist=$sources" -o Dir::Etc::sourceparts=- -o Acquire::Retries=1 -o Acquire::http::Timeout=15)
+          sudo apt-get "${apt_opts[@]}" -o APT::Update::Error-Mode=any update
+          sudo apt-get "${apt_opts[@]}" install -y --no-install-recommends libwebkit2gtk-4.1-0 libgtk-3-0t64 libevent-dev libsqlite3-0 libzmq5 libgomp1 libopengl0 libxkbcommon-x11-0 libayatana-appindicator3-1 xdg-desktop-portal xdg-desktop-portal-gtk zenity xvfb xauth dbus-x11 openbox scrot wmctrl xdotool python3-pyatspi at-spi2-core python3-venv
           cp accepted-source/scripts/release/verify_release_btxd.py .
           python3 -m venv engine
           engine/bin/pip install --disable-pip-version-check --retries 1 --index-url https://download.pytorch.org/whl/cpu torch==2.7.1
