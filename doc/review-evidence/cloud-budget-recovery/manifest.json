@@ -1,0 +1,92 @@
+{
+  "base": "dac9aee53520bd49ed320ec7a49b9072fc7d88d9",
+  "trees": {
+    "baseline_tested_tree": "ed72649dc18f4eaf55c9a6d1a2b171e587b482dd",
+    "candidate_tested_runtime_tree": "5233f2e4b8c17e63d166f729dcf381bed095cb39",
+    "candidate_full_test_syntax_tree": "7554d854fb1393228f92488be64cc6aa4f896c67",
+    "clean_release_patch_tree": "5d326abdb062b2c4f6ecb8e0c3710615f126e296",
+    "clean_release_patch_tree_runtime_qualified_as_whole": false,
+    "combined_patch_sha256": "1ad4d9f9230f2ac5b001e82d0b64ad89b78389dc59203203b95d628c0a025b17",
+    "derivation": "Reconstructed exact #473 prerequisite overlay, matched ed72649d, then installed hash-matched tested product files. Full test source reconstructed from exact patch. Private index/object directory; shared repository unchanged."
+  },
+  "baseline_run": 42927462266,
+  "candidate_run": 42927926052,
+  "qualification_source": "dcdac7f97b1b4a9b3bd46bec387eda7b21451917",
+  "platform": "GitHub-hosted Ubuntu22.04 x86_64, GCC11.4.0/OpenSSL3.5.9",
+  "cached_archive": 13750286693,
+  "cached_archive_sha256": "c4b58e4ef14e93f8b257c18bc855a7d9e4079a4659c9e3266fd25acad50d66df",
+  "paired": {
+    "baseline": {
+      "identity": {
+        "source_tree": "ed72649dc18f4eaf55c9a6d1a2b171e587b482dd",
+        "binary_sha256": "4900da604004ac3d901782193b6a7113a8f269b1e638aed8974f284c3d31edfd",
+        "harness_sha256": "9e04cfc4e8374d0bd0bc6e195b837f0021a1e0e3e11ce883106bd107e301090b"
+      },
+      "verdict": "REPRODUCED",
+      "classifier_exit": 1,
+      "maintained_binary_sha256": "be37526c4652100050ebde2db4177ae6e6676ca1c07ed5b1f459c73711bd9c6f",
+      "maintained_exit": 201,
+      "temporary_files_after": []
+    },
+    "candidate": {
+      "identity": {
+        "source_tree": "ed72649dc18f4eaf55c9a6d1a2b171e587b482dd + patch-sha256:9a1ca43f301d8a636b2dca1c1e6e8101f3676ad6131d9889ab456b842577e53d",
+        "binary_sha256": "f308899993d5fbcbccbeecb0bb2c246e786431a6a2c4d487d685238c3ea0ba4f",
+        "harness_sha256": "9e04cfc4e8374d0bd0bc6e195b837f0021a1e0e3e11ce883106bd107e301090b"
+      },
+      "verdict": "PASS",
+      "classifier_exit": 0,
+      "maintained_binary_sha256": "c1042db0a41f7e9894b78b06e3ef2fd8272eb6472a935f6ec011b8ae134378e2",
+      "maintained_exit": 0,
+      "temporary_files_after": []
+    }
+  },
+  "identical_test_code": {
+    "consumer_sha256": "9e04cfc4e8374d0bd0bc6e195b837f0021a1e0e3e11ce883106bd107e301090b",
+    "maintained_body_sha256": "77815424aafb4e7955b7d9159a4ff8c1825a47b6bd88191013b5b465b8ecd8b6",
+    "classifier_sha256": "eb1e51f08b6d0f892b79f7523c2c7fe8ffb3813c7fed49b9e6f536d386c2fced",
+    "objects": {
+      "consumer.o": "99dc2091c24807fa87cb378919127b607146bbfe37a0a2c1947174cd47d1db65",
+      "maintained.o": "a1a95ae56dda7d8021a9b7210e0bc16b704743f21a0d53556c1da14e5960d3d0"
+    }
+  },
+  "candidate_source_sha256": {
+    "src/modelnet/s3_store.cpp": "fd2a4fcc24461733e8c4a34289e567e6852cf174162751d75653d85afaaddc53",
+    "src/modelnet/s3_store.h": "206ec44f9229e3b939e58a1368d9b0ae0c7ed2e74e439abe5a26e49e1d6e5e34"
+  },
+  "runtime_scope": "S3PieceStore with FakeS3, component entry point and exact maintained regression bodies; outer fixture supplies owned directory instead of BasicTestingSetup",
+  "full_source_syntax_pass": true,
+  "full_test_btx_run": false,
+  "full_helper_restart": false,
+  "native_Windows": false,
+  "live_S3": false,
+  "product_changes": [
+    "src/modelnet/s3_store.cpp",
+    "src/modelnet/s3_store.h",
+    "src/test/modelnet_cloud_tests.cpp"
+  ],
+  "attribution": "Existing BTX copyright notices and calendar-budget/credential fixtures retained; uses repository file-commit and exclusive-create helpers. No other author contribution is represented as our new code.",
+  "automation": "Prepared and exercised with Codex; platform/result scope above is the evidence.",
+  "files": {
+    "README.md": "11df7d4154a2c1f9c56f137f25cef565e089d0a51dc4bf01677d3b0f8a68364e",
+    "baseline/classification.log": "e96d64308bedf7395e1ca1878d2974d01cd086bb3704f6eb447e2474db91a746",
+    "baseline/fault-write-evidence.log": "e41630f368c0c06e38e1e1062c6a03b9649724beab0081f0bc73f6a8d6db7e4b",
+    "baseline/identity.json": "9c07a0a4c18a34b96ef4b543157dd0355e5dde4c8e7a550017df34450c7af61e",
+    "baseline/maintained-tests.log": "3c00006e711440660ac9ceaa55b39736e48cd325fc0f908f59215ce9f6a01381",
+    "baseline/observations.json": "5b48fd1e78b52e5f89f5faf9217453d13fe42292cd8959e034b9eb2e6b5dde99",
+    "baseline/syscalls.log": "273307949b05032c6bca5b55e3d0d2e28fe1015a1811ee95da878748ef522f88",
+    "candidate/classification.log": "c26de83abdc9496cd1301470918ec39ecca1cf389ef0ae1c6504da1800d1c431",
+    "candidate/fault-write-evidence.log": "bd830083ddc3f05baeb549536a6e12ab64e1cbc19a7ac43822951c0450b8bb1a",
+    "candidate/identity.json": "b5ccbf6f9dee03234ae0cdc98103b93db478dbb768ac5de4e8f6df2a341082d0",
+    "candidate/maintained-tests.log": "bea14fbae0ca2c728e0245c501213901d6ed923287f860f93da0e6c1914f4042",
+    "candidate/observations.json": "233bb832c362cae07f0ec061f1452e10152bb3938bf464be54efa9dd67b81b67",
+    "candidate/syscalls.log": "e858bd497eca1deccc6a360e6dd5cae5c957d2e70535efaad7a88c7e2cf4714d",
+    "combined.patch": "1ad4d9f9230f2ac5b001e82d0b64ad89b78389dc59203203b95d628c0a025b17",
+    "fixture/classify.py": "eb1e51f08b6d0f892b79f7523c2c7fe8ffb3813c7fed49b9e6f536d386c2fced",
+    "fixture/consumer.cpp": "9e04cfc4e8374d0bd0bc6e195b837f0021a1e0e3e11ce883106bd107e301090b",
+    "fixture/maintained_wrapper.cpp": "6ae7c4588f27b50d20c03615f175ed7e445b2c914c855edad8cff490cc5d35bc",
+    "fixture/startup-regression.inc": "77815424aafb4e7955b7d9159a4ff8c1825a47b6bd88191013b5b465b8ecd8b6",
+    "fixture/test_classify.py": "c88a74743d0c93990db299686cbeef18bd3cee5563c99e0aff0320a6ce76ca60",
+    "full-test-source-syntax.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}
