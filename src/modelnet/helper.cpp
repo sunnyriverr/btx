@@ -997,13 +997,33 @@ bool ReadJsonFile(const fs::path& path, UniValue& out)
 
 bool WriteJsonFile(const fs::path& path, const UniValue& obj, std::string& err)
 {
+    // Write a temp file, check it after close and rename it over path. Writing
+    // path in place left a cut-short file when a full disk failed the write
+    // (often only the flush at close), and the caller was told it was saved.
+    // The next read of that file starts from an empty store.
     fs::create_directories(path.parent_path());
-    std::ofstream out(path);
-    if (!out) {
+    std::error_code ec;
+    const fs::path tmp = fs::PathFromString(fs::PathToString(path) + ".tmp");
+    {
+        std::ofstream out(tmp, std::ios::trunc);
+        if (!out) {
+            err = "write " + fs::PathToString(path);
+            return false;
+        }
+        out << obj.write() << "\n";
+        out.close();
+        if (!out) {
+            fs::remove(tmp, ec);
+            err = "write " + fs::PathToString(path);
+            return false;
+        }
+    }
+    fs::rename(tmp, path, ec);
+    if (ec) {
+        fs::remove(tmp, ec);
         err = "write " + fs::PathToString(path);
         return false;
     }
-    out << obj.write() << "\n";
     return true;
 }
 
