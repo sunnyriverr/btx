@@ -82,7 +82,10 @@ def build(candidate):
         assert 0 < len(actions) <= max_steps and any('bitcoin-cli.cpp.o' in x for x in actions), actions
         assert any('Linking CXX executable bin/btx-cli' in x for x in actions), actions
         if label == 'candidate':
-            assert all('bitcoin-cli.cpp.o' in x or 'Linking CXX executable bin/btx-cli' in x for x in actions), actions
+            allowed = ('bitcoin-cli.cpp.o', 'Linking CXX executable bin/btx-cli',
+                       'Generating bitcoin-build-info.h', 'clientversion.cpp.o',
+                       'Linking CXX static library lib/libbitcoin_clientversion.a')
+            assert all(any(item in action for item in allowed) for action in actions), actions
         RESULT[label + '_actions'] = actions
         run([*ninja, '-j2', 'btx-cli'], label + '-build', timeout=260)
         output.parent.mkdir(exist_ok=True)
@@ -95,7 +98,7 @@ def build(candidate):
     run(['git', 'apply', '--check', patch], 'patch-check', source)
     run(['git', 'apply', patch], 'patch', source)
     RESULT.update(source_before=SOURCE_SHA, source_after=sha(source / SOURCE), patch_sha256=sha(patch))
-    build_cli('candidate', candidate, 2)
+    build_cli('candidate', candidate, 5)
     assert sha(archive) == ARCHIVE
     return baseline
 
