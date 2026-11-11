@@ -1,0 +1,54 @@
+diff --git a/src/wallet/rpc/bcp1.cpp b/src/wallet/rpc/bcp1.cpp
+--- a/src/wallet/rpc/bcp1.cpp
++++ b/src/wallet/rpc/bcp1.cpp
+@@ -920,9 +920,12 @@
+                 throw JSONRPCError(RPC_WALLET_ERROR, err.original);
+             }
+             if (rescan) {
+-                const int64_t scanned_time = pwallet->RescanFromTime(0, reserver, true);
++                bool interrupted = false;
++                const int64_t scanned_time = pwallet->RescanFromTime(0, reserver, true, &interrupted);
+                 if (pwallet->IsAbortingRescan()) {
+                     throw JSONRPCError(RPC_MISC_ERROR, "Rescan aborted by user.");
++                } else if (interrupted) {
++                    throw JSONRPCError(RPC_MISC_ERROR, "Rescan interrupted by node shutdown.");
+                 } else if (scanned_time > 0) {
+                     throw JSONRPCError(RPC_WALLET_ERROR, "Rescan was unable to fully rescan the blockchain. Some transactions may be missing.");
+                 }
+diff --git a/src/wallet/wallet.cpp b/src/wallet/wallet.cpp
+--- a/src/wallet/wallet.cpp
++++ b/src/wallet/wallet.cpp
+@@ -2783,8 +2783,9 @@
+  * @return Earliest timestamp that could be successfully scanned from. Timestamp
+  * returned will be higher than startTime if relevant blocks could not be read.
+  */
+-int64_t CWallet::RescanFromTime(int64_t startTime, const WalletRescanReserver& reserver, bool update)
+-{
++int64_t CWallet::RescanFromTime(int64_t startTime, const WalletRescanReserver& reserver, bool update, bool* interrupted)
++{
++    if (interrupted) *interrupted = false;
+     // Find starting block. May be null if nCreateTime is greater than the
+     // highest blockchain timestamp, in which case there is nothing that needs
+     // to be scanned.
+@@ -2795,8 +2796,8 @@
+     WalletLogPrintf("%s: Rescanning last %i blocks\n", __func__, rescan_blocks);
+ 
+     if (start) {
+-        // NOTE: this should take into account failure by ScanResult::USER_ABORT
+         ScanResult result = ScanForWalletTransactions(start_block, start_height, /*max_height=*/{}, reserver, /*fUpdate=*/update, /*save_progress=*/false);
++        if (interrupted) *interrupted = result.status == ScanResult::USER_ABORT;
+         if (result.status == ScanResult::FAILURE) {
+             int64_t time_max;
+             CHECK_NONFATAL(chain().findBlock(result.last_failed_block, FoundBlock().maxTime(time_max)));
+diff --git a/src/wallet/wallet.h b/src/wallet/wallet.h
+--- a/src/wallet/wallet.h
++++ b/src/wallet/wallet.h
+@@ -793,7 +793,7 @@
+     void blockConnected(ChainstateRole role, const interfaces::BlockInfo& block) override;
+     void blockDisconnected(const interfaces::BlockInfo& block) override;
+     void updatedBlockTip() override;
+-    int64_t RescanFromTime(int64_t startTime, const WalletRescanReserver& reserver, bool update);
++    int64_t RescanFromTime(int64_t startTime, const WalletRescanReserver& reserver, bool update, bool* interrupted = nullptr);
+ 
+     struct ScanResult {
+         enum { SUCCESS, FAILURE, USER_ABORT } status = SUCCESS;
