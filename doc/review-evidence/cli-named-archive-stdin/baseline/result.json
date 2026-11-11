@@ -1,0 +1,194 @@
+{
+  "source": "dac9aee53520bd49ed320ec7a49b9072fc7d88d9",
+  "cases": {
+    "backup_positional_stdin": {
+      "returncode": 0,
+      "stderr": "",
+      "archive_created": true,
+      "source_after": {
+        "locked": true,
+        "balance": "0",
+        "ownership_and_label_match": true
+      },
+      "sha256": "0f1c9ae7da3e48b82c454d44864f811e174fc14b52142ca16764d4db4b634c31",
+      "bytes": 143395,
+      "integrity_ok": true
+    },
+    "backup_named_explicit": {
+      "returncode": 0,
+      "stderr": "",
+      "archive_created": true,
+      "source_after": {
+        "locked": true,
+        "balance": "0",
+        "ownership_and_label_match": true
+      },
+      "sha256": "c948ef958b9ba092488e5824a50617911f4a9cbc2e44a08a4844a170aa7041e4",
+      "bytes": 147491,
+      "integrity_ok": true
+    },
+    "backup_named_archive_stdin": {
+      "returncode": 8,
+      "stderr": "error code: -8\nerror message:\nParameter destination_archive specified twice both as positional and named argument",
+      "archive_created": false,
+      "source_after": {
+        "locked": true,
+        "balance": "0",
+        "ownership_and_label_match": true
+      }
+    },
+    "backup_named_wallet_stdin": {
+      "returncode": 8,
+      "stderr": "error code: -8\nerror message:\nParameter destination_archive specified twice both as positional and named argument",
+      "archive_created": false,
+      "source_after": {
+        "locked": true,
+        "balance": "0",
+        "ownership_and_label_match": true
+      }
+    },
+    "backup_named_both_stdin": {
+      "returncode": 8,
+      "stderr": "error code: -8\nerror message:\nParameter destination_archive specified twice both as positional and named argument",
+      "archive_created": false,
+      "source_after": {
+        "locked": true,
+        "balance": "0",
+        "ownership_and_label_match": true
+      }
+    },
+    "backup_mixed_stdin": {
+      "returncode": 0,
+      "stderr": "",
+      "archive_created": true,
+      "source_after": {
+        "locked": true,
+        "balance": "0",
+        "ownership_and_label_match": true
+      },
+      "sha256": "91ca57f9b2836e5c3f2e0042c2d2d7c597292362e7db4c6e3160549ff2dd5708",
+      "bytes": 147491,
+      "integrity_ok": true
+    },
+    "backup_named_equals_stdin": {
+      "returncode": 8,
+      "stderr": "error code: -8\nerror message:\nUnknown named parameter FixtureArchive",
+      "archive_created": false,
+      "source_after": {
+        "locked": true,
+        "balance": "0",
+        "ownership_and_label_match": true
+      }
+    },
+    "backup_duplicate_archive_passphrase": {
+      "returncode": 8,
+      "stderr": "error code: -8\nerror message:\nParameter destination_archive specified twice both as positional and named argument",
+      "archive_created": false,
+      "source_after": {
+        "locked": true,
+        "balance": "0",
+        "ownership_and_label_match": true
+      }
+    },
+    "backup_duplicate_wallet_passphrase": {
+      "returncode": 8,
+      "stderr": "error code: -8\nerror message:\nParameter destination_archive specified twice both as positional and named argument",
+      "archive_created": false,
+      "source_after": {
+        "locked": true,
+        "balance": "0",
+        "ownership_and_label_match": true
+      }
+    },
+    "restore_genuine_mixed_duplicate": {
+      "returncode": 8,
+      "stderr": "error code: -8\nerror message:\nParameter wallet_name specified twice both as positional and named argument"
+    },
+    "restore_wrong_archive_pass": {
+      "returncode": 14,
+      "stderr": "error code: -14\nerror message:\nError: The wallet bundle archive passphrase entered was incorrect or the archive is corrupt.",
+      "archive_unchanged": true,
+      "no_partial_wallet": true
+    },
+    "restore_positional_stdin": {
+      "returncode": 0,
+      "stderr": "",
+      "archive_unchanged": true,
+      "initial": {
+        "locked": true,
+        "balance": "0",
+        "ownership_and_label_match": true
+      },
+      "after_reload": {
+        "locked": true,
+        "balance": "0",
+        "ownership_and_label_match": true
+      }
+    },
+    "restore_named_explicit": {
+      "returncode": 0,
+      "stderr": "",
+      "archive_unchanged": true,
+      "initial": {
+        "locked": true,
+        "balance": "0",
+        "ownership_and_label_match": true
+      },
+      "after_reload": {
+        "locked": true,
+        "balance": "0",
+        "ownership_and_label_match": true
+      }
+    },
+    "restore_same_archive_named_control": {
+      "returncode": 0,
+      "stderr": "",
+      "archive_unchanged": true,
+      "initial": {
+        "locked": true,
+        "balance": "0",
+        "ownership_and_label_match": true
+      },
+      "after_reload": {
+        "locked": true,
+        "balance": "0",
+        "ownership_and_label_match": true
+      }
+    },
+    "restore_named_stdin": {
+      "returncode": 8,
+      "stderr": "error code: -8\nerror message:\nParameter wallet_name specified twice both as positional and named argument",
+      "archive_unchanged": true,
+      "no_partial_wallet": true
+    },
+    "restore_backup_mixed_stdin": {
+      "returncode": 0,
+      "stderr": "",
+      "archive_unchanged": true,
+      "initial": {
+        "locked": true,
+        "balance": "0",
+        "ownership_and_label_match": true
+      },
+      "after_reload": {
+        "locked": true,
+        "balance": "0",
+        "ownership_and_label_match": true
+      }
+    }
+  },
+  "status": "observed_controls_passed",
+  "binary_sha256": {
+    "btxd": "ffd6c2dc95df0111a8152b5d5f82244190cad2323981376ffed7c21a1cfd9fc6",
+    "btx-cli": "921c54e5f0c92745b42bd63711bf404f9e50b7be3d39e2d82916d0439b9633c8"
+  },
+  "fixture_sha256": "d115ef55e060a4631496f33c32991556189ad46dab67e93c01a85499e7bffc58",
+  "isolation": {
+    "chain": "regtest",
+    "height": 0,
+    "connections": 0,
+    "wallets_at_start": []
+  },
+  "clean_shutdown": true,
+  "runtime_removed": true
+}
