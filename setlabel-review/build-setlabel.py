@@ -75,6 +75,9 @@ try:
         "Generating bitcoin-build-info.h",
         "Building CXX object src/CMakeFiles/bitcoin_clientversion.dir/clientversion.cpp.o",
         "Linking CXX static library lib/libbitcoin_clientversion.a",
+        # The generated build-info header also feeds the existing MatMul canary.
+        "Building CXX object src/CMakeFiles/bitcoin_common.dir/matmul/matmul_v4_rc_production_canary.cpp.o",
+        "Linking CXX static library lib/libbitcoin_common.a",
         "Linking CXX static library lib/libbitcoin_wallet.a",
     }
     record["actions"] = actions
