@@ -34,6 +34,9 @@ jobs:
       - name: Run discover, retrieve, verify, generate and restart
         timeout-minutes: 4
         run: |
+          sudo ip address add 10.253.254.1/32 dev lo scope host
+          trap 'sudo ip address del 10.253.254.1/32 dev lo' EXIT
+          export BTX_TEST_PUBLISHER=10.253.254.1
           chmod +x generate_local.py
           PATH="$PWD/engine/bin:$PATH" BTX_MODEL_GENERATE="$PWD/generate_local.py" \
             HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 OMP_NUM_THREADS=1 engine/bin/python -u native_fixture.py

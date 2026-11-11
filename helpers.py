@@ -30,7 +30,7 @@ class Helper:
   require(self.proc is None and not self.sock.exists(),'helper not cleanly stopped');self.starts+=1
   home=self.root/'home';home.mkdir(exist_ok=True)
   args=[str(self.binary),'-modeldir='+str(self.store),'-modelrpcsocket='+str(self.sock),'-modelstorage='+str(self.cap),'-modelfollowpeers=0','-modellandiscovery=0','-modelnatpmp=0','-modelseed='+('auto' if self.hostport else 'off'),'-pwcchain=regtest']
-  if self.hostport:args+=['-modelhost','-modelbind=127.0.0.1:'+str(self.hostport)]
+  if self.hostport:args+=['-modelhost','-modelbind='+getattr(self,'hostaddr','127.0.0.1')+':'+str(self.hostport)]
   else:args+=['-modelhost=0', *['-modelpeer='+x for x in (self.peer if isinstance(self.peer,list) else [self.peer])]]
   if getattr(self,'trace',None):args=['strace','-D','-f','-ttt','-e','trace=connect,clone,clone3','-o',str(self.trace),*args]
   self.log=(self.out/(self.label+'-'+str(self.starts)+'.log')).open('wb')

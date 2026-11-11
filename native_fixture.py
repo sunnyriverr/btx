@@ -1,5 +1,6 @@
 """Run the documented zero-wallet model workflow on the published helper."""
 import json
+import os
 from pathlib import Path
 import socket
 import tempfile
@@ -62,11 +63,14 @@ def run(root):
     create_model(model)
     expected = {p.name: digest(p,'sha384') for p in sorted(model.iterdir()) if p.is_file()}
     receipt['source_file_sha384'] = expected
+    address = os.environ.get('BTX_TEST_PUBLISHER', '127.0.0.1')
+    receipt['publisher_address'] = address
     with socket.socket() as sock:
-        sock.bind(('127.0.0.1',0))
+        sock.bind((address,0))
         port = sock.getsockname()[1]
     publisher = Helper(binary, root/'publisher',OUT,'publisher',64<<20,hostport=port)
-    receiver = Helper(binary, root/'receiver',OUT,'receiver',64<<20,peer=f'127.0.0.1:{port}')
+    publisher.hostaddr = address
+    receiver = Helper(binary, root/'receiver',OUT,'receiver',64<<20,peer=f'{address}:{port}')
     try:
         phase('start packaged publisher and import')
         publisher.start()
