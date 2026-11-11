@@ -1,0 +1,30 @@
+ld: warning: ignoring duplicate libraries: '../../lib/libbitcoin_clientversion.a', '../../lib/libbitcoin_common.a', '../../lib/libbitcoin_consensus.a', '../../lib/libbitcoin_crypto.a', '../../lib/libbitcoin_db.a', '../../lib/libbitcoin_util.a', '../../lib/libbitcoinpqc.a', '../../lib/libbtx_matmul_backend.a', '../libcrc32c.a', '../libleveldb.a', '../secp256k1/lib/libsecp256k1.a', '../univalue/libunivalue.a'
+Running 1 test case...
+Entering test module "ModelWatchQueue"
+<temp-runner>/driver.cpp:54: Entering test suite "modelnet_watch_tests"
+<temp-runner>/driver.cpp:55: Entering test case "unwatch_drops_the_actions_the_watch_queued"
+<temp-runner>/driver.cpp:84: error: in "modelnet_watch_tests/unwatch_drops_the_actions_the_watch_queued": check !DispatchHelperRpc(cat, HelperReq("unwatchmodel", un), result, code, err) has failed
+<temp-runner>/driver.cpp:85: error: in "modelnet_watch_tests/unwatch_drops_the_actions_the_watch_queued": check code == "IO_ERROR" has failed [ != IO_ERROR]
+<temp-runner>/driver.cpp:87: error: in "modelnet_watch_tests/unwatch_drops_the_actions_the_watch_queued": check BoundModelWatchStore()->GetWatch(dropped.watch_id, stored) has failed
+<temp-runner>/driver.cpp:88: error: in "modelnet_watch_tests/unwatch_drops_the_actions_the_watch_queued": check BoundModelWatchStore()->PeekActions().size() == 2U has failed [1 != 2]
+<temp-runner>/driver.cpp:93: fatal error: in "modelnet_watch_tests/unwatch_drops_the_actions_the_watch_queued": critical check result["removed"].get_bool() has failed
+<temp-runner>/driver.cpp:55: Leaving test case "unwatch_drops_the_actions_the_watch_queued"; testing time: 102923us
+<temp-runner>/driver.cpp:54: Leaving test suite "modelnet_watch_tests"; testing time: 102932us
+Leaving test module "ModelWatchQueue"; testing time: 102941us
+
+Test module "ModelWatchQueue" has failed with:
+  1 test case out of 1 failed
+  1 test case out of 1 aborted
+  9 assertions out of 14 passed
+  5 assertions out of 14 failed
+
+  Test suite "modelnet_watch_tests" has failed with:
+    1 test case out of 1 failed
+    1 test case out of 1 aborted
+    9 assertions out of 14 passed
+    5 assertions out of 14 failed
+
+    Test case "modelnet_watch_tests/unwatch_drops_the_actions_the_watch_queued" was aborted with:
+      9 assertions out of 14 passed
+      5 assertions out of 14 failed
+
