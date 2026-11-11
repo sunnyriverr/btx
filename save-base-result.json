@@ -1,0 +1,132 @@
+{
+  "cleanup": {
+    "daemon_exit": 0,
+    "daemon_exited": true,
+    "errors": [],
+    "log_thread_finished": true,
+    "normal_rpc_stop_requested": true,
+    "runtime_removed": true,
+    "sigkill_sent": false,
+    "sigterm_sent": false
+  },
+  "daemon_pid": 5251,
+  "elapsed_seconds": 1.725,
+  "fault_hits": {
+    "ABORT": 1,
+    "ROLLBACK": 1
+  },
+  "fixture_sha256": "5394737c17d1ca9a0012a06428ec54c557bf96db2890a48a84d2514751fd0d42",
+  "hypothesis_confirmed": null,
+  "inputs": {
+    "base_source": "dac9aee53520bd49ed320ec7a49b9072fc7d88d9",
+    "binary": "/home/runner/work/btx/btx/daemon-binaries/base",
+    "binary_sha256": "ffd6c2dc95df0111a8152b5d5f82244190cad2323981376ffed7c21a1cfd9fc6",
+    "command": [
+      "/home/runner/work/btx/btx/daemon-binaries/base",
+      "-datadir=/tmp/btx-label-import-t_60nmak",
+      "-regtest=1",
+      "-server=1",
+      "-disablewallet=0",
+      "-walletdir=/tmp/btx-label-import-t_60nmak/wallets",
+      "-keypool=2",
+      "-modelnet=0",
+      "-networkactive=0",
+      "-listen=0",
+      "-connect=0",
+      "-dnsseed=0",
+      "-discover=0",
+      "-upnp=0",
+      "-natpmp=0",
+      "-walletbroadcast=0",
+      "-flushwallet=0",
+      "-persistmempool=0",
+      "-nosettings",
+      "-nodebuglogfile",
+      "-printtoconsole=1",
+      "-debug=rpc",
+      "-rpcport=54059",
+      "-rpcbind=127.0.0.1",
+      "-rpcallowip=127.0.0.1"
+    ],
+    "debug_file_disabled_by": "-nodebuglogfile (negated debuglogfile option)",
+    "expected_sha256": "ffd6c2dc95df0111a8152b5d5f82244190cad2323981376ffed7c21a1cfd9fc6",
+    "fixture_sha256": "ca75b9c6c2a0fbdc26b92566cc46e096b0ae0b5849bad17efc33019ec205499f",
+    "functional_root": "/home/runner/work/btx/btx/accepted-source/test/functional",
+    "rpc_port": 54059,
+    "runtime": "/tmp/btx-label-import-t_60nmak",
+    "soft_file_size_cap": 1024
+  },
+  "launcher_sha256": "ca75b9c6c2a0fbdc26b92566cc46e096b0ae0b5849bad17efc33019ec205499f",
+  "rpc_events": [
+    {
+      "elapsed_seconds": 0.000807,
+      "label": "save_fault_ABORT",
+      "result": {
+        "imported": 1,
+        "skipped": 0
+      },
+      "success": true
+    },
+    {
+      "elapsed_seconds": 0.001276,
+      "label": "save_retry_ABORT",
+      "result": {
+        "imported": 1,
+        "skipped": 0
+      },
+      "success": true
+    },
+    {
+      "elapsed_seconds": 0.000729,
+      "label": "save_fault_ROLLBACK",
+      "result": {
+        "imported": 1,
+        "skipped": 0
+      },
+      "success": true
+    },
+    {
+      "elapsed_seconds": 0.001028,
+      "label": "save_retry_ROLLBACK",
+      "result": {
+        "imported": 1,
+        "skipped": 0
+      },
+      "success": true
+    }
+  ],
+  "save_probes": {
+    "ABORT": {
+      "false_success": true,
+      "fault": "SQLite trigger rejects only INSERT/REPLACE of the existing address name key",
+      "healthy_retry_reopened_label": "new-save-label",
+      "live_label": "new-save-label",
+      "oracle_pass": false,
+      "reopened_label": "old-save-label",
+      "source_unchanged": true,
+      "stored_old_value": true,
+      "stored_purpose": "0772656365697665"
+    },
+    "ROLLBACK": {
+      "false_success": true,
+      "fault": "SQLite trigger rejects only INSERT/REPLACE of the existing address name key",
+      "healthy_retry_reopened_label": "new-save-label",
+      "live_label": "new-save-label",
+      "oracle_pass": false,
+      "reopened_label": "old-save-label",
+      "source_unchanged": true,
+      "stored_old_value": true,
+      "stored_purpose": "0772656365697665"
+    }
+  },
+  "schema_version": 1,
+  "scope": "Linux synthetic wallet importlabels, SQLite ABORT and automatic ROLLBACK",
+  "startup": {
+    "chain": "regtest",
+    "connections": 0,
+    "height": 0,
+    "loaded_wallets": [],
+    "networkactive": false
+  },
+  "status": "observation_complete"
+}

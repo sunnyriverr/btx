@@ -1,0 +1,127 @@
+{
+  "cleanup": {
+    "daemon_exit": 0,
+    "daemon_exited": true,
+    "errors": [],
+    "log_thread_finished": true,
+    "normal_rpc_stop_requested": true,
+    "runtime_removed": true,
+    "sigkill_sent": false,
+    "sigterm_sent": false
+  },
+  "daemon_pid": 5169,
+  "elapsed_seconds": 1.421,
+  "fault_hits": {
+    "read": 1
+  },
+  "fixture_sha256": "48fd4589bba0a9a4ef0a2439ed407aa251a589d6942d69bd0d8d758ac8878ecd",
+  "hypothesis_confirmed": null,
+  "inputs": {
+    "base_source": "dac9aee53520bd49ed320ec7a49b9072fc7d88d9",
+    "binary": "/home/runner/work/btx/btx/daemon-binaries/base",
+    "binary_sha256": "ffd6c2dc95df0111a8152b5d5f82244190cad2323981376ffed7c21a1cfd9fc6",
+    "command": [
+      "/home/runner/work/btx/btx/daemon-binaries/base",
+      "-datadir=/tmp/btx-label-import-80440zt1",
+      "-regtest=1",
+      "-server=1",
+      "-disablewallet=0",
+      "-walletdir=/tmp/btx-label-import-80440zt1/wallets",
+      "-keypool=2",
+      "-modelnet=0",
+      "-networkactive=0",
+      "-listen=0",
+      "-connect=0",
+      "-dnsseed=0",
+      "-discover=0",
+      "-upnp=0",
+      "-natpmp=0",
+      "-walletbroadcast=0",
+      "-flushwallet=0",
+      "-persistmempool=0",
+      "-nosettings",
+      "-nodebuglogfile",
+      "-printtoconsole=1",
+      "-debug=rpc",
+      "-rpcport=33973",
+      "-rpcbind=127.0.0.1",
+      "-rpcallowip=127.0.0.1"
+    ],
+    "debug_file_disabled_by": "-nodebuglogfile (negated debuglogfile option)",
+    "expected_sha256": "ffd6c2dc95df0111a8152b5d5f82244190cad2323981376ffed7c21a1cfd9fc6",
+    "fixture_sha256": "ca75b9c6c2a0fbdc26b92566cc46e096b0ae0b5849bad17efc33019ec205499f",
+    "functional_root": "/home/runner/work/btx/btx/accepted-source/test/functional",
+    "rpc_port": 33973,
+    "runtime": "/tmp/btx-label-import-80440zt1",
+    "soft_file_size_cap": 1024
+  },
+  "launcher_sha256": "ca75b9c6c2a0fbdc26b92566cc46e096b0ae0b5849bad17efc33019ec205499f",
+  "read_elapsed_seconds": 0.952,
+  "read_probe": {
+    "false_success": true,
+    "fault": "read returns EIO after byte 256, immediately after one complete JSONL record",
+    "healthy_retry_reopened_labels": [
+      "new-first",
+      "new-second"
+    ],
+    "live_labels": [
+      "new-first",
+      "old-second"
+    ],
+    "oracle_pass": false,
+    "reopened_labels": [
+      "new-first",
+      "old-second"
+    ],
+    "source_unchanged": true
+  },
+  "rpc_events": [
+    {
+      "elapsed_seconds": 0.000583,
+      "error": {
+        "code": -22,
+        "message": "importlabels line 2: expected a JSON object"
+      },
+      "label": "malformed_control",
+      "success": false
+    },
+    {
+      "elapsed_seconds": 0.001172,
+      "label": "read_fault",
+      "result": {
+        "imported": 1,
+        "skipped": 0
+      },
+      "success": true
+    },
+    {
+      "elapsed_seconds": 0.00173,
+      "label": "read_retry",
+      "result": {
+        "imported": 2,
+        "skipped": 0
+      },
+      "success": true
+    },
+    {
+      "elapsed_seconds": 0.000357,
+      "label": "empty_control",
+      "result": {
+        "imported": 0,
+        "skipped": 0
+      },
+      "success": true
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Linux synthetic wallet importlabels with exact input read EIO",
+  "shim_sha256": "44ed66b5854cd9f0b8e415cdca5c39ad311e631a6970b0dae99031c92d6a9746",
+  "startup": {
+    "chain": "regtest",
+    "connections": 0,
+    "height": 0,
+    "loaded_wallets": [],
+    "networkactive": false
+  },
+  "status": "observation_complete"
+}
