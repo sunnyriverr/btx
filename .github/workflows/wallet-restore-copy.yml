@@ -1,0 +1,52 @@
+name: Wallet restore copy and retry observation
+on:
+  push:
+    branches: [codex/ci-wallet-restore-copy]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  observe:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: dac9aee53520bd49ed320ec7a49b9072fc7d88d9
+          path: accepted-source
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Retained daemon runtime libraries
+        timeout-minutes: 4
+        run: |
+          sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g' /etc/apt/sources.list
+          sudo apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=12 update
+          sudo apt-get -o Acquire::Retries=1 install -y --no-install-recommends libevent-core-2.1-7 libevent-extra-2.1-7 libevent-pthreads-2.1-7 libsqlite3-0 libzmq5
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: qt-pending-rpc-control-binaries
+          run-id: 42918244124
+          github-token: ${{ github.token }}
+          path: saved-bin
+      - name: Verify saved daemon and observe restore copy
+        timeout-minutes: 4
+        run: |
+          chmod +x saved-bin/btxd
+          echo 'ffd6c2dc95df0111a8152b5d5f82244190cad2323981376ffed7c21a1cfd9fc6  saved-bin/btxd' | sha256sum -c -
+          ldd saved-bin/btxd | tee daemon-loader.txt
+          ! grep -q 'not found' daemon-loader.txt
+          python3 -u native_fixture.py --binary saved-bin/btxd --records records
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: wallet-restore-copy-records
+          path: |
+            records
+            daemon-loader.txt
+          retention-days: 14
