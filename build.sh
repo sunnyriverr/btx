@@ -47,10 +47,25 @@ install -m 755 atlas-target/release/btx-atlas "$build/bin/btx-atlas"
 test -z "$(git -C product status --porcelain --untracked-files=no)"
 test -x "$build/bin/btx-guardd"
 mkdir candidate-input
+cp -a "$build/bin" package-bin
+# Only stage the three executables named by the unchanged packager's ABI gate.
+for name in btx-atlas btx-native-qualify btx-security; do
+  staged="package-bin/$name"
+  before=$(patchelf --print-rpath "$staged")
+  if [[ -n "$before" ]]; then
+    patchelf --add-rpath '$ORIGIN/../lib' "$staged"
+  else
+    patchelf --set-rpath '$ORIGIN/../lib' "$staged"
+  fi
+  after=$(patchelf --print-rpath "$staged")
+  case ":$after:" in *':$ORIGIN/../lib:'*) ;; *) exit 1 ;; esac
+  printf '%s: %s -> %s\n' "$name" "$before" "$after"
+  sha256sum "$build/bin/$name" "$staged"
+done | tee candidate-input/staging-runpaths.txt
 archive=candidate-input/btx-linux-gui-candidate.tar.gz
 env -u BTX_RELEASE_GLIBC_CEILING python3 product/scripts/release/package_release_archive.py \
   --source-root product --output-dir candidate-input --version 0.34.16 --platform-id linux-x86_64 \
-  --btxd "$build/bin/btxd" --btx-cli "$build/bin/btx-cli" --btx-util "$build/bin/btx-util" \
+  --btxd package-bin/btxd --btx-cli package-bin/btx-cli --btx-util package-bin/btx-util \
   --archive-name "${archive##*/}" --require-gui --require-model-helpers
 env -u BTX_RELEASE_GLIBC_CEILING python3 product/scripts/release/verify_release_btxd.py --no-launch --archive "$archive" --require-model-helpers
 python3 manifest.py
