@@ -20,7 +20,7 @@ tar -xzf "$python_setup/ubuntu-python.tar.gz" -C "$python_setup/unpacked"
 (cd "$python_setup/unpacked" && RUNNER_TOOL_CACHE=/opt/hostedtoolcache bash setup.sh)
 builder_python=/opt/hostedtoolcache/Python/3.12.16/x64/bin/python3
 "$builder_python" -VV
-"$builder_python" -m pip install --disable-pip-version-check --no-deps cmake==3.31.6 ninja==1.12.1.1
+"$builder_python" -m pip install --disable-pip-version-check --no-deps cmake==3.31.6 ninja==1.11.1.4
 tool_bin=${builder_python%/*}
 ln -s "$tool_bin/cmake" /usr/local/bin/cmake
 ln -s "$tool_bin/ninja" /usr/local/bin/ninja
