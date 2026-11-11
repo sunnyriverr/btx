@@ -56,3 +56,16 @@ class Helper:
     self.forced=True;os.killpg(self.proc.pid,signal.SIGKILL);self.proc.wait(10)
   if self.log:self.log.close()
   (self.out/(self.label+'-rpc.json')).write_text(json.dumps(self.calls,indent=2)+'\n')
+ def job(self,jid):
+  x=self.ok('getmodeljob',[jid])
+  if 'jobs' in x:return next((j for j in x['jobs'] if str(j.get('job_id'))==str(jid)),{})
+  return x
+ def request(self,uri):
+  r=self.ok('getmodel',[uri,'FREE_ONLY']);return r.get('job_id'),r
+ def settled(self,jid,limit):
+  end=time.monotonic()+limit
+  while True:
+   j=self.job(jid)
+   if j.get('status') in ('done','failed','cancelled'):return j
+   require(time.monotonic()<end,'job did not settle');time.sleep(.2)
+
