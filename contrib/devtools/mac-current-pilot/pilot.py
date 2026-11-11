@@ -130,8 +130,14 @@ def main():
         for relative, item in cmake_inventory.items():
             if relative.startswith("mac-config-build/") and relative.endswith(".o"):
                 path = WORK / relative
-                assert path.stat().st_mtime_ns == item["mtime_ns"] and digest(path) == item["sha256"]
-                result["cmake_objects_preserved"] += 1
+                assert digest(path) == item["sha256"], ("object contents changed", relative)
+                if path.stat().st_mtime_ns != item["mtime_ns"]:
+                    probe = ("mac-config-build/src/libbitcoinpqc/shake_a64_probe/build/"
+                             "CMakeFiles/shake_a64_probe.dir/shake_a64_probe.s.o")
+                    assert relative == probe, ("unexpected object timestamp change", relative)
+                    result["configure_probe_refreshed"] = relative
+                else:
+                    result["cmake_objects_preserved"] += 1
         run("rust-install-pinned", "rustup", "toolchain", "install", "1.95.0",
             "--profile", "minimal", "--target", "aarch64-apple-darwin", timeout=300)
         cargo_env = dict(os.environ, RUSTUP_TOOLCHAIN="1.95.0",
@@ -146,6 +152,9 @@ def main():
             "aarch64-apple-darwin", env=cargo_env)
         assert not run("clean-current-source", "git", "-C", PRODUCT, "status", "--porcelain").strip()
         result["complete"] = True
+    except Exception as exc:
+        result["error"] = repr(exc)
+        raise
     finally:
         (LOG / "result.json").write_text(json.dumps(result, indent=2) + "\n")
 
