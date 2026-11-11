@@ -134,7 +134,8 @@ try:
     gate = BIN/'identity-gate.so'
     run(['cc','-shared','-fPIC','-Wall','-Wextra','-Werror',WORK/'gate.c','-o',gate,'-ldl'],
         OUT/'gate-build.log')
-    for number,row in SCOPES.items():
+    for number in sys.argv[1:] or SCOPES:
+        row = SCOPES[number]
         pair = receipt['repairs'][number] = {'pass':False}
         try:
             qualify(number,row,pair,helper_commands,wallet_commands,gate)

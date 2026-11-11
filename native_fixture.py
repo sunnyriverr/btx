@@ -1,5 +1,6 @@
 """Real disposable helper RPC controls for #504 and #494."""
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
+from itertools import count
 import json
 from pathlib import Path
 import resource
@@ -74,8 +75,9 @@ def exports(helper, root, candidate):
         model_ids.append(result['model_id'])
     def link(path, revision):
         return 'exportmodellink', [model_ids[revision], str(path)]
+    request_ids = count(1)
     def package(path, revision):
-        return 'exportbtxbundle', [{'payload': {'kind': 'btxbundle', 'schema_version': 1,
+        return 'exportbtxbundle', [{'idempotency_key': f'export-{next(request_ids)}', 'payload': {'kind': 'btxbundle', 'schema_version': 1,
                                                'title': ('old bundle', 'new bundle')[revision]}, 'path': str(path)}]
     observed = {}
     pid = helper.proc.pid
