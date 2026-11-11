@@ -1,0 +1,39 @@
+2026-11-11T09:45:30.021000Z TestFramework (INFO): PRNG seed is: 9134493222691627642
+2026-11-11T09:45:30.021000Z TestFramework (INFO): Initializing test directory /Volumes/BTXWalletQual/regtest-before-475
+2026-11-11T09:45:38.529000Z TestFramework (INFO): A locked wallet counts its coins as trusted but cannot use them
+2026-11-11T09:45:38.530000Z TestFramework (INFO): Funding RPCs ask for the passphrase
+2026-11-11T09:45:38.538000Z TestFramework (INFO): A request above the wallet's total value stays a funding error while locked
+2026-11-11T09:45:38.539000Z TestFramework (ERROR): Unexpected exception
+Traceback (most recent call last):
+  File "/Volumes/BTXWalletQual/source/test/functional/test_framework/util.py", line 160, in try_rpc
+    fun(*args, **kwds)
+  File "/Volumes/BTXWalletQual/source/test/functional/test_framework/coverage.py", line 50, in __call__
+    return_val = self.auth_service_proxy_instance.__call__(*args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/BTXWalletQual/source/test/functional/test_framework/authproxy.py", line 151, in __call__
+    raise JSONRPCException(response['error'], status)
+test_framework.authproxy.JSONRPCException: Error: Please enter the wallet passphrase with walletpassphrase first. (-13)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Volumes/BTXWalletQual/source/test/functional/test_framework/test_framework.py", line 142, in main
+    self.run_test()
+  File "/Volumes/BTXWalletQual/source/test/functional/wallet_locked_funding.py", line 74, in run_test
+    assert_raises_rpc_error(-4, "Insufficient funds", wallet.send, [{dest: 10}])
+  File "/Volumes/BTXWalletQual/source/test/functional/test_framework/util.py", line 151, in assert_raises_rpc_error
+    assert try_rpc(code, message, fun, *args, **kwds), "No exception raised"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/BTXWalletQual/source/test/functional/test_framework/util.py", line 164, in try_rpc
+    raise AssertionError("Unexpected JSONRPC error code %i" % e.error["code"])
+AssertionError: Unexpected JSONRPC error code -13
+2026-11-11T09:45:38.600000Z TestFramework (INFO): Not stopping nodes as test failed. The dangling processes will be cleaned up later.
+2026-11-11T09:45:38.600000Z TestFramework (WARNING): Not cleaning up dir /Volumes/BTXWalletQual/regtest-before-475
+2026-11-11T09:45:38.600000Z TestFramework (ERROR): Test failed. Test logging available at /Volumes/BTXWalletQual/regtest-before-475/test_framework.log
+2026-11-11T09:45:38.600000Z TestFramework (ERROR): 
+2026-11-11T09:45:38.600000Z TestFramework (ERROR): Hint: Call /Volumes/BTXWalletQual/source/test/functional/combine_logs.py '/Volumes/BTXWalletQual/regtest-before-475' to consolidate all logs
+2026-11-11T09:45:38.600000Z TestFramework (ERROR): 
+2026-11-11T09:45:38.600000Z TestFramework (ERROR): If this failure happened unexpectedly or intermittently, please file a bug and provide a link or upload of the combined log.
+2026-11-11T09:45:38.600000Z TestFramework (ERROR): https://github.com/btxchain/btx/issues
+2026-11-11T09:45:38.601000Z TestFramework (ERROR): 
+[node 0] Cleaning up leftover process

@@ -1,0 +1,22 @@
+2026-11-11T09:45:38.729000Z TestFramework (INFO): PRNG seed is: 1965362935154118321
+2026-11-11T09:45:38.729000Z TestFramework (INFO): Initializing test directory /Volumes/BTXWalletQual/regtest-before-476
+2026-11-11T09:45:39.309000Z TestFramework (INFO): A blank encrypted wallet exports an empty descriptor file without a seed warning
+2026-11-11T09:45:39.770000Z TestFramework (ERROR): Unexpected exception
+Traceback (most recent call last):
+  File "/Volumes/BTXWalletQual/source/test/functional/test_framework/test_framework.py", line 142, in main
+    self.run_test()
+  File "/Volumes/BTXWalletQual/source/test/functional/wallet_backupbundle_private_descriptors.py", line 46, in run_test
+    assert_equal(blank_dir["wallet_passphrase_required_to_spend"], True)
+  File "/Volumes/BTXWalletQual/source/test/functional/test_framework/util.py", line 77, in assert_equal
+    raise AssertionError("not(%s)" % " == ".join(str(arg) for arg in (thing1, thing2) + args))
+AssertionError: not(False == True)
+2026-11-11T09:45:39.831000Z TestFramework (INFO): Not stopping nodes as test failed. The dangling processes will be cleaned up later.
+2026-11-11T09:45:39.831000Z TestFramework (WARNING): Not cleaning up dir /Volumes/BTXWalletQual/regtest-before-476
+2026-11-11T09:45:39.831000Z TestFramework (ERROR): Test failed. Test logging available at /Volumes/BTXWalletQual/regtest-before-476/test_framework.log
+2026-11-11T09:45:39.831000Z TestFramework (ERROR): 
+2026-11-11T09:45:39.831000Z TestFramework (ERROR): Hint: Call /Volumes/BTXWalletQual/source/test/functional/combine_logs.py '/Volumes/BTXWalletQual/regtest-before-476' to consolidate all logs
+2026-11-11T09:45:39.831000Z TestFramework (ERROR): 
+2026-11-11T09:45:39.831000Z TestFramework (ERROR): If this failure happened unexpectedly or intermittently, please file a bug and provide a link or upload of the combined log.
+2026-11-11T09:45:39.831000Z TestFramework (ERROR): https://github.com/btxchain/btx/issues
+2026-11-11T09:45:39.831000Z TestFramework (ERROR): 
+[node 0] Cleaning up leftover process
