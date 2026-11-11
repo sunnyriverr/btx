@@ -26,7 +26,7 @@
      UniValue o(UniValue::VOBJ);
      o.pushKV("day_utc", m_day_utc);
      o.pushKV("month_utc", m_month_utc);
-@@ -96,11 +99,33 @@
+@@ -96,11 +99,34 @@
      o.pushKV("month_bytes", m_month_bytes);
      o.pushKV("used_gets", m_used_gets);
      o.pushKV("used_bytes", m_used_bytes);
@@ -36,9 +36,9 @@
 -    if (!out) return;
 -    out << o.write() << "\n";
 +    const fs::path& path = m_cfg.budget_state_path;
-+    std::error_code ec;
-+    if (!path.parent_path().empty()) fs::create_directories(path.parent_path(), ec);
-+    if (ec) {
++    try {
++        if (!path.parent_path().empty()) fs::create_directories(path.parent_path());
++    } catch (const fs::filesystem_error&) {
 +        err = "cloud budget directory creation failed";
 +        return false;
 +    }
@@ -57,6 +57,7 @@
 +    const bool committed = written && FileCommit(file);
 +    const bool closed = std::fclose(file) == 0;
 +    if (!committed || !closed || !RenameOver(tmp, path)) {
++        std::error_code ec;
 +        fs::remove(tmp, ec);
 +        err = "cloud budget save failed";
 +        return false;
@@ -65,7 +66,7 @@
  }
  
  void S3PieceStore::LoadBudgetState()
-@@ -153,8 +178,8 @@
+@@ -153,8 +179,8 @@
      ++m_month_gets;
      m_day_bytes += bytes;
      m_month_bytes += bytes;
@@ -76,7 +77,7 @@
  }
  
  bool S3PieceStore::Init(std::string& err)
-@@ -177,7 +202,7 @@
+@@ -177,7 +203,7 @@
      {
          std::lock_guard<std::mutex> lock(m_mu);
          RollWindowsLocked(NowS());
