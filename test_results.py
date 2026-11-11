@@ -5,7 +5,7 @@ from socketserver import BaseRequestHandler, ThreadingTCPServer
 from threading import Thread
 import time
 
-from native_fixture import verdict
+from native_fixture import descendants, trace_events, verdict
 from relay import Relay, pacing
 
 
@@ -72,7 +72,24 @@ def check_pacing():
             thread.join(5)
 
 
+def check_trace():
+    lines = [
+        '10  100.000000 clone(child_stack=0) = 11',
+        '10  100.000001 clone3({flags=CLONE_VM}, 88 <unfinished ...>',
+        '10  100.000002 <... clone3 resumed>) = 12',
+        '12  100.000003 clone(child_stack=0) = 13',
+        '11  100.000004 connect(6, {sa_family=AF_INET, sin_port=htons(7010), sin_addr=inet_addr("127.0.0.1")}, 16) = -1 EINPROGRESS',
+        '13  100.000005 connect(6, {sa_family=AF_INET, sin_port=htons(7011), sin_addr=inet_addr("127.0.0.1")}, 16 <unfinished ...>',
+        '13  100.000006 connect(6, {sa_family=AF_INET6, sin6_port=htons(7011)}, 28) = 0',
+    ]
+    connects, links = trace_events(lines)
+    assert connects == [(100.000004, 11, 7010), (100.000005, 13, 7011), (100.000006, 13, None)]
+    assert descendants(12, links) == {12, 13}
+    assert all(port != 7010 for _, tid, port in connects if tid in descendants(12, links))
+
+
 if __name__ == '__main__':
     check_verdicts()
+    check_trace()
     check_pacing()
     print('Offline verdict gates and two-flow aggregate TCP pacing passed.')

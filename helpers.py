@@ -34,7 +34,7 @@ class Helper:
   args=[str(self.binary),'-modeldir='+str(self.store),'-modelrpcsocket='+str(self.sock),'-modelstorage='+str(self.cap),'-modelfollowpeers=0','-modellandiscovery=0','-modelnatpmp=0','-modelseed='+('auto' if self.hostport else 'off'),'-pwcchain=regtest']
   if self.hostport:args+=['-modelhost','-modelbind=127.0.0.1:'+str(self.hostport)]
   else:args+=['-modelhost=0', *['-modelpeer='+x for x in (self.peer if isinstance(self.peer,list) else [self.peer])]]
-  if getattr(self,'trace',None):args=['strace','-D','-f','-ttt','-e','trace=connect','-o',str(self.trace),*args]
+  if getattr(self,'trace',None):args=['strace','-D','-f','-ttt','-e','trace=connect,clone,clone3','-o',str(self.trace),*args]
   self.log=(self.out/(self.label+'-'+str(self.starts)+'.log')).open('wb')
   self.proc=subprocess.Popen(args,stdout=self.log,stderr=subprocess.STDOUT,start_new_session=True,env=dict(os.environ,HOME=str(home),XDG_DATA_HOME=str(home/'data'),XDG_RUNTIME_DIR=str(self.root)))
   end=time.monotonic()+25

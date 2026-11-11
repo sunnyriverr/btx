@@ -35,19 +35,36 @@ def ports():
         b.bind(('127.0.0.1', 0))
         return a.getsockname()[1], b.getsockname()[1]
 
-def connects(path):
-    out = []
-    for line in path.read_text().splitlines() if path.exists() else []:
-        if 'sa_family=AF_INET' not in line or 'connect(' not in line:
-            continue
-        match = re.search(r'(\d+\.\d+) connect\(.*?sin_port=htons\((\d+)\).*?127\.0\.0\.1', line)
+def trace_events(lines):
+    connections = []
+    children = []
+    for line in lines:
+        match = re.match(r'(\d+)\s+(\d+\.\d+) (.*)', line)
         if not match:
-            stamp = re.search(r'(\d+\.\d+) connect\(', line)
-            require(stamp, 'could not read TCP trace timestamp')
-            out.append((float(stamp[1]), None))
-        else:
-            out.append((float(match[1]), int(match[2])))
-    return out
+            continue
+        tid, at, call = int(match[1]), float(match[2]), match[3]
+        if call.startswith(('clone(', 'clone3(', '<... clone resumed>', '<... clone3 resumed>')):
+            child = re.search(r' = (\d+)$', call)
+            if child:
+                children.append((tid, int(child[1])))
+        if call.startswith('connect(') and 'sa_family=AF_INET' in call:
+            port = re.search(r'sin_port=htons\((\d+)\).*?inet_addr\("127\.0\.0\.1"\)', call)
+            connections.append((at, tid, int(port[1]) if port else None))
+    return connections, children
+
+
+def descendants(root, links):
+    found = {root}
+    while True:
+        expanded = found | {child for parent, child in links if parent in found}
+        if expanded == found:
+            return found
+        found = expanded
+
+
+def trace(path):
+    return trace_events(path.read_text().splitlines() if path.exists() else [])
+
 
 def make_model(path):
     header = json.dumps({'t': {'dtype':'U8','shape':[SIZE],'data_offsets':[0,SIZE]}},
@@ -124,8 +141,16 @@ def run(binary, out, root):
                 break
             require(job.get('status') in ('queued','running') and time.monotonic()<end, f'no B prefix {job}')
             time.sleep(.15)
-        before = [(t,p) for t,p in connects(receiver.trace) if t>=began]
-        require(before and before[0][1]==ap and any(p==rp for _,p in before),'missing A-first/B-second evidence')
+        connections, links = trace(receiver.trace)
+        before = [(at, tid, port) for at, tid, port in connections if at >= began]
+        starters = {tid for at, tid, port in before if port == ap
+                    and any(t > at and p == rp and t_id == tid for t, t_id, p in before)}
+        require(len(starters) == 1, f'could not identify retrieval worker {starters}')
+        worker = starters.pop()
+        require(any(child == worker for _, child in links), 'worker creation missing from trace')
+        worker_before = [port for _, tid, port in before if tid == worker]
+        require(worker_before[0] == ap and rp in worker_before, 'missing A-first/B-second evidence')
+        r['worker_tid'] = worker
         r['initial_connections'] = before
         phase('restart A, then stop B')
         a.start()
@@ -160,8 +185,9 @@ def run(binary, out, root):
         while time.monotonic()<absolute_end:
             job = receiver.job(jid)
             r['samples'].append(job)
-            attempts = connects(receiver.trace)
-            r['a_attempt'] = any(p==ap and t>=switched for t,p in attempts)
+            attempts, links = trace(receiver.trace)
+            workers = descendants(worker, links)
+            r['a_attempt'] = any(p == ap and t >= switched and tid in workers for t, tid, p in attempts)
             if job.get('peer_retries',0)>pre and job.get('last_peer')==f'127.0.0.1:{rp}':
                 first_retry = first_retry or time.monotonic()
                 r['worker_b_retry'] = True
@@ -171,10 +197,17 @@ def run(binary, out, root):
                 r['observed_seconds'] = time.monotonic()-first_retry
                 break
             time.sleep(.25)
-        r['connections'] = connects(receiver.trace)
-        r['route_verified'] = all(p in (ap,rp) for t,p in r['connections'] if t>=began)
-        r['worker_b_retry'] = bool(r.get('worker_b_retry') and
-                                   any(p==rp and t>=switched for t,p in r['connections']))
+        r['connections'], links = trace(receiver.trace)
+        workers = descendants(worker, links)
+        r['worker_descendants'] = sorted(workers - {worker})
+        r['route_verified'] = all(p in (ap, rp) for t, _, p in r['connections'] if t >= began)
+        r['a_attempt'] = any(p == ap and t >= switched and tid in workers
+                             for t, tid, p in r['connections'])
+        r['ambient_a_attempts'] = sum(p == ap and t >= switched and tid not in workers
+                                      for t, tid, p in r['connections'])
+        r['worker_b_connections'] = sum(p == rp and t >= switched and tid == worker
+                                         for t, tid, p in r['connections'])
+        r['worker_b_retry'] = bool(r.get('worker_b_retry') and r['worker_b_connections'])
         require(r['route_verified'],'extra route observed')
         r['original_job_final'] = job
         if job.get('status')=='done':
@@ -196,11 +229,14 @@ def run(binary, out, root):
             after_restart = receiver.pieces(artifact)
             require(all(after_restart.get(k)==v for k,v in pieces.items()),
                     'saved pieces did not survive restart')
-            retry,_ = receiver.request(uri)
-            require(receiver.settled(retry,60)['status']=='done','recovery control failed')
+            retry, control_reply = receiver.request(uri)
+            r['control_request'] = control_reply
+            r['control_job'] = receiver.settled(retry or jid, 60)
+            require(r['control_job']['status'] == 'done', 'recovery control failed')
             r['completion'] = completion(receiver,uri,expected)
-            r['control_connections'] = connects(receiver.trace)
-            require(any(p==ap for _,p in r['control_connections']), 'control did not connect to A')
+            r['control_connections'], _ = trace(receiver.trace)
+            require(any(p == ap for _, _, p in r['control_connections']), 'control did not connect to A')
+            require(r['control_job'].get('last_peer') == f'127.0.0.1:{ap}', 'control did not finish from A')
             r['control_complete'] = True
         kept = receiver.pieces(artifact)
         r['exact_completion'] = (r['completion']['sha384']==expected and r['completion']['bytes']==total
