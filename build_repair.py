@@ -1,6 +1,6 @@
 """Build only btxd for a pinned single-file wallet restore repair from an isolated verified Linux checkpoint."""
 from pathlib import Path
-import json, os, re, shutil, signal, subprocess, tarfile, time
+import json, os, re, shutil, signal, subprocess, tarfile, time, traceback
 from checkpoint import sha, restore_timestamps, verify_restored, create
 
 BASE = 'dac9aee53520bd49ed320ec7a49b9072fc7d88d9'
@@ -94,10 +94,15 @@ def main():
         (out/'repair-input.json').write_text(json.dumps(spec,indent=2)+'\n')
         assert run(['g++','-dumpfullversion'],'compiler').strip() == '11.4.0'
         assert 'OpenSSL 3.5.9' in run([w/'gui-pilot-runtime/openssl/bin/openssl','version'],'openssl')
-        initial_binaries={n:sha(build/'bin'/n) for n in ('btxd','btx-cli','btx-qt')}
-        assert initial_binaries['btxd']==DAEMON
+        initial_binaries={n:sha(build/'bin'/n) for n in ('btxd','btx-cli','btx-qt') if (build/'bin'/n).exists()}
+        assert initial_binaries == {'btx-qt':'7239c3b1e80e8114e47ebf3bd5b060b95c23db746dd70533681a9858763329a5'}
+        stock=w/'saved-daemon/btxd'
+        assert sha(stock)==DAEMON
         result['original_binaries']=initial_binaries
-        shutil.copy2(build/'bin/btxd',binaries/'base')
+        result['stock_daemon_run']=42918244124
+        result['component_reuse_run']=42939400065
+        result['component_consumer_sha256']='fdfb1e833e3ad5fc66307bf66d4e6ba1b29a6b6b54e5b11b568f35592a8895d4'
+        shutil.copy2(stock,binaries/'base')
         (binaries/'base').chmod(0o755)
         shutil.copy2(build/'CMakeCache.txt',out/'cache-before.txt')
         def profile(text):
@@ -113,13 +118,17 @@ def main():
         result['repair_patch_sha256']=sha(out/'repair-patch.log')
         source_manifest[TARGET]={'kind':'file','sha256':sha(src/TARGET)}
         (out/'candidate-source.json').write_text(json.dumps(source_manifest,indent=2,sort_keys=True)+'\n')
-        run(['cmake','-S',src,'-B',build],'candidate-configure',timeout=240)
+        run(['cmake','-S',src,'-B',build,'-DBUILD_DAEMON=ON'],'candidate-configure',timeout=240)
         cache = (build/'CMakeCache.txt').read_text()
         assert all(flag in cache for flag in ('BUILD_DAEMON:BOOL=ON','ENABLE_WALLET:BOOL=ON','WITH_SQLITE:BOOL=ON'))
         assert str(w/'gui-pilot-runtime/openssl/lib/libcrypto.a') in cache
         shutil.copy2(build/'CMakeCache.txt',out/'cache-after.txt')
         result['build_profile']=profile(cache)
-        assert result['build_profile']==original_profile, 'Configuration flags/compiler/OpenSSL profile changed'
+        expected_profile=dict(original_profile)
+        assert expected_profile['BUILD_DAEMON']==['BOOL','OFF']
+        expected_profile['BUILD_DAEMON']=['BOOL','ON']
+        result['intentional_profile_delta']={'BUILD_DAEMON':['OFF','ON']}
+        assert result['build_profile']==expected_profile, 'Unexpected configuration/compiler/OpenSSL profile change'
         run(['cmake','-P',build/'CMakeFiles/VerifyGlobs.cmake'],'candidate-globs',build)
         manifest = out/'candidate.ninja'; shutil.copy2(build/'build.ninja',manifest)
         dry = run(['ninja','-C',build,'-f',manifest,'-d','explain','-n','btxd'],'candidate-plan')
@@ -148,7 +157,7 @@ def main():
         result['compiled'] = True
         shutil.copy2(build/'bin/btxd',binaries/'candidate')
         result['binaries'] = {name: sha(binaries/name) for name in ('base','candidate')}
-        assert all(sha(build/'bin'/n)==initial_binaries[n] for n in ('btx-cli','btx-qt'))
+        assert all(sha(build/'bin'/n)==digest for n,digest in initial_binaries.items())
         assert result['binaries']['base'] != result['binaries']['candidate']
         for name in ('base','candidate'):
             assert 'not found' not in run(['ldd',binaries/name],name+'-ldd')
@@ -163,7 +172,7 @@ def main():
         result['successor_checkpoint_sha256']=successor['archive_sha256']
         result['passed']=True
     except Exception as error:
-        result.update(passed=False,error=repr(error))
+        result.update(passed=False,error=repr(error),traceback=traceback.format_exc())
     finally:
         (out/'build-result.json').write_text(json.dumps(result,indent=2)+'\n')
     return 0 if result['passed'] else 1
