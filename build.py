@@ -72,7 +72,7 @@ def qualify(number, row, pair, helper_commands, wallet_commands, gate):
                 author_tree=run(['git','rev-parse','HEAD^{tree}'],target/'author-tree.log',accepted).strip())
     changed = set(run(['git','diff','--name-only',BASE,row['head']],
                       target/'author-delta.log',accepted).splitlines())
-    assert all(name in row['changed'] or name.startswith('src/test/') for name in changed), changed
+    assert all(name in row['changed'] or name.startswith(('src/test/', 'test/functional/')) for name in changed), changed
     run(['git','apply','--check','--whitespace=error',patch],target/'patch-check.log',accepted)
     originals = {name: (SOURCE/name).read_bytes() for name in row['changed']}
     try:
@@ -127,7 +127,7 @@ try:
     assert run(['g++','-dumpfullversion'],OUT/'compiler.log').strip() == '11.4.0'
     helper_commands = run(['ninja','-C',CACHE,'-t','commands','btx-modeld'],
                           OUT/'helper-commands.log').splitlines()
-    wallet_commands = run(['ninja','-C',CACHE,'-t','commands','btxd'],
+    wallet_commands = run(['ninja','-C',CACHE,'-t','commands','bitcoin_wallet'],
                            OUT/'wallet-commands.log').splitlines()
     if not (CACHE/ENTRY).exists():
         run(['ninja','-C',CACHE,'-j1',ENTRY],OUT/'shared-entry.log')
