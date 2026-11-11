@@ -1,0 +1,46 @@
+name: Live failover at tight quota audit
+on:
+  push:
+    branches: [codex/ci-live-failover-tight-quota]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  qualify:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 42
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Offline result gates and minimal prerequisites
+        timeout-minutes: 4
+        run: |
+          sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g' /etc/apt/sources.list
+          sudo apt-get -o Acquire::http::Timeout=15 -o Acquire::Retries=1 update
+          sudo apt-get install -y --no-install-recommends libboost-dev libsqlite3-dev ninja-build strace
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: 13750286693
+          run-id: 42787985840
+          github-token: ${{ github.token }}
+          merge-multiple: true
+          path: checkpoint-input
+      - name: Relink only the changed helper and run the paired failover workflow
+        timeout-minutes: 29
+        run: python3 -u build.py
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: live-failover-tight-quota-records
+          path: repair-records
+          retention-days: 14
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: live-failover-tight-quota-binaries
+          path: repair-binaries
+          retention-days: 14
