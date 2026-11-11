@@ -52,6 +52,7 @@ def source_identity(label):
   entries[name]={'git_mode':mode,'git_blob':oid,'expected_working_blob':EXPECTED_WORKING_BLOBS.get(name,oid),'working_sha256':hashlib.sha256(data).hexdigest()}
  target=E/(label+'-source.json');target.write_text(json.dumps({'head':head,'files':entries},indent=2)+'\n');result[label+'_source_sha256']=sha(target);result[label+'_tracked_files']=len(entries)
 def metadata():
+ result['compiler_env']={k:os.environ.get(k) for k in ['VCToolsVersion','WindowsSDKVersion','ImageVersion','PROCESSOR_ARCHITECTURE']}
  source_identity('before')
  for label,cmd in [('cmake-version',['cmake','--version']),('ninja-version',['ninja','--version']),('clang-version',['clang-cl','--version'])]:need(label,cmd)
  run('cl-version',['cl','/Bv']);result['resolved_tools']={x:shutil.which(x)for x in ['cl','clang-cl','cmake','ninja','perl','nasm','nmake','dumpbin']}
@@ -91,11 +92,10 @@ def bootstrap():
     need('vcpkg-checkout', ['git','-C',str(tool),'checkout','--detach',VCPKG_COMMIT], timeout=120)
     assert subprocess.check_output(['git','-C',str(tool),'rev-parse','HEAD'], text=True).strip() == VCPKG_COMMIT
     assert 'VCPKG_TOOL_RELEASE_TAG=2026-10-29' in (tool/'scripts/vcpkg-tool-metadata.txt').read_text()
-    url = 'https://api.github.com/repos/microsoft/vcpkg-tool/releases/assets/690264732'
-    req = urllib.request.Request(url, headers={'Accept':'application/octet-stream',
-                                'User-Agent':'btx-pinned-native-tool','X-GitHub-Api-Version':'2022-11-28'})
-    with urllib.request.urlopen(req, timeout=90) as response:
-        binary = response.read(10*1024*1024)
+    url = 'https://github.com/microsoft/vcpkg-tool/releases/download/2026-10-29/vcpkg.exe'
+    request = urllib.request.Request(url, headers={'User-Agent': 'btx-pinned-native-tool'})
+    with urllib.request.urlopen(request, timeout=90) as response:
+        binary = response.read(10 * 1024 * 1024)
     assert len(binary) == 6836024 and hashlib.sha256(binary).hexdigest() == '191ee64b0887af80aad3eff6c5e888ab733d3ef2182885ed4747b4574c201834'
     (tool/'vcpkg.exe').write_bytes(binary)
     (tool/'vcpkg.disable-metrics').write_text('')

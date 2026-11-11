@@ -35,7 +35,13 @@ jobs:
           if (-not $vs) { throw "Native Visual Studio tools missing" }
           "toolset=$((Get-Content "$vs\VC\Auxiliary\Build\Microsoft.VCToolsVersion.default.txt").Trim())" >> $env:GITHUB_OUTPUT
           "BTX_VS=$vs" >> $env:GITHUB_ENV
-      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
+      - name: Prepare pinned vcpkg
+        shell: cmd
+        run: |
+          python controls/runner.py bootstrap
+          exit /b %errorlevel%
+      - uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
+        id: openssl-cache
         with:
           path: D:\btx-pr558\openssl-3.5.4-static
           key: btx-pr558-openssl354-v1-${{ steps.native.outputs.toolset }}
@@ -47,11 +53,11 @@ jobs:
           set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
           python controls/runner.py openssl
           exit /b %errorlevel%
-      - name: Prepare pinned vcpkg
-        shell: cmd
-        run: |
-          python controls/runner.py bootstrap
-          exit /b %errorlevel%
+      - uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
+        if: steps.openssl-cache.outputs.cache-hit != 'true'
+        with:
+          path: D:\btx-pr558\openssl-3.5.4-static
+          key: btx-pr558-openssl354-v1-${{ steps.native.outputs.toolset }}
       - name: Compile the same generated unit object before and after
         shell: cmd
         run: |
