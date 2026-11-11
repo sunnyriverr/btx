@@ -9,6 +9,7 @@ class Relay:
         self.rate = rate
         self.samples = []
         self.writers = set()
+        self.handlers = set()
         self.loop = asyncio.new_event_loop()
         self.thread = threading.Thread(target=self.loop.run_forever, daemon=True)
         self.thread.start()
@@ -39,6 +40,9 @@ class Relay:
 
     async def serve(self, client, client_writer):
         upstream = None
+        tasks = []
+        handler = asyncio.current_task()
+        self.handlers.add(handler)
         self.writers.add(client_writer)
         try:
             upstream_reader, upstream = await asyncio.open_connection('127.0.0.1', self.backend, limit=32768)
@@ -52,6 +56,10 @@ class Relay:
         except OSError:
             pass
         finally:
+            for task in tasks:
+                task.cancel()
+            await asyncio.gather(*tasks, return_exceptions=True)
+            self.handlers.discard(handler)
             for writer in (client_writer, upstream):
                 if writer is not None:
                     writer.close()
@@ -59,13 +67,14 @@ class Relay:
 
     async def shutdown(self):
         self.server.close()
-        await self.server.wait_closed()
+        # Python 3.12+ may wait for live connections in wait_closed().
         for writer in list(self.writers):
-            writer.close()
-        tasks = [t for t in asyncio.all_tasks() if t != asyncio.current_task()]
-        for task in tasks:
-            task.cancel()
-        await asyncio.gather(*tasks, return_exceptions=True)
+            writer.transport.abort()
+        handlers = list(self.handlers)
+        for handler in handlers:
+            handler.cancel()
+        await asyncio.gather(*handlers, return_exceptions=True)
+        await self.server.wait_closed()
 
     def close(self):
         if self.thread.is_alive():

@@ -58,6 +58,14 @@ def check_pacing():
             assert sum(count for _, count in relay.samples) == 2 * len(payload)
             assert pacing(relay.samples, rate)
             assert not pacing([(0, 16384), (.1, 16384)], rate)
+            with create_connection(('127.0.0.1', relay.port), timeout=5) as active:
+                active.sendall(b'x')
+                assert active.recv(1) == payload[:1]
+                start = time.monotonic()
+                relay.close()
+                assert time.monotonic() - start < 2
+                assert len(active.recv(32768)) < len(payload)
+                assert active.recv(1) == b'' 
         finally:
             relay.close()
             server.shutdown()
