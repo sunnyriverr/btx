@@ -1,7 +1,7 @@
 """Bounded setup/configuration only. Never compile BTX, run a node or publish."""
 from pathlib import Path
 import os,subprocess,json,hashlib,platform,shutil,sys,signal
-w=Path(os.environ['GITHUB_WORKSPACE']);out=w/'mac-config-records';out.mkdir(exist_ok=True);src=w/'product';build=w/'mac-config-build';state={'expected_source':'36ab43008cac48aa5c8410e4b70d90a249196a33','expected_image':'20261104.0514.1','openssl_version':'3.5.9','btx_compiled':False,'node_started':False,'commands':[]}
+w=Path(os.environ['GITHUB_WORKSPACE']);out=w/'mac-config-records';out.mkdir(exist_ok=True);src=w/'product';build=w/'mac-config-build';state={'expected_source':'c6f9678dd225572528d06c456c16eb4c78bc637c','expected_image':'20261104.0514.1','openssl_version':'3.5.9','btx_compiled':False,'node_started':False,'commands':[]}
 def save():(out/'result.json').write_text(json.dumps(state,indent=2)+'\n')
 def command(argv,label,limit=60,env=None,cwd=None):
  print('START '+label,flush=True);save()

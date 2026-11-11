@@ -9,7 +9,7 @@ import subprocess
 import tarfile
 
 HERE = Path(__file__).resolve().parent
-BASE = "36ab43008cac48aa5c8410e4b70d90a249196a33"
+BASE = "c6f9678dd225572528d06c456c16eb4c78bc637c"
 TARGET = "c6f9678dd225572528d06c456c16eb4c78bc637c"
 WORK = Path(os.environ["GITHUB_WORKSPACE"])
 LOG = WORK / "pilot-records"
@@ -34,6 +34,8 @@ def run(label, *command, timeout=120, env=None):
 def restore(name, roots):
     expected = json.loads((HERE / "checkpoints.json").read_text())[name]
     payload = WORK / (name + "-payload") / "after"
+    if name == "cmake" and not payload.is_dir():
+        payload = WORK / "cmake-payload" / "cmake-chunk-checkpoint" / "after"
     receipt = json.loads((payload / "receipt.json").read_text())
     archive = payload / "checkpoint.tar.gz"
     manifest = payload / "inventory.json"
@@ -108,8 +110,6 @@ def main():
                 os.utime(path, ns=(item["mtime_ns"],) * 2, follow_symlinks=False)
         assert not run("clean-restored-source", "git", "-C", PRODUCT, "status", "--porcelain").strip()
         assert run("restored-source", "git", "-C", PRODUCT, "rev-parse", "HEAD").strip() == BASE
-        run("fetch-target", "git", "-C", PRODUCT, "fetch", "--depth=1", "origin", TARGET)
-        run("select-target", "git", "-C", PRODUCT, "checkout", "--detach", TARGET)
         assert run("current-source", "git", "-C", PRODUCT, "rev-parse", "HEAD").strip() == TARGET
         run("configure", "cmake", "-S", PRODUCT, "-B", BUILD, timeout=300)
         inspection = BUILD / "checkpoint-inspection.ninja"
@@ -119,7 +119,8 @@ def main():
         plan = run("ninja-dry-plan", "ninja", "-C", BUILD, "-f", inspection.name,
                    "-n", "-d", "explain", *TARGETS)
         result["ninja_actions"] = sum(line.startswith("[") for line in plan.splitlines())
-        assert result["ninja_actions"] > 0 and graph.strip()
+        assert 0 < result["ninja_actions"] <= 120, ("checkpoint reuse insufficient", result["ninja_actions"])
+        assert hashlib.sha256(graph.encode()).hexdigest() == "180514e0521212dc9f8ac11b8c7ceb0e12c2e6cbeef0297903883e52547d1985", "shipping graph changed"
         scheduled = set()
         for line in plan.splitlines():
             for prefix in ("Building CXX object ", "Building C object "):

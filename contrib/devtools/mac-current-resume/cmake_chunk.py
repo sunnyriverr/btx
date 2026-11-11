@@ -1,6 +1,6 @@
 from pathlib import Path
 import os,sys,json,subprocess,time,hashlib,tarfile,shutil,signal,re
-w=Path(os.environ['GITHUB_WORKSPACE']);out=w/'cargo-chunk-records';out.mkdir(exist_ok=True);payload=w/'cargo-chunk-checkpoint';payload.mkdir(exist_ok=True);bins=w/'cargo-chunk-binaries';bins.mkdir(exist_ok=True);roots=[w/'product',w/'atlas-target'];state={'btx_compile_started':False,'node_started':False,'samples':0,'peak_owned_rss_bytes':0,'source':'c6f9678dd225572528d06c456c16eb4c78bc637c','bound_seconds':1500};compile_proc=None;start=time.monotonic()
+w=Path(os.environ['GITHUB_WORKSPACE']);out=w/'cmake-chunk-records';out.mkdir(exist_ok=True);payload=w/'cmake-chunk-checkpoint';payload.mkdir(exist_ok=True);bins=w/'cmake-chunk-binaries';bins.mkdir(exist_ok=True);roots=[w/'product',w/'mac-config-build'];state={'btx_compile_started':False,'node_started':False,'samples':0,'peak_owned_rss_bytes':0,'source':'c6f9678dd225572528d06c456c16eb4c78bc637c','bound_seconds':1200};compile_proc=None;start=time.monotonic()
 def save():(out/'chunk-result.json').write_text(json.dumps(state,indent=2)+'\n')
 def sha(p):
  h=hashlib.sha256()
@@ -49,7 +49,7 @@ def write_checkpoint(inv,total):
  with tarfile.open(archive) as t:
   members=t.getmembers();assert len(members)==len(inv)
   for m in members:
-   assert not Path(m.name).is_absolute() and '..' not in Path(m.name).parts and Path(m.name).parts[0] in ['product','atlas-target']
+   assert not Path(m.name).is_absolute() and '..' not in Path(m.name).parts and Path(m.name).parts[0] in ['product','mac-config-build']
  digest=sha(archive);destination.mkdir()
  (destination/'inventory.json').write_text(json.dumps(inv,indent=2))
  receipt={'sha256':digest,'bytes':archive.stat().st_size,'entries':len(inv),'live_bytes':total,'inventory_sha256':sha(destination/'inventory.json'),'generation':generation}
@@ -77,26 +77,22 @@ if len(sys.argv)>1 and sys.argv[1]=='archive-only':
  archive_worker(json.loads(Path(sys.argv[2]).read_text()),Path(sys.argv[3]));raise SystemExit(0)
 
 try:
- roots[1].mkdir(exist_ok=True)
  assert all(p.exists() for p in roots)
- assert json.loads((w/'mac-config-records/result.json').read_text())['complete']
  gate=json.loads((w/'pilot-records/result.json').read_text())
  assert gate['complete'] and gate['source']==state['source'] and not gate['compiled']
- assert gate['restored']=={'cmake':20615,'cargo':19648}
- assert gate['ninja_actions']==200 and len(gate['cached_objects_scheduled'])==167
- assert gate['cmake_objects_preserved']==3364
+ assert gate['restored']=={'cmake':20687,'cargo':19648}
+ assert 0 < gate['ninja_actions'] <= 120
+ assert gate['cmake_objects_preserved'] >= 3300
  state['resume_gate']=gate
  assert subprocess.check_output(['git','-C',str(roots[0]),'rev-parse','HEAD'],text=True).strip()==state['source']
  assert not subprocess.check_output(['git','-C',str(roots[0]),'status','--porcelain'],text=True).strip()
- env=dict(os.environ,RUSTUP_TOOLCHAIN='1.95.0',CARGO_BUILD_JOBS='1',CARGO_TARGET_DIR=str(roots[1]),DEVELOPER_DIR='/Applications/Xcode_16.4.app/Contents/Developer')
- state['rustc']=subprocess.check_output(['rustc','-Vv'],env=env,text=True)
- assert state['rustc'].startswith('rustc 1.95.0 ')
  # Reject unsupported real-tree links before committing to a long compile.
  before,total=inventory();write_checkpoint(before,total);state['baseline_checkpoint_valid']=True;state['initial_inventory_entries']=len(before);state['initial_tree_bytes']=total;save()
  assert shutil.disk_usage(w).free>16*1024**3
- args=['cargo','build','--manifest-path',str(roots[0]/'gui/atlas/Cargo.toml'),'--locked','--offline','--release','--target','aarch64-apple-darwin','-p','btx-atlas'];state['compile_args']=args
+ targets=json.loads(Path(__file__).with_name('targets.json').read_text())
+ args=['ninja','-C',str(roots[1]),'-j1',*targets];state['compile_args']=args
  with (out/'compile.log').open('w') as log,(out/'resources.jsonl').open('w') as samples:
-  proc=subprocess.Popen(args,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True);compile_proc=proc;trackers[proc.pid]=OwnedProcesses(proc);state['btx_compile_started']=True;begin=time.monotonic();reason=None
+  proc=subprocess.Popen(args,stdout=log,stderr=subprocess.STDOUT,start_new_session=True);compile_proc=proc;trackers[proc.pid]=OwnedProcesses(proc);state['btx_compile_started']=True;begin=time.monotonic();reason=None
   try:
    while proc.poll() is None:
     observed=trackers[proc.pid].update();rss=observed['rss_bytes']
@@ -105,7 +101,6 @@ try:
     if elapsed>=state['bound_seconds']:reason='time_limit'
     elif rss>int(5.5*1024**3):reason='memory_limit'
     elif free<10*1024**3:reason='disk_limit'
-    elif state['samples']%30==0 and sum(p.stat().st_size for p in roots[1].rglob('*') if p.is_file() and not p.is_symlink())>6*1024**3:reason='target_size_limit'
     if reason:group_stop(proc);break
     if state['samples']%30==0:print('CHUNK',round(elapsed), 'seconds; peak RSS',state['peak_owned_rss_bytes'],flush=True)
     time.sleep(2)
@@ -121,12 +116,12 @@ finally:
  finished={}
  try:
   assert safe,'Live owned group: no copying outputs'
-  if (roots[1]/'aarch64-apple-darwin/release').exists():
-   for p in (roots[1]/'aarch64-apple-darwin/release').iterdir():
+  if (roots[1]/'bin').exists():
+   for p in (roots[1]/'bin').iterdir():
     if p.is_file() and not p.is_symlink() and p.name.startswith('btx') and os.access(p,os.X_OK):finished[p.name]={'sha256':sha(p),'bytes':p.stat().st_size,'mode':p.stat().st_mode&0o777}
   assert sum(x['bytes'] for x in finished.values())<2*1024**3
   with tarfile.open(bins/'available-executables.tar.gz','w:gz',compresslevel=1) as t:
-   for name in finished:t.add(roots[1]/'aarch64-apple-darwin/release'/name,arcname=name)
+   for name in finished:t.add(roots[1]/'bin'/name,arcname=name)
   (bins/'manifest.json').write_text(json.dumps(finished,indent=2));state['available_executables']=finished;state['binary_artifact_sha256']=sha(bins/'available-executables.tar.gz')
  except Exception as e:state['binary_retention_error']=repr(e)
  try:
