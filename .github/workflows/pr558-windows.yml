@@ -1,0 +1,68 @@
+name: PR 558 native Windows bridge test
+on:
+  push:
+    branches: [codex/ci-pr558-windows]
+permissions:
+  contents: read
+jobs:
+  bridge:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: windows-2025
+    timeout-minutes: 50
+    env:
+      BTX_NATIVE_ROOT: D:\btx-pr558
+    steps:
+      - name: Preserve checkout bytes
+        shell: pwsh
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.longpaths true
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          path: controls
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: c6f9678dd225572528d06c456c16eb4c78bc637c
+          path: btx
+          persist-credentials: false
+      - name: Identify Visual Studio toolset
+        id: native
+        shell: pwsh
+        run: |
+          $vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          if (-not $vs) { throw "Native Visual Studio tools missing" }
+          "toolset=$((Get-Content "$vs\VC\Auxiliary\Build\Microsoft.VCToolsVersion.default.txt").Trim())" >> $env:GITHUB_OUTPUT
+          "BTX_VS=$vs" >> $env:GITHUB_ENV
+      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
+        with:
+          path: D:\btx-pr558\openssl-3.5.4-static
+          key: btx-pr558-openssl354-v1-${{ steps.native.outputs.toolset }}
+      - name: Build pinned native OpenSSL and verify its linkage
+        shell: cmd
+        run: |
+          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+          if errorlevel 1 exit /b %errorlevel%
+          set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
+          python controls/runner.py openssl
+          exit /b %errorlevel%
+      - name: Prepare pinned vcpkg
+        shell: cmd
+        run: |
+          python controls/runner.py bootstrap
+          exit /b %errorlevel%
+      - name: Compile the same generated unit object before and after
+        shell: cmd
+        run: |
+          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+          if errorlevel 1 exit /b %errorlevel%
+          set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
+          python controls/runner.py compare
+          exit /b %errorlevel%
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: pr558-native-windows-records
+          path: D:\btx-pr558\evidence\
+          retention-days: 14
