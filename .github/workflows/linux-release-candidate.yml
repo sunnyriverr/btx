@@ -32,6 +32,13 @@ jobs:
           . /etc/os-release
           test "$VERSION_ID" = 24.04
           getconf GNU_LIBC_VERSION
+          if ! timeout 8s getent ahostsv4 archive.ubuntu.com; then
+            # The build container resolved this signed archive during earlier runs.
+            docker pull ubuntu:22.04
+            mirror_ip=$(docker run --rm ubuntu:22.04 getent ahostsv4 archive.ubuntu.com | awk 'NR==1 {print $1}')
+            [[ "$mirror_ip" =~ ^[0-9]+(\.[0-9]+){3}$ ]]
+            printf '%s archive.ubuntu.com\n' "$mirror_ip" | sudo tee -a /etc/hosts
+          fi
           getent ahostsv4 archive.ubuntu.com
           sources="$RUNNER_TEMP/btx-runtime.sources"
           printf '%s\n' 'Types: deb' 'URIs: http://archive.ubuntu.com/ubuntu/' 'Suites: noble noble-updates noble-security' 'Components: main universe' 'Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg' > "$sources"
