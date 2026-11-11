@@ -58,7 +58,7 @@ jobs:
         with:
           path: D:\btx-pr558\openssl-3.5.4-static
           key: btx-pr558-openssl354-v1-${{ steps.native.outputs.toolset }}
-      - name: Compile the same generated unit object before and after
+      - name: Run the same generated unit compiler command before and after
         shell: cmd
         run: |
           call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64

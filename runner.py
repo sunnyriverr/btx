@@ -138,20 +138,30 @@ def compare():
     result['before_test_sha256'] = sha(SOURCE/test_path)
     result['after_test_sha256'] = sha(candidate)
     source_identity('baseline-composed')
-    command = ['cmake','--build',str(build),'--target',target,'--verbose','--','-j','1']
-    before = run('baseline-unit-object', command, SOURCE, 300)
+    # The Ninja object edge has order-only dependencies on the rest of the test
+    # graph. Run the exact compiler invocation CMake generated for this object.
+    compiler_entry = commands[0]
+    command = compiler_entry['command']
+    command_cwd = Path(compiler_entry['directory'])
+    assert command_cwd.resolve() == build.resolve()
+    object_path = build / target
+    assert object_path.parent.is_dir() and not object_path.exists()
+    result['generated_object_target'] = target
+    result['direct_generated_compiler_command'] = True
+    before = run('baseline-unit-object', command, command_cwd, 300)
     output = (E/'baseline-unit-object.log').read_text(errors='replace')
     result['baseline_exit'] = before
-    if before == 0 or "fatal error: 'unistd.h' file not found" not in output or 'modelnet_bridge_tests.cpp(' not in output:
+    if before == 0 or "fatal error: 'unistd.h' file not found" not in output or not any(f'modelnet_bridge_tests.cpp{separator}' in output for separator in ('(', ':')):
         raise RuntimeError('baseline did not fail on the expected bridge unistd.h include')
+    assert not object_path.exists()
     (SOURCE/test_path).write_bytes(candidate.read_bytes())
     EXPECTED_WORKING_BLOBS[test_path] = subprocess.check_output(['git','hash-object',str(candidate)],text=True).strip()
     source_identity('candidate-composed')
-    after = run('candidate-unit-object', command, SOURCE, 300)
+    after = run('candidate-unit-object', command, command_cwd, 300)
     result['candidate_exit'] = after
     if after or sha(db) != result['compile_db_sha256']:
         raise RuntimeError('candidate object failed or compiler configuration changed')
-    result['object_sha256'] = sha(build/target)
+    result['object_sha256'] = sha(object_path)
     result['status'] = 'PASS_NATIVE_GENERATED_OBJECT'
 
 
