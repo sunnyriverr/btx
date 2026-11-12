@@ -1,0 +1,24 @@
+hydration-baseline exit=1
+healthy_control start=4194304 bytes_read=8388608 verified_pieces=3 exact_bytes=1 cleaned=1
+fault_error=failed to write file stream job
+old_bytes=403 after_bytes=8 preserved=0 reopened=0 reload_error=invalid file stream job
+fault_retry start=0 bytes_read=12582912 verified_pieces=3 exact_bytes=1 cleaned=1
+old cursor did not survive
+
+bundle-baseline exit=1
+fault_error=BTX035_BUNDLE
+old_bytes=93 after_bytes=8 preserved=0 reopened=0
+retry_bytes=100 exact_bytes=1 imported_sequence=2 quorum_preserved=1
+old bundle did not survive
+
+hydration-candidate exit=0
+healthy_control start=4194304 bytes_read=8388608 verified_pieces=3 exact_bytes=1 cleaned=1
+fault_error=failed to write file stream job
+old_bytes=403 after_bytes=403 preserved=1 reopened=1 reload_error=failed to write file stream job
+fault_retry start=4194304 bytes_read=8388608 verified_pieces=3 exact_bytes=1 cleaned=1
+
+bundle-candidate exit=0
+fault_error=BTX035_BUNDLE
+old_bytes=93 after_bytes=93 preserved=1 reopened=1
+retry_bytes=100 exact_bytes=1 imported_sequence=2 quorum_preserved=1
+
