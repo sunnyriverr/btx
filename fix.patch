@@ -1,0 +1,48 @@
+diff --git a/src/modelnet/file_stream.cpp b/src/modelnet/file_stream.cpp
+index 4f691141a..254df1b40 100644
+--- a/src/modelnet/file_stream.cpp
++++ b/src/modelnet/file_stream.cpp
+@@ -213,7 +213,7 @@ bool SaveFileStreamJob(const fs::path& modeldir, const FileStreamJobRecord& rec,
+         err = "file stream job json must not contain secrets or URLs";
+         return false;
+     }
+-    if (!WriteBinaryFile(FileStreamJobPath(modeldir, j.artifact, j.file_index), raw)) {
++    if (!WriteBinaryFileAtomically(FileStreamJobPath(modeldir, j.artifact, j.file_index), raw)) {
+         err = "failed to write file stream job";
+         return false;
+     }
+diff --git a/src/modelnet/realm_channel.cpp b/src/modelnet/realm_channel.cpp
+index c6e00a536..969f0b50c 100644
+--- a/src/modelnet/realm_channel.cpp
++++ b/src/modelnet/realm_channel.cpp
+@@ -7,6 +7,10 @@
+ #include <crypto/hex_base.h>
+ #include <crypto/sha384.h>
+ #include <span.h>
++#include <util/readwritefile.h>
++#ifdef _WIN32
++#include <util/string.h>
++#endif
+ 
+ #include <algorithm>
+ #include <array>
+@@ -882,14 +886,11 @@ bool RealmRollout::WriteOfflineBundle(const std::filesystem::path& path, const s
+     text += "body=" + body + "\n";
+     if (!channel_name.empty()) text += "name=" + channel_name + "\n";
+ 
+-    std::ofstream out(path, std::ios::out | std::ios::trunc);
+-    if (!out) {
+-        err = "BTX035_BUNDLE";
+-        return false;
+-    }
+-    out << text;
+-    out.flush();
+-    if (!out) {
++#ifdef _WIN32
++    // Preserve the CRLF bytes previously emitted by the Windows text stream.
++    ReplaceAll(text, "\n", "\r\n");
++#endif
++    if (!WriteBinaryFileAtomically(fs::path{path}, text)) {
+         err = "BTX035_BUNDLE";
+         return false;
+     }
