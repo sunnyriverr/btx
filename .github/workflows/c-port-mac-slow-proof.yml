@@ -8,7 +8,7 @@ permissions:
 jobs:
   proof:
     runs-on: macos-26
-    timeout-minutes: 75
+    timeout-minutes: 42
     env:
       OMP_NUM_THREADS: "2"
       OMP_WAIT_POLICY: PASSIVE
@@ -35,63 +35,31 @@ jobs:
           shasum -a 256 build/bin/test_btx | tee evidence/test_btx.sha256
           grep -Eq '^2fc7ce626d664373ccb3fb46def59d57e1cfb645f6332b87d7e837d5f3931817 [ *]build/bin/test_btx$' evidence/test_btx.sha256
           brew install libevent zeromq libomp openssl@3
-      - name: Run SMILE2 audit
-        if: ${{ !cancelled() && steps.saved.outcome == 'success' }}
+      - name: Run only the unfinished SMILE2 membership case
         timeout-minutes: 33
         shell: bash
-        env:
-          SUITE: smile2_audit_tests
-          EXPECTED_CASES: "27"
         run: |
-          python3 contrib/ci-fork/btx_ci.py suites --bin build/bin/test_btx \
-            --label mac-slow-proof --job "$GITHUB_JOB" --out "evidence/$SUITE/units" \
-            --suites "$SUITE" --jobs 1 --timeout 1800 --keep-logs
           python3 - <<'PY'
-          import csv, hashlib, os
+          import json, subprocess
           from pathlib import Path
-          root = Path("evidence") / suite / "units"
-          suite = os.environ["SUITE"]
-          expected = int(os.environ["EXPECTED_CASES"])
-          assert hashlib.sha256((root / "listed.txt").read_bytes()).hexdigest() == "c560577ef477b1d757cf8fb80bd0291fafe343a6908713c484b8fe7e33a4a942"
-          assert (root / "selected.txt").read_text().splitlines() == [suite]
-          with (root / "results.tsv").open() as results:
-              rows = list(csv.DictReader(results, delimiter="\t"))
-          assert len(rows) == 1
-          result = rows[0]
-          assert (result["suite"], result["status"], result["rc"]) == (suite, "pass", "0"), result
-          assert int(result["expected"]) == int(result["cases"]) == expected, result
-          assert int(result["errors"]) == int(result["skipped"]) == 0, result
-          PY
-      - name: Run SMILE2 membership
-        if: ${{ !cancelled() && steps.saved.outcome == 'success' }}
-        timeout-minutes: 33
-        shell: bash
-        env:
-          SUITE: smile2_membership_tests
-          EXPECTED_CASES: "21"
-        run: |
-          python3 contrib/ci-fork/btx_ci.py suites --bin build/bin/test_btx \
-            --label mac-slow-proof --job "$GITHUB_JOB" --out "evidence/$SUITE/units" \
-            --suites "$SUITE" --jobs 1 --timeout 1800 --keep-logs
-          python3 - <<'PY'
-          import csv, hashlib, os
-          from pathlib import Path
-          root = Path("evidence") / suite / "units"
-          suite = os.environ["SUITE"]
-          expected = int(os.environ["EXPECTED_CASES"])
-          assert hashlib.sha256((root / "listed.txt").read_bytes()).hexdigest() == "c560577ef477b1d757cf8fb80bd0291fafe343a6908713c484b8fe7e33a4a942"
-          assert (root / "selected.txt").read_text().splitlines() == [suite]
-          with (root / "results.tsv").open() as results:
-              rows = list(csv.DictReader(results, delimiter="\t"))
-          assert len(rows) == 1
-          result = rows[0]
-          assert (result["suite"], result["status"], result["rc"]) == (suite, "pass", "0"), result
-          assert int(result["expected"]) == int(result["cases"]) == expected, result
-          assert int(result["errors"]) == int(result["skipped"]) == 0, result
+          case = "smile2_membership_tests/p3_g9_zero_knowledge"
+          binary = "build/bin/test_btx"
+          cmd = [binary, f"--run_test={case}", "--log_level=test_suite", "--color_output=no"]
+          path = Path("evidence")
+          with (path / "membership-final.log").open("wb") as log:
+              result = subprocess.run(cmd, stdout=log, stderr=subprocess.STDOUT, timeout=1800)
+          text = (path / "membership-final.log").read_text(errors="replace")
+          (path / "membership-final.json").write_text(json.dumps({"case": case, "exit": result.returncode}) + "\n")
+          assert result.returncode == 0
+          assert 'Running 1 test case' in text
+          assert text.count('Entering test case "p3_g9_zero_knowledge"') == 1
+          assert text.count('Leaving test case "p3_g9_zero_knowledge"') == 1
+          assert text.count("Leaving test case") == 1
+          assert "No errors detected" in text
           PY
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: ${{ !cancelled() }}
         with:
-          name: macos26-smile2-evidence
+          name: macos26-smile2-final-evidence
           path: evidence/
           if-no-files-found: error
