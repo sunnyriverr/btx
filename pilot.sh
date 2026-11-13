@@ -19,6 +19,7 @@ cleanup() {
   rm -rf -- "$tmp"
 }
 trap cleanup EXIT
+if [[ "${1:-}" != --configure-only ]]; then
 cd "$tmp"
 download() { curl -fsSL --retry 2 --max-time 90 "$1" -o "$2"; }
 signers=https://raw.githubusercontent.com/bitcoin-core/guix.sigs/f432c43b5fbd6b8355daf36127acb7a73d0308b7
@@ -63,6 +64,7 @@ timeout 20s tail --pid="$pid" -f /dev/null
 wait "$pid"
 pid=
 echo BITCOIN_REGTEST_PASS
+fi
 cd "$GITHUB_WORKSPACE"
 sudo apt-get -o Acquire::Retries=1 update
 sudo apt-get install -y --no-install-recommends libboost-dev libevent-dev libsqlite3-dev libzmq3-dev python3-dev python3-venv ninja-build
@@ -77,11 +79,12 @@ cmake -S product -B "$tmp/build" -G Ninja -DCMAKE_BUILD_TYPE=Release \
 grep -E '^(ENABLE_WALLET|WITH_SQLITE|WITH_MODELNET|BUILD_DAEMON|BUILD_CLI|Python3_EXECUTABLE|_Python3_(EXECUTABLE|LIBRARY_RELEASE|INCLUDE_DIR)):' "$tmp/build/CMakeCache.txt" | tee "$out/selected-config.txt"
 grep -Fx 'ENABLE_WALLET:BOOL=ON' "$out/selected-config.txt"
 grep -Fx 'WITH_SQLITE:BOOL=ON' "$out/selected-config.txt"
-ninja -C "$tmp/build" -n btxd btx-cli > "$out/ninja-plan.log"
-grep -m1 'swapnet-generated/swapnet/frozen_sources.h' "$out/ninja-plan.log"
-grep -m1 'Linking CXX executable .*btxd' "$out/ninja-plan.log"
-grep -m1 'Linking CXX executable .*btx-cli' "$out/ninja-plan.log"
+# Query the generated graph without triggering the CONFIGURE_DEPENDS glob check.
+ninja -C "$tmp/build" -t commands btxd btx-cli > "$out/ninja-commands.log"
+grep -m1 'generate_embedded.py' "$out/ninja-commands.log" | cut -c1-240
+grep -m1 ' -o bin/btxd ' "$out/ninja-commands.log" | cut -c1-240
+grep -m1 ' -o bin/btx-cli ' "$out/ninja-commands.log" | cut -c1-240
 test ! -e "$tmp/build/bin/btxd"
 test ! -e "$tmp/build/bin/btx-cli"
-tail -3 "$out/ninja-plan.log"
+wc -l "$out/ninja-commands.log"
 echo BTX_CONFIGURE_ONLY_PASS

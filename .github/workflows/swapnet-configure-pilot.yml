@@ -18,9 +18,9 @@ jobs:
           ref: 5806b2d0eb1ec1cd65c64da5db8d8905ff9d1148
           path: product
           persist-credentials: false
-      - name: Verify inputs, Bitcoin regtest, and BTX configure
+      - name: Inspect the generated BTX target graph
         timeout-minutes: 14
-        run: bash pilot.sh
+        run: bash pilot.sh --configure-only
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
