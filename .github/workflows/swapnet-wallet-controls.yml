@@ -1,0 +1,30 @@
+name: SwapNet startup and wallet ordering controls
+on:
+  push:
+    branches: [codex/ci-swapnet-wallet-controls]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: 14077640049
+          run-id: 43504754645
+          github-token: ${{ github.token }}
+          path: payload
+          merge-multiple: true
+      - run: bash controls.sh
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: swapnet-wallet-control-records
+          path: records/
+          retention-days: 10
+          if-no-files-found: error
