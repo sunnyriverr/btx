@@ -1,11 +1,11 @@
-name: C-PORT Windows checkpoint linked repair
+name: C-PORT Windows standalone wallet link
 permissions:
   contents: read
 jobs:
   configure:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: windows-2025
-    timeout-minutes: 60
+    timeout-minutes: 70
     env:
       BTX_NATIVE_ROOT: D:\btx-native-035
     steps:
@@ -158,7 +158,7 @@ jobs:
         cache; refusing fresh rebuild" }
 
         '
-    - name: Verify checkpoint, build and run three maintained tests
+    - name: Verify exact checkpoint, reproduce wallet link and test repair
       id: prepare
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -177,16 +177,16 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/cport-checkpoint-build.py
+        python controls/contrib/devtools/windows-root-configure/wallet-checkpoint.py
 
         exit /b %errorlevel%
 
         '
-    - name: Retain build and three test logs
+    - name: Retain dry plan evidence
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
       if: always()
       with:
-        name: c-port-windows-checkpoint-linked
+        name: c-port-windows-wallet-link
         path: D:\btx-native-035\evidence
         retention-days: 7
 'on':
