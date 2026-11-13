@@ -1,0 +1,106 @@
+diff --git a/src/modelnet/realm_channel.cpp b/src/modelnet/realm_channel.cpp
+index 297f4d59..4ba54c0e 100644
+--- a/src/modelnet/realm_channel.cpp
++++ b/src/modelnet/realm_channel.cpp
+@@ -884,7 +884,7 @@ bool RealmRollout::WriteOfflineBundle(const std::filesystem::path& path, const s
+ 
+ #ifdef _WIN32
+     // Preserve the CRLF bytes previously emitted by the Windows text stream.
+-    ReplaceAll(text, "\n", "\r\n");
++    util::ReplaceAll(text, "\n", "\r\n");
+ #endif
+     if (!WriteBinaryFileAtomically(fs::path{path}, text)) {
+         err = "BTX035_BUNDLE";
+diff --git a/src/test/modelnet_bridge_tests.cpp b/src/test/modelnet_bridge_tests.cpp
+index 6bc14664..c3ebc0cd 100644
+--- a/src/test/modelnet_bridge_tests.cpp
++++ b/src/test/modelnet_bridge_tests.cpp
+@@ -28,7 +28,9 @@
+ #include <utility>
+ #include <vector>
+ 
++#ifndef _WIN32
+ #include <unistd.h>
++#endif
+ 
+ BOOST_FIXTURE_TEST_SUITE(modelnet_bridge_tests, BasicTestingSetup)
+ 
+@@ -764,6 +766,7 @@ BOOST_AUTO_TEST_CASE(dequeued_hint_same_policy_for_any_from_addr)
+     DrainBridgeHints();
+ }
+ 
++#ifndef _WIN32 // Requires the helper Unix RPC transport.
+ // The /api/v1/feed routes read getmodelfeed from btx-modeld when
+ // BTX_BRIDGE_RPC_SOCKET is set. Each route must ask for a feed mode that
+ // getmodelfeed accepts; a refused mode leaves the route with the empty shell.
+@@ -816,4 +819,6 @@ BOOST_AUTO_TEST_CASE(api_v1_feed_routes_reach_the_helper_feed)
+     finish();
+ }
+ 
++#endif // !_WIN32
++
+ BOOST_AUTO_TEST_SUITE_END()
+--- a/src/modelnet/profile.cpp
++++ b/src/modelnet/profile.cpp
+@@ -405,9 +405,16 @@
+         return false;
+     }
+     const fs::path temporary = path.parent_path() / fs::u8path(fs::PathToString(path.filename()) + ".tmp");
+-    if (IsSymlink(path) || IsSymlink(temporary)) {
+-        err = "operator profile paths must not be symbolic links";
+-        return false;
++    for (const auto* candidate : {&path, &temporary}) {
++        std::error_code ec;
++        if (IsSymlink(*candidate, ec)) {
++            err = "operator profile paths must not be symbolic links";
++            return false;
++        }
++        if (ec && ec != std::errc::no_such_file_or_directory) {
++            err = "cannot inspect operator profile path: " + ec.message();
++            return false;
++        }
+     }
+     const std::string bytes = OperatorProfileToJson(profile, policy).write() + "\n";
+     FILE* file = fsbridge::fopen(temporary, "wb");
+--- a/src/test/modelnet_infra_tests.cpp
++++ b/src/test/modelnet_infra_tests.cpp
+@@ -446,6 +446,39 @@
+     BOOST_CHECK(!p2.preserve_rare);
+ }
+ 
++#ifdef _WIN32
++BOOST_AUTO_TEST_CASE(profile_refuses_invalid_windows_path)
++{
++    using namespace modelnet;
++    const auto path = m_path_root / "invalid<profile>.json";
++    const auto policy = ResolveProfile(OperatorProfile::PERSONAL, {});
++    std::string err;
++    BOOST_CHECK(!SaveOperatorProfile(path, OperatorProfile::PERSONAL, policy, err));
++    BOOST_CHECK_EQUAL(err.find("cannot inspect operator profile path: "), 0U);
++}
++#endif
++
++#ifndef __MINGW64__
++BOOST_AUTO_TEST_CASE(profile_refuses_destination_and_temporary_symlinks)
++{
++    using namespace modelnet;
++    const auto target = m_path_root / "profile-link-target";
++    fs::create_directory(target);
++    const auto path = OperatorProfilePath(m_path_root);
++    const auto temporary = m_path_root / "operator_profile.json.tmp";
++    const auto policy = ResolveProfile(OperatorProfile::PERSONAL, {});
++    for (const auto& link : {path, temporary}) {
++        fs::create_directory_symlink(target, link);
++        std::string err;
++        BOOST_CHECK(!SaveOperatorProfile(path, OperatorProfile::PERSONAL, policy, err));
++        BOOST_CHECK_EQUAL(err, "operator profile paths must not be symbolic links");
++        BOOST_CHECK(fs::is_empty(target));
++        BOOST_REQUIRE(fs::remove(link));
++    }
++    BOOST_CHECK(!fs::exists(path));
++}
++#endif
++
+ BOOST_AUTO_TEST_CASE(operator_rpc_overrides_reach_resolved_policy)
+ {
+     using namespace modelnet;
