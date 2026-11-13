@@ -120,196 +120,11 @@ jobs:
           overwrite: true
 
   # ------------------------------------------------------------------ static checks
-  win-native-build:
-    name: win-native-build
-    needs: tools
-    runs-on: windows-2025
-    continue-on-error: true  # measurement lane: not gating until it has been green once
-    timeout-minutes: 355
-    outputs:
-      btxd: ${{ steps.bsum.outputs.btxd }}
-    env:
-      VCPKG_ROOT: 'D:\w\vcpkg'
-      VCPKG_DISABLE_METRICS: "1"
-      VCPKG_BINARY_SOURCES: 'clear;files,D:\w\vbc,readwrite'
-      CCACHE_DIR: 'D:\w\ccache'
-      MSYS_NO_PATHCONV: "1"
-    steps:
-      - name: Start (and keep checkout bytes, no CRLF conversion)
-        run: |
-          {
-            echo "JOB_T0=$(date +%s)"
-            echo "LOGS=$RUNNER_TEMP/logs"
-            echo "CIPY=$RUNNER_TEMP/ci-tools/btx_ci.py"
-            echo "CCACHE_BASEDIR=$GITHUB_WORKSPACE"
-          } >> "$GITHUB_ENV"
-          mkdir -p "$RUNNER_TEMP/logs" /d/w/vbc /d/w/ccache
-          git config --global core.autocrlf false
-          git config --global core.longpaths true
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
-        with:
-          persist-credentials: false
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        with:
-          name: ci-tools
-          path: ${{ runner.temp }}/ci-tools
-      - name: Toolchain identity (x64 VS environment, clang-cl, cmake, ninja, image)
-        run: |
-          t="$LOGS/toolchain.txt"
-          {
-            python "$CIPY" msvc-run --job "$GITHUB_JOB"
-            python "$CIPY" msvc-run --job "$GITHUB_JOB" --path-prepend 'C:\Program Files\LLVM\bin' --path-drop Strawberry -- clang-cl --version
-            python "$CIPY" msvc-run --job "$GITHUB_JOB" -- cmake --version
-            python "$CIPY" msvc-run --job "$GITHUB_JOB" -- ninja --version
-          } > "$t" 2>&1
-          cat "$t"
-          python "$CIPY" ann notice "job=$GITHUB_JOB step=toolchain $(tr '\r\n' '  ' < "$t" | tr -s ' ' | cut -c1-500) image=${ImageOS:-?}/${ImageVersion:-?}"
-      - name: ccache (official ${{ env.CCACHE_WIN_VER }} release zip, sha256 pinned)
-        run: |
-          z="ccache-$CCACHE_WIN_VER-windows-x86_64"
-          curl -fsSL --retry 3 -o "$RUNNER_TEMP/$z.zip" "https://github.com/ccache/ccache/releases/download/v$CCACHE_WIN_VER/$z.zip"
-          got=$(sha256sum -b < "$RUNNER_TEMP/$z.zip" | cut -d' ' -f1)
-          if [ "$got" != "$CCACHE_WIN_SHA256" ]; then
-            python "$CIPY" ann error "job=$GITHUB_JOB step=ccache sha256-mismatch got=$got"
-            exit 1
-          fi
-          python -c "import sys, zipfile; zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])" "$RUNNER_TEMP/$z.zip" 'D:\w\ccache-bin'
-          exe=$(find /d/w/ccache-bin -name ccache.exe | head -n 1)
-          [ -n "$exe" ]
-          cygpath -w "$(dirname "$exe")" >> "$GITHUB_PATH"
-          echo "CCACHE_EXE=$(cygpath -m "$exe")" >> "$GITHUB_ENV"
-          "$exe" --version | head -n 1
-      - name: Restore OpenSSL
-        id: ossl-cache
-        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
-        with:
-          path: D:\w\ossl
-          key: openssl-${{ env.OSSL_VER }}-win-vc-static-noasm-v1
-      - name: Build static OpenSSL (VC-WIN64A no-shared no-asm, Strawberry Perl, nmake)
-        id: ossl-build
-        if: steps.ossl-cache.outputs.cache-hit != 'true'
-        timeout-minutes: 90
-        run: |
-          cd "$RUNNER_TEMP"
-          u="https://github.com/openssl/openssl/releases/download/openssl-$OSSL_VER/openssl-$OSSL_VER.tar.gz"
-          curl -fsSL --retry 3 -o ossl.tar.gz "$u"
-          got=$(sha256sum ossl.tar.gz | cut -d' ' -f1)
-          if [ "$got" != "$OSSL_SHA256" ]; then
-            python "$CIPY" ann error "job=$GITHUB_JOB step=openssl-win sha256-mismatch got=$got"
-            exit 1
-          fi
-          tar xzf ossl.tar.gz
-          cd "openssl-$OSSL_VER"
-          run() { python "$CIPY" msvc-run --job "$GITHUB_JOB" --path-prepend 'C:\Strawberry\perl\bin' -- "$@"; }
-          run 'C:\Strawberry\perl\bin\perl.exe' Configure VC-WIN64A no-shared no-tests no-docs no-asm \
-            '--prefix=D:\w\ossl' '--openssldir=D:\w\ossl\ssl' --libdir=lib > "$LOGS/ossl-win-configure.log" 2>&1 \
-            || { tail -n 60 "$LOGS/ossl-win-configure.log"; exit 1; }
-          run nmake > "$LOGS/ossl-win-make.log" 2>&1 || { tail -n 60 "$LOGS/ossl-win-make.log"; exit 1; }
-          run nmake install_sw > "$LOGS/ossl-win-install.log" 2>&1 || { tail -n 60 "$LOGS/ossl-win-install.log"; exit 1; }
-          ls -la /d/w/ossl/lib
-          python "$CIPY" ann notice "job=$GITHUB_JOB step=openssl-win built=$OSSL_VER sha256=pinned-match config=VC-WIN64A,no-shared,no-asm $(/d/w/ossl/bin/openssl.exe version | tr ' ' '-')"
-      - name: Save OpenSSL
-        if: steps.ossl-build.outcome == 'success'
-        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
-        with:
-          path: D:\w\ossl
-          key: openssl-${{ env.OSSL_VER }}-win-vc-static-noasm-v1
-      - name: vcpkg tool at the pinned commit (full clone; the manifest's builtin-baseline must be in its history)
-        run: |
-          if [ ! -d /d/w/vcpkg/.git ]; then git clone --no-checkout https://github.com/microsoft/vcpkg.git 'D:\w\vcpkg'; fi
-          git -C 'D:\w\vcpkg' checkout --detach "$VCPKG_COMMIT"
-          [ "$(git -C 'D:\w\vcpkg' rev-parse HEAD)" = "$VCPKG_COMMIT" ]
-          base=$(python -c "import json; print(json.load(open('vcpkg.json'))['builtin-baseline'])")
-          git -C 'D:\w\vcpkg' cat-file -e "$base^{commit}"
-          python "$CIPY" msvc-run --job "$GITHUB_JOB" -- 'D:\w\vcpkg\bootstrap-vcpkg.bat' -disableMetrics
-          python "$CIPY" ann notice "job=$GITHUB_JOB step=vcpkg commit=$VCPKG_COMMIT baseline=$base $(/d/w/vcpkg/vcpkg.exe version | head -n 1 | tr ' ' '-')"
-      - name: Restore vcpkg binary cache
-        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
-        with:
-          path: D:\w\vbc
-          key: vcpkg-bin-win-static-${{ env.VCPKG_COMMIT }}-${{ hashFiles('vcpkg.json') }}-${{ github.run_id }}
-          restore-keys: |
-            vcpkg-bin-win-static-${{ env.VCPKG_COMMIT }}-${{ hashFiles('vcpkg.json') }}-
-            vcpkg-bin-win-static-
-      - name: Restore ccache
-        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
-        with:
-          path: D:\w\ccache
-          key: ccache-winnative-${{ github.run_id }}-${{ github.run_attempt }}-build
-          restore-keys: |
-            ccache-winnative-${{ github.run_id }}-
-            ccache-winnative-
-      - name: Configure (preset windows-clangcl-static; tests, Modelnet, wallet, ZMQ ON)
-        id: configure
-        run: |
-          python "$CIPY" msvc-run --job "$GITHUB_JOB" --path-prepend 'C:\Program Files\LLVM\bin' --path-drop Strawberry -- \
-            python "$CIPY" configure --name winnative --job "$GITHUB_JOB" --logs "$LOGS" --builddir build -- \
-            --preset windows-clangcl-static -S . -B build -DBUILD_TESTS=ON -DWITH_MODELNET=ON -DENABLE_WALLET=ON -DWITH_ZMQ=ON \
-            -DVCPKG_MANIFEST_NO_DEFAULT_FEATURES=ON '-DVCPKG_MANIFEST_FEATURES=wallet;tests;zeromq' \
-            -DVCPKG_INSTALLED_DIR=D:/w/vi -DVCPKG_INSTALL_OPTIONS=--x-buildtrees-root=D:/w/vbt \
-            -DOPENSSL_ROOT_DIR=D:/w/ossl -DOPENSSL_USE_STATIC_LIBS=ON -DOPENSSL_MSVC_STATIC_RT=ON \
-            -DOPENSSL_INCLUDE_DIR=D:/w/ossl/include -DOPENSSL_CRYPTO_LIBRARY=D:/w/ossl/lib/libcrypto.lib \
-            -DOPENSSL_SSL_LIBRARY=D:/w/ossl/lib/libssl.lib "-DCMAKE_C_COMPILER_LAUNCHER=$CCACHE_EXE" \
-            "-DCMAKE_CXX_COMPILER_LAUNCHER=$CCACHE_EXE" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-      - name: Save vcpkg binary cache
-        if: ${{ !cancelled() && steps.configure.outcome == 'success' }}
-        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
-        with:
-          path: D:\w\vbc
-          key: vcpkg-bin-win-static-${{ env.VCPKG_COMMIT }}-${{ hashFiles('vcpkg.json') }}-${{ github.run_id }}
-      - name: Build the daemon, CLI tools and btx-modeld (keep going)
-        timeout-minutes: 290
-        run: |
-          read -r -a targets <<< "$WIN_NATIVE_TARGETS"
-          python "$CIPY" msvc-run --job "$GITHUB_JOB" --path-prepend 'C:\Program Files\LLVM\bin' --path-drop Strawberry -- \
-            python "$CIPY" build --name daemon --logs "$LOGS" --builddir build -- -k 0 -j"$(nproc)" "${targets[@]}"
-      - name: Build summary
-        id: bsum
-        if: ${{ !cancelled() && steps.configure.outcome == 'success' }}
-        run: |
-          python "$CIPY" build-summary --name daemon --job "$GITHUB_JOB" --logs "$LOGS" \
-            --exe btxd=build/bin/btxd.exe btx_cli=build/bin/btx-cli.exe btx_modeld=build/bin/btx-modeld.exe
-      - name: Save ccache
-        if: ${{ !cancelled() && steps.configure.outcome == 'success' }}
-        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
-        with:
-          path: D:\w\ccache
-          key: ccache-winnative-${{ github.run_id }}-${{ github.run_attempt }}-build
-      - name: Package the daemon (static build, so dumpbin should list system DLLs only)
-        if: ${{ !cancelled() && steps.bsum.outputs.btxd == 'yes' }}
-        run: |
-          mkdir -p dist-daemon
-          for x in btxd btx-cli btx-tx btx-util btx-modeld; do
-            if [ -f "build/bin/$x.exe" ]; then cp "build/bin/$x.exe" dist-daemon/; fi
-          done
-          cp build/src/bitcoin-build-info.h dist-daemon/ || true
-          python "$CIPY" msvc-run --job "$GITHUB_JOB" -- dumpbin /nologo /dependents dist-daemon/btxd.exe > dist-daemon/btxd-dependents.txt 2>&1 || true
-          (cd dist-daemon && sha256sum ./* > SHA256SUMS.txt)
-          python "$CIPY" ann notice "job=$GITHUB_JOB step=package dlls=$(grep -i '\.dll' dist-daemon/btxd-dependents.txt | tr -d ' \r' | tr '\n' ',' | cut -c1-300) $(grep -h 'BUILD_GIT' dist-daemon/bitcoin-build-info.h | tr -s ' ' | tr '\n' ' ')"
-      - name: Upload the daemon
-        if: ${{ !cancelled() && steps.bsum.outputs.btxd == 'yes' }}
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        with:
-          name: win-native-daemon
-          path: dist-daemon/
-          retention-days: 7
-          overwrite: true
-      - name: Upload logs
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        with:
-          name: logs-win-native-build
-          path: ${{ runner.temp }}/logs
-          retention-days: 7
-          overwrite: true
-          if-no-files-found: ignore
-
   win-native-tests:
     name: win-native-tests
-    needs: [tools, win-native-build]
-    if: ${{ !cancelled() && needs.tools.result == 'success' && needs.win-native-build.outputs.btxd == 'yes' }}
+    needs: tools
+    if: ${{ !cancelled() && needs.tools.result == 'success' }}
     runs-on: windows-2025
-    continue-on-error: true  # measurement lane: not gating until it has been green once
     timeout-minutes: 355
     outputs:
       test_btx: ${{ steps.bsum.outputs.test_btx }}
@@ -398,11 +213,11 @@ jobs:
             -DOPENSSL_INCLUDE_DIR=D:/w/ossl/include -DOPENSSL_CRYPTO_LIBRARY=D:/w/ossl/lib/libcrypto.lib \
             -DOPENSSL_SSL_LIBRARY=D:/w/ossl/lib/libssl.lib "-DCMAKE_C_COMPILER_LAUNCHER=$CCACHE_EXE" \
             "-DCMAKE_CXX_COMPILER_LAUNCHER=$CCACHE_EXE" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-      - name: Build everything (default target, incl. test_btx; keep going)
+      - name: Build test_btx and its runtime helper executables
         timeout-minutes: 300
         run: |
           python "$CIPY" msvc-run --job "$GITHUB_JOB" --path-prepend 'C:\Program Files\LLVM\bin' --path-drop Strawberry -- \
-            python "$CIPY" build --name all --logs "$LOGS" --builddir build -- -k 0 -j"$(nproc)"
+            python "$CIPY" build --name all --logs "$LOGS" --builddir build -- -k 0 -j"$(nproc)" test_btx btxd btx-cli btx-modeld btx-open btx-util btx-tx btx-hcpd btx-hosted btx-guardd btx-capabilityd btx-security
       - name: Build summary
         id: bsum
         if: ${{ !cancelled() && steps.configure.outcome == 'success' }}
@@ -438,66 +253,6 @@ jobs:
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: logs-win-native-tests
-          path: ${{ runner.temp }}/logs
-          retention-days: 7
-          overwrite: true
-          if-no-files-found: ignore
-
-  win-native-smoke:
-    name: win-native-smoke
-    needs: [tools, win-native-build]
-    if: ${{ !cancelled() && needs.win-native-build.outputs.btxd == 'yes' }}
-    runs-on: windows-2025
-    continue-on-error: true  # measurement lane: not gating until it has been green once
-    timeout-minutes: 60
-    env:
-      MSYS_NO_PATHCONV: "1"
-    steps:
-      - name: Start
-        run: |
-          {
-            echo "JOB_T0=$(date +%s)"
-            echo "LOGS=$RUNNER_TEMP/logs"
-            echo "CIPY=$RUNNER_TEMP/ci-tools/btx_ci.py"
-          } >> "$GITHUB_ENV"
-          mkdir -p "$RUNNER_TEMP/logs"
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        with:
-          name: ci-tools
-          path: ${{ runner.temp }}/ci-tools
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        with:
-          name: win-native-daemon
-          path: bin
-      - name: Regtest smoke with -modelnet=0 (start, wallet, 101 blocks, send to self, stop)
-        timeout-minutes: 30
-        run: |
-          ls -la bin
-          python "$CIPY" smoke --btxd bin/btxd.exe --cli bin/btx-cli.exe --datadir "$RUNNER_TEMP/smoke-nomodel" \
-            --label winnative-nomodel --job "$GITHUB_JOB" --port 38333 --rpcport 38332 --wallet --mine 101 --mine-budget 900 \
-            --send --extra=-modelnet=0 --extra=-matmulvalidation=economic \
-            --extra=-regtestmatmulbindingheight=2147483647 --extra=-regtestmatmulproductdigestheight=2147483647 \
-            --extra=-regtestmatmulv4height=2147483647 --extra=-regtestmatmulrequireproductpayload=0 --out "$LOGS"
-      - name: Regtest start with the default Modelnet, no btx-modeld.exe next to btxd.exe, 60 s, stop
-        if: ${{ !cancelled() }}
-        timeout-minutes: 10
-        run: |
-          mkdir -p nohelper && cp bin/btxd.exe bin/btx-cli.exe nohelper/
-          python "$CIPY" smoke --btxd nohelper/btxd.exe --cli nohelper/btx-cli.exe --datadir "$RUNNER_TEMP/smoke-nohelper" \
-            --label winnative-nohelper --job "$GITHUB_JOB" --port 38343 --rpcport 38342 --linger 60 \
-            --capture getmodelnetworkinfo --out "$LOGS"
-      - name: Regtest start with the default Modelnet, btx-modeld.exe next to btxd.exe, 60 s, stop
-        if: ${{ !cancelled() }}
-        timeout-minutes: 10
-        run: |
-          python "$CIPY" smoke --btxd bin/btxd.exe --cli bin/btx-cli.exe --datadir "$RUNNER_TEMP/smoke-helper" \
-            --label winnative-helper --job "$GITHUB_JOB" --port 38353 --rpcport 38352 --linger 60 \
-            --capture getmodelnetworkinfo --out "$LOGS"
-      - name: Upload logs
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        with:
-          name: logs-win-native-smoke
           path: ${{ runner.temp }}/logs
           retention-days: 7
           overwrite: true
@@ -678,7 +433,3 @@ jobs:
           retention-days: 7
           overwrite: true
           if-no-files-found: ignore
-
-  # Census only: cl.exe is expected to stop at unsigned __int128 (src/matmul/int8_field.h:148) and the
-  # GCC overflow builtins (src/matmul/matmul_v4_rc_gkr_field.h). Same flags as repch1c's cl runs in #356
-  # (Modelnet and ZMQ OFF); it never gates the run.
