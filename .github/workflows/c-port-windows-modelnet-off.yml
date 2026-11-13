@@ -1,42 +1,43 @@
-name: C-PORT Windows ModelNet-off probe
+name: C-PORT Windows linked ModelNet-off control
 on:
   push:
     branches: [codex/ci-cport-windows-modelnet-off]
 permissions:
   contents: read
+  actions: read
 jobs:
   control:
     runs-on: windows-2025
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
+      - name: Preserve checkout bytes
+        shell: bash
+        run: git config --global core.autocrlf false
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           persist-credentials: false
-      - name: Compare path conversion settings
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          artifact-ids: 14025253627
+          github-token: ${{ github.token }}
+          run-id: 43386332886
+          path: build/bin
+      - name: Run only the previously failing linked test
         shell: bash
         run: |
           mkdir -p evidence
-          command -v c++ | tee evidence/compiler.txt
-          c++ --version >> evidence/compiler.txt
-          script=contrib/modelnet/check-with-modelnet-off.sh
-          rc=0
-          MSYS_NO_PATHCONV=1 bash "$script" > evidence/disabled.log 2>&1 || rc=$?
-          echo "$rc" > evidence/disabled.rc
-          (
-            unset MSYS_NO_PATHCONV
-            rc=0
-            bash "$script" > evidence/default.log 2>&1 || rc=$?
-            echo "$rc" > evidence/default.rc
-          )
-          cat evidence/disabled.log evidence/default.log
-          test "$(cat evidence/disabled.rc)" = 1
-          grep -E '/tmp/.*probe.cpp.*No such file' evidence/disabled.log
-          test "$(cat evidence/default.rc)" = 0
-          grep -F '11 checks passed' evidence/default.log
-          grep -F 'ok 7 - disabled_stub.h #errors when ENABLE_MODELNET is set' evidence/default.log
+          sha256sum build/bin/test_btx.exe | tee evidence/test_btx.sha256
+          grep -Fx '87e2a0ca5616c7d305bb2fefcd6e9699beca547d409e448547e49741f884bfa3 *build/bin/test_btx.exe' evidence/test_btx.sha256 ||
+            grep -Fx '87e2a0ca5616c7d305bb2fefcd6e9699beca547d409e448547e49741f884bfa3  build/bin/test_btx.exe' evidence/test_btx.sha256
+          unset MSYS_NO_PATHCONV
+          export BOOST_TEST_COLOR_OUTPUT=0
+          build/bin/test_btx.exe --run_test=modelnet_ahp_comp_tests/ahp_comp_05_modelnet_disabled_build --log_level=all 2>&1 | tee evidence/linked.log
+          grep -F '11 checks passed' evidence/linked.log
+          grep -F 'ok 7 - disabled_stub.h #errors when ENABLE_MODELNET is set' evidence/linked.log
+          grep -F 'No errors detected' evidence/linked.log
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: ${{ !cancelled() }}
         with:
-          name: windows-modelnet-off-control
+          name: windows-linked-modelnet-off-control
           path: evidence/
           if-no-files-found: error
