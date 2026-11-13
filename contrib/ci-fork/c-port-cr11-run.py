@@ -25,7 +25,7 @@ for name, data in variants:
     work.mkdir()
     local = work / "hcp_cr11.cpp"
     local.write_bytes(data)
-    command = [compiler, "/nologo", "/std:c++20", "/EHsc", "/O2", "/MT",
+    command = [compiler, "/nologo", "/std:c++20", "/EHsc", "/O2", "/MT", "/DWIN32", "/Zc:preprocessor", "/Zc:__cplusplus",
                f"/I{root / 'src'}", f"/I{univalue / 'include'}",
                str(harness), str(local),
                *map(str, sorted((univalue / "lib").glob("univalue*.cpp"))), "/Fe:control.exe"]
