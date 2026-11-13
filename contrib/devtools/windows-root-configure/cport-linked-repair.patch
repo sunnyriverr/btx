@@ -1,0 +1,171 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 3edfd3e37..8a7e03c9a 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -1969,6 +1969,9 @@ if(ENABLE_WALLET)
+     )
+     if((UNIX AND NOT APPLE) OR MINGW)
+       target_link_btx_linux_archive_group(btx-wallet ${BTX_NODE_WALLET_ARCHIVES})
++    elseif(WIN32)
++      # The wallet archive's shielded RPC objects reference node symbols.
++      target_link_libraries(btx-wallet bitcoin_wallet bitcoin_node)
+     else()
+       target_link_libraries(btx-wallet bitcoin_wallet)
+     endif()
+diff --git a/src/matmul-v4-rc-harness.cpp b/src/matmul-v4-rc-harness.cpp
+index dafd814ea..31fabdb79 100644
+--- a/src/matmul-v4-rc-harness.cpp
++++ b/src/matmul-v4-rc-harness.cpp
+@@ -548,30 +548,27 @@ bool ApplyBackendDispatch(const std::string& backend, std::string& err)
+ {
+     const char* env = std::getenv("BTX_MATMUL_V4_BACKEND");
+     const std::string env_s = (env != nullptr) ? std::string(env) : std::string{};
+-    auto conflict = [&](const std::string& want) {
+-        if (!env_s.empty() && env_s != want && env_s != "auto") {
+-            err = "conflict: --backend " + backend + " vs BTX_MATMUL_V4_BACKEND=" + env_s +
+-                  " (set them equal, or unset the env)";
+-            return true;
+-        }
++    if (backend == "auto") return true;
++    if (backend != "cpu" && backend != "cuda" && backend != "hip" &&
++        backend != "metal" && backend != "ascend") {
++        err = "unknown --backend " + backend + " (want cpu|cuda|hip|metal|ascend|auto)";
+         return false;
+-    };
+-    if (backend == "cpu") {
+-        if (conflict("cpu")) return false;
+-        setenv("BTX_MATMUL_V4_BACKEND", "cpu", 1);
+-        return true;
+-    }
+-    if (backend == "auto") {
+-        // Leave env untouched; ResolveBackend picks default/cert registry.
+-        return true;
+-    }
+-    if (backend == "cuda" || backend == "hip" || backend == "metal" || backend == "ascend") {
+-        if (conflict(backend)) return false;
+-        setenv("BTX_MATMUL_V4_BACKEND", backend.c_str(), 1);
+-        return true;
+-    }
+-    err = "unknown --backend " + backend + " (want cpu|cuda|hip|metal|ascend|auto)";
+-    return false;
++    }
++    if (!env_s.empty() && env_s != backend && env_s != "auto") {
++        err = "conflict: --backend " + backend + " vs BTX_MATMUL_V4_BACKEND=" + env_s +
++              " (set them equal, or unset the env)";
++        return false;
++    }
++#if defined(_WIN32)
++    const int status = _putenv_s("BTX_MATMUL_V4_BACKEND", backend.c_str());
++#else
++    const int status = setenv("BTX_MATMUL_V4_BACKEND", backend.c_str(), 1);
++#endif
++    if (status != 0) {
++        err = "could not set BTX_MATMUL_V4_BACKEND";
++        return false;
++    }
++    return true;
+ }
+ 
+ int RunCoupledHarness(const Args& args)
+diff --git a/src/modelnet/realm_channel.cpp b/src/modelnet/realm_channel.cpp
+index 297f4d59d..4ba54c0e6 100644
+--- a/src/modelnet/realm_channel.cpp
++++ b/src/modelnet/realm_channel.cpp
+@@ -884,7 +884,7 @@ bool RealmRollout::WriteOfflineBundle(const std::filesystem::path& path, const s
+ 
+ #ifdef _WIN32
+     // Preserve the CRLF bytes previously emitted by the Windows text stream.
+-    ReplaceAll(text, "\n", "\r\n");
++    util::ReplaceAll(text, "\n", "\r\n");
+ #endif
+     if (!WriteBinaryFileAtomically(fs::path{path}, text)) {
+         err = "BTX035_BUNDLE";
+diff --git a/src/test/modelnet_bridge_tests.cpp b/src/test/modelnet_bridge_tests.cpp
+index 6bc146644..c3ebc0cd0 100644
+--- a/src/test/modelnet_bridge_tests.cpp
++++ b/src/test/modelnet_bridge_tests.cpp
+@@ -28,7 +28,9 @@
+ #include <utility>
+ #include <vector>
+ 
++#ifndef _WIN32
+ #include <unistd.h>
++#endif
+ 
+ BOOST_FIXTURE_TEST_SUITE(modelnet_bridge_tests, BasicTestingSetup)
+ 
+@@ -764,6 +766,7 @@ BOOST_AUTO_TEST_CASE(dequeued_hint_same_policy_for_any_from_addr)
+     DrainBridgeHints();
+ }
+ 
++#ifndef _WIN32 // Requires the helper Unix RPC transport.
+ // The /api/v1/feed routes read getmodelfeed from btx-modeld when
+ // BTX_BRIDGE_RPC_SOCKET is set. Each route must ask for a feed mode that
+ // getmodelfeed accepts; a refused mode leaves the route with the empty shell.
+@@ -816,4 +819,6 @@ BOOST_AUTO_TEST_CASE(api_v1_feed_routes_reach_the_helper_feed)
+     finish();
+ }
+ 
++#endif // !_WIN32
++
+ BOOST_AUTO_TEST_SUITE_END()
+diff --git a/src/modelnet/hcp_cr11.cpp b/src/modelnet/hcp_cr11.cpp
+index 790fbe6eb..5df06171d 100644
+--- a/src/modelnet/hcp_cr11.cpp
++++ b/src/modelnet/hcp_cr11.cpp
+@@ -198,7 +198,7 @@ bool Cr11Tco(const std::string& annual_tasks, const std::string& service_per_tas
+         // fractional digits by long division: the result is the same floor.
+         // Inputs too large to represent give null, as below, instead of
+         // wrapping.
+-        const __int128 kMax = std::numeric_limits<__int128>::max();
++        constexpr auto kMax = static_cast<__int128>(~static_cast<unsigned __int128>(0) >> 1);
+         UniValue be;
+         if (local >= 0 && unit <= kMax / 10 / years) {
+             const __int128 denom = unit * years;
+diff --git a/src/test/lightwatch_tests.cpp b/src/test/lightwatch_tests.cpp
+index 9f5224307..521142bd3 100644
+--- a/src/test/lightwatch_tests.cpp
++++ b/src/test/lightwatch_tests.cpp
+@@ -436,9 +436,12 @@ BOOST_AUTO_TEST_CASE(lightwatch_file_cut_at_a_line_end_is_refused)
+     BOOST_CHECK(!missing.Load(path, error));
+ 
+     // A version 1 file has no trailer. It is still read, and saving it writes version 2.
++    // Save writes through a text stream, so the line ends are CRLF on Windows.
++    const std::string v2_header{"btx-lightwatch 2"};
+     std::string v1 = text.substr(0, text.rfind("end "));
+-    BOOST_REQUIRE_EQUAL(v1.rfind("btx-lightwatch 2\n", 0), 0U);
+-    v1.replace(0, std::string("btx-lightwatch 2").size(), "btx-lightwatch 1");
++    BOOST_REQUIRE_EQUAL(v1.rfind(v2_header, 0), 0U);
++    BOOST_REQUIRE_EQUAL(v1.find_first_of("\r\n"), v2_header.size());
++    v1.replace(0, v2_header.size(), "btx-lightwatch 1");
+     write(v1);
+     LightWatch old;
+     BOOST_REQUIRE(old.Load(path, error));
+diff --git a/src/test/modelnet_jit_mat_tests.cpp b/src/test/modelnet_jit_mat_tests.cpp
+index 282086640..aaf7b8b09 100644
+--- a/src/test/modelnet_jit_mat_tests.cpp
++++ b/src/test/modelnet_jit_mat_tests.cpp
+@@ -15,7 +15,7 @@
+ 
+ #include <cstdint>
+ #include <string>
+-#include <sys/stat.h>
++#include <system_error>
+ #include <vector>
+ 
+ namespace modelnet {
+@@ -210,10 +210,10 @@ BOOST_AUTO_TEST_CASE(jit_mat_05_unsafe_hardlink)
+     BOOST_CHECK_EQUAL(std::string(snap.begin(), snap.end()), original);
+     BOOST_CHECK(std::string(snap.begin(), snap.end()) != "MUTATED-OPERATOR");
+ 
+-    struct stat st_src {}, st_dst {};
+-    BOOST_REQUIRE_EQUAL(::stat(fs::PathToString(src).c_str(), &st_src), 0);
+-    BOOST_REQUIRE_EQUAL(::stat(fs::PathToString(dest).c_str(), &st_dst), 0);
+-    BOOST_CHECK(st_src.st_ino != st_dst.st_ino);
++    std::error_code identity_error;
++    const bool same_file = fs::equivalent(src, dest, identity_error);
++    BOOST_REQUIRE_MESSAGE(!identity_error, identity_error.message());
++    BOOST_CHECK(!same_file);
+     BOOST_CHECK(!FuseMountDirectory(fs::PathToString(m_path_root), "jit-mat-05-snap.bin", {std::vector<unsigned char>(snap.begin(), snap.end())},
+                                     {true}, gen, err_code, err));
+     BOOST_CHECK_EQUAL(err_code, "OVERWRITE_REFUSED");
