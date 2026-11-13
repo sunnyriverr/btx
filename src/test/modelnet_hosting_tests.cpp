@@ -27,6 +27,8 @@
 #include <tinyformat.h>
 #include <univalue.h>
 #include <util/fs.h>
+#include <util/sock.h>
+#include <util/threadinterrupt.h>
 #include <util/strencodings.h>
 #include <util/syserror.h>
 
@@ -39,6 +41,8 @@
 #include <chrono>
 #include <cstdlib>
 #include <fstream>
+#include <future>
+#include <memory>
 #include <iterator>
 #include <set>
 #include <string>
@@ -48,6 +52,8 @@
 #ifndef WIN32
 #include <fcntl.h>
 #include <sys/resource.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #endif
@@ -585,6 +591,66 @@ BOOST_AUTO_TEST_CASE(start_socket_path_that_cannot_fit_does_not_spawn)
 #endif
 
 #ifndef WIN32
+BOOST_AUTO_TEST_CASE(external_helper_shutdown_cancels_inflight_health_read)
+{
+    // Use a short private socket path. Test datadirs can exceed sun_path.
+    char dir[] = "/tmp/btx-supervisor-XXXXXX";
+    BOOST_REQUIRE(::mkdtemp(dir) != nullptr);
+    const fs::path root{dir};
+    const auto cleanup = std::unique_ptr<const fs::path, void (*)(const fs::path*)>{
+        &root, [](const fs::path* path) {
+            std::error_code ignored;
+            fs::remove_all(*path, ignored);
+        }};
+    using namespace std::chrono_literals;
+    const fs::path socket_path = root / "helper.sock";
+    const std::string path = fs::PathToString(socket_path);
+
+    const int fd = ::socket(AF_UNIX, SOCK_STREAM, 0);
+    BOOST_REQUIRE(fd >= 0);
+    Sock listener{static_cast<SOCKET>(fd)};
+    sockaddr_un address{};
+    address.sun_family = AF_UNIX;
+    BOOST_REQUIRE(path.size() < sizeof(address.sun_path));
+    std::memcpy(address.sun_path, path.c_str(), path.size() + 1);
+    BOOST_REQUIRE(listener.Bind(reinterpret_cast<sockaddr*>(&address), sizeof(address)) == 0);
+    BOOST_REQUIRE(listener.Listen(1) == 0);
+    BOOST_REQUIRE(listener.SetNonBlocking());
+
+    modelnet::HelperLaunchConfig cfg;
+    cfg.rpc_socket = socket_path;
+    cfg.external_socket = true;
+    modelnet::HelperSupervisor supervisor{std::move(cfg)};
+    std::string error;
+    BOOST_REQUIRE(supervisor.Start(error));
+
+    BOOST_REQUIRE(listener.Wait(5s, Sock::RECV));
+    auto peer = listener.Accept(nullptr, nullptr);
+    BOOST_REQUIRE(peer);
+    BOOST_REQUIRE(peer->SetNonBlocking());
+    // The received request proves the connection reached the reply path.
+    CThreadInterrupt interrupt;
+    const auto wire = peer->RecvUntilTerminator('\n', 5s, interrupt, 4096);
+    UniValue request;
+    BOOST_REQUIRE(request.read(wire));
+    BOOST_CHECK_EQUAL(request["method"].get_str(), "getmodelnetworkinfo");
+
+    std::promise<void> stopped;
+    auto result = stopped.get_future();
+    std::jthread stop_thread{[&] {
+        supervisor.Stop();
+        stopped.set_value();
+    }};
+    const auto status = result.wait_for(2s);
+    // Unblock the baseline before joining the test thread.
+    peer.reset();
+    stop_thread.join();
+
+    BOOST_CHECK(status == std::future_status::ready);
+    BOOST_CHECK(supervisor.Snapshot().state == modelnet::HelperState::DISABLED);
+    BOOST_CHECK(!listener.Accept(nullptr, nullptr));
+}
+
 BOOST_AUTO_TEST_CASE(start_spawned_helper_does_not_inherit_descriptors)
 {
     // A descriptor without FD_CLOEXEC, like btxd's P2P listen socket. A helper

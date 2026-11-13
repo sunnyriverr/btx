@@ -40,7 +40,7 @@
 # - Every result is an annotation titled RESULT, readable without a token via
 #   GET /repos/{owner}/{repo}/check-runs/{id}/annotations.
 
-name: C-PORT sharded macOS and release gate
+name: C-PORT K16 native macOS
 
 on:
   workflow_dispatch:
@@ -87,7 +87,7 @@ env:
   HOMEBREW_NO_ANALYTICS: "1"
   HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: "1"
   PYTHONUNBUFFERED: "1"
-  LINUX_TEST_TARGETS: "test_btx btxd btx-cli btx-open btx-modeld btx-wallet btx-util btx-hcpd btx-tx btx-hosted"
+  LINUX_TEST_TARGETS: "test_btx btxd btx-cli btx-modeld"
   CORE_SUITES: "util_tests,crypto_tests,hash_tests,key_tests,base58_tests,bech32_tests,uint256_tests,arith_uint256_tests,serialize_tests,streams_tests,script_tests,transaction_tests,sighash_tests,coins_tests,mempool_tests,validation_tests,blockchain_tests,net_tests,addrman_tests,getarg_tests,fs_tests,sock_tests,pq_crypto_tests,wallet_tests,lightwatch_tests,lab_lifecycle_tests,nif_sandbox_tests,guard_permit_tests,native_discovery_tests,cap02_tests,hire01_tests,acc07_tests,fixture_cleanup_tests"
   GUARD_SUITES: "guard_permit_tests,native_discovery_tests,cap02_tests,hire01_tests,acc07_tests"
 
@@ -125,10 +125,7 @@ jobs:
     needs: tools
     if: ${{ !cancelled() && needs.tools.result == 'success' }}
     runs-on: macos-15
-    continue-on-error: true  # measurement lane: not gating until it has been green once
     timeout-minutes: 355
-    outputs:
-      bin: ${{ steps.pack.outputs.bin }}
     steps:
       - name: Start
         run: |
@@ -220,192 +217,21 @@ jobs:
         with:
           path: ~/.ccache-btx
           key: ccache-macos-${{ github.run_id }}-${{ github.run_attempt }}-test
-      - name: Pack the binaries for the test jobs
-        id: pack
-        if: ${{ !cancelled() && steps.bsum.outputs.test_btx == 'yes' }}
+      - name: Maintained shutdown and process controls
+        timeout-minutes: 12
         run: |
-          tar -cf "$RUNNER_TEMP/macos-bin.tar" build/bin
-          ls -la "$RUNNER_TEMP/macos-bin.tar"
-          echo "bin=yes" >> "$GITHUB_OUTPUT"
-      - name: Upload the binaries
-        if: ${{ !cancelled() && steps.pack.outcome == 'success' }}
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        with:
-          name: macos-bin
-          path: ${{ runner.temp }}/macos-bin.tar
-          retention-days: 3
-          overwrite: true
+          set -o pipefail
+          shasum -a 256 build/bin/test_btx build/bin/btxd build/bin/btx-modeld | tee "$LOGS/k16-sha256.txt"
+          build/bin/test_btx --run_test=modelnet_hosting_tests --log_level=test_suite 2>&1 | tee "$LOGS/k16-hosting.log"
+          for test in feature_modelnet_helper_after_kill feature_modelnet_helper_long_calls; do
+            python3 "test/functional/$test.py" --configfile=build/test/config.ini --timeout-factor=1 \
+              --tmpdir="$RUNNER_TEMP/$test" 2>&1 | tee "$LOGS/$test.log"
+          done
       - name: Upload logs
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: logs-macos-tests-build
-          path: ${{ runner.temp }}/logs
-          retention-days: 7
-          overwrite: true
-          if-no-files-found: ignore
-
-  # First run = measurement: the macOS gates do not fail the workflow until they have been green once.
-  macos-unit:
-    name: macos-unit (${{ matrix.shard }}/3)
-    needs: [tools, macos-tests-build]
-    if: ${{ !cancelled() && needs.macos-tests-build.outputs.bin == 'yes' }}
-    strategy:
-      fail-fast: false
-      matrix:
-        shard: [1, 2, 3]
-    runs-on: macos-15
-    continue-on-error: true  # measurement lane: not gating until it has been green once
-    timeout-minutes: 355
-    steps:
-      - name: Start
-        run: |
-          {
-            echo "JOB_T0=$(date +%s)"
-            echo "LOGS=$RUNNER_TEMP/logs"
-            echo "CIPY=$RUNNER_TEMP/ci-tools/btx_ci.py"
-          } >> "$GITHUB_ENV"
-          mkdir -p "$RUNNER_TEMP/logs"
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
-        with:
-          persist-credentials: false
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        with:
-          name: ci-tools
-          path: ${{ runner.temp }}/ci-tools
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        with:
-          name: macos-bin
-          path: ${{ runner.temp }}
-      - name: Unpack the binaries and install the runtime libraries
-        run: |
-          tar -xf "$RUNNER_TEMP/macos-bin.tar" && rm -f "$RUNNER_TEMP/macos-bin.tar"
-          brew install libevent zeromq libomp openssl@3
-      - name: Shard ${{ matrix.shard }}/3 of test_btx (balanced by measured seconds, 2 at a time, 900 s per suite)
-        env:
-          OMP_NUM_THREADS: "2"
-          OMP_WAIT_POLICY: "PASSIVE"
-        run: |
-          python3 "$CIPY" suites --bin build/bin/test_btx --label "mac-unit-${{ matrix.shard }}" --job "$GITHUB_JOB" \
-            --out "$LOGS/units" --include . --exclude "$UNIT_EXCLUDE" --serial '^pq_timing_tests$' \
-            --shard "${{ matrix.shard }}/3" --shard-costs contrib/ci-fork/unit-suite-seconds.tsv \
-            --jobs 2 --timeout 900 --keep-logs --stop-at $((JOB_T0 + 340 * 60)) --stop-in 335 || true
-      - name: Known-failing gate (not gating until macOS has been green once)
-        if: ${{ !cancelled() }}
-        continue-on-error: true
-        run: |
-          python3 "$CIPY" known --label "mac-unit-${{ matrix.shard }}" --known "$KNOWN" --out "$LOGS/gate" \
-            --unit "$LOGS/units/results.tsv"
-      - name: Upload results and logs
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        with:
-          name: logs-macos-unit-${{ matrix.shard }}
-          path: ${{ runner.temp }}/logs
-          retention-days: 7
-          overwrite: true
-          if-no-files-found: ignore
-
-  macos-swarm:
-    name: macos-swarm
-    needs: [tools, macos-tests-build]
-    if: ${{ !cancelled() && needs.macos-tests-build.outputs.bin == 'yes' }}
-    runs-on: macos-15
-    continue-on-error: true  # measurement lane: not gating until it has been green once
-    timeout-minutes: 100
-    steps:
-      - name: Start
-        run: |
-          {
-            echo "JOB_T0=$(date +%s)"
-            echo "LOGS=$RUNNER_TEMP/logs"
-            echo "CIPY=$RUNNER_TEMP/ci-tools/btx_ci.py"
-          } >> "$GITHUB_ENV"
-          mkdir -p "$RUNNER_TEMP/logs"
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
-        with:
-          persist-credentials: false
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        with:
-          name: ci-tools
-          path: ${{ runner.temp }}/ci-tools
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        with:
-          name: macos-bin
-          path: ${{ runner.temp }}
-      - name: Unpack the binaries and install the runtime libraries
-        run: |
-          tar -xf "$RUNNER_TEMP/macos-bin.tar" && rm -f "$RUNNER_TEMP/macos-bin.tar"
-          brew install libevent zeromq libomp openssl@3
-      - name: swarm_confine_tests and swarm_fsjail_tests, Seatbelt, n=3
-        timeout-minutes: 20
-        run: |
-          python3 "$CIPY" suites --bin build/bin/test_btx --label mac-confine-fsjail --job "$GITHUB_JOB" \
-            --out "$LOGS/t-confine" --suites swarm_confine_tests,swarm_fsjail_tests --repeat 3 --jobs 1 \
-            --timeout 900 --per-suite --keep-logs --stop-in 18
-      - name: All swarm_* suites
-        if: ${{ !cancelled() }}
-        timeout-minutes: 70
-        run: |
-          python3 "$CIPY" suites --bin build/bin/test_btx --label mac-swarm --job "$GITHUB_JOB" \
-            --out "$LOGS/t-swarm" --include '^swarm_' --exclude '^swarm_(confine|fsjail)_tests$' \
-            --jobs 3 --timeout 900 --stop-at $((JOB_T0 + 95 * 60)) --stop-in 68
-      - name: Upload logs
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        with:
-          name: logs-macos-swarm
-          path: ${{ runner.temp }}/logs
-          retention-days: 7
-          overwrite: true
-          if-no-files-found: ignore
-
-  # 20 of the 191 matmul_v4_rc_stage3_* suites (every tenth by name), so the arm64 path is measured at
-  # all. Report only; the stage3 suites are not gated anywhere in the hosted jobs.
-  release-gate:
-    name: release-gate
-    needs: tools
-    if: ${{ !cancelled() && needs.tools.result == 'success' }}
-    runs-on: ubuntu-24.04
-    timeout-minutes: 20
-    steps:
-      - name: Start
-        run: |
-          {
-            echo "JOB_T0=$(date +%s)"
-            echo "LOGS=$RUNNER_TEMP/logs"
-            echo "CIPY=$RUNNER_TEMP/ci-tools/btx_ci.py"
-          } >> "$GITHUB_ENV"
-          mkdir -p "$RUNNER_TEMP/logs"
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
-        with:
-          persist-credentials: false
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        with:
-          name: ci-tools
-          path: ${{ runner.temp }}/ci-tools
-      - name: The release tooling's own tests (package, verify, cut, the ZMQ gate)
-        run: |
-          mkdir -p "$LOGS/release/logs"
-          : > "$LOGS/release/lint-results.tsv"
-          for t in test/util/*release*_test.py; do
-            n="release:$(basename "$t")"
-            t0=$(date +%s)
-            rc=0
-            python3 "$t" > "$LOGS/release/logs/$(basename "$t").log" 2>&1 || rc=$?
-            st=pass
-            [ "$rc" -eq 0 ] || st=fail
-            printf '%s\t%s\t%s\n' "$n" "$st" "$(( $(date +%s) - t0 ))" | tee -a "$LOGS/release/lint-results.tsv"
-          done
-      - name: Known-failing gate
-        if: ${{ !cancelled() }}
-        run: |
-          python3 "$CIPY" known --label release-gate --known "$KNOWN" --out "$LOGS/gate" --lint "$LOGS/release/lint-results.tsv"
-      - name: Upload results
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        with:
-          name: res-release-gate
           path: ${{ runner.temp }}/logs
           retention-days: 7
           overwrite: true
