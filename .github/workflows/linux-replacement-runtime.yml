@@ -1,0 +1,124 @@
+name: Linux replacement exact archive qualification
+on:
+  push:
+    branches: [codex/ci-linux-replacement-runtime]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  acceptance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 38
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 88c9b49cb16360fc8fbf3f84003b8b54c29e6db5
+          path: accepted-source
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: 14040930895
+          run-id: 43428864330
+          github-token: ${{ github.token }}
+          path: candidate-input
+          merge-multiple: true
+      - name: Verify retained archive before launch
+        run: |
+          archive=candidate-input/btx-linux-gui-candidate.tar.gz
+          echo "7d9dab78797d6c4e9668d92d65fb909f218b256760e565345089a1bbbd724fc5  $archive" | sha256sum --check
+          jq -e '.source == "88c9b49cb16360fc8fbf3f84003b8b54c29e6db5" and .candidate_archive_sha256 == "7d9dab78797d6c4e9668d92d65fb909f218b256760e565345089a1bbbd724fc5"' candidate-input/provenance.json
+      - name: Install acceptance prerequisites
+        timeout-minutes: 12
+        run: |
+          . /etc/os-release
+          test "$VERSION_ID" = 24.04
+          getconf GNU_LIBC_VERSION
+          test "$(uname -m)" = x86_64
+          sources="$RUNNER_TEMP/btx-runtime.sources"
+          apt_opts=(-o "Dir::Etc::sourcelist=$sources" -o Dir::Etc::sourceparts=- -o Acquire::Retries=0 -o Acquire::https::Timeout=12)
+          selected=
+          for mirror in https://mirrors.edge.kernel.org/ubuntu/ https://mirror.math.princeton.edu/pub/ubuntu/ https://mirrors.mit.edu/ubuntu/; do
+            echo "Checking signed Ubuntu indexes at $mirror"
+            curl --fail --silent --show-error --location --max-time 12 --output /dev/null "${mirror}dists/noble/InRelease" || continue
+            curl --fail --silent --show-error --location --max-time 12 --output /dev/null "${mirror}dists/noble-security/InRelease" || continue
+            printf '%s\n' 'Types: deb' "URIs: $mirror" 'Suites: noble noble-updates noble-security' 'Components: main universe' 'Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg' > "$sources"
+            if sudo timeout 70s apt-get "${apt_opts[@]}" -o APT::Update::Error-Mode=any update; then
+              selected=$mirror
+              break
+            fi
+          done
+          test -n "$selected"
+          echo "Verified signed Ubuntu indexes at $selected"
+          sudo apt-get "${apt_opts[@]}" install -y --no-install-recommends libwebkit2gtk-4.1-0 libgtk-3-0t64 libevent-dev libsqlite3-0 libzmq5 libgomp1 libopengl0 libxkbcommon-x11-0 libayatana-appindicator3-1 xdg-desktop-portal xdg-desktop-portal-gtk zenity xvfb xauth dbus-x11 openbox scrot wmctrl xdotool python3-pyatspi at-spi2-core python3-venv
+          cp accepted-source/scripts/release/verify_release_btxd.py .
+          python3 -m venv engine
+          engine/bin/pip install --disable-pip-version-check --retries 1 --index-url https://download.pytorch.org/whl/cpu torch==2.7.1
+          engine/bin/pip install --disable-pip-version-check --retries 1 transformers==4.53.3 safetensors==0.5.3
+          engine/bin/python -c 'import torch, transformers, safetensors; from transformers import GPT2LMHeadModel; m=GPT2LMHeadModel(transformers.GPT2Config(n_layer=1,n_head=1,n_embd=8,vocab_size=16)); assert tuple(m(torch.zeros((1,2),dtype=torch.long)).logits.shape)==(1,2,16); print(torch.__version__, transformers.__version__)'
+      - name: Verify X11, accessibility and file picker prerequisites
+        timeout-minutes: 2
+        run: |
+          export XDG_CURRENT_DESKTOP=Openbox XDG_SESSION_TYPE=x11
+          export XDG_RUNTIME_DIR="$RUNNER_TEMP/atlas-desktop-runtime"
+          export XDG_CONFIG_HOME="$RUNNER_TEMP/atlas-desktop-config"
+          mkdir -p "$XDG_RUNTIME_DIR" "$XDG_CONFIG_HOME/xdg-desktop-portal"
+          chmod 700 "$XDG_RUNTIME_DIR"
+          printf '[preferred]\ndefault=gtk\n' > "$XDG_CONFIG_HOME/xdg-desktop-portal/portals.conf"
+          timeout --signal=TERM --kill-after=10s 45s dbus-run-session -- xvfb-run -a -s '-screen 0 1440x1000x24 -nolisten tcp' sh -ec 'dbus-update-activation-environment DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_RUNTIME_DIR XDG_CONFIG_HOME; timeout 20s gdbus call --session --dest org.freedesktop.portal.Desktop --object-path /org/freedesktop/portal/desktop --method org.freedesktop.DBus.Properties.Get org.freedesktop.portal.FileChooser version > "$GITHUB_WORKSPACE/portal-preflight.log"; test -n "$DISPLAY"; command -v openbox; /usr/bin/python3 -c "import pyatspi"; ldconfig -p > "$GITHUB_WORKSPACE/runtime-libraries.log"; grep -q libwebkit2gtk-4.1.so.0 "$GITHUB_WORKSPACE/runtime-libraries.log"; grep -q libgtk-3.so.0 "$GITHUB_WORKSPACE/runtime-libraries.log"; cat "$GITHUB_WORKSPACE/portal-preflight.log"; echo DESKTOP_SETUP_PASS'
+      - name: Verify pinned archive and test installed tree
+        id: installer
+        continue-on-error: true
+        timeout-minutes: 4
+        run: bash installer.sh
+      - name: Observe Qt and native Atlas connection
+        id: desktop
+        continue-on-error: true
+        timeout-minutes: 6
+        env:
+          BTX_RUN_ATLAS_WINDOW: explicit-native-authorisation
+        run: |
+          export XDG_CURRENT_DESKTOP=Openbox XDG_SESSION_TYPE=x11
+          export XDG_RUNTIME_DIR="$RUNNER_TEMP/atlas-desktop-runtime"
+          export XDG_CONFIG_HOME="$RUNNER_TEMP/atlas-desktop-config"
+          mkdir -p "$XDG_RUNTIME_DIR" "$XDG_CONFIG_HOME/xdg-desktop-portal"
+          chmod 700 "$XDG_RUNTIME_DIR"
+          printf '[preferred]\ndefault=gtk\n' > "$XDG_CONFIG_HOME/xdg-desktop-portal/portals.conf"
+          timeout --signal=TERM --kill-after=10s 300s dbus-run-session -- xvfb-run -a -s '-screen 0 1440x1000x24 -nolisten tcp' sh -ec 'dbus-update-activation-environment DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_RUNTIME_DIR XDG_CONFIG_HOME; timeout 20s gdbus call --session --dest org.freedesktop.portal.Desktop --object-path /org/freedesktop/portal/desktop --method org.freedesktop.DBus.Properties.Get org.freedesktop.portal.FileChooser version > "$GITHUB_WORKSPACE/portal-preflight.log"; openbox > /tmp/atlas-openbox.log 2>&1 & exec /usr/bin/python3 run.py'
+      - name: Verify packaged node and guard across restart
+        id: lifecycle
+        continue-on-error: true
+        timeout-minutes: 5
+        run: python3 lifecycle.py
+      - name: Verify model discovery, interrupted download and offline inference
+        id: model
+        continue-on-error: true
+        timeout-minutes: 10
+        run: bash model.sh
+      - name: Check complete acceptance and archive identity
+        if: always()
+        env:
+          INSTALLER: ${{ steps.installer.outcome }}
+          DESKTOP: ${{ steps.desktop.outcome }}
+          LIFECYCLE: ${{ steps.lifecycle.outcome }}
+          MODEL: ${{ steps.model.outcome }}
+        run: |
+          echo "Desktop: $DESKTOP, lifecycle: $LIFECYCLE, model: $MODEL"
+          test "$INSTALLER/$DESKTOP/$LIFECYCLE/$MODEL" = success/success/success/success
+          digest=$(jq -er .candidate_archive_sha256 candidate-input/provenance.json)
+          echo "$digest  candidate-input/btx-linux-gui-candidate.tar.gz" | sha256sum --check
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: linux-candidate-test-records
+          path: |
+            candidate-input/provenance.json
+            installer-records/
+            portal-preflight.log
+            atlas-window-results/
+            lifecycle-records/
+            model-results/
+          retention-days: 7
