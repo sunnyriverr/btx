@@ -1,0 +1,69 @@
+name: C-K01 native Windows suites
+on:
+  push:
+    branches: [codex/c-k01-windows]
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: c-k01-windows-focused
+  cancel-in-progress: false
+
+jobs:
+  k01:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: windows-2025
+    timeout-minutes: 55
+    defaults:
+      run:
+        shell: bash
+    env:
+      MSYS_NO_PATHCONV: "1"
+    steps:
+      - name: Prepare native test paths
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.longpaths true
+          mkdir -p /d/w/t
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          github-token: ${{ github.token }}
+          run-id: 43386332886
+          artifact-ids: '14025253627'
+          path: build/bin
+      - name: Verify source and executable
+        run: |
+          test "$(git rev-parse HEAD^)" = 6fcf9171d982934302bd7e3050a207e92ac05103
+          test "$(git diff --name-only HEAD^ HEAD)" = .github/workflows/c-k01-windows-focused.yml
+          cd build/bin
+          printf '%s  test_btx.exe\n' 87e2a0ca5616c7d305bb2fefcd6e9699beca547d409e448547e49741f884bfa3 | sha256sum -c -
+      - name: Run and verify eleven C-K01 suites
+        env:
+          TEMP: 'D:\w\t'
+          TMP: 'D:\w\t'
+        run: |
+          python contrib/ci-fork/btx_ci.py suites --bin build/bin/test_btx.exe \
+            --label k01-windows --job "$GITHUB_JOB" --out "$RUNNER_TEMP/k01" \
+            --include '^(modelnet_035_wan_endpoint_tests|modelnet_035_wan_tests|modelnet_035_workspace_git_tests|modelnet_ahp_chan_tests|modelnet_gap_store_tests|modelnet_jit_tests|modelnet_network02_gh_tests|modelnet_r7_package_tests|modelnet_store2_tests|swarm_mesh_tests|util_tests)$' \
+            --jobs 2 --timeout 1800 --keep-logs
+          python - <<'PY'
+          import csv
+          import os
+          from pathlib import Path
+          with (Path(os.environ["RUNNER_TEMP"]) / "k01" / "results.tsv").open(encoding="utf-8") as f:
+              rows = list(csv.DictReader(f, delimiter="\t"))
+          assert len(rows) == len({row["suite"] for row in rows}) == 11, rows
+          assert all(row["status"] == "pass" and int(row["cases"]) > 0 for row in rows), rows
+          PY
+      - name: Upload suite results and case logs
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: k01-windows-results
+          path: ${{ runner.temp }}/k01
+          if-no-files-found: error
