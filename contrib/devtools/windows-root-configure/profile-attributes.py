@@ -41,23 +41,20 @@ with tempfile.TemporaryDirectory(prefix="cport profile ") as scratch:
     finally:
         temp.rmdir()
 
-    # Deny traversal on a disposable directory and inspect the child lookup.
-    # Some runner identities can bypass traversal checks, so report the actual
-    # outcome and restore the DACL before the temporary directory is cleaned up.
-    denied = root / "denied"
-    denied.mkdir()
-    child = denied / destination.name
-    child.write_bytes(b"fixture")
+    # Deny only reading attributes on a disposable file. Preserve the rights
+    # needed by the owner to restore its DACL and remove the fixture.
+    denied = root / "denied.json"
+    denied.write_bytes(b"fixture")
     sid = subprocess.check_output(
         ["powershell.exe", "-NoProfile", "-Command",
          "[System.Security.Principal.WindowsIdentity]::GetCurrent().User.Value"],
         text=True).strip()
-    subprocess.run(["icacls", str(denied), "/deny", f"*{sid}:(RX)"], check=True)
+    subprocess.run(["icacls", str(denied), "/deny", f"*{sid}:(RA)"], check=True)
     try:
-        rows["denied_directory"] = probe(denied)
-        rows["file_under_denied_directory"] = probe(child)
+        rows["denied_file"] = probe(denied)
     finally:
         subprocess.run(["icacls", str(denied), "/remove:d", f"*{sid}"], check=True)
+    rows["restored_file"] = probe(denied)
 
 output = Path(os.environ["RUNNER_TEMP"]) / "profile-attributes.json"
 output.write_text(json.dumps(rows, indent=2) + "\n", encoding="utf-8")
@@ -67,3 +64,5 @@ assert rows["missing_parent"]["error"] == 3
 assert rows["invalid_name"]["error"] not in (None, 2, 3)
 assert rows["regular_destination"]["error"] is None and not rows["regular_destination"]["reparse"]
 assert rows["temporary_junction"]["reparse"]
+assert rows["denied_file"]["error"] == 5
+assert rows["restored_file"]["error"] is None
