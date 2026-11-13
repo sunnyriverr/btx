@@ -30,6 +30,7 @@ jobs:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           persist-credentials: false
+          fetch-depth: 3
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
         with:
           github-token: ${{ github.token }}
@@ -38,8 +39,8 @@ jobs:
           path: build/bin
       - name: Verify source and executable
         run: |
-          test "$(git rev-parse HEAD^)" = 6fcf9171d982934302bd7e3050a207e92ac05103
-          test "$(git diff --name-only HEAD^ HEAD)" = .github/workflows/c-k01-windows-focused.yml
+          test "$(git rev-parse HEAD~2)" = 6fcf9171d982934302bd7e3050a207e92ac05103
+          test "$(git diff --name-only HEAD~2 HEAD)" = .github/workflows/c-k01-windows-focused.yml
           cd build/bin
           printf '%s  test_btx.exe\n' 87e2a0ca5616c7d305bb2fefcd6e9699beca547d409e448547e49741f884bfa3 | sha256sum -c -
       - name: Run and verify eleven C-K01 suites
