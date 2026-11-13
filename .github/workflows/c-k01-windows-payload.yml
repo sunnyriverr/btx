@@ -1,0 +1,47 @@
+name: C-K01 native Windows payload rollback
+on:
+  push:
+    branches: [codex/c-k01-windows-payload]
+permissions:
+  contents: read
+jobs:
+  probe:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: windows-2025
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - name: Compile the same harness with each production function body
+        shell: cmd
+        run: |
+          git diff --exit-code 88c9b49cb16360fc8fbf3f84003b8b54c29e6db5 HEAD -- src
+          if errorlevel 1 exit /b 1
+          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
+          if not defined BTX_VS exit /b 2
+          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+          if errorlevel 1 exit /b 3
+          "C:\Program Files\LLVM\bin\clang-cl.exe" --version
+          for %%i in (before after) do (
+            "C:\Program Files\LLVM\bin\clang-cl.exe" /nologo /std:c++20 /O2 /EHsc /DWIN32 /DWIN32_LEAN_AND_MEAN /DNOMINMAX /Isrc /Icontrib/devtools/c-k01-payload/%%i contrib/devtools/c-k01-payload/probe.cpp /Fe:%%i.exe
+            if errorlevel 1 exit /b 4
+          )
+      - name: Check read-only collision, cleanup, retry and successful publication
+        shell: pwsh
+        run: |
+          $root = Join-Path $env:RUNNER_TEMP ('k01-' + [Guid]::NewGuid().ToString('N'))
+          $volume = Get-Volume -DriveLetter ([IO.Path]::GetPathRoot($root).Substring(0,1))
+          if ($volume.FileSystem -ne 'NTFS') { throw "Expected NTFS" }
+          New-Item -ItemType Directory -Path "$root/before","$root/after" | Out-Null
+          try {
+            Get-FileHash before.exe,after.exe -Algorithm SHA256
+            & ./before.exe "$root/before"
+            $before = $LASTEXITCODE
+            & ./after.exe "$root/after"
+            $after = $LASTEXITCODE
+            if ($before -ne 17 -or $after -ne 0) { throw "Unexpected before=$before after=$after" }
+          } finally {
+            Remove-Item -LiteralPath $root -Recurse -Force
+          }
