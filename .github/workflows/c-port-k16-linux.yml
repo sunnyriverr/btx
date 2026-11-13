@@ -40,12 +40,12 @@
 # - Every result is an annotation titled RESULT, readable without a token via
 #   GET /repos/{owner}/{repo}/check-runs/{id}/annotations.
 
-name: C-PORT K16 native macOS
+name: C-PORT K16 native Linux
 
 on:
   workflow_dispatch:
   push:
-    branches: ['ci-0.34.16/c-port-mac']
+    branches: ['ci-0.34.16/c-port-k16-linux']
 
 concurrency:
   group: btx-0.34.16-ci-${{ github.ref }}
@@ -119,13 +119,11 @@ jobs:
           retention-days: 7
           overwrite: true
 
-  # ------------------------------------------------------------------ static checks
-  macos-tests-build:
-    name: macos-tests-build
+  linux-build:
+    name: linux-build
     needs: tools
-    if: ${{ !cancelled() && needs.tools.result == 'success' }}
-    runs-on: macos-15
-    timeout-minutes: 355
+    runs-on: ubuntu-24.04
+    timeout-minutes: 350
     steps:
       - name: Start
         run: |
@@ -144,84 +142,80 @@ jobs:
         with:
           name: ci-tools
           path: ${{ runner.temp }}/ci-tools
-      - name: Install Homebrew dependencies
+      - name: Install build dependencies
         run: |
-          brew install ninja pkgconf libevent zeromq libomp openssl@3 ccache
-          command -v cmake >/dev/null || brew install cmake
-      - name: Pick Boost (the tree's depends pin unless the Boost >= 1.91 fix is in)
-        id: boost
-        run: |
-          if grep -q 'struct CTxMemPoolEntry_Indices final : boost::multi_index::indexed_by' src/txmempool.h; then
-            echo "mode=pinned" >> "$GITHUB_OUTPUT"
-            if brew list --formula boost >/dev/null 2>&1; then brew uninstall --ignore-dependencies boost; fi
-          else
-            echo "mode=brew" >> "$GITHUB_OUTPUT"
-          fi
-      - name: Restore pinned Boost headers
-        id: boost-cache
-        if: steps.boost.outputs.mode == 'pinned'
+          sudo apt-get update -q
+          sudo apt-get install -y -q --no-install-recommends build-essential cmake ninja-build pkgconf python3 python3-zmq ccache \
+            libevent-dev libboost-dev libsqlite3-dev libzmq3-dev
+      - name: Restore OpenSSL
+        id: ossl-cache
         uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
-          path: ~/boost-pin
-          key: boost-headers-${{ env.BOOST_PIN_VER }}-v1
-      - name: Fetch pinned Boost headers
-        if: steps.boost.outputs.mode == 'pinned' && steps.boost-cache.outputs.cache-hit != 'true'
+          path: ~/ossl35
+          key: openssl-${{ env.OSSL_VER }}-ubuntu24-x64-v2
+      - name: Build static OpenSSL
+        id: ossl-build
+        if: steps.ossl-cache.outputs.cache-hit != 'true'
         run: |
-          v="$BOOST_PIN_VER"; d="boost_${v//./_}"
-          curl -fsSL --retry 3 -o "$RUNNER_TEMP/$d.tar.gz" "https://archives.boost.io/release/$v/source/$d.tar.gz"
-          got=$(shasum -a 256 "$RUNNER_TEMP/$d.tar.gz" | cut -d' ' -f1)
-          if [ "$got" != "$BOOST_PIN_SHA256" ]; then
-            python3 "$CIPY" ann error "job=$GITHUB_JOB step=boost sha256-mismatch got=$got"
+          cd "$RUNNER_TEMP"
+          u="https://github.com/openssl/openssl/releases/download/openssl-$OSSL_VER/openssl-$OSSL_VER.tar.gz"
+          curl -fsSL --retry 3 -o ossl.tar.gz "$u"
+          curl -fsSL --retry 3 -o ossl.tar.gz.sha256 "$u.sha256"
+          got=$(sha256sum ossl.tar.gz | cut -d' ' -f1)
+          want=$(awk '{print $1}' ossl.tar.gz.sha256)
+          if [ "$got" != "$OSSL_SHA256" ] || [ "$got" != "$want" ]; then
+            python3 "$CIPY" ann error "job=$GITHUB_JOB step=openssl sha256-mismatch got=$got"
             exit 1
           fi
-          tar -xzf "$RUNNER_TEMP/$d.tar.gz" -C "$RUNNER_TEMP" "$d/boost"
-          mkdir -p "$HOME/boost-pin/include"
-          mv "$RUNNER_TEMP/$d/boost" "$HOME/boost-pin/include/boost"
-      - name: Install Homebrew Boost
-        if: steps.boost.outputs.mode == 'brew'
-        run: brew install boost
+          tar xzf ossl.tar.gz
+          cd "openssl-$OSSL_VER"
+          ./Configure --prefix="$HOME/ossl35" --libdir=lib no-shared no-tests no-docs -fPIC > "$LOGS/ossl-configure.log" 2>&1
+          make -j"$(nproc)" > "$LOGS/ossl-make.log" 2>&1
+          make install_sw install_ssldirs > "$LOGS/ossl-install.log" 2>&1
+          "$HOME/ossl35/bin/openssl" list -signature-algorithms | grep -qi 'ml-dsa-44'
+          python3 "$CIPY" ann notice "job=$GITHUB_JOB step=openssl built=$OSSL_VER sha256=pinned-match ml-dsa-44=listed"
+      - name: Save OpenSSL
+        if: steps.ossl-build.outcome == 'success'
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ~/ossl35
+          key: openssl-${{ env.OSSL_VER }}-ubuntu24-x64-v2
       - name: Restore ccache
         uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: ~/.ccache-btx
-          key: ccache-macos-${{ github.run_id }}-${{ github.run_attempt }}-test
+          key: ccache-linux-r3416-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
-            ccache-macos-${{ github.run_id }}-
-            ccache-macos-
-      - name: Configure (Modelnet ON)
+            ccache-linux-r3416-${{ github.run_id }}-
+            ccache-linux-r3416-
+      - name: Configure (Modelnet ON, tests ON)
         id: configure
-        env:
-          BOOST_MODE: ${{ steps.boost.outputs.mode }}
         run: |
-          prefix=$(brew --prefix)
-          export PKG_CONFIG_PATH="$prefix/lib/pkgconfig"
-          args=(-S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$prefix" -DWITH_MODELNET=ON
-                -DWITH_ZMQ=ON -DBUILD_GUI=OFF -DBUILD_BENCH=OFF -DWITH_CCACHE=ON)
-          if [ "$BOOST_MODE" = pinned ]; then args+=(-DBoost_INCLUDE_DIR="$HOME/boost-pin/include"); fi
-          if ! xcrun -sdk macosx metal -v >/dev/null 2>&1; then args+=(-DBTX_MATMUL_METAL_PRECOMPILE_KERNELS=OFF); fi
-          python3 "$CIPY" configure --name macos --job "$GITHUB_JOB" --logs "$LOGS" --builddir build -- "${args[@]}"
-      - name: Build test_btx and the helpers it runs (keep going)
+          python3 "$CIPY" configure --name linux --job "$GITHUB_JOB" --logs "$LOGS" --builddir build -- \
+            -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DWITH_MODELNET=ON -DBUILD_TESTS=ON -DBUILD_GUI=OFF \
+            -DBUILD_BENCH=OFF -DWITH_ZMQ=ON -DWITH_CCACHE=ON -DOPENSSL_ROOT_DIR="$HOME/ossl35" -DOPENSSL_USE_STATIC_LIBS=ON \
+            -DBTX_ENABLE_CUDA_EXPERIMENTAL=OFF
+          grep -E '^OPENSSL_(SSL|CRYPTO)_LIBRARY' build/CMakeCache.txt
+      - name: Build the linked lifecycle test and its executables
         timeout-minutes: 320
-        run: |
-          read -r -a targets <<< "$LINUX_TEST_TARGETS"
-          python3 "$CIPY" build --name tests --logs "$LOGS" --builddir build -- -k 0 -j"$(sysctl -n hw.ncpu)" "${targets[@]}"
+        run: python3 "$CIPY" build --name all --logs "$LOGS" --builddir build -- -k 0 -j"$(nproc)" test_btx btxd btx-cli btx-modeld
       - name: Build summary
         id: bsum
         if: ${{ !cancelled() && steps.configure.outcome == 'success' }}
         run: |
-          python3 "$CIPY" build-summary --name tests --job "$GITHUB_JOB" --logs "$LOGS" \
-            --exe test_btx=build/bin/test_btx btxd=build/bin/btxd jail_probe=build/bin/test_swarm_jail_probe
+          python3 "$CIPY" build-summary --name all --job "$GITHUB_JOB" --logs "$LOGS" \
+            --exe btxd=build/bin/btxd btx_cli=build/bin/btx-cli test_btx=build/bin/test_btx
       - name: Save ccache
         if: ${{ !cancelled() && steps.configure.outcome == 'success' }}
         uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: ~/.ccache-btx
-          key: ccache-macos-${{ github.run_id }}-${{ github.run_attempt }}-test
+          key: ccache-linux-r3416-${{ github.run_id }}-${{ github.run_attempt }}
       - name: Maintained shutdown and process controls
         timeout-minutes: 12
         run: |
           set -o pipefail
-          shasum -a 256 build/bin/test_btx build/bin/btxd build/bin/btx-modeld | tee "$LOGS/k16-sha256.txt"
+          sha256sum build/bin/test_btx build/bin/btxd build/bin/btx-modeld | tee "$LOGS/k16-sha256.txt"
           for case in external_helper_shutdown_cancels_inflight_health_read owned_helper_shutdown_refuses_a_different_socket_peer start_spawned_helper_does_not_inherit_descriptors; do
             build/bin/test_btx --run_test="modelnet_hosting_tests/$case" --log_level=test_suite 2>&1 | tee "$LOGS/$case.log"
           done
@@ -241,8 +235,8 @@ jobs:
           assert source.count(old) == 1
           path.write_text(source.replace(old, "    if (check_peer && !UnixConnectedPeerIsSelf(fd, err)) {"))
           PYCODE
-          cmake --build build --parallel "$(sysctl -n hw.ncpu)" --target test_btx > "$LOGS/k16-control-build.log" 2>&1
-          shasum -a 256 build/bin/test_btx > "$LOGS/k16-control-sha256.txt"
+          cmake --build build --parallel "$(nproc)" --target test_btx > "$LOGS/k16-control-build.log" 2>&1
+          sha256sum build/bin/test_btx > "$LOGS/k16-control-sha256.txt"
           rc=0
           build/bin/test_btx --run_test=modelnet_hosting_tests/owned_helper_shutdown_refuses_a_different_socket_peer \
             --log_level=test_suite > "$LOGS/k16-control.log" 2>&1 || rc=$?
@@ -254,7 +248,7 @@ jobs:
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
-          name: logs-macos-tests-build
+          name: logs-linux-k16
           path: ${{ runner.temp }}/logs
           retention-days: 7
           overwrite: true
