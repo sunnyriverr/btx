@@ -1,0 +1,29 @@
+name: C-PORT Windows file identity control
+on:
+  push:
+    branches: [codex/ci-cport-windows-file-identity]
+permissions:
+  contents: read
+jobs:
+  control:
+    runs-on: windows-2025
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - shell: pwsh
+        run: |
+          $env:PATH = "C:\Program Files\LLVM\bin;" + $env:PATH
+          New-Item -ItemType Directory evidence | Out-Null
+          Push-Location evidence
+          python ../contrib/ci-fork/btx_ci.py msvc-run --job $env:GITHUB_JOB --path-prepend 'C:\Program Files\LLVM\bin' -- clang-cl /nologo /std:c++20 /EHsc /O2 /MT ../contrib/ci-fork/c-port-file-identity.cpp /Fe:control.exe
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          ./control.exe | Tee-Object result.txt
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: ${{ !cancelled() }}
+        with:
+          name: windows-file-identity-control
+          path: evidence/result.txt
+          if-no-files-found: error
