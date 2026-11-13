@@ -1,0 +1,172 @@
+# Focused fork execution of JPP's tools and CI-4 lint jobs at bff533c5.
+# The separate branch and workflow concurrency key isolate the Windows build.
+name: C-K01 integrated CI-4
+
+on:
+  push:
+    branches: ['ci-0.34.16/c-k01-lint']
+
+concurrency:
+  group: c-k01-ci4-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  RELEASE_BRANCH: "release-0.34.16"
+  UPSTREAM_URL: "https://github.com/btxchain/btx.git"
+  OSSL_VER: "3.5.4"
+  OSSL_SHA256: "967311f84955316969bdb1d8d4b983718ef42338639c621ec4c34fddef355e99"
+  BOOST_PIN_VER: "1.81.0"
+  BOOST_PIN_SHA256: "205666dea9f6a7cfed87c7a6dfbeb52a2c1b9de55712c9c1a87735d7181452b6"
+  # ccache 4.14.2 (18 Oct 2026); sha256 = the GitHub release asset digest of ccache-4.14.2-windows-x86_64.zip.
+  CCACHE_WIN_VER: "4.14.2"
+  CCACHE_WIN_SHA256: "6993ce645e53192cec592ee23186200b574ac4c59097ecde8d9cfd681b47ae84"
+  # The vcpkg commit of the native Windows runs reported on #356 (3 Nov 2026); vcpkg.json's builtin-baseline
+  # (c82f7466, 2024.09.30) still decides the port versions.
+  VCPKG_COMMIT: "afa249f12f52ed8a3b919f195495ba8b330288d1"
+  WIN_NATIVE_TARGETS: "btxd btx-cli btx-tx btx-util btx-modeld"
+  # The pin of ci/lint/04_install.sh; sha256 of shellcheck-v0.8.0.linux.x86_64.tar.xz, checked 12 Nov 2026.
+  SHELLCHECK_VER: "v0.8.0"
+  SHELLCHECK_SHA256: "ab6ee1b178f014d1b86d1e24da20d1139656c8b0ed34d2867fbb834dad02bf0a"
+  TIDY_LLVM_V: "19"
+  UNIT_EXCLUDE: "^matmul_v4_rc_stage3_"
+  KNOWN: "contrib/ci-fork/known-failing.txt"
+  CCACHE_MAXSIZE: "2500M"
+  CCACHE_COMPRESS: "true"
+  CCACHE_NOHASHDIR: "true"
+  CCACHE_COMPILERCHECK: "content"
+  HOMEBREW_NO_AUTO_UPDATE: "1"
+  HOMEBREW_NO_INSTALL_CLEANUP: "1"
+  HOMEBREW_NO_ANALYTICS: "1"
+  HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: "1"
+  PYTHONUNBUFFERED: "1"
+  LINUX_TEST_TARGETS: "test_btx btxd btx-cli btx-open btx-modeld btx-wallet btx-util btx-hcpd btx-tx btx-hosted"
+  CORE_SUITES: "util_tests,crypto_tests,hash_tests,key_tests,base58_tests,bech32_tests,uint256_tests,arith_uint256_tests,serialize_tests,streams_tests,script_tests,transaction_tests,sighash_tests,coins_tests,mempool_tests,validation_tests,blockchain_tests,net_tests,addrman_tests,getarg_tests,fs_tests,sock_tests,pq_crypto_tests,wallet_tests,lightwatch_tests,lab_lifecycle_tests,nif_sandbox_tests,guard_permit_tests,native_discovery_tests,cap02_tests,hire01_tests,acc07_tests,fixture_cleanup_tests"
+  GUARD_SUITES: "guard_permit_tests,native_discovery_tests,cap02_tests,hire01_tests,acc07_tests"
+
+jobs:
+  tools:
+    name: tools
+    # Every other job needs this one, so this guard keeps the whole workflow off upstream and off every
+    # branch except ci-0.34.16 and ci-0.34.16/* (push or manual run).
+    if: ${{ github.repository == 'sunnyriverr/btx' && github.ref_name == 'ci-0.34.16/c-k01-lint' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+      - name: Check the CI helpers (selftests, shellcheck) and hand btx_ci.py on
+        run: |
+          command -v shellcheck >/dev/null || { sudo apt-get update -q && sudo apt-get install -y -q shellcheck; }
+          python3 -m py_compile contrib/ci-fork/*.py
+          python3 contrib/ci-fork/btx_ci.py selftest --job tools
+          python3 contrib/ci-fork/coverage_check.py --selftest
+          shellcheck contrib/ci-fork/*.sh
+          mkdir -p ci-tools
+          cp contrib/ci-fork/btx_ci.py ci-tools/btx_ci.py
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: ci-tools
+          path: ci-tools/btx_ci.py
+          retention-days: 7
+          overwrite: true
+
+  # ------------------------------------------------------------------ static checks
+  lint:
+    name: lint
+    needs: tools
+    if: ${{ !cancelled() && needs.tools.result == 'success' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - name: Start
+        run: |
+          {
+            echo "JOB_T0=$(date +%s)"
+            echo "LOGS=$RUNNER_TEMP/logs"
+            echo "CIPY=$RUNNER_TEMP/ci-tools/btx_ci.py"
+          } >> "$GITHUB_ENV"
+          mkdir -p "$RUNNER_TEMP/logs"
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: ci-tools
+          path: ${{ runner.temp }}/ci-tools
+      - name: Fetch the release line and find where this branch leaves it
+        run: |
+          git fetch --no-tags --quiet "$UPSTREAM_URL" "+refs/heads/$RELEASE_BRANCH:refs/remotes/upstream/$RELEASE_BRANCH"
+          base=$(git merge-base HEAD "upstream/$RELEASE_BRANCH")
+          echo "BRANCH_BASE=$base" >> "$GITHUB_ENV"
+          python3 "$CIPY" ann notice "job=$GITHUB_JOB step=base base=${base:0:12} release_head=$(git rev-parse --short=12 "upstream/$RELEASE_BRANCH") commits_on_top=$(git rev-list --count "$base..HEAD")"
+      - name: Install the lint tools (the pins of ci/lint/04_install.sh where Python 3.12 allows)
+        run: |
+          python3 -m venv "$RUNNER_TEMP/lintvenv"
+          "$RUNNER_TEMP/lintvenv/bin/pip" install -q --disable-pip-version-check codespell==2.2.6 lief==0.14.1 mypy==1.4.1 \
+            pyzmq==25.1.1 ruff==0.5.5 vulture==2.6 yamllint==1.35.1
+          curl -fsSL --retry 3 -o "$RUNNER_TEMP/sc.tar.xz" \
+            "https://github.com/koalaman/shellcheck/releases/download/$SHELLCHECK_VER/shellcheck-$SHELLCHECK_VER.linux.x86_64.tar.xz"
+          echo "$SHELLCHECK_SHA256  $RUNNER_TEMP/sc.tar.xz" | sha256sum -c -
+          tar -xf "$RUNNER_TEMP/sc.tar.xz" -C "$RUNNER_TEMP"
+          mkdir -p "$RUNNER_TEMP/lintbin"
+          cp "$RUNNER_TEMP/shellcheck-$SHELLCHECK_VER/shellcheck" "$RUNNER_TEMP/lintbin/"
+          echo "$RUNNER_TEMP/lintbin" >> "$GITHUB_PATH"
+          echo "$RUNNER_TEMP/lintvenv/bin" >> "$GITHUB_PATH"
+          (cd test/lint/test_runner && CARGO_TARGET_DIR="$RUNNER_TEMP/lint-target" cargo build -q)
+      - name: Every lint check on its own
+        run: |
+          shellcheck --version | sed -n 2p
+          COMMIT_RANGE="$BRANCH_BASE..HEAD" bash contrib/ci-fork/lint.sh "$RUNNER_TEMP/lint-target/debug/test_runner" "$LOGS/lint"
+      - name: Lints that fail on the release base too - new output lines only
+        run: |
+          python3 "$CIPY" lint-diff --runner "$RUNNER_TEMP/lint-target/debug/test_runner" --results "$LOGS/lint/lint-results.tsv" \
+            --logs "$LOGS/lint/logs" --base "$BRANCH_BASE" --known "$KNOWN" --out "$RUNNER_TEMP/lint-base"
+          mkdir -p "$LOGS/lint/base"
+          cp "$RUNNER_TEMP"/lint-base/*.txt "$RUNNER_TEMP"/lint-base/*.log "$LOGS/lint/base/" 2>/dev/null || true
+      - name: yamllint on .github
+        run: |
+          t0=$(date +%s)
+          rc=0
+          yamllint -d '{extends: relaxed, rules: {line-length: disable}}' .github > "$LOGS/lint/logs/yamllint.log" 2>&1 || rc=$?
+          st=pass
+          [ "$rc" -eq 0 ] || st=fail
+          printf 'yamllint\t%s\t%s\n' "$st" "$(( $(date +%s) - t0 ))" >> "$LOGS/lint/lint-results.tsv"
+          cat "$LOGS/lint/logs/yamllint.log"
+      - name: Scan the lines this branch adds for keys and tokens
+        run: python3 "$CIPY" secrets --base "$BRANCH_BASE" --label secrets
+      - name: Known-failing gate
+        if: ${{ !cancelled() }}
+        run: |
+          python3 "$CIPY" known --label lint --known "$KNOWN" --out "$LOGS/gate" --lint "$LOGS/lint/lint-results.tsv"
+      - name: Require an executed K01 pass
+        if: ${{ !cancelled() }}
+        run: |
+          python3 - <<'CHECK'
+          import os
+          from pathlib import Path
+          name = 'lint-k01-state-writes.py'
+          root = Path(os.environ['LOGS']) / 'lint'
+          results = (root / 'lint-results.tsv').read_text().splitlines()
+          rows = [line.split('	') for line in results if line.split('	', 1)[0] == name]
+          assert len(rows) == 1 and rows[0][1] == 'pass', rows
+          assert (root / 'logs' / (name + '.log')).is_file()
+          print('K01 executed and passed exactly once')
+          CHECK
+      - name: Upload results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: res-lint
+          path: ${{ runner.temp }}/logs
+          retention-days: 7
+          overwrite: true
+          if-no-files-found: ignore
