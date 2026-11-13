@@ -229,6 +229,27 @@ jobs:
             python3 "test/functional/$test.py" --configfile=build/test/config.ini --timeout-factor=1 \
               --tmpdir="$RUNNER_TEMP/$test" 2>&1 | tee "$LOGS/$test.log"
           done
+      - name: Verify the maintained ownership test rejects the old behavior
+        timeout-minutes: 20
+        run: |
+          python3 - <<'PYCODE'
+          from pathlib import Path
+          path = Path("src/modelnet/helper.cpp")
+          source = path.read_text()
+          old = """    if ((expected_peer_pid > 0 && !UnixConnectedPeerMatchesPid(fd, expected_peer_pid, err)) ||
+                  (check_peer && !UnixConnectedPeerIsSelf(fd, err))) {"""
+          assert source.count(old) == 1
+          path.write_text(source.replace(old, "    if (check_peer && !UnixConnectedPeerIsSelf(fd, err)) {"))
+          PYCODE
+          cmake --build build --parallel "$(sysctl -n hw.ncpu)" --target test_btx > "$LOGS/k16-control-build.log" 2>&1
+          shasum -a 256 build/bin/test_btx > "$LOGS/k16-control-sha256.txt"
+          rc=0
+          build/bin/test_btx --run_test=modelnet_hosting_tests/owned_helper_shutdown_refuses_a_different_socket_peer \
+            --log_level=test_suite > "$LOGS/k16-control.log" 2>&1 || rc=$?
+          test "$rc" -eq 201
+          grep -F 'check !received_stop has failed' "$LOGS/k16-control.log"
+          grep -F '1 failure is detected' "$LOGS/k16-control.log"
+          git restore -- src/modelnet/helper.cpp
       - name: Upload logs
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0

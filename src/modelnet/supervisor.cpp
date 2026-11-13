@@ -27,6 +27,9 @@
 #include <sys/stat.h>
 #include <sys/un.h>
 #include <sys/wait.h>
+#ifdef __linux__
+#include <sys/syscall.h>
+#endif
 #include <unistd.h>
 #ifdef __APPLE__
 #include <mach-o/dyld.h>
@@ -404,6 +407,11 @@ bool HelperSupervisor::SpawnLocked(std::string& err)
         err = std::strerror(rc);
         return false;
     }
+#if defined(__linux__) && defined(SYS_pidfd_open) && defined(SYS_pidfd_send_signal)
+    // The supervisor is the child's sole waiter. Its PID cannot be reused
+    // before that wait, including if the child exits during this call.
+    m_pidfd = static_cast<int>(::syscall(SYS_pidfd_open, pid, 0));
+#endif
     m_pid = pid;
     m_st.pid = pid;
     m_st.managed_by_btxd = true;
@@ -415,45 +423,70 @@ bool HelperSupervisor::SpawnLocked(std::string& err)
 #endif
 }
 
+void HelperSupervisor::ClearChildLocked()
+{
+#ifdef __linux__
+    if (m_pidfd >= 0) ::close(m_pidfd);
+    m_pidfd = -1;
+#endif
+    m_pid = -1;
+    m_st.pid = -1;
+}
+
 void HelperSupervisor::RequestStopOwned()
 {
 #ifndef WIN32
-    pid_t pid = -1;
+    pid_t pid;
     {
         std::lock_guard<std::mutex> lock(m_mu);
         pid = m_pid;
     }
     if (pid <= 0) return;
+
+    const auto wait_child = [&](int options) {
+        int status = 0;
+        pid_t waited;
+        do {
+            waited = ::waitpid(pid, &status, options);
+        } while (waited < 0 && errno == EINTR);
+        if (waited == pid || (waited < 0 && errno == ECHILD)) {
+            std::lock_guard<std::mutex> lock(m_mu);
+            ClearChildLocked();
+        }
+        return waited;
+    };
+    const auto signal_child = [&](int signal) {
+#if defined(__linux__) && defined(SYS_pidfd_open) && defined(SYS_pidfd_send_signal)
+        if (m_pidfd >= 0) {
+            const auto result = ::syscall(SYS_pidfd_send_signal, m_pidfd, signal, nullptr, 0);
+            if (result == 0 || errno != ENOSYS) return static_cast<int>(result);
+        }
+#endif
+        // Stop() has joined the only other waiter. Confirm a live direct
+        // child before signalling by PID on macOS and older Linux kernels.
+        if (wait_child(WNOHANG) != 0) {
+            errno = ESRCH;
+            return -1;
+        }
+        return ::kill(pid, signal);
+    };
+
+    if (wait_child(WNOHANG) != 0) return;
     UniValue ignore;
     std::string err;
     UniValue params(UniValue::VARR);
     (void)CallUnixRpc(m_cfg.rpc_socket, "stop", params, ignore, err, nullptr, /*reply_timeout_ms=*/1000, /*check_peer=*/true, pid);
-    if (kill(pid, SIGTERM) != 0 && errno != ESRCH) {
+    if (signal_child(SIGTERM) != 0 && errno != ESRCH) {
         LogPrintf("model helper: SIGTERM pid=%d failed (%s)\n", static_cast<int>(pid), std::strerror(errno));
     }
     for (int i = 0; i < 50; ++i) {
-        int status = 0;
-        const pid_t w = waitpid(pid, &status, WNOHANG);
-        if (w == pid || (w < 0 && errno == ECHILD)) {
-            std::lock_guard<std::mutex> lock(m_mu);
-            if (m_pid == pid) {
-                m_pid = -1;
-                m_st.pid = -1;
-            }
-            return;
-        }
+        if (wait_child(WNOHANG) != 0) return;
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
-    if (kill(pid, SIGKILL) != 0 && errno != ESRCH) {
+    if (signal_child(SIGKILL) != 0 && errno != ESRCH) {
         LogPrintf("model helper: SIGKILL pid=%d failed (%s)\n", static_cast<int>(pid), std::strerror(errno));
     }
-    int status = 0;
-    (void)waitpid(pid, &status, 0);
-    std::lock_guard<std::mutex> lock(m_mu);
-    if (m_pid == pid) {
-        m_pid = -1;
-        m_st.pid = -1;
-    }
+    (void)wait_child(0);
 #endif
 }
 
@@ -495,13 +528,12 @@ void HelperSupervisor::Loop()
         if (pid > 0) {
             int status = 0;
             const pid_t w = waitpid(pid, &status, WNOHANG);
-            if (w == pid) {
+            if (w == pid || (w < 0 && errno == ECHILD)) {
                 bool died = false;
                 {
                     std::lock_guard<std::mutex> lock(m_mu);
                     if (m_pid == pid) {
-                        m_pid = -1;
-                        m_st.pid = -1;
+                        ClearChildLocked();
                         m_st.state = HelperState::FAILED_RETRYING;
                         ++m_st.restart_count;
                         m_st.error = "helper exited";
