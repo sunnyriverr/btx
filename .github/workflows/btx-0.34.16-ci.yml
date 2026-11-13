@@ -170,7 +170,7 @@ jobs:
           ssl=$(brew --prefix openssl@3)
           "$ssl/bin/openssl" version
           for lib in "$ssl/lib/libssl.a" "$ssl/lib/libcrypto.a"; do
-            lipo -verify_arch arm64 "$lib"
+            lipo "$lib" -verify_arch arm64
             shasum -a 256 "$lib"
           done
           for query in 'kem-algorithms ML-KEM-768' 'signature-algorithms ML-DSA-44'; do
