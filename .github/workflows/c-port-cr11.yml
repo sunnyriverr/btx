@@ -1,0 +1,28 @@
+name: C-PORT Windows CR11 break-even control
+on:
+  push:
+    branches: [codex/ci-cport-windows-cr11]
+permissions:
+  contents: read
+jobs:
+  control:
+    runs-on: windows-2025
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - name: Compare stock and candidate with clang-cl
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $env:PYTHONUNBUFFERED = '1'
+          $env:PYTHONIOENCODING = 'utf-8'
+          python contrib/ci-fork/btx_ci.py msvc-run --job $env:GITHUB_JOB --path-prepend 'C:\Program Files\LLVM\bin' -- python contrib/ci-fork/c-port-cr11-run.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: ${{ !cancelled() }}
+        with:
+          name: windows-cr11-control
+          path: windows-cr11-results/
+          if-no-files-found: error
