@@ -1,0 +1,65 @@
+diff --git a/src/modelnet/realm_channel.cpp b/src/modelnet/realm_channel.cpp
+index 297f4d59..4ba54c0e 100644
+--- a/src/modelnet/realm_channel.cpp
++++ b/src/modelnet/realm_channel.cpp
+@@ -884,7 +884,7 @@ bool RealmRollout::WriteOfflineBundle(const std::filesystem::path& path, const s
+ 
+ #ifdef _WIN32
+     // Preserve the CRLF bytes previously emitted by the Windows text stream.
+-    ReplaceAll(text, "\n", "\r\n");
++    util::ReplaceAll(text, "\n", "\r\n");
+ #endif
+     if (!WriteBinaryFileAtomically(fs::path{path}, text)) {
+         err = "BTX035_BUNDLE";
+diff --git a/src/test/modelnet_bridge_tests.cpp b/src/test/modelnet_bridge_tests.cpp
+index 6bc14664..c3ebc0cd 100644
+--- a/src/test/modelnet_bridge_tests.cpp
++++ b/src/test/modelnet_bridge_tests.cpp
+@@ -28,7 +28,9 @@
+ #include <utility>
+ #include <vector>
+ 
++#ifndef _WIN32
+ #include <unistd.h>
++#endif
+ 
+ BOOST_FIXTURE_TEST_SUITE(modelnet_bridge_tests, BasicTestingSetup)
+ 
+@@ -764,6 +766,7 @@ BOOST_AUTO_TEST_CASE(dequeued_hint_same_policy_for_any_from_addr)
+     DrainBridgeHints();
+ }
+ 
++#ifndef _WIN32 // Requires the helper Unix RPC transport.
+ // The /api/v1/feed routes read getmodelfeed from btx-modeld when
+ // BTX_BRIDGE_RPC_SOCKET is set. Each route must ask for a feed mode that
+ // getmodelfeed accepts; a refused mode leaves the route with the empty shell.
+@@ -816,4 +819,6 @@ BOOST_AUTO_TEST_CASE(api_v1_feed_routes_reach_the_helper_feed)
+     finish();
+ }
+ 
++#endif // !_WIN32
++
+ BOOST_AUTO_TEST_SUITE_END()
+--- a/src/test/modelnet_jit_peer_tests.cpp
++++ b/src/test/modelnet_jit_peer_tests.cpp
+@@ -30,6 +30,7 @@
+ #include <boost/test/unit_test.hpp>
+ #include <test/util/environment.h>
+ 
++#include <cstdio>
+ #include <cstdlib>
+ #include <string>
+ #include <vector>
+@@ -350,7 +351,11 @@
+         BOOST_CHECK_EQUAL(std::string(modelnet::TransportAssuranceName(off.assurance)), "HOST_BUFFER");
+         BOOST_TEST_MESSAGE("JIT-PEER-06 Apple: Linux NIXL is not a macOS path (NOT_RUN)");
+ #else
+-        test::SetEnv("BTX_NIXL_LIB", "/proc/self/exe");
++        const fs::path present = m_path_root / "nixl-presence-fixture";
++        std::FILE* fixture = fsbridge::fopen(present, "wb");
++        BOOST_REQUIRE(fixture != nullptr);
++        BOOST_REQUIRE_EQUAL(std::fclose(fixture), 0);
++        test::SetEnv("BTX_NIXL_LIB", fs::PathToString(present).c_str());
+         modelnet::PeerTransferOffer off;
+         BOOST_REQUIRE(modelnet::ProbePeerBackends(off));
+         AssertProbeHonesty(off);
