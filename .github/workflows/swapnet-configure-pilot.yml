@@ -1,0 +1,30 @@
+name: SwapNet configure-only feasibility pilot
+on:
+  push:
+    branches: [codex/ci-swapnet-configure-pilot]
+permissions:
+  contents: read
+jobs:
+  pilot:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 5806b2d0eb1ec1cd65c64da5db8d8905ff9d1148
+          path: product
+          persist-credentials: false
+      - name: Verify inputs, Bitcoin regtest, and BTX configure
+        timeout-minutes: 14
+        run: bash pilot.sh
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: swapnet-pilot-records
+          path: records/
+          retention-days: 7
+          if-no-files-found: error
