@@ -12,6 +12,10 @@ if not compiler:
     raise RuntimeError("clang-cl unavailable")
 version = subprocess.check_output([compiler, "--version"], text=True)
 (out / "compiler.txt").write_text(version)
+resource_dir = Path(subprocess.check_output([compiler, "--print-resource-dir"], text=True).strip())
+builtins = resource_dir / "lib/windows/clang_rt.builtins-x86_64.lib"
+if not builtins.is_file():
+    raise RuntimeError(f"missing release-profile Clang builtins: {builtins}")
 stock = root / "src/modelnet/hcp_cr11.cpp"
 source = stock.read_bytes()
 old = b"const __int128 kMax = std::numeric_limits<__int128>::max();"
@@ -28,7 +32,7 @@ for name, data in variants:
     command = [compiler, "/nologo", "/std:c++20", "/EHsc", "/O2", "/MT", "/DWIN32", "/Zc:preprocessor", "/Zc:__cplusplus",
                f"/I{root / 'src'}", f"/I{univalue / 'include'}",
                str(harness), str(local),
-               *map(str, sorted((univalue / "lib").glob("univalue*.cpp"))), "/Fe:control.exe"]
+               *map(str, sorted((univalue / "lib").glob("univalue*.cpp"))), "/Fe:control.exe", "/link", str(builtins)]
     compiled = subprocess.run(command, cwd=work, stdout=subprocess.PIPE,
                               stderr=subprocess.STDOUT, text=True, errors="replace")
     (out / f"{name}-compile.log").write_text(compiled.stdout, encoding="utf-8")
