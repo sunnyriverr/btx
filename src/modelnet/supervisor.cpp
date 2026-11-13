@@ -427,7 +427,7 @@ void HelperSupervisor::RequestStopOwned()
     UniValue ignore;
     std::string err;
     UniValue params(UniValue::VARR);
-    (void)CallUnixRpc(m_cfg.rpc_socket, "stop", params, ignore, err, nullptr, /*reply_timeout_ms=*/1000);
+    (void)CallUnixRpc(m_cfg.rpc_socket, "stop", params, ignore, err, nullptr, /*reply_timeout_ms=*/1000, /*check_peer=*/true, pid);
     if (kill(pid, SIGTERM) != 0 && errno != ESRCH) {
         LogPrintf("model helper: SIGTERM pid=%d failed (%s)\n", static_cast<int>(pid), std::strerror(errno));
     }

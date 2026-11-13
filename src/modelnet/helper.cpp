@@ -11921,10 +11921,30 @@ bool HelperRefusalFromError(const std::string& err, std::string& code, std::stri
     return !code.empty();
 }
 
-bool CallUnixRpc(const fs::path& socket_path, const std::string& method, const UniValue& params, UniValue& result, std::string& err, std::atomic<bool>* stop, int reply_timeout_ms, bool check_peer)
+static bool UnixConnectedPeerMatchesPid(int fd, int64_t expected_pid, std::string& err)
+{
+#ifndef _WIN32
+#if defined(__linux__) && defined(SO_PEERCRED)
+    struct ucred peer {};
+    socklen_t len = sizeof(peer);
+    if (::getsockopt(fd, SOL_SOCKET, SO_PEERCRED, &peer, &len) == 0 &&
+        len == sizeof(peer) && peer.pid == expected_pid &&
+        peer.uid == ::getuid()) return true;
+#elif defined(__APPLE__) && defined(LOCAL_PEERPID)
+    pid_t peer = 0;
+    socklen_t len = sizeof(peer);
+    if (::getsockopt(fd, SOL_LOCAL, LOCAL_PEERPID, &peer, &len) == 0 &&
+        len == sizeof(peer) && peer == expected_pid) return true;
+#endif
+#endif
+    err = "helper Unix RPC peer is not the owned child";
+    return false;
+}
+
+bool CallUnixRpc(const fs::path& socket_path, const std::string& method, const UniValue& params, UniValue& result, std::string& err, std::atomic<bool>* stop, int reply_timeout_ms, bool check_peer, int64_t expected_peer_pid)
 {
 #ifdef _WIN32
-    (void)stop; (void)reply_timeout_ms; (void)check_peer;
+    (void)stop; (void)reply_timeout_ms; (void)check_peer; (void)expected_peer_pid;
     (void)socket_path; (void)method; (void)params; (void)result;
     err = "helper Unix RPC is not supported on this platform";
     return false;
@@ -11965,7 +11985,8 @@ bool CallUnixRpc(const fs::path& socket_path, const std::string& method, const U
         close(fd);
         return false;
     }
-    if (check_peer && !UnixConnectedPeerIsSelf(fd, err)) {
+    if ((expected_peer_pid > 0 && !UnixConnectedPeerMatchesPid(fd, expected_peer_pid, err)) ||
+        (check_peer && !UnixConnectedPeerIsSelf(fd, err))) {
         close(fd);
         return false;
     }

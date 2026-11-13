@@ -222,7 +222,9 @@ jobs:
         run: |
           set -o pipefail
           shasum -a 256 build/bin/test_btx build/bin/btxd build/bin/btx-modeld | tee "$LOGS/k16-sha256.txt"
-          build/bin/test_btx --run_test=modelnet_hosting_tests --log_level=test_suite 2>&1 | tee "$LOGS/k16-hosting.log"
+          for case in external_helper_shutdown_cancels_inflight_health_read owned_helper_shutdown_refuses_a_different_socket_peer start_spawned_helper_does_not_inherit_descriptors; do
+            build/bin/test_btx --run_test="modelnet_hosting_tests/$case" --log_level=test_suite 2>&1 | tee "$LOGS/$case.log"
+          done
           for test in feature_modelnet_helper_after_kill feature_modelnet_helper_long_calls; do
             python3 "test/functional/$test.py" --configfile=build/test/config.ini --timeout-factor=1 \
               --tmpdir="$RUNNER_TEMP/$test" 2>&1 | tee "$LOGS/$test.log"
