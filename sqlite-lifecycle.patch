@@ -1,0 +1,191 @@
+--- a/src/wallet/sqlite.h
++++ b/src/wallet/sqlite.h
+@@ -98,6 +98,20 @@
+     bool HasActiveTxn() override { return m_txn; }
+ };
+ 
++/** Keeps the process-wide SQLite library initialized while a client uses it. */
++class SQLiteLibrary
++{
++public:
++    SQLiteLibrary();
++    ~SQLiteLibrary();
++    SQLiteLibrary(const SQLiteLibrary&) = delete;
++    SQLiteLibrary& operator=(const SQLiteLibrary&) = delete;
++
++private:
++    static Mutex g_sqlite_mutex;
++    static int g_sqlite_count GUARDED_BY(g_sqlite_mutex);
++};
++
+ /** An instance of this class represents one SQLite3 database.
+  **/
+ class SQLiteDatabase : public WalletDatabase
+@@ -109,16 +123,7 @@
+ 
+     const std::string m_file_path;
+ 
+-    /**
+-     * This mutex protects SQLite initialization and shutdown.
+-     * sqlite3_config() and sqlite3_shutdown() are not thread-safe (sqlite3_initialize() is).
+-     * Concurrent threads that execute SQLiteDatabase::SQLiteDatabase() should have just one
+-     * of them do the init and the rest wait for it to complete before all can proceed.
+-     */
+-    static Mutex g_sqlite_mutex;
+-    static int g_sqlite_count GUARDED_BY(g_sqlite_mutex);
+-
+-    void Cleanup() noexcept EXCLUSIVE_LOCKS_REQUIRED(!g_sqlite_mutex);
++    SQLiteLibrary m_sqlite;
+ 
+ public:
+     SQLiteDatabase() = delete;
+--- a/src/wallet/sqlite.cpp
++++ b/src/wallet/sqlite.cpp
+@@ -131,40 +131,50 @@
+     SetPragma(db, "secure_delete", "ON", "Failed to enable secure_delete");
+ }
+ 
+-Mutex SQLiteDatabase::g_sqlite_mutex;
+-int SQLiteDatabase::g_sqlite_count = 0;
++Mutex SQLiteLibrary::g_sqlite_mutex;
++int SQLiteLibrary::g_sqlite_count = 0;
++
++SQLiteLibrary::SQLiteLibrary()
++{
++    LOCK(g_sqlite_mutex);
++    if (g_sqlite_count == 0) {
++        int ret = sqlite3_config(SQLITE_CONFIG_LOG, ErrorLogCallback, nullptr);
++        if (ret != SQLITE_OK) {
++            throw std::runtime_error(strprintf("SQLiteDatabase: Failed to setup error log: %s\n", sqlite3_errstr(ret)));
++        }
++        ret = sqlite3_config(SQLITE_CONFIG_SERIALIZED);
++        if (ret != SQLITE_OK) {
++            throw std::runtime_error(strprintf("SQLiteDatabase: Failed to configure serialized threading mode: %s\n", sqlite3_errstr(ret)));
++        }
++        ret = sqlite3_initialize();
++        if (ret != SQLITE_OK) {
++            throw std::runtime_error(strprintf("SQLiteDatabase: Failed to initialize SQLite: %s\n", sqlite3_errstr(ret)));
++        }
++    }
++    ++g_sqlite_count;
++}
++
++SQLiteLibrary::~SQLiteLibrary()
++{
++    LOCK(g_sqlite_mutex);
++    if (--g_sqlite_count == 0) {
++        const int ret = sqlite3_shutdown();
++        if (ret != SQLITE_OK) {
++            LogPrintf("SQLiteDatabase: Failed to shutdown SQLite: %s\n", sqlite3_errstr(ret));
++        }
++    }
++}
+ 
+ SQLiteDatabase::SQLiteDatabase(const fs::path& dir_path, const fs::path& file_path, const DatabaseOptions& options, bool mock)
+     : WalletDatabase(), m_mock(mock), m_dir_path(fs::PathToString(dir_path)), m_file_path(fs::PathToString(file_path)), m_write_semaphore(1), m_use_unsafe_sync(options.use_unsafe_sync)
+ {
+-    {
+-        LOCK(g_sqlite_mutex);
+-        LogPrintf("Using SQLite Version %s\n", SQLiteDatabaseVersion());
+-        LogPrintf("Using wallet %s\n", m_dir_path);
+-
+-        if (++g_sqlite_count == 1) {
+-            // Setup logging
+-            int ret = sqlite3_config(SQLITE_CONFIG_LOG, ErrorLogCallback, nullptr);
+-            if (ret != SQLITE_OK) {
+-                throw std::runtime_error(strprintf("SQLiteDatabase: Failed to setup error log: %s\n", sqlite3_errstr(ret)));
+-            }
+-            // Force serialized threading mode
+-            ret = sqlite3_config(SQLITE_CONFIG_SERIALIZED);
+-            if (ret != SQLITE_OK) {
+-                throw std::runtime_error(strprintf("SQLiteDatabase: Failed to configure serialized threading mode: %s\n", sqlite3_errstr(ret)));
+-            }
+-        }
+-        int ret = sqlite3_initialize(); // This is a no-op if sqlite3 is already initialized
+-        if (ret != SQLITE_OK) {
+-            throw std::runtime_error(strprintf("SQLiteDatabase: Failed to initialize SQLite: %s\n", sqlite3_errstr(ret)));
+-        }
+-    }
++    LogPrintf("Using SQLite Version %s\n", SQLiteDatabaseVersion());
++    LogPrintf("Using wallet %s\n", m_dir_path);
+ 
+     try {
+         Open();
+     } catch (const std::runtime_error&) {
+-        // If open fails, cleanup this object and rethrow the exception
+-        Cleanup();
++        Close();
+         throw;
+     }
+ }
+@@ -192,22 +202,7 @@
+ 
+ SQLiteDatabase::~SQLiteDatabase()
+ {
+-    Cleanup();
+-}
+-
+-void SQLiteDatabase::Cleanup() noexcept
+-{
+-    AssertLockNotHeld(g_sqlite_mutex);
+-
+     Close();
+-
+-    LOCK(g_sqlite_mutex);
+-    if (--g_sqlite_count == 0) {
+-        int ret = sqlite3_shutdown();
+-        if (ret != SQLITE_OK) {
+-            LogPrintf("SQLiteDatabase: Failed to shutdown SQLite: %s\n", sqlite3_errstr(ret));
+-        }
+-    }
+ }
+ 
+ bool SQLiteDatabase::Verify(bilingual_str& error)
+--- a/src/swapnet/node.cpp
++++ b/src/swapnet/node.cpp
+@@ -1,4 +1,6 @@
+ // Copyright (c) 2026 The BTX developers. MIT license.
++#include <bitcoin-build-config.h>
++
+ #include <swapnet/node.h>
+ #include <swapnet/runtime.h>
+ #include <chainparams.h>
+@@ -17,10 +19,25 @@
+ #include <mutex>
+ #include <set>
+ #include <stdexcept>
++
++#if defined(SWAPNET_WITH_WALLET) && defined(USE_SQLITE)
++#include <wallet/sqlite.h>
++#endif
++
+ namespace swapnet {
+ namespace {
+ std::mutex g_mutex;
+ std::shared_ptr<Runtime> g_runtime;
++#if defined(SWAPNET_WITH_WALLET) && defined(USE_SQLITE)
++struct SQLiteRuntime {
++    // Runtime stops and closes the Python connection before the guard releases SQLite.
++    wallet::SQLiteLibrary sqlite;
++    Runtime runtime;
++
++    SQLiteRuntime(const std::string& network, std::string config, Callbacks callbacks)
++        : runtime(network, std::move(config), std::move(callbacks)) {}
++};
++#endif
+ WalletBridge g_wallet_bridge;
+ std::set<std::string> g_owners;
+ std::shared_ptr<Runtime> Current() { std::lock_guard<std::mutex> lock(g_mutex); return g_runtime; }
+@@ -96,7 +113,12 @@
+         config.pushKV("datadir",fs::PathToString(args.GetDataDirNet()));config.pushKV("wallet",args.GetArg("-swapnetwallet",""));
+         Callbacks callbacks;
+         callbacks.core=[&node](const auto& wallet,const auto& method,const auto& params){return CoreCall(node,wallet,method,params);};
++#if defined(SWAPNET_WITH_WALLET) && defined(USE_SQLITE)
++        auto state = std::make_shared<SQLiteRuntime>(genesis, config.write(), std::move(callbacks));
++        std::shared_ptr<Runtime> runtime(state, &state->runtime);
++#else
+         auto runtime=std::make_shared<Runtime>(genesis,config.write(),std::move(callbacks));
++#endif
+         runtime->Start();
+         {std::lock_guard<std::mutex> lock(g_mutex);g_owners.clear();for(const auto& user:args.GetArgs("-swapnetowner"))g_owners.insert(user);g_runtime=runtime;}
+         LogPrintf("SwapNet: embedded runtime started; discovery enabled; no implicit spending authorization\n");return true;
