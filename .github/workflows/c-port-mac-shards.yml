@@ -230,6 +230,7 @@ jobs:
               --tmpdir="$RUNNER_TEMP/$test" 2>&1 | tee "$LOGS/$test.log"
           done
       - name: Verify the maintained ownership test rejects the old behavior
+        if: ${{ !cancelled() && steps.bsum.outcome == 'success' }}
         timeout-minutes: 20
         run: |
           python3 - <<'PYCODE'
