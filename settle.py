@@ -234,10 +234,15 @@ def run():
     connected(x, y)
     save("fund and mature test coins")
     for n, peer, addr_type in ((a, b, "p2mr"), (y, x, "bech32")):
-        spacing = 1200 if CASE == "refund" and n is a else 1
+        spacing = 1
         n.mine(3, n.wallet("getnewaddress", "", addr_type), spacing)
         n.mine(105, sinks[n], spacing)
         synced(n, peer)
+    if CASE == "refund":
+        # Give the deadline estimator a short, slower history without mining
+        # the wallet coinbases before the wallet birth time.
+        a.mine(24, sinks[a], 60)
+        synced(a, b)
     for n in (a, b):
         n.stop()
         n.start("swapnet", "-swapnet=1", "-wallet=trader", "-swapnetwallet=trader", *flags)
@@ -341,7 +346,7 @@ def run():
         save("refuse the refund before maturity")
         assert terms["lock_domain"] == "height"
         maturity = terms["lock_value"]
-        assert funded_height < maturity <= funded_height + 700
+        assert funded_height < maturity <= funded_height + 6500
         refund_txid, = [op["txid"] for op in operations(a, "refund")]
         try:
             a.rpc("refundswap", {"swap_id": sid})
