@@ -22,6 +22,7 @@ BTX_ID, BTC_ID = f"btx:{BTX}:0:native", f"btc:{BTC}:0:native"
 HOME = ROOT / "home"
 HOME.mkdir(mode=0o700)
 MODE = os.environ["SWAPNET_VARIANT"]
+FIXTURE_EPOCH = int(time.time()) - 1800
 result = {"status": "INCOMPLETE"}
 nodes = []
 
@@ -129,8 +130,13 @@ class Node:
 
     def mine(self, count, address):
         before = self.rpc("getblockcount")
-        assert len(self.rpc("generatetoaddress", count, address, timeout=90)) == count
+        header = self.rpc("getblockheader", self.rpc("getbestblockhash"))
+        stamp = header["time"] if before else FIXTURE_EPOCH
+        for index in range(count):
+            self.rpc("setmocktime", stamp + index + 1)
+            assert len(self.rpc("generatetoaddress", 1, address, timeout=90)) == 1
         assert self.rpc("getblockcount") == before + count
+        self.rpc("setmocktime", 0)
 
 
 def connected(a, b):
@@ -270,7 +276,7 @@ def run():
     states = []
     while time.monotonic() < deadline:
         states = [n.rpc("listswaps")["swaps"] for n in (a, b)]
-        views = [{k: sw[k] for k in ("stage", "last_action", "last_error", "refs") if k in sw}
+        views = [{k: sw[k] for k in ("stage", "last_action", "last_error", "refs", "observations") if k in sw}
                  for items in states for sw in items if sw["swap_id"] == sid]
         if views != result.get("last_states"):
             result["last_states"] = views
@@ -279,10 +285,16 @@ def run():
             break
         # Mine confirmations only after seeing a pending tx. Extra blocks go to
         # the unloaded miner wallet, whose rewards never enter trader balances.
-        for n, peer, confs in ((a, b, 20), (y, x, 6)):
-            if n.rpc("getrawmempool"):
-                n.mine(confs, sinks[n])
-                synced(n, peer)
+        if a.rpc("getrawmempool"):
+            # Advance the short chain first. The long-chain depth must not
+            # consume the full safety margin while the short tip stands still.
+            y.mine(20, sinks[y])
+            synced(y, x)
+            a.mine(20, sinks[a])
+            synced(a, b)
+        elif y.rpc("getrawmempool"):
+            y.mine(6, sinks[y])
+            synced(y, x)
         time.sleep(0.8)
     else:
         result["diagnostics"] = {}
