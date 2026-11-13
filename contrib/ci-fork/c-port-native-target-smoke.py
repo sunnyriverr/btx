@@ -19,6 +19,7 @@ def run(exe, args, log, env=None):
 
 
 def wallet(exe, logs, scratch):
+    (scratch / "regtest" / "wallets").mkdir(parents=True)
     args = ["-regtest", f"-datadir={scratch}", "-wallet=cport-smoke"]
     for command in ("create", "info"):
         result = run(exe, [*args, command], logs / f"wallet-{command}.log")

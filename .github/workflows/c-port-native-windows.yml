@@ -169,15 +169,36 @@ jobs:
             -DOPENSSL_INCLUDE_DIR=D:/w/ossl/include -DOPENSSL_CRYPTO_LIBRARY=D:/w/ossl/lib/libcrypto.lib \
             -DOPENSSL_SSL_LIBRARY=D:/w/ossl/lib/libssl.lib "-DCMAKE_C_COMPILER_LAUNCHER=$CCACHE_EXE" \
             "-DCMAKE_CXX_COMPILER_LAUNCHER=$CCACHE_EXE" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-      - name: Build wallet CLI and MatMul benchmark
+      - name: Check cache reuse on one generated clang-cl object
+        timeout-minutes: 15
+        run: |
+          set -o pipefail
+          target=src/modelnet/CMakeFiles/bitcoin_modelnet.dir/realm_channel.cpp.obj
+          "$CCACHE_EXE" --zero-stats
+          CCACHE_LOGFILE="$LOGS/cache-object-first.log" python "$CIPY" msvc-run --job "$GITHUB_JOB" --path-prepend 'C:\Program Files\LLVM\bin' --path-drop Strawberry -- ninja -C build -v "$target" > "$LOGS/cache-object-first-build.log" 2>&1
+          python -c 'from pathlib import Path; import sys; Path(sys.argv[1]).unlink()' "build/$target"
+          CCACHE_LOGFILE="$LOGS/cache-object-second.log" python "$CIPY" msvc-run --job "$GITHUB_JOB" --path-prepend 'C:\Program Files\LLVM\bin' --path-drop Strawberry -- ninja -C build -v "$target" > "$LOGS/cache-object-second-build.log" 2>&1
+          "$CCACHE_EXE" --show-stats --verbose | tee "$LOGS/cache-object-stats.txt"
+          if grep -Eq 'Result: (direct_cache_hit|preprocessed_cache_hit)' "$LOGS/cache-object-second.log"; then
+            echo "Observed a cache hit for the second realm_channel compile." | tee "$LOGS/cache-object-verdict.txt"
+          else
+            echo "No cache hit observed. Continuing the bounded default build." | tee "$LOGS/cache-object-verdict.txt"
+          fi
+      - name: Build the default targets on one integrated tree
         timeout-minutes: 300
         run: |
           python "$CIPY" msvc-run --job "$GITHUB_JOB" --path-prepend 'C:\Program Files\LLVM\bin' --path-drop Strawberry -- \
-            python "$CIPY" build --name all --logs "$LOGS" --builddir build -- -k 0 -j"$(nproc)" -v btx-wallet matmul-v4-rc-harness
+            python "$CIPY" build --name all --logs "$LOGS" --builddir build -- -k 0 -j"$(nproc)"
       - name: Smoke each successfully built target
         if: ${{ !cancelled() && steps.configure.outcome == 'success' }}
         run: |
           python contrib/ci-fork/c-port-native-target-smoke.py --bin build/bin --logs "$LOGS"
+      - name: Save ccache
+        if: ${{ !cancelled() && steps.configure.outcome == 'success' }}
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: D:\w\ccache
+          key: ccache-winnative-${{ github.run_id }}-${{ github.run_attempt }}-test
       - name: Upload logs
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
