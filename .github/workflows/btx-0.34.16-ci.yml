@@ -1950,9 +1950,11 @@ jobs:
   macos-build:
     name: macos-build
     needs: tools
-    runs-on: macos-15
+    runs-on: macos-26
     continue-on-error: true  # measurement lane: not gating until it has been green once
     timeout-minutes: 350
+    outputs:
+      archive_verified: ${{ steps.archive-gate.outputs.verified }}
     steps:
       - name: Start
         run: |
@@ -1973,8 +1975,40 @@ jobs:
           path: ${{ runner.temp }}/ci-tools
       - name: Install Homebrew dependencies
         run: |
-          brew install ninja pkgconf libevent zeromq libomp openssl@3 ccache
+          brew install ninja pkgconf libevent zeromq libomp openssl@3 ccache qt qrencode librsvg libicns
           command -v cmake >/dev/null || brew install cmake
+      - name: Check native Qt, OpenSSL and Metal tools
+        run: |
+          set -euo pipefail
+          test "$(uname -m)" = arm64
+          sw_vers
+          xcodebuild -version
+          deployqt=$(command -v macdeployqt || true)
+          if [[ -z "$deployqt" ]]; then
+            for formula in qttools qtbase qt; do
+              tool="$(brew --prefix "$formula")/bin/macdeployqt"
+              if [[ -x "$tool" ]]; then deployqt=$tool; break; fi
+            done
+          fi
+          test -x "$deployqt"
+          echo "$(dirname "$deployqt")" >> "$GITHUB_PATH"
+          shasum -a 256 "$deployqt"
+          brew list --versions qtbase qttools
+          ssl=$(brew --prefix openssl@3)
+          "$ssl/bin/openssl" version
+          for lib in "$ssl/lib/libssl.a" "$ssl/lib/libcrypto.a"; do
+            lipo "$lib" -verify_arch arm64
+            shasum -a 256 "$lib"
+          done
+          for query in 'kem-algorithms ML-KEM-768' 'signature-algorithms ML-DSA-44'; do
+            read -r type algorithm <<< "$query"
+            "$ssl/bin/openssl" list "-$type" | grep -iF "$algorithm"
+          done
+          probe="$RUNNER_TEMP/ci10-metal"
+          printf '%s\n' '#include <metal_stdlib>' 'kernel void ci10_probe() {}' > "$probe.metal"
+          xcrun -sdk macosx metal -c "$probe.metal" -o "$probe.air"
+          xcrun -sdk macosx metallib "$probe.air" -o "$probe.metallib"
+          test -s "$probe.metallib"
       - name: Pick Boost (the tree's depends pin unless the Boost >= 1.91 fix is in)
         id: boost
         run: |
@@ -2029,15 +2063,49 @@ jobs:
         run: |
           prefix=$(brew --prefix)
           export PKG_CONFIG_PATH="$prefix/lib/pkgconfig"
+          ssl=$(brew --prefix openssl@3)
           args=(-S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$prefix" -DWITH_MODELNET=ON
-                -DWITH_ZMQ=ON -DBUILD_GUI=OFF -DBUILD_BENCH=OFF -DWITH_CCACHE=ON)
+                -DWITH_ZMQ=ON -DBTX_ENABLE_METAL=ON -DBUILD_GUI=ON -DWITH_QT_VERSION=6 -DBUILD_BENCH=OFF -DWITH_CCACHE=ON
+                "-DOPENSSL_ROOT_DIR=$ssl" "-DOPENSSL_INCLUDE_DIR=$ssl/include"
+                "-DOPENSSL_SSL_LIBRARY=$ssl/lib/libssl.a" "-DOPENSSL_CRYPTO_LIBRARY=$ssl/lib/libcrypto.a"
+                -DOPENSSL_USE_STATIC_LIBS=ON -DBTX_MATMUL_METAL_PRECOMPILE_KERNELS=ON)
           if [ "$BOOST_MODE" = pinned ]; then args+=(-DBoost_INCLUDE_DIR="$HOME/boost-pin/include"); fi
-          if ! xcrun -sdk macosx metal -v >/dev/null 2>&1; then args+=(-DBTX_MATMUL_METAL_PRECOMPILE_KERNELS=OFF); fi
           python3 "$CIPY" configure --name macos --job "$GITHUB_JOB" --logs "$LOGS" --builddir build -- "${args[@]}"
           python3 "$CIPY" ann notice "job=$GITHUB_JOB step=boost-mode mode=$BOOST_MODE xcode=$(xcodebuild -version | head -n 1 | tr ' ' '-') macos=$(sw_vers -productVersion)"
-      - name: Build btxd and btx-cli
+      - name: Build macOS package targets
         timeout-minutes: 310
-        run: python3 "$CIPY" build --name daemon --logs "$LOGS" --builddir build -- -k 0 -j"$(sysctl -n hw.ncpu)" btxd btx-cli
+        run: |
+          python3 "$CIPY" build --name daemon --logs "$LOGS" --builddir build -- \
+            -k 0 -j"$(sysctl -n hw.ncpu)" btxd btx-cli btx-util btx-qt btx-guardd \
+            btx-modeld btx-hcpd btx-hosted btx-open btx-capability btx-capabilityd \
+            btx-modelcheck btx-matmul-backend-info
+      - name: Package and verify the macOS release archive
+        id: archive-gate
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          mkdir -p "$LOGS/release"
+          test -s build/src/matmul_accel_kernels.metallib
+          test -s build/src/oracle_accel_kernels.metallib
+          package_directory="$RUNNER_TEMP/btx-macos-package"
+          python3 scripts/release/package_release_archive.py --platform-id macos-arm64-metal \
+            --version 0.34.16 --btxd build/bin/btxd --btx-cli build/bin/btx-cli \
+            --btx-util build/bin/btx-util --metal-lib-dir build/src --require-gui \
+            --require-model-helpers --output-dir "$package_directory" 2>&1 \
+            | tee "$LOGS/release/macos-package.log"
+          shopt -s nullglob
+          archives=("$package_directory"/*.tar.gz)
+          if [[ ${#archives[@]} -ne 1 || ! -f "${archives[0]}" ]]; then
+              echo "Expected exactly one macOS release tarball in $package_directory." >&2
+              exit 1
+          fi
+
+          archive=${archives[0]}
+          shasum -a 256 "$archive" | tee "$LOGS/release/macos-archive.sha256"
+          python3 scripts/release/verify_release_btxd.py \
+              --no-launch --require-model-helpers --archive "$archive" 2>&1 \
+              | tee "$LOGS/release/macos-archive-verdict.log"
+          echo "verified=yes" >> "$GITHUB_OUTPUT"
       - name: Build summary
         if: ${{ !cancelled() && steps.configure.outcome == 'success' }}
         run: python3 "$CIPY" build-summary --name daemon --job "$GITHUB_JOB" --logs "$LOGS" --exe btxd=build/bin/btxd btx_cli=build/bin/btx-cli
@@ -2353,7 +2421,7 @@ jobs:
   # ------------------------------------------------------------------ release tooling and the verdict
   release-gate:
     name: release-gate
-    needs: tools
+    needs: [tools, macos-build]
     if: ${{ !cancelled() && needs.tools.result == 'success' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 20
@@ -2386,6 +2454,16 @@ jobs:
             [ "$rc" -eq 0 ] || st=fail
             printf '%s\t%s\t%s\n' "$n" "$st" "$(( $(date +%s) - t0 ))" | tee -a "$LOGS/release/lint-results.tsv"
           done
+      - name: Require the same-run macOS archive verdict
+        if: ${{ !cancelled() }}
+        env:
+          MACOS_ARCHIVE_VERIFIED: ${{ needs.macos-build.outputs.archive_verified }}
+        run: |
+          if [[ "$MACOS_ARCHIVE_VERIFIED" != yes ]]; then
+            echo "::error::The macOS build did not verify its release archive."
+            exit 1
+          fi
+          echo "CI-10 received the passing archive verdict for run $GITHUB_RUN_ID."
       - name: Known-failing gate
         if: ${{ !cancelled() }}
         run: |
