@@ -142,7 +142,27 @@ def connected(a, b):
 
 
 def synced(a, b):
-    until(lambda: a.rpc("getbestblockhash") == b.rpc("getbestblockhash"), 40)
+    def match():
+        return a.rpc("getbestblockhash") == b.rpc("getbestblockhash")
+    if a.genesis != BTC:
+        until(match, 40)
+        return
+    try:
+        until(match, 4)
+    except TimeoutError:
+        peer_height = b.rpc("getblockcount")
+        miner_height = a.rpc("getblockcount")
+        assert a.rpc("getblockhash", peer_height) == b.rpc("getblockhash", peer_height)
+        if peer_height == miner_height:
+            return
+        print(f"Bitcoin regtest relay lagged at {peer_height}; submitting blocks through {miner_height}", flush=True)
+        for height in range(peer_height + 1, miner_height + 1):
+            block_hash = a.rpc("getblockhash", height)
+            submitted = b.rpc("submitblock", a.rpc("getblock", block_hash, 0))
+            assert submitted in (None, "duplicate"), (height, submitted)
+            assert b.rpc("getblockhash", height) == block_hash
+        result.setdefault("bitcoin_relay_fallback", []).append([peer_height, miner_height])
+        until(match, 8)
 
 
 def atoms(value):
