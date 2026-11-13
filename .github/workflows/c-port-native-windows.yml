@@ -1,46 +1,4 @@
-# Fork CI for btxchain/btx release-0.34.16, on a fork's branch ci-0.34.16 (and ci-0.34.16/<topic>).
-#
-# A fork-side gate for the release line. Not proposed upstream: upstream runs no GitHub-hosted CI
-# by policy (.github/workflows/README.md), so a fork run is the evidence a pull request carries.
-# The branch is release-0.34.16 plus one commit: this file, btx-0.34.16-coverage.yml and the helpers
-# in contrib/ci-fork/. A topic branch ci-0.34.16/<topic> is that branch plus a PR's commits.
-#
-# Jobs
-# - tools: selftests and shellcheck of contrib/ci-fork; hands btx_ci.py to every other job.
-# - lint: each check of the repo's lint runner (test/lint/test_runner) and each test/lint/lint-*.py on
-#   its own, yamllint on .github, and a scan of the lines the branch adds for keys and tokens.
-# - clang-tidy-diff: src/.clang-tidy with the bitcoin-tidy plugin (LLVM 19) on the C++ lines the branch
-#   changes against release-0.34.16; warnings are errors there.
-# - cppcheck: cppcheck 2.13 on every product translation unit; red when an (id, file) count grows past
-#   contrib/ci-fork/cppcheck-baseline.tsv, which only shrinks.
-# - linux-build (all targets; the ctest entries outside test_btx; every test_btx suite registered in
-#   ctest) -> linux-unit (6 shards) and linux-functional (4 shards); linux-userns (swarm suites with real
-#   user namespaces). Shards are balanced by measured seconds (contrib/ci-fork/*-seconds.tsv); 900 s per
-#   unit suite, and a suite that times out is rerun alone at the same 900 s. The 191
-#   matmul_v4_rc_stage3_* suites stay out of the hosted Linux shards (macos-stage3-sample measures 20).
-# - mingw-cross, mingw-tests, windows-smoke, windows-tests: the MinGW lane (cross build, native run).
-# - win-native-*: the clang-cl lane (windows-clangcl-static preset); win-native-cl: a cl.exe census that
-#   never gates; win-atlas: the Atlas desktop app. These lanes have not run yet: measurement first.
-# - macos-build -> macos-tests-build -> macos-unit (3 shards), macos-swarm, macos-stage3-sample.
-# - The MinGW, native Windows and macOS jobs are measurement lanes (continue-on-error) until each has been
-#   green once; the gate is lint, clang-tidy-diff, cppcheck, the linux-* jobs, release-gate and summary.
-# - release-gate: the release tooling's own tests (test/util/*release*_test.py).
-# - summary: one known-failing verdict over every Linux result, and the next known-failing list.
-#
-# Rules
-# - No secrets: the job token is read-only (permissions: contents: read); push and manual runs only,
-#   no pull_request trigger.
-# - Runs only outside btxchain/* and only on ci-0.34.16 and ci-0.34.16/* (guard on the tools job).
-# - Third-party code: only actions/* pinned to full commit SHAs; the OpenSSL, Boost, ccache and
-#   shellcheck downloads checked against fixed sha256 values; vcpkg at a pinned commit; the Python lint
-#   tools at pinned versions; Ubuntu packages; crates checked against gui/atlas/Cargo.lock (--locked).
-# - A test failure is red only when it is not in contrib/ci-fork/known-failing.txt
-#   (kind | name | class | first failing line | seen on). The list only shrinks; the summary job writes
-#   the next one. No timeout is raised and no test is skipped to make a job green.
-# - Every result is an annotation titled RESULT, readable without a token via
-#   GET /repos/{owner}/{repo}/check-runs/{id}/annotations.
-
-name: C-PORT native Windows release qualification
+name: C-PORT native Windows default targets
 
 on:
   workflow_dispatch:
@@ -48,7 +6,7 @@ on:
     branches: ['ci-0.34.16/c-port-native']
 
 concurrency:
-  group: btx-0.34.16-ci-${{ github.ref }}
+  group: btx-c-port-native-default-targets-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -120,14 +78,12 @@ jobs:
           overwrite: true
 
   # ------------------------------------------------------------------ static checks
-  win-native-tests:
-    name: win-native-tests
+  win-native-default-targets:
+    name: win-native-default-targets
     needs: tools
     if: ${{ !cancelled() && needs.tools.result == 'success' }}
     runs-on: windows-2025
     timeout-minutes: 355
-    outputs:
-      test_btx: ${{ steps.bsum.outputs.test_btx }}
     env:
       VCPKG_ROOT: 'D:\w\vcpkg'
       VCPKG_DISABLE_METRICS: "1"
@@ -213,223 +169,21 @@ jobs:
             -DOPENSSL_INCLUDE_DIR=D:/w/ossl/include -DOPENSSL_CRYPTO_LIBRARY=D:/w/ossl/lib/libcrypto.lib \
             -DOPENSSL_SSL_LIBRARY=D:/w/ossl/lib/libssl.lib "-DCMAKE_C_COMPILER_LAUNCHER=$CCACHE_EXE" \
             "-DCMAKE_CXX_COMPILER_LAUNCHER=$CCACHE_EXE" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-      - name: Build test_btx and its runtime helper executables
+      - name: Build wallet CLI and MatMul benchmark
         timeout-minutes: 300
         run: |
           python "$CIPY" msvc-run --job "$GITHUB_JOB" --path-prepend 'C:\Program Files\LLVM\bin' --path-drop Strawberry -- \
-            python "$CIPY" build --name all --logs "$LOGS" --builddir build -- -k 0 -j"$(nproc)" test_btx btxd btx-cli btx-modeld btx-open btx-util btx-tx btx-hcpd btx-hosted btx-guardd btx-capabilityd btx-security
-      - name: Build summary
-        id: bsum
+            python "$CIPY" build --name all --logs "$LOGS" --builddir build -- -k 0 -j"$(nproc)" -v btx-wallet matmul-v4-rc-harness
+      - name: Smoke each successfully built target
         if: ${{ !cancelled() && steps.configure.outcome == 'success' }}
         run: |
-          python "$CIPY" build-summary --name all --job "$GITHUB_JOB" --logs "$LOGS" \
-            --exe test_btx=build/bin/test_btx.exe btxd=build/bin/btxd.exe btx_modeld=build/bin/btx-modeld.exe btx_open=build/bin/btx-open.exe
-          for f in build/bin/*.exe; do printf '%s ' "${f##*/}"; done > "$LOGS/exes.txt"
-          python "$CIPY" ann notice "job=$GITHUB_JOB step=exes $(cat "$LOGS/exes.txt")"
-      - name: Save ccache
-        if: ${{ !cancelled() && steps.configure.outcome == 'success' }}
-        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
-        with:
-          path: D:\w\ccache
-          key: ccache-winnative-${{ github.run_id }}-${{ github.run_attempt }}-test
-      - name: Package build/bin (all executables; the shard jobs put it back at the same path)
-        if: ${{ !cancelled() && steps.bsum.outputs.test_btx == 'yes' }}
-        run: |
-          mkdir -p dist-native
-          cp build/bin/*.exe dist-native/
-          cp build/src/bitcoin-build-info.h dist-native/ || true
-          python "$CIPY" msvc-run --job "$GITHUB_JOB" -- dumpbin /nologo /dependents dist-native/test_btx.exe > dist-native/test_btx-dependents.txt 2>&1 || true
-          (cd dist-native && sha256sum ./*.exe > SHA256SUMS.txt)
-      - name: Upload build/bin
-        if: ${{ !cancelled() && steps.bsum.outputs.test_btx == 'yes' }}
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        with:
-          name: win-native-bin
-          path: dist-native/
-          retention-days: 7
-          overwrite: true
+          python contrib/ci-fork/c-port-native-target-smoke.py --bin build/bin --logs "$LOGS"
       - name: Upload logs
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
-          name: logs-win-native-tests
+          name: logs-win-native-default-targets
           path: ${{ runner.temp }}/logs
-          retention-days: 7
-          overwrite: true
-          if-no-files-found: ignore
-
-  # Every suite test_btx --list_content shows, in 8 shards of the sorted list (2 at a time, 30 min each,
-  # the limit repch1c used in #356). Run from the checkout root at the build path, because test_btx has
-  # source and build/bin paths compiled in (src/test/CMakeLists.txt) and some suites look up files from
-  # the working directory. TEMP is short, as it would be with -testdatadir.
-  win-native-units:
-    name: win-native-units (${{ matrix.shard }}/8)
-    needs: [tools, win-native-tests]
-    if: ${{ !cancelled() && needs.win-native-tests.outputs.test_btx == 'yes' }}
-    strategy:
-      fail-fast: false
-      matrix:
-        shard: [1, 2, 3, 4, 5, 6, 7, 8]
-    runs-on: windows-2025
-    continue-on-error: true  # measurement lane: not gating until it has been green once
-    timeout-minutes: 350
-    env:
-      MSYS_NO_PATHCONV: "1"
-    steps:
-      - name: Start (and keep checkout bytes, no CRLF conversion)
-        run: |
-          {
-            echo "JOB_T0=$(date +%s)"
-            echo "LOGS=$RUNNER_TEMP/logs"
-            echo "CIPY=$RUNNER_TEMP/ci-tools/btx_ci.py"
-          } >> "$GITHUB_ENV"
-          mkdir -p "$RUNNER_TEMP/logs" /d/w/t
-          git config --global core.autocrlf false
-          git config --global core.longpaths true
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
-        with:
-          persist-credentials: false
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        with:
-          name: ci-tools
-          path: ${{ runner.temp }}/ci-tools
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        with:
-          name: win-native-bin
-          path: build/bin
-      - name: test_btx shard ${{ matrix.shard }}/8 (balanced by measured seconds, 2 at a time, 1800 s per suite)
-        env:
-          TEMP: 'D:\w\t'
-          TMP: 'D:\w\t'
-        run: |
-          python "$CIPY" suites --bin build/bin/test_btx.exe --label "winnative-s${{ matrix.shard }}" --job "$GITHUB_JOB" \
-            --out "$LOGS/units" --include . --shard "${{ matrix.shard }}/8" --jobs 2 --timeout 1800 --keep-logs \
-            --shard-costs contrib/ci-fork/unit-suite-seconds.tsv \
-            --stop-at $((JOB_T0 + 335 * 60)) --stop-in 330
-      - name: Upload results
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        with:
-          name: win-native-units-${{ matrix.shard }}
-          path: ${{ runner.temp }}/logs
-          retention-days: 7
-          overwrite: true
-          if-no-files-found: ignore
-
-  # Second pass for the suites that hit 1800 s (or were not reached): 5400 s each, in 4 shards.
-  win-native-retry:
-    name: win-native-retry (${{ matrix.shard }}/4)
-    needs: [tools, win-native-tests, win-native-units]
-    if: ${{ !cancelled() && needs.win-native-tests.outputs.test_btx == 'yes' }}
-    strategy:
-      fail-fast: false
-      matrix:
-        shard: [1, 2, 3, 4]
-    runs-on: windows-2025
-    continue-on-error: true  # measurement lane: not gating until it has been green once
-    timeout-minutes: 350
-    env:
-      MSYS_NO_PATHCONV: "1"
-    steps:
-      - name: Start (and keep checkout bytes, no CRLF conversion)
-        run: |
-          {
-            echo "JOB_T0=$(date +%s)"
-            echo "LOGS=$RUNNER_TEMP/logs"
-            echo "CIPY=$RUNNER_TEMP/ci-tools/btx_ci.py"
-          } >> "$GITHUB_ENV"
-          mkdir -p "$RUNNER_TEMP/logs" /d/w/t
-          git config --global core.autocrlf false
-          git config --global core.longpaths true
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
-        with:
-          persist-credentials: false
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        with:
-          name: ci-tools
-          path: ${{ runner.temp }}/ci-tools
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        with:
-          name: win-native-bin
-          path: build/bin
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        continue-on-error: true
-        with:
-          pattern: win-native-units-*
-          path: ${{ runner.temp }}/pass1
-      - name: Suites to retry (timeout, deadline or not reached in pass 1)
-        run: |
-          python "$CIPY" merge --label winnative-pass1 --out "$LOGS/pass1" --inputs "$RUNNER_TEMP/pass1/*/units/results.tsv" \
-            --listed "$RUNNER_TEMP/pass1/*/units/listed.txt" --max-notices 2 --max-errors 2 || true
-          { cat "$LOGS"/pass1/retry-timeout.txt "$LOGS"/pass1/retry-deadline.txt "$LOGS"/pass1/retry-not_run.txt 2>/dev/null || true; } \
-            | sort -u > "$LOGS/retry-list.txt"
-          python "$CIPY" ann notice "job=$GITHUB_JOB step=retry-list suites=$(wc -l < "$LOGS/retry-list.txt")"
-      - name: Retry shard ${{ matrix.shard }}/4 (2 at a time, 5400 s per suite)
-        env:
-          TEMP: 'D:\w\t'
-          TMP: 'D:\w\t'
-        run: |
-          if [ ! -s "$LOGS/retry-list.txt" ]; then echo "nothing to retry"; exit 0; fi
-          python "$CIPY" suites --bin build/bin/test_btx.exe --label "winnative-r${{ matrix.shard }}" --job "$GITHUB_JOB" \
-            --out "$LOGS/units" --include . --suites-file "$LOGS/retry-list.txt" --shard "${{ matrix.shard }}/4" \
-            --jobs 2 --timeout 5400 --keep-logs --stop-at $((JOB_T0 + 335 * 60)) --stop-in 330
-      - name: Upload results
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        with:
-          name: win-native-retry-${{ matrix.shard }}
-          path: ${{ runner.temp }}/logs
-          retention-days: 7
-          overwrite: true
-          if-no-files-found: ignore
-
-  win-native-summary:
-    name: win-native-summary
-    needs: [tools, win-native-units, win-native-retry]
-    if: ${{ !cancelled() && needs.tools.result == 'success' }}
-    runs-on: ubuntu-24.04
-    continue-on-error: true  # measurement lane: not gating until it has been green once
-    timeout-minutes: 15
-    steps:
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        with:
-          name: ci-tools
-          path: ${{ runner.temp }}/ci-tools
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        continue-on-error: true
-        with:
-          pattern: win-native-units-*
-          path: ${{ runner.temp }}/pass1
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        continue-on-error: true
-        with:
-          pattern: win-native-retry-*
-          path: ${{ runner.temp }}/pass2
-      - name: Merge pass 1 and pass 2 (pass 2 wins, a not-run never replaces a result)
-        run: |
-          CIPY="$RUNNER_TEMP/ci-tools/btx_ci.py"
-          python3 "$CIPY" merge --label winnative-all --out "$RUNNER_TEMP/summary" \
-            --inputs "$RUNNER_TEMP/pass1/*/units/results.tsv" "$RUNNER_TEMP/pass2/*/units/results.tsv" \
-            --listed "$RUNNER_TEMP/pass1/*/units/listed.txt" || true
-          if [ ! -f "$RUNNER_TEMP/summary/summary-all.json" ]; then echo "no shard results"; exit 0; fi
-          python3 - "$RUNNER_TEMP/summary/summary-all.json" >> "$GITHUB_STEP_SUMMARY" <<'PY'
-          import json, sys
-          d = json.load(open(sys.argv[1]))
-          print("### Native Windows test_btx (all shards, both passes)\n")
-          print("| status | suites |\n|---|---|")
-          for k, v in sorted(d["counts"].items()):
-              print(f"| {k} | {v} |")
-          print(f"\nlisted={d['listed']} unaccounted={len(d['unaccounted'])} problems={len(d['problems'])}\n")
-          for k, names in sorted(d["by_status"].items()):
-              if k in ("fail", "crash", "timeout", "deadline", "not_run"):
-                  print(f"**{k}** ({len(names)}): " + ", ".join(names[:200]) + "\n")
-          PY
-      - name: Upload the merged table
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        with:
-          name: win-native-summary
-          path: ${{ runner.temp }}/summary
           retention-days: 7
           overwrite: true
           if-no-files-found: ignore
