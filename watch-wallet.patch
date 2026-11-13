@@ -1,0 +1,99 @@
+--- a/contrib/swapnet/swapnet/embedded.py
++++ b/contrib/swapnet/swapnet/embedded.py
+@@ -50,13 +50,17 @@
+         self.drivers={native_asset:UTXODriver(native_asset,self.native,self.wallet,self.wallet,self.journal,self.vault,
+                            network=self.network,confirmations=self.config.get('btx_confirmations',20))}
+         self.startup_errors={}
+-        for asset,policy in self.journal.setting('asset_policies',{}).items():
++        policies=self.journal.setting('asset_policies',{})
++        for asset,policy in policies.items():
+             try:self.drivers[asset]=self.configure_asset(policy)
+             except SwapError as e:self.startup_errors[asset]=e.code
+         # Discover an already-running same-network Bitcoin node without new ports,
+         # installers, downloaded binaries, seeds, or assumptions about liquidity.
+-        try:self.auto_bitcoin()
+-        except SwapError as e:self.startup_errors['bitcoin_auto']=e.code
++        # Never substitute a discovered wallet for an explicit Bitcoin policy
++        # that failed validation during restore.
++        if not any(asset.startswith('btc:') for asset in policies):
++            try:self.auto_bitcoin()
++            except SwapError as e:self.startup_errors['bitcoin_auto']=e.code
+         self.app=Application(self.store,self.network,self.identity,self.vault,self.drivers,self.send,
+                              configure_asset=self.configure_asset,wallet_info=self.wallet_info,
+                              export_recovery=lambda passphrase:export_bundle(self.journal,self.directory,passphrase,self.network))
+@@ -90,11 +94,19 @@
+         wallets=rpc('listwallets');selected=policy.get('wallet','')
+         if selected:require(selected in wallets,'WALLET_UNLOADED','Configured Bitcoin wallet is not loaded')
+         else:require(len(wallets)==1,'WALLET_SELECTION','Bitcoin requires one loaded wallet or an explicit local wallet policy');selected=wallets[0]
+-        # Descriptor watch import stays in the existing owner-selected wallet; it
+-        # cannot import private keys or choose an endpoint supplied by a peer.
+         wrpc=LocalRPC(rpc.url.rstrip('/')+'/wallet/'+quote(selected,safe=''),cookie_path=rpc.cookie_path,timeout=rpc.timeout)
++        watch=wrpc
++        if 'watch_wallet' in policy:
++            observer=policy['watch_wallet']
++            require(type(observer) is str and 0<len(observer)<=256 and observer!=selected and observer in wallets,
++                    'WATCH_WALLET','Select a separate loaded Bitcoin watch wallet')
++            watch=LocalRPC(rpc.url.rstrip('/')+'/wallet/'+quote(observer,safe=''),
++                           cookie_path=rpc.cookie_path,timeout=rpc.timeout)
++            watch_info=watch('getwalletinfo')
++            require(watch_info.get('descriptors') is True and watch_info.get('private_keys_enabled') is False,
++                    'WATCH_WALLET','Bitcoin watch wallet must use descriptors and disable private keys')
+         hrp={'main':'bc','regtest':'bcrt'}.get(info['chain'],'tb')
+-        return UTXODriver(asset,rpc,wrpc,wrpc,self.journal,self.vault,network=self.network,hrp=hrp,
++        return UTXODriver(asset,rpc,wrpc,watch,self.journal,self.vault,network=self.network,hrp=hrp,
+                           fee_rate=policy.get('fee_rate',2),confirmations=policy.get('confirmations',6))
+     def auto_bitcoin(self):
+         chain=self.config.get('chain','main')
+@@ -105,11 +117,12 @@
+             if driver.asset.id not in self.drivers:self.drivers[driver.asset.id]=driver
+     def configure_asset(self,policy):
+         require(type(policy) is dict,'ASSET_POLICY','Asset policy must be an object')
+-        allowed={'asset','rpc_url','cookie_path','wallet','fee_rate','confirmations','contract','runtime_hash'}
++        allowed={'asset','rpc_url','cookie_path','wallet','watch_wallet','fee_rate','confirmations','contract','runtime_hash'}
+         require(set(policy)<=allowed and {'asset','rpc_url'}<=set(policy),'ASSET_POLICY','Unsupported or missing asset policy fields')
+         asset=Asset.parse(policy['asset']);require(asset.family in {'btc','evm'},'ASSET_POLICY','Native BTX binding is immutable')
+         rpc=LocalRPC(policy['rpc_url'],cookie_path=policy.get('cookie_path'))
+         if asset.family=='btc':return self._bitcoin(rpc,policy)
++        require('watch_wallet' not in policy,'ASSET_POLICY','Watch wallet is Bitcoin-only')
+         require({'contract','runtime_hash'}<=set(policy),'ASSET_POLICY','EVM requires the deployed address and exact runtime code hash')
+         return EVMDriver(asset.id,rpc,self.journal,self.vault,policy['contract'],policy['runtime_hash'])
+     def wallet_info(self):
+--- a/doc/swapnet/schemas/asset_policy.schema.json
++++ b/doc/swapnet/schemas/asset_policy.schema.json
+@@ -16,6 +16,11 @@
+     },
+     "wallet": {
+       "type": "string",
++      "maxLength": 256
++    },
++    "watch_wallet": {
++      "type": "string",
++      "minLength": 1,
+       "maxLength": 256
+     },
+     "fee_rate": {
+--- a/doc/swapnet/schemas/local_request.schema.json
++++ b/doc/swapnet/schemas/local_request.schema.json
+@@ -938,6 +938,11 @@
+                   "type": "string",
+                   "maxLength": 256
+                 },
++                "watch_wallet": {
++                  "type": "string",
++                  "minLength": 1,
++                  "maxLength": 256
++                },
+                 "fee_rate": {
+                   "type": "integer",
+                   "minimum": 1,
+--- a/doc/swapnet/OPERATIONS.md
++++ b/doc/swapnet/OPERATIONS.md
+@@ -9,6 +9,8 @@
+ Load exactly one native wallet or select one with `-swapnetwallet=<name>`. The binding is persisted and cannot be switched by an unprivileged caller. Unlock the native wallet through its normal owner workflow when an authorized operation requires it. Wallet-unloaded, locked, read-only or ambiguous-wallet conditions fail rather than choosing somebody else's funds.
+ 
+ ## External-chain prerequisites
++
++For Bitcoin swaps, set `wallet` to the loaded funding wallet and `watch_wallet` to a separate loaded descriptor wallet with private keys disabled. Both use the same verified Bitcoin RPC endpoint. Public HTLC descriptors are imported into the watch wallet. Funding, change and signing stay with the funding wallet.
+ 
+ The host attempts to discover an already-running same-network Bitcoin node using standard local cookie locations. It requires an appropriate loaded wallet and chain verification. Automatic discovery does not download a blockchain, install a daemon, or create funded liquidity. A configured Bitcoin policy can specify its loopback URL, local cookie path, wallet, fee rate and confirmations with `setswapassetpolicy`.
+ 
