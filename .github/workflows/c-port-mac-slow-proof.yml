@@ -1,0 +1,72 @@
+name: C-PORT macOS slow proof pilot
+on:
+  push:
+    branches: [codex/ci-cport-mac-slow-proof]
+permissions:
+  actions: read
+  contents: read
+jobs:
+  proof:
+    runs-on: macos-15
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - suite: matmul_v4_rc_air_episode_tests
+            cases: 5
+          - suite: smile2_audit_tests
+            cases: 27
+          - suite: smile2_membership_tests
+            cases: 21
+    env:
+      SUITE: ${{ matrix.suite }}
+      EXPECTED_CASES: ${{ matrix.cases }}
+      OMP_NUM_THREADS: "2"
+      OMP_WAIT_POLICY: PASSIVE
+      HOMEBREW_NO_AUTO_UPDATE: "1"
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          artifact-ids: 14014797933
+          github-token: ${{ github.token }}
+          run-id: 43376418783
+          path: ${{ runner.temp }}/saved-producer
+      - name: Verify the saved producer and install runtime dependencies
+        shell: bash
+        run: |
+          mkdir -p evidence
+          tar -xf "$RUNNER_TEMP/saved-producer/macos-bin.tar" build/bin/test_btx
+          shasum -a 256 build/bin/test_btx | tee evidence/test_btx.sha256
+          grep -Eq '^2fc7ce626d664373ccb3fb46def59d57e1cfb645f6332b87d7e837d5f3931817 [ *]build/bin/test_btx$' evidence/test_btx.sha256
+          brew install libevent zeromq libomp openssl@3
+      - name: Run one complete proof suite
+        shell: bash
+        run: |
+          python3 contrib/ci-fork/btx_ci.py suites --bin build/bin/test_btx \
+            --label mac-slow-proof --job "$GITHUB_JOB" --out evidence/units \
+            --suites "$SUITE" --jobs 1 --timeout 1800 --keep-logs
+          python3 - <<'PY'
+          import csv, os
+          from pathlib import Path
+          root = Path("evidence/units")
+          suite = os.environ["SUITE"]
+          expected = int(os.environ["EXPECTED_CASES"])
+          assert (root / "selected.txt").read_text().splitlines() == [suite]
+          with (root / "results.tsv").open() as results:
+              rows = list(csv.DictReader(results, delimiter="\t"))
+          assert len(rows) == 1
+          result = rows[0]
+          assert (result["suite"], result["status"], result["rc"]) == (suite, "pass", "0"), result
+          assert int(result["expected"]) == int(result["cases"]) == expected, result
+          assert int(result["errors"]) == int(result["skipped"]) == 0, result
+          PY
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: ${{ !cancelled() }}
+        with:
+          name: mac-slow-proof-${{ matrix.suite }}
+          path: evidence/
+          if-no-files-found: error
