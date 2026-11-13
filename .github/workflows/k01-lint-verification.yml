@@ -1,0 +1,36 @@
+name: C-K01 lint discovery
+on:
+  push:
+    branches: [codex/ci-k01-lint]
+permissions:
+  contents: read
+jobs:
+  lint:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - name: Check K01 in the fork lint driver's Python discovery loop
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = eb603a8adc9e7844fefa320018603dfd4dfee28e
+          git diff --exit-code HEAD^ HEAD -- src test
+          case_root="$RUNNER_TEMP/k01"
+          mkdir -p "$case_root/test/lint"
+          git archive HEAD^ src | tar -xf - -C "$case_root"
+          git -C "$case_root" init -q
+          cp test/lint/lint-k01-state-writes.py "$case_root/test/lint/"
+          driver="$GITHUB_WORKSPACE/contrib/devtools/k01-ci/lint.sh"
+          cd "$case_root"
+          # Exercise only the pinned driver's Python discovery/recording path.
+          bash "$driver" /usr/bin/true "$RUNNER_TEMP/clean"
+          grep -E '^lint-k01-state-writes\.py[[:space:]]+pass[[:space:]]' "$RUNNER_TEMP/clean/lint-results.tsv"
+          printf '\nstd::ofstream planted_k01_regression(path);\n' >> src/modelnet/workspace_git.cpp
+          bash "$driver" /usr/bin/true "$RUNNER_TEMP/planted"
+          grep -E '^lint-k01-state-writes\.py[[:space:]]+fail[[:space:]]' "$RUNNER_TEMP/planted/lint-results.tsv"
+          grep -F planted_k01_regression "$RUNNER_TEMP/planted/logs/lint-k01-state-writes.py.log"
