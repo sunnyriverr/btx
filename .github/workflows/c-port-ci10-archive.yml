@@ -1,0 +1,82 @@
+name: C-PORT CI-10 macOS archive controls
+on:
+  push:
+    branches: [codex/ci-cport-ci10-archive]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  ci10-macos-archive:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: macos-15
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: /contrib/devtools/c-port-qt-fresh/
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: c6f9678dd225572528d06c456c16eb4c78bc637c
+          path: product
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 88c9b49cb16360fc8fbf3f84003b8b54c29e6db5
+          path: release-gate-source
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: /scripts/release/verify_release_btxd.py
+      - name: Recreate exact admitted prerequisites and configuration without BTX compilation
+        timeout-minutes: 30
+        run: python3 contrib/devtools/c-port-qt-fresh/configure.py
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        timeout-minutes: 8
+        with:
+          artifact-ids: 13867962531
+          run-id: 43046975785
+          github-token: ${{ github.token }}
+          path: producer-binaries
+          merge-multiple: true
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        timeout-minutes: 8
+        with:
+          artifact-ids: 13868692030
+          run-id: 43046975785
+          github-token: ${{ github.token }}
+          path: producer-checkpoints
+          merge-multiple: true
+      - name: Verify producer bytes and assemble admitted packages
+        timeout-minutes: 25
+        run: python3 contrib/devtools/c-port-qt-fresh/run.py
+      - name: Exercise the shipped CI-10 archive verifier
+        timeout-minutes: 12
+        run: |
+          set -euo pipefail
+          gate=release-gate-source/scripts/release/verify_release_btxd.py
+          test "$(git -C release-gate-source rev-parse HEAD)" = 88c9b49cb16360fc8fbf3f84003b8b54c29e6db5
+          test "$(git hash-object "$gate")" = bc0f54b03cbf4ff21a443b04a04506de0112c7d7
+          shopt -s nullglob
+          baseline=(package-output/baseline/*.tar.gz)
+          candidate=(package-output/candidate/*.tar.gz)
+          test "${#baseline[@]}" -eq 1
+          test "${#candidate[@]}" -eq 1
+          shasum -a 256 "${baseline[0]}" "${candidate[0]}" | tee package-records/ci10-archives.sha256
+          rc=0
+          python3 "$gate" --no-launch --require-model-helpers --archive "${baseline[0]}" > package-records/ci10-baseline.log 2>&1 || rc=$?
+          cat package-records/ci10-baseline.log
+          test "$rc" -eq 1
+          grep -F 'libjpeg.8.dylib: non-portable macOS runpath:' package-records/ci10-baseline.log
+          python3 "$gate" --no-launch --require-model-helpers --archive "${candidate[0]}" | tee package-records/ci10-candidate.log
+          grep -F 'PASS archive' package-records/ci10-candidate.log
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: c-port-ci10-archive-records
+          path: |
+            mac-config-records
+            package-records
+          retention-days: 14
