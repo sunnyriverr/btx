@@ -60,6 +60,6 @@ for target in x86_64-pc-windows-msvc x86_64-w64-windows-gnu; do
         printf 'Expected the unguarded compile to fail: %s\n' "$target" >&2
         exit 1
     fi
-    grep -F "use of undeclared identifier 'fork'" "$case_root/compile.log"
+    grep -E "undeclared identifier 'fork'|no member named 'fork' in (the )?global namespace" "$case_root/compile.log"
     printf 'Unguarded compile failed as expected: %s\n' "$target"
 done
