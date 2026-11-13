@@ -7,6 +7,7 @@ from pathlib import Path
 import secrets
 import signal
 import socket
+import sqlite3
 import subprocess
 import sys
 import time
@@ -246,7 +247,7 @@ def run():
     sid = accepted["swap_id"]
     result["swap_id"] = sid
     save("observe funding and claims")
-    deadline = time.monotonic() + 160
+    deadline = time.monotonic() + 55
     states = []
     while time.monotonic() < deadline:
         states = [n.rpc("listswaps")["swaps"] for n in (a, b)]
@@ -265,7 +266,26 @@ def run():
                 synced(n, peer)
         time.sleep(0.8)
     else:
-        raise TimeoutError("both swaps did not complete; see last_states")
+        result["diagnostics"] = {}
+        for n in (a, b):
+            health = n.rpc("getswapnetworkinfo")
+            uri = (n.data / "regtest/swapnet/state.sqlite").as_uri() + "?mode=ro"
+            with sqlite3.connect(uri, uri=True) as db:
+                tables = ("reservations", "sn_claimed_quotes", "sn_negotiations", "sn_operations")
+                counts = {table: db.execute(f"SELECT count(*) FROM {table}").fetchone()[0]
+                          for table in tables}
+            result["diagnostics"][n.name] = {"packet_errors": health["packet_errors"],
+                                              "last_tick_error": health["last_tick_error"],
+                                              "journal_counts": counts}
+        result["after_atoms"] = {n.name: balance(n) for n in nodes}
+        result["mempool_counts"] = {n.name: len(n.rpc("getrawmempool")) for n in nodes}
+        # Probe the same descriptor-import shape against the maker's existing
+        # private-key BTC wallet after the stalled run. No coins move.
+        outside = x.wallet("getnewaddress", "", "bech32")
+        descriptor = y.rpc("getdescriptorinfo", f"addr({outside})")["descriptor"]
+        result["bitcoin_watch_import_control"] = y.wallet(
+            "importdescriptors", [{"desc": descriptor, "timestamp": "now", "active": False}])
+        raise TimeoutError("both swaps did not complete; see last_states and diagnostics")
     first, second = (items[0] for items in states)
     assert first["swap_id"] == second["swap_id"] == sid and first["agreement"] == second["agreement"]
     ops = sum((n.rpc("listswapoperations", {"swap_id": sid})["operations"] for n in (a, b)), [])
