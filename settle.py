@@ -364,8 +364,22 @@ def run():
         until(lambda: refund_txid in a.rpc("getrawmempool"), 30)
         result["refund_first_seen_height"] = a.rpc("getblockcount")
         assert result["refund_first_seen_height"] == maturity
+        def observed_refund():
+            v = view(a)
+            return v.get("observations", {}).get("a", {}).get("refunded", False)
+        # Let the daemon observe the unconfirmed spend before the next block
+        # so the bounded historical scan is not its first observation path.
+        try:
+            until(observed_refund, 15)
+            result["saw_mempool_refund"] = True
+        except TimeoutError:
+            result["saw_mempool_refund"] = False
         a.mine(20, sinks[a])
-        until(lambda: view(a)["stage"] == "refunded", 35)
+        settled = view(a)
+        result["reported_swap_stage"] = settled.get("stage")
+        result["reported_last_error"] = settled.get("last_error")
+        result["reported_long_leg"] = settled.get("observations", {}).get("a")
+
         assert [op["txid"] for op in operations(a, "fund")] == [ref["txid"]]
         assert [op["txid"] for op in operations(a, "refund")] == [refund_txid]
         assert not operations(a, "claim") and not view(a)["secret_exposed"]
@@ -396,6 +410,11 @@ def run():
                             "refund_fee_atoms": refund_fee, "wallet_delta_atoms": balance(a)-before[a.name],
                             "confirmations": tx["confirmations"], "btc_balances_unchanged": True}
         save("refund and wallet ownership verified")
+        try:
+            until(lambda: view(a)["stage"] == "refunded", 40)
+            result["reported_swap_stage"] = "refunded"
+        except TimeoutError:
+            result["terminal_state_pending"] = True
         return
 
     connected(a, b)
