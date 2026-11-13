@@ -1,0 +1,361 @@
+# Fork CI for btxchain/btx release-0.34.16, on a fork's branch ci-0.34.16 (and ci-0.34.16/<topic>).
+#
+# A fork-side gate for the release line. Not proposed upstream: upstream runs no GitHub-hosted CI
+# by policy (.github/workflows/README.md), so a fork run is the evidence a pull request carries.
+# The branch is release-0.34.16 plus one commit: this file, btx-0.34.16-coverage.yml and the helpers
+# in contrib/ci-fork/. A topic branch ci-0.34.16/<topic> is that branch plus a PR's commits.
+#
+# Jobs
+# - tools: selftests and shellcheck of contrib/ci-fork; hands btx_ci.py to every other job.
+# - lint: each check of the repo's lint runner (test/lint/test_runner) and each test/lint/lint-*.py on
+#   its own, yamllint on .github, and a scan of the lines the branch adds for keys and tokens.
+# - clang-tidy-diff: src/.clang-tidy with the bitcoin-tidy plugin (LLVM 19) on the C++ lines the branch
+#   changes against release-0.34.16; warnings are errors there.
+# - cppcheck: cppcheck 2.13 on every product translation unit; red when an (id, file) count grows past
+#   contrib/ci-fork/cppcheck-baseline.tsv, which only shrinks.
+# - linux-build (all targets; the ctest entries outside test_btx; every test_btx suite registered in
+#   ctest) -> linux-unit (6 shards) and linux-functional (4 shards); linux-userns (swarm suites with real
+#   user namespaces). Shards are balanced by measured seconds (contrib/ci-fork/*-seconds.tsv); 900 s per
+#   unit suite, and a suite that times out is rerun alone at the same 900 s. The 191
+#   matmul_v4_rc_stage3_* suites stay out of the hosted Linux shards (macos-stage3-sample measures 20).
+# - mingw-cross, mingw-tests, windows-smoke, windows-tests: the MinGW lane (cross build, native run).
+# - win-native-*: the clang-cl lane (windows-clangcl-static preset); win-native-cl: a cl.exe census that
+#   never gates; win-atlas: the Atlas desktop app. These lanes have not run yet: measurement first.
+# - macos-build -> macos-tests-build -> macos-unit (3 shards), macos-swarm, macos-stage3-sample.
+# - The MinGW, native Windows and macOS jobs are measurement lanes (continue-on-error) until each has been
+#   green once; the gate is lint, clang-tidy-diff, cppcheck, the linux-* jobs, release-gate and summary.
+# - release-gate: the release tooling's own tests (test/util/*release*_test.py).
+# - summary: one known-failing verdict over every Linux result, and the next known-failing list.
+#
+# Rules
+# - No secrets: the job token is read-only (permissions: contents: read); push and manual runs only,
+#   no pull_request trigger.
+# - Runs only outside btxchain/* and only on ci-0.34.16 and ci-0.34.16/* (guard on the tools job).
+# - Third-party code: only actions/* pinned to full commit SHAs; the OpenSSL, Boost, ccache and
+#   shellcheck downloads checked against fixed sha256 values; vcpkg at a pinned commit; the Python lint
+#   tools at pinned versions; Ubuntu packages; crates checked against gui/atlas/Cargo.lock (--locked).
+# - A test failure is red only when it is not in contrib/ci-fork/known-failing.txt
+#   (kind | name | class | first failing line | seen on). The list only shrinks; the summary job writes
+#   the next one. No timeout is raised and no test is skipped to make a job green.
+# - Every result is an annotation titled RESULT, readable without a token via
+#   GET /repos/{owner}/{repo}/check-runs/{id}/annotations.
+
+name: btx-0.34.16 CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['ci-0.34.16/c-port-ci10-normal']
+
+concurrency:
+  group: btx-0.34.16-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  RELEASE_BRANCH: "release-0.34.16"
+  UPSTREAM_URL: "https://github.com/btxchain/btx.git"
+  OSSL_VER: "3.5.4"
+  OSSL_SHA256: "967311f84955316969bdb1d8d4b983718ef42338639c621ec4c34fddef355e99"
+  BOOST_PIN_VER: "1.81.0"
+  BOOST_PIN_SHA256: "205666dea9f6a7cfed87c7a6dfbeb52a2c1b9de55712c9c1a87735d7181452b6"
+  # ccache 4.14.2 (18 Oct 2026); sha256 = the GitHub release asset digest of ccache-4.14.2-windows-x86_64.zip.
+  CCACHE_WIN_VER: "4.14.2"
+  CCACHE_WIN_SHA256: "6993ce645e53192cec592ee23186200b574ac4c59097ecde8d9cfd681b47ae84"
+  # The vcpkg commit of the native Windows runs reported on #356 (3 Nov 2026); vcpkg.json's builtin-baseline
+  # (c82f7466, 2024.09.30) still decides the port versions.
+  VCPKG_COMMIT: "afa249f12f52ed8a3b919f195495ba8b330288d1"
+  WIN_NATIVE_TARGETS: "btxd btx-cli btx-tx btx-util btx-modeld"
+  # The pin of ci/lint/04_install.sh; sha256 of shellcheck-v0.8.0.linux.x86_64.tar.xz, checked 12 Nov 2026.
+  SHELLCHECK_VER: "v0.8.0"
+  SHELLCHECK_SHA256: "ab6ee1b178f014d1b86d1e24da20d1139656c8b0ed34d2867fbb834dad02bf0a"
+  TIDY_LLVM_V: "19"
+  UNIT_EXCLUDE: "^matmul_v4_rc_stage3_"
+  KNOWN: "contrib/ci-fork/known-failing.txt"
+  CCACHE_MAXSIZE: "2500M"
+  CCACHE_COMPRESS: "true"
+  CCACHE_NOHASHDIR: "true"
+  CCACHE_COMPILERCHECK: "content"
+  HOMEBREW_NO_AUTO_UPDATE: "1"
+  HOMEBREW_NO_INSTALL_CLEANUP: "1"
+  HOMEBREW_NO_ANALYTICS: "1"
+  HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: "1"
+  PYTHONUNBUFFERED: "1"
+  LINUX_TEST_TARGETS: "test_btx btxd btx-cli btx-open btx-modeld btx-wallet btx-util btx-hcpd btx-tx btx-hosted"
+  CORE_SUITES: "util_tests,crypto_tests,hash_tests,key_tests,base58_tests,bech32_tests,uint256_tests,arith_uint256_tests,serialize_tests,streams_tests,script_tests,transaction_tests,sighash_tests,coins_tests,mempool_tests,validation_tests,blockchain_tests,net_tests,addrman_tests,getarg_tests,fs_tests,sock_tests,pq_crypto_tests,wallet_tests,lightwatch_tests,lab_lifecycle_tests,nif_sandbox_tests,guard_permit_tests,native_discovery_tests,cap02_tests,hire01_tests,acc07_tests,fixture_cleanup_tests"
+  GUARD_SUITES: "guard_permit_tests,native_discovery_tests,cap02_tests,hire01_tests,acc07_tests"
+
+jobs:
+  tools:
+    name: tools
+    # Every other job needs this one, so this guard keeps the whole workflow off upstream and off every
+    # branch except ci-0.34.16 and ci-0.34.16/* (push or manual run).
+    if: ${{ github.repository_owner != 'btxchain' && (github.ref_name == 'ci-0.34.16' || startsWith(github.ref_name, 'ci-0.34.16/')) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+      - name: Check the CI helpers (selftests, shellcheck) and hand btx_ci.py on
+        run: |
+          command -v shellcheck >/dev/null || { sudo apt-get update -q && sudo apt-get install -y -q shellcheck; }
+          python3 -m py_compile contrib/ci-fork/*.py
+          python3 contrib/ci-fork/btx_ci.py selftest --job tools
+          python3 contrib/ci-fork/coverage_check.py --selftest
+          shellcheck contrib/ci-fork/*.sh
+          mkdir -p ci-tools
+          cp contrib/ci-fork/btx_ci.py ci-tools/btx_ci.py
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: ci-tools
+          path: ci-tools/btx_ci.py
+          retention-days: 7
+          overwrite: true
+
+  # ------------------------------------------------------------------ static checks
+  macos-build:
+    name: macos-build
+    needs: tools
+    runs-on: macos-26
+    continue-on-error: true  # measurement lane: not gating until it has been green once
+    timeout-minutes: 350
+    outputs:
+      archive_verified: ${{ steps.archive-gate.outputs.verified }}
+    steps:
+      - name: Start
+        run: |
+          {
+            echo "JOB_T0=$(date +%s)"
+            echo "LOGS=$RUNNER_TEMP/logs"
+            echo "CIPY=$RUNNER_TEMP/ci-tools/btx_ci.py"
+            echo "CCACHE_DIR=$HOME/.ccache-btx"
+            echo "CCACHE_BASEDIR=$GITHUB_WORKSPACE"
+          } >> "$GITHUB_ENV"
+          mkdir -p "$RUNNER_TEMP/logs"
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: ci-tools
+          path: ${{ runner.temp }}/ci-tools
+      - name: Install Homebrew dependencies
+        run: |
+          brew install ninja pkgconf libevent zeromq libomp openssl@3 ccache qt qrencode librsvg libicns
+          command -v cmake >/dev/null || brew install cmake
+      - name: Check native Qt, OpenSSL and Metal tools
+        run: |
+          set -euo pipefail
+          test "$(uname -m)" = arm64
+          sw_vers
+          xcodebuild -version
+          deployqt=$(command -v macdeployqt || true)
+          if [[ -z "$deployqt" ]]; then
+            for formula in qttools qtbase qt; do
+              tool="$(brew --prefix "$formula")/bin/macdeployqt"
+              if [[ -x "$tool" ]]; then deployqt=$tool; break; fi
+            done
+          fi
+          test -x "$deployqt"
+          echo "$(dirname "$deployqt")" >> "$GITHUB_PATH"
+          shasum -a 256 "$deployqt"
+          brew list --versions qtbase qttools
+          ssl=$(brew --prefix openssl@3)
+          "$ssl/bin/openssl" version
+          for lib in "$ssl/lib/libssl.a" "$ssl/lib/libcrypto.a"; do
+            lipo -verify_arch arm64 "$lib"
+            shasum -a 256 "$lib"
+          done
+          for query in 'kem-algorithms ML-KEM-768' 'signature-algorithms ML-DSA-44'; do
+            read -r type algorithm <<< "$query"
+            "$ssl/bin/openssl" list "-$type" | grep -iF "$algorithm"
+          done
+          probe="$RUNNER_TEMP/ci10-metal"
+          printf '%s\n' '#include <metal_stdlib>' 'kernel void ci10_probe() {}' > "$probe.metal"
+          xcrun -sdk macosx metal -c "$probe.metal" -o "$probe.air"
+          xcrun -sdk macosx metallib "$probe.air" -o "$probe.metallib"
+          test -s "$probe.metallib"
+      - name: Pick Boost (the tree's depends pin unless the Boost >= 1.91 fix is in)
+        id: boost
+        run: |
+          if grep -q 'struct CTxMemPoolEntry_Indices final : boost::multi_index::indexed_by' src/txmempool.h; then
+            echo "mode=pinned" >> "$GITHUB_OUTPUT"
+            if brew list --formula boost >/dev/null 2>&1; then brew uninstall --ignore-dependencies boost; fi
+          else
+            echo "mode=brew" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Restore pinned Boost headers
+        id: boost-cache
+        if: steps.boost.outputs.mode == 'pinned'
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ~/boost-pin
+          key: boost-headers-${{ env.BOOST_PIN_VER }}-v1
+      - name: Fetch pinned Boost headers
+        id: boost-fetch
+        if: steps.boost.outputs.mode == 'pinned' && steps.boost-cache.outputs.cache-hit != 'true'
+        run: |
+          v="$BOOST_PIN_VER"; d="boost_${v//./_}"
+          curl -fsSL --retry 3 -o "$RUNNER_TEMP/$d.tar.gz" "https://archives.boost.io/release/$v/source/$d.tar.gz"
+          got=$(shasum -a 256 "$RUNNER_TEMP/$d.tar.gz" | cut -d' ' -f1)
+          if [ "$got" != "$BOOST_PIN_SHA256" ]; then
+            python3 "$CIPY" ann error "job=$GITHUB_JOB step=boost sha256-mismatch got=$got"
+            exit 1
+          fi
+          tar -xzf "$RUNNER_TEMP/$d.tar.gz" -C "$RUNNER_TEMP" "$d/boost"
+          mkdir -p "$HOME/boost-pin/include"
+          mv "$RUNNER_TEMP/$d/boost" "$HOME/boost-pin/include/boost"
+      - name: Save pinned Boost headers
+        if: steps.boost-fetch.outcome == 'success'
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ~/boost-pin
+          key: boost-headers-${{ env.BOOST_PIN_VER }}-v1
+      - name: Install Homebrew Boost
+        if: steps.boost.outputs.mode == 'brew'
+        run: brew install boost
+      - name: Restore ccache
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ~/.ccache-btx
+          key: ccache-macos-${{ github.run_id }}-${{ github.run_attempt }}-build
+          restore-keys: |
+            ccache-macos-${{ github.run_id }}-
+            ccache-macos-
+      - name: Configure (Modelnet ON)
+        id: configure
+        env:
+          BOOST_MODE: ${{ steps.boost.outputs.mode }}
+        run: |
+          prefix=$(brew --prefix)
+          export PKG_CONFIG_PATH="$prefix/lib/pkgconfig"
+          ssl=$(brew --prefix openssl@3)
+          args=(-S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$prefix" -DWITH_MODELNET=ON
+                -DWITH_ZMQ=ON -DBTX_ENABLE_METAL=ON -DBUILD_GUI=ON -DWITH_QT_VERSION=6 -DBUILD_BENCH=OFF -DWITH_CCACHE=ON
+                "-DOPENSSL_ROOT_DIR=$ssl" "-DOPENSSL_INCLUDE_DIR=$ssl/include"
+                "-DOPENSSL_SSL_LIBRARY=$ssl/lib/libssl.a" "-DOPENSSL_CRYPTO_LIBRARY=$ssl/lib/libcrypto.a"
+                -DOPENSSL_USE_STATIC_LIBS=ON -DBTX_MATMUL_METAL_PRECOMPILE_KERNELS=ON)
+          if [ "$BOOST_MODE" = pinned ]; then args+=(-DBoost_INCLUDE_DIR="$HOME/boost-pin/include"); fi
+          python3 "$CIPY" configure --name macos --job "$GITHUB_JOB" --logs "$LOGS" --builddir build -- "${args[@]}"
+          python3 "$CIPY" ann notice "job=$GITHUB_JOB step=boost-mode mode=$BOOST_MODE xcode=$(xcodebuild -version | head -n 1 | tr ' ' '-') macos=$(sw_vers -productVersion)"
+      - name: Build macOS package targets
+        timeout-minutes: 310
+        run: |
+          python3 "$CIPY" build --name daemon --logs "$LOGS" --builddir build -- \
+            -k 0 -j"$(sysctl -n hw.ncpu)" btxd btx-cli btx-util btx-qt btx-guardd \
+            btx-modeld btx-hcpd btx-hosted btx-open btx-capability btx-capabilityd \
+            btx-modelcheck btx-matmul-backend-info
+      - name: Package and verify the macOS release archive
+        id: archive-gate
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          mkdir -p "$LOGS/release"
+          test -s build/src/matmul_accel_kernels.metallib
+          test -s build/src/oracle_accel_kernels.metallib
+          package_directory="$RUNNER_TEMP/btx-macos-package"
+          python3 scripts/release/package_release_archive.py --platform-id macos-arm64-metal \
+            --version 0.34.16 --btxd build/bin/btxd --btx-cli build/bin/btx-cli \
+            --btx-util build/bin/btx-util --metal-lib-dir build/src --require-gui \
+            --require-model-helpers --output-dir "$package_directory" 2>&1 \
+            | tee "$LOGS/release/macos-package.log"
+          shopt -s nullglob
+          archives=("$package_directory"/*.tar.gz)
+          if [[ ${#archives[@]} -ne 1 || ! -f "${archives[0]}" ]]; then
+              echo "Expected exactly one macOS release tarball in $package_directory." >&2
+              exit 1
+          fi
+
+          archive=${archives[0]}
+          shasum -a 256 "$archive" | tee "$LOGS/release/macos-archive.sha256"
+          python3 scripts/release/verify_release_btxd.py \
+              --no-launch --require-model-helpers --archive "$archive" 2>&1 \
+              | tee "$LOGS/release/macos-archive-verdict.log"
+          echo "verified=yes" >> "$GITHUB_OUTPUT"
+      - name: Build summary
+        if: ${{ !cancelled() && steps.configure.outcome == 'success' }}
+        run: python3 "$CIPY" build-summary --name daemon --job "$GITHUB_JOB" --logs "$LOGS" --exe btxd=build/bin/btxd btx_cli=build/bin/btx-cli
+      - name: Save ccache
+        if: ${{ !cancelled() && steps.configure.outcome == 'success' }}
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ~/.ccache-btx
+          key: ccache-macos-${{ github.run_id }}-${{ github.run_attempt }}-build
+      - name: Upload logs
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: logs-macos-build
+          path: ${{ runner.temp }}/logs
+          retention-days: 7
+          overwrite: true
+          if-no-files-found: ignore
+
+  # Builds test_btx and the helpers once (the daemon's objects come from macos-build's ccache) and hands
+  # them to the test jobs. Unsharded, the macOS test job ran out of time (343 min on 3 Nov).
+  release-gate:
+    name: release-gate
+    needs: [tools, macos-build]
+    if: ${{ !cancelled() && needs.tools.result == 'success' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Start
+        run: |
+          {
+            echo "JOB_T0=$(date +%s)"
+            echo "LOGS=$RUNNER_TEMP/logs"
+            echo "CIPY=$RUNNER_TEMP/ci-tools/btx_ci.py"
+          } >> "$GITHUB_ENV"
+          mkdir -p "$RUNNER_TEMP/logs"
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: ci-tools
+          path: ${{ runner.temp }}/ci-tools
+      - name: The release tooling's own tests (package, verify, cut, the ZMQ gate)
+        run: |
+          mkdir -p "$LOGS/release/logs"
+          : > "$LOGS/release/lint-results.tsv"
+          for t in test/util/*release*_test.py; do
+            n="release:$(basename "$t")"
+            t0=$(date +%s)
+            rc=0
+            python3 "$t" > "$LOGS/release/logs/$(basename "$t").log" 2>&1 || rc=$?
+            st=pass
+            [ "$rc" -eq 0 ] || st=fail
+            printf '%s\t%s\t%s\n' "$n" "$st" "$(( $(date +%s) - t0 ))" | tee -a "$LOGS/release/lint-results.tsv"
+          done
+      - name: Require the same-run macOS archive verdict
+        if: ${{ !cancelled() }}
+        env:
+          MACOS_ARCHIVE_VERIFIED: ${{ needs.macos-build.outputs.archive_verified }}
+        run: |
+          if [[ "$MACOS_ARCHIVE_VERIFIED" != yes ]]; then
+            echo "::error::The macOS build did not verify its release archive."
+            exit 1
+          fi
+          echo "CI-10 received the passing archive verdict for run $GITHUB_RUN_ID."
+      - name: Known-failing gate
+        if: ${{ !cancelled() }}
+        run: |
+          python3 "$CIPY" known --label release-gate --known "$KNOWN" --out "$LOGS/gate" --lint "$LOGS/release/lint-results.tsv"
+      - name: Upload results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: res-release-gate
+          path: ${{ runner.temp }}/logs
+          retention-days: 7
+          overwrite: true
+          if-no-files-found: ignore
+
