@@ -1,0 +1,28 @@
+name: C-PORT POSIX lint verification
+on:
+  push:
+    branches: [codex/ci-c-port-posix-lint]
+permissions:
+  contents: read
+jobs:
+  lint:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - name: Verify POSIX lint and fork CI discovery
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = 1e5e1fe2b829816757827a6382e495fa327f2902
+          git diff --exit-code HEAD^ HEAD -- src test
+          cd "$GITHUB_WORKSPACE"
+          echo '34568f4bffa00b4676636943fa348f48bfa20509b1a01c84b198609dbaa59d12  contrib/devtools/c-port-ci/lint.sh' | sha256sum -c -
+          cp contrib/devtools/c-port-ci/verify.sh "$GITHUB_WORKSPACE/../c-port-verify.sh"
+          cp contrib/devtools/c-port-ci/lint.sh "$GITHUB_WORKSPACE/../c-port-driver.sh"
+          git switch --detach HEAD^
+          bash "$GITHUB_WORKSPACE/../c-port-verify.sh" "$GITHUB_WORKSPACE/../c-port-driver.sh"
