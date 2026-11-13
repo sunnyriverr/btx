@@ -1,0 +1,48 @@
+name: K01 native locked replacement
+on:
+  push:
+    branches: [codex/ci-k01-locked-replacement]
+permissions:
+  contents: read
+jobs:
+  locked-replacement:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: windows-2025
+    timeout-minutes: 10
+    steps:
+      - name: Preserve Git source bytes
+        run: git config --global core.autocrlf false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 3
+      - name: Compile exact atomic writer and Windows filesystem functions
+        shell: cmd
+        run: |
+          git diff --exit-code eb603a8adc9e7844fefa320018603dfd4dfee28e HEAD -- src
+          if errorlevel 1 exit /b 1
+          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "BTX_VS=%%i"
+          if not defined BTX_VS exit /b 2
+          call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
+          if errorlevel 1 exit /b 3
+          python contrib/devtools/k01-windows/prepare-probe.py . probe
+          if errorlevel 1 exit /b 4
+          "C:\Program Files\LLVM\bin\clang-cl.exe" --version
+          "C:\Program Files\LLVM\bin\clang-cl.exe" /nologo /std:c++20 /O2 /EHsc /DWIN32 /DWIN32_LEAN_AND_MEAN /DNOMINMAX /Iprobe /Isrc probe/readwritefile.cpp probe/platform.cpp contrib/devtools/k01-windows/locked-replacement.cpp /Fe:probe/check.exe
+          exit /b %errorlevel%
+      - name: Verify replacement refusal, preservation, cleanup and identical retry
+        shell: pwsh
+        run: |
+          $root = Join-Path $env:RUNNER_TEMP ('k01-' + [Guid]::NewGuid().ToString('N'))
+          $volume = Get-Volume -DriveLetter ([IO.Path]::GetPathRoot($root).Substring(0,1))
+          if ($volume.FileSystem -ne 'NTFS') { throw "Expected NTFS, got $($volume.FileSystem)" }
+          [Environment]::OSVersion.Version
+          $volume.FileSystem
+          Get-FileHash probe/check.exe -Algorithm SHA256
+          New-Item -ItemType Directory -Path $root | Out-Null
+          try {
+            & probe/check.exe $root
+            if ($LASTEXITCODE -ne 0) { throw "Locked replacement probe failed: $LASTEXITCODE" }
+          } finally {
+            Remove-Item -LiteralPath $root -Recurse
+          }
