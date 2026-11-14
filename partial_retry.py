@@ -58,7 +58,7 @@ class PartialRetry(ModelNetMinioLayoutsTest):
                     if not any(k in error for k in ['backoff','cooldown','rate limit']) or time.monotonic()>=deadline:return observations
                     time.sleep(.5)
             result['retry_responses']=retry()
-            result['retry_cursor']=json.loads(cursor_path.read_text())
+            result['retry_cursor']=json.loads(cursor_path.read_text()) if cursor_path.exists() else None
             result['retry_quarantine']={p.name:sha(p.read_bytes()) for p in quarantine.glob('*.piece')}
             def inspect(label):
                 pieces=sorted(root.rglob('*.piece'),key=lambda p:int(p.stem));result[label+'_bytes_match']=b''.join(p.read_bytes() for p in pieces)==original
@@ -68,9 +68,10 @@ class PartialRetry(ModelNetMinioLayoutsTest):
                 except Exception as e:result[label+'_export_error']=str(e)
             inspect('retry');save()
             self._restart_helper();result['after_restart_responses']=retry();inspect('restart')
-            result['restart_cursor']=json.loads(cursor_path.read_text())
+            result['restart_cursor']=json.loads(cursor_path.read_text()) if cursor_path.exists() else None
             result['phase']='RECOVERED_BYTES_AND_RESTART' if all(result.get(k) is True for k in ['retry_bytes_match','retry_materialized_match','restart_bytes_match','restart_materialized_match']) else 'FAILED_PARTIAL_RETRY'
             save();assert result['phase']=='RECOVERED_BYTES_AND_RESTART',result
+            assert result['retry_cursor'] is None and result['restart_cursor'] is None,result
             print('PARTIAL_CLOUD_RECOVERY_PASS',flush=True)
         finally:save()
 
