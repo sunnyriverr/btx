@@ -1,0 +1,164 @@
+{
+  "status": "PASS",
+  "case": "restart",
+  "stage": "restart verified",
+  "before_atoms": {
+    "btx-a": 6000000000,
+    "btx-b": 0,
+    "btc-a": 0,
+    "btc-b": 15000000000
+  },
+  "quote": {
+    "id": "e6a89ea41677768cc5c7b3006985d1c85e8ec06bb4784af5463f7af7ec8cbe5b",
+    "sell_atoms": "20000000",
+    "buy_atoms": "40000000",
+    "maker_fee_atoms": "10000"
+  },
+  "swap_id": "ef2553597a3cb396f5dfc3cba3aeef628ccef6944d445c8202d2b3396929aae5",
+  "initial_funding": {
+    "outpoint": {
+      "txid": "d49ebc3b923a0cebbbd57d0b41c04f3bb3a349d5f9f9c55876e462b3d761e2cc",
+      "vout": 0
+    },
+    "height": 109,
+    "confirmed": true,
+    "counterparty_funded": false,
+    "durable_refund": true
+  },
+  "restart_preserved_original": true,
+  "last_states": [
+    {
+      "stage": "complete",
+      "last_action": "complete",
+      "last_error": null,
+      "refs": {
+        "a": {
+          "txid": "d49ebc3b923a0cebbbd57d0b41c04f3bb3a349d5f9f9c55876e462b3d761e2cc",
+          "vout": 0
+        },
+        "b": {
+          "txid": "5ed1c373ca68a5603d1bcb82fe2f6f641fafe657f779c43dd21d1c01d0080e45",
+          "vout": 1
+        }
+      },
+      "observations": {
+        "a": {
+          "canonical": true,
+          "claimed": true,
+          "confirmations": 20,
+          "conflicting": false,
+          "exact_terms": true,
+          "finalized": false,
+          "observed_at": 1794645109,
+          "present": true,
+          "refunded": false
+        },
+        "b": {
+          "canonical": true,
+          "claimed": true,
+          "confirmations": 26,
+          "conflicting": false,
+          "exact_terms": true,
+          "finalized": false,
+          "observed_at": 1794645109,
+          "present": true,
+          "refunded": false
+        }
+      }
+    },
+    {
+      "stage": "complete",
+      "last_action": "complete",
+      "last_error": null,
+      "refs": {
+        "a": {
+          "txid": "d49ebc3b923a0cebbbd57d0b41c04f3bb3a349d5f9f9c55876e462b3d761e2cc",
+          "vout": 0
+        },
+        "b": {
+          "txid": "5ed1c373ca68a5603d1bcb82fe2f6f641fafe657f779c43dd21d1c01d0080e45",
+          "vout": 1
+        }
+      },
+      "observations": {
+        "a": {
+          "canonical": true,
+          "claimed": true,
+          "confirmations": 20,
+          "conflicting": false,
+          "exact_terms": true,
+          "finalized": false,
+          "observed_at": 1794645109,
+          "present": true,
+          "refunded": false
+        },
+        "b": {
+          "canonical": true,
+          "claimed": true,
+          "confirmations": 26,
+          "conflicting": false,
+          "exact_terms": true,
+          "finalized": false,
+          "observed_at": 1794645109,
+          "present": true,
+          "refunded": false
+        }
+      }
+    }
+  ],
+  "bitcoin_relay_fallback": [
+    [
+      140,
+      160
+    ]
+  ],
+  "btc_observer_isolation": true,
+  "legs": {
+    "btx": {
+      "funding_txid": "d49ebc3b923a0cebbbd57d0b41c04f3bb3a349d5f9f9c55876e462b3d761e2cc",
+      "funding_vout": 0,
+      "claim_txid": "e1252a3703667877966258533de04c048e195830765baaff865cdbd25d966b0c",
+      "locked_atoms": 20000000,
+      "paid_atoms": 19991000,
+      "funding_fee_atoms": 7834,
+      "claim_fee_atoms": 9000,
+      "payout": "btxrt1zzfmxr4fnxv65djq50y2t6dly3uclw37actud9kmer4zkpf0dg9tswp2d9m"
+    },
+    "btc": {
+      "funding_txid": "5ed1c373ca68a5603d1bcb82fe2f6f641fafe657f779c43dd21d1c01d0080e45",
+      "funding_vout": 1,
+      "claim_txid": "598de1cd7ac1a19ab61551a697475d87cb7741cdf212dc3b580ca5bdc8d819d9",
+      "locked_atoms": 39990000,
+      "paid_atoms": 39989560,
+      "funding_fee_atoms": 330,
+      "claim_fee_atoms": 440,
+      "payout": "bcrt1qvckxewyjquvuuwyqvvetew0vyfl9xudm7jq73f"
+    }
+  },
+  "after_atoms": {
+    "btx-a": 5979992166,
+    "btx-b": 19991000,
+    "btc-a": 39989560,
+    "btc-b": 14960009670
+  },
+  "expected_delta_atoms": {
+    "btx-a": -20007834,
+    "btx-b": 19991000,
+    "btc-b": -39990330,
+    "btc-a": 39989560
+  },
+  "actual_delta_atoms": {
+    "btx-a": -20007834,
+    "btx-b": 19991000,
+    "btc-a": 39989560,
+    "btc-b": -39990330
+  },
+  "funding_outputs": [
+    {
+      "txid": "d49ebc3b923a0cebbbd57d0b41c04f3bb3a349d5f9f9c55876e462b3d761e2cc",
+      "vout": 0
+    }
+  ],
+  "terminal_restart_preserved": true,
+  "cleanup_errors": []
+}

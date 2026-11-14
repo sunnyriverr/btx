@@ -1,0 +1,51 @@
+{
+  "status": "INCOMPLETE",
+  "target": "f08e0b4be0eea06152ad83e47311ff8907f9c25d",
+  "scope": "Current production Python coordinator/driver and real Bitcoin Core30.4 wallet/chain; simulated BTX counterleg, no embedded native BTX runtime",
+  "binary_sha256": "58f9e3b5b8cf0cecd268cc6bf02993f3244e1a93fe8d67949ced6b52c2fdd9fb",
+  "cases": [],
+  "fee_failures": [
+    {
+      "attempt": 1,
+      "error": {
+        "code": "FEE_CAP",
+        "message": "Funding fee exceeds authorization"
+      },
+      "locks": [
+        "8518a36ef438c6f5dc5868bae30c00d7111fd1952cd43106ecd0e7e79e456d56:0",
+        "9fbbf46dea0dc70a11c9ab069e1bd81a9de894b3a881543a24e810b6a7ad7479:0"
+      ]
+    }
+  ],
+  "funding_calls": [
+    {
+      "wallet": "alice",
+      "options": {
+        "lockUnspents": true,
+        "replaceable": false,
+        "include_unsafe": false,
+        "fee_rate": 10,
+        "minconf": 2,
+        "psbt_version": 0
+      },
+      "positional_psbt_version": null,
+      "error": {
+        "code": "CHAIN_RPC",
+        "message": "Unexpected key psbt_version"
+      }
+    },
+    {
+      "wallet": "alice",
+      "options": {
+        "lockUnspents": true,
+        "replaceable": false,
+        "include_unsafe": false,
+        "fee_rate": 10,
+        "minconf": 2
+      },
+      "positional_psbt_version": null,
+      "has_tx": false,
+      "fee": "0.00001650"
+    }
+  ]
+}

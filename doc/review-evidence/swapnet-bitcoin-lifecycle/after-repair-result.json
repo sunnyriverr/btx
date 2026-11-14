@@ -1,0 +1,131 @@
+{
+  "status": "PASS_PAIRED_NATIVE_REGRESSION",
+  "target": "f08e0b4be0eea06152ad83e47311ff8907f9c25d",
+  "scope": "Current production Python coordinator/driver and real Bitcoin Core30.4 wallet/chain; simulated BTX counterleg, no embedded native BTX runtime",
+  "binary_sha256": "58f9e3b5b8cf0cecd268cc6bf02993f3244e1a93fe8d67949ced6b52c2fdd9fb",
+  "cases": [],
+  "fee_failures": [
+    {
+      "attempt": 1,
+      "error": {
+        "code": "FEE_CAP",
+        "message": "Funding fee exceeds authorization"
+      },
+      "locks": [
+        "f6761cf9a2c9c529e78f909b7236491cf9aa281074656bdb43149bfd68b12fc9:0"
+      ]
+    },
+    {
+      "attempt": 2,
+      "error": {
+        "code": "FEE_CAP",
+        "message": "Funding fee exceeds authorization"
+      },
+      "locks": [
+        "f6761cf9a2c9c529e78f909b7236491cf9aa281074656bdb43149bfd68b12fc9:0"
+      ]
+    },
+    {
+      "attempt": 3,
+      "error": {
+        "code": "FEE_CAP",
+        "message": "Funding fee exceeds authorization"
+      },
+      "locks": [
+        "f6761cf9a2c9c529e78f909b7236491cf9aa281074656bdb43149bfd68b12fc9:0"
+      ]
+    }
+  ],
+  "controls": {
+    "preexisting_locks": [
+      "f6761cf9a2c9c529e78f909b7236491cf9aa281074656bdb43149bfd68b12fc9:0"
+    ],
+    "after_fee_failures_unchanged": true,
+    "signer_failure_cleanup": true,
+    "store_failure_cleanup": true,
+    "prepared_locks_retained": true,
+    "healthy_funding": "funded",
+    "after_broadcast_only_preexisting": true,
+    "fund_operations": 1
+  },
+  "funding_calls": [
+    {
+      "wallet": "alice",
+      "options": {
+        "lockUnspents": false,
+        "replaceable": false,
+        "include_unsafe": false,
+        "fee_rate": 10,
+        "minconf": 2
+      },
+      "positional_psbt_version": 0,
+      "has_tx": true,
+      "fee": "0.00001650"
+    },
+    {
+      "wallet": "alice",
+      "options": {
+        "lockUnspents": false,
+        "replaceable": false,
+        "include_unsafe": false,
+        "fee_rate": 10,
+        "minconf": 2
+      },
+      "positional_psbt_version": 0,
+      "has_tx": true,
+      "fee": "0.00001650"
+    },
+    {
+      "wallet": "alice",
+      "options": {
+        "lockUnspents": false,
+        "replaceable": false,
+        "include_unsafe": false,
+        "fee_rate": 10,
+        "minconf": 2
+      },
+      "positional_psbt_version": 0,
+      "has_tx": true,
+      "fee": "0.00001650"
+    },
+    {
+      "wallet": "alice",
+      "options": {
+        "lockUnspents": false,
+        "replaceable": false,
+        "include_unsafe": false,
+        "fee_rate": 2,
+        "minconf": 2
+      },
+      "positional_psbt_version": 0,
+      "has_tx": true,
+      "fee": "0.00000330"
+    },
+    {
+      "wallet": "alice",
+      "options": {
+        "lockUnspents": false,
+        "replaceable": false,
+        "include_unsafe": false,
+        "fee_rate": 2,
+        "minconf": 2
+      },
+      "positional_psbt_version": 0,
+      "has_tx": true,
+      "fee": "0.00000330"
+    },
+    {
+      "wallet": "alice",
+      "options": {
+        "lockUnspents": false,
+        "replaceable": false,
+        "include_unsafe": false,
+        "fee_rate": 2,
+        "minconf": 2
+      },
+      "positional_psbt_version": 0,
+      "has_tx": true,
+      "fee": "0.00000330"
+    }
+  ]
+}

@@ -1,0 +1,204 @@
+--- a/contrib/swapnet/swapnet/adapters.py
++++ b/contrib/swapnet/swapnet/adapters.py
+@@ -14,21 +14,15 @@
+ COIN=100_000_000
+ 
+ def create_funded_psbt(caller, inputs, outputs, locktime, options, bip32derivs, *, request_v0):
+-    """Ask for PSBT v0 when the wallet understands that option.
+-
+-    Bitcoin Core 32 defaults to v2, whose decode has no tx. Core 30.4 and this
+-    node's wallet reject the key before any coin is locked. Their default
+-    PSBT is already v0, so the same call is repeated without the option.
+-    """
+-    requested=dict(options)
++    """Use the wallet's RPC argument contract without guessing its PSBT default."""
++    args=[inputs,outputs,locktime,dict(options),bip32derivs]
+     if request_v0:
+-        requested['psbt_version']=0
+-    try:
+-        return caller('walletcreatefundedpsbt', inputs, outputs, locktime, requested, bip32derivs)
+-    except SwapError as error:
+-        if not request_v0 or 'psbt_version' not in error.message.lower():
+-            raise
+-        return caller('walletcreatefundedpsbt', inputs, outputs, locktime, options, bip32derivs)
++        help_text=caller('help','walletcreatefundedpsbt')
++        require(type(help_text) is str,'PSBT_VERSION','Wallet PSBT argument contract is unavailable')
++        if re.search(r'\bpsbt_version\b',help_text):
++            # Core32's version is argument6, after transaction version (default).
++            args.extend([None,0])
++    return caller('walletcreatefundedpsbt',*args)
+ 
+ def to_atoms(value):
+     require(type(value) in {str,int,Decimal},'RPC_AMOUNT','RPC amount must not pass through binary floating point')
+--- a/contrib/swapnet/swapnet/drivers.py
++++ b/contrib/swapnet/swapnet/drivers.py
+@@ -115,7 +115,7 @@
+     def prepare_funding(self,sid,terms,local_key,reservation_id,max_fee_atoms):
+         c=self.watch_terms(terms,local_key);self.ready()
+         result=create_funded_psbt(self.wallet,[],[{c['address']:coin_string(atoms(terms.amount_atoms))}],0,
+-                           {'lockUnspents':True,'replaceable':False,'include_unsafe':False,
++                           {'lockUnspents':False,'replaceable':False,'include_unsafe':False,
+                             'fee_rate':self.fee_rate,'minconf':self.confirmations},True,
+                            request_v0=self.family=='btc')
+         fee=to_atoms(result['fee']);require(0<=fee<=atoms(max_fee_atoms),'FEE_CAP','Funding fee exceeds authorization')
+@@ -139,13 +139,27 @@
+         require(input_total-sum(int(o[1]) for o in expected)==fee,'FEE_MISMATCH','Wallet fee does not match chain inputs')
+         plan=FundingPlan(self.network,sid,reservation_id,self.asset.id,
+                          tuple(f"{v['txid']}:{v['vout']}" for v in decoded['vin']),str(input_total),tuple(expected),max_fee_atoms)
+-        self.journal.store.lock_coins(reservation_id,self.asset.id,list(plan.inputs))
+-        owned={o[0] for o in expected if o[2]=='change'}
+-        raw=self.adapter.sign_funding(result['psbt'],approved_plan=plan,is_owned_change=lambda x:x in owned)
+-        tx=self.rpc('decoderawtransaction',raw)
+-        require(tx['txid']==decoded['txid'],'FUNDING_MALLEATED','Witness signing changed the funding txid')
+-        ref={'txid':tx['txid'],'vout':match[0]}
+-        return Prepared(tx['txid'],raw,ref,str(fee),{'plan_id':plan.id,'inputs':list(plan.inputs)})
++        coins=[{'txid':v['txid'],'vout':v['vout']} for v in decoded['vin']]
++        # Native lockunspent rejects already-locked inputs. Until this point,
++        # decoding and all fee/output checks have no wallet-lock side effects.
++        require(self.wallet('lockunspent',False,coins) is True,'COINLOCK','Wallet could not reserve selected inputs')
++        try:
++            owned={o[0] for o in expected if o[2]=='change'}
++            raw=self.adapter.sign_funding(result['psbt'],approved_plan=plan,is_owned_change=lambda x:x in owned)
++            tx=self.rpc('decoderawtransaction',raw)
++            require(tx['txid']==decoded['txid'],'FUNDING_MALLEATED','Witness signing changed the funding txid')
++            ref={'txid':tx['txid'],'vout':match[0]}
++            prepared=Prepared(tx['txid'],raw,ref,str(fee),{'plan_id':plan.id,'inputs':list(plan.inputs)})
++            self.journal.store.lock_coins(reservation_id,self.asset.id,list(plan.inputs))
++            return prepared
++        except Exception as error:
++            # Only these successfully acquired inputs belong to this attempt.
++            # Never unlock every wallet coin or an earlier reservation.
++            try:
++                require(self.wallet('lockunspent',True,coins) is True,'COINLOCK_CLEANUP','Wallet could not release failed preparation inputs')
++            except Exception as cleanup:
++                raise SwapError('COINLOCK_CLEANUP','Failed preparation input cleanup needs attention') from cleanup
++            raise
+     def _dest_script(self,address):
+         valid=self.rpc('validateaddress',address)
+         require(valid.get('isvalid') is True,'PAYOUT','Invalid payout')
+--- a/contrib/swapnet/tests/test_psbt_version.py
++++ b/contrib/swapnet/tests/test_psbt_version.py
+@@ -31,9 +31,11 @@
+     def wallet(method,*args):
+         calls.append(method)
+         if method=='getwalletinfo':return {}
++        if method=='help':return 'walletcreatefundedpsbt inputs outputs locktime options bip32derivs version psbt_version'
+         if method=='walletcreatefundedpsbt':
+-            assert args[3]=={'lockUnspents':True,'replaceable':False,'include_unsafe':False,
+-                             'fee_rate':2,'minconf':6,'psbt_version':0}
++            assert args[3]=={'lockUnspents':False,'replaceable':False,'include_unsafe':False,
++                             'fee_rate':2,'minconf':6}
++            assert args[5:]==(None,0)
+             return {'psbt':'cHNidA','fee':'0.00001000'}
+         raise AssertionError(method)
+     def watch(method,*args):
+@@ -53,9 +55,11 @@
+         raise AssertionError(method)
+     def awallet(method,*args):
+         calls.append(method)
++        if method=='help':return 'walletcreatefundedpsbt inputs outputs locktime options bip32derivs version psbt_version'
+         if method=='walletcreatefundedpsbt':
+             assert args[3]=={'lockUnspents':False,'replaceable':False,'include_unsafe':False,
+-                             'fee_rate':2,'minconf':1,'psbt_version':0}
++                             'fee_rate':2,'minconf':1}
++            assert args[5:]==(None,0)
+             return {'psbt':'cHNidA','fee':'0.00001000'}
+         raise AssertionError(method)
+     adapter=BitcoinAdapter(arpc,awallet,GENESIS,'bcrt')
+@@ -64,23 +68,80 @@
+         adapter.sign_funding('cHNidA',approved_plan=None,is_owned_change=lambda s:False)
+     assert 'walletprocesspsbt' not in calls
+ 
+-def test_rejected_psbt_version_is_retried_without_the_option():
+-    seen=[]
+-    def caller(method, *args):
++@pytest.mark.parametrize('supports_version',[False,True])
++def test_wallet_psbt_version_contract(supports_version):
++    funded=[]
++    def caller(method,*args):
++        if method=='help':return 'walletcreatefundedpsbt inputs outputs'+(' psbt_version' if supports_version else '')
+         assert method=='walletcreatefundedpsbt'
+-        seen.append(dict(args[3]))
+-        if 'psbt_version' in args[3]:
+-            raise SwapError('CHAIN_RPC', 'Unexpected key psbt_version')
++        funded.append(args)
++        assert 'psbt_version' not in args[3]
++        assert args[5:]==((None,0) if supports_version else ())
+         return {'psbt':'cHNidA','fee':'0.00001000'}
+-    result=create_funded_psbt(caller,[],[],0,{'fee_rate':2},True,request_v0=True)
+-    assert result['psbt']=='cHNidA'
+-    assert seen==[{'fee_rate':2,'psbt_version':0},{'fee_rate':2}]
++    assert create_funded_psbt(caller,[],[],0,{'fee_rate':2},True,request_v0=True)['psbt']=='cHNidA'
++    assert len(funded)==1
+ 
+ def test_other_funding_rejection_is_not_retried():
+-    calls=[]
+-    def caller(method, *args):
+-        calls.append(args[3])
+-        raise SwapError('CHAIN_RPC', 'Insufficient funds')
+-    with pytest.raises(SwapError, match='Insufficient funds'):
+-        create_funded_psbt(caller,[],[],0,{'fee_rate':2},True,request_v0=True)
+-    assert len(calls)==1
++    funded=[]
++    def caller(method,*args):
++        if method=='help':return 'walletcreatefundedpsbt psbt_version'
++        funded.append(args)
++        raise SwapError('CHAIN_RPC','Insufficient funds')
++    with pytest.raises(SwapError,match='Insufficient funds'):
++        create_funded_psbt(caller,[],[],0,{},True,request_v0=True)
++    assert len(funded)==1
++
++def test_native_btx_does_not_probe_bitcoin_arguments():
++    def caller(method,*args):
++        assert method=='walletcreatefundedpsbt' and len(args)==5
++        return {'psbt':'cHNidA'}
++    create_funded_psbt(caller,[],[],0,{},True,request_v0=False)
++
++@pytest.mark.parametrize('failure',['fee','decode','sign','store',None])
++def test_preparation_reserves_only_valid_inputs_and_cleans_its_failures(failure):
++    from types import SimpleNamespace
++    coin={'txid':'aa'*32,'vout':0}
++    old=('bb'*32,1)
++    locked={old}
++    decoded={'txid':'cc'*32,'vin':[coin],
++             'vout':[{'value':'0.00010000','scriptPubKey':{'hex':'00'}}]}
++    def rpc(method,*args):
++        if method=='decodepsbt':return {} if failure=='decode' else {'tx':decoded}
++        if method=='gettxout':return {'value':'0.00010100','confirmations':10}
++        if method=='decoderawtransaction':return {'txid':decoded['txid']}
++        raise AssertionError(method)
++    def wallet(method,*args):
++        if method=='help':return 'walletcreatefundedpsbt psbt_version'
++        if method=='walletcreatefundedpsbt':
++            assert args[3]['lockUnspents'] is False
++            assert args[5:]==(None,0)
++            return {'psbt':'cHNidA','fee':'0.00000100'}
++        if method=='lockunspent':
++            keys={(c['txid'],c['vout']) for c in args[1]}
++            assert old not in keys
++            if args[0]:locked.difference_update(keys)
++            else:
++                assert not keys & locked
++                locked.update(keys)
++            return True
++        raise AssertionError(method)
++    stored=[]
++    def reserve(*args):
++        if failure=='store':raise SwapError('TEST_STORE','reservation rejected')
++        stored.extend(args[2])
++    driver=UTXODriver(BTC,rpc,wallet,wallet,SimpleNamespace(store=SimpleNamespace(lock_coins=reserve)),None,network=NET)
++    driver.watch_terms=lambda *a:{'address':'bcrt1qfixture'}
++    driver.ready=lambda:True
++    def sign(*args,**kwargs):
++        if failure=='sign':raise SwapError('TEST_SIGN','signer refused')
++        return 'aa'
++    driver.adapter.sign_funding=sign
++    args=('1'*64,SimpleNamespace(amount_atoms='10000',lock_commitment='00'),{},'2'*64,'50' if failure=='fee' else '500')
++    if failure:
++        expected={'fee':'FEE_CAP','decode':'PSBT_VERSION','sign':'TEST_SIGN','store':'TEST_STORE'}[failure]
++        with pytest.raises(SwapError,match=expected):driver.prepare_funding(*args)
++        assert locked=={old} and not stored
++    else:
++        result=driver.prepare_funding(*args)
++        assert result.txid==decoded['txid']
++        assert locked=={old,(coin['txid'],0)} and stored==[coin['txid']+':0']
