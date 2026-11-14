@@ -1,0 +1,30 @@
+FF..                                                                     [100%]
+=================================== FAILURES ===================================
+_______ test_last_verified_facts_survive_current_uncertainty[rpc_error] ________
+
+restored = (<test_execution_v2.Pair object at 0x107ad05d0>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <...istory.Probe object at 0x107b1bfd0>, 'j': <swapnet.journal.Journal object at 0x1076d75d0>, ...}, ['refunded'], [], ...)
+failure = 'rpc_error'
+
+    @pytest.mark.parametrize('failure',['rpc_error','conflicting'])
+    def test_last_verified_facts_survive_current_uncertainty(restored,failure):
+>    p,sid,h,o,m,e,snap,reopen=restored;c=o['c'];before=snap();v=c.resume(Principal('alice'),sid);verified=v['recovery']['last_verified'];assert verified['status']=='original_refunded'
+                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E    KeyError: 'last_verified'
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:164: KeyError
+______ test_last_verified_facts_survive_current_uncertainty[conflicting] _______
+
+restored = (<test_execution_v2.Pair object at 0x107ae84d0>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <...istory.Probe object at 0x107a9db50>, 'j': <swapnet.journal.Journal object at 0x107ae8650>, ...}, ['refunded'], [], ...)
+failure = 'conflicting'
+
+    @pytest.mark.parametrize('failure',['rpc_error','conflicting'])
+    def test_last_verified_facts_survive_current_uncertainty(restored,failure):
+>    p,sid,h,o,m,e,snap,reopen=restored;c=o['c'];before=snap();v=c.resume(Principal('alice'),sid);verified=v['recovery']['last_verified'];assert verified['status']=='original_refunded'
+                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E    KeyError: 'last_verified'
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:164: KeyError
+=========================== short test summary info ============================
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_last_verified_facts_survive_current_uncertainty[rpc_error]
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_last_verified_facts_survive_current_uncertainty[conflicting]
+2 failed, 2 passed, 25 deselected in 3.91s

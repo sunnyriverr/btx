@@ -1,0 +1,622 @@
+FFFFFFFFFFFFFFFFF.F.FFF                                                  [100%]
+=================================== FAILURES ===================================
+______________________ test_expired_facts_only[refunded] _______________________
+
+restored = (<test_execution_v2.Pair object at 0x10b496210>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <...repair.Probe object at 0x10b4961d0>, 'j': <swapnet.journal.Journal object at 0x10b4c3d90>, ...}, ['refunded'], [], ...)
+kind = 'refunded'
+
+    @pytest.mark.parametrize('kind',['refunded','claimed','pending','unspent'])
+    def test_expired_facts_only(restored,kind):
+     p,sid,h,o,m,e,snap,reopen=restored;m[0]=kind
+     if kind=='unspent':h.add(TXID,0)
+>    before=snap();view=o['c'].resume(Principal('alice'),sid)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:485: in resume
+    self._owned(ctx,sid);self.tick_one(sid);return self.get(ctx,sid)
+                         ^^^^^^^^^^^^^^^^^^
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:363: in tick_one
+    action=decide(state,ra.observation,rb.observation,ra.clock,rb.clock,
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/machine.py:94: in decide
+    policy.validate_deadlines(long,short,clock_a,clock_b,now)
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/policy.py:73: in validate_deadlines
+    require(a_min >= b_max + self.settlement_margin_seconds, "UNSAFE_TIMEOUT", "Long leg does not conservatively outlive short leg")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'UNSAFE_TIMEOUT'
+message = 'Long leg does not conservatively outlive short leg'
+
+    def require(condition, code, message):
+        if not condition:
+>           raise SwapError(code, message)
+E           swapnet.errors.SwapError: UNSAFE_TIMEOUT: Long leg does not conservatively outlive short leg
+
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/errors.py:11: SwapError
+_______________________ test_expired_facts_only[claimed] _______________________
+
+restored = (<test_execution_v2.Pair object at 0x10b469090>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <..._repair.Probe object at 0x10b468610>, 'j': <swapnet.journal.Journal object at 0x10b46a850>, ...}, ['claimed'], [], ...)
+kind = 'claimed'
+
+    @pytest.mark.parametrize('kind',['refunded','claimed','pending','unspent'])
+    def test_expired_facts_only(restored,kind):
+     p,sid,h,o,m,e,snap,reopen=restored;m[0]=kind
+     if kind=='unspent':h.add(TXID,0)
+>    before=snap();view=o['c'].resume(Principal('alice'),sid)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:485: in resume
+    self._owned(ctx,sid);self.tick_one(sid);return self.get(ctx,sid)
+                         ^^^^^^^^^^^^^^^^^^
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:363: in tick_one
+    action=decide(state,ra.observation,rb.observation,ra.clock,rb.clock,
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/machine.py:94: in decide
+    policy.validate_deadlines(long,short,clock_a,clock_b,now)
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/policy.py:73: in validate_deadlines
+    require(a_min >= b_max + self.settlement_margin_seconds, "UNSAFE_TIMEOUT", "Long leg does not conservatively outlive short leg")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'UNSAFE_TIMEOUT'
+message = 'Long leg does not conservatively outlive short leg'
+
+    def require(condition, code, message):
+        if not condition:
+>           raise SwapError(code, message)
+E           swapnet.errors.SwapError: UNSAFE_TIMEOUT: Long leg does not conservatively outlive short leg
+
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/errors.py:11: SwapError
+_______________________ test_expired_facts_only[pending] _______________________
+
+restored = (<test_execution_v2.Pair object at 0x10b59ab90>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <..._repair.Probe object at 0x10b59b750>, 'j': <swapnet.journal.Journal object at 0x10b59b710>, ...}, ['pending'], [], ...)
+kind = 'pending'
+
+    @pytest.mark.parametrize('kind',['refunded','claimed','pending','unspent'])
+    def test_expired_facts_only(restored,kind):
+     p,sid,h,o,m,e,snap,reopen=restored;m[0]=kind
+     if kind=='unspent':h.add(TXID,0)
+>    before=snap();view=o['c'].resume(Principal('alice'),sid)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:485: in resume
+    self._owned(ctx,sid);self.tick_one(sid);return self.get(ctx,sid)
+                         ^^^^^^^^^^^^^^^^^^
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:363: in tick_one
+    action=decide(state,ra.observation,rb.observation,ra.clock,rb.clock,
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/machine.py:94: in decide
+    policy.validate_deadlines(long,short,clock_a,clock_b,now)
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/policy.py:73: in validate_deadlines
+    require(a_min >= b_max + self.settlement_margin_seconds, "UNSAFE_TIMEOUT", "Long leg does not conservatively outlive short leg")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'UNSAFE_TIMEOUT'
+message = 'Long leg does not conservatively outlive short leg'
+
+    def require(condition, code, message):
+        if not condition:
+>           raise SwapError(code, message)
+E           swapnet.errors.SwapError: UNSAFE_TIMEOUT: Long leg does not conservatively outlive short leg
+
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/errors.py:11: SwapError
+_______________________ test_expired_facts_only[unspent] _______________________
+
+restored = (<test_execution_v2.Pair object at 0x10b5a16d0>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <..._repair.Probe object at 0x10b5a3b10>, 'j': <swapnet.journal.Journal object at 0x10b5a1910>, ...}, ['unspent'], [], ...)
+kind = 'unspent'
+
+    @pytest.mark.parametrize('kind',['refunded','claimed','pending','unspent'])
+    def test_expired_facts_only(restored,kind):
+     p,sid,h,o,m,e,snap,reopen=restored;m[0]=kind
+     if kind=='unspent':h.add(TXID,0)
+>    before=snap();view=o['c'].resume(Principal('alice'),sid)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:485: in resume
+    self._owned(ctx,sid);self.tick_one(sid);return self.get(ctx,sid)
+                         ^^^^^^^^^^^^^^^^^^
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:363: in tick_one
+    action=decide(state,ra.observation,rb.observation,ra.clock,rb.clock,
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/machine.py:94: in decide
+    policy.validate_deadlines(long,short,clock_a,clock_b,now)
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/policy.py:73: in validate_deadlines
+    require(a_min >= b_max + self.settlement_margin_seconds, "UNSAFE_TIMEOUT", "Long leg does not conservatively outlive short leg")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'UNSAFE_TIMEOUT'
+message = 'Long leg does not conservatively outlive short leg'
+
+    def require(condition, code, message):
+        if not condition:
+>           raise SwapError(code, message)
+E           swapnet.errors.SwapError: UNSAFE_TIMEOUT: Long leg does not conservatively outlive short leg
+
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/errors.py:11: SwapError
+_________________ test_action_fences_before_first_tick[cancel] _________________
+
+restored = (<test_execution_v2.Pair object at 0x10b4dcf10>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <...repair.Probe object at 0x10b370410>, 'j': <swapnet.journal.Journal object at 0x10b372210>, ...}, ['refunded'], [], ...)
+action = 'cancel'
+
+    @pytest.mark.parametrize('action',['cancel','peer_cancel','refund','bump_claim','bump_refund','prepare','fund','claim'])
+    def test_action_fences_before_first_tick(restored,action):
+     from swapnet.terms import Agreement
+     p,sid,h,o,m,e,snap,reopen=restored;c=o['c'];before=snap();rev,s=o['j'].load(sid)
+>    with pytest.raises(SwapError) as error:
+E    Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:63: Failed
+______________ test_action_fences_before_first_tick[peer_cancel] _______________
+
+restored = (<test_execution_v2.Pair object at 0x10b4dce90>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <...repair.Probe object at 0x10b4ec750>, 'j': <swapnet.journal.Journal object at 0x10b373a50>, ...}, ['refunded'], [], ...)
+action = 'peer_cancel'
+
+    @pytest.mark.parametrize('action',['cancel','peer_cancel','refund','bump_claim','bump_refund','prepare','fund','claim'])
+    def test_action_fences_before_first_tick(restored,action):
+     from swapnet.terms import Agreement
+     p,sid,h,o,m,e,snap,reopen=restored;c=o['c'];before=snap();rev,s=o['j'].load(sid)
+>    with pytest.raises(SwapError) as error:
+E    Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:63: Failed
+_________________ test_action_fences_before_first_tick[refund] _________________
+
+restored = (<test_execution_v2.Pair object at 0x10b4eecd0>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <...repair.Probe object at 0x10b343810>, 'j': <swapnet.journal.Journal object at 0x105ac8210>, ...}, ['refunded'], [], ...)
+action = 'refund'
+
+    @pytest.mark.parametrize('action',['cancel','peer_cancel','refund','bump_claim','bump_refund','prepare','fund','claim'])
+    def test_action_fences_before_first_tick(restored,action):
+     from swapnet.terms import Agreement
+     p,sid,h,o,m,e,snap,reopen=restored;c=o['c'];before=snap();rev,s=o['j'].load(sid)
+     with pytest.raises(SwapError) as error:
+      if action=='cancel':c.cancel(Principal('alice'),sid)
+      elif action=='peer_cancel':c.receive_cancel('bob',sid,{'quote_id':s['quote_id']})
+      elif action=='refund':c.request_refund(Principal('alice'),sid)
+      elif action.startswith('bump'):bump(c,Principal('alice'),sid,action[5:],'101')
+      else:getattr(c,'_'+action)(sid,s,rev,Agreement.parse(s['agreement']))
+>    assert error.value.code=='RECOVERY_READ_ONLY' and snap()==before and not e
+E    AssertionError: assert ('NOT_FUNDED' == 'RECOVERY_READ_ONLY'
+E      
+E      - RECOVERY_READ_ONLY
+E      + NOT_FUNDED)
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:69: AssertionError
+_______________ test_action_fences_before_first_tick[bump_claim] _______________
+
+restored = (<test_execution_v2.Pair object at 0x10b370a50>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <...repair.Probe object at 0x10b370d50>, 'j': <swapnet.journal.Journal object at 0x10b370fd0>, ...}, ['refunded'], [], ...)
+action = 'bump_claim'
+
+    @pytest.mark.parametrize('action',['cancel','peer_cancel','refund','bump_claim','bump_refund','prepare','fund','claim'])
+    def test_action_fences_before_first_tick(restored,action):
+     from swapnet.terms import Agreement
+     p,sid,h,o,m,e,snap,reopen=restored;c=o['c'];before=snap();rev,s=o['j'].load(sid)
+     with pytest.raises(SwapError) as error:
+      if action=='cancel':c.cancel(Principal('alice'),sid)
+      elif action=='peer_cancel':c.receive_cancel('bob',sid,{'quote_id':s['quote_id']})
+      elif action=='refund':c.request_refund(Principal('alice'),sid)
+      elif action.startswith('bump'):bump(c,Principal('alice'),sid,action[5:],'101')
+      else:getattr(c,'_'+action)(sid,s,rev,Agreement.parse(s['agreement']))
+>    assert error.value.code=='RECOVERY_READ_ONLY' and snap()==before and not e
+E    AssertionError: assert ('OPERATION_MISSING' == 'RECOVERY_READ_ONLY'
+E      
+E      - RECOVERY_READ_ONLY
+E      + OPERATION_MISSING)
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:69: AssertionError
+______________ test_action_fences_before_first_tick[bump_refund] _______________
+
+restored = (<test_execution_v2.Pair object at 0x10b370410>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <...repair.Probe object at 0x10b45a550>, 'j': <swapnet.journal.Journal object at 0x10afb90d0>, ...}, ['refunded'], [], ...)
+action = 'bump_refund'
+
+    @pytest.mark.parametrize('action',['cancel','peer_cancel','refund','bump_claim','bump_refund','prepare','fund','claim'])
+    def test_action_fences_before_first_tick(restored,action):
+     from swapnet.terms import Agreement
+     p,sid,h,o,m,e,snap,reopen=restored;c=o['c'];before=snap();rev,s=o['j'].load(sid)
+     with pytest.raises(SwapError) as error:
+      if action=='cancel':c.cancel(Principal('alice'),sid)
+      elif action=='peer_cancel':c.receive_cancel('bob',sid,{'quote_id':s['quote_id']})
+      elif action=='refund':c.request_refund(Principal('alice'),sid)
+      elif action.startswith('bump'):bump(c,Principal('alice'),sid,action[5:],'101')
+      else:getattr(c,'_'+action)(sid,s,rev,Agreement.parse(s['agreement']))
+>    assert error.value.code=='RECOVERY_READ_ONLY' and snap()==before and not e
+E    AssertionError: assert ('OPERATION_MISSING' == 'RECOVERY_READ_ONLY'
+E      
+E      - RECOVERY_READ_ONLY
+E      + OPERATION_MISSING)
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:69: AssertionError
+________________ test_action_fences_before_first_tick[prepare] _________________
+
+restored = (<test_execution_v2.Pair object at 0x10b459790>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <...ect at 0x10b0538d0>, 'j': <swapnet.journal.Journal object at 0x10b45a750>, ...}, ['refunded'], ['prepare_refund'], ...)
+action = 'prepare'
+
+    @pytest.mark.parametrize('action',['cancel','peer_cancel','refund','bump_claim','bump_refund','prepare','fund','claim'])
+    def test_action_fences_before_first_tick(restored,action):
+     from swapnet.terms import Agreement
+     p,sid,h,o,m,e,snap,reopen=restored;c=o['c'];before=snap();rev,s=o['j'].load(sid)
+     with pytest.raises(SwapError) as error:
+      if action=='cancel':c.cancel(Principal('alice'),sid)
+      elif action=='peer_cancel':c.receive_cancel('bob',sid,{'quote_id':s['quote_id']})
+      elif action=='refund':c.request_refund(Principal('alice'),sid)
+      elif action.startswith('bump'):bump(c,Principal('alice'),sid,action[5:],'101')
+>     else:getattr(c,'_'+action)(sid,s,rev,Agreement.parse(s['agreement']))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:288: in _prepare
+    else:refund=driver.prepare_refund(sid,own,s['refs'][own_name],s['keys']['refund'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+_name = 'prepare_refund'
+a = ('fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', LegTerms(asset='btc:11111111111111111111111111111...', 'vout': 0}, {'handle': 'alicerefund1', 'payout': 'alice-refund-payout', 'public': 'alicerefund1', 'role': 'refund'})
+kw = {}
+
+>   def fail(*a,_name=name,**kw):effects.append(_name);raise AssertionError('spend '+_name)
+                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: spend prepare_refund
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:36: AssertionError
+__________________ test_action_fences_before_first_tick[fund] __________________
+
+restored = (<test_execution_v2.Pair object at 0x10b45a690>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <...repair.Probe object at 0x10b5d5fd0>, 'j': <swapnet.journal.Journal object at 0x10b5d7bd0>, ...}, ['refunded'], [], ...)
+action = 'fund'
+
+    @pytest.mark.parametrize('action',['cancel','peer_cancel','refund','bump_claim','bump_refund','prepare','fund','claim'])
+    def test_action_fences_before_first_tick(restored,action):
+     from swapnet.terms import Agreement
+     p,sid,h,o,m,e,snap,reopen=restored;c=o['c'];before=snap();rev,s=o['j'].load(sid)
+     with pytest.raises(SwapError) as error:
+      if action=='cancel':c.cancel(Principal('alice'),sid)
+      elif action=='peer_cancel':c.receive_cancel('bob',sid,{'quote_id':s['quote_id']})
+      elif action=='refund':c.request_refund(Principal('alice'),sid)
+      elif action.startswith('bump'):bump(c,Principal('alice'),sid,action[5:],'101')
+      else:getattr(c,'_'+action)(sid,s,rev,Agreement.parse(s['agreement']))
+>    assert error.value.code=='RECOVERY_READ_ONLY' and snap()==before and not e
+E    AssertionError: assert ('RECOVERY_MISSING' == 'RECOVERY_READ_ONLY'
+E      
+E      - RECOVERY_READ_ONLY
+E      + RECOVERY_MISSING)
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:69: AssertionError
+_________________ test_action_fences_before_first_tick[claim] __________________
+
+restored = (<test_execution_v2.Pair object at 0x10b5d5090>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <...repair.Probe object at 0x10b48c490>, 'j': <swapnet.journal.Journal object at 0x10b5d7cd0>, ...}, ['refunded'], [], ...)
+action = 'claim'
+
+    @pytest.mark.parametrize('action',['cancel','peer_cancel','refund','bump_claim','bump_refund','prepare','fund','claim'])
+    def test_action_fences_before_first_tick(restored,action):
+     from swapnet.terms import Agreement
+     p,sid,h,o,m,e,snap,reopen=restored;c=o['c'];before=snap();rev,s=o['j'].load(sid)
+     with pytest.raises(SwapError) as error:
+      if action=='cancel':c.cancel(Principal('alice'),sid)
+      elif action=='peer_cancel':c.receive_cancel('bob',sid,{'quote_id':s['quote_id']})
+      elif action=='refund':c.request_refund(Principal('alice'),sid)
+      elif action.startswith('bump'):bump(c,Principal('alice'),sid,action[5:],'101')
+>     else:getattr(c,'_'+action)(sid,s,rev,Agreement.parse(s['agreement']))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <swapnet.coordinator.Coordinator object at 0x10b48c750>
+sid = 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748'
+s = {'agreement': {'initiator': 'alice', 'long_leg': {'amount_atoms': '10000', 'asset': 'btc:11111111111111111111111111111...c5f1de919787409c188b6f8faa9a260327a4d8d7ff7fc6f4ecf688a6ef', 'created_at': 1900000000, 'funding_broadcast': False, ...}
+rev = 1
+agr = Agreement(network='1111111111111111111111111111111111111111111111111111111111111111', quote_id='b7175e699cbc34bb7d96e7...1e7512e166b0269f2e38fa4e8999789c3de581b72b2e48adeebcf873377e0', max_claim_fee_atoms='100', max_refund_fee_atoms='100'))
+
+    def _claim(self,sid,s,rev,agr):
+        _,_,incoming_name,incoming=self._own(s,agr);driver=self._driver(incoming.asset)
+        if 'claim_template' not in s:
+>           s['claim_template']=driver.prepare_claim_template(sid,incoming,s['refs'][incoming_name],s['keys']['claim'])
+                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^
+E           KeyError: 'b'
+
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:318: KeyError
+________________ test_history_failures_remain_readonly[missing] ________________
+
+restored = (<test_execution_v2.Pair object at 0x10b5d69d0>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <...repair.Probe object at 0x10b252cd0>, 'j': <swapnet.journal.Journal object at 0x10b068e10>, ...}, ['refunded'], [], ...)
+history = 'missing'
+
+    @pytest.mark.parametrize('history',['missing','incomplete','ambiguous','empty'])
+    def test_history_failures_remain_readonly(restored,history):
+>    p,sid,h,o,m,e,snap,reopen=restored;h.mode=history;before=snap();v=o['c'].resume(Principal('alice'),sid)
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:485: in resume
+    self._owned(ctx,sid);self.tick_one(sid);return self.get(ctx,sid)
+                         ^^^^^^^^^^^^^^^^^^
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:363: in tick_one
+    action=decide(state,ra.observation,rb.observation,ra.clock,rb.clock,
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/machine.py:94: in decide
+    policy.validate_deadlines(long,short,clock_a,clock_b,now)
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/policy.py:73: in validate_deadlines
+    require(a_min >= b_max + self.settlement_margin_seconds, "UNSAFE_TIMEOUT", "Long leg does not conservatively outlive short leg")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'UNSAFE_TIMEOUT'
+message = 'Long leg does not conservatively outlive short leg'
+
+    def require(condition, code, message):
+        if not condition:
+>           raise SwapError(code, message)
+E           swapnet.errors.SwapError: UNSAFE_TIMEOUT: Long leg does not conservatively outlive short leg
+
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/errors.py:11: SwapError
+______________ test_history_failures_remain_readonly[incomplete] _______________
+
+restored = (<test_execution_v2.Pair object at 0x10b69edd0>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <...repair.Probe object at 0x10b69d210>, 'j': <swapnet.journal.Journal object at 0x10b3700d0>, ...}, ['refunded'], [], ...)
+history = 'incomplete'
+
+    @pytest.mark.parametrize('history',['missing','incomplete','ambiguous','empty'])
+    def test_history_failures_remain_readonly(restored,history):
+>    p,sid,h,o,m,e,snap,reopen=restored;h.mode=history;before=snap();v=o['c'].resume(Principal('alice'),sid)
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:485: in resume
+    self._owned(ctx,sid);self.tick_one(sid);return self.get(ctx,sid)
+                         ^^^^^^^^^^^^^^^^^^
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:363: in tick_one
+    action=decide(state,ra.observation,rb.observation,ra.clock,rb.clock,
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/machine.py:94: in decide
+    policy.validate_deadlines(long,short,clock_a,clock_b,now)
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/policy.py:73: in validate_deadlines
+    require(a_min >= b_max + self.settlement_margin_seconds, "UNSAFE_TIMEOUT", "Long leg does not conservatively outlive short leg")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'UNSAFE_TIMEOUT'
+message = 'Long leg does not conservatively outlive short leg'
+
+    def require(condition, code, message):
+        if not condition:
+>           raise SwapError(code, message)
+E           swapnet.errors.SwapError: UNSAFE_TIMEOUT: Long leg does not conservatively outlive short leg
+
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/errors.py:11: SwapError
+_______________ test_history_failures_remain_readonly[ambiguous] _______________
+
+restored = (<test_execution_v2.Pair object at 0x10b495a50>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <...repair.Probe object at 0x10b3504d0>, 'j': <swapnet.journal.Journal object at 0x105b4b290>, ...}, ['refunded'], [], ...)
+history = 'ambiguous'
+
+    @pytest.mark.parametrize('history',['missing','incomplete','ambiguous','empty'])
+    def test_history_failures_remain_readonly(restored,history):
+>    p,sid,h,o,m,e,snap,reopen=restored;h.mode=history;before=snap();v=o['c'].resume(Principal('alice'),sid)
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:485: in resume
+    self._owned(ctx,sid);self.tick_one(sid);return self.get(ctx,sid)
+                         ^^^^^^^^^^^^^^^^^^
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:363: in tick_one
+    action=decide(state,ra.observation,rb.observation,ra.clock,rb.clock,
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/machine.py:94: in decide
+    policy.validate_deadlines(long,short,clock_a,clock_b,now)
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/policy.py:73: in validate_deadlines
+    require(a_min >= b_max + self.settlement_margin_seconds, "UNSAFE_TIMEOUT", "Long leg does not conservatively outlive short leg")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'UNSAFE_TIMEOUT'
+message = 'Long leg does not conservatively outlive short leg'
+
+    def require(condition, code, message):
+        if not condition:
+>           raise SwapError(code, message)
+E           swapnet.errors.SwapError: UNSAFE_TIMEOUT: Long leg does not conservatively outlive short leg
+
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/errors.py:11: SwapError
+_________________ test_history_failures_remain_readonly[empty] _________________
+
+restored = (<test_execution_v2.Pair object at 0x10b3d7310>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <...repair.Probe object at 0x10b3d6110>, 'j': <swapnet.journal.Journal object at 0x10b3d7a10>, ...}, ['refunded'], [], ...)
+history = 'empty'
+
+    @pytest.mark.parametrize('history',['missing','incomplete','ambiguous','empty'])
+    def test_history_failures_remain_readonly(restored,history):
+>    p,sid,h,o,m,e,snap,reopen=restored;h.mode=history;before=snap();v=o['c'].resume(Principal('alice'),sid)
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:485: in resume
+    self._owned(ctx,sid);self.tick_one(sid);return self.get(ctx,sid)
+                         ^^^^^^^^^^^^^^^^^^
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:363: in tick_one
+    action=decide(state,ra.observation,rb.observation,ra.clock,rb.clock,
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/machine.py:94: in decide
+    policy.validate_deadlines(long,short,clock_a,clock_b,now)
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/policy.py:73: in validate_deadlines
+    require(a_min >= b_max + self.settlement_margin_seconds, "UNSAFE_TIMEOUT", "Long leg does not conservatively outlive short leg")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'UNSAFE_TIMEOUT'
+message = 'Long leg does not conservatively outlive short leg'
+
+    def require(condition, code, message):
+        if not condition:
+>           raise SwapError(code, message)
+E           swapnet.errors.SwapError: UNSAFE_TIMEOUT: Long leg does not conservatively outlive short leg
+
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/errors.py:11: SwapError
+____________________ test_latch_stays_after_height_rollback ____________________
+
+restored = (<test_execution_v2.Pair object at 0x10b1a8b90>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <...repair.Probe object at 0x10b1a9490>, 'j': <swapnet.journal.Journal object at 0x10b1a9850>, ...}, ['refunded'], [], ...)
+
+    def test_latch_stays_after_height_rollback(restored):
+>    p,sid,h,o,m,e,snap,reopen=restored;before=snap();o['c'].resume(Principal('alice'),sid);p.a.height=100;p.b.height=100
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:80: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:485: in resume
+    self._owned(ctx,sid);self.tick_one(sid);return self.get(ctx,sid)
+                         ^^^^^^^^^^^^^^^^^^
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:363: in tick_one
+    action=decide(state,ra.observation,rb.observation,ra.clock,rb.clock,
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/machine.py:94: in decide
+    policy.validate_deadlines(long,short,clock_a,clock_b,now)
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/policy.py:73: in validate_deadlines
+    require(a_min >= b_max + self.settlement_margin_seconds, "UNSAFE_TIMEOUT", "Long leg does not conservatively outlive short leg")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'UNSAFE_TIMEOUT'
+message = 'Long leg does not conservatively outlive short leg'
+
+    def require(condition, code, message):
+        if not condition:
+>           raise SwapError(code, message)
+E           swapnet.errors.SwapError: UNSAFE_TIMEOUT: Long leg does not conservatively outlive short leg
+
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/errors.py:11: SwapError
+__________________ test_fresh_session_same_imported_database ___________________
+
+restored = (<test_execution_v2.Pair object at 0x10b0be0d0>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <...repair.Probe object at 0x10b0be810>, 'j': <swapnet.journal.Journal object at 0x10b0bcf50>, ...}, ['refunded'], [], ...)
+
+    def test_fresh_session_same_imported_database(restored):
+>    p,sid,h,o,m,e,snap,reopen=restored;c=o['c'];c.resume(Principal('alice'),sid);state=o['j'].load(sid)[1];rid=state['reservation_id'];gid=state['grant_id'];old=o['st'].db.execute('SELECT * FROM reservations WHERE id=?',(rid,)).fetchone();grant=o['st'].db.execute('SELECT * FROM sn_grants WHERE id=?',(gid,)).fetchone()
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:91: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:485: in resume
+    self._owned(ctx,sid);self.tick_one(sid);return self.get(ctx,sid)
+                         ^^^^^^^^^^^^^^^^^^
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:363: in tick_one
+    action=decide(state,ra.observation,rb.observation,ra.clock,rb.clock,
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/machine.py:94: in decide
+    policy.validate_deadlines(long,short,clock_a,clock_b,now)
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/policy.py:73: in validate_deadlines
+    require(a_min >= b_max + self.settlement_margin_seconds, "UNSAFE_TIMEOUT", "Long leg does not conservatively outlive short leg")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'UNSAFE_TIMEOUT'
+message = 'Long leg does not conservatively outlive short leg'
+
+    def require(condition, code, message):
+        if not condition:
+>           raise SwapError(code, message)
+E           swapnet.errors.SwapError: UNSAFE_TIMEOUT: Long leg does not conservatively outlive short leg
+
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/errors.py:11: SwapError
+______________ test_owner_revocation_does_not_block_factual_reads ______________
+
+restored = (<test_execution_v2.Pair object at 0x10b627d50>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <...repair.Probe object at 0x10b615f90>, 'j': <swapnet.journal.Journal object at 0x10b614a90>, ...}, ['refunded'], [], ...)
+
+    def test_owner_revocation_does_not_block_factual_reads(restored):
+     p,sid,h,o,m,e,snap,reopen=restored;s=o['j'].load(sid)[1];rid=s['reservation_id'];mid=o['st'].db.execute('SELECT mandate_id FROM reservations WHERE id=?',(rid,)).fetchone()[0]
+>    o['auth'].revoke(Principal('alice',True),mid);before=snap();v=o['c'].resume(Principal('alice'),sid)
+                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:115: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:485: in resume
+    self._owned(ctx,sid);self.tick_one(sid);return self.get(ctx,sid)
+                         ^^^^^^^^^^^^^^^^^^
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:363: in tick_one
+    action=decide(state,ra.observation,rb.observation,ra.clock,rb.clock,
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/machine.py:94: in decide
+    policy.validate_deadlines(long,short,clock_a,clock_b,now)
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/policy.py:73: in validate_deadlines
+    require(a_min >= b_max + self.settlement_margin_seconds, "UNSAFE_TIMEOUT", "Long leg does not conservatively outlive short leg")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'UNSAFE_TIMEOUT'
+message = 'Long leg does not conservatively outlive short leg'
+
+    def require(condition, code, message):
+        if not condition:
+>           raise SwapError(code, message)
+E           swapnet.errors.SwapError: UNSAFE_TIMEOUT: Long leg does not conservatively outlive short leg
+
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/errors.py:11: SwapError
+_________________ test_reimport_retains_observation_only_latch _________________
+
+restored = (<test_execution_v2.Pair object at 0x10b5ed590>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <...repair.Probe object at 0x10b5eca10>, 'j': <swapnet.journal.Journal object at 0x10b5ee690>, ...}, ['refunded'], [], ...)
+tmp_path = PosixPath('<owned-ram-runtime>/t-before/test_reimport_retains_observat0')
+
+    def test_reimport_retains_observation_only_latch(restored,tmp_path):
+>    p,sid,h,o,m,e,snap,reopen=restored;c=o['c'];c.resume(Principal('alice'),sid);password='long observation-only reexport password';folder=Path(o['st'].path).parent if hasattr(o['st'],'path') else tmp_path/'imported'
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:120: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:485: in resume
+    self._owned(ctx,sid);self.tick_one(sid);return self.get(ctx,sid)
+                         ^^^^^^^^^^^^^^^^^^
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:363: in tick_one
+    action=decide(state,ra.observation,rb.observation,ra.clock,rb.clock,
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/machine.py:94: in decide
+    policy.validate_deadlines(long,short,clock_a,clock_b,now)
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/policy.py:73: in validate_deadlines
+    require(a_min >= b_max + self.settlement_margin_seconds, "UNSAFE_TIMEOUT", "Long leg does not conservatively outlive short leg")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'UNSAFE_TIMEOUT'
+message = 'Long leg does not conservatively outlive short leg'
+
+    def require(condition, code, message):
+        if not condition:
+>           raise SwapError(code, message)
+E           swapnet.errors.SwapError: UNSAFE_TIMEOUT: Long leg does not conservatively outlive short leg
+
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/errors.py:11: SwapError
+_____________________ test_peer_hint_cannot_enable_actions _____________________
+
+restored = (<test_execution_v2.Pair object at 0x10b188810>, 'fcd74ce1d7cff07751ae060039467a539053cc8026e2a842f4410861e633b748', <...repair.Probe object at 0x10b189b90>, 'j': <swapnet.journal.Journal object at 0x10b188650>, ...}, ['refunded'], [], ...)
+
+    def test_peer_hint_cannot_enable_actions(restored):
+>    p,sid,h,o,m,e,snap,reopen=restored;c=o['c'];c.resume(Principal('alice'),sid);state=o['j'].load(sid)[1];before=snap();original=state['recovery_facts']['original']
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py:127: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:485: in resume
+    self._owned(ctx,sid);self.tick_one(sid);return self.get(ctx,sid)
+                         ^^^^^^^^^^^^^^^^^^
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/coordinator.py:363: in tick_one
+    action=decide(state,ra.observation,rb.observation,ra.clock,rb.clock,
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/machine.py:94: in decide
+    policy.validate_deadlines(long,short,clock_a,clock_b,now)
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/policy.py:73: in validate_deadlines
+    require(a_min >= b_max + self.settlement_margin_seconds, "UNSAFE_TIMEOUT", "Long leg does not conservatively outlive short leg")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'UNSAFE_TIMEOUT'
+message = 'Long leg does not conservatively outlive short leg'
+
+    def require(condition, code, message):
+        if not condition:
+>           raise SwapError(code, message)
+E           swapnet.errors.SwapError: UNSAFE_TIMEOUT: Long leg does not conservatively outlive short leg
+
+<owned-ram-runtime>/before/contrib/swapnet/swapnet/errors.py:11: SwapError
+=========================== short test summary info ============================
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_expired_facts_only[refunded]
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_expired_facts_only[claimed]
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_expired_facts_only[pending]
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_expired_facts_only[unspent]
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_action_fences_before_first_tick[cancel]
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_action_fences_before_first_tick[peer_cancel]
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_action_fences_before_first_tick[refund]
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_action_fences_before_first_tick[bump_claim]
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_action_fences_before_first_tick[bump_refund]
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_action_fences_before_first_tick[prepare]
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_action_fences_before_first_tick[fund]
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_action_fences_before_first_tick[claim]
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_history_failures_remain_readonly[missing]
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_history_failures_remain_readonly[incomplete]
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_history_failures_remain_readonly[ambiguous]
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_history_failures_remain_readonly[empty]
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_latch_stays_after_height_rollback
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_fresh_session_same_imported_database
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_owner_revocation_does_not_block_factual_reads
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_reimport_retains_observation_only_latch
+FAILED work/btx-lanes/session-1/swapnet-recovery-workflow/test_observation_only.py::test_peer_hint_cannot_enable_actions
+21 failed, 2 passed in 20.32s
