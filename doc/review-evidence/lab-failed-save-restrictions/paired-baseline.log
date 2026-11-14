@@ -1,0 +1,37 @@
+FF.                                                                      [100%]
+=================================== FAILURES ===================================
+_____ test_pause_survives_unrelated_failed_save_and_explicit_resume_works ______
+
+lab = (<function lab.<locals>.call at 0x10acaf060>, PosixPath('<owned-ram-cache>/matched-baseline/test_pause_survives_unrelated_0/lab'))
+
+    def test_pause_survives_unrelated_failed_save_and_explicit_resume_works(lab):
+        call,state=lab
+        assert execute(call,prepare(call))['state']=='PERMIT_CONSUMED'
+        binding=call('lab.runtime_bind',{'release_id':'b'*96,'environment_ref':{},'requested_grants':[],'assurance':'LOCAL'},True)['record_id']
+        old=prepare(call)
+        assert call('lab.runtime_pause',{'runtime_binding_id':binding,'reason':'operator'},True)['state']=='PAUSED'
+        with pytest.raises(RPCError,match='BTX035_PAUSED'):execute(call,old)
+        fault(call,state)
+>       with pytest.raises(RPCError,match='BTX035_PAUSED'):prepare(call)
+E       Failed: DID NOT RAISE <class 'test_native_rollback.RPCError'>
+
+work/btx-lanes/session-2/modelnet-lab-rollback-integrity/test_native_rollback.py:65: Failed
+________________ test_revocation_survives_unrelated_failed_save ________________
+
+lab = (<function lab.<locals>.call at 0x10acce8e0>, PosixPath('<owned-ram-cache>/matched-baseline/test_revocation_survives_unrel0/lab'))
+
+    def test_revocation_survives_unrelated_failed_save(lab):
+        call,state=lab;root=identity(call,'revoked')
+        req={'record_type':'Revocation','payload':{'issuer_root':root,'revocation_epoch':'1','targets':[root],'effective_after_ms':'1','reason_code':'operator','prior_revocation_id':None,'quarantine_since_ms':None},'realm_id':'a'*96,'delegation_id':None,'expires_ms':'4102444800000'}
+        signed=call('lab.identity_sign',req,True)['envelope'];assert call('lab.record_verify',{'envelope':signed})['valid']
+        rec=call('lab.record_import',{'envelope':signed,'publish':False},True)['record_id'];assert call('lab.identity_revoke',{'revocation_id':rec},True)['state']=='REVOKED'
+        with pytest.raises(RPCError,match='BTX035_IDENTITY_REVOKED'):call('lab.identity_sign',req,True)
+        fault(call,state)
+>       with pytest.raises(RPCError,match='BTX035_IDENTITY_REVOKED'):call('lab.identity_sign',req,True)
+E       Failed: DID NOT RAISE <class 'test_native_rollback.RPCError'>
+
+work/btx-lanes/session-2/modelnet-lab-rollback-integrity/test_native_rollback.py:77: Failed
+=========================== short test summary info ============================
+FAILED work/btx-lanes/session-2/modelnet-lab-rollback-integrity/test_native_rollback.py::test_pause_survives_unrelated_failed_save_and_explicit_resume_works
+FAILED work/btx-lanes/session-2/modelnet-lab-rollback-integrity/test_native_rollback.py::test_revocation_survives_unrelated_failed_save
+2 failed, 1 passed in 1.52s
