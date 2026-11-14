@@ -16,7 +16,6 @@
 #include <util/syserror.h>
 
 #include <cerrno>
-#include <cstdio>
 #include <fstream>
 #include <limits>
 #include <map>
@@ -115,17 +114,13 @@ std::streampos GetFileSize(const char* path, std::streamsize max)
 bool FileCommit(FILE* file)
 {
     if (fflush(file) != 0) { // harmless if redundantly called
-        const int error = errno;
-        LogPrintf("fflush failed: %s\n", SysErrorString(error));
-        std::fprintf(stderr, "LAB_TRACE FileCommit fflush errno=%d\n", error);
+        LogPrintf("fflush failed: %s\n", SysErrorString(errno));
         return false;
     }
 #ifdef WIN32
     HANDLE hFile = (HANDLE)_get_osfhandle(_fileno(file));
     if (FlushFileBuffers(hFile) == 0) {
-        const auto error = GetLastError();
-        LogPrintf("FlushFileBuffers failed: %s\n", Win32ErrorString(error));
-        std::fprintf(stderr, "LAB_TRACE FileCommit FlushFileBuffers win32=%lu\n", static_cast<unsigned long>(error));
+        LogPrintf("FlushFileBuffers failed: %s\n", Win32ErrorString(GetLastError()));
         return false;
     }
 #elif defined(__APPLE__) && defined(F_FULLFSYNC)
@@ -336,11 +331,6 @@ bool RenameOver(fs::path src, fs::path dest)
 {
     std::error_code error;
     fs::rename(src, dest, error);
-    if (error) {
-        const std::string message = error.message();
-        std::fprintf(stderr, "LAB_TRACE RenameOver category=%s value=%d message=%s src_chars=%zu dest_chars=%zu\n",
-                     error.category().name(), error.value(), message.c_str(), src.native().size(), dest.native().size());
-    }
     return !error;
 }
 

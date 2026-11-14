@@ -253,8 +253,7 @@ BOOST_AUTO_TEST_CASE(failed_write_is_rolled_back_and_does_not_block_later_writes
     exec.pushKV("local_capability_grant_id", intent);
     exec.pushKV("idempotency_key", "lifecycle-fault-execute");
     exec.pushKV("expected_state", UniValue());
-    const bool executed = Call("lab.research_execute", exec, ignored, err);
-    BOOST_REQUIRE_MESSAGE(executed, "lab.research_execute setup failed: " << err);
+    BOOST_REQUIRE(Call("lab.research_execute", exec, ignored, err));
     const fs::path pieces = root.path / "pieces";
     const fs::path kept = root.path / "pieces.kept";
     BOOST_REQUIRE(fs::is_directory(pieces));

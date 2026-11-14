@@ -7,7 +7,6 @@
 #include <univalue.h>
 #include <util/fs_helpers.h>
 
-#include <cerrno>
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
@@ -731,22 +730,10 @@ bool AtomicWrite(const fs::path& dir, const std::string& bytes, std::string& err
     const fs::path dest = dir / "lab.json";
     const fs::path tmp = dir / "lab.json.tmp";
     FILE* file = fsbridge::fopen(tmp, "wb");
-    if (!file) {
-        const int error = errno;
-        std::fprintf(stderr, "LAB_TRACE lab.json fopen errno=%d path_chars=%zu\n", error, tmp.native().size());
-        return Fail(err, "BTX035_RECOVERY_REQUIRED");
-    }
+    if (!file) return Fail(err, "BTX035_RECOVERY_REQUIRED");
     const size_t n = bytes.empty() ? 0 : fwrite(bytes.data(), 1, bytes.size(), file);
-    if (n != bytes.size()) {
-        const int error = errno;
-        std::fprintf(stderr, "LAB_TRACE lab.json fwrite errno=%d\n", error);
-    }
     const bool committed = n == bytes.size() && FileCommit(file);
     const int closed = fclose(file);
-    if (closed != 0) {
-        const int error = errno;
-        std::fprintf(stderr, "LAB_TRACE lab.json fclose errno=%d\n", error);
-    }
     if (!committed || closed != 0 || !RenameOver(tmp, dest)) {
         std::error_code ec;
         fs::remove(tmp, ec);
