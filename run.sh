@@ -6,11 +6,23 @@ head=8d6d8b1aabf371b12f2b1f5797b950fed7962d4e
 test "$(git -C product rev-parse HEAD)" = "$head"
 git -C product rev-parse HEAD
 docker version --format '{{.Server.Version}}'
-image=minio/minio:RELEASE.2025-04-22T22-12-26Z
-timeout 180 docker pull "$image"
+tag=RELEASE.2025-04-22T22-12-26Z
+mkdir -p minio-image
+curl -fsSL --retry 2 "https://github.com/minio/minio/releases/download/$tag/minio.linux-amd64.$tag" -o minio-image/minio
+(cd minio-image && echo '53e2a2cb16c5366ea6fbbc479c19ddb4c6a0948273e752f740fb1fbf27bb817c  minio' | sha256sum -c -)
+chmod 755 minio-image/minio
+cat > minio-image/Dockerfile <<'DOCKER'
+FROM scratch
+COPY minio /minio
+ENV HOME=/root
+ENTRYPOINT ["/minio"]
+DOCKER
+image=btx-evidence-minio:2025-04-22
+docker build -t "$image" minio-image
+docker run --rm "$image" --version | tee records/minio-version.txt
 export BTX_MINIO_IMAGE
 BTX_MINIO_IMAGE=$(docker image inspect --format '{{.Id}}' "$image")
-docker image inspect --format '{{json .RepoDigests}} {{.Id}}' "$image" | tee records/image.txt
+printf '%s %s\n' "$tag" "$BTX_MINIO_IMAGE" | tee records/image.txt
 sudo apt-get update -qq
 sudo apt-get install -y -qq libboost-dev libevent-dev libsqlite3-dev libzmq3-dev python3-dev python3-cryptography ninja-build
 /usr/bin/python3 -I -c 'import cryptography,sqlite3; print(cryptography.__version__,sqlite3.sqlite_version)'
