@@ -1,0 +1,27 @@
+{
+  "utc": "2026-11-14T07:04:04.371436+00:00",
+  "target": "3b0175dff3e377e5954d26dbc389b8dc9b0b7084",
+  "verdict": "PASS_SCOPED_NATIVE_BITCOIN_ADOPTION_AND_REFUND",
+  "production_modules_sha256": {
+    "swapnet/coordinator.py": "0a0af551260e1dd008f811f671c864da6e0a660d2b41a4853513ba2862cf4916",
+    "swapnet/drivers.py": "6a5ce89cf74ffca4b9d7069fc60bf7d03eb2f107db2d52879f470f5f91e16629",
+    "swapnet/funding_scan.py": "bee44322c2344d517e88c5a13ba8272f2e1fdbb9293e6e9921e52bd5bf4a5d35",
+    "swapnet/journal.py": "cdbbbc402cb44819c56a547262fd07bdf452a9c05ac6136d24f255cbefb960d3",
+    "swapnet/recovery.py": "ec18a65cd05ab000da7aa71c3ff97c5add13e64cea92f498a8559e11d05b2013",
+    "swapnet/adapters.py": "33016b4ebb57bb388d176e004b51a2780fd0411d4ef75e721865c1b8328c534b"
+  },
+  "bitcoin_sha256": "fc155e96b3df11c0e522c041fe55210a1f19272a5a36a373b0323f36715d07dd",
+  "scope": "Current production Python coordinator/driver and real Bitcoin Core30.4 wallet/chain; simulated BTX counterleg, no embedded native BTX runtime",
+  "setup_limit": "Original funding only: omitted unsupported psbt_version=0 on Core30.4. Restore/adoption uses unchanged production driver and RPC options. Current-head fresh funding on30.4 failed and is unqualified.",
+  "policy_confirmations": 2,
+  "baseline_receipt": "native-receipt.json",
+  "files": {
+    "current_native_probe.py": "040dfe70860136f54593ba9be7974989119aedf1b2aa65f60fa44acc71416959",
+    "current-native-result.json": "36594fcf4f2657a46fdf1c58fa8d6d7bb00db14a64ded287c7defd3054733713",
+    "current-native-probe.log": "16a662e51d141d96e615b4494559f7c213eaa45097091146c6196770ec27bf70",
+    "current-native-node.log": "70dc88d19325af6df465c62c66fd8e8d6aea22ffb5ec3647eff5a6edb605eb20",
+    "core30-setup-current-native-probe.log": "417093f133771aac4f5e62164bd46990b9fd3d00d498d114e41a9c1eb4ffa4db"
+  },
+  "resources_released": true,
+  "no_posting": true
+}

@@ -1,0 +1,82 @@
+{
+  "status": "PASS_ADOPTION_AND_NATIVE_REFUND",
+  "target": "3b0175dff3e377e5954d26dbc389b8dc9b0b7084",
+  "scope": "Current production Python coordinator/driver and real Bitcoin Core30.4 wallet/chain; simulated BTX counterleg, no embedded native BTX runtime",
+  "binary_sha256": "fc155e96b3df11c0e522c041fe55210a1f19272a5a36a373b0323f36715d07dd",
+  "cases": [
+    {
+      "original_payment": {
+        "txid": "697187669970b99cf47bc76fa8953284609dca9090dec248938fa8174a3496f5",
+        "vout": 1
+      },
+      "original_inputs": [
+        {
+          "txid": "2c19be83784947253fb716cc3be3c04c1eee3b2f59ce4b97f1bf873008e7f14b",
+          "vout": 0,
+          "sequence": 4294967294
+        }
+      ],
+      "adopted_same_outpoint": true,
+      "fresh_funding_calls_after_restore": 0,
+      "funding_calls_total": 1,
+      "early_refund_rejected": true,
+      "restart_preserved_reference": true,
+      "refund_txid": "cc5efdf96782822073ed075a41eb1c087d889911ae0ec0a6a8b91ebb8cacebb1",
+      "refund_confirmations": 2,
+      "refund_spends_original": true,
+      "refund_amount_atoms": 9900,
+      "refund_fee_atoms": 100,
+      "beneficiary_matches": true,
+      "terminal_after_restart": "refunded",
+      "policy_confirmations": 2
+    }
+  ],
+  "setup_limit": "Original funding only: omitted unsupported psbt_version=0 on Core30.4. Restore/adoption uses unchanged production driver and RPC options. Current-head fresh funding on30.4 failed and is unqualified.",
+  "rpc_funding_calls": [
+    {
+      "wallet": "alice",
+      "method": "walletcreatefundedpsbt",
+      "decoded": {
+        "txid": "697187669970b99cf47bc76fa8953284609dca9090dec248938fa8174a3496f5",
+        "hash": "697187669970b99cf47bc76fa8953284609dca9090dec248938fa8174a3496f5",
+        "version": 2,
+        "size": 137,
+        "vsize": 137,
+        "weight": 548,
+        "locktime": 0,
+        "vin": [
+          {
+            "txid": "2c19be83784947253fb716cc3be3c04c1eee3b2f59ce4b97f1bf873008e7f14b",
+            "vout": 0,
+            "sequence": 4294967294
+          }
+        ],
+        "vout": [
+          {
+            "value": "49.99989670",
+            "n": 0,
+            "scriptPubKey": {
+              "desc": "rawtr(2e7e3e99af80d69297c4888441ee9606a38b09e502448a883f24a93553efec96)#zsssngyp",
+              "address": "bcrt1p9elraxd0srtf997y3zzyrm5kq63ckz09qfzg4zplyj5n25l0ajtqpephfm",
+              "type": "witness_v1_taproot"
+            }
+          },
+          {
+            "value": "0.00010000",
+            "n": 1,
+            "scriptPubKey": {
+              "desc": "addr(bcrt1q2ehuzp4gctkleh3s2cc4lr6hqlgxgmuqfqg28n9fvr8lp6vj0mdq5d3yr8)#cezrqaa8",
+              "address": "bcrt1q2ehuzp4gctkleh3s2cc4lr6hqlgxgmuqfqg28n9fvr8lp6vj0mdq5d3yr8",
+              "type": "witness_v0_scripthash"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "rpc_funding_attempts": [
+    {
+      "wallet": "alice"
+    }
+  ]
+}
