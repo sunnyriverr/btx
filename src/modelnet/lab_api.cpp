@@ -36,6 +36,7 @@
 #include <algorithm>
 #include <chrono>
 #include <cstdint>
+#include <cstdio>
 #include <cstdlib>
 #include <filesystem>
 #include <map>
@@ -695,8 +696,14 @@ bool PersistDurable(std::string& err)
     }
     LabDiskImage image;
     ImageFromStore(State(), image);
-    if (!SaveLabDisk(image, err)) return false;
-    return SaveModelPieces(State(), err);
+    std::fprintf(stderr, "LAB_TRACE enter lab.json save\n");
+    const bool snapshot_ok = SaveLabDisk(image, err);
+    std::fprintf(stderr, "LAB_TRACE lab.json saved=%d code=%s\n", snapshot_ok, err.c_str());
+    if (!snapshot_ok) return false;
+    std::fprintf(stderr, "LAB_TRACE enter pieces save models=%zu\n", State().models.size());
+    const bool pieces_ok = SaveModelPieces(State(), err);
+    std::fprintf(stderr, "LAB_TRACE pieces saved=%d code=%s\n", pieces_ok, err.c_str());
+    return pieces_ok;
 }
 
 void RevertStore(LabDiskImage prior, std::map<std::string, std::vector<unsigned char>> secrets, bool recovery, uint64_t generation)
@@ -3695,7 +3702,11 @@ bool DispatchLabApi(const std::string& method, const std::string& request_json, 
         bool persisted = false;
         try {
             persisted = PersistDurable(err);
-        } catch (const std::filesystem::filesystem_error&) {
+        } catch (const std::filesystem::filesystem_error& ex) {
+            const auto& ec = ex.code();
+            const std::string message = ec.message();
+            std::fprintf(stderr, "LAB_TRACE persistence exception category=%s value=%d message=%s path1_chars=%zu path2_chars=%zu\n",
+                         ec.category().name(), ec.value(), message.c_str(), ex.path1().native().size(), ex.path2().native().size());
             err = "BTX035_RECOVERY_REQUIRED";
         }
         if (!persisted) {

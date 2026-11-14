@@ -10,6 +10,7 @@
 #include <util/fs_helpers.h>
 
 #include <algorithm>
+#include <cerrno>
 #include <cstdio>
 #include <limits>
 #include <string>
@@ -68,23 +69,41 @@ bool WriteBinaryFileAtomically(const fs::path& filename, const std::function<boo
 {
     std::error_code ec;
     const auto status = fs::symlink_status(filename, ec);
-    if (ec && ec != std::errc::no_such_file_or_directory) return false;
+    if (ec && ec != std::errc::no_such_file_or_directory) {
+        const std::string message = ec.message();
+        std::fprintf(stderr, "LAB_TRACE atomic symlink_status category=%s value=%d message=%s path_chars=%zu\n",
+                     ec.category().name(), ec.value(), message.c_str(), filename.native().size());
+        return false;
+    }
     if (fs::exists(status) && !fs::is_regular_file(status)) return false;
 
     FastRandomContext rng;
     const fs::path tmp_dir = staging_dir.empty() ? filename.parent_path() : staging_dir;
     const fs::path tmp = tmp_dir / fs::PathFromString(".btx-export-" + std::to_string(rng.rand64()) + ".tmp");
     FILE* file = fsbridge::fopen(tmp, "wbx");
-    if (!file) return false;
+    if (!file) {
+        const int error = errno;
+        std::fprintf(stderr, "LAB_TRACE atomic fopen wbx errno=%d path_chars=%zu\n", error, tmp.native().size());
+        return false;
+    }
     bool committed;
     try {
-        committed = write(file) && FileCommit(file);
+        const bool wrote = write(file);
+        if (!wrote) {
+            const int error = errno;
+            std::fprintf(stderr, "LAB_TRACE atomic write callback errno=%d\n", error);
+        }
+        committed = wrote && FileCommit(file);
     } catch (...) {
         std::fclose(file);
         fs::remove(tmp, ec);
         throw;
     }
     const bool closed = std::fclose(file) == 0;
+    if (!closed) {
+        const int error = errno;
+        std::fprintf(stderr, "LAB_TRACE atomic fclose errno=%d\n", error);
+    }
     ec.clear();
 #ifndef WIN32
     if (committed && closed && fs::exists(status)) {

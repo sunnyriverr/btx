@@ -1,4 +1,4 @@
-name: MinGW bridge fixture verification
+name: MinGW Lab persistence trace
 
 on:
   workflow_dispatch:
@@ -216,14 +216,12 @@ jobs:
         with:
           name: win-tests
           path: bin
-      - name: Verify and run bridge suite
-        timeout-minutes: 8
+      - name: Verify and run the single Lab lifecycle case
+        timeout-minutes: 5
         run: |
           (cd bin && sha256sum -c SHA256SUMS.txt)
-          export BTX_TEST_V11_VECTORS="$(cygpath -aw bin/modelnet_v11_vectors.json)"
-          python "$CIPY" suites --bin bin/test_btx.exe --label mingw-bridge --job "$GITHUB_JOB" \
-            --out "$LOGS/focused" --suites modelnet_bridge_tests --jobs 1 --timeout 120 --per-suite --keep-logs
-          python -c 'import json,sys; s=json.load(open(sys.argv[1])); assert s["selected"]==1 and s["counts"]=={"pass":1}, s' "$LOGS/focused/summary.json"
+          bin/test_btx.exe --run_test=lab_lifecycle_tests/failed_write_is_rolled_back_and_does_not_block_later_writes \
+            --log_level=test_suite --color_output=no > "$LOGS/lab-persistence-trace.log" 2>&1
       - name: Upload logs
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
