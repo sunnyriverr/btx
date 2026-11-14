@@ -1,0 +1,59 @@
+name: ModelNet integrated helper bounded build
+on:
+  push:
+    branches: [codex/ci-modelnet-integrated-helper]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: f40eb37a6fb8b665340fe92a2f248ff3f23ec7f6
+          path: accepted-source
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: 14137426601
+          run-id: 43653837133
+          github-token: ${{ github.token }}
+          path: saved-checkpoint
+          merge-multiple: true
+      - name: Verify restore and bounded helper compile
+        timeout-minutes: 35
+        run: |
+          set -euo pipefail
+          mkdir -p records
+          image=ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11
+          docker pull "$image"
+          docker run --rm --init --platform linux/amd64 -v "$GITHUB_WORKSPACE:$GITHUB_WORKSPACE" -w "$GITHUB_WORKSPACE" -e GITHUB_WORKSPACE "$image" bash -e -c 'timeout --kill-after=20s 10m bash setup.sh && /opt/hostedtoolcache/Python/3.12.16/x64/bin/python3 pilot.py' 2>&1 | tee records/preparation.log
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: modelnet-integrated-helper-binary
+          path: candidate/
+          retention-days: 14
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: modelnet-integrated-helper-cache
+          path: resume-checkpoint/
+          retention-days: 14
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: modelnet-integrated-helper-build-records
+          path: |
+            pilot-records/
+            records/
+          retention-days: 14
+          if-no-files-found: error
