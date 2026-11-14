@@ -36,7 +36,13 @@ BOOST_FIXTURE_TEST_SUITE(modelnet_bridge_tests, BasicTestingSetup)
 
 static UniValue LoadVectors()
 {
+#ifdef _WIN32
+    const char* packaged_vectors = std::getenv("BTX_TEST_V11_VECTORS");
+    std::ifstream in{fs::PathFromString(packaged_vectors && *packaged_vectors
+        ? packaged_vectors : MODELNET_V11_VECTORS_PATH)};
+#else
     std::ifstream in{MODELNET_V11_VECTORS_PATH};
+#endif
     BOOST_REQUIRE(in);
     std::string raw((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
     UniValue v;
