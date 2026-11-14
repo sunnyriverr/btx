@@ -1,0 +1,234 @@
+--- a/contrib/swapnet/swapnet/authorization.py
++++ b/contrib/swapnet/swapnet/authorization.py
+@@ -57,9 +57,9 @@
+                 g=local_load(raw)
+                 rr=db.execute('SELECT mandate_id FROM reservations WHERE id=?',(g['reservation_id'],)).fetchone()
+                 if rr and rr[0]==mid and not consumed:db.execute('UPDATE sn_grants SET revoked=1 WHERE id=?',(gid,))
+-    def reserve(self,ctx,quote,mandate_id,max_fee_atoms):
++    def reserve(self,ctx,quote,mandate_id,max_fee_atoms,*,db=None,check_only=False):
+         require(type(ctx) is Principal,'AUTH','Peer cannot reserve wallet funds')
+-        return self.store.reserve(quote,mandate_id,ctx.name,max_fee_atoms,self.clock())
++        return self.store.reserve(quote,mandate_id,ctx.name,max_fee_atoms,self.clock(),db=db,check_only=check_only)
+     def reservation_expiry(self,rid):
+         with self.store.lock:
+             row=self.store.db.execute('SELECT m.body FROM mandates m JOIN reservations r ON r.mandate_id=m.id WHERE r.id=?',(rid,)).fetchone()
+--- a/contrib/swapnet/swapnet/coordinator.py
++++ b/contrib/swapnet/swapnet/coordinator.py
+@@ -27,6 +27,13 @@
+         require(asset in self.drivers,'ASSET_UNAVAILABLE','No qualified local chain driver for this asset')
+         return self.drivers[asset]
+     def _save(self,sid,s,rev):return self.journal.save(sid,s,rev)
++    def _save_new(self,sid,body,ctx,budget_quote,mandate_id,maxfee):
++        # Driver and vault setup has finished. Keep the debit, quote claim and
++        # session in one transaction so failed initialization leaves no hold.
++        with self.journal.store.transaction() as db:
++            body['reservation_id']=self.authority.reserve(ctx,budget_quote,mandate_id,maxfee,db=db)
++            self.journal.claim_quote(body['quote_id'],sid,db=db)
++            self.journal.save(sid,body,-1,db=db)
+     def _owned(self,ctx,sid):
+         require(type(ctx) is Principal,'AUTH','Authenticated RPC principal required')
+         rev,s=self.journal.load(sid)
+@@ -68,12 +75,10 @@
+         self.journal.ensure_capacity()
+         a,b=self._driver(q.sell_asset),self._driver(q.buy_asset)
+         a.ready();b.ready()
+-        rid=self.authority.reserve(ctx,q,mandate_id,max_local_fee_atoms)
+-        self.journal.claim_quote(q.id,sid)
++        self.authority.reserve(ctx,q,mandate_id,max_local_fee_atoms,check_only=True)
+         long,short=self._deadlines(a,b)
+         ak=a.new_key('refund');bk=b.new_key('claim')
+-        # A crash before session commit leaves only a non-spending held reservation;
+-        # retries use the same reservation and the already-created secret.
++        # A retry after interrupted setup reuses the already-created secret.
+         secret_id='secret_'+sid
+         if secret_id in self.vault.entries:
+             h=hashlib.sha256(bytes.fromhex(self.vault.entries[secret_id]['preimage'])).hexdigest()
+@@ -87,11 +92,12 @@
+         require(atoms(proposal['short_claim_fee_atoms'])<=atoms(q.max_receive_network_fee_atoms),'FEE_CAP','Claim fee exceeds signed quote')
+         require(atoms(refund_fee_atoms)<=atoms(max_local_fee_atoms),'FEE_CAP','Refund fee exceeds local authorization')
+         s={'principal':ctx.name,'wallet':ctx.wallet,'peer':q.provider,'role':'initiator','stage':'proposed',
+-           'quote_id':q.id,'quote':envelope,'proposal':proposal,'reservation_id':rid,
++           'quote_id':q.id,'quote':envelope,'proposal':proposal,
+            'keys':{'refund':ak,'claim':bk},'max_local_fee_atoms':max_local_fee_atoms,
+            'secret_exposed':False,'funding_prepared':False,'funding_broadcast':False,'recovery_ready':False,
+            'refs':{},'created_at':now,'updated_at':now}
+-        self._save(sid,s,-1);self.emit(q.provider,'proposal',sid,proposal)
++        self._save_new(sid,s,ctx,q,mandate_id,max_local_fee_atoms)
++        self.emit(q.provider,'proposal',sid,proposal)
+         return self._safe_view(sid,s)
+     def receive_proposal(self,sender,sid,p,market):
+         exact_fields(p,{'quote','rfq','hashlock','nonce','long_refund_key','long_refund_payout',
+@@ -125,8 +131,7 @@
+         # bilateral agreement remains bound to the original signed quote.
+         reverse=Quote(q.network,sender,digest('BTX/SWAPNET/MAKER/2',{'swap_id':sid}),q.nonce,q.sequence,
+                       q.buy_asset,q.sell_asset,str(atoms(q.buy_atoms)-atoms(q.maker_fee_atoms)),q.sell_atoms,'0','0',q.issued_at,q.expires_at)
+-        rid=self.authority.reserve(ctx,reverse,market['mandate_id'],maxfee)
+-        self.journal.claim_quote(q.id,sid)
++        self.authority.reserve(ctx,reverse,market['mandate_id'],maxfee,check_only=True)
+         a,b=self._driver(q.sell_asset),self._driver(q.buy_asset);a.ready();b.ready()
+         long,short=Deadline(**p['long_deadline']),Deadline(**p['short_deadline'])
+         self.policy.validate_deadlines(long,short,a.clock(),b.clock(),now)
+@@ -143,11 +148,12 @@
+         a.watch_terms(la,ak);b.watch_terms(lb,bk)
+         sig=self.identity.sign(agr.signing_message)
+         s={'principal':ctx.name,'wallet':ctx.wallet,'peer':sender,'role':'responder','stage':'offered',
+-           'quote_id':q.id,'quote':p['quote'],'proposal':p,'reservation_id':rid,
++           'quote_id':q.id,'quote':p['quote'],'proposal':p,
+            'keys':{'refund':bk,'claim':ak},'max_local_fee_atoms':maxfee,'agreement':asdict(agr),'agreement_id':agr.id,
+            'signatures':{'responder':sig},'secret_exposed':False,'funding_prepared':False,'funding_broadcast':False,
+            'recovery_ready':False,'refs':{},'created_at':now,'updated_at':now}
+-        self._save(sid,s,-1);self.emit(sender,'agreement',sid,{'agreement':asdict(agr),'responder_signature':sig})
++        self._save_new(sid,s,ctx,reverse,market['mandate_id'],maxfee)
++        self.emit(sender,'agreement',sid,{'agreement':asdict(agr),'responder_signature':sig})
+     def receive_agreement(self,sender,sid,body):
+         exact_fields(body,{'agreement','responder_signature'});rev,s=self.journal.load(sid)
+         require(s['role']=='initiator' and s['peer']==sender and s['stage'] not in TERMINAL,'SESSION_BINDING','Unexpected agreement')
+--- a/contrib/swapnet/swapnet/journal.py
++++ b/contrib/swapnet/swapnet/journal.py
+@@ -4,6 +4,7 @@
+ persisted before sending; repeated messages and process restarts are idempotent.
+ Secrets and raw claim transactions are never returned by public read methods.
+ """
++from contextlib import nullcontext
+ from dataclasses import asdict
+ import hashlib
+ import json
+@@ -109,9 +110,9 @@
+                     'SESSION_LIMIT','Journal session capacity reached; preserve recovery state before offline archival')
+             require(self.store.db.execute("SELECT count(*) FROM sn_negotiations WHERE stage NOT IN ('complete','refunded','cancelled','rejected')").fetchone()[0]<128,
+                     'ACTIVE_LIMIT','At most 128 active settlements per native node')
+-    def save(self,sid,body,expected=-1):
++    def save(self,sid,body,expected=-1,*,db=None):
+         hex32(sid)
+-        with self.store.transaction() as db:
++        with (self.store.transaction() if db is None else nullcontext(db)) as db:
+             old=db.execute('SELECT revision,body FROM sn_negotiations WHERE id=?',(sid,)).fetchone()
+             require((old[0] if old else -1)==expected,'REVISION_CONFLICT','Concurrent swap update')
+             if old:
+@@ -137,8 +138,8 @@
+             if principal is None:rows=self.store.db.execute('SELECT id,revision,body FROM sn_negotiations ORDER BY id LIMIT ?',(limit,)).fetchall()
+             else:rows=self.store.db.execute('SELECT id,revision,body FROM sn_negotiations WHERE principal=? ORDER BY id LIMIT ?',(principal,limit)).fetchall()
+         return [(r[0],r[1],local_load(r[2])) for r in rows]
+-    def claim_quote(self,qid,sid):
+-        with self.store.transaction() as db:
++    def claim_quote(self,qid,sid,*,db=None):
++        with (self.store.transaction() if db is None else nullcontext(db)) as db:
+             row=db.execute('SELECT swap_id FROM sn_claimed_quotes WHERE quote_id=?',(qid,)).fetchone()
+             require(not row or row[0]==sid,'QUOTE_ALREADY_ACCEPTED','Quote belongs to another swap')
+             db.execute('INSERT OR IGNORE INTO sn_claimed_quotes VALUES(?,?)',(qid,sid))
+--- a/contrib/swapnet/swapnet/store.py
++++ b/contrib/swapnet/swapnet/store.py
+@@ -3,7 +3,7 @@
+ No network I/O occurs inside SQL transactions. Serialized raw transactions are
+ persisted BEFORE broadcast. Retrying an ambiguous broadcast reuses the same bytes.
+ """
+-from contextlib import contextmanager
++from contextlib import contextmanager, nullcontext
+ from dataclasses import asdict
+ import hashlib
+ import os
+@@ -101,11 +101,11 @@
+             self._audit(db,{"type":"mandate_revoked","id":mandate_id})
+         # Existing locked swaps retain recovery authority, never new funding authority.
+ 
+-    def reserve(self, quote: Quote, mandate_id, principal, max_local_fee_atoms, now):
++    def reserve(self, quote: Quote, mandate_id, principal, max_local_fee_atoms, now, *, db=None, check_only=False):
+         fee=atoms(max_local_fee_atoms)
+         cost=atoms(quote.sell_atoms)+fee
+         rid=digest("BTX/SWAPNET/RESERVATION/1", {"quote_id":quote.id,"principal":principal,"mandate_id":mandate_id,"fee":max_local_fee_atoms})
+-        with self.transaction() as db:
++        with (self.transaction() if db is None else nullcontext(db)) as db:
+             existing=db.execute("SELECT id FROM reservations WHERE quote_id=?",(quote.id,)).fetchone()
+             if existing:
+                 require(existing[0] == rid,"IDEMPOTENCY_CONFLICT","Quote already reserved with different parameters")
+@@ -119,6 +119,8 @@
+             require(atoms(quote.sell_atoms) <= atoms(mandate.max_trade_atoms) and fee <= atoms(mandate.max_fee_atoms),"BUDGET_LIMIT","Trade or fee exceeds cap")
+             held,used=atoms(row[1]),atoms(row[2])
+             require(held+used+cost <= atoms(mandate.max_total_atoms),"BUDGET_LIMIT","Cumulative cap exceeded")
++            if check_only:
++                return rid
+             db.execute("INSERT INTO reservations VALUES(?,?,?,?,?,'held',?)",(rid,quote.id,mandate_id,principal,str(cost),dumps(asdict(quote))))
+             db.execute("UPDATE mandates SET held=? WHERE id=?",(str(held+cost),mandate_id))
+             self._audit(db,{"type":"reserved","id":rid,"quote_id":quote.id,"cost_atoms":str(cost)})
+--- a/contrib/swapnet/tests/test_execution_v2.py
++++ b/contrib/swapnet/tests/test_execution_v2.py
+@@ -3,6 +3,7 @@
+ import hashlib
+ import os
+ import json
++import sqlite3
+ import pytest
+ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+ from swapnet.store import Store
+@@ -205,3 +206,71 @@
+     assert {o['kind'] for o in ops}=={'fund','refund'}
+     assert all('raw' not in o for o in journal.operations(sid))
+     assert journal.store.verify_audit()
++
++
++@pytest.mark.parametrize("failure", ["watch", "session_insert"])
++def test_rejected_proposal_releases_maker_budget(pair, monkeypatch, failure):
++    sid = pair.start()
++    sender, maker, _, _, proposal = pair.queue.pop()
++    mandate_id = pair.market['mandate_id']
++    quote_id = pair.state('alice')['quote_id']
++
++    def reject_watch(*args):
++        raise SwapError('RPC', 'Watch wallet rejected descriptor import')
++
++    if failure == 'watch':
++        monkeypatch.setattr(pair.nodes[maker][3].drivers[B], 'watch_terms', reject_watch)
++        expected = SwapError
++        message = 'Watch wallet rejected descriptor import'
++    else:
++        # Abort the final SQLite write after the budget and quote writes have run.
++        pair.nodes[maker][0].db.execute("""
++            CREATE TEMP TRIGGER reject_session BEFORE INSERT ON sn_negotiations
++            BEGIN SELECT RAISE(ABORT, 'Session insert failed'); END
++        """)
++        expected = sqlite3.IntegrityError
++        message = 'Session insert failed'
++    with pytest.raises(expected, match=message):
++        pair.nodes[maker][3].receive_proposal(sender, sid, proposal, pair.market)
++
++    assert not pair.queue
++    pair.restart(maker)
++    store, journal, _, coordinator = pair.nodes[maker]
++    assert journal.all() == []
++    assert journal.operations(sid) == []
++    assert store.db.execute('SELECT held,used FROM mandates WHERE id=?', (mandate_id,)).fetchone() == ('0', '0')
++    assert store.db.execute('SELECT count(*) FROM reservations').fetchone() == (0,)
++    assert store.db.execute('SELECT count(*) FROM sn_claimed_quotes').fetchone() == (0,)
++
++    coordinator.receive_proposal(sender, sid, proposal, pair.market)
++    coordinator.receive_proposal(sender, sid, proposal, pair.market)
++    assert store.db.execute('SELECT held,used FROM mandates WHERE id=?', (mandate_id,)).fetchone() == ('20490', '0')
++    assert store.db.execute('SELECT swap_id FROM sn_claimed_quotes WHERE quote_id=?', (quote_id,)).fetchone() == (sid,)
++    for _ in range(18):
++        pair.step()
++        pair.restart(maker)
++    assert pair.state(sender)['stage'] == pair.state(maker)['stage'] == 'complete'
++    assert len(pair.a.records) == len(pair.b.records) == 1
++    store, journal, _, _ = pair.nodes[maker]
++    assert len([op for op in journal.operations(sid) if op['kind'] == 'fund']) == 1
++    assert store.verify_audit()
++
++def test_rejected_start_releases_initiator_budget(pair, monkeypatch):
++    def reject_key(*args):
++        raise SwapError('RPC', 'Refund key setup failed')
++
++    monkeypatch.setattr(pair.nodes['alice'][3].drivers[A], 'new_key', reject_key)
++    with pytest.raises(SwapError, match='Refund key setup failed'):
++        pair.start()
++    pair.restart('alice')
++    store, journal, _, _ = pair.nodes['alice']
++    assert journal.all() == []
++    assert store.db.execute('SELECT held,used FROM mandates').fetchall() == [('0', '0')]
++    assert store.db.execute('SELECT count(*) FROM sn_claimed_quotes').fetchone() == (0,)
++    assert not pair.queue
++    sid = pair.start()
++    for _ in range(18):
++        pair.step()
++    assert pair.state('alice')['stage'] == 'complete'
++    assert len(pair.a.records) == len(pair.b.records) == 1
++    assert len([op for op in journal.operations(sid) if op['kind'] == 'fund']) == 1

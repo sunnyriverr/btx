@@ -27,6 +27,13 @@ class Coordinator:
         require(asset in self.drivers,'ASSET_UNAVAILABLE','No qualified local chain driver for this asset')
         return self.drivers[asset]
     def _save(self,sid,s,rev):return self.journal.save(sid,s,rev)
+    def _save_new(self,sid,body,ctx,budget_quote,mandate_id,maxfee):
+        # Driver and vault setup has finished. Keep the debit, quote claim and
+        # session in one transaction so failed initialization leaves no hold.
+        with self.journal.store.transaction() as db:
+            body['reservation_id']=self.authority.reserve(ctx,budget_quote,mandate_id,maxfee,db=db)
+            self.journal.claim_quote(body['quote_id'],sid,db=db)
+            self.journal.save(sid,body,-1,db=db)
     def _owned(self,ctx,sid):
         require(type(ctx) is Principal,'AUTH','Authenticated RPC principal required')
         rev,s=self.journal.load(sid)
@@ -68,12 +75,10 @@ class Coordinator:
         self.journal.ensure_capacity()
         a,b=self._driver(q.sell_asset),self._driver(q.buy_asset)
         a.ready();b.ready()
-        rid=self.authority.reserve(ctx,q,mandate_id,max_local_fee_atoms)
-        self.journal.claim_quote(q.id,sid)
+        self.authority.reserve(ctx,q,mandate_id,max_local_fee_atoms,check_only=True)
         long,short=self._deadlines(a,b)
         ak=a.new_key('refund');bk=b.new_key('claim')
-        # A crash before session commit leaves only a non-spending held reservation;
-        # retries use the same reservation and the already-created secret.
+        # A retry after interrupted setup reuses the already-created secret.
         secret_id='secret_'+sid
         if secret_id in self.vault.entries:
             h=hashlib.sha256(bytes.fromhex(self.vault.entries[secret_id]['preimage'])).hexdigest()
@@ -87,11 +92,12 @@ class Coordinator:
         require(atoms(proposal['short_claim_fee_atoms'])<=atoms(q.max_receive_network_fee_atoms),'FEE_CAP','Claim fee exceeds signed quote')
         require(atoms(refund_fee_atoms)<=atoms(max_local_fee_atoms),'FEE_CAP','Refund fee exceeds local authorization')
         s={'principal':ctx.name,'wallet':ctx.wallet,'peer':q.provider,'role':'initiator','stage':'proposed',
-           'quote_id':q.id,'quote':envelope,'proposal':proposal,'reservation_id':rid,
+           'quote_id':q.id,'quote':envelope,'proposal':proposal,
            'keys':{'refund':ak,'claim':bk},'max_local_fee_atoms':max_local_fee_atoms,
            'secret_exposed':False,'funding_prepared':False,'funding_broadcast':False,'recovery_ready':False,
            'refs':{},'created_at':now,'updated_at':now}
-        self._save(sid,s,-1);self.emit(q.provider,'proposal',sid,proposal)
+        self._save_new(sid,s,ctx,q,mandate_id,max_local_fee_atoms)
+        self.emit(q.provider,'proposal',sid,proposal)
         return self._safe_view(sid,s)
     def receive_proposal(self,sender,sid,p,market):
         exact_fields(p,{'quote','rfq','hashlock','nonce','long_refund_key','long_refund_payout',
@@ -125,8 +131,7 @@ class Coordinator:
         # bilateral agreement remains bound to the original signed quote.
         reverse=Quote(q.network,sender,digest('BTX/SWAPNET/MAKER/2',{'swap_id':sid}),q.nonce,q.sequence,
                       q.buy_asset,q.sell_asset,str(atoms(q.buy_atoms)-atoms(q.maker_fee_atoms)),q.sell_atoms,'0','0',q.issued_at,q.expires_at)
-        rid=self.authority.reserve(ctx,reverse,market['mandate_id'],maxfee)
-        self.journal.claim_quote(q.id,sid)
+        self.authority.reserve(ctx,reverse,market['mandate_id'],maxfee,check_only=True)
         a,b=self._driver(q.sell_asset),self._driver(q.buy_asset);a.ready();b.ready()
         long,short=Deadline(**p['long_deadline']),Deadline(**p['short_deadline'])
         self.policy.validate_deadlines(long,short,a.clock(),b.clock(),now)
@@ -143,11 +148,12 @@ class Coordinator:
         a.watch_terms(la,ak);b.watch_terms(lb,bk)
         sig=self.identity.sign(agr.signing_message)
         s={'principal':ctx.name,'wallet':ctx.wallet,'peer':sender,'role':'responder','stage':'offered',
-           'quote_id':q.id,'quote':p['quote'],'proposal':p,'reservation_id':rid,
+           'quote_id':q.id,'quote':p['quote'],'proposal':p,
            'keys':{'refund':bk,'claim':ak},'max_local_fee_atoms':maxfee,'agreement':asdict(agr),'agreement_id':agr.id,
            'signatures':{'responder':sig},'secret_exposed':False,'funding_prepared':False,'funding_broadcast':False,
            'recovery_ready':False,'refs':{},'created_at':now,'updated_at':now}
-        self._save(sid,s,-1);self.emit(sender,'agreement',sid,{'agreement':asdict(agr),'responder_signature':sig})
+        self._save_new(sid,s,ctx,reverse,market['mandate_id'],maxfee)
+        self.emit(sender,'agreement',sid,{'agreement':asdict(agr),'responder_signature':sig})
     def receive_agreement(self,sender,sid,body):
         exact_fields(body,{'agreement','responder_signature'});rev,s=self.journal.load(sid)
         require(s['role']=='initiator' and s['peer']==sender and s['stage'] not in TERMINAL,'SESSION_BINDING','Unexpected agreement')

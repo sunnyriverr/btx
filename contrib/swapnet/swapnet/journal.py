@@ -4,6 +4,7 @@ SQLite runs in WAL/FULL mode (via Store). Each externally visible operation is
 persisted before sending; repeated messages and process restarts are idempotent.
 Secrets and raw claim transactions are never returned by public read methods.
 """
+from contextlib import nullcontext
 from dataclasses import asdict
 import hashlib
 import json
@@ -109,9 +110,9 @@ class Journal:
                     'SESSION_LIMIT','Journal session capacity reached; preserve recovery state before offline archival')
             require(self.store.db.execute("SELECT count(*) FROM sn_negotiations WHERE stage NOT IN ('complete','refunded','cancelled','rejected')").fetchone()[0]<128,
                     'ACTIVE_LIMIT','At most 128 active settlements per native node')
-    def save(self,sid,body,expected=-1):
+    def save(self,sid,body,expected=-1,*,db=None):
         hex32(sid)
-        with self.store.transaction() as db:
+        with (self.store.transaction() if db is None else nullcontext(db)) as db:
             old=db.execute('SELECT revision,body FROM sn_negotiations WHERE id=?',(sid,)).fetchone()
             require((old[0] if old else -1)==expected,'REVISION_CONFLICT','Concurrent swap update')
             if old:
@@ -137,8 +138,8 @@ class Journal:
             if principal is None:rows=self.store.db.execute('SELECT id,revision,body FROM sn_negotiations ORDER BY id LIMIT ?',(limit,)).fetchall()
             else:rows=self.store.db.execute('SELECT id,revision,body FROM sn_negotiations WHERE principal=? ORDER BY id LIMIT ?',(principal,limit)).fetchall()
         return [(r[0],r[1],local_load(r[2])) for r in rows]
-    def claim_quote(self,qid,sid):
-        with self.store.transaction() as db:
+    def claim_quote(self,qid,sid,*,db=None):
+        with (self.store.transaction() if db is None else nullcontext(db)) as db:
             row=db.execute('SELECT swap_id FROM sn_claimed_quotes WHERE quote_id=?',(qid,)).fetchone()
             require(not row or row[0]==sid,'QUOTE_ALREADY_ACCEPTED','Quote belongs to another swap')
             db.execute('INSERT OR IGNORE INTO sn_claimed_quotes VALUES(?,?)',(qid,sid))

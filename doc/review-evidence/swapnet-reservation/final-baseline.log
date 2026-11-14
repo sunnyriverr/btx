@@ -1,0 +1,116 @@
+....................................................................FFF. [ 61%]
+..............................................                           [100%]
+=================================== FAILURES ===================================
+_____________ test_rejected_proposal_releases_maker_budget[watch] ______________
+
+pair = <test_execution_v2.Pair object at 0x10b192d50>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10b20e650>
+failure = 'watch'
+
+    @pytest.mark.parametrize("failure", ["watch", "session_insert"])
+    def test_rejected_proposal_releases_maker_budget(pair, monkeypatch, failure):
+        sid = pair.start()
+        sender, maker, _, _, proposal = pair.queue.pop()
+        mandate_id = pair.market['mandate_id']
+        quote_id = pair.state('alice')['quote_id']
+    
+        def reject_watch(*args):
+            raise SwapError('RPC', 'Watch wallet rejected descriptor import')
+    
+        if failure == 'watch':
+            monkeypatch.setattr(pair.nodes[maker][3].drivers[B], 'watch_terms', reject_watch)
+            expected = SwapError
+            message = 'Watch wallet rejected descriptor import'
+        else:
+            # Abort the final SQLite write after the budget and quote writes have run.
+            pair.nodes[maker][0].db.execute("""
+                CREATE TEMP TRIGGER reject_session BEFORE INSERT ON sn_negotiations
+                BEGIN SELECT RAISE(ABORT, 'Session insert failed'); END
+            """)
+            expected = sqlite3.IntegrityError
+            message = 'Session insert failed'
+        with pytest.raises(expected, match=message):
+            pair.nodes[maker][3].receive_proposal(sender, sid, proposal, pair.market)
+    
+        assert not pair.queue
+        pair.restart(maker)
+        store, journal, _, coordinator = pair.nodes[maker]
+        assert journal.all() == []
+        assert journal.operations(sid) == []
+>       assert store.db.execute('SELECT held,used FROM mandates WHERE id=?', (mandate_id,)).fetchone() == ('0', '0')
+E       AssertionError: assert ('20490', '0') == ('0', '0')
+E         
+E         At index 0 diff: '20490' != '0'
+E         Use -v to get more diff
+
+tests/test_execution_v2.py:241: AssertionError
+_________ test_rejected_proposal_releases_maker_budget[session_insert] _________
+
+pair = <test_execution_v2.Pair object at 0x10b2fe390>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10b2fd810>
+failure = 'session_insert'
+
+    @pytest.mark.parametrize("failure", ["watch", "session_insert"])
+    def test_rejected_proposal_releases_maker_budget(pair, monkeypatch, failure):
+        sid = pair.start()
+        sender, maker, _, _, proposal = pair.queue.pop()
+        mandate_id = pair.market['mandate_id']
+        quote_id = pair.state('alice')['quote_id']
+    
+        def reject_watch(*args):
+            raise SwapError('RPC', 'Watch wallet rejected descriptor import')
+    
+        if failure == 'watch':
+            monkeypatch.setattr(pair.nodes[maker][3].drivers[B], 'watch_terms', reject_watch)
+            expected = SwapError
+            message = 'Watch wallet rejected descriptor import'
+        else:
+            # Abort the final SQLite write after the budget and quote writes have run.
+            pair.nodes[maker][0].db.execute("""
+                CREATE TEMP TRIGGER reject_session BEFORE INSERT ON sn_negotiations
+                BEGIN SELECT RAISE(ABORT, 'Session insert failed'); END
+            """)
+            expected = sqlite3.IntegrityError
+            message = 'Session insert failed'
+        with pytest.raises(expected, match=message):
+            pair.nodes[maker][3].receive_proposal(sender, sid, proposal, pair.market)
+    
+        assert not pair.queue
+        pair.restart(maker)
+        store, journal, _, coordinator = pair.nodes[maker]
+        assert journal.all() == []
+        assert journal.operations(sid) == []
+>       assert store.db.execute('SELECT held,used FROM mandates WHERE id=?', (mandate_id,)).fetchone() == ('0', '0')
+E       AssertionError: assert ('20490', '0') == ('0', '0')
+E         
+E         At index 0 diff: '20490' != '0'
+E         Use -v to get more diff
+
+tests/test_execution_v2.py:241: AssertionError
+________________ test_rejected_start_releases_initiator_budget _________________
+
+pair = <test_execution_v2.Pair object at 0x10b2fe0d0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10b2fffd0>
+
+    def test_rejected_start_releases_initiator_budget(pair, monkeypatch):
+        def reject_key(*args):
+            raise SwapError('RPC', 'Refund key setup failed')
+    
+        monkeypatch.setattr(pair.nodes['alice'][3].drivers[A], 'new_key', reject_key)
+        with pytest.raises(SwapError, match='Refund key setup failed'):
+            pair.start()
+        pair.restart('alice')
+        store, journal, _, _ = pair.nodes['alice']
+        assert journal.all() == []
+>       assert store.db.execute('SELECT held,used FROM mandates').fetchall() == [('0', '0')]
+E       AssertionError: assert [('10500', '0')] == [('0', '0')]
+E         
+E         At index 0 diff: ('10500', '0') != ('0', '0')
+E         Use -v to get more diff
+
+tests/test_execution_v2.py:268: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_execution_v2.py::test_rejected_proposal_releases_maker_budget[watch]
+FAILED tests/test_execution_v2.py::test_rejected_proposal_releases_maker_budget[session_insert]
+FAILED tests/test_execution_v2.py::test_rejected_start_releases_initiator_budget
+3 failed, 115 passed in 10.12s

@@ -3,7 +3,7 @@
 No network I/O occurs inside SQL transactions. Serialized raw transactions are
 persisted BEFORE broadcast. Retrying an ambiguous broadcast reuses the same bytes.
 """
-from contextlib import contextmanager
+from contextlib import contextmanager, nullcontext
 from dataclasses import asdict
 import hashlib
 import os
@@ -101,11 +101,11 @@ class Store:
             self._audit(db,{"type":"mandate_revoked","id":mandate_id})
         # Existing locked swaps retain recovery authority, never new funding authority.
 
-    def reserve(self, quote: Quote, mandate_id, principal, max_local_fee_atoms, now):
+    def reserve(self, quote: Quote, mandate_id, principal, max_local_fee_atoms, now, *, db=None, check_only=False):
         fee=atoms(max_local_fee_atoms)
         cost=atoms(quote.sell_atoms)+fee
         rid=digest("BTX/SWAPNET/RESERVATION/1", {"quote_id":quote.id,"principal":principal,"mandate_id":mandate_id,"fee":max_local_fee_atoms})
-        with self.transaction() as db:
+        with (self.transaction() if db is None else nullcontext(db)) as db:
             existing=db.execute("SELECT id FROM reservations WHERE quote_id=?",(quote.id,)).fetchone()
             if existing:
                 require(existing[0] == rid,"IDEMPOTENCY_CONFLICT","Quote already reserved with different parameters")
@@ -119,6 +119,8 @@ class Store:
             require(atoms(quote.sell_atoms) <= atoms(mandate.max_trade_atoms) and fee <= atoms(mandate.max_fee_atoms),"BUDGET_LIMIT","Trade or fee exceeds cap")
             held,used=atoms(row[1]),atoms(row[2])
             require(held+used+cost <= atoms(mandate.max_total_atoms),"BUDGET_LIMIT","Cumulative cap exceeded")
+            if check_only:
+                return rid
             db.execute("INSERT INTO reservations VALUES(?,?,?,?,?,'held',?)",(rid,quote.id,mandate_id,principal,str(cost),dumps(asdict(quote))))
             db.execute("UPDATE mandates SET held=? WHERE id=?",(str(held+cost),mandate_id))
             self._audit(db,{"type":"reserved","id":rid,"quote_id":quote.id,"cost_atoms":str(cost)})
