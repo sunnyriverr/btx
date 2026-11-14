@@ -1,0 +1,58 @@
+{
+  "utc": "2026-11-14T05:06:17.365663+00:00",
+  "revision": "cb823a94f55685c60fd30e0b6d14d02ea1b951a8",
+  "platform": "macOS-26.5.1-arm64-arm-64bit",
+  "compiler": "Apple clang17.0.0, C++17, -Wall -Wextra -Werror -pthread, assertions enabled",
+  "scope": "compiled production Transport component; bidirectional transport provider frames, not signed provider catalog or daemon integration",
+  "baseline": "original upstream standalone test passes; paired test fails with1,0 admitted after missed hello",
+  "candidate": "same paired tests pass; original unchanged standalone test passes",
+  "controls": [
+    "left hello missed",
+    "right hello missed",
+    "both missed",
+    "healthy hello exchange",
+    "retry not before five seconds",
+    "duplicate hello has no reply",
+    "full outbound queue defers admission; retry succeeds after drain",
+    "wrong network and unknown peer rejected",
+    "existing disabled/disconnect/frame/queue/token/concurrency checks"
+  ],
+  "ubsan": "pass",
+  "asan": "stalled before main during AddressSanitizer initialization; sampled initializer stack and terminated own test process, no ASan pass claimed",
+  "negative_control": "removing the newly added reply queue bound makes the full-queue regression fail",
+  "paired": {
+    "baseline": {
+      "build_exit": 0,
+      "exit": -6,
+      "source_sha256": "a8a3c1eac33fd404bc933e88dda36d9f0b2ad2086ef7a992161aeec9aedbbf8c",
+      "test_sha256": "779ca908ae8bc67f26e1e665ef4095b029010f12776b763ff3e9181f3dfea287",
+      "binary_sha256": "a69516e13f72cdb755db27aadf1958522e28e62420ff2296e3cdff55377d7fb8"
+    },
+    "candidate": {
+      "build_exit": 0,
+      "exit": 0,
+      "source_sha256": "ad52b2542f11ad4036835ec662fc1da92e97f4d2d114568a24f272f5e23a2dc0",
+      "test_sha256": "779ca908ae8bc67f26e1e665ef4095b029010f12776b763ff3e9181f3dfea287",
+      "binary_sha256": "faf924656e225d827d4ebb8e41765ea889af29ffdffbd357aa0f450cf2460dcd"
+    }
+  },
+  "sha256": {
+    "source/swapnet/transport.cpp": "ad52b2542f11ad4036835ec662fc1da92e97f4d2d114568a24f272f5e23a2dc0",
+    "source/swapnet/transport.h": "5f7658aa83911a54d64f130bb103e3fafcd3916f96820a9ef50e96422e0acbd4",
+    "source/swapnet/test_transport.cpp": "779ca908ae8bc67f26e1e665ef4095b029010f12776b763ff3e9181f3dfea287",
+    "transport-baseline.cpp": "a8a3c1eac33fd404bc933e88dda36d9f0b2ad2086ef7a992161aeec9aedbbf8c",
+    "test_transport-baseline.cpp": "3d2ce02c47c8701107a1d775c257e143fa0d5bcdcf48a88a3c1ab041d86c1cd6",
+    "hello-reply.patch": "563aaca8b8813ab70a4d5b1803b633b4a2027557f23d768a01f0eaf221381230",
+    "paired-baseline.log": "7546061a89405f0c9b12682fd44398a29cc4b72645b369e09181f8d779c98550",
+    "paired-candidate.log": "c2e8b3d2951ab1f491c5a4f44d93c30800c8133bcaff2f7c82bf8d6ca823342b",
+    "upstream-control.log": "c2e8b3d2951ab1f491c5a4f44d93c30800c8133bcaff2f7c82bf8d6ca823342b",
+    "unchanged-test-candidate.log": "c2e8b3d2951ab1f491c5a4f44d93c30800c8133bcaff2f7c82bf8d6ca823342b",
+    "ubsan.log": "c2e8b3d2951ab1f491c5a4f44d93c30800c8133bcaff2f7c82bf8d6ca823342b",
+    "reply-cap-negative-control.log": "58e6988dcb1b56d7f4b47dbd9d9d7d52fbc74acda595d2f2e3db744178f26c72",
+    "sanitizer-sample.txt": "745feda9b0098f9ca6bf7dc64813273629f5653389ac14635a209a58b7f8843f",
+    "admission-baseline.log": "56ed0d4ff0c1b9b1e296b6d8180705560d2f52900435451fc2d34b43585e0241"
+  },
+  "publication": null,
+  "local_commit": "128133d899af262709efc037dcc7563b95c984b4",
+  "local_commit_patch_sha256": "782dab071c8de3c12bd8c3eed28f19a14ae10d85f74c865da905c87eca483b1c"
+}
