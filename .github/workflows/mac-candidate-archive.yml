@@ -1,4 +1,4 @@
-name: Mac candidate archive preflight
+name: Mac current candidate build and wallet acceptance
 on:
   push:
     branches: [codex/ci-mac-candidate-archive]
@@ -33,15 +33,15 @@ jobs:
           fetch-depth: 1
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
-          artifact-ids: 14135314680
-          run-id: 43651249392
+          artifact-ids: 14137136420
+          run-id: 43653240904
           github-token: ${{ github.token }}
           path: producer-restore
           merge-multiple: true
-      - name: Measure current candidate package build without compilation
+      - name: Build current package executables and run affected wallet checks
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python3 contrib/devtools/mac-backports/archive-preflight.py
+        run: python3 contrib/devtools/mac-backports/archive-build.py
       - name: Preserve resumable build and exact evidence
         if: always()
         timeout-minutes: 8
