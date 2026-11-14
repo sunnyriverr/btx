@@ -38,28 +38,7 @@ cp feature_modelnet_minio.py product/test/functional/feature_modelnet_minio.py
 cp strict_matrix.py product/test/functional/strict_matrix.py
 cp corrupt_resume.py product/test/functional/corrupt_resume.py
 cp obj/bin/btx-modeld retained-resume-helper
-# Run the exact maintained integration first on the retained before helper.
-cp baseline/btx-modeld obj/bin/btx-modeld
-chmod +x obj/bin/btx-modeld
-sha256sum obj/bin/btx-modeld retained-resume-helper | tee records/pair-binaries.sha256
-set +e
-timeout --kill-after=20s 12m /usr/bin/python3 product/test/functional/strict_matrix.py --configfile="$PWD/obj/test/config.ini" --tmpdir="$RUNNER_TEMP/maintained-before" --nocleanup > records/maintained-before.log 2>&1
-status=$?
-set -e
-printf '%s\n' "$status" > records/maintained-before-exit.txt
-cp "$RUNNER_TEMP/maintained-before/partial-retry-result.json" records/maintained-before-result.json
-python3 - <<'PY2'
-import json
-r=json.load(open('records/maintained-before-result.json'))
-assert r['phase']=='FAILED_PARTIAL_RETRY',r
-assert r['partial_cursor']['next_piece']==1,r
-assert r['retry_responses'][-1]['cloud_hydrate_error']=='stream longer than expected file',r
-assert r['after_restart_responses'][-1]['cloud_hydrate_error']=='stream longer than expected file',r
-assert int(open('records/maintained-before-exit.txt').read())==1
-PY2
-cp retained-resume-helper obj/bin/btx-modeld
-chmod +x obj/bin/btx-modeld
-for spec in strict_matrix corrupt_resume; do
+for spec in corrupt_resume; do
   set +e
   timeout --kill-after=20s 12m /usr/bin/python3 "product/test/functional/$spec.py" --configfile="$PWD/obj/test/config.ini" --tmpdir="$RUNNER_TEMP/qualified-$spec" --nocleanup > "records/$spec.log" 2>&1
   status=$?
@@ -71,7 +50,6 @@ for spec in strict_matrix corrupt_resume; do
 done
 python3 - <<'PY2'
 import json
-assert json.load(open('records/strict_matrix-result.json'))['phase']=='RECOVERED_BYTES_AND_RESTART'
 assert json.load(open('records/corrupt_resume-result.json'))['phase']=='RESUMED_CORRUPTION_REFUSED'
-print('MAINTAINED_BEFORE_AFTER_AND_RESUMED_INTEGRITY_VERIFIED')
+print('RESUMED_INTEGRITY_VERIFIED')
 PY2

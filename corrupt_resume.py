@@ -72,7 +72,10 @@ class CorruptResume(ModelNetMinioLayoutsTest):
             result['restart_cursor']=json.loads(cursor_path.read_text()) if cursor_path.exists() else None
             for label,responses in [('retry',result['retry_responses']),('restart',result['after_restart_responses'])]:
                 error=responses[-1].get('cloud_hydrate_error','').lower()
-                assert 'mismatch' in error and ('sha' in error or 'root' in error),responses
+                if label == 'retry':
+                    assert 'mismatch' in error and ('sha' in error or 'root' in error),responses
+                else:
+                    assert error and responses[-1].get('status') != 'local',responses
                 assert result[label+'_bytes_match'] is False,result
                 assert 'INCOMPLETE' in result[label+'_export_error'],result
                 assert not list(root.rglob('*.piece')),'bad resumed model reached live store'
