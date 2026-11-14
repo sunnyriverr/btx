@@ -1,0 +1,33 @@
+{
+  "utc": "2026-11-14T23:12:02.451233+00:00",
+  "current_source": "f40eb37a6fb8b665340fe92a2f248ff3f23ec7f6",
+  "original_trace_source": "a5d1637facc925ff176507fae87fc2042940829d",
+  "source_path_checks": {
+    "src/modelnet/helper.cpp": {
+      "entire_file_equals_tested_candidate_product": true
+    },
+    "src/modelnet/catalog.cpp": {
+      "ModelCatalog::ModelCatalog(": true,
+      "ModelCatalog::LoadLocked(": true,
+      "ModelCatalog::PersistLocked(": true,
+      "ModelCatalog::ImportPath(": true,
+      "ModelCatalog::MaterializeCheckout(": true,
+      "ModelCatalog::InstallFromManifest(": true
+    },
+    "src/modelnet/store.cpp": {
+      "ModelStore::MaterializeFile(": true,
+      "ModelStore::SavePieceIndex(": true
+    },
+    "src/modelnet/helper_network02.cpp": {
+      "entire_file_unchanged": true
+    },
+    "src/modelnet/verified_manifest.cpp": {
+      "entire_file_unchanged": true
+    }
+  },
+  "remaining_source_delta": "Catalog EnforceQuotaLocked adds #694 eviction-feasibility check; store adds ArtifactBytes/refactors RemoveArtifact; not a new catalog restore route. Native binary does not qualify entire new head or new quota guard. Tiny4KiB fixture used64MiB quota, no eviction pressure.",
+  "product_changes": false,
+  "upstream_posts": false,
+  "scope": "native Linux missing catalog, surviving-checkout and normal reimport/restart, cloud-only refusal. No native peer/package/corrupt catalog test.",
+  "goal_disposition": "Source trace and supported/native recovery boundary established; no product fix built. Cloud-only metadata restoration is a capability/contract gap, not proven loss of remote data."
+}

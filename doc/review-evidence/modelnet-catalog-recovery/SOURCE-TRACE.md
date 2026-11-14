@@ -1,0 +1,32 @@
+# Supported catalog recovery routes on a5d1637f
+
+This is a caller/state trace, not native qualification. Exact targeted source hashes are in source-provenance.json. Paths refer to the upstream repository at a5d1637facc925ff176507fae87fc2042940829d; no full source checkout is bundled. Source tree: https://github.com/btxchain/btx/tree/a5d1637facc925ff176507fae87fc2042940829d . Final changed-head disposition is in final-review.json.
+
+## Where the metadata comes from
+
+- `src/modelnet/catalog.cpp:346–354,649–715`: construction calls LoadLocked and ignores its bool/error. Missing/unopenable catalog.json starts with cleared rows; malformed JSON returns false, but construction does not surface it. Valid entries reconstruct ModelCore/ArtifactCore. Partial-load and permissions behavior are not qualified here; do not turn that adjacent observation into another repair.
+- `catalog.cpp:586–647`: checked temp-file write/close/rename preserves a valid existing file on failed write. This routine makes no automatic previous-generation backup. `store.cpp:453–501` stores per-artifact piece index size/root/leaves, not original file paths, roles, all ModelCore fields or model↔artifact mapping.
+- `helper.cpp:12891–12896`: constructs catalog, loads cloud config/jobs and configured peers. It does not scan surviving pieces to rebuild catalog entries. Catalog-saved peer contacts are lost with the file; explicitly configured/discovered peers can still supply manifests.
+
+## Ordinary supported routes
+
+1. **Surviving original model directory or complete checkout → importmodel.** `helper.cpp:7142–7203,5230–5262` routes to ImportPath; `catalog.cpp:718–948` rehashes files, derives model/artifact identities, verifies any existing destination pieces and persists the row. `helper.cpp:9633–9678` names the checkout path and MaterializeCheckout verifies file hashes. A full checkout is an ordinary local model directory. Native same-ID/byte/restart control passed in corrected run43651794115; the initial43651624629pilot stopped before execution.
+2. **Reachable configured/discovered peer → getmodel.** `helper.cpp:8910–8958` follows peers/queues retrieval. `helper.cpp:11119–11144` fetches a manifest, verifies it against the requested identity, enforces download quota and installs FETCHING metadata; final retrieval validates bytes and completes installation at11976–11989. `verified_manifest.cpp:21–143` derives ModelCore/ArtifactCore hashes from ordered files/profiles and compares both claimed/requested identities. This is an existing source route, not evidence of a native peer reconstitution run in this task.
+3. **Intact prior catalog/modeldir backup.** LoadLocked can read the original schema. There is no dedicated catalog-restore RPC in the traced dispatchers. Manual restoration would need a valid same-profile backup while the disposable helper is stopped, followed by normal integrity checks; not executed here and not presented as a tested operator runbook.
+
+## Routes that do not establish a bare-cloud restore
+
+- **Cloud bytes alone:** `helper.cpp:5920–5970` PublishCatalogToCloud uploads source-file or piece bytes by artifact/file indexes. It does not upload the full model manifest in this function. TryHydrateFromCloud (`5972+`) requires an existing CatalogEntry/core.files. In `getmodel` (`8790–8916`), only an existing row enters hydration. On catalog miss, search metadata may supply an artifact ID for a cloud HEAD/presign diagnostic, but that is not manifest reconstruction or catalog installation. With no peer contacts, it returns WAIT_FREE/not_local. Layout/key rules in `doc/modelnet/storage-backends.md` agree. Native missing-catalog/remote-survival and cloud-only controls passed in43651794115; remote bytes remained intact.
+- **Search/index metadata:** `search.h:70–120` records IDs/descriptions/provider hints, not the full ordered per-file hashes/roots and profiles required by VerifiedManifest. `helper_network02.cpp:1143–1160` reconcilemodelindex reports bounded missing IDs and explicitly does not authorize insertion. An index hit does not recreate the complete catalog by itself.
+- **Saved raw getmodelmanifest JSON / standard unsigned bundle:** GetManifest is an export of an existing row (`catalog.cpp:1117–1157`); no direct raw-manifest import RPC was found in these dispatchers. `helper_network02.cpp:1009–1066` has a conditional signed-package→VerifiedManifest installation branch, but requires cryptographic signature PASS. The normal public bundle inspection path reports NOT_EVALUATED (`743–813`); standard BTX-PJSON1 payload validation allows only core/observations/signatures (`package_core.cpp:27,617–633`), while the catalog-import branch seeks model_id/files or top-level manifest. Therefore do not advertise an unsigned manifest→createbtxpackage→importbtxpackage loop as a supported catalog backup/restore workflow. A custom/noncanonical envelope is not a legitimate recovery control, and is not constructed here.
+- **executemodelimport/resumemodelimport:** local source reuses ImportPath; source-adapter jobs stage/verify through ImportCoordinator and report live_http=false (`helper_network02.cpp:330–477,945–1004`). An in-memory plan/status or S3-labelled adapter is not proof of a live cloud-catalog restore. `exportmodelpack` requires an existing verified import coordinator.
+
+## What prior native evidence proves
+
+The retained operator run43589182229 deliberately called removemodel, which deletes catalog rows, local artifact pieces and checkout. Remote bytes survived and ordinary getmodel did not recover. That is not the same as accidental catalog.json deletion. Existing667evidence intentionally preserved catalog bytes;707addresses rejected cloud stream checkpoints. Neither qualifies catalog metadata loss.
+
+## Decision before any product repair
+
+Bare artifact bytes and a MODEL URI are not enough in the traced ordinary cloud path to reconstruct authenticated file/layout metadata. The useful question is whether a real operator has a surviving checkout/original or a reachable manifest peer. A tested supported reimport closes that case without a new product feature. A cloud-only backup needs a defined metadata-retention/restore contract; do not invent remote manifest discovery or relax identity/admission checks.
+
+Native observation is bounded to missing catalog only, surviving checkout reimport and cloud-only total-local-loss, plus ordinary reimport/restart. No malformed-catalog, power-loss, package-signature, peer-native or release-scale verdict is claimed.
