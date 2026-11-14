@@ -5,6 +5,12 @@ from pathlib import Path
 from feature_modelnet_minio import ModelNetMinioLayoutsTest, write_safetensors
 
 class NormalRecovery(ModelNetMinioLayoutsTest):
+    def set_test_params(self):
+        super().set_test_params()
+
+    def run_test(self):
+        super().run_test()
+
     def _start_container(self):
         endpoint = super()._start_container()
         assert endpoint, self.not_run  # Never silently fall back to FakeS3.
