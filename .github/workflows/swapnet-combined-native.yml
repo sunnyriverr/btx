@@ -1,0 +1,58 @@
+name: Combined SwapNet native candidate
+on:
+  push:
+    branches: [codex/ci-swapnet-combined-native]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CCACHE_BASEDIR: ${{ github.workspace }}
+      CCACHE_MAXSIZE: 600M
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          path: product
+          persist-credentials: false
+      - uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684
+        with:
+          path: .ccache
+          key: ccache-linux-r3416-43422995615-1
+      - name: Preflight and bounded native build
+        run: bash ci/swapnet-combined/build.sh
+      - name: Preserve compiler statistics and resumable objects
+        if: always()
+        run: |
+          mkdir -p records checkpoint
+          if command -v ccache; then ccache --show-stats > records/cache-after.txt; fi
+          if test -d obj; then tar -I 'zstd -T2 -3' -cf checkpoint/objects.tar.zst obj; fi
+      - uses: actions/cache/save@5a3ec84eff668545956fd18022155c47e93e2684
+        if: always()
+        with:
+          path: .ccache
+          key: swapnet-combined-linux-${{ github.sha }}-${{ github.run_id }}
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: swapnet-combined-build
+          path: |
+            records/
+            payload/
+            candidate-manifest.json
+          retention-days: 30
+          if-no-files-found: error
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: swapnet-combined-checkpoint
+          path: checkpoint/
+          retention-days: 30
+          if-no-files-found: warn
