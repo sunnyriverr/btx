@@ -1,0 +1,94 @@
+2026-11-14T03:47:49.218000Z TestFramework (INFO): User supplied random seed 630
+2026-11-14T03:47:49.219000Z TestFramework (INFO): PRNG seed is: 630
+2026-11-14T03:47:49.219000Z TestFramework (INFO): Initializing test directory <fixture>/policy-test
+2026-11-14T03:47:50.261000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'setup_network:447', 'setup:339']
+2026-11-14T03:47:50.761000Z TestFramework (INFO): Mining blocks...
+2026-11-14T03:49:08.944000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'run_test:88']
+2026-11-14T03:49:10.570000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'run_test:91', 'main:142']
+2026-11-14T03:49:10.694000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'run_test:92']
+2026-11-14T03:49:10.704000Z TestFramework (INFO): Running tests
+2026-11-14T03:49:10.705000Z TestFramework (INFO): Test simple bumpfee: default
+2026-11-14T03:49:10.792000Z TestFramework (INFO): Observed sync call ['test_simple_bumpfee_succeeds:323', 'run_test:98', 'main:142']
+2026-11-14T03:49:10.805000Z TestFramework (INFO): Observed sync call ['test_simple_bumpfee_succeeds:344', 'run_test:98', 'main:142']
+2026-11-14T03:49:11.319000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:49:11.321000Z TestFramework (INFO): Test simple bumpfee: fee_rate
+2026-11-14T03:49:11.365000Z TestFramework (INFO): Observed sync call ['test_simple_bumpfee_succeeds:323', 'run_test:98', 'main:142']
+2026-11-14T03:49:11.377000Z TestFramework (INFO): Observed sync call ['test_simple_bumpfee_succeeds:344', 'run_test:98', 'main:142']
+2026-11-14T03:49:11.475000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:49:11.476000Z TestFramework (INFO): Test simple bumpfee: new_outputs
+2026-11-14T03:49:11.521000Z TestFramework (INFO): Observed sync call ['test_simple_bumpfee_succeeds:323', 'run_test:98', 'main:142']
+2026-11-14T03:49:11.572000Z TestFramework (INFO): Observed sync call ['test_simple_bumpfee_succeeds:344', 'run_test:98', 'main:142']
+2026-11-14T03:49:12.858000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:49:12.860000Z TestFramework (INFO): Test invalid parameters
+2026-11-14T03:49:12.903000Z TestFramework (INFO): Observed sync call ['test_invalid_parameters:134', 'run_test:99', 'main:142']
+2026-11-14T03:49:12.907000Z TestFramework (INFO): Test invalid fee rate settings
+2026-11-14T03:49:12.915000Z TestFramework (INFO): Test explicit fee rate raises RPC error if both fee_rate and conf_target are passed
+2026-11-14T03:49:12.916000Z TestFramework (INFO): Test explicit fee rate raises RPC error if both fee_rate and estimate_mode are passed
+2026-11-14T03:49:12.917000Z TestFramework (INFO): Test invalid conf_target settings
+2026-11-14T03:49:12.917000Z TestFramework (INFO): Test invalid estimate_mode settings
+2026-11-14T03:49:12.920000Z TestFramework (INFO): Test invalid outputs values
+2026-11-14T03:49:12.921000Z TestFramework (INFO): Test original_change_index option
+2026-11-14T03:49:12.923000Z TestFramework (INFO): Test outputs and original_change_index cannot both be provided
+2026-11-14T03:49:14.023000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:49:14.025000Z TestFramework (INFO): Test that we can replace a non RBF transaction (RPC require_replacable=false)
+2026-11-14T03:49:14.272000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:49:14.276000Z TestFramework (INFO): Test that we cannot replace a non RBF transaction
+2026-11-14T03:49:15.433000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:49:15.434000Z TestFramework (INFO): Test that it cannot bump fee if non-owned inputs are included
+2026-11-14T03:49:15.487000Z TestFramework (INFO): Test that psbtbumpfee works for non-owned inputs
+2026-11-14T03:49:16.984000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:49:16.987000Z TestFramework (INFO): Test that fee cannot be bumped when it has descendant
+2026-11-14T03:49:17.116000Z TestFramework (INFO): Observed sync call ['test_bumpfee_with_descendant_fails:444', 'run_test:106', 'main:142']
+2026-11-14T03:49:17.163000Z TestFramework (INFO): Observed sync call ['test_bumpfee_with_descendant_fails:450', 'run_test:106', 'main:142']
+2026-11-14T03:49:18.512000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:49:18.513000Z TestFramework (INFO): Test that fee can be bumped when it has abandoned descendant
+2026-11-14T03:49:20.609000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:49:20.611000Z TestFramework (INFO): Test that bumped output that is dust is dropped to fee
+2026-11-14T03:49:20.902000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:49:20.904000Z TestFramework (INFO): Test that PSBT is returned for bumpfee in watchonly wallets
+2026-11-14T03:49:21.410000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'test_watchonly_psbt:666']
+2026-11-14T03:49:22.566000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:49:22.568000Z TestFramework (INFO): Test that re-bumping the original tx fails, but bumping successor works
+2026-11-14T03:49:22.738000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:49:22.740000Z TestFramework (INFO): Test that re-bumping non-replaceable fails
+2026-11-14T03:49:24.235000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:49:24.236000Z TestFramework (INFO): Test that bumping tx with already spent coin fails
+2026-11-14T03:49:25.360000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'test_bumpfee_already_spent:729']
+2026-11-14T03:49:25.364000Z TestFramework (INFO): Test that unconfirmed outputs from bumped txns are not spendable
+2026-11-14T03:49:25.566000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generateblock:764', 'test_unconfirmed_not_spendable:752']
+2026-11-14T03:49:26.904000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:49:26.906000Z TestFramework (INFO): Test that bumped txn metadata persists to new txn record
+2026-11-14T03:51:40.109000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generatetoaddress:769', 'test_bumpfee_metadata:783']
+2026-11-14T03:51:40.280000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:51:40.281000Z TestFramework (INFO): Test that locked wallet cannot bump txn
+2026-11-14T03:51:40.479000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:51:40.484000Z TestFramework (INFO): Test that the same change addresses is used for the replacement transaction when possible
+2026-11-14T03:51:41.699000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:51:41.700000Z TestFramework (INFO): Test setfeerate
+2026-11-14T03:51:44.127000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:51:44.128000Z TestFramework (INFO): Test settxfee
+2026-11-14T03:51:46.338000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:51:46.340000Z TestFramework (INFO): Test that bumpfee fails when it hits -maxtxfee
+2026-11-14T03:51:48.495000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:51:48.498000Z TestFramework (INFO): Testing small output with feerate bump succeeds
+2026-11-14T03:51:57.912000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generatetoaddress:769', 'test_small_output_with_feerate_succeeds:491']
+2026-11-14T03:51:57.959000Z TestFramework (INFO): Keep bumping until transaction fee out-spends non-destination value
+2026-11-14T03:51:59.069000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generatetoaddress:769', 'test_small_output_with_feerate_succeeds:524']
+2026-11-14T03:52:00.299000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:52:00.300000Z TestFramework (INFO): Test that bumpfee fails when there are no available confirmed outputs
+2026-11-14T03:52:01.413000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generatetoaddress:769', 'test_no_more_inputs_fails:848']
+2026-11-14T03:52:02.004000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:52:02.005000Z TestFramework (INFO): Test that bumpfee can send coins back to yourself
+2026-11-14T03:52:02.262000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'test_bump_back_to_yourself:212']
+2026-11-14T03:52:02.418000Z TestFramework (INFO): Test the original_change_index option
+2026-11-14T03:52:02.465000Z TestFramework (INFO): Test that single output txs can be bumped
+2026-11-14T03:52:02.656000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'test_single_output:294']
+2026-11-14T03:52:02.898000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'test_feerate_checks_replaced_outputs:858']
+2026-11-14T03:52:02.901000Z TestFramework (INFO): Test that feerate checks use replaced outputs
+2026-11-14T03:52:04.117000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:52:04.118000Z TestFramework (INFO): Test that bumpfee with fee_rate ignores walletincrementalrelayfee
+2026-11-14T03:52:04.340000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'test_bumpfee_with_feerate_ignores_walletincrementalrelayfee:894']
+2026-11-14T03:52:04.486000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:52:04.541000Z TestFramework (INFO): Stopping nodes
+2026-11-14T03:52:04.704000Z TestFramework (WARNING): Not cleaning up dir <fixture>/policy-test
+2026-11-14T03:52:04.704000Z TestFramework (INFO): Tests successful

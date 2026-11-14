@@ -1,0 +1,68 @@
+2026-11-14T03:52:24.970000Z TestFramework (INFO): User supplied random seed 630
+2026-11-14T03:52:24.970000Z TestFramework (INFO): PRNG seed is: 630
+2026-11-14T03:52:24.970000Z TestFramework (INFO): Initializing test directory <fixture>/policy-baseline
+2026-11-14T03:52:26.013000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'setup_network:447', 'setup:339']
+2026-11-14T03:52:26.436000Z TestFramework (INFO): Mining blocks...
+2026-11-14T03:53:17.415000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'run_test:88']
+2026-11-14T03:53:18.251000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'run_test:91', 'main:142']
+2026-11-14T03:53:18.461000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'run_test:92']
+2026-11-14T03:53:18.466000Z TestFramework (INFO): Running tests
+2026-11-14T03:53:18.466000Z TestFramework (INFO): Test simple bumpfee: default
+2026-11-14T03:53:18.511000Z TestFramework (INFO): Observed sync call ['test_simple_bumpfee_succeeds:323', 'run_test:98', 'main:142']
+2026-11-14T03:53:18.515000Z TestFramework (INFO): Observed sync call ['test_simple_bumpfee_succeeds:344', 'run_test:98', 'main:142']
+2026-11-14T03:53:19.671000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:53:19.672000Z TestFramework (INFO): Test simple bumpfee: fee_rate
+2026-11-14T03:53:19.697000Z TestFramework (INFO): Observed sync call ['test_simple_bumpfee_succeeds:323', 'run_test:98', 'main:142']
+2026-11-14T03:53:19.702000Z TestFramework (INFO): Observed sync call ['test_simple_bumpfee_succeeds:344', 'run_test:98', 'main:142']
+2026-11-14T03:53:20.814000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:53:20.818000Z TestFramework (INFO): Test simple bumpfee: new_outputs
+2026-11-14T03:53:20.853000Z TestFramework (INFO): Observed sync call ['test_simple_bumpfee_succeeds:323', 'run_test:98', 'main:142']
+2026-11-14T03:53:20.878000Z TestFramework (INFO): Observed sync call ['test_simple_bumpfee_succeeds:344', 'run_test:98', 'main:142']
+2026-11-14T03:53:21.048000Z TestFramework (INFO): Observed sync call ['sync_all:840', 'generate:759', 'clear_mempool:76']
+2026-11-14T03:53:21.048000Z TestFramework (INFO): Test invalid parameters
+2026-11-14T03:53:21.072000Z TestFramework (INFO): Observed sync call ['test_invalid_parameters:134', 'run_test:99', 'main:142']
+2026-11-14T03:53:21.074000Z TestFramework (INFO): Test invalid fee rate settings
+2026-11-14T03:53:21.078000Z TestFramework (INFO): Test explicit fee rate raises RPC error if both fee_rate and conf_target are passed
+2026-11-14T03:53:21.079000Z TestFramework (INFO): Test explicit fee rate raises RPC error if both fee_rate and estimate_mode are passed
+2026-11-14T03:53:21.079000Z TestFramework (INFO): Test invalid conf_target settings
+2026-11-14T03:53:21.079000Z TestFramework (INFO): Test invalid estimate_mode settings
+2026-11-14T03:53:21.080000Z TestFramework (INFO): Test invalid outputs values
+2026-11-14T03:53:21.081000Z TestFramework (ERROR): Unexpected exception
+Traceback (most recent call last):
+  File "<fixture>/test_framework/util.py", line 160, in try_rpc
+    fun(*args, **kwds)
+  File "<fixture>/test_framework/coverage.py", line 50, in __call__
+    return_val = self.auth_service_proxy_instance.__call__(*args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<fixture>/test_framework/authproxy.py", line 151, in __call__
+    raise JSONRPCException(response['error'], status)
+test_framework.authproxy.JSONRPCException: OP_RETURN "data" outputs are disabled on BTX (financial-only chain); this output type is not supported (-8)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<fixture>/test_framework/test_framework.py", line 142, in main
+    self.run_test()
+  File "<fixture>/wallet_bumpfee.py", line 99, in run_test
+    self.test_invalid_parameters(rbf_node, peer_node, dest_address)
+  File "<fixture>/wallet_bumpfee.py", line 189, in test_invalid_parameters
+    assert_raises_rpc_error(-8, "Invalid parameter, duplicate key: data",
+  File "<fixture>/test_framework/util.py", line 151, in assert_raises_rpc_error
+    assert try_rpc(code, message, fun, *args, **kwds), "No exception raised"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<fixture>/test_framework/util.py", line 166, in try_rpc
+    raise AssertionError(
+AssertionError: Expected substring not found in error message:
+substring: 'Invalid parameter, duplicate key: data'
+error message: 'OP_RETURN "data" outputs are disabled on BTX (financial-only chain); this output type is not supported'.
+2026-11-14T03:53:21.134000Z TestFramework (INFO): Not stopping nodes as test failed. The dangling processes will be cleaned up later.
+2026-11-14T03:53:21.135000Z TestFramework (WARNING): Not cleaning up dir <fixture>/policy-baseline
+2026-11-14T03:53:21.135000Z TestFramework (ERROR): Test failed. Test logging available at <fixture>/policy-baseline/test_framework.log
+2026-11-14T03:53:21.135000Z TestFramework (ERROR): 
+2026-11-14T03:53:21.135000Z TestFramework (ERROR): Hint: Call <fixture>/combine_logs.py '<fixture>/policy-baseline' to consolidate all logs
+2026-11-14T03:53:21.135000Z TestFramework (ERROR): 
+2026-11-14T03:53:21.135000Z TestFramework (ERROR): If this failure happened unexpectedly or intermittently, please file a bug and provide a link or upload of the combined log.
+2026-11-14T03:53:21.135000Z TestFramework (ERROR): https://github.com/btxchain/btx/issues
+2026-11-14T03:53:21.135000Z TestFramework (ERROR): 
+[node 1] Cleaning up leftover process
+[node 0] Cleaning up leftover process
