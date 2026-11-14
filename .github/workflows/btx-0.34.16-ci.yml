@@ -216,12 +216,24 @@ jobs:
         with:
           name: win-tests
           path: bin
+      - name: Verify test executable package
+        run: (cd bin && sha256sum -c SHA256SUMS.txt)
       - name: Verify and run the single Lab lifecycle case
+        id: lab_default
         timeout-minutes: 5
         run: |
-          (cd bin && sha256sum -c SHA256SUMS.txt)
           bin/test_btx.exe --run_test=lab_lifecycle_tests/failed_write_is_rolled_back_and_does_not_block_later_writes \
             --log_level=test_suite --color_output=no > "$LOGS/lab-persistence-trace.log" 2>&1
+      - name: Repeat only the Lab case with a shorter temporary root
+        if: ${{ !cancelled() && steps.lab_default.outcome == 'failure' }}
+        timeout-minutes: 5
+        run: |
+          host_root="$(cygpath -u "${SYSTEMDRIVE:-C:}")/btx-lab-${GITHUB_RUN_ID}"
+          mkdir "$host_root"
+          case_temp="$(cygpath -aw "$host_root")"
+          export TEMP="$case_temp" TMP="$case_temp"
+          bin/test_btx.exe --run_test=lab_lifecycle_tests/failed_write_is_rolled_back_and_does_not_block_later_writes \
+            --log_level=test_suite --color_output=no > "$LOGS/lab-short-root.log" 2>&1
       - name: Upload logs
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0

@@ -3704,6 +3704,7 @@ bool DispatchLabApi(const std::string& method, const std::string& request_json, 
             persisted = PersistDurable(err);
         } catch (const std::filesystem::filesystem_error& ex) {
             const auto& ec = ex.code();
+            std::fprintf(stderr, "LAB_TRACE exception detail=%s\n", ex.what());
             const std::string message = ec.message();
             std::fprintf(stderr, "LAB_TRACE persistence exception category=%s value=%d message=%s path1_chars=%zu path2_chars=%zu\n",
                          ec.category().name(), ec.value(), message.c_str(), ex.path1().native().size(), ex.path2().native().size());
