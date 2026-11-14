@@ -1,39 +1,31 @@
-# Missing-piece cloud recovery
+# ModelNet cloud recovery — consolidated evidence for #667
 
-Product 81afbe56647f72c2fcf5dac3ebf808370cf76511 on `swapnet-v2` 70de5a454b4263c929b0162af6615c9dd756becd. This follows the upstream MinIO fixture and #613 reports from repch1c; original fixture attribution is preserved. This is a focused repair within a broader recovery campaign.
+**Verdict:** missing local model pieces recover through ordinary getmodel without catalog edits; a transient origin failure after the first4MiB now resumes at the saved next piece and finishes exact-byte recovery, including helper restart. Full-file SHA-384 and pieces-root checks still gate publication.
 
-## Native verdict
+Code: [6d81278e](https://github.com/sunnyriverr/btx/commit/6d81278e4b0384528228668d2b02f13138ed3f8f), adding the one-line resume correction and maintained regression atop original PR667commit81afbe56. Use that code commit/PR branch for review and builds; this separate branch records evidence. Native rebuilt helper2a7255a9 has identical helper bytes; the maintained Python file is identical to the executed regression. Existing MinIO fixture/report credit: [repch1c, #613](https://github.com/btxchain/btx/issues/613).
 
-| Boundary | Actual observation |
-|---|---|
-| Before, run43588655872 | Healthy upload/read succeeded; after deleting source/pieces and restarting, getmodel falsely said local/seeded. No restored bytes; export IO:missingpiece. |
-| After, run43590785003 | Identical direct fixture: bytes restored by one cloud GET, exact materialization, local usability retained after another helper restart. |
-| Maintained test, run43592347962 | Real MinIO AUTO/SOURCE_FILES/PIECE_OBJECTS matrix passed using the strengthened in-tree fixture, without manual catalog flag edits. |
-| Corrupt origin | file SHA-384 mismatch; no live pieces, export INCOMPLETE. |
-| Zero GET budget | cloud origin budget exhausted; no live pieces, export INCOMPLETE. |
-| Unaffected model | Existing healthy model stayed local and materialized matching bytes under both refusal conditions. |
+## What ran
 
-Both refusal tests completed; the candidate did not accept corrupt/unbudgeted bytes. Direct, maintained and refusal logs plus JSON are adjacent. No FakeS3 fallback or model execution. Small synthetic safetensors files (the maintained restore was8,259bytes).
+| Scenario | Before | After |
+|---|---|---|
+| Catalog retained; local source/pieces gone; ordinary recovery and restart | False local status, missing bytes; [43588655872](https://github.com/sunnyriverr/btx/actions/runs/43588655872) | Exact recovery/materialization and restart; [43590785003](https://github.com/sunnyriverr/btx/actions/runs/43590785003) |
+| Real MinIO piece1 withheld after checkpointing piece0; restore exact origin object, retry same model, restart | Duplicate prefix; stream longer than expected file; [43595155870](https://github.com/sunnyriverr/btx/actions/runs/43595155870) | Only2remaining origin GETs; exact8,392,777bytes in store/export, cursor removed, restart healthy; [43595218373](https://github.com/sunnyriverr/btx/actions/runs/43595218373) |
+| Exact maintained in-tree MinIO integration | Fails at original partial-retry condition | Passes byte/restart checks; paired execution [43596936934](https://github.com/sunnyriverr/btx/actions/runs/43596936934) |
+| Normal layout and safety controls | Earlier evidence retained | AUTO/SOURCE_FILES/PIECE_OBJECTS pass; corrupt-origin/zeroGET refused and healthy model usable in43595218373 |
+| Corrupt a later origin piece after partial checkpoint, then restart | Not a new before/after claim | SHA-384 refusal, continued nonlocal/INCOMPLETE export after restart; final [43597247023](https://github.com/sunnyriverr/btx/actions/runs/43597247023) |
 
-## Exact executable boundaries
+The standalone partial-recovery harness is byte-identical before/after (SHA256b3a1626ff21e7d2defc9107da73cda832d3eebfc97bde03901e94e3b3fc5b641). Maintained regression SHA2566bf1ec290e8edb28c8b194ecbdfb92b6a43a51f5d390c735b02103e82c39bf5f is in the code commit. No manual catalog/cursor/quarantine edits and no FakeS3 fallback in these native claims. Withholding/removing data touched only disposable fixture objects/pieces.
 
-Native runtime: Ubuntu24.04 x86-64, disposable regtest, real MinIO RELEASE.2025-04-22T22-12-26Z in loopback Docker; executable checksum verified before use. The before control used retained8d6d8b1a node/helper binaries. Relevant catalog, hydration, getmodel and export sections matched d7b9594b (source comparison retained). Candidate helper came from d7b9594b plus the tested production patch, source8033fe4e20c887287b2e4c11db12ef3b10bf52a5, compiled with the restored Ubuntu22/GCC11/OpenSSL checkpoint. Its libraries were built with the candidate; its unchanged RPC proxy remained the older retained node. This is not a same-toolchain whole-daemon pair or a full release rebuild.
+## Commands and provenance
 
-Helper SHA-256: `7436885f08cade46ccd84d3891d06ca35f252c950a983458a4a30135548b5c60`.
-Candidate artifact14112398679 ZIP SHA-256: `d601dfa7a162cdce03c524d703cd7b160ccfc218ddcaf259463f09eaa1adf138`.
-The identical direct Python fixture hash is `60dbaf974670f72b01ef96bb3b6db9e1fb431d7a87bc4f2a8f1fe949fdca0671`.
+Executed entry points are the immutable fork CI recipes: [build and paired runtime at f9509715](https://github.com/sunnyriverr/btx/tree/f9509715ea9877f21b4d2f33aaf63d4e11007e5b), [maintained pair at f46b4f2d](https://github.com/sunnyriverr/btx/tree/f46b4f2df0ba1fb19bf5ca7e1dcc6b4fd48e8c75), and [final specialized corruption control at bfb37540](https://github.com/sunnyriverr/btx/tree/bfb37540955186dce5eec1216a63701f19e8a177). Each pins downloads/config and propagates native exit/results. The maintained entry is test/functional/feature_modelnet_minio.py with its configfile; requires Docker and real MinIO to exercise the added row. The fallback explicitly reports that row unrun.
 
-Executed workflow entry points:
-- https://github.com/sunnyriverr/btx/actions/runs/43588655872 (baseline)
-- https://github.com/sunnyriverr/btx/actions/runs/43590785003 (helper build/direct test, exact workflow394878526ac011bdfc6dcb34d662516fc36707b2)
-- https://github.com/sunnyriverr/btx/actions/runs/43592347962 (maintained/refusal controls, exact workflow75e689894f7f95faf78afb4f00b1cc0f201f7146)
+[Exact source/binary/artifact provenance](resume/final-evidence.json), [before](resume/paired-before.json), [after](resume/paired-after.json), [maintained before](resume/maintained-before.json), [maintained after](resume/maintained-after.json) and [resumed integrity](resume/resumed-corruption.json) accompany raw logs. Before helper SHA2567436885f08cade46ccd84d3891d06ca35f252c950a983458a4a30135548b5c60; after83fb3f0b1be5cca1e7edfaa8571e0f5c0ee53391d1303a86828e480f2cc2d99b. Ubuntu24.04x86-64 runtime; Ubuntu22/GCC11/OpenSSL3.5.9 helper build. Retained older8d6node/CLI only proxy RPCs; not a whole-current-node rebuild.
 
-The workflow source contains the dependency/configuration, binary verification, real MinIO setup and bounded commands actually executed. `direct-recovery.py` and `refusal-controls.py` were copied beside the unchanged test framework; the maintained test uses this PR's modified feature_modelnet_minio.py. Placeholder paths in sanitized receipts/logs are not a fresh portable build recipe. Published and original hashes are distinguished in manifest.json.
+The43596936934maintained pair passed but the job overall failed in an additional control that expected identical error wording.43597082688then exposed an extra inherited fixture invocation. Both failed logs and [corrections](resume/control-corrections.md) are preserved; only that specialized wrapper was rerun, and43597247023passes. Do not infer a pass from a workflow badge or hide these fixture failures.
 
-## Limits and remaining campaign
+## Limits and remaining decisions
 
-No Windows/Mac native run, full unit/functional suite, multi-file/large-model throughput, WAN/R2, model runtime execution or power-loss qualification. Normal getmodel now probes expected piece paths; completion hashes files while holding the catalog mutex. Large-model latency is not measured.
+This repairs valid saved checkpoints. It does not repair an already-poisoned/invalid cursor/quarantine left by the old retry or corrupt origin. Corruption is still blocked after restart (short stream), but graceful recovery from that invalid state is unqualified. Recovery after deleting catalog metadata is outside this repair. Remote bytes survived the separate metadata-removal observation.
 
-The repair needs retained catalog metadata. A separately measured removemodel→getmodel path discarded that metadata and did not recover from PIECE_OBJECTS despite remote bytes remaining intact. Recovering missing metadata, origin-outage retry/interrupt boundaries and wider platform/scale acceptance remain broader campaign questions; this PR does not close them or introduce a remote manifest protocol.
-
-Current 70de5a454b4263c929b0162af6615c9dd756becd affected source originals remain byte-identical to the tested d7b9594b base. Publication preserves the exact tested product and maintained-test bytes. No release acceptance is requested.
+Small synthetic models; no model execution, spend, native Mac/Windows, WAN/R2, full-suite/release or large/multi-file latency qualification. Normal reads probe piece paths; completion hashes while holding the catalog mutex. The broader recovery campaign remains open. Original one-piece/matrix evidence is retained in this directory and at immutable [d8fb2e2e](https://github.com/sunnyriverr/btx/tree/d8fb2e2e9b48e7edd8632c34f026d7a7c8207615/doc/review-evidence/modelnet-cloud-missing-pieces).

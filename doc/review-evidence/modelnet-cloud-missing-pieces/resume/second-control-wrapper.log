@@ -1,0 +1,34 @@
+2026-11-14T12:55:03.189000Z TestFramework (INFO): PRNG seed is: 5612894277714186556
+2026-11-14T12:55:03.190000Z TestFramework (INFO): Initializing test directory /home/runner/work/_temp/qualified-corrupt_resume
+2026-11-14T12:55:03.190000Z TestFramework (INFO): starting /home/runner/work/btx/btx/obj/bin/btx-modeld -modeldir=/home/runner/work/_temp/qualified-corrupt_resume/node0/modeldir -modelstorage=64MiB -modelrpcsocket=/home/runner/work/_temp/qualified-corrupt_resume/node0/modeldir/modeld.sock
+2026-11-14T12:55:03.445000Z TestFramework (INFO): wrote 0600 credential_ref file cloud-creds.ini (values not logged)
+2026-11-14T12:55:04.322000Z TestFramework (INFO): MinIO live on http://127.0.0.1:36609
+2026-11-14T12:55:04.325000Z TestFramework (INFO): bucket btx-e2e-models ready (HTTP 200)
+2026-11-14T12:55:04.838000Z TestFramework (INFO): starting /home/runner/work/btx/btx/obj/bin/btx-modeld -modeldir=/home/runner/work/_temp/qualified-corrupt_resume/node0/modeldir -modelstorage=64MiB -modelrpcsocket=/home/runner/work/_temp/qualified-corrupt_resume/node0/modeldir/modeld.sock
+2026-11-14T12:55:05.465000Z TestFramework (INFO): starting /home/runner/work/btx/btx/obj/bin/btx-modeld -modeldir=/home/runner/work/_temp/qualified-corrupt_resume/node0/modeldir -modelstorage=64MiB -modelrpcsocket=/home/runner/work/_temp/qualified-corrupt_resume/node0/modeldir/modeld.sock
+RESUMED_CORRUPTION_REFUSED
+2026-11-14T12:55:05.890000Z TestFramework (INFO): removed container btx-func-minio-3242
+2026-11-14T12:55:05.890000Z TestFramework (ERROR): Unexpected exception
+Traceback (most recent call last):
+  File "/home/runner/work/btx/btx/product/test/functional/test_framework/test_framework.py", line 142, in main
+    self.run_test()
+  File "/home/runner/work/btx/btx/product/test/functional/corrupt_resume.py", line 8, in run_test
+    def run_test(self):super().run_test()
+                       ^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/btx/btx/product/test/functional/feature_modelnet_minio.py", line 833, in run_test
+    self._run_partial_cloud_recovery()
+  File "/home/runner/work/btx/btx/product/test/functional/feature_modelnet_minio.py", line 726, in _run_partial_cloud_recovery
+    source.parent.mkdir()
+  File "/usr/lib/python3.12/pathlib.py", line 1313, in mkdir
+    os.mkdir(self, mode)
+FileExistsError: [Errno 17] File exists: '/home/runner/work/_temp/qualified-corrupt_resume/multi-piece'
+2026-11-14T12:55:06.155000Z TestFramework (INFO): Not stopping nodes as test failed. The dangling processes will be cleaned up later.
+2026-11-14T12:55:06.155000Z TestFramework (WARNING): Not cleaning up dir /home/runner/work/_temp/qualified-corrupt_resume
+2026-11-14T12:55:06.155000Z TestFramework (ERROR): Test failed. Test logging available at /home/runner/work/_temp/qualified-corrupt_resume/test_framework.log
+2026-11-14T12:55:06.155000Z TestFramework (ERROR): 
+2026-11-14T12:55:06.156000Z TestFramework (ERROR): Hint: Call /home/runner/work/btx/btx/product/test/functional/combine_logs.py '/home/runner/work/_temp/qualified-corrupt_resume' to consolidate all logs
+2026-11-14T12:55:06.156000Z TestFramework (ERROR): 
+2026-11-14T12:55:06.156000Z TestFramework (ERROR): If this failure happened unexpectedly or intermittently, please file a bug and provide a link or upload of the combined log.
+2026-11-14T12:55:06.156000Z TestFramework (ERROR): https://github.com/btxchain/btx/issues
+2026-11-14T12:55:06.156000Z TestFramework (ERROR): 
+[node 0] Cleaning up leftover process
