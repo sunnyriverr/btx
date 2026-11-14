@@ -1,6 +1,5 @@
 """Strict real-MinIO acceptance using the upstream fixture."""
 import hashlib
-import os
 from pathlib import Path
 
 from feature_modelnet_minio import ModelNetMinioLayoutsTest
@@ -8,6 +7,12 @@ from feature_modelnet_minio import ModelNetMinioLayoutsTest
 
 class StrictMinioRecovery(ModelNetMinioLayoutsTest):
     proved = False
+
+    def set_test_params(self):
+        super().set_test_params()
+
+    def run_test(self):
+        super().run_test()
 
     def _start_container(self):
         endpoint = super()._start_container()

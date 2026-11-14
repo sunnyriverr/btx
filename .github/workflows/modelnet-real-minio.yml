@@ -18,7 +18,19 @@ jobs:
           ref: 8d6d8b1aabf371b12f2b1f5797b950fed7962d4e
           path: product
           persist-credentials: false
-      - run: bash run.sh
+      - run: bash run.sh build
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: modelnet-minio-binaries
+          path: |
+            obj/bin/btxd
+            obj/bin/btx-cli
+            obj/bin/btx-modeld
+            obj/test/config.ini
+            records/binaries.sha256
+          retention-days: 7
+          if-no-files-found: error
+      - run: bash run.sh test
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:

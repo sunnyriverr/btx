@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 mkdir -p records
-exec > >(tee records/run.log) 2>&1
+exec > >(tee -a records/run.log) 2>&1
+phase=${1:?use build or test}
 head=8d6d8b1aabf371b12f2b1f5797b950fed7962d4e
 test "$(git -C product rev-parse HEAD)" = "$head"
 git -C product rev-parse HEAD
+if [[ "$phase" == build ]]; then
 docker version --format '{{.Server.Version}}'
 tag=RELEASE.2025-04-22T22-12-26Z
 mkdir -p minio-image
@@ -40,8 +42,15 @@ jobs=$(nproc)
 if (( jobs > 4 )); then jobs=4; fi
 cmake --build obj -j "$jobs" --target btxd btx-cli btx-modeld > records/build.log 2>&1
 sha256sum obj/bin/{btxd,btx-cli,btx-modeld} | tee records/binaries.sha256
+exit 0
+fi
+test "$phase" = test
+sha256sum -c records/binaries.sha256
+export BTX_MINIO_IMAGE
+BTX_MINIO_IMAGE=$(awk '{print $2}' records/image.txt)
+docker image inspect "$BTX_MINIO_IMAGE" >/dev/null
 cp test.py product/test/functional/strict_minio_recovery.py
 export BTXMODELD="$PWD/obj/bin/btx-modeld"
-timeout 12m /usr/bin/python3 product/test/functional/strict_minio_recovery.py  --configfile="$PWD/obj/test/config.ini" --tmpdir="$RUNNER_TEMP/btx-minio-regtest" --nocleanup | tee records/test.log
+timeout 12m /usr/bin/python3 product/test/functional/strict_minio_recovery.py  --configfile="$PWD/obj/test/config.ini" --tmpdir="$RUNNER_TEMP/btx-minio-regtest" --nocleanup 2>&1 | tee records/test.log
 grep -F MINIO_RECOVERY_BYTE_IDENTICAL records/test.log
 grep -F 'modelnet MinIO layout e2e passed' records/test.log
