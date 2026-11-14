@@ -26,4 +26,6 @@ ln -s "$tool_bin/cmake" /usr/local/bin/cmake
 ln -s "$tool_bin/ninja" /usr/local/bin/ninja
 /usr/local/bin/cmake --version
 /usr/local/bin/ninja --version
+"$builder_python" -m pip install --disable-pip-version-check cryptography==46.0.4
+"$builder_python" -c "import cryptography, sqlite3; print(cryptography.__version__)"
 "$builder_python" pilot.py
