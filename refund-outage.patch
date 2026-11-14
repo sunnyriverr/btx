@@ -15,7 +15,7 @@
          # Valid preimages read from either local chain remain public forever,
          # even if the revealing transaction later leaves the canonical chain.
          for report in (ra,rb):
-@@ -357,6 +363,47 @@
+@@ -357,6 +363,48 @@
              # Continue observing terminal sessions. A deep reorg reopens recovery,
              # but does not replenish a consumed mandate or erase secret exposure.
              s['stage']='reconciling';self._save(sid,s,rev)
@@ -34,9 +34,9 @@
 +        if (report.clock.height<own.lock_value or obs.claimed
 +                or not obs.settled(driver.family,self.policy,now)):
 +            return False
-+        op=self.journal.operation(s['refund_op'])
-+        require(op['swap_id']==sid and op['kind']=='refund' and op['asset']==own.asset
-+                and op['metadata']['reference']==s['refs']['a'],'RECOVERY_CONFLICT','Saved refund does not match local funding')
++        op=next((item for item in self.journal.operations(sid,private=True) if item['id']==s['refund_op']),None)
++        require(op and op['kind']=='refund' and op['asset']==own.asset
++                and op['metadata'].get('reference')==s['refs']['a'],'RECOVERY_CONFLICT','Saved refund does not match local funding')
 +        if obs.refunded:
 +            tx=driver.rpc('getrawtransaction',op['txid'],True)
 +            if tx.get('confirmations',0)<self.policy.confirmations(driver.family):
@@ -55,6 +55,7 @@
 +            self.journal.broadcast(s['refund_op'],driver)
 +            s['stage']='refund_broadcast'
 +        s.update(last_action='refund_local_leg',last_error=None,updated_at=now)
++        s.setdefault('observations',{})['a']=asdict(obs)
 +        self._save(sid,s,rev)
 +        if s['stage']=='refunded':
 +            self.authority.terminal(s['grant_id'])
