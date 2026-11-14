@@ -1,4 +1,4 @@
-name: Current ModelNet recovery qualification
+name: ModelNet quota checkpoint restart control
 on:
   push:
     branches: [codex/ci-modelnet-current-recovery]
@@ -8,7 +8,7 @@ permissions:
 jobs:
   recovery:
     runs-on: ubuntu-24.04
-    timeout-minutes: 35
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:

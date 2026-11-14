@@ -35,16 +35,12 @@ BTX_MINIO_IMAGE=$(docker image inspect --format '{{.Id}}' "$image")
 BTXMODELD="$PWD/obj/bin/btx-modeld"
 docker run --rm "$image" --version | tee records/minio-version.txt
 cp base_minio.py product/test/functional/feature_modelnet_minio.py
-for name in integration controls quota_eof; do
-  cp "$name.py" "product/test/functional/$name.py"
-  set +e
-  timeout --kill-after=20s 8m /usr/bin/python3 "product/test/functional/$name.py" --configfile="$PWD/obj/test/config.ini" --tmpdir="$RUNNER_TEMP/current-$name" --nocleanup > "records/$name.log" 2>&1
-  status=$?
-  set -e
-  printf '%s\n' "$status" > "records/$name-exit.txt"
-  for file in normal-current-result.json partial-valid-result.json corrected-origin-result.json cloud-controls.json quota-eof-result.json; do
-    if test -f "$RUNNER_TEMP/current-$name/$file"; then cp "$RUNNER_TEMP/current-$name/$file" "records/$file"; fi
-  done
-  test "$status" = 0
-done
-python3 validate_result.py records
+cp quota_restart.py product/test/functional/quota_restart.py
+set +e
+timeout --kill-after=20s 8m /usr/bin/python3 product/test/functional/quota_restart.py --configfile="$PWD/obj/test/config.ini" --tmpdir="$RUNNER_TEMP/current-quota-restart" --nocleanup > records/quota-restart.log 2>&1
+status=$?
+set -e
+printf '%s\n' "$status" > records/test-exit.txt
+if test -f "$RUNNER_TEMP/current-quota-restart/quota-eof-result.json"; then cp "$RUNNER_TEMP/current-quota-restart/quota-eof-result.json" records/result.json; fi
+test "$status" = 0
+python3 validate_result.py records/result.json

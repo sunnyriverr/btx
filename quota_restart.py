@@ -37,11 +37,20 @@ class Case(ModelNetMinioLayoutsTest):
         job=Path(self.modeldir)/'file_stream_jobs'/f'{artifact}-0.json';q=Path(self.modeldir)/'cloud-hydrate-q/artifacts'/artifact/'0'
         record=json.loads(job.read_text());assert record['next_piece']==3,record
         expected={p.name:sha(p.read_bytes()) for p in q.glob('*.piece')};assert len(expected)==3
+        self._restart_helper()
+        record_after=json.loads(job.read_text());assert record_after==record,(record,record_after)
+        assert {p.name:sha(p.read_bytes()) for p in q.glob('*.piece')}==expected
+        still_blocked=node.getmodel(uri);assert still_blocked.get('cloud_hydrate_error')=='disk quota',still_blocked
+        assert still_blocked.get('origin_get_ops',0)==0,still_blocked
+        result['quota_checkpoint_survived_restart']=True
+        result['blocked_restart_response']=still_blocked;save()
         self._zero_spend(node.removemodel(entry2['uri']),'remove disposable filler')
         assert {p.name:sha(p.read_bytes()) for p in q.glob('*.piece')}==expected
         got=self._zero_spend(node.getmodel(uri),'resume valid EOF');assert got.get('status')=='local' and got.get('origin_get_ops')==0,got
         exported=self._zero_spend(node.exportmodelpath(uri),'export EOF');assert (Path(exported['path'])/source.name).read_bytes()==original
         assert not job.exists()
-        self._restart_helper();assert node.getmodel(uri).get('status')=='local'
+        self._restart_helper();again=node.getmodel(uri);assert again.get('status')=='local' and again['model_id']==result['model_id'] and again['artifact_id']==artifact,again
+        after_export=node.exportmodelpath(uri);assert (Path(after_export['path'])/source.name).read_bytes()==original
+        result['restart_exact_export']=True;result['restart_returned_identity_match']=True
         result.update(phase='VALID_EOF_QUOTA_RESUME_PASS',origin_get_ops=0,exact_export=True,restart_local=True);save()
 if __name__=='__main__':Case(__file__).main()
