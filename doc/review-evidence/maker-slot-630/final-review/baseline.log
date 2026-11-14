@@ -1,0 +1,71 @@
+F...F                                                                    [100%]
+=================================== FAILURES ===================================
+______________ test_maker_slot_after_confirmed_refund_and_restart ______________
+
+pair = <test_execution_v2.Pair object at 0x109644410>
+
+    def test_maker_slot_after_confirmed_refund_and_restart(pair):
+        initiator, maker, agreement = funded_long_leg(pair)
+        mature_long_refund(pair, initiator, agreement)
+        maker.tick_one(pair.sid)
+        before = maker_state(pair)
+        assert before["stage"] == "committed"
+        assert before["long_leg"]["refunded"] and before["long_leg"]["confirmations"] == 0
+        assert not before["maker_funding_prepared"] and not before["maker_funding_broadcast"]
+        assert not before["operations"] and not pair.b.records
+        print("REFUND_UNCONFIRMED", before)
+    
+        pair.a.mine(2)
+        initiator.tick_one(pair.sid)
+        assert pair.state("alice")["stage"] == "refunded"
+        maker.tick_one(pair.sid)
+        confirmed = maker_state(pair)
+        assert confirmed["long_leg"]["confirmations"] == 2
+        assert confirmed["long_leg"]["refunded"] and confirmed["long_leg"]["canonical"]
+        assert confirmed["long_leg"]["exact_terms"] and not confirmed["long_leg"]["conflicting"]
+        print("REFUND_CONFIRMED", confirmed)
+        pair.restart("bob")
+        store, journal, _, maker = pair.nodes["bob"]
+        maker.tick_one(pair.sid)
+        restarted = maker_state(pair)
+        assert restarted == confirmed
+        print("REFUND_AFTER_RESTART", restarted)
+    
+>       assert restarted["stage"] == "cancelled"
+E       AssertionError: assert 'committed' == 'cancelled'
+E         
+E         - cancelled
+E         + committed
+
+tests/test_maker_terminal_capacity.py:99: AssertionError
+----------------------------- Captured stdout call -----------------------------
+REFUND_UNCONFIRMED {'stage': 'committed', 'active': 1, 'reservation': 'held', 'reserved_atoms': 20490, 'maker_funding_prepared': False, 'maker_funding_broadcast': False, 'operations': [], 'action': 'wait_for_chain', 'long_leg': {'canonical': True, 'claimed': False, 'confirmations': 0, 'conflicting': False, 'exact_terms': True, 'finalized': False, 'observed_at': 1900000000, 'present': True, 'refunded': True}}
+REFUND_CONFIRMED {'stage': 'committed', 'active': 1, 'reservation': 'held', 'reserved_atoms': 20490, 'maker_funding_prepared': False, 'maker_funding_broadcast': False, 'operations': [], 'action': 'wait_for_chain', 'long_leg': {'canonical': True, 'claimed': False, 'confirmations': 2, 'conflicting': False, 'exact_terms': True, 'finalized': False, 'observed_at': 1900000000, 'present': True, 'refunded': True}}
+REFUND_AFTER_RESTART {'stage': 'committed', 'active': 1, 'reservation': 'held', 'reserved_atoms': 20490, 'maker_funding_prepared': False, 'maker_funding_broadcast': False, 'operations': [], 'action': 'wait_for_chain', 'long_leg': {'canonical': True, 'claimed': False, 'confirmations': 2, 'conflicting': False, 'exact_terms': True, 'finalized': False, 'observed_at': 1900000000, 'present': True, 'refunded': True}}
+_________________ test_slot_and_reservation_roll_back_together _________________
+
+pair = <test_execution_v2.Pair object at 0x1098f0a90>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1098f1310>
+
+    def test_slot_and_reservation_roll_back_together(pair, monkeypatch):
+        initiator, maker, agreement = funded_long_leg(pair)
+        mature_long_refund(pair, initiator, agreement)
+        pair.a.mine(2)
+        store = pair.nodes["bob"][0]
+        audit = store._audit
+    
+        def interrupted(db, event):
+            if event.get("stage") == "cancelled":
+                raise RuntimeError("fixture stops after reservation update")
+            return audit(db, event)
+    
+        with monkeypatch.context() as patch:
+            patch.setattr(store, "_audit", interrupted)
+>           with pytest.raises(RuntimeError, match="fixture stops"):
+E           Failed: DID NOT RAISE <class 'RuntimeError'>
+
+tests/test_maker_terminal_capacity.py:192: Failed
+=========================== short test summary info ============================
+FAILED tests/test_maker_terminal_capacity.py::test_maker_slot_after_confirmed_refund_and_restart
+FAILED tests/test_maker_terminal_capacity.py::test_slot_and_reservation_roll_back_together
+2 failed, 3 passed in 0.88s
