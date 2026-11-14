@@ -1,0 +1,86 @@
+FF...                                                                    [100%]
+=================================== FAILURES ===================================
+_____ test_offline_terminal_cleanup_retries_after_restart[before_cleanup] ______
+
+pair = <test_execution_v2.Pair object at 0x108a68890>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x108a73090>
+boundary = 'before_cleanup'
+
+    @pytest.mark.parametrize('boundary', ['before_cleanup', 'during_transaction', 'after_cleanup'])
+    def test_offline_terminal_cleanup_retries_after_restart(pair, monkeypatch, boundary):
+        c = refunded_observation(pair)
+        store = pair.nodes['alice'][0]
+        terminal, audit = c.authority.terminal, store._audit
+        def interrupted(*args):
+            if boundary == 'after_cleanup':
+                terminal(*args)
+            raise RuntimeError('injected cleanup interruption')
+        def interrupted_audit(db, event):
+            if event.get('type') == 'reservation_closed':
+                raise RuntimeError('injected cleanup interruption')
+            return audit(db, event)
+        with monkeypatch.context() as m:
+            if boundary == 'during_transaction':
+                m.setattr(store, '_audit', interrupted_audit)
+            else:
+                m.setattr(c.authority, 'terminal', interrupted)
+            with pytest.raises(RuntimeError, match='injected cleanup interruption'):
+                c.tick_one(pair.sid)
+        assert pair.state('alice')['stage'] == 'refunded'
+        assert reservation(pair) == ('closed' if boundary == 'after_cleanup' else 'funded')
+        operations = pair.nodes['alice'][1].operations(pair.sid)
+        transactions = dict(pair.a.transactions)
+        pair.restart('alice')
+        c = offline(pair)
+        c.tick_one(pair.sid)
+>       assert reservation(pair) == 'closed'
+E       AssertionError: assert 'funded' == 'closed'
+E         
+E         - closed
+E         + funded
+
+work/btx-lanes/session-3/swapnet-maker-terminal-capacity/combined-lifecycle/current-native-qualification/latest-head-review/contrib/swapnet/tests/test_offline_terminal_cleanup.py:63: AssertionError
+___ test_offline_terminal_cleanup_retries_after_restart[during_transaction] ____
+
+pair = <test_execution_v2.Pair object at 0x108a46a50>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x108a9dcd0>
+boundary = 'during_transaction'
+
+    @pytest.mark.parametrize('boundary', ['before_cleanup', 'during_transaction', 'after_cleanup'])
+    def test_offline_terminal_cleanup_retries_after_restart(pair, monkeypatch, boundary):
+        c = refunded_observation(pair)
+        store = pair.nodes['alice'][0]
+        terminal, audit = c.authority.terminal, store._audit
+        def interrupted(*args):
+            if boundary == 'after_cleanup':
+                terminal(*args)
+            raise RuntimeError('injected cleanup interruption')
+        def interrupted_audit(db, event):
+            if event.get('type') == 'reservation_closed':
+                raise RuntimeError('injected cleanup interruption')
+            return audit(db, event)
+        with monkeypatch.context() as m:
+            if boundary == 'during_transaction':
+                m.setattr(store, '_audit', interrupted_audit)
+            else:
+                m.setattr(c.authority, 'terminal', interrupted)
+            with pytest.raises(RuntimeError, match='injected cleanup interruption'):
+                c.tick_one(pair.sid)
+        assert pair.state('alice')['stage'] == 'refunded'
+        assert reservation(pair) == ('closed' if boundary == 'after_cleanup' else 'funded')
+        operations = pair.nodes['alice'][1].operations(pair.sid)
+        transactions = dict(pair.a.transactions)
+        pair.restart('alice')
+        c = offline(pair)
+        c.tick_one(pair.sid)
+>       assert reservation(pair) == 'closed'
+E       AssertionError: assert 'funded' == 'closed'
+E         
+E         - closed
+E         + funded
+
+work/btx-lanes/session-3/swapnet-maker-terminal-capacity/combined-lifecycle/current-native-qualification/latest-head-review/contrib/swapnet/tests/test_offline_terminal_cleanup.py:63: AssertionError
+=========================== short test summary info ============================
+FAILED work/btx-lanes/session-3/swapnet-maker-terminal-capacity/combined-lifecycle/current-native-qualification/latest-head-review/contrib/swapnet/tests/test_offline_terminal_cleanup.py::test_offline_terminal_cleanup_retries_after_restart[before_cleanup]
+FAILED work/btx-lanes/session-3/swapnet-maker-terminal-capacity/combined-lifecycle/current-native-qualification/latest-head-review/contrib/swapnet/tests/test_offline_terminal_cleanup.py::test_offline_terminal_cleanup_retries_after_restart[during_transaction]
+2 failed, 3 passed in 1.39s
