@@ -4,6 +4,8 @@ from pathlib import Path
 from feature_modelnet_minio import ModelNetMinioLayoutsTest
 
 class CatalogRecovery(ModelNetMinioLayoutsTest):
+    def set_test_params(self):super().set_test_params()
+    def run_test(self):super().run_test()
     def _start_container(self):
         ep=super()._start_container()
         assert ep,self.not_run
