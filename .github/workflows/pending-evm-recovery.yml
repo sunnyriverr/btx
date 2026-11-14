@@ -1,0 +1,27 @@
+name: Pending Ethereum recovery impact
+on:
+  push:
+    branches: [codex/ci-swapnet-pending-recovery]
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          path: product
+          persist-credentials: false
+      - name: Measure native pending recovery without product changes
+        run: bash ci/pending-evm/run.sh
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: pending-evm-recovery
+          path: records/
+          retention-days: 30
