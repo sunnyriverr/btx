@@ -1,0 +1,31 @@
+name: Normal cloud recovery retained binaries
+on:
+  push:
+    branches: [codex/ci-normal-cloud-recovery]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  recovery:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 8d6d8b1aabf371b12f2b1f5797b950fed7962d4e
+          path: product
+          persist-credentials: false
+      - run: bash run.sh
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: normal-cloud-recovery
+          path: records/
+          retention-days: 14
+          if-no-files-found: error
