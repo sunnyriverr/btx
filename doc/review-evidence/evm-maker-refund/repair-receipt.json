@@ -1,0 +1,25 @@
+{
+  "utc": "2026-11-14T08:58:20.412422+00:00",
+  "base": "f08e0b4be0eea06152ad83e47311ff8907f9c25d",
+  "production_change": "Remove height-only requirement from existing confirmed-refund unfunded-maker cleanup; all observation/finality/journal authorization guards unchanged",
+  "before": "2failed6passed",
+  "after": "8passed1.52s",
+  "full_candidate": "165passed25.15s",
+  "scope": "macOS arm64 Python coordinator+journal+SQLite with simulated EVM finality/reference/contract state",
+  "native_candidate_run": false,
+  "publication": false,
+  "checks": [
+    "finalized exact canonical refund closes reservation and held20490atoms to0 across restart",
+    "active slot released; new valid proposal admitted with127other fixture active rows",
+    "unused grant revoked; later remote rollback cannot authorize local funding",
+    "nonfinal,noncanonical,wrongterms,conflict,stale evidence retain obligations; stale rejected and conflict enters reconciling",
+    "durable local fund WAL record retains held position across restart; full existing height-maker controls pass"
+  ],
+  "sha256": {
+    "repair.patch": "146f75c9f07950a8c0a33312e250f1a87c06dfe7fd440ccd95fd6eeab525ff95",
+    "final-before.log": "a798da75a08c7cc1ac6f923f538df19899f5b90de6da028146bdffaf0190dcb5",
+    "final-after.log": "eb89e2b25528b4b0f8477dc39579f0a808fc3a7dd53920e9fb08eb142c46d8b9",
+    "full-after.log": "16a33431a8969b1f2512be07f9ad9e19bcc789fd395cc5681ef5c8f743a4518c"
+  },
+  "fixture_notes": "Initial negative controls incorrectly expected committed for conflicting/stale evidence. Baseline already reconciles conflict and raises STALE_OBSERVATION. Final matched tests require those exact existing behaviors and retained reservation/grant, rather than forcing committed."
+}

@@ -1,0 +1,26 @@
+{
+  "head": "94859cd2abf2e25033ffb98889dc6d06d39e5bd3",
+  "checkpoint_base": "772b35d27a72a457f3995beea5597310a0b7a521",
+  "branch": "codex/ci-swapnet-evm-cleanup",
+  "scope": "Actual Anvil HTLC, production EVMDriver/EVMAdapter, signed coordinator negotiation and SQLite before/after. BTX leg simulated; repaired daemon compiled but not used to execute this EVM fixture.",
+  "run_id": 43579229310,
+  "url": "https://github.com/sunnyriverr/btx/actions/runs/43579229310",
+  "previous_head": "b14b1b29e476ca135bf8ca7cce8ec236c197d77d",
+  "status": "PASS native EVM boundary; incremental daemon build verified separately",
+  "build_run": 43579028797,
+  "build_result": "11incremental tasks from checkpoint, relinked daemon; subsequent run reused checksum-identical binaries",
+  "artifact_id": 14107319527,
+  "artifact_sha256": "69b9a8cfbf43ad317755673d00b9ecccd7e34a92d6268e22b16037e5aede744b",
+  "artifact_digest_verified": true,
+  "binary_sha256": {
+    "btxd": "706bcc052b1bdaf865c5b3c83e3a7ce068b3f9c211ae093b3c6e1bf45787e061",
+    "btx-cli": "8b7c3e5869cb6beaff5a7a9f4b70f25509d879934112a407936a52c117ef3750"
+  },
+  "limits": [
+    "Not full embedded two-node BTX/ETH swap, package, mainnet or release acceptance",
+    "Local funding safety control inserts a durable funding WAL record, not a new real BTX or ETH funding position",
+    "Anvil unlocked/impersonated disposable accounts submit remote contract lock/refund; automatic signer/gas recovery/withdrawal flow not qualified",
+    "Raw baseline result.status INCOMPLETE because intended cleanup assertion fails; log and state establish the expected failure, not a setup failure"
+  ],
+  "fixture_correction": "Initial43579028797 passed incremental build and Solidity compile, but fixture import lackedpytest. Added pinned8.4.2; reused built binaries, no second compile."
+}

@@ -1,0 +1,45 @@
+F......F                                                                 [100%]
+=================================== FAILURES ===================================
+__________ test_finalized_evm_refund_releases_capacity_after_restart ___________
+
+evm_pair = <test_execution_v2.Pair object at 0x109174890>
+
+    def test_finalized_evm_refund_releases_capacity_after_restart(evm_pair):
+        p=evm_pair;m=refunded_remote(p);m.tick_one(p.sid);before=accounting(p)
+        assert before['long_leg']['refunded'] and before['long_leg']['finalized']
+        assert before['long_leg']['exact_terms'] and before['long_leg']['canonical']
+        assert not before['operations'] and not before['maker_funding_prepared']
+        p.restart('bob');p.nodes['bob'][3].tick_one(p.sid);after=accounting(p)
+        for k in ['stage','reservation','active','mandate_held','grant_revoked']:assert after[k]==before[k]
+        st,j,_,m=p.nodes['bob']
+        for n in range(1,128):j.save(f'{n:064x}',{'stage':'committed','principal':'fixture','peer':'fixture'})
+        sid,proposal=fresh_proposal(p)
+        try:m.receive_proposal('alice',sid,proposal,p.market);admission='accepted'
+        except SwapError as e:admission=e.code
+        print('MEASURED',json.dumps({'before':before,'after_restart':after,'fresh_admission_at_127_other_slots':admission}))
+>       assert after['stage']=='cancelled' and after['reservation']=='closed'
+E       AssertionError: assert ('committed' == 'cancelled'
+E         
+E         - cancelled
+E         + committed)
+
+work/btx-lanes/session-1/swapnet-evm-maker-release/source/contrib/swapnet/tests/test_timestamp_capacity.py:65: AssertionError
+----------------------------- Captured stdout call -----------------------------
+MEASURED {"before": {"stage": "committed", "active": 1, "reservation": "held", "reserved_atoms": 20490, "maker_funding_prepared": false, "maker_funding_broadcast": false, "operations": [], "action": "wait_for_chain", "long_leg": {"canonical": true, "claimed": false, "confirmations": 1, "conflicting": false, "exact_terms": true, "finalized": true, "observed_at": 1900021611, "present": true, "refunded": true}, "mandate_held": "20490", "grant_consumed": 0, "grant_revoked": 0}, "after_restart": {"stage": "committed", "active": 1, "reservation": "held", "reserved_atoms": 20490, "maker_funding_prepared": false, "maker_funding_broadcast": false, "operations": [], "action": "wait_for_chain", "long_leg": {"canonical": true, "claimed": false, "confirmations": 1, "conflicting": false, "exact_terms": true, "finalized": true, "observed_at": 1900021611, "present": true, "refunded": true}, "mandate_held": "20490", "grant_consumed": 0, "grant_revoked": 0}, "fresh_admission_at_127_other_slots": "ACTIVE_LIMIT"}
+__________ test_later_remote_reorg_cannot_reauthorize_cancelled_maker __________
+
+evm_pair = <test_execution_v2.Pair object at 0x109265710>
+
+    def test_later_remote_reorg_cannot_reauthorize_cancelled_maker(evm_pair):
+        p=evm_pair;m=refunded_remote(p);m.tick_one(p.sid)
+>       assert p.state('bob')['stage']=='cancelled'
+E       AssertionError: assert 'committed' == 'cancelled'
+E         
+E         - cancelled
+E         + committed
+
+work/btx-lanes/session-1/swapnet-evm-maker-release/source/contrib/swapnet/tests/test_timestamp_capacity.py:100: AssertionError
+=========================== short test summary info ============================
+FAILED work/btx-lanes/session-1/swapnet-evm-maker-release/source/contrib/swapnet/tests/test_timestamp_capacity.py::test_finalized_evm_refund_releases_capacity_after_restart
+FAILED work/btx-lanes/session-1/swapnet-evm-maker-release/source/contrib/swapnet/tests/test_timestamp_capacity.py::test_later_remote_reorg_cannot_reauthorize_cancelled_maker
+2 failed, 6 passed in 1.49s
