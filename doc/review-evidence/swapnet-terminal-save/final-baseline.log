@@ -1,0 +1,112 @@
+FF...........FFF                                                         [100%]
+=================================== FAILURES ===================================
+_____________ test_unchanged_terminal_ticks_do_not_write[complete] _____________
+
+terminal_pair = <test_execution_v2.Pair object at 0x10b70d050>
+
+    def test_unchanged_terminal_ticks_do_not_write(terminal_pair):
+        pair = terminal_pair
+        initial = saved_snapshot(pair)
+        for _ in range(10):
+            pair.nodes['alice'][3].tick()
+>       assert saved_snapshot(pair) == initial
+E       AssertionError: assert ((59, {'agree......}), 68, 60) == ((39, {'agree......}), 48, 40)
+E         
+E         At index 0 diff: (59, {'agreement': {'initiator': 'alice', 'long_leg': {'amount_atoms': '10000', 'asset': 'btx:1111111111111111111111111111111111111111111111111111111111111111:0:native', 'claim_key': 'bobclaim1', 'hashlock': '69ddccda32d22ba37c9269e4c6388db58d1cc3c0108b80bbba252dd296aaa9d4', 'lock_commitment': '52bab7fdee98c06dae991150aec59ef8ba2e7e2d499b13023f8e664cdcaa7afc', 'lock_domain': 'height', 'lock_value': 21710, 'max_claim_fee_atoms': '100', 'max_refund_fee_atoms': '100', 'payout': 'bob-claim-payout', 'refund_key': 'alicerefund1', 'refund_payout': 'alice-refun...
+E         
+E         ...Full output truncated (2 lines hidden), use '-vv' to show
+
+tests/test_terminal_observation_persistence.py:50: AssertionError
+_____________ test_unchanged_terminal_ticks_do_not_write[refunded] _____________
+
+terminal_pair = <test_execution_v2.Pair object at 0x10b6ef310>
+
+    def test_unchanged_terminal_ticks_do_not_write(terminal_pair):
+        pair = terminal_pair
+        initial = saved_snapshot(pair)
+        for _ in range(10):
+            pair.nodes['alice'][3].tick()
+>       assert saved_snapshot(pair) == initial
+E       AssertionError: assert ((35, {'agree......}), 43, 36) == ((15, {'agree......}), 23, 16)
+E         
+E         At index 0 diff: (35, {'agreement': {'initiator': 'alice', 'long_leg': {'amount_atoms': '10000', 'asset': 'btx:1111111111111111111111111111111111111111111111111111111111111111:0:native', 'claim_key': 'bobclaim1', 'hashlock': '62bfe4d1330de46a5324b8f8c6af26851a8f4779cede76ebfddbfd246e3b8ae5', 'lock_commitment': '48bbb19817080738ddeade36f1b76fe7cfc1332f9aff910a1f8106de6629a90a', 'lock_domain': 'height', 'lock_value': 21710, 'max_claim_fee_atoms': '100', 'max_refund_fee_atoms': '100', 'payout': 'bob-claim-payout', 'refund_key': 'alicerefund1', 'refund_payout': 'alice-refun...
+E         
+E         ...Full output truncated (2 lines hidden), use '-vv' to show
+
+tests/test_terminal_observation_persistence.py:50: AssertionError
+________________ test_terminal_poll_still_checks_evm_withdrawal ________________
+
+pair = <test_execution_v2.Pair object at 0x10b7f44d0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10b7db290>
+
+    def test_terminal_poll_still_checks_evm_withdrawal(pair, monkeypatch):
+        pair.start()
+        for _ in range(18):
+            pair.step()
+        coordinator = pair.nodes['alice'][3]
+        pair.nodes['alice'][3].tick()
+        incoming = coordinator.drivers[B]
+        # Component control for the EVM withdrawal callback, without a real EVM.
+        monkeypatch.setattr(incoming, 'family', 'evm')
+        coordinator.policy = replace(coordinator.policy, require_evm_finalized=False)
+        ready = [True]
+        calls = []
+        def withdrawal(*args, **kwargs):
+            calls.append(kwargs['refund'])
+            return ready[0]
+        monkeypatch.setattr(incoming, 'ensure_withdrawal', withdrawal, raising=False)
+        initial = saved_snapshot(pair)
+        coordinator.tick()
+        coordinator.tick()
+        assert calls == [False, False]
+>       assert saved_snapshot(pair) == initial
+E       AssertionError: assert ((43, {'agree......}), 52, 44) == ((39, {'agree......}), 48, 40)
+E         
+E         At index 0 diff: (43, {'agreement': {'initiator': 'alice', 'long_leg': {'amount_atoms': '10000', 'asset': 'btx:1111111111111111111111111111111111111111111111111111111111111111:0:native', 'claim_key': 'bobclaim1', 'hashlock': '155536b0221a80c6be86e6da97c2eb06c098c38d23f8868421241cd545d17c96', 'lock_commitment': '6b13f1d6469309c091405f9d6466455e4d498395041c2412d68f5a9d3ff23f08', 'lock_domain': 'height', 'lock_value': 21710, 'max_claim_fee_atoms': '100', 'max_refund_fee_atoms': '100', 'payout': 'bob-claim-payout', 'refund_key': 'alicerefund1', 'refund_payout': 'alice-refun...
+E         
+E         ...Full output truncated (2 lines hidden), use '-vv' to show
+
+tests/test_terminal_observation_persistence.py:160: AssertionError
+_____________ test_terminal_poll_clears_persisted_error[complete] ______________
+
+terminal_pair = <test_execution_v2.Pair object at 0x10b80a750>
+
+    def test_terminal_poll_clears_persisted_error(terminal_pair):
+        pair = terminal_pair
+        journal = pair.nodes['alice'][1]
+        rev, state = journal.load(pair.sid)
+        state['last_error'] = {'code': 'RPC', 'message': 'Previous observation failed'}
+        journal.save(pair.sid, state, rev)
+        pair.restart('alice')
+        before = saved_snapshot(pair)
+        pair.nodes['alice'][3].tick()
+        cleared = saved_snapshot(pair)
+>       assert cleared[0][0] == before[0][0] + 1
+E       assert 42 == (40 + 1)
+
+tests/test_terminal_observation_persistence.py:176: AssertionError
+_____________ test_terminal_poll_clears_persisted_error[refunded] ______________
+
+terminal_pair = <test_execution_v2.Pair object at 0x10b76e990>
+
+    def test_terminal_poll_clears_persisted_error(terminal_pair):
+        pair = terminal_pair
+        journal = pair.nodes['alice'][1]
+        rev, state = journal.load(pair.sid)
+        state['last_error'] = {'code': 'RPC', 'message': 'Previous observation failed'}
+        journal.save(pair.sid, state, rev)
+        pair.restart('alice')
+        before = saved_snapshot(pair)
+        pair.nodes['alice'][3].tick()
+        cleared = saved_snapshot(pair)
+>       assert cleared[0][0] == before[0][0] + 1
+E       assert 18 == (16 + 1)
+
+tests/test_terminal_observation_persistence.py:176: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_terminal_observation_persistence.py::test_unchanged_terminal_ticks_do_not_write[complete]
+FAILED tests/test_terminal_observation_persistence.py::test_unchanged_terminal_ticks_do_not_write[refunded]
+FAILED tests/test_terminal_observation_persistence.py::test_terminal_poll_still_checks_evm_withdrawal
+FAILED tests/test_terminal_observation_persistence.py::test_terminal_poll_clears_persisted_error[complete]
+FAILED tests/test_terminal_observation_persistence.py::test_terminal_poll_clears_persisted_error[refunded]
+5 failed, 11 passed in 5.98s

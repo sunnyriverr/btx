@@ -1,0 +1,31 @@
+{
+  "utc": "2026-11-14T04:17:08.169811+00:00",
+  "revision": "8d6d8b1aabf371b12f2b1f5797b950fed7962d4e",
+  "platform": "macOS arm64, Python 3.11.14",
+  "production_changes": [
+    "contrib/swapnet/swapnet/journal.py"
+  ],
+  "added_test": "contrib/swapnet/tests/test_terminal_observation_persistence.py",
+  "baseline": "5 failed, 11 passed",
+  "candidate": "16 passed",
+  "full_suite": "131 passed",
+  "recovery": "confirmed and refunded scenarios detect changed confirmations and simulated spend rollback after reopening SQLite",
+  "unchanged_ticks": "0 new revisions or audit rows for fixed, advancing and aged observation times, before and after reopen",
+  "scope": "simulated chain drivers with real SQLite, no native daemon; EVM withdrawal is a component callback control",
+  "timestamp_semantics": "Durable updated_at and observed_at remain at the last meaningful terminal snapshot. Live decisions obtain fresh driver reports on every tick.",
+  "peer_compatibility": {
+    "application_only": true,
+    "combined_execution": false,
+    "peer_patch_sha256": "19cdf86d2249c33de2cc281a069b30f0a9bbb10b38e14ef78b45d7c82631e86c"
+  },
+  "sha256": {
+    "terminal-save.patch": "1ebb3f6b4d4f7974b201fe57e093c052642f2d7ab38af2bb90aa6b62673838c7",
+    "source/swapnet/journal.py": "313cfed5d38df50e0d1e65290e2b28dc52fc1241ff8e432f8a295c65ef4d6861",
+    "source/tests/test_terminal_observation_persistence.py": "8b5e0d88aaabee7cb9a4651a2a02f9f0377b8175eed69b46633b80136d7c348f",
+    "paired-results.json": "3fca3fc79dbf107d9eff73afb12d59ee6cbc1e91d973d03459e650a5aaa4d472",
+    "final-baseline.log": "c65a4c993e3060982dedc49248ff56118e53997b8a397fe0e63383f8a3452efb",
+    "final-candidate.log": "c8d365576408b28b4753ab73fa1895b10eaffb29fbdc8011f555af2eaf54fc52",
+    "repair-full-suite.log": "d50c235db204c3ae86466634f3eb4cbd932032161fb89cd065248bff21493031"
+  },
+  "publication": null
+}
