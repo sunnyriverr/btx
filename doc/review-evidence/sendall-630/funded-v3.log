@@ -1,0 +1,46 @@
+2026-11-14T02:52:28.006000Z TestFramework (INFO): User supplied random seed 630
+2026-11-14T02:52:28.006000Z TestFramework (INFO): PRNG seed is: 630
+2026-11-14T02:52:28.007000Z TestFramework (INFO): Initializing test directory <workdir>/runtime/funded-v3
+2026-11-14T02:53:10.058000Z TestFramework (INFO): Test that cleanup wrapper empties wallet
+2026-11-14T02:53:10.281000Z TestFramework (INFO): Testing basic sendall case without specific amounts
+2026-11-14T02:53:10.698000Z TestFramework (INFO): Testing sendall where two recipients have unspecified amount
+2026-11-14T02:53:11.074000Z TestFramework (INFO): Testing sendall in combination with paying specified amount to recipient
+2026-11-14T02:53:11.419000Z TestFramework (INFO): Test having only recipient with specified amount, missing recipient with unspecified amount
+2026-11-14T02:53:11.561000Z TestFramework (INFO): Test duplicate destination
+2026-11-14T02:53:11.878000Z TestFramework (INFO): Test sending more than balance
+2026-11-14T02:53:12.098000Z TestFramework (INFO): Test that sendall fails if all UTXOs have negative effective value
+2026-11-14T02:53:12.300000Z TestFramework (INFO): Check that `send_max` option causes negative value UTXOs to be left behind
+2026-11-14T02:53:12.693000Z TestFramework (INFO): Test sendall with a subset of UTXO pool
+2026-11-14T02:53:12.937000Z TestFramework (INFO): Test sendall fails because specified UTXO is not available
+2026-11-14T02:53:13.282000Z TestFramework (INFO): Test sendall fails because no address is provided
+2026-11-14T02:53:13.452000Z TestFramework (INFO): Test sendall fails because send_max is used while specific inputs are provided
+2026-11-14T02:53:13.615000Z TestFramework (INFO): Test sendall fails if the transaction fee exceeds the maxtxfee
+2026-11-14T02:53:13.751000Z TestFramework (INFO): Test sendall fails if the transaction fee is lower than the minimum fee rate setting
+2026-11-14T02:53:13.752000Z TestFramework (INFO): Test sendall with a subset of UTXO pool in a watchonly wallet
+2026-11-14T02:53:13.894000Z TestFramework (ERROR): Unexpected exception
+Traceback (most recent call last):
+  File "<workdir>/source/test/functional/test_framework/test_framework.py", line 142, in main
+    self.run_test()
+  File "<workdir>/candidate/wallet_sendall.py", line 541, in run_test
+    self.sendall_watchonly_specific_inputs()
+  File "<workdir>/candidate/wallet_sendall.py", line 21, in wrapper
+    func(self)
+  File "<workdir>/candidate/wallet_sendall.py", line 317, in sendall_watchonly_specific_inputs
+    sendall_tx_receipt = watchonly.sendall(recipients=[self.remainder_target], inputs=[utxo])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<workdir>/source/test/functional/test_framework/coverage.py", line 50, in __call__
+    return_val = self.auth_service_proxy_instance.__call__(*args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<workdir>/source/test/functional/test_framework/authproxy.py", line 151, in __call__
+    raise JSONRPCException(response['error'], status)
+test_framework.authproxy.JSONRPCException: Unable to determine the size of the transaction, the wallet contains unsolvable descriptors (-4)
+2026-11-14T02:53:13.949000Z TestFramework (INFO): Not stopping nodes as test failed. The dangling processes will be cleaned up later.
+2026-11-14T02:53:13.949000Z TestFramework (WARNING): Not cleaning up dir <workdir>/runtime/funded-v3
+2026-11-14T02:53:13.949000Z TestFramework (ERROR): Test failed. Test logging available at <workdir>/runtime/funded-v3/test_framework.log
+2026-11-14T02:53:13.949000Z TestFramework (ERROR): 
+2026-11-14T02:53:13.949000Z TestFramework (ERROR): Hint: Call <workdir>/source/test/functional/combine_logs.py '<workdir>/runtime/funded-v3' to consolidate all logs
+2026-11-14T02:53:13.949000Z TestFramework (ERROR): 
+2026-11-14T02:53:13.949000Z TestFramework (ERROR): If this failure happened unexpectedly or intermittently, please file a bug and provide a link or upload of the combined log.
+2026-11-14T02:53:13.949000Z TestFramework (ERROR): https://github.com/btxchain/btx/issues
+2026-11-14T02:53:13.949000Z TestFramework (ERROR): 
+[node 0] Cleaning up leftover process

@@ -1,0 +1,49 @@
+2026-11-14T02:49:37.747000Z TestFramework (INFO): User supplied random seed 630
+2026-11-14T02:49:37.747000Z TestFramework (INFO): PRNG seed is: 630
+2026-11-14T02:49:37.747000Z TestFramework (INFO): Initializing test directory <workdir>/runtime/funding-probe
+2026-11-14T02:50:18.680000Z TestFramework (INFO): Test that cleanup wrapper empties wallet
+2026-11-14T02:50:18.681000Z TestFramework (INFO): Funding preflight: height=101 tip=d872874e03b5201b606af033c4e32e3513c22ee147fe403f60fc474524b875b9 trusted=20.00000000 requested=[15, 2, 4]
+2026-11-14T02:50:18.703000Z TestFramework (INFO): Funding send: trusted_before=20.00000000 amount=15 fee=-0.00004860
+2026-11-14T02:50:18.764000Z TestFramework (INFO): Funding send: trusted_before=4.99995140 amount=2 fee=-0.00078340
+2026-11-14T02:50:18.785000Z TestFramework (ERROR): First funding error: trusted=2.99916800 requested=4
+Traceback (most recent call last):
+  File "<workdir>/run-sendall.py", line 63, in record_funding
+    txid = self.def_wallet.sendtoaddress(self.wallet.getnewaddress(), amount)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<workdir>/source/test/functional/test_framework/coverage.py", line 50, in __call__
+    return_val = self.auth_service_proxy_instance.__call__(*args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<workdir>/source/test/functional/test_framework/authproxy.py", line 151, in __call__
+    raise JSONRPCException(response['error'], status)
+test_framework.authproxy.JSONRPCException: Insufficient funds (-6)
+2026-11-14T02:50:18.786000Z TestFramework (ERROR): Unexpected exception
+Traceback (most recent call last):
+  File "<workdir>/source/test/functional/test_framework/test_framework.py", line 142, in main
+    self.run_test()
+  File "<workdir>/source/test/functional/wallet_sendall.py", line 489, in run_test
+    self.test_cleanup()
+  File "<workdir>/source/test/functional/wallet_sendall.py", line 80, in test_cleanup
+    self.gen_and_clean()
+  File "<workdir>/source/test/functional/wallet_sendall.py", line 21, in wrapper
+    func(self)
+  File "<workdir>/source/test/functional/wallet_sendall.py", line 76, in gen_and_clean
+    self.add_utxos([15, 2, 4])
+  File "<workdir>/run-sendall.py", line 63, in record_funding
+    txid = self.def_wallet.sendtoaddress(self.wallet.getnewaddress(), amount)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<workdir>/source/test/functional/test_framework/coverage.py", line 50, in __call__
+    return_val = self.auth_service_proxy_instance.__call__(*args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<workdir>/source/test/functional/test_framework/authproxy.py", line 151, in __call__
+    raise JSONRPCException(response['error'], status)
+test_framework.authproxy.JSONRPCException: Insufficient funds (-6)
+2026-11-14T02:50:18.842000Z TestFramework (INFO): Not stopping nodes as test failed. The dangling processes will be cleaned up later.
+2026-11-14T02:50:18.842000Z TestFramework (WARNING): Not cleaning up dir <workdir>/runtime/funding-probe
+2026-11-14T02:50:18.842000Z TestFramework (ERROR): Test failed. Test logging available at <workdir>/runtime/funding-probe/test_framework.log
+2026-11-14T02:50:18.842000Z TestFramework (ERROR): 
+2026-11-14T02:50:18.842000Z TestFramework (ERROR): Hint: Call <workdir>/source/test/functional/combine_logs.py '<workdir>/runtime/funding-probe' to consolidate all logs
+2026-11-14T02:50:18.842000Z TestFramework (ERROR): 
+2026-11-14T02:50:18.842000Z TestFramework (ERROR): If this failure happened unexpectedly or intermittently, please file a bug and provide a link or upload of the combined log.
+2026-11-14T02:50:18.842000Z TestFramework (ERROR): https://github.com/btxchain/btx/issues
+2026-11-14T02:50:18.842000Z TestFramework (ERROR): 
+[node 0] Cleaning up leftover process
