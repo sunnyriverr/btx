@@ -1,0 +1,33 @@
+name: Combined SwapNet funded lifecycle
+on:
+  push:
+    branches: [codex/ci-swapnet-funded]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  discovery:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 42
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          github-token: ${{ github.token }}
+          run-id: 43573514061
+          name: swapnet-combined-build
+          path: .
+      - name: Run retained binaries without rebuilding
+        run: bash ci/swapnet-funded/run.sh
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: swapnet-funded-results
+          path: |
+            records/
+            records-restart/
+            records-refund/
+            funded-*.log
+          retention-days: 30
