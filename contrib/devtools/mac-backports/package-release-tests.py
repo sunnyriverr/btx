@@ -532,13 +532,19 @@ class PackageReleaseArchiveTest(unittest.TestCase):
                     for image in (release_root / "libexec").glob("*.real"):
                         image.write_text("bundled\n")
                     return []
-                fake = types.SimpleNamespace(bundle_macos_python=bundle)
-                spec = types.SimpleNamespace(loader=types.SimpleNamespace(exec_module=lambda module: None))
+                fake = types.ModuleType("bundle_macos_python_runtime")
+                fake.bundle_macos_python = bundle
+                spec = importlib.machinery.ModuleSpec("bundle_macos_python_runtime",
+                    types.SimpleNamespace(create_module=lambda spec: fake, exec_module=lambda module: None))
+                original_spec = importlib.util.spec_from_file_location
+                def select_spec(name, path, *args, **kwargs):
+                    if pathlib.Path(path).name == "bundle_macos_python_runtime.py":
+                        return spec
+                    return original_spec(name, path, *args, **kwargs)
                 args = ["--output-dir", str(root / "out"), "--version", "test",
                         "--platform-id", "macos-arm64", "--btxd", str(btxd),
                         "--btx-cli", str(cli), "--source-root", str(source_root)]
-                with mock.patch.object(self.module.importlib.util, "spec_from_file_location", return_value=spec), \
-                     mock.patch.object(self.module.importlib.util, "module_from_spec", return_value=fake):
+                with mock.patch.object(self.module.importlib.util, "spec_from_file_location", side_effect=select_spec):
                     if broken:
                         with self.assertRaisesRegex(RuntimeError, "invalid final image"):
                             self.module.main(args)
