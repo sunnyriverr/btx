@@ -6,6 +6,10 @@ from feature_modelnet_minio import ModelNetMinioLayoutsTest
 class CorruptResume(ModelNetMinioLayoutsTest):
     def set_test_params(self):super().set_test_params()
     def run_test(self):super().run_test()
+    def _run_partial_cloud_recovery(self):
+        # This specialized control already runs its partial scenario in _run_matrix.
+        # The maintained positive scenario is qualified separately on both binaries.
+        pass
     def _start_container(self):
         ep=super()._start_container();assert ep,self.not_run;return ep
     def _run_matrix(self,fake):
