@@ -1,0 +1,410 @@
+{
+  "base": "a5d1637facc925ff176507fae87fc2042940829d",
+  "producer_source": "c6f9678dd225572528d06c456c16eb4c78bc637c",
+  "commands": [
+    {
+      "label": "source",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "seconds": 0.58,
+      "bounded_stop": false
+    },
+    {
+      "label": "xcode",
+      "args": [
+        "xcodebuild",
+        "-version"
+      ],
+      "returncode": 0,
+      "seconds": 0.55,
+      "bounded_stop": false
+    },
+    {
+      "label": "clang",
+      "args": [
+        "xcrun",
+        "clang++",
+        "--version"
+      ],
+      "returncode": 0,
+      "seconds": 1.59,
+      "bounded_stop": false
+    },
+    {
+      "label": "sdk",
+      "args": [
+        "xcrun",
+        "--sdk",
+        "macosx",
+        "--show-sdk-version"
+      ],
+      "returncode": 0,
+      "seconds": 1.64,
+      "bounded_stop": false
+    },
+    {
+      "label": "patch-tests-697",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "apply",
+        "/Users/runner/work/btx/btx/contrib/devtools/mac-backports/697-tests.patch"
+      ],
+      "returncode": 0,
+      "seconds": 0.54,
+      "bounded_stop": false
+    },
+    {
+      "label": "patch-tests-698",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "apply",
+        "/Users/runner/work/btx/btx/contrib/devtools/mac-backports/698-tests.patch"
+      ],
+      "returncode": 0,
+      "seconds": 0.51,
+      "bounded_stop": false
+    },
+    {
+      "label": "patch-tests-699",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "apply",
+        "/Users/runner/work/btx/btx/contrib/devtools/mac-backports/699-tests.patch"
+      ],
+      "returncode": 0,
+      "seconds": 0.51,
+      "bounded_stop": false
+    },
+    {
+      "label": "patch-tests-700",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "apply",
+        "/Users/runner/work/btx/btx/contrib/devtools/mac-backports/700-tests.patch"
+      ],
+      "returncode": 0,
+      "seconds": 0.54,
+      "bounded_stop": false
+    },
+    {
+      "label": "patch-product-697",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "apply",
+        "/Users/runner/work/btx/btx/contrib/devtools/mac-backports/697-product.patch"
+      ],
+      "returncode": 0,
+      "seconds": 0.56,
+      "bounded_stop": false
+    },
+    {
+      "label": "patch-product-698",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "apply",
+        "/Users/runner/work/btx/btx/contrib/devtools/mac-backports/698-product.patch"
+      ],
+      "returncode": 0,
+      "seconds": 0.54,
+      "bounded_stop": false
+    },
+    {
+      "label": "patch-product-699",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "apply",
+        "/Users/runner/work/btx/btx/contrib/devtools/mac-backports/699-product.patch"
+      ],
+      "returncode": 0,
+      "seconds": 0.53,
+      "bounded_stop": false
+    },
+    {
+      "label": "patch-product-700",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "apply",
+        "/Users/runner/work/btx/btx/contrib/devtools/mac-backports/700-product.patch"
+      ],
+      "returncode": 0,
+      "seconds": 0.52,
+      "bounded_stop": false
+    },
+    {
+      "label": "dependencies",
+      "args": [
+        "brew",
+        "install",
+        "--force-bottle",
+        "boost@1.85",
+        "libevent",
+        "zeromq",
+        "libomp",
+        "qt",
+        "qrencode",
+        "librsvg",
+        "libicns",
+        "python@3.12"
+      ],
+      "returncode": 0,
+      "seconds": 178.62,
+      "bounded_stop": false
+    },
+    {
+      "label": "ssl-prefix",
+      "args": [
+        "brew",
+        "--prefix",
+        "openssl@3"
+      ],
+      "returncode": 0,
+      "seconds": 0.62,
+      "bounded_stop": false
+    },
+    {
+      "label": "python-prefix",
+      "args": [
+        "brew",
+        "--prefix",
+        "python@3.12"
+      ],
+      "returncode": 0,
+      "seconds": 0.6,
+      "bounded_stop": false
+    },
+    {
+      "label": "python-env",
+      "args": [
+        "/opt/homebrew/opt/python@3.12/bin/python3.12",
+        "-m",
+        "venv",
+        "/Users/runner/work/btx/btx/test-env"
+      ],
+      "returncode": 0,
+      "seconds": 3.45,
+      "bounded_stop": false
+    },
+    {
+      "label": "python-crypto",
+      "args": [
+        "/Users/runner/work/btx/btx/test-env/bin/python",
+        "-m",
+        "pip",
+        "install",
+        "cryptography==46.0.4"
+      ],
+      "returncode": 0,
+      "seconds": 1.84,
+      "bounded_stop": false
+    },
+    {
+      "label": "focused-configure",
+      "args": [
+        "cmake",
+        "-S",
+        "/Users/runner/work/btx/btx/product",
+        "-B",
+        "/Users/runner/work/btx/btx/mac-config-build",
+        "-DCMAKE_SUPPRESS_REGENERATION=ON",
+        "-DPython3_EXECUTABLE=/Users/runner/work/btx/btx/test-env/bin/python"
+      ],
+      "returncode": 0,
+      "seconds": 12.39,
+      "bounded_stop": false
+    },
+    {
+      "label": "actual-focused-plan",
+      "args": [
+        "ninja",
+        "-C",
+        "/Users/runner/work/btx/btx/mac-config-build",
+        "-n",
+        "test_btx"
+      ],
+      "returncode": 0,
+      "seconds": 1.78,
+      "bounded_stop": false
+    },
+    {
+      "label": "focused-build",
+      "args": [
+        "ninja",
+        "-C",
+        "/Users/runner/work/btx/btx/mac-config-build",
+        "-j3",
+        "test_btx"
+      ],
+      "returncode": 0,
+      "seconds": 10.28,
+      "bounded_stop": false
+    },
+    {
+      "label": "699-contents",
+      "args": [
+        "/Users/runner/work/btx/btx/mac-config-build/bin/test_backport_699",
+        "--list_content"
+      ],
+      "returncode": 0,
+      "seconds": 0.59,
+      "bounded_stop": false
+    },
+    {
+      "label": "candidate-699-suite",
+      "args": [
+        "/Users/runner/work/btx/btx/mac-config-build/bin/test_backport_699",
+        "--run_test=denialofservice_tests",
+        "--log_level=test_suite",
+        "--report_level=detailed"
+      ],
+      "returncode": 0,
+      "seconds": 2.85,
+      "bounded_stop": false
+    },
+    {
+      "label": "patch-product-699-reverse",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "apply",
+        "--reverse",
+        "/Users/runner/work/btx/btx/contrib/devtools/mac-backports/699-product.patch"
+      ],
+      "returncode": 0,
+      "seconds": 0.54,
+      "bounded_stop": false
+    },
+    {
+      "label": "without699-build",
+      "args": [
+        "ninja",
+        "-C",
+        "/Users/runner/work/btx/btx/mac-config-build",
+        "-j3",
+        "test_btx"
+      ],
+      "returncode": 0,
+      "seconds": 32.67,
+      "bounded_stop": false
+    },
+    {
+      "label": "without699-focused",
+      "args": [
+        "/Users/runner/work/btx/btx/mac-config-build/bin/test_backport_699",
+        "--run_test=denialofservice_tests/orphan_reconsideration_interruptible",
+        "--log_level=test_suite",
+        "--report_level=detailed"
+      ],
+      "returncode": 201,
+      "seconds": 2.4,
+      "bounded_stop": false
+    },
+    {
+      "label": "patch-product-699",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "apply",
+        "/Users/runner/work/btx/btx/contrib/devtools/mac-backports/699-product.patch"
+      ],
+      "returncode": 0,
+      "seconds": 0.59,
+      "bounded_stop": false
+    },
+    {
+      "label": "restore-candidate-699",
+      "args": [
+        "ninja",
+        "-C",
+        "/Users/runner/work/btx/btx/mac-config-build",
+        "-j3",
+        "test_btx"
+      ],
+      "returncode": 0,
+      "seconds": 31.5,
+      "bounded_stop": false
+    },
+    {
+      "label": "698-valid-serving",
+      "args": [
+        "/Users/runner/work/btx/btx/test-env/bin/python",
+        "/Users/runner/work/btx/btx/product/test/functional/p2p_backport_serving_control.py",
+        "--configfile=/Users/runner/work/btx/btx/mac-config-build/test/config.ini",
+        "--tmpdir=/Users/runner/work/btx/btx/test-data/698-serving",
+        "--nocleanup"
+      ],
+      "returncode": 0,
+      "seconds": 4.01,
+      "bounded_stop": false
+    }
+  ],
+  "tests": [
+    {
+      "stage": "candidate",
+      "case": "699-suite",
+      "exit": 0,
+      "binary_sha256": "88445a838bea7545e698f5cf35a13b8c870b50b17d845167f84315b91458fca5"
+    },
+    {
+      "stage": "without699",
+      "case": "699-focused",
+      "exit": 201,
+      "binary_sha256": "1d03dcf464e90fa4739e5a30824d1caa6361cc844791ad9b76a8f78d4969e3e1"
+    },
+    {
+      "stage": "candidate",
+      "case": "698-valid-serving",
+      "exit": 0,
+      "btxd_sha256": "cf23b285507a6eed8d12b7b026e7987acee0e7f6c1f205eb9fd0d4cafdc393fc"
+    }
+  ],
+  "complete": true,
+  "previous_run": 43647289770,
+  "scope": "Original target compile/link settings; temporary main+denialofservice source selection. Not a full test_btx build.",
+  "producer_checkpoint": {
+    "sha256": "cc75953aedc1941e3ac8e1c0b48244e17328902e3c1c3cccaaaeb2975c912580",
+    "bytes": 281486524,
+    "live_bytes": 885240441,
+    "files": 21751,
+    "scope": "task source/build and saved baseline; original product tests only, no release qualification"
+  },
+  "matched_source_mtimes": 14700,
+  "test_cmake_sha256": "abeffe6bb3cb25846b87bd00c2140624fb156881c2fcf8865ff20324bc87be21",
+  "focused_plan_edges": 12,
+  "candidate_699_sha256": "88445a838bea7545e698f5cf35a13b8c870b50b17d845167f84315b91458fca5",
+  "declared_cases": [
+    "DoS_bantime",
+    "block_relay_only_eviction",
+    "orphan_reconsideration_interruptible",
+    "outbound_slow_chain_eviction",
+    "peer_discouragement",
+    "stale_tip_peer_management"
+  ],
+  "without699_sha256": "1d03dcf464e90fa4739e5a30824d1caa6361cc844791ad9b76a8f78d4969e3e1",
+  "final_699_sha256": "88445a838bea7545e698f5cf35a13b8c870b50b17d845167f84315b91458fca5",
+  "serving_control_sha256": "9fd3916a05273b79b1f0b73330b1c0307952ce789a405e07e15ae5fbce138a4c",
+  "acceptance": "Focused699 suite/negative and unrun698 serving control completed; prior4functionalpairs reused."
+}

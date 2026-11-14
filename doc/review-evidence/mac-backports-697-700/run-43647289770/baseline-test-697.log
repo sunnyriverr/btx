@@ -1,0 +1,44 @@
+2026-11-14T22:31:40.417000Z TestFramework (INFO): PRNG seed is: 5223501493577950129
+2026-11-14T22:31:40.418000Z TestFramework (INFO): Initializing test directory /Users/runner/work/btx/btx/test-data/baseline-697
+2026-11-14T22:31:40.691000Z TestFramework (INFO): Control: a ranged watch-only import inside the int32_t bound succeeds
+2026-11-14T22:31:40.698000Z TestFramework (INFO): An inclusive range end of 2^31-1 has no representable exclusive end and is rejected
+2026-11-14T22:31:40.701000Z TestFramework (ERROR): Unexpected exception
+Traceback (most recent call last):
+  File "/Users/runner/work/btx/btx/product/test/functional/test_framework/test_framework.py", line 142, in main
+    self.run_test()
+  File "/Users/runner/work/btx/btx/product/test/functional/wallet_descriptor_range_bounds.py", line 50, in run_test
+    res = self.import_one(w, {"desc": descsum_create(f"wpkh({XPUB}/1/*)"), "timestamp": "now", "range": [2**31 - 1, 2**31 - 1]})
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/runner/work/btx/btx/product/test/functional/wallet_descriptor_range_bounds.py", line 36, in import_one
+    result = wallet.importdescriptors([request])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/runner/work/btx/btx/product/test/functional/test_framework/coverage.py", line 50, in __call__
+    return_val = self.auth_service_proxy_instance.__call__(*args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/runner/work/btx/btx/product/test/functional/test_framework/authproxy.py", line 132, in __call__
+    response, status = self._request('POST', self.__url.path, postdata.encode('utf-8'))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/runner/work/btx/btx/product/test/functional/test_framework/authproxy.py", line 106, in _request
+    return self._get_response()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/runner/work/btx/btx/product/test/functional/test_framework/authproxy.py", line 169, in _get_response
+    http_response = self.__conn.getresponse()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.16/Frameworks/Python.framework/Versions/3.12/lib/python3.12/http/client.py", line 1478, in getresponse
+    response.begin()
+  File "/opt/homebrew/Cellar/python@3.12/3.12.16/Frameworks/Python.framework/Versions/3.12/lib/python3.12/http/client.py", line 343, in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.16/Frameworks/Python.framework/Versions/3.12/lib/python3.12/http/client.py", line 312, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+2026-11-14T22:31:40.849000Z TestFramework (INFO): Not stopping nodes as test failed. The dangling processes will be cleaned up later.
+2026-11-14T22:31:40.849000Z TestFramework (WARNING): Not cleaning up dir /Users/runner/work/btx/btx/test-data/baseline-697
+2026-11-14T22:31:40.850000Z TestFramework (ERROR): Test failed. Test logging available at /Users/runner/work/btx/btx/test-data/baseline-697/test_framework.log
+2026-11-14T22:31:40.850000Z TestFramework (ERROR): 
+2026-11-14T22:31:40.850000Z TestFramework (ERROR): Hint: Call /Users/runner/work/btx/btx/product/test/functional/combine_logs.py '/Users/runner/work/btx/btx/test-data/baseline-697' to consolidate all logs
+2026-11-14T22:31:40.850000Z TestFramework (ERROR): 
+2026-11-14T22:31:40.850000Z TestFramework (ERROR): If this failure happened unexpectedly or intermittently, please file a bug and provide a link or upload of the combined log.
+2026-11-14T22:31:40.850000Z TestFramework (ERROR): https://github.com/btxchain/btx/issues
+2026-11-14T22:31:40.850000Z TestFramework (ERROR): 
+[node 0] Cleaning up leftover process

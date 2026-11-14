@@ -1,0 +1,22 @@
+2026-11-14T22:31:39.168000Z TestFramework (INFO): PRNG seed is: 3515442777413626379
+2026-11-14T22:31:39.171000Z TestFramework (INFO): Initializing test directory /Users/runner/work/btx/btx/test-data/baseline-700
+2026-11-14T22:31:39.846000Z TestFramework (INFO): Testing that an invalid batch element does not reuse the id or version of the previous one...
+2026-11-14T22:31:39.847000Z TestFramework (ERROR): Unexpected exception
+Traceback (most recent call last):
+  File "/Users/runner/work/btx/btx/product/test/functional/test_framework/test_framework.py", line 142, in main
+    self.run_test()
+  File "/Users/runner/work/btx/btx/product/test/functional/interface_rpc.py", line 189, in test_batch_invalid_element_reply
+    assert_equal(response, [
+  File "/Users/runner/work/btx/btx/product/test/functional/test_framework/util.py", line 81, in assert_equal
+    raise AssertionError("not(%s)" % " == ".join(str(arg) for arg in (thing1, thing2) + args))
+AssertionError: not([{'jsonrpc': '2.0', 'result': 0, 'id': 'X'}, {'jsonrpc': '2.0', 'error': {'code': -32600, 'message': 'Invalid Request object'}, 'id': 'X'}] == [{'jsonrpc': '2.0', 'result': 0, 'id': 'X'}, {'result': None, 'error': {'code': -32600, 'message': 'Invalid Request object'}, 'id': None}])
+2026-11-14T22:31:39.903000Z TestFramework (INFO): Not stopping nodes as test failed. The dangling processes will be cleaned up later.
+2026-11-14T22:31:39.903000Z TestFramework (WARNING): Not cleaning up dir /Users/runner/work/btx/btx/test-data/baseline-700
+2026-11-14T22:31:39.903000Z TestFramework (ERROR): Test failed. Test logging available at /Users/runner/work/btx/btx/test-data/baseline-700/test_framework.log
+2026-11-14T22:31:39.904000Z TestFramework (ERROR): 
+2026-11-14T22:31:39.904000Z TestFramework (ERROR): Hint: Call /Users/runner/work/btx/btx/product/test/functional/combine_logs.py '/Users/runner/work/btx/btx/test-data/baseline-700' to consolidate all logs
+2026-11-14T22:31:39.904000Z TestFramework (ERROR): 
+2026-11-14T22:31:39.904000Z TestFramework (ERROR): If this failure happened unexpectedly or intermittently, please file a bug and provide a link or upload of the combined log.
+2026-11-14T22:31:39.904000Z TestFramework (ERROR): https://github.com/btxchain/btx/issues
+2026-11-14T22:31:39.904000Z TestFramework (ERROR): 
+[node 0] Cleaning up leftover process

@@ -1,0 +1,43 @@
+2026-11-14T22:31:41.528000Z TestFramework (INFO): PRNG seed is: 626446868272618639
+2026-11-14T22:31:41.529000Z TestFramework (INFO): Initializing test directory /Users/runner/work/btx/btx/test-data/baseline-698-bloom
+2026-11-14T22:31:42.210000Z TestFramework (INFO): Test that peer is disconnected if it sends mempool message
+2026-11-14T22:31:42.852000Z TestFramework (INFO): Test that peer is disconnected if it sends filterload message
+2026-11-14T22:31:43.273000Z TestFramework (INFO): Test that peer is disconnected if it sends filteradd message
+2026-11-14T22:31:43.504000Z TestFramework (INFO): Test that peer is disconnected if it sends a filterclear message
+2026-11-14T22:31:43.924000Z TestFramework (INFO): Test that peer is disconnected if it requests a filtered block
+2026-11-14T22:32:44.258000Z TestFramework.utils (ERROR): wait_until() failed. Predicate: ''''
+        def test_function():
+            if check_connected:
+                assert self.is_connected
+            return test_function_in()
+'''
+2026-11-14T22:32:44.260000Z TestFramework (ERROR): Unexpected exception
+Traceback (most recent call last):
+  File "/Users/runner/work/btx/btx/product/test/functional/test_framework/test_framework.py", line 142, in main
+    self.run_test()
+  File "/Users/runner/work/btx/btx/product/test/functional/p2p_nobloomfilter_messages.py", line 49, in run_test
+    self.test_message_causes_disconnect(msg_getdata([CInv(MSG_FILTERED_BLOCK, tip)]))
+  File "/Users/runner/work/btx/btx/product/test/functional/p2p_nobloomfilter_messages.py", line 30, in test_message_causes_disconnect
+    peer.wait_for_disconnect()
+  File "/Users/runner/work/btx/btx/product/test/functional/test_framework/p2p.py", line 659, in wait_for_disconnect
+    self.wait_until(test_function, timeout=timeout, check_connected=False)
+  File "/Users/runner/work/btx/btx/product/test/functional/test_framework/p2p.py", line 651, in wait_until
+    wait_until_helper_internal(test_function, timeout=timeout, lock=p2p_lock, timeout_factor=self.timeout_factor, check_interval=check_interval)
+  File "/Users/runner/work/btx/btx/product/test/functional/test_framework/util.py", line 333, in wait_until_helper_internal
+    raise AssertionError("Predicate {} not true after {} seconds".format(predicate_source, timeout))
+AssertionError: Predicate ''''
+        def test_function():
+            if check_connected:
+                assert self.is_connected
+            return test_function_in()
+''' not true after 60.0 seconds
+2026-11-14T22:32:44.317000Z TestFramework (INFO): Not stopping nodes as test failed. The dangling processes will be cleaned up later.
+2026-11-14T22:32:44.317000Z TestFramework (WARNING): Not cleaning up dir /Users/runner/work/btx/btx/test-data/baseline-698-bloom
+2026-11-14T22:32:44.317000Z TestFramework (ERROR): Test failed. Test logging available at /Users/runner/work/btx/btx/test-data/baseline-698-bloom/test_framework.log
+2026-11-14T22:32:44.317000Z TestFramework (ERROR): 
+2026-11-14T22:32:44.317000Z TestFramework (ERROR): Hint: Call /Users/runner/work/btx/btx/product/test/functional/combine_logs.py '/Users/runner/work/btx/btx/test-data/baseline-698-bloom' to consolidate all logs
+2026-11-14T22:32:44.317000Z TestFramework (ERROR): 
+2026-11-14T22:32:44.318000Z TestFramework (ERROR): If this failure happened unexpectedly or intermittently, please file a bug and provide a link or upload of the combined log.
+2026-11-14T22:32:44.318000Z TestFramework (ERROR): https://github.com/btxchain/btx/issues
+2026-11-14T22:32:44.318000Z TestFramework (ERROR): 
+[node 0] Cleaning up leftover process

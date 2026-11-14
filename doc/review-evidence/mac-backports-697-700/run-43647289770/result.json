@@ -1,0 +1,639 @@
+{
+  "base": "a5d1637facc925ff176507fae87fc2042940829d",
+  "producer_source": "c6f9678dd225572528d06c456c16eb4c78bc637c",
+  "commands": [
+    {
+      "label": "source",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "seconds": 0.53,
+      "bounded_stop": false
+    },
+    {
+      "label": "xcode",
+      "args": [
+        "xcodebuild",
+        "-version"
+      ],
+      "returncode": 0,
+      "seconds": 0.52,
+      "bounded_stop": false
+    },
+    {
+      "label": "clang",
+      "args": [
+        "xcrun",
+        "clang++",
+        "--version"
+      ],
+      "returncode": 0,
+      "seconds": 1.09,
+      "bounded_stop": false
+    },
+    {
+      "label": "sdk",
+      "args": [
+        "xcrun",
+        "--sdk",
+        "macosx",
+        "--show-sdk-version"
+      ],
+      "returncode": 0,
+      "seconds": 1.56,
+      "bounded_stop": false
+    },
+    {
+      "label": "dependencies",
+      "args": [
+        "brew",
+        "install",
+        "--force-bottle",
+        "boost@1.85",
+        "libevent",
+        "zeromq",
+        "libomp",
+        "qt",
+        "qrencode",
+        "librsvg",
+        "libicns",
+        "python@3.12"
+      ],
+      "returncode": 0,
+      "seconds": 204.39,
+      "bounded_stop": false
+    },
+    {
+      "label": "ssl-prefix",
+      "args": [
+        "brew",
+        "--prefix",
+        "openssl@3"
+      ],
+      "returncode": 0,
+      "seconds": 0.68,
+      "bounded_stop": false
+    },
+    {
+      "label": "boost-prefix",
+      "args": [
+        "brew",
+        "--prefix",
+        "boost@1.85"
+      ],
+      "returncode": 0,
+      "seconds": 0.63,
+      "bounded_stop": false
+    },
+    {
+      "label": "python-prefix",
+      "args": [
+        "brew",
+        "--prefix",
+        "python@3.12"
+      ],
+      "returncode": 0,
+      "seconds": 0.59,
+      "bounded_stop": false
+    },
+    {
+      "label": "python-env",
+      "args": [
+        "/opt/homebrew/opt/python@3.12/bin/python3.12",
+        "-m",
+        "venv",
+        "/Users/runner/work/btx/btx/test-env"
+      ],
+      "returncode": 0,
+      "seconds": 3.53,
+      "bounded_stop": false
+    },
+    {
+      "label": "python-crypto",
+      "args": [
+        "/Users/runner/work/btx/btx/test-env/bin/python",
+        "-m",
+        "pip",
+        "install",
+        "cryptography==46.0.4"
+      ],
+      "returncode": 0,
+      "seconds": 1.89,
+      "bounded_stop": false
+    },
+    {
+      "label": "patch-tests-697",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "apply",
+        "/Users/runner/work/btx/btx/contrib/devtools/mac-backports/697-tests.patch"
+      ],
+      "returncode": 0,
+      "seconds": 0.63,
+      "bounded_stop": false
+    },
+    {
+      "label": "patch-tests-698",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "apply",
+        "/Users/runner/work/btx/btx/contrib/devtools/mac-backports/698-tests.patch"
+      ],
+      "returncode": 0,
+      "seconds": 0.6,
+      "bounded_stop": false
+    },
+    {
+      "label": "patch-tests-699",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "apply",
+        "/Users/runner/work/btx/btx/contrib/devtools/mac-backports/699-tests.patch"
+      ],
+      "returncode": 0,
+      "seconds": 0.53,
+      "bounded_stop": false
+    },
+    {
+      "label": "patch-tests-700",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "apply",
+        "/Users/runner/work/btx/btx/contrib/devtools/mac-backports/700-tests.patch"
+      ],
+      "returncode": 0,
+      "seconds": 0.6,
+      "bounded_stop": false
+    },
+    {
+      "label": "configure",
+      "args": [
+        "cmake",
+        "-S",
+        "/Users/runner/work/btx/btx/product",
+        "-B",
+        "/Users/runner/work/btx/btx/mac-config-build",
+        "-G",
+        "Ninja",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_PREFIX_PATH=/opt/homebrew",
+        "-DCMAKE_OSX_ARCHITECTURES=arm64",
+        "-DBoost_INCLUDE_DIR=/opt/homebrew/opt/boost@1.85/include",
+        "-DOPENSSL_ROOT_DIR=/opt/homebrew/opt/openssl@3",
+        "-DOPENSSL_INCLUDE_DIR=/opt/homebrew/opt/openssl@3/include",
+        "-DOPENSSL_SSL_LIBRARY=/opt/homebrew/opt/openssl@3/lib/libssl.a",
+        "-DOPENSSL_CRYPTO_LIBRARY=/opt/homebrew/opt/openssl@3/lib/libcrypto.a",
+        "-DOPENSSL_USE_STATIC_LIBS=ON",
+        "-DWITH_ZMQ=ON",
+        "-DBTX_ENABLE_METAL=ON",
+        "-DBTX_MATMUL_METAL_PRECOMPILE_KERNELS=ON",
+        "-DWITH_MODELNET=ON",
+        "-DBUILD_GUI=ON",
+        "-DWITH_QT_VERSION=6",
+        "-DENABLE_WALLET=ON",
+        "-DWITH_SQLITE=ON",
+        "-DBUILD_BENCH=OFF",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+        "-DPython3_EXECUTABLE=/Users/runner/work/btx/btx/test-env/bin/python"
+      ],
+      "returncode": 0,
+      "seconds": 15.48,
+      "bounded_stop": false
+    },
+    {
+      "label": "baseline-dirty-explanation",
+      "args": [
+        "ninja",
+        "-C",
+        "/Users/runner/work/btx/btx/mac-config-build",
+        "-d",
+        "explain",
+        "-n",
+        "btxd",
+        "btx-cli"
+      ],
+      "returncode": 0,
+      "seconds": 0.6,
+      "bounded_stop": false
+    },
+    {
+      "label": "baseline-node-plan",
+      "args": [
+        "ninja",
+        "-C",
+        "/Users/runner/work/btx/btx/mac-config-build",
+        "-n",
+        "btxd",
+        "btx-cli"
+      ],
+      "returncode": 0,
+      "seconds": 0.61,
+      "bounded_stop": false
+    },
+    {
+      "label": "baseline-node-build",
+      "args": [
+        "ninja",
+        "-C",
+        "/Users/runner/work/btx/btx/mac-config-build",
+        "-j3",
+        "btxd",
+        "btx-cli"
+      ],
+      "returncode": 0,
+      "seconds": 409.85,
+      "bounded_stop": false
+    },
+    {
+      "label": "baseline-test-700",
+      "args": [
+        "/Users/runner/work/btx/btx/test-env/bin/python",
+        "/Users/runner/work/btx/btx/product/test/functional/backport_rpc_focus.py",
+        "--configfile=/Users/runner/work/btx/btx/mac-config-build/test/config.ini",
+        "--tmpdir=/Users/runner/work/btx/btx/test-data/baseline-700",
+        "--nocleanup",
+        "--timeout-factor=1"
+      ],
+      "returncode": 1,
+      "seconds": 1.8,
+      "bounded_stop": false
+    },
+    {
+      "label": "baseline-test-697",
+      "args": [
+        "/Users/runner/work/btx/btx/test-env/bin/python",
+        "/Users/runner/work/btx/btx/product/test/functional/wallet_descriptor_range_bounds.py",
+        "--configfile=/Users/runner/work/btx/btx/mac-config-build/test/config.ini",
+        "--tmpdir=/Users/runner/work/btx/btx/test-data/baseline-697",
+        "--nocleanup",
+        "--timeout-factor=1",
+        "--descriptors"
+      ],
+      "returncode": 1,
+      "seconds": 1.04,
+      "bounded_stop": false
+    },
+    {
+      "label": "baseline-test-698-bloom",
+      "args": [
+        "/Users/runner/work/btx/btx/test-env/bin/python",
+        "/Users/runner/work/btx/btx/product/test/functional/p2p_nobloomfilter_messages.py",
+        "--configfile=/Users/runner/work/btx/btx/mac-config-build/test/config.ini",
+        "--tmpdir=/Users/runner/work/btx/btx/test-data/baseline-698-bloom",
+        "--nocleanup",
+        "--timeout-factor=1"
+      ],
+      "returncode": 1,
+      "seconds": 63.27,
+      "bounded_stop": false
+    },
+    {
+      "label": "baseline-test-698-empty",
+      "args": [
+        "/Users/runner/work/btx/btx/test-env/bin/python",
+        "/Users/runner/work/btx/btx/product/test/functional/p2p_getblocktxn_empty.py",
+        "--configfile=/Users/runner/work/btx/btx/mac-config-build/test/config.ini",
+        "--tmpdir=/Users/runner/work/btx/btx/test-data/baseline-698-empty",
+        "--nocleanup",
+        "--timeout-factor=1"
+      ],
+      "returncode": 1,
+      "seconds": 61.34,
+      "bounded_stop": false
+    },
+    {
+      "label": "patch-product-697",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "apply",
+        "/Users/runner/work/btx/btx/contrib/devtools/mac-backports/697-product.patch"
+      ],
+      "returncode": 0,
+      "seconds": 0.52,
+      "bounded_stop": false
+    },
+    {
+      "label": "patch-product-698",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "apply",
+        "/Users/runner/work/btx/btx/contrib/devtools/mac-backports/698-product.patch"
+      ],
+      "returncode": 0,
+      "seconds": 0.55,
+      "bounded_stop": false
+    },
+    {
+      "label": "patch-product-699",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "apply",
+        "/Users/runner/work/btx/btx/contrib/devtools/mac-backports/699-product.patch"
+      ],
+      "returncode": 0,
+      "seconds": 0.56,
+      "bounded_stop": false
+    },
+    {
+      "label": "patch-product-700",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "apply",
+        "/Users/runner/work/btx/btx/contrib/devtools/mac-backports/700-product.patch"
+      ],
+      "returncode": 0,
+      "seconds": 0.6,
+      "bounded_stop": false
+    },
+    {
+      "label": "candidate-diff",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "diff",
+        "--stat"
+      ],
+      "returncode": 0,
+      "seconds": 0.51,
+      "bounded_stop": false
+    },
+    {
+      "label": "candidate-exact-diff",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "diff",
+        "--binary"
+      ],
+      "returncode": 0,
+      "seconds": 0.59,
+      "bounded_stop": false
+    },
+    {
+      "label": "candidate-node-plan",
+      "args": [
+        "ninja",
+        "-C",
+        "/Users/runner/work/btx/btx/mac-config-build",
+        "-n",
+        "btxd",
+        "btx-cli"
+      ],
+      "returncode": 0,
+      "seconds": 0.66,
+      "bounded_stop": false
+    },
+    {
+      "label": "candidate-node-build",
+      "args": [
+        "ninja",
+        "-C",
+        "/Users/runner/work/btx/btx/mac-config-build",
+        "-j3",
+        "btxd",
+        "btx-cli"
+      ],
+      "returncode": 0,
+      "seconds": 53.77,
+      "bounded_stop": false
+    },
+    {
+      "label": "candidate-test-700",
+      "args": [
+        "/Users/runner/work/btx/btx/test-env/bin/python",
+        "/Users/runner/work/btx/btx/product/test/functional/backport_rpc_focus.py",
+        "--configfile=/Users/runner/work/btx/btx/mac-config-build/test/config.ini",
+        "--tmpdir=/Users/runner/work/btx/btx/test-data/candidate-700",
+        "--nocleanup",
+        "--timeout-factor=1"
+      ],
+      "returncode": 0,
+      "seconds": 2.27,
+      "bounded_stop": false
+    },
+    {
+      "label": "candidate-test-697",
+      "args": [
+        "/Users/runner/work/btx/btx/test-env/bin/python",
+        "/Users/runner/work/btx/btx/product/test/functional/wallet_descriptor_range_bounds.py",
+        "--configfile=/Users/runner/work/btx/btx/mac-config-build/test/config.ini",
+        "--tmpdir=/Users/runner/work/btx/btx/test-data/candidate-697",
+        "--nocleanup",
+        "--timeout-factor=1",
+        "--descriptors"
+      ],
+      "returncode": 0,
+      "seconds": 5.57,
+      "bounded_stop": false
+    },
+    {
+      "label": "candidate-test-698-bloom",
+      "args": [
+        "/Users/runner/work/btx/btx/test-env/bin/python",
+        "/Users/runner/work/btx/btx/product/test/functional/p2p_nobloomfilter_messages.py",
+        "--configfile=/Users/runner/work/btx/btx/mac-config-build/test/config.ini",
+        "--tmpdir=/Users/runner/work/btx/btx/test-data/candidate-698-bloom",
+        "--nocleanup",
+        "--timeout-factor=1"
+      ],
+      "returncode": 0,
+      "seconds": 6.01,
+      "bounded_stop": false
+    },
+    {
+      "label": "candidate-test-698-empty",
+      "args": [
+        "/Users/runner/work/btx/btx/test-env/bin/python",
+        "/Users/runner/work/btx/btx/product/test/functional/p2p_getblocktxn_empty.py",
+        "--configfile=/Users/runner/work/btx/btx/mac-config-build/test/config.ini",
+        "--tmpdir=/Users/runner/work/btx/btx/test-data/candidate-698-empty",
+        "--nocleanup",
+        "--timeout-factor=1"
+      ],
+      "returncode": 0,
+      "seconds": 2.49,
+      "bounded_stop": false
+    },
+    {
+      "label": "candidate-unit-plan",
+      "args": [
+        "ninja",
+        "-C",
+        "/Users/runner/work/btx/btx/mac-config-build",
+        "-n",
+        "test_btx"
+      ],
+      "returncode": 0,
+      "seconds": 0.63,
+      "bounded_stop": false
+    },
+    {
+      "label": "candidate-unit-build",
+      "args": [
+        "ninja",
+        "-C",
+        "/Users/runner/work/btx/btx/mac-config-build",
+        "-j3",
+        "test_btx"
+      ],
+      "returncode": 130,
+      "seconds": 1200.14,
+      "bounded_stop": true
+    }
+  ],
+  "tests": [
+    {
+      "stage": "baseline",
+      "case": "700",
+      "exit": 1,
+      "log": "baseline-test-700.log",
+      "runtime_logs": [
+        "baseline-700-runtime-0.log",
+        "baseline-700-runtime-1.log"
+      ],
+      "verdict": "failure_needs_signature_review"
+    },
+    {
+      "stage": "baseline",
+      "case": "697",
+      "exit": 1,
+      "log": "baseline-test-697.log",
+      "runtime_logs": [
+        "baseline-697-runtime-0.log",
+        "baseline-697-runtime-1.log"
+      ],
+      "verdict": "failure_needs_signature_review"
+    },
+    {
+      "stage": "baseline",
+      "case": "698-bloom",
+      "exit": 1,
+      "log": "baseline-test-698-bloom.log",
+      "runtime_logs": [
+        "baseline-698-bloom-runtime-0.log",
+        "baseline-698-bloom-runtime-1.log"
+      ],
+      "verdict": "failure_needs_signature_review"
+    },
+    {
+      "stage": "baseline",
+      "case": "698-empty",
+      "exit": 1,
+      "log": "baseline-test-698-empty.log",
+      "runtime_logs": [
+        "baseline-698-empty-runtime-0.log",
+        "baseline-698-empty-runtime-1.log"
+      ],
+      "verdict": "failure_needs_signature_review"
+    },
+    {
+      "stage": "candidate",
+      "case": "700",
+      "exit": 0,
+      "log": "candidate-test-700.log",
+      "runtime_logs": [
+        "candidate-700-runtime-0.log",
+        "candidate-700-runtime-1.log"
+      ],
+      "verdict": "passed"
+    },
+    {
+      "stage": "candidate",
+      "case": "697",
+      "exit": 0,
+      "log": "candidate-test-697.log",
+      "runtime_logs": [
+        "candidate-697-runtime-0.log",
+        "candidate-697-runtime-1.log"
+      ],
+      "verdict": "passed"
+    },
+    {
+      "stage": "candidate",
+      "case": "698-bloom",
+      "exit": 0,
+      "log": "candidate-test-698-bloom.log",
+      "runtime_logs": [
+        "candidate-698-bloom-runtime-0.log",
+        "candidate-698-bloom-runtime-1.log"
+      ],
+      "verdict": "passed"
+    },
+    {
+      "stage": "candidate",
+      "case": "698-empty",
+      "exit": 0,
+      "log": "candidate-test-698-empty.log",
+      "runtime_logs": [
+        "candidate-698-empty-runtime-0.log",
+        "candidate-698-empty-runtime-1.log"
+      ],
+      "verdict": "passed"
+    }
+  ],
+  "complete": false,
+  "image": "20261104.0514.1",
+  "restore": {
+    "objects": 3365,
+    "matched_source_mtimes_restored": 14346,
+    "different_or_missing_source_files": 218,
+    "range_bytes": 211531366
+  },
+  "plans": {
+    "baseline-node-plan": {
+      "edges": 2,
+      "cap": 1500,
+      "targets": [
+        "btxd",
+        "btx-cli"
+      ]
+    },
+    "candidate-node-plan": {
+      "edges": 2,
+      "cap": 100,
+      "targets": [
+        "btxd",
+        "btx-cli"
+      ]
+    },
+    "candidate-unit-plan": {
+      "edges": 2,
+      "cap": 900,
+      "targets": [
+        "test_btx"
+      ]
+    }
+  },
+  "baseline_binary": {
+    "btxd": "88cffcc9c43ffbd1d642a65e14379b5015c18c46e4514df28378385247af6f62",
+    "btx-cli": "9e88d7e256725d52828f76a61d6a360f57eeede43cdd92739ed22b57a1d4dcfe"
+  },
+  "candidate_binary": {
+    "btxd": "cf23b285507a6eed8d12b7b026e7987acee0e7f6c1f205eb9fd0d4cafdc393fc",
+    "btx-cli": "9e88d7e256725d52828f76a61d6a360f57eeede43cdd92739ed22b57a1d4dcfe"
+  },
+  "error": "candidate-unit-build failed; exact log retained"
+}
