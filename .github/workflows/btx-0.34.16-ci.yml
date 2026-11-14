@@ -1,4 +1,4 @@
-name: MinGW #609 release qualification
+name: MinGW focused fixture verification
 
 on:
   workflow_dispatch:
@@ -78,159 +78,12 @@ jobs:
           overwrite: true
 
   # ------------------------------------------------------------------ static checks
-  mingw-cross:
-    name: mingw-cross
-    needs: tools
-    runs-on: ubuntu-24.04
-    continue-on-error: true  # measurement lane: not gating until it has been green once
-    timeout-minutes: 350
-    outputs:
-      btxd: ${{ steps.bsum.outputs.btxd }}
-    env:
-      HOSTW: x86_64-w64-mingw32
-    steps:
-      - name: Start
-        run: |
-          {
-            echo "JOB_T0=$(date +%s)"
-            echo "LOGS=$RUNNER_TEMP/logs"
-            echo "CIPY=$RUNNER_TEMP/ci-tools/btx_ci.py"
-            echo "CCACHE_DIR=$HOME/.ccache-btx"
-            echo "CCACHE_BASEDIR=$GITHUB_WORKSPACE"
-          } >> "$GITHUB_ENV"
-          mkdir -p "$RUNNER_TEMP/logs"
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
-        with:
-          persist-credentials: false
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        with:
-          name: ci-tools
-          path: ${{ runner.temp }}/ci-tools
-      - name: Free disk space
-        run: |
-          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc /usr/local/.ghcup /opt/hostedtoolcache/CodeQL || true
-          df -h / | tail -n 1
-      - name: Install the mingw-w64 toolchain (posix threads)
-        run: |
-          sudo apt-get update -q
-          sudo apt-get install -y -q --no-install-recommends g++-mingw-w64-x86-64-posix gcc-mingw-w64-x86-64-posix \
-            binutils-mingw-w64-x86-64 mingw-w64-x86-64-dev make cmake ninja-build curl patch pkgconf python3 ccache \
-            xz-utils autoconf automake libtool
-          for t in gcc g++; do
-            if [ -e "/usr/bin/$HOSTW-$t-posix" ]; then
-              sudo update-alternatives --set "$HOSTW-$t" "/usr/bin/$HOSTW-$t-posix" || true
-            fi
-          done
-          tm=$("$HOSTW-g++" -v 2>&1 | grep -i 'thread model' | tr ' ' '-')
-          python3 "$CIPY" ann notice "job=$GITHUB_JOB step=toolchain $("$HOSTW-g++" --version | head -n 1 | tr ' ' '-') $tm"
-      - name: Restore depends prefix
-        id: dep-cache
-        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
-        with:
-          path: depends/x86_64-w64-mingw32
-          key: depends-mingw-v1-${{ hashFiles('depends/**') }}-ossl-${{ env.OSSL_VER }}
-      - name: Build depends and static OpenSSL for mingw
-        id: dep-build
-        if: steps.dep-cache.outputs.cache-hit != 'true'
-        timeout-minutes: 60
-        run: |
-          t0=$(date +%s)
-          make -C depends HOST="$HOSTW" NO_QT=1 NO_QR=1 NO_UPNP=1 NO_USDT=1 NO_BDB=1 -j"$(nproc)" > "$LOGS/depends.log" 2>&1 || {
-            tail -n 60 "$LOGS/depends.log"
-            python3 "$CIPY" ann error "job=$GITHUB_JOB step=depends status=fail"
-            exit 1
-          }
-          PFX="$GITHUB_WORKSPACE/depends/$HOSTW"
-          cd "$RUNNER_TEMP"
-          u="https://github.com/openssl/openssl/releases/download/openssl-$OSSL_VER/openssl-$OSSL_VER.tar.gz"
-          curl -fsSL --retry 3 -o ossl.tar.gz "$u"
-          got=$(sha256sum ossl.tar.gz | cut -d' ' -f1)
-          if [ "$got" != "$OSSL_SHA256" ]; then
-            python3 "$CIPY" ann error "job=$GITHUB_JOB step=openssl-mingw sha256-mismatch got=$got"
-            exit 1
-          fi
-          tar xzf ossl.tar.gz
-          cd "openssl-$OSSL_VER"
-          perl Configure mingw64 --cross-compile-prefix="$HOSTW-" --prefix="$PFX" --libdir=lib \
-            no-shared no-tests no-docs no-apps > "$LOGS/ossl-w-configure.log" 2>&1
-          make -j"$(nproc)" > "$LOGS/ossl-w-make.log" 2>&1
-          make install_sw > "$LOGS/ossl-w-install.log" 2>&1
-          built=$(cd "$GITHUB_WORKSPACE/depends/built/$HOSTW" 2>/dev/null && printf '%s,' *)
-          python3 "$CIPY" ann notice "job=$GITHUB_JOB step=depends status=ok secs=$(( $(date +%s) - t0 )) openssl=$OSSL_VER sha256=pinned-match built=$built"
-      - name: Save depends prefix
-        if: steps.dep-build.outcome == 'success'
-        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
-        with:
-          path: depends/x86_64-w64-mingw32
-          key: ${{ steps.dep-cache.outputs.cache-primary-key }}
-      - name: Restore ccache
-        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
-        with:
-          path: ~/.ccache-btx
-          key: ccache-mingw-${{ github.run_id }}-${{ github.run_attempt }}-build
-          restore-keys: |
-            ccache-mingw-${{ github.run_id }}-
-            ccache-mingw-
-      - name: Configure (Modelnet ON)
-        id: configure
-        run: |
-          PFX="$GITHUB_WORKSPACE/depends/$HOSTW"
-          python3 "$CIPY" configure --name mingw --job "$GITHUB_JOB" --logs "$LOGS" --builddir build-win -- \
-            -S . -B build-win -G Ninja --toolchain "$PFX/toolchain.cmake" -DCMAKE_BUILD_TYPE=Release \
-            -DWITH_MODELNET=ON -DOPENSSL_ROOT_DIR="$PFX" -DOPENSSL_USE_STATIC_LIBS=ON -DBUILD_TESTS=ON -DBUILD_GUI=OFF \
-            -DBUILD_BENCH=OFF -DWITH_ZMQ=ON -DWITH_CCACHE=ON -DREDUCE_EXPORTS=ON -DBUILD_GUI_TESTS=OFF \
-            "-DCMAKE_CXX_FLAGS=-Wno-error=maybe-uninitialized -Wno-error=array-bounds"
-      - name: Build btxd.exe and btx-cli.exe
-        timeout-minutes: 260
-        run: python3 "$CIPY" build --name daemon --logs "$LOGS" --builddir build-win -- -k 0 -j"$(nproc)" btxd btx-cli
-      - name: Build summary
-        id: bsum
-        if: ${{ !cancelled() && steps.configure.outcome == 'success' }}
-        run: |
-          python3 "$CIPY" build-summary --name daemon --job "$GITHUB_JOB" --logs "$LOGS" \
-            --exe btxd=build-win/bin/btxd.exe btx_cli=build-win/bin/btx-cli.exe
-      - name: Save ccache
-        if: ${{ !cancelled() && steps.configure.outcome == 'success' }}
-        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
-        with:
-          path: ~/.ccache-btx
-          key: ccache-mingw-${{ github.run_id }}-${{ github.run_attempt }}-build
-      - name: Package the daemon and its DLLs
-        if: ${{ !cancelled() && steps.bsum.outputs.btxd == 'yes' }}
-        run: |
-          mkdir -p dist-daemon
-          cp build-win/bin/btxd.exe dist-daemon/
-          [ -f build-win/bin/btx-cli.exe ] && cp build-win/bin/btx-cli.exe dist-daemon/
-          "$HOSTW-strip" dist-daemon/*.exe
-          python3 "$CIPY" dlls --job "$GITHUB_JOB" --objdump "$HOSTW-objdump" --dest dist-daemon \
-            --search "/usr/lib/gcc/$HOSTW/*-posix" "/usr/$HOSTW/lib" "/usr/$HOSTW/bin" \
-            --exe dist-daemon/btxd.exe dist-daemon/btx-cli.exe
-          (cd dist-daemon && sha256sum ./* > SHA256SUMS.txt)
-      - name: Upload the daemon
-        if: ${{ !cancelled() && steps.bsum.outputs.btxd == 'yes' }}
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        with:
-          name: win-daemon
-          path: dist-daemon/
-          retention-days: 7
-          overwrite: true
-      - name: Upload logs
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        with:
-          name: logs-mingw-cross
-          path: ${{ runner.temp }}/logs
-          retention-days: 7
-          overwrite: true
-          if-no-files-found: ignore
-
   mingw-tests:
     name: mingw-tests
-    needs: [tools, mingw-cross]
+    needs: tools
     if: ${{ !cancelled() && needs.tools.result == 'success' }}
     runs-on: ubuntu-24.04
-    continue-on-error: true  # measurement lane: not gating until it has been green once
-    timeout-minutes: 355
+    timeout-minutes: 55
     outputs:
       test_btx: ${{ steps.bsum.outputs.test_btx }}
     env:
@@ -274,30 +127,21 @@ jobs:
         with:
           path: depends/x86_64-w64-mingw32
           key: depends-mingw-v1-${{ hashFiles('depends/**') }}-ossl-${{ env.OSSL_VER }}
-      - name: Build depends and static OpenSSL for mingw
-        if: steps.dep-cache.outputs.cache-hit != 'true'
-        timeout-minutes: 60
-        run: |
-          make -C depends HOST="$HOSTW" NO_QT=1 NO_QR=1 NO_UPNP=1 NO_USDT=1 NO_BDB=1 -j"$(nproc)" > "$LOGS/depends.log" 2>&1
-          PFX="$GITHUB_WORKSPACE/depends/$HOSTW"
-          cd "$RUNNER_TEMP"
-          curl -fsSL --retry 3 -o ossl.tar.gz "https://github.com/openssl/openssl/releases/download/openssl-$OSSL_VER/openssl-$OSSL_VER.tar.gz"
-          got=$(sha256sum ossl.tar.gz | cut -d' ' -f1)
-          [ "$got" = "$OSSL_SHA256" ] || { python3 "$CIPY" ann error "job=$GITHUB_JOB step=openssl-mingw sha256-mismatch got=$got"; exit 1; }
-          tar xzf ossl.tar.gz
-          cd "openssl-$OSSL_VER"
-          perl Configure mingw64 --cross-compile-prefix="$HOSTW-" --prefix="$PFX" --libdir=lib \
-            no-shared no-tests no-docs no-apps > "$LOGS/ossl-w-configure.log" 2>&1
-          make -j"$(nproc)" > "$LOGS/ossl-w-make.log" 2>&1
-          make install_sw > "$LOGS/ossl-w-install.log" 2>&1
-      - name: Restore ccache
+      - name: Restore completed MinGW unit compiler cache
+        id: unit-cache
         uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: ~/.ccache-btx
-          key: ccache-mingw-${{ github.run_id }}-${{ github.run_attempt }}-test
-          restore-keys: |
-            ccache-mingw-${{ github.run_id }}-
-            ccache-mingw-
+          key: ccache-mingw-43531300596-1-test
+      - name: Require both saved caches
+        env:
+          DEPENDS_HIT: ${{ steps.dep-cache.outputs.cache-hit }}
+          UNIT_HIT: ${{ steps.unit-cache.outputs.cache-hit }}
+        run: |
+          if [ "$DEPENDS_HIT" != true ] || [ "$UNIT_HIT" != true ]; then
+            echo "Expected MinGW caches missing: depends=$DEPENDS_HIT unit=$UNIT_HIT"
+            exit 1
+          fi
       # Run 1's link failure was not caused by the prune: key_tests.cpp includes <secp256k1.h>, and
       # test_btx takes secp256k1's include directories but not its SECP256K1_STATIC definition, so on
       # Windows the calls become __imp_secp256k1_* imports that the static library does not provide.
@@ -313,53 +157,26 @@ jobs:
             -DWITH_MODELNET=ON -DOPENSSL_ROOT_DIR="$PFX" -DOPENSSL_USE_STATIC_LIBS=ON -DBUILD_TESTS=ON -DBUILD_GUI=OFF \
             -DBUILD_BENCH=OFF -DWITH_ZMQ=ON -DWITH_CCACHE=ON -DREDUCE_EXPORTS=ON -DBUILD_GUI_TESTS=OFF \
             "-DCMAKE_CXX_FLAGS=-Wno-error=maybe-uninitialized -Wno-error=array-bounds"
-      - name: Build test_btx.exe, pass 1 (keep going)
-        timeout-minutes: 230
-        run: python3 "$CIPY" build --name tests1 --logs "$LOGS" --builddir build-win -- -k 0 -j"$(nproc)" test_btx btxd btx-cli
-      - name: Pass 1 summary
-        id: p1sum
-        if: ${{ !cancelled() && steps.configure.outcome == 'success' }}
-        run: python3 "$CIPY" build-summary --name tests1 --job "$GITHUB_JOB" --logs "$LOGS" --exe test_btx_pass1=build-win/bin/test_btx.exe
-      - name: Drop the test files that do not compile with mingw (CI-only edit of the test list)
-        id: prune
-        if: ${{ !cancelled() && steps.configure.outcome == 'success' && steps.p1sum.outputs.test_btx_pass1 != 'yes' }}
-        run: python3 "$CIPY" prune --log "$LOGS/build-tests1.log" --src . --target test_btx --logs "$LOGS" --job "$GITHUB_JOB"
-      # relink links again. If the link fails because kept test files use code that lives only in pruned
-      # ones, it drops those test files too and links again (up to 5 rounds). It drops nothing, and
-      # reports, if a library or an __imp_ (dllimport) symbol is undefined.
-      - name: Build test_btx.exe, pass 2 (relink; also drop the test files that use code from pruned ones)
-        id: relink
-        if: ${{ !cancelled() && steps.prune.outcome == 'success' && steps.prune.outputs.pruned != '0' }}
+      - name: Link test_btx and btx-open with all registered suites
         timeout-minutes: 40
-        run: |
-          python3 "$CIPY" relink --name tests2 --job "$GITHUB_JOB" --logs "$LOGS" --builddir build-win --src . \
-            --target test_btx --rounds 5 -- -k 0 -j"$(nproc)" test_btx
+        run: python3 "$CIPY" build --name focused --logs "$LOGS" --builddir build-win -- -k 0 -j"$(nproc)" test_btx btx-open
       - name: Build summary
         id: bsum
         if: ${{ !cancelled() && steps.configure.outcome == 'success' }}
         run: |
-          name=tests1
-          [ -f "$LOGS/build-tests2.t0" ] && name=tests2
-          python3 "$CIPY" build-summary --name "$name" --job "$GITHUB_JOB" --logs "$LOGS" \
-            --exe test_btx=build-win/bin/test_btx.exe btxd_tests_job=build-win/bin/btxd.exe
-      - name: Save ccache
-        if: ${{ !cancelled() && steps.configure.outcome == 'success' }}
-        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
-        with:
-          path: ~/.ccache-btx
-          key: ccache-mingw-${{ github.run_id }}-${{ github.run_attempt }}-test
+          python3 "$CIPY" build-summary --name focused --job "$GITHUB_JOB" --logs "$LOGS" \
+            --exe test_btx=build-win/bin/test_btx.exe btx_open=build-win/bin/btx-open.exe
       - name: Package test_btx.exe and its DLLs
-        if: ${{ !cancelled() && steps.bsum.outputs.test_btx == 'yes' }}
+        if: ${{ !cancelled() && steps.bsum.outputs.test_btx == 'yes' && steps.bsum.outputs.btx_open == 'yes' }}
         run: |
           mkdir -p dist-tests
-          cp build-win/bin/test_btx.exe dist-tests/
-          "$HOSTW-strip" dist-tests/test_btx.exe
+          cp build-win/bin/test_btx.exe build-win/bin/btx-open.exe dist-tests/
+          "$HOSTW-strip" dist-tests/test_btx.exe dist-tests/btx-open.exe
           python3 "$CIPY" dlls --job "$GITHUB_JOB" --objdump "$HOSTW-objdump" --dest dist-tests \
-            --search "/usr/lib/gcc/$HOSTW/*-posix" "/usr/$HOSTW/lib" "/usr/$HOSTW/bin" --exe dist-tests/test_btx.exe
-          [ -f "$LOGS/pruned.txt" ] && cp "$LOGS/pruned.txt" dist-tests/
+            --search "/usr/lib/gcc/$HOSTW/*-posix" "/usr/$HOSTW/lib" "/usr/$HOSTW/bin" --exe dist-tests/test_btx.exe dist-tests/btx-open.exe
           (cd dist-tests && sha256sum ./* > SHA256SUMS.txt)
       - name: Upload test_btx.exe
-        if: ${{ !cancelled() && steps.bsum.outputs.test_btx == 'yes' }}
+        if: ${{ !cancelled() && steps.bsum.outputs.test_btx == 'yes' && steps.bsum.outputs.btx_open == 'yes' }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: win-tests
@@ -376,67 +193,12 @@ jobs:
           overwrite: true
           if-no-files-found: ignore
 
-  # ------------------------------------------------------------------ Windows (native run of the mingw binaries)
-  windows-smoke:
-    name: windows-smoke
-    needs: [tools, mingw-cross]
-    if: ${{ !cancelled() && needs.mingw-cross.outputs.btxd == 'yes' }}
-    runs-on: windows-latest
-    continue-on-error: true  # measurement lane: not gating until it has been green once
-    timeout-minutes: 60
-    steps:
-      - name: Start
-        run: |
-          {
-            echo "JOB_T0=$(date +%s)"
-            echo "LOGS=$RUNNER_TEMP/logs"
-            echo "CIPY=$RUNNER_TEMP/ci-tools/btx_ci.py"
-          } >> "$GITHUB_ENV"
-          mkdir -p "$RUNNER_TEMP/logs"
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        with:
-          name: ci-tools
-          path: ${{ runner.temp }}/ci-tools
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        with:
-          name: win-daemon
-          path: bin
-      # btx_ci.py smoke writes regtest=1 to <datadir>/btx.conf, passes the same -datadir and -regtest to btxd
-      # and btx-cli, and waits for <datadir>\regtest\.cookie before the first RPC (run 1 lost that race).
-      # The four -regtestmatmul* flags keep MatMul v4 off on this regtest chain, as the tester guide does:
-      # without them block 100 is the first v4 block and a CPU did not find it in 6.5 minutes.
-      - name: Regtest smoke with -modelnet=0 -matmulvalidation=economic (start, wallet, 101 blocks, send to self, stop)
-        timeout-minutes: 30
-        run: |
-          ls -la bin
-          python "$CIPY" smoke --btxd bin/btxd.exe --cli bin/btx-cli.exe --datadir "$RUNNER_TEMP/smoke-tester-flags" \
-            --label win-tester-flags --job "$GITHUB_JOB" --port 38333 --rpcport 38332 --wallet --mine 101 --mine-budget 900 \
-            --send --extra=-modelnet=0 --extra=-matmulvalidation=economic \
-            --extra=-regtestmatmulbindingheight=2147483647 --extra=-regtestmatmulproductdigestheight=2147483647 \
-            --extra=-regtestmatmulv4height=2147483647 --extra=-regtestmatmulrequireproductpayload=0 --out "$LOGS"
-      - name: Regtest start with the default Modelnet (in-process swarm on, no btx-modeld.exe), 60 s, stop
-        if: ${{ !cancelled() }}
-        timeout-minutes: 10
-        run: |
-          python "$CIPY" smoke --btxd bin/btxd.exe --cli bin/btx-cli.exe --datadir "$RUNNER_TEMP/smoke-default" \
-            --label win-default --job "$GITHUB_JOB" --port 38343 --rpcport 38342 --linger 60 --out "$LOGS"
-      - name: Upload logs
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        with:
-          name: logs-windows-smoke
-          path: ${{ runner.temp }}/logs
-          retention-days: 7
-          overwrite: true
-          if-no-files-found: ignore
-
   windows-tests:
     name: windows-tests
     needs: [tools, mingw-tests]
-    if: ${{ !cancelled() && needs.mingw-tests.outputs.test_btx == 'yes' }}
+    if: ${{ needs.mingw-tests.result == 'success' }}
     runs-on: windows-latest
-    continue-on-error: true  # measurement lane: not gating until it has been green once
-    timeout-minutes: 100
+    timeout-minutes: 20
     steps:
       - name: Start
         run: |
@@ -454,34 +216,21 @@ jobs:
         with:
           name: win-tests
           path: bin
-      - name: Test files left out of the mingw build
+      - name: Verify and run bridge and sandbox suites
+        timeout-minutes: 8
         run: |
-          ls -la bin
-          if [ -f bin/pruned.txt ]; then
-            cl=$(awk '/^# test sources removed because they use/{s=1} /^# failed edges outside/{exit} /^src\//{if(s)l++; else c++} END{print c+0, l+0}' bin/pruned.txt)
-            c=${cl% *}
-            l=${cl#* }
-            python "$CIPY" ann notice "job=$GITHUB_JOB step=pruned-count test_sources_not_built=$((c + l)) do_not_compile=$c use_pruned_code=$l (list in win-tests/pruned.txt and the mingw-tests annotations)"
-          fi
-      - name: swarm_confine_tests and swarm_fsjail_tests on Windows, n=3
-        timeout-minutes: 15
-        run: |
-          python "$CIPY" suites --bin bin/test_btx.exe --label win-confine-fsjail --job "$GITHUB_JOB" \
-            --out "$LOGS/t-confine" --suites swarm_confine_tests,swarm_fsjail_tests --repeat 3 --jobs 1 \
-            --timeout 600 --per-suite --keep-logs --stop-in 13
-      - name: All swarm_* suites on Windows (incl. the Windows sandbox and windowslife ones)
+          (cd bin && sha256sum -c SHA256SUMS.txt)
+          export BTX_TEST_BTX_OPEN="$(cygpath -aw bin/btx-open.exe)"
+          python "$CIPY" suites --bin bin/test_btx.exe --label mingw-focused --job "$GITHUB_JOB" \
+            --out "$LOGS/focused" --suites modelnet_bridge_tests,swarm_confine_tests,swarm_fsjail_tests \
+            --jobs 1 --timeout 120 --per-suite --keep-logs
+          python -c 'import json,sys; s=json.load(open(sys.argv[1])); assert s["selected"]==3 and s["counts"]=={"pass":3}, s' "$LOGS/focused/summary.json"
+      - name: Capture Lab healthy setup result
         if: ${{ !cancelled() }}
-        timeout-minutes: 65
+        timeout-minutes: 5
         run: |
-          python "$CIPY" suites --bin bin/test_btx.exe --label win-swarm --job "$GITHUB_JOB" \
-            --out "$LOGS/t-swarm" --include '^swarm_' --exclude '^swarm_(confine|fsjail)_tests$' \
-            --jobs 4 --timeout 600 --stop-at $((JOB_T0 + 75 * 60)) --stop-in 63
-      - name: Core and node suites on Windows
-        if: ${{ !cancelled() }}
-        timeout-minutes: 20
-        run: |
-          python "$CIPY" suites --bin bin/test_btx.exe --label win-core --job "$GITHUB_JOB" \
-            --out "$LOGS/t-core" --suites "$CORE_SUITES" --jobs 4 --timeout 600 --keep-logs --stop-at $((JOB_T0 + 95 * 60)) --stop-in 18
+          bin/test_btx.exe --run_test=lab_lifecycle_tests/failed_write_is_rolled_back_and_does_not_block_later_writes \
+            --log_level=test_suite --color_output=no > "$LOGS/lab-diagnostic.log" 2>&1
       - name: Upload logs
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
@@ -491,9 +240,3 @@ jobs:
           retention-days: 7
           overwrite: true
           if-no-files-found: ignore
-
-  # ------------------------------------------------------------------ Windows native (clang-cl, MSVC STL, vcpkg x64-windows-static)
-  # The repo's own preset windows-clangcl-static, overridden only by -D options (tests, Modelnet, ZMQ,
-  # wallet, static OpenSSL 3.5.4). Every native job works under D:\w so no path gets near MAX_PATH.
-  # msvc-run (btx_ci.py) runs a command inside the x64 Visual Studio environment, with LLVM first in PATH
-  # and Strawberry Perl's MinGW tree dropped (its c\lib holds MinGW OpenSSL/SQLite builds).

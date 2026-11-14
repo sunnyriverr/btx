@@ -14,6 +14,7 @@
 #include <signal.h>
 #endif
 
+#include <cstdlib>
 #include <fstream>
 #include <iterator>
 #include <string>
@@ -175,7 +176,10 @@ BOOST_AUTO_TEST_CASE(windows_native_helper_runs_and_cleans_up)
     const fs::path root = fs::canonical(fs::temp_directory_path()) / "btx-swarm-fsjail-native";
     fs::create_directories(root);
     const fs::path helper = root / "btx-open.exe";
-    BOOST_REQUIRE(fs::copy_file(fs::path{MODELNET_BTX_OPEN_PATH}, helper, fs::copy_options::none));
+    const char* packaged_helper = std::getenv("BTX_TEST_BTX_OPEN");
+    const fs::path helper_source = packaged_helper && *packaged_helper
+        ? fs::PathFromString(packaged_helper) : fs::PathFromString(MODELNET_BTX_OPEN_PATH);
+    BOOST_REQUIRE(fs::copy_file(helper_source, helper, fs::copy_options::none));
     const auto helper_size = fs::file_size(helper);
     std::string err = "stale";
     // No arguments: print usage and exit 1 without opening a URI.
