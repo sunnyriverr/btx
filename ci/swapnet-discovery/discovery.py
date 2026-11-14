@@ -189,10 +189,13 @@ def run():
     try:a.rpc('getswapnetworkinfo')
     except RPCError as e:assert 'disabled' in str(e)
     else:raise AssertionError('SwapNet unexpectedly enabled')
+    x.mine(3,x.wallet('getnewaddress'))
+    a.mine(3,a.wallet('getnewaddress','','p2mr'))
+    assert not x.rpc('getblockchaininfo')['initialblockdownload']
     for n in (a,b):n.stop()
     enabled=('-swapnet=1','-wallet=trader','-swapnetwallet=trader',*flags)
     a.start('enabled',*enabled);time.sleep(2);b.start('enabled',*enabled)
-    connected(a,b)
+    connected(a,b);synced(a,b)
     mutual=lambda:all(n.rpc('getswapbootstrapinfo')['admitted_peers']>=1 for n in (a,b))
     until(mutual,30);result['mutual_staggered_admission']=True
     save('configure test market without accepting quotes')
