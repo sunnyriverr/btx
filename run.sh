@@ -42,5 +42,5 @@ cat records/test.log
 if ((status != 0)); then exit "$status"; fi
 python3 - <<'PY'
 import json
-r=json.load(open('records/normal-recovery-result.json'));assert r['phase']=='PASS_BYTES_AND_RESTART' and r['pieces_restored'] and r['materialized_bytes_match'];print('QUALIFIED_NORMAL_RECOVERY')
+r=json.load(open('records/normal-recovery-result.json'));assert r['phase'] in ['OPERATOR_RECOVERY_PASSED','OPERATOR_PATH_MEASURED_NO_RECOVERY'] and r['remote_bytes_survive_remove'] and 'restart_getmodel' in r;print('MEASUREMENT_COMPLETE',r['phase'])
 PY

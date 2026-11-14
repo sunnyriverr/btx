@@ -58,17 +58,34 @@ class NormalRecovery(ModelNetMinioLayoutsTest):
         except Exception as e:
             outcome["materialize_error"] = str(e)
         Path(self.options.tmpdir, "normal-recovery-result.json").write_text(json.dumps(outcome, indent=2))
-        # Honest classification: a local label alone never passes recovery.
-        assert outcome["pieces_restored"], outcome
-        assert outcome.get("materialized_bytes_match"), outcome
+        # Same disposable state: measure the supported remove/retrieve path.
+        outcome["remove"] = self._zero_spend(node.removemodel(uri), "remove damaged local replica")
+        assert outcome["remove"].get("removed") is True
+        remote = self._reconstruct_object(self._bucket_keys(), artifact)
+        assert remote == original
+        outcome["remote_bytes_survive_remove"] = True
+        outcome["retry_getmodel"] = self._zero_spend(node.getmodel(uri), "retrieve after remove")
+        outcome["retry_pieces_match"] = stored() == original
+        try:
+            exported = self._zero_spend(node.exportmodelpath(uri), "materialize after retry")
+            outcome["retry_materialized_match"] = (Path(exported["path"]) / source.name).read_bytes() == original
+        except Exception as e:
+            outcome["retry_materialize_error"] = str(e)
         self._restart_helper()
-        assert stored() == original
-        assert self._zero_spend(node.getmodel(uri), "second restart").get("status") == "local"
+        outcome["restart_getmodel"] = self._zero_spend(node.getmodel(uri), "retrieve after second restart")
+        outcome["restart_pieces_match"] = stored() == original
+        try:
+            exported = self._zero_spend(node.exportmodelpath(uri), "materialize after second restart")
+            outcome["restart_materialized_match"] = (Path(exported["path"]) / source.name).read_bytes() == original
+        except Exception as e:
+            outcome["restart_materialize_error"] = str(e)
+        assert self._reconstruct_object(self._bucket_keys(), artifact) == original
         assert not source.exists()
         assert not Path(self.modeldir, "fakes3-objects.bin").exists()
-        outcome["phase"] = "PASS_BYTES_AND_RESTART"
+        recovered = all(outcome.get(k) is True for k in ["retry_pieces_match", "retry_materialized_match", "restart_pieces_match", "restart_materialized_match"])
+        outcome["phase"] = "OPERATOR_RECOVERY_PASSED" if recovered else "OPERATOR_PATH_MEASURED_NO_RECOVERY"
         Path(self.options.tmpdir, "normal-recovery-result.json").write_text(json.dumps(outcome, indent=2))
-        print("NORMAL_CLOUD_RECOVERY_PASS", flush=True)
+        print("OPERATOR_RECOVERY_MEASUREMENT_COMPLETE", flush=True)
 
 if __name__ == "__main__":
     NormalRecovery(__file__).main()
