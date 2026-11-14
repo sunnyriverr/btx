@@ -8,7 +8,7 @@ permissions:
 jobs:
   repair:
     runs-on: ubuntu-24.04
-    timeout-minutes: 65
+    timeout-minutes: 80
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -27,7 +27,7 @@ jobs:
           path: saved-checkpoint
           merge-multiple: true
       - name: Restore, configure and inspect helper-only plan
-        timeout-minutes: 45
+        timeout-minutes: 60
         run: |
           image=ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11
           docker pull "$image"
