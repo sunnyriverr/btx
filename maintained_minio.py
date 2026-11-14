@@ -827,6 +827,7 @@ class ModelNetMinioLayoutsTest(BitcoinTestFramework):
             self._zero_spend(node.setcloudstorage(self._cloud_cfg('PIECE_OBJECTS', False)), 'configure')
             count = 2 * (4 << 20) + 4096
             payload = (bytes(range(256)) * ((count + 255) // 256))[:count]
+            payload = b'\x7f' + payload[1:]  # Distinct from the valid-partial scenario.
             header = json.dumps({'w': {'dtype': 'U8', 'shape': [count], 'data_offsets': [0, count]}}, separators=(',', ':')).encode()
             original = struct.pack('<Q', len(header)) + header + payload
             source = Path(self.options.tmpdir) / 'corrected-origin' / 'model.safetensors'

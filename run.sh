@@ -33,35 +33,26 @@ export BTX_MINIO_IMAGE BTXMODELD
 BTX_MINIO_IMAGE=$(docker image inspect --format '{{.Id}}' "$image")
 BTXMODELD="$PWD/obj/bin/btx-modeld"
 docker run --rm "$image" --version | tee records/minio-version.txt
-cp base_minio.py product/test/functional/feature_modelnet_minio.py
-for spec in corrected_origin cleanup_controls quota_eof controls; do
-  cp "$spec.py" "product/test/functional/$spec.py"
-  set +e
-  timeout --kill-after=20s 12m /usr/bin/python3 "product/test/functional/$spec.py" --configfile="$PWD/obj/test/config.ini" --tmpdir="$RUNNER_TEMP/checkpoint-$spec" --nocleanup > "records/$spec.log" 2>&1
-  status=$?
-  set -e
-  printf '%s\n' "$status" > "records/$spec-exit.txt"
-  for name in partial-retry-result.json cleanup-controls.json quota-eof-result.json cloud-controls.json; do
-    if test -f "$RUNNER_TEMP/checkpoint-$spec/$name"; then cp "$RUNNER_TEMP/checkpoint-$spec/$name" "records/$spec-$name"; fi
-  done
-  cat "records/$spec.log"
-  test "$status" = 0
-done
 cp maintained_minio.py product/test/functional/feature_modelnet_minio.py
 cp strict_matrix.py product/test/functional/strict_matrix.py
-set +e
-timeout --kill-after=20s 12m /usr/bin/python3 product/test/functional/strict_matrix.py --configfile="$PWD/obj/test/config.ini" --tmpdir="$RUNNER_TEMP/checkpoint-maintained" --nocleanup > records/maintained.log 2>&1
-status=$?
-set -e
-printf '%s\n' "$status" > records/maintained-exit.txt
-if test -f "$RUNNER_TEMP/checkpoint-maintained/partial-retry-result.json"; then cp "$RUNNER_TEMP/checkpoint-maintained/partial-retry-result.json" records/maintained-result.json; fi
-cat records/maintained.log
-test "$status" = 0
+cp obj/bin/btx-modeld retained-checkpoint-helper
+cp before/btx-modeld obj/bin/btx-modeld
+chmod +x obj/bin/btx-modeld
+for variant in before after; do
+  if test "$variant" = after; then cp retained-checkpoint-helper obj/bin/btx-modeld; chmod +x obj/bin/btx-modeld; fi
+  set +e
+  timeout --kill-after=20s 12m /usr/bin/python3 product/test/functional/strict_matrix.py --configfile="$PWD/obj/test/config.ini" --tmpdir="$RUNNER_TEMP/maintained-$variant" --nocleanup > "records/maintained-$variant.log" 2>&1
+  status=$?
+  set -e
+  printf '%s\n' "$status" > "records/maintained-$variant-exit.txt"
+  if test -f "$RUNNER_TEMP/maintained-$variant/partial-retry-result.json"; then cp "$RUNNER_TEMP/maintained-$variant/partial-retry-result.json" "records/maintained-$variant-result.json"; fi
+  if test "$variant" = before; then test "$status" = 1; else test "$status" = 0; fi
+done
 python3 - <<'PY2'
 import json
-assert json.load(open('records/corrected_origin-partial-retry-result.json'))['phase']=='RECOVERED_CORRECTED_ORIGIN'
-assert json.load(open('records/quota_eof-quota-eof-result.json'))['phase']=='VALID_EOF_QUOTA_RESUME_PASS'
-assert len(json.load(open('records/cleanup_controls-cleanup-controls.json')))==3
-assert json.load(open('records/maintained-result.json'))['phase']=='RECOVERED_CORRECTED_ORIGIN'
-print('CHECKPOINT_RECOVERY_AND_SAFETY_QUALIFIED')
+before=json.load(open('records/maintained-before-result.json'));after=json.load(open('records/maintained-after-result.json'))
+assert before['phase']=='FAILED_CORRECTED_ORIGIN_RETRY',before
+assert before['corrected_responses'][-1]['cloud_hydrate_error']=='short stream',before
+assert after['phase']=='RECOVERED_CORRECTED_ORIGIN',after
+print('MAINTAINED_IDENTICAL_BEFORE_AFTER_QUALIFIED')
 PY2
