@@ -3,6 +3,8 @@
 #include <crypto/sha384.h>
 #include <span.h>
 #include <util/fs.h>
+#include <util/translation.h>
+const TranslateFn G_TRANSLATION_FUN{nullptr};
 #include <cassert>
 #include <vector>
 #include <iostream>
