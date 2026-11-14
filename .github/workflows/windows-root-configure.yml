@@ -1,4 +1,4 @@
-name: C-PORT Windows operator profile persistence
+name: C-K01 Windows linked JIT retry
 permissions:
   contents: read
 jobs:
@@ -158,8 +158,7 @@ jobs:
         cache; refusing fresh rebuild" }
 
         '
-    - name: Build test_btx from checkpoint and verify operator profile persistence
-        and refusal
+    - name: Link the exact C-K01 candidate and run the maintained JIT suite
       id: prepare
       shell: cmd
       run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
@@ -178,16 +177,16 @@ jobs:
 
         set "_CL_="
 
-        python controls/contrib/devtools/windows-root-configure/cport-profile-v2.py
+        python controls/contrib/devtools/windows-root-configure/ck01-jit.py
 
         exit /b %errorlevel%
 
         '
-    - name: Retain build and three test logs
+    - name: Retain compiler and JIT evidence
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
       if: always()
       with:
-        name: c-port-windows-profile-persistence
+        name: ck01-windows-jit
         path: D:\btx-native-035\evidence
         retention-days: 7
 'on':

@@ -1,0 +1,108 @@
+diff --git a/src/modelnet/capability_bytes.cpp b/src/modelnet/capability_bytes.cpp
+index 70720ce3f..2430f09e8 100644
+--- a/src/modelnet/capability_bytes.cpp
++++ b/src/modelnet/capability_bytes.cpp
+@@ -466,6 +466,18 @@ bool ReadVerifiedRange(const Digest48& manifest, uint32_t file_index, uint64_t o
+     return true;
+ }
+ 
++namespace {
++void RemoveIncompletePayload(const std::string& path)
++{
++#ifdef _WIN32
++    // The Windows CRT cannot unlink the read-only payload created with mode 0444.
++    if (::unlink(path.c_str()) == 0 || errno != EACCES) return;
++    if (::_chmod(path.c_str(), _S_IREAD | _S_IWRITE) != 0) return;
++#endif
++    ::unlink(path.c_str());
++}
++} // namespace
++
+ bool MaterializeCompleteFile(const std::vector<std::vector<unsigned char>>& pieces, const std::string& dest,
+                              Generation16 gen, std::string& err_code, std::string& err)
+ {
+@@ -497,7 +509,7 @@ bool MaterializeCompleteFile(const std::vector<std::vector<unsigned char>>& piec
+         const ssize_t n = ::pwrite(fd, p.data(), p.size(), off);
+         if (n < 0 || static_cast<size_t>(n) != p.size()) {
+             ::close(fd);
+-            ::unlink(dest.c_str());
++            RemoveIncompletePayload(dest);
+             err_code = "IO_ERROR";
+             err = "pwrite";
+             return false;
+@@ -506,13 +518,13 @@ bool MaterializeCompleteFile(const std::vector<std::vector<unsigned char>>& piec
+     }
+     if (::fsync(fd) != 0) {
+         ::close(fd);
+-        ::unlink(dest.c_str());
++        RemoveIncompletePayload(dest);
+         err_code = "IO_ERROR";
+         err = "fsync";
+         return false;
+     }
+     if (::close(fd) != 0) {
+-        ::unlink(dest.c_str());
++        RemoveIncompletePayload(dest);
+         err_code = "IO_ERROR";
+         err = "close payload";
+         return false;
+@@ -521,7 +533,7 @@ bool MaterializeCompleteFile(const std::vector<std::vector<unsigned char>>& piec
+     const std::string metadata = GenerationHex(gen) + "\n" + std::to_string(pieces.size()) + "\n";
+     const int sidecar_fd = ::open(sidecar.c_str(), O_WRONLY | O_CREAT | O_EXCL | O_NOFOLLOW, 0666);
+     if (sidecar_fd < 0) {
+-        ::unlink(dest.c_str());
++        RemoveIncompletePayload(dest);
+         err_code = "IO_ERROR";
+         err = "generation sidecar";
+         return false;
+@@ -536,7 +548,7 @@ bool MaterializeCompleteFile(const std::vector<std::vector<unsigned char>>& piec
+     const bool closed = ::close(sidecar_fd) == 0;
+     if (written != metadata.size() || !closed) {
+         ::unlink(sidecar.c_str());
+-        ::unlink(dest.c_str());
++        RemoveIncompletePayload(dest);
+         err_code = "IO_ERROR";
+         err = "generation sidecar";
+         return false;
+diff --git a/src/modelnet/realm_channel.cpp b/src/modelnet/realm_channel.cpp
+index 297f4d59d..4ba54c0e6 100644
+--- a/src/modelnet/realm_channel.cpp
++++ b/src/modelnet/realm_channel.cpp
+@@ -884,7 +884,7 @@ bool RealmRollout::WriteOfflineBundle(const std::filesystem::path& path, const s
+ 
+ #ifdef _WIN32
+     // Preserve the CRLF bytes previously emitted by the Windows text stream.
+-    ReplaceAll(text, "\n", "\r\n");
++    util::ReplaceAll(text, "\n", "\r\n");
+ #endif
+     if (!WriteBinaryFileAtomically(fs::path{path}, text)) {
+         err = "BTX035_BUNDLE";
+diff --git a/src/test/modelnet_bridge_tests.cpp b/src/test/modelnet_bridge_tests.cpp
+index 6bc146644..c3ebc0cd0 100644
+--- a/src/test/modelnet_bridge_tests.cpp
++++ b/src/test/modelnet_bridge_tests.cpp
+@@ -28,7 +28,9 @@
+ #include <utility>
+ #include <vector>
+ 
++#ifndef _WIN32
+ #include <unistd.h>
++#endif
+ 
+ BOOST_FIXTURE_TEST_SUITE(modelnet_bridge_tests, BasicTestingSetup)
+ 
+@@ -764,6 +766,7 @@ BOOST_AUTO_TEST_CASE(dequeued_hint_same_policy_for_any_from_addr)
+     DrainBridgeHints();
+ }
+ 
++#ifndef _WIN32 // Requires the helper Unix RPC transport.
+ // The /api/v1/feed routes read getmodelfeed from btx-modeld when
+ // BTX_BRIDGE_RPC_SOCKET is set. Each route must ask for a feed mode that
+ // getmodelfeed accepts; a refused mode leaves the route with the empty shell.
+@@ -816,4 +819,6 @@ BOOST_AUTO_TEST_CASE(api_v1_feed_routes_reach_the_helper_feed)
+     finish();
+ }
+ 
++#endif // !_WIN32
++
+ BOOST_AUTO_TEST_SUITE_END()
