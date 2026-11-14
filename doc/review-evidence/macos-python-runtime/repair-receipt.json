@@ -1,0 +1,165 @@
+{
+  "utc": "2026-11-14T21:36:53.982404+00:00",
+  "base": "a5d1637facc925ff176507fae87fc2042940829d",
+  "status": "focused_packaging_repair_qualified_locally_no_publication",
+  "files_sha256": {
+    "scripts/release/package_release_archive.py": "2d9545f2151c61ab56d72f7eebed37c91ccebc91049251e5ec56472da7d80f88",
+    "scripts/release/bundle_macos_python_runtime.py": "c317c91c3f778fc8ab5baae69e68fc64ad74d9bbee5e78fc9aa2e171cfd02438",
+    "test/util/bundle_macos_python_runtime_test.py": "d1c195a1aea76ed8622782c9923acb06234d77a7a4cca06d1ded1530d1d4a02e"
+  },
+  "patch_sha256": "f09f5eb735e913da9a521d580d5bede3bc8eafeedc41b067c9d04773db8cf3aa",
+  "input_provenance": {
+    "retained_original_sha256": "2c623e1841d0aca07572d0d82c73352708733567fda226551c8478bad9eec41a",
+    "packaging_input_sha256": "abce49e600018f6fcf7f5295e1e3515efc25a63e8b2b11fbb2d3367a39848fe0",
+    "adjustment": "Disposable copy only: load command points to owned build-host-equivalent Python framework, ad-hoc re-signed; same input before/after; original untouched.",
+    "retained_source": "JPP43599161832/64889922,70de5a45 plus CI; not a currenta5d1637f daemon build"
+  },
+  "baseline_archive_sha256": "a8cb0e1c4af98e75b558cbf805b4c442919649ce1362322b748fc5770275fad5",
+  "candidate_archive_sha256": "f27b2228b4f20c16520e6e92ec49f23a2835ce9b4708a89852b7ab3a5e9957d5",
+  "archive_controls": [
+    {
+      "case": "baseline-default-off",
+      "expected_ready": false,
+      "swapnet": 0,
+      "environment": "PATH=/usr/bin:/bin; DYLD_PRINT_LIBRARIES=1 only (no loader overrides)",
+      "archive": "relocated archives/baseline moved/btx-0.34.16",
+      "rpc_ready": false,
+      "exit": 127,
+      "matched": true,
+      "seconds": 0.412
+    },
+    {
+      "case": "candidate-default-off",
+      "expected_ready": true,
+      "swapnet": 0,
+      "environment": "PATH=/usr/bin:/bin; DYLD_PRINT_LIBRARIES=1 only (no loader overrides)",
+      "archive": "relocated archives/candidate moved/btx-0.34.16",
+      "rpc_ready": true,
+      "network": {
+        "result": null,
+        "error": {
+          "code": -1,
+          "message": "SwapNet is disabled or not initialized"
+        },
+        "id": "archive-control"
+      },
+      "clean_stop": true,
+      "exit": 0,
+      "matched": true,
+      "seconds": 2.584
+    },
+    {
+      "case": "candidate-enabled",
+      "expected_ready": true,
+      "swapnet": 1,
+      "environment": "PATH=/usr/bin:/bin; DYLD_PRINT_LIBRARIES=1 only (no loader overrides)",
+      "archive": "relocated archives/candidate moved/btx-0.34.16",
+      "rpc_ready": true,
+      "network": {
+        "result": {
+          "version": "2.0.0",
+          "protocol": 2,
+          "network": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360",
+          "discovery_default": true,
+          "peers": 0,
+          "providers": 0,
+          "routes": 0,
+          "automatic_spend_atoms": "0",
+          "in_process": true,
+          "execution": "durable_htlc_coordinator",
+          "last_tick_error": null,
+          "packet_errors": 0,
+          "recent_packet_errors": [],
+          "wallet_loaded": false,
+          "wallet_warning": "NATIVE_RPC"
+        },
+        "error": null,
+        "id": "archive-control"
+      },
+      "clean_stop": true,
+      "exit": 0,
+      "matched": true,
+      "seconds": 10.372
+    },
+    {
+      "case": "candidate-restart",
+      "expected_ready": true,
+      "swapnet": 1,
+      "environment": "PATH=/usr/bin:/bin; DYLD_PRINT_LIBRARIES=1 only (no loader overrides)",
+      "archive": "relocated archives/candidate moved/btx-0.34.16",
+      "rpc_ready": true,
+      "network": {
+        "result": {
+          "version": "2.0.0",
+          "protocol": 2,
+          "network": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360",
+          "discovery_default": true,
+          "peers": 0,
+          "providers": 0,
+          "routes": 0,
+          "automatic_spend_atoms": "0",
+          "in_process": true,
+          "execution": "durable_htlc_coordinator",
+          "last_tick_error": null,
+          "packet_errors": 0,
+          "recent_packet_errors": [],
+          "wallet_loaded": false,
+          "wallet_warning": "NATIVE_RPC"
+        },
+        "error": null,
+        "id": "archive-control"
+      },
+      "clean_stop": true,
+      "exit": 0,
+      "matched": true,
+      "seconds": 1.36
+    }
+  ],
+  "native_gates": {
+    "positive_native_images_verified": 69,
+    "negative": [
+      {
+        "case": "signature",
+        "rejected": true,
+        "error": "<workspace>/work/btx-lanes/session-1/swapnet-packaged-macos-acceptance/repair/relocated archives/candidate moved/btx-0.34.16/libexec/gate-probe: codesign --verify --strict failed (the binary was modified after signing; re-sign it or set the paths at configure time): <workspace>/work/btx-lanes/session-1/swapnet-packaged-macos-acceptance/repair/relocated archives/candidate moved/btx-0.34.16/libexec/gate-probe: main executable failed strict validation"
+      },
+      {
+        "case": "missing",
+        "rejected": true,
+        "error": "Dependency escapes/is missing in <workspace>/work/btx-lanes/session-1/swapnet-packaged-macos-acceptance/repair/relocated archives/candidate moved/btx-0.34.16/libexec/gate-probe: @loader_path/not-present/Python"
+      },
+      {
+        "case": "escape",
+        "rejected": true,
+        "error": "Dependency escapes/is missing in <workspace>/work/btx-lanes/session-1/swapnet-packaged-macos-acceptance/repair/relocated archives/candidate moved/btx-0.34.16/libexec/gate-probe: @loader_path/../../../../../python-pkg/Python_Framework.pkg/Payload/Versions/3.12/Python"
+      },
+      {
+        "case": "homebrew",
+        "rejected": true,
+        "error": "<workspace>/work/btx-lanes/session-1/swapnet-packaged-macos-acceptance/repair/relocated archives/candidate moved/btx-0.34.16/libexec/gate-probe: macOS release binary must not load Homebrew dylibs (clean Mac without brew will not launch). Found: ['/opt/homebrew/lib/libpython3.12.dylib']"
+      }
+    ]
+  },
+  "maintained_tests": {
+    "new": "9 passed",
+    "existing": "58 run:56 passed,2 skipped"
+  },
+  "independent_review": "independent-code-review.md; source review only, all concrete findings addressed",
+  "final_guard_delta": "Final guard-only rebuild exactly matches native-qualified f27b2228 archive; reused positive lifecycle without rerun.",
+  "runtime_license_metadata": "CPython stdlib licence and selected cryptography/cffi/typing metadata retained; native Mach-O closure re-signed after relocation.",
+  "resource_state": "No live node/compiler/job; producer runtime restored; test-only probes removed; owned source/binaries/archives retained.",
+  "free_bytes": 1723392000,
+  "limits": [
+    "Plain Mac ARM64 archive using retained daemon and currentpackager; not currentdaemon/release qualification",
+    "Wallet disabled, ModelNet off, no mining/funding/signing/settlement",
+    "No native Qt archive, Intel Mac, Windows/Linux, DeveloperID/hardened runtime/notarization/Gatekeeper qualification",
+    "Archive uses ad-hoc signatures; finalrelease signing remains maintainer step"
+  ],
+  "publication": "explicitly held by user",
+  "attribution_only_delta": {
+    "reason": "PR678author is Jpp-matata; repch1c credited separately for native SwapNet reports",
+    "old_module_sha256": "6afba4feb0be0cde6457a689ca616585a10ec56067316141d9934b443e125b23",
+    "new_module_sha256": "c317c91c3f778fc8ab5baae69e68fc64ad74d9bbee5e78fc9aa2e171cfd02438",
+    "verification": "Only module docstring attribution changed; parsed executable AST identical; no test or archive rerun"
+  }
+}

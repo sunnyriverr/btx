@@ -1,0 +1,25 @@
+{
+  "positive_native_images_verified": 69,
+  "negative": [
+    {
+      "case": "signature",
+      "rejected": true,
+      "error": "<workspace>/work/btx-lanes/session-1/swapnet-packaged-macos-acceptance/repair/relocated archives/candidate moved/btx-0.34.16/libexec/gate-probe: codesign --verify --strict failed (the binary was modified after signing; re-sign it or set the paths at configure time): <workspace>/work/btx-lanes/session-1/swapnet-packaged-macos-acceptance/repair/relocated archives/candidate moved/btx-0.34.16/libexec/gate-probe: main executable failed strict validation"
+    },
+    {
+      "case": "missing",
+      "rejected": true,
+      "error": "Dependency escapes/is missing in <workspace>/work/btx-lanes/session-1/swapnet-packaged-macos-acceptance/repair/relocated archives/candidate moved/btx-0.34.16/libexec/gate-probe: @loader_path/not-present/Python"
+    },
+    {
+      "case": "escape",
+      "rejected": true,
+      "error": "Dependency escapes/is missing in <workspace>/work/btx-lanes/session-1/swapnet-packaged-macos-acceptance/repair/relocated archives/candidate moved/btx-0.34.16/libexec/gate-probe: @loader_path/../../../../../python-pkg/Python_Framework.pkg/Payload/Versions/3.12/Python"
+    },
+    {
+      "case": "homebrew",
+      "rejected": true,
+      "error": "<workspace>/work/btx-lanes/session-1/swapnet-packaged-macos-acceptance/repair/relocated archives/candidate moved/btx-0.34.16/libexec/gate-probe: macOS release binary must not load Homebrew dylibs (clean Mac without brew will not launch). Found: ['/opt/homebrew/lib/libpython3.12.dylib']"
+    }
+  ]
+}
