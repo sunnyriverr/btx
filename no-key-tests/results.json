@@ -1,0 +1,131 @@
+{
+  "utc": "2026-11-14T23:05:34.442211+00:00",
+  "platform": "macOS-26.5.1-arm64-arm-64bit",
+  "machine": "arm64",
+  "python": "3.9.6 (default, Dec  2 2025, 07:27:58) \n[Clang 17.0.0 (clang-1700.6.3.2)]",
+  "source_commit": "a5d1637facc925ff176507fae87fc2042940829d",
+  "runs": [
+    {
+      "errors": 0,
+      "failures": 0,
+      "guard_violations": [],
+      "skipped": 0,
+      "success": true,
+      "tests": 6,
+      "suite": "cut-release",
+      "exit_code": 0,
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-B",
+        "<evidence-root>/no-key-tests/run_guarded.py",
+        "<evidence-root>/source/test/util/cut_release_test.py"
+      ]
+    },
+    {
+      "errors": 0,
+      "failures": 0,
+      "guard_violations": [],
+      "skipped": 0,
+      "success": true,
+      "tests": 2,
+      "suite": "sign-release",
+      "exit_code": 0,
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-B",
+        "<evidence-root>/no-key-tests/run_guarded.py",
+        "<evidence-root>/source/test/util/sign_release_bundle_test.py"
+      ]
+    },
+    {
+      "errors": 0,
+      "failures": 0,
+      "guard_violations": [],
+      "skipped": 0,
+      "success": true,
+      "tests": 29,
+      "suite": "publish-release",
+      "exit_code": 0,
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-B",
+        "<evidence-root>/no-key-tests/run_guarded.py",
+        "<evidence-root>/source/test/util/publish_github_release_test.py"
+      ]
+    },
+    {
+      "errors": 0,
+      "failures": 0,
+      "guard_violations": [],
+      "skipped": 0,
+      "success": true,
+      "tests": 2,
+      "suite": "collector-signing",
+      "exit_code": 0,
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-B",
+        "<evidence-root>/no-key-tests/run_guarded.py",
+        "<evidence-root>/source/test/util/release_bundle_manifest_test.py",
+        "ReleaseBundleManifestTest.test_main_sign_with_invokes_signer",
+        "ReleaseBundleManifestTest.test_sign_checksum_file_uses_loopback_passphrase_when_requested"
+      ]
+    },
+    {
+      "errors": 0,
+      "failures": 0,
+      "guard_violations": [],
+      "skipped": 0,
+      "success": true,
+      "tests": 2,
+      "suite": "installer-signature",
+      "exit_code": 0,
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-B",
+        "<evidence-root>/no-key-tests/run_guarded.py",
+        "<evidence-root>/source/test/util/btx_agent_setup_test.py",
+        "BTXAgentSetupTest.test_remote_release_requires_signature_unless_overridden",
+        "BTXAgentSetupTest.test_remote_release_verifies_signature_when_present"
+      ]
+    },
+    {
+      "errors": 0,
+      "failures": 0,
+      "guard_violations": [],
+      "skipped": 0,
+      "success": true,
+      "tests": 14,
+      "suite": "new-contracts",
+      "exit_code": 0,
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-B",
+        "<evidence-root>/no-key-tests/run_guarded.py",
+        "<evidence-root>/no-key-tests/release_signer_recovery_test.py"
+      ]
+    },
+    {
+      "errors": 0,
+      "failures": 0,
+      "guard_violations": [],
+      "skipped": 0,
+      "success": true,
+      "tests": 3,
+      "suite": "broken-controls",
+      "exit_code": 0,
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-B",
+        "<evidence-root>/no-key-tests/run_guarded.py",
+        "<evidence-root>/no-key-tests/broken_controls_test.py"
+      ]
+    }
+  ],
+  "totals": {
+    "tests": 58,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  }
+}
