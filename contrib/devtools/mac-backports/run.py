@@ -72,10 +72,14 @@ def restore():
    if not m.name.startswith('mac-config-build/'):continue
    assert '..' not in Path(m.name).parts and not Path(m.name).is_absolute()
    dest=W/m.name;meta=inv[m.name]
+   assert dest.parent.resolve().is_relative_to(W.resolve()),'Archive parent escapes workspace'
    if m.isdir():dest.mkdir(parents=True,exist_ok=True);continue
    dest.parent.mkdir(parents=True,exist_ok=True)
    if m.issym():
-    assert not Path(m.linkname).is_absolute() and '..' not in Path(m.linkname).parts
+    assert m.linkname==meta.get('archive_target',meta.get('target')),('Symlink differs from verified manifest',m.name)
+    resolved=(dest.parent/m.linkname).resolve()
+    assert resolved.is_relative_to(W.resolve()),('Symlink escapes task workspace',m.name)
+    assert '.git' not in resolved.relative_to(W.resolve()).parts
     dest.symlink_to(m.linkname);continue
    assert m.isfile();data=t.extractfile(m).read();assert hashlib.sha256(data).hexdigest()==meta['sha256'];dest.write_bytes(data);dest.chmod(meta['mode']);os.utime(dest,ns=(meta['mtime_ns'],meta['mtime_ns']));count+=m.name.endswith('.o')
  matched=0;changed=0
