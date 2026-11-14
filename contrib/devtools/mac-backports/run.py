@@ -4,6 +4,7 @@ import os,sys,json,subprocess,time,hashlib,shutil,platform,tarfile,io,zipfile,ur
 resource.setrlimit(resource.RLIMIT_CORE,(0,0))
 W=Path(os.environ['GITHUB_WORKSPACE']);R=W/'records';R.mkdir(exist_ok=True);S=W/'product';B=W/'mac-config-build';F=Path(__file__).resolve().parent
 BEGAN=time.monotonic()
+EXECUTION_LIMIT=4800
 STATE={'base':'a5d1637facc925ff176507fae87fc2042940829d','producer_source':'c6f9678dd225572528d06c456c16eb4c78bc637c','commands':[],'tests':[],'complete':False}
 ENV=dict(os.environ);ENV['NINJA_STATUS']='[%f/%t %es] '
 def save(): (R/'result.json').write_text(json.dumps(STATE,indent=2)+'\n')
@@ -13,8 +14,8 @@ def sha(p):
   for b in iter(lambda:f.read(1048576),b''):h.update(b)
  return h.hexdigest()
 def cmd(args,label,limit=120,cwd=W,check=True):
- assert time.monotonic()-BEGAN<4800,'Global80minute execution budget reached; preserve state'
- print('START '+label,flush=True);start=time.monotonic();limit=min(limit,4800-(start-BEGAN));save()
+ assert time.monotonic()-BEGAN<EXECUTION_LIMIT,'Global execution budget reached; preserve state'
+ print('START '+label,flush=True);start=time.monotonic();limit=min(limit,EXECUTION_LIMIT-(start-BEGAN));save()
  with (R/(label+'.log')).open('w') as log:
   p=subprocess.Popen(list(map(str,args)),cwd=cwd,env=ENV,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
   timeout=False;last=0
@@ -150,7 +151,8 @@ def main():
  STATE['complete']=len(candidate)>=4 and all(x['exit']==0 for x in candidate)
  STATE['acceptance']='Candidate executions pass; baseline signatures require exact log review' if STATE['complete'] else 'Incomplete or failed candidate; no acceptance claim'
  save()
-try:main()
-except Exception as e:STATE['error']=str(e);(R/'exception.txt').write_text(traceback.format_exc())
-finally:save()
-sys.exit(0 if STATE['complete'] else 1)
+if __name__ == '__main__':
+ try:main()
+ except Exception as e:STATE['error']=str(e);(R/'exception.txt').write_text(traceback.format_exc())
+ finally:save()
+ sys.exit(0 if STATE['complete'] else 1)

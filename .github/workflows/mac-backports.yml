@@ -1,4 +1,4 @@
-name: Mac backports 697-700 bounded acceptance
+name: Mac backports focused continuation
 on:
   push:
     branches: [codex/ci-mac-backports-697-700]
@@ -12,7 +12,7 @@ jobs:
   native:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: macos-15
-    timeout-minutes: 100
+    timeout-minutes: 40
     env:
       DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
       HOMEBREW_NO_AUTO_UPDATE: '1'
@@ -31,10 +31,17 @@ jobs:
           path: product
           persist-credentials: false
           fetch-depth: 1
-      - name: Verify restore, measure and execute bounded build
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: 14136280100
+          run-id: 43647289770
+          github-token: ${{ github.token }}
+          path: producer-restore
+          merge-multiple: true
+      - name: Finish focused699 and unrun valid-serving control
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python3 contrib/devtools/mac-backports/run.py
+        run: python3 contrib/devtools/mac-backports/resume.py
       - name: Preserve resumable build and exact evidence
         if: always()
         timeout-minutes: 8
