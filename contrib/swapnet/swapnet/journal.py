@@ -5,6 +5,7 @@ persisted before sending; repeated messages and process restarts are idempotent.
 Secrets and raw claim transactions are never returned by public read methods.
 """
 from dataclasses import asdict
+from copy import deepcopy
 import hashlib
 import json
 import time
@@ -120,6 +121,16 @@ class Journal:
                 require(previous['principal']==body['principal'] and previous['peer']==body['peer'],'SESSION_BINDING','Immutable session owner changed')
                 if previous.get('agreement_id'):
                     require(previous['agreement_id']==body.get('agreement_id'),'AGREEMENT_CHANGED','Accepted agreement is immutable')
+            if old and previous['stage'] in {'complete','refunded'} and body['stage']==previous['stage']:
+                # Decisions still use fresh driver observations on every tick.
+                # Persist a terminal snapshot only when more than its poll times changed.
+                snapshots = (deepcopy(previous), deepcopy(body))
+                for snapshot in snapshots:
+                    snapshot.pop('updated_at', None)
+                    for observation in snapshot.get('observations', {}).values():
+                        observation.pop('observed_at', None)
+                if snapshots[0] == snapshots[1]:
+                    return old[0]
             if not old:self.ensure_capacity()
             rev=expected+1
             db.execute('INSERT INTO sn_negotiations VALUES(?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET revision=excluded.revision,stage=excluded.stage,body=excluded.body',
