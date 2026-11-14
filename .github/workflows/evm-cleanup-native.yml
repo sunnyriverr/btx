@@ -1,0 +1,44 @@
+name: Ethereum maker cleanup native verification
+on:
+  push:
+    branches: [codex/ci-swapnet-evm-cleanup]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          path: product
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          github-token: ${{ github.token }}
+          run-id: 43573514061
+          name: swapnet-combined-checkpoint
+          path: checkpoint
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          github-token: ${{ github.token }}
+          run-id: 43573514061
+          name: swapnet-combined-build
+          path: bundle
+      - name: Restore bounded checkpoint and verify native EVM before/after
+        run: bash ci/evm-cleanup/run.sh
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: evm-cleanup-native
+          path: |
+            records/
+            obj/bin/btxd
+            obj/bin/btx-cli
+          retention-days: 30
