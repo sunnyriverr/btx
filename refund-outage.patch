@@ -1,0 +1,65 @@
+--- a/contrib/swapnet/swapnet/coordinator.py
++++ b/contrib/swapnet/swapnet/coordinator.py
+@@ -304,7 +304,13 @@
+         agr=Agreement.parse(s['agreement']);a,b=self._driver(agr.long_leg.asset),self._driver(agr.short_leg.asset)
+         # The counterparty leg must not block a mature local refund or claim.
+         ra=self._observe(a,agr.long_leg,s['refs'].get('a'),required=s['role']=='initiator')
+-        rb=self._observe(b,agr.short_leg,s['refs'].get('b'),required=s['role']=='responder')
++        try:
++            rb=self._observe(b,agr.short_leg,s['refs'].get('b'),required=s['role']=='responder')
++        except SwapError as error:
++            unavailable=error.code=='RPC_COOKIE' and error.message=='RPC cookie unavailable'
++            if not unavailable or not self._refund_without_bitcoin(sid,s,rev,agr,a,ra):
++                raise
++            return
+         # Valid preimages read from either local chain remain public forever,
+         # even if the revealing transaction later leaves the canonical chain.
+         for report in (ra,rb):
+@@ -357,6 +363,47 @@
+             # Continue observing terminal sessions. A deep reorg reopens recovery,
+             # but does not replenish a consumed mandate or erase secret exposure.
+             s['stage']='reconciling';self._save(sid,s,rev)
++    def _refund_without_bitcoin(self,sid,s,rev,agr,driver,report):
++        # Limit offline recovery to the original, authorized BTX refund before
++        # the counterparty leg was recorded or the secret was exposed.
++        own=agr.long_leg
++        if (s['role']!='initiator' or driver.family!='btx' or not agr.short_leg.asset.startswith('btc:')
++                or own.lock_domain!='height' or s['secret_exposed'] or s['refs'].get('b')
++                or s.get('observations',{}).get('b',{}).get('conflicting')
++                or not (s['funding_prepared'] and s['funding_broadcast'] and s['recovery_ready'] and s.get('refund_op'))):
++            return False
++        now=self.now()
++        self.policy.check_clocks(now,report.clock)
++        obs=report.observation
++        if (report.clock.height<own.lock_value or obs.claimed
++                or not obs.settled(driver.family,self.policy,now)):
++            return False
++        op=self.journal.operation(s['refund_op'])
++        require(op['swap_id']==sid and op['kind']=='refund' and op['asset']==own.asset
++                and op['metadata']['reference']==s['refs']['a'],'RECOVERY_CONFLICT','Saved refund does not match local funding')
++        if obs.refunded:
++            tx=driver.rpc('getrawtransaction',op['txid'],True)
++            if tx.get('confirmations',0)<self.policy.confirmations(driver.family):
++                return False
++            if s['stage']=='refunded':
++                return True
++            s['stage']='refunded'
++        else:
++            if s['stage']=='refund_broadcast' and driver.has_transaction(op['txid']):
++                return True
++            ref=s['refs']['a']
++            coin=driver.rpc('gettxout',ref['txid'],ref['vout'],True)
++            if not coin or coin['bestblock']!=driver.rpc('getbestblockhash'):
++                return False
++            require(coin['scriptPubKey']['hex']==own.lock_commitment,'RECOVERY_CONFLICT','Local refund output changed')
++            self.journal.broadcast(s['refund_op'],driver)
++            s['stage']='refund_broadcast'
++        s.update(last_action='refund_local_leg',last_error=None,updated_at=now)
++        self._save(sid,s,rev)
++        if s['stage']=='refunded':
++            self.authority.terminal(s['grant_id'])
++        return True
++
+     def _observe(self,driver,terms,ref,*,required):
+         try:return driver.observe(terms,ref)
+         except SwapError:

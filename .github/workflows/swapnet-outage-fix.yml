@@ -1,0 +1,61 @@
+name: SwapNet local refund outage before and after
+on:
+  push:
+    branches: [codex/ci-swapnet-outage-fix]
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: 14080763187
+          run-id: 43514242465
+          github-token: ${{ github.token }}
+          path: payload
+          merge-multiple: true
+      - run: bash settle.sh baseline
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: swapnet-outage-baseline-records
+          path: records/
+          retention-days: 10
+          if-no-files-found: error
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 68
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 8d6d8b1aabf371b12f2b1f5797b950fed7962d4e
+          path: product
+          persist-credentials: false
+      - name: Build and stage wallet binaries
+        timeout-minutes: 48
+        run: bash build.sh
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: swapnet-outage-candidate-binaries
+          path: payload/
+          retention-days: 30
+          if-no-files-found: error
+      - name: Verify candidate refund while Bitcoin RPC is down
+        timeout-minutes: 14
+        run: bash settle.sh candidate
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: swapnet-outage-candidate-records
+          path: records/
+          retention-days: 10
+          if-no-files-found: error
