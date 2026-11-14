@@ -1,0 +1,181 @@
+FFFFFF                                                                   [100%]
+=================================== FAILURES ===================================
+________________ test_review_matching_controls[duplicate_rows] _________________
+
+pair = <test_execution_v2.Pair object at 0x109150d90>
+variant = 'duplicate_rows'
+
+    @pytest.mark.parametrize('variant',['duplicate_rows','wrong_script','wrong_amount','pending','dropped'])
+    def test_review_matching_controls(pair,variant):
+     c,d,h=setup(pair,'unique');wallet=h.wallet;rpc=h.rpc
+     def w(m,*a):
+      if m=='listtransactions' and variant=='duplicate_rows':return [{'txid':TXID},{'txid':TXID}]
+      value=wallet(m,*a)
+      if m=='gettransaction' and variant in {'pending','dropped'}:value={**value,'confirmations':0};value.pop('blockhash',None)
+      return value
+     def r(m,*a):
+      if m=='getmempoolentry':
+       if variant=='dropped':raise SwapError('CHAIN_RPC','not in mempool')
+       return {'vsize':100}
+      value=rpc(m,*a)
+      if m=='decoderawtransaction':
+       if variant=='wrong_script':value['vout'][0]['scriptPubKey']['hex']='ff'
+       if variant=='wrong_amount':value['vout'][0]['value']+=Decimal('0.00000001')
+      return value
+     d.wallet=d.watch=w;d.rpc=r
+     if variant in {'wrong_script','wrong_amount','dropped'}:
+      with pytest.raises(SwapError) as error:c.tick_one(pair.sid)
+      assert error.value.code==('CHAIN_RPC' if variant=='dropped' else 'RECOVERY_UNRESOLVED')
+     else:
+      c.tick_one(pair.sid)
+>     assert pair.state('alice')['refs']['a']=={'txid':TXID,'vout':0}
+E     AssertionError: assert {'txid': '2d0...3', 'vout': 0} == {'txid': 'aba...b', 'vout': 0}
+E       
+E       Omitting 1 identical items, use -vv to show
+E       Differing items:
+E       {'txid': '2d04d707fbf9445de228f29ad63a9f536a24b29d938ccbc569eb3125e09c2bd3'} != {'txid': 'abababababababababababababababababababababababababababababababab'}
+E       Use -v to get more diff
+
+work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py:131: AssertionError
+_________________ test_review_matching_controls[wrong_script] __________________
+
+pair = <test_execution_v2.Pair object at 0x108cd84d0>, variant = 'wrong_script'
+
+    @pytest.mark.parametrize('variant',['duplicate_rows','wrong_script','wrong_amount','pending','dropped'])
+    def test_review_matching_controls(pair,variant):
+     c,d,h=setup(pair,'unique');wallet=h.wallet;rpc=h.rpc
+     def w(m,*a):
+      if m=='listtransactions' and variant=='duplicate_rows':return [{'txid':TXID},{'txid':TXID}]
+      value=wallet(m,*a)
+      if m=='gettransaction' and variant in {'pending','dropped'}:value={**value,'confirmations':0};value.pop('blockhash',None)
+      return value
+     def r(m,*a):
+      if m=='getmempoolentry':
+       if variant=='dropped':raise SwapError('CHAIN_RPC','not in mempool')
+       return {'vsize':100}
+      value=rpc(m,*a)
+      if m=='decoderawtransaction':
+       if variant=='wrong_script':value['vout'][0]['scriptPubKey']['hex']='ff'
+       if variant=='wrong_amount':value['vout'][0]['value']+=Decimal('0.00000001')
+      return value
+     d.wallet=d.watch=w;d.rpc=r
+     if variant in {'wrong_script','wrong_amount','dropped'}:
+>     with pytest.raises(SwapError) as error:c.tick_one(pair.sid)
+E     Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+
+work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py:127: Failed
+_________________ test_review_matching_controls[wrong_amount] __________________
+
+pair = <test_execution_v2.Pair object at 0x1090c4510>, variant = 'wrong_amount'
+
+    @pytest.mark.parametrize('variant',['duplicate_rows','wrong_script','wrong_amount','pending','dropped'])
+    def test_review_matching_controls(pair,variant):
+     c,d,h=setup(pair,'unique');wallet=h.wallet;rpc=h.rpc
+     def w(m,*a):
+      if m=='listtransactions' and variant=='duplicate_rows':return [{'txid':TXID},{'txid':TXID}]
+      value=wallet(m,*a)
+      if m=='gettransaction' and variant in {'pending','dropped'}:value={**value,'confirmations':0};value.pop('blockhash',None)
+      return value
+     def r(m,*a):
+      if m=='getmempoolentry':
+       if variant=='dropped':raise SwapError('CHAIN_RPC','not in mempool')
+       return {'vsize':100}
+      value=rpc(m,*a)
+      if m=='decoderawtransaction':
+       if variant=='wrong_script':value['vout'][0]['scriptPubKey']['hex']='ff'
+       if variant=='wrong_amount':value['vout'][0]['value']+=Decimal('0.00000001')
+      return value
+     d.wallet=d.watch=w;d.rpc=r
+     if variant in {'wrong_script','wrong_amount','dropped'}:
+>     with pytest.raises(SwapError) as error:c.tick_one(pair.sid)
+E     Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+
+work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py:127: Failed
+____________________ test_review_matching_controls[pending] ____________________
+
+pair = <test_execution_v2.Pair object at 0x108dc8f90>, variant = 'pending'
+
+    @pytest.mark.parametrize('variant',['duplicate_rows','wrong_script','wrong_amount','pending','dropped'])
+    def test_review_matching_controls(pair,variant):
+     c,d,h=setup(pair,'unique');wallet=h.wallet;rpc=h.rpc
+     def w(m,*a):
+      if m=='listtransactions' and variant=='duplicate_rows':return [{'txid':TXID},{'txid':TXID}]
+      value=wallet(m,*a)
+      if m=='gettransaction' and variant in {'pending','dropped'}:value={**value,'confirmations':0};value.pop('blockhash',None)
+      return value
+     def r(m,*a):
+      if m=='getmempoolentry':
+       if variant=='dropped':raise SwapError('CHAIN_RPC','not in mempool')
+       return {'vsize':100}
+      value=rpc(m,*a)
+      if m=='decoderawtransaction':
+       if variant=='wrong_script':value['vout'][0]['scriptPubKey']['hex']='ff'
+       if variant=='wrong_amount':value['vout'][0]['value']+=Decimal('0.00000001')
+      return value
+     d.wallet=d.watch=w;d.rpc=r
+     if variant in {'wrong_script','wrong_amount','dropped'}:
+      with pytest.raises(SwapError) as error:c.tick_one(pair.sid)
+      assert error.value.code==('CHAIN_RPC' if variant=='dropped' else 'RECOVERY_UNRESOLVED')
+     else:
+      c.tick_one(pair.sid)
+>     assert pair.state('alice')['refs']['a']=={'txid':TXID,'vout':0}
+E     AssertionError: assert {'txid': '7a2...6', 'vout': 0} == {'txid': 'aba...b', 'vout': 0}
+E       
+E       Omitting 1 identical items, use -vv to show
+E       Differing items:
+E       {'txid': '7a2852c997c6db9e0a294f2c1cb6f7b4a9d9ca431fbeeaf7ec9fd6e06dc75356'} != {'txid': 'abababababababababababababababababababababababababababababababab'}
+E       Use -v to get more diff
+
+work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py:131: AssertionError
+____________________ test_review_matching_controls[dropped] ____________________
+
+pair = <test_execution_v2.Pair object at 0x108cce350>, variant = 'dropped'
+
+    @pytest.mark.parametrize('variant',['duplicate_rows','wrong_script','wrong_amount','pending','dropped'])
+    def test_review_matching_controls(pair,variant):
+     c,d,h=setup(pair,'unique');wallet=h.wallet;rpc=h.rpc
+     def w(m,*a):
+      if m=='listtransactions' and variant=='duplicate_rows':return [{'txid':TXID},{'txid':TXID}]
+      value=wallet(m,*a)
+      if m=='gettransaction' and variant in {'pending','dropped'}:value={**value,'confirmations':0};value.pop('blockhash',None)
+      return value
+     def r(m,*a):
+      if m=='getmempoolentry':
+       if variant=='dropped':raise SwapError('CHAIN_RPC','not in mempool')
+       return {'vsize':100}
+      value=rpc(m,*a)
+      if m=='decoderawtransaction':
+       if variant=='wrong_script':value['vout'][0]['scriptPubKey']['hex']='ff'
+       if variant=='wrong_amount':value['vout'][0]['value']+=Decimal('0.00000001')
+      return value
+     d.wallet=d.watch=w;d.rpc=r
+     if variant in {'wrong_script','wrong_amount','dropped'}:
+>     with pytest.raises(SwapError) as error:c.tick_one(pair.sid)
+E     Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+
+work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py:127: Failed
+_____________________ test_review_marker_survives_reexport _____________________
+
+pair = <test_execution_v2.Pair object at 0x1091503d0>
+tmp_path = PosixPath('/Volumes/BTX-S1-HistoryReview/before-tests/test_review_marker_survives_re0')
+
+    def test_review_marker_survives_reexport(pair,tmp_path):
+     pair.start();pair.deliver();folder=pair.path/'alice';atomic_private_write(folder/'vault.key',b'0123456789abcdef0123456789abcdef');pair.nodes['alice'][3].vault.save();(folder/'foreign-vault.json').write_bytes((folder/'vault.json').read_bytes());password='long independently owned fixture password';network=pair.identities['alice'].network
+     first=export_bundle(pair.nodes['alice'][1],folder,password,network);dest=tmp_path/'first';restore_bundle(first['path'],dest,password,network)
+     st=Store(dest/'state.sqlite');j=Journal(st)
+     try:
+>     assert j.setting('restored_session:'+pair.sid) is True
+E     AssertionError: assert None is True
+E      +  where None = setting(('restored_session:' + '4ca56839feffbbafeb8f1fe6d0a6ae744dd438cd5f3559d6d268542581ed6049'))
+E      +    where setting = <swapnet.journal.Journal object at 0x103786cd0>.setting
+E      +    and   '4ca56839feffbbafeb8f1fe6d0a6ae744dd438cd5f3559d6d268542581ed6049' = <test_execution_v2.Pair object at 0x1091503d0>.sid
+
+work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py:139: AssertionError
+=========================== short test summary info ============================
+FAILED work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py::test_review_matching_controls[duplicate_rows]
+FAILED work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py::test_review_matching_controls[wrong_script]
+FAILED work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py::test_review_matching_controls[wrong_amount]
+FAILED work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py::test_review_matching_controls[pending]
+FAILED work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py::test_review_matching_controls[dropped]
+FAILED work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py::test_review_marker_survives_reexport
+6 failed, 16 deselected in 1.62s

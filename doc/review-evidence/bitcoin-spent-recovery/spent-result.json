@@ -1,0 +1,166 @@
+{
+  "status": "MEASUREMENT_COMPLETE",
+  "target": "d7b9594b1d6f0b69fc743341725ae04cbf9681fb",
+  "scope": "Current production Python coordinator/driver and real Bitcoin Core30.4 wallet/chain; simulated BTX counterleg, no embedded native BTX runtime",
+  "binary_sha256": "e4f5c68ea419820592a50a744040ab0c08f84fff5942ebe92eca21f5ccddcb5c",
+  "cases": [],
+  "original": {
+    "funding": {
+      "txid": "a30997dbee5ef454f92305a18e3043c48fdf795138b2231084782a4c96e54209",
+      "vout": 0
+    },
+    "claim_txid": "913bb4aa069745f60e64a268da0c7d7ad46c988fde716b5331affce97801adab",
+    "principal_atoms": 10000,
+    "claim_received_atoms": 9900,
+    "claim_fee_atoms": 100,
+    "wallet_history_present": true,
+    "spent_on_chain": true
+  },
+  "lookup_after_restore": null,
+  "restored_before": {
+    "stage": "committed",
+    "funding_prepared": false,
+    "funding_broadcast": false,
+    "refs": {}
+  },
+  "funding_attempts_after_restore": 1,
+  "restored_after": {
+    "stage": "funded",
+    "funding_prepared": true,
+    "funding_broadcast": true,
+    "refs": {
+      "a": {
+        "txid": "5ab95ebf86360cdc380a249466dc021e29d56771e473b9a04d03ed21eeb8f4f5",
+        "vout": 0
+      }
+    },
+    "last_error": null
+  },
+  "another_payment": true,
+  "second_payment": {
+    "reference": {
+      "txid": "5ab95ebf86360cdc380a249466dc021e29d56771e473b9a04d03ed21eeb8f4f5",
+      "vout": 0
+    },
+    "principal_atoms": 10000,
+    "confirmed": true,
+    "disjoint_inputs": true
+  },
+  "reopened": {
+    "stage": "funded",
+    "funding_prepared": true,
+    "funding_broadcast": true,
+    "refs": {
+      "a": {
+        "txid": "5ab95ebf86360cdc380a249466dc021e29d56771e473b9a04d03ed21eeb8f4f5",
+        "vout": 0
+      }
+    }
+  },
+  "rpc_funding_calls": [
+    {
+      "wallet": "alice",
+      "method": "walletcreatefundedpsbt",
+      "decoded": {
+        "txid": "a30997dbee5ef454f92305a18e3043c48fdf795138b2231084782a4c96e54209",
+        "hash": "a30997dbee5ef454f92305a18e3043c48fdf795138b2231084782a4c96e54209",
+        "version": 2,
+        "size": 137,
+        "vsize": 137,
+        "weight": 548,
+        "locktime": 0,
+        "vin": [
+          {
+            "txid": "8e18aecda85049dbbd6bf5a73c191aaf237c0c48a0104c4e869102e6fff7bf97",
+            "vout": 0,
+            "scriptSig": {
+              "asm": "",
+              "hex": ""
+            },
+            "sequence": 4294967294
+          }
+        ],
+        "vout": [
+          {
+            "value": "0.00010000",
+            "n": 0,
+            "scriptPubKey": {
+              "asm": "0 9d683f84dd5ca57633683faacdd7cde6d7f7feddd14a3795592307db69dd05eb",
+              "desc": "addr(bcrt1qn45rlpxatjjhvvmg874vm47dumtl0lka699r092eyvrak6waqh4sh0cpnd)#42yctm9x",
+              "hex": "00209d683f84dd5ca57633683faacdd7cde6d7f7feddd14a3795592307db69dd05eb",
+              "address": "bcrt1qn45rlpxatjjhvvmg874vm47dumtl0lka699r092eyvrak6waqh4sh0cpnd",
+              "type": "witness_v0_scripthash"
+            }
+          },
+          {
+            "value": "49.99989670",
+            "n": 1,
+            "scriptPubKey": {
+              "asm": "1 85ca023f50aac84c7d242fa383a57580be46d45c10a7a549b97dc6bdb1968673",
+              "desc": "rawtr(85ca023f50aac84c7d242fa383a57580be46d45c10a7a549b97dc6bdb1968673)#unf3lj62",
+              "hex": "512085ca023f50aac84c7d242fa383a57580be46d45c10a7a549b97dc6bdb1968673",
+              "address": "bcrt1psh9qy06s4tyyclfy973c8ft4szlyd4zuzzn62jde0hrtmvvksees54enz8",
+              "type": "witness_v1_taproot"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "wallet": "alice",
+      "method": "walletcreatefundedpsbt",
+      "decoded": {
+        "txid": "5ab95ebf86360cdc380a249466dc021e29d56771e473b9a04d03ed21eeb8f4f5",
+        "hash": "5ab95ebf86360cdc380a249466dc021e29d56771e473b9a04d03ed21eeb8f4f5",
+        "version": 2,
+        "size": 137,
+        "vsize": 137,
+        "weight": 548,
+        "locktime": 0,
+        "vin": [
+          {
+            "txid": "583b4f26fe5ad2981b28a07ea6a0abec123cd2db87cac226eba6b43af58ce24a",
+            "vout": 0,
+            "scriptSig": {
+              "asm": "",
+              "hex": ""
+            },
+            "sequence": 4294967294
+          }
+        ],
+        "vout": [
+          {
+            "value": "0.00010000",
+            "n": 0,
+            "scriptPubKey": {
+              "asm": "0 9d683f84dd5ca57633683faacdd7cde6d7f7feddd14a3795592307db69dd05eb",
+              "desc": "addr(bcrt1qn45rlpxatjjhvvmg874vm47dumtl0lka699r092eyvrak6waqh4sh0cpnd)#42yctm9x",
+              "hex": "00209d683f84dd5ca57633683faacdd7cde6d7f7feddd14a3795592307db69dd05eb",
+              "address": "bcrt1qn45rlpxatjjhvvmg874vm47dumtl0lka699r092eyvrak6waqh4sh0cpnd",
+              "type": "witness_v0_scripthash"
+            }
+          },
+          {
+            "value": "49.99989670",
+            "n": 1,
+            "scriptPubKey": {
+              "asm": "1 d85eac2e1e031b27a2c6634f8f92548144528ee074f6d2459ff7ff528bb06037",
+              "desc": "rawtr(d85eac2e1e031b27a2c6634f8f92548144528ee074f6d2459ff7ff528bb06037)#wmw9sfal",
+              "hex": "5120d85eac2e1e031b27a2c6634f8f92548144528ee074f6d2459ff7ff528bb06037",
+              "address": "bcrt1pmp02cts7qvdj0gkxvd8clyj5s9z99rhqwnmdy3vl7ll49zasvqmsh0gdaf",
+              "type": "witness_v1_taproot"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "rpc_funding_attempts": [
+    {
+      "wallet": "alice"
+    },
+    {
+      "wallet": "alice"
+    }
+  ]
+}

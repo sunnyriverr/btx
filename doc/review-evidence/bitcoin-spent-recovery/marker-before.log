@@ -1,0 +1,20 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_________________ test_marker_failure_does_not_publish_restore _________________
+
+pair = <test_execution_v2.Pair object at 0x10b0125d0>
+tmp_path = PosixPath('/Volumes/BTX-S1-HistoryRepair/t-marker-before/test_marker_failure_does_not_p0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10afd5c10>
+
+    def test_marker_failure_does_not_publish_restore(pair,tmp_path,monkeypatch):
+     pair.start();pair.deliver();folder=pair.path/'alice';atomic_private_write(folder/'vault.key',b'0123456789abcdef0123456789abcdef');pair.nodes['alice'][3].vault.save();(folder/'foreign-vault.json').write_bytes((folder/'vault.json').read_bytes())
+     b=export_bundle(pair.nodes['alice'][1],folder,'long independently owned fixture password',pair.identities['alice'].network)
+     def fail(*args,**kwargs):raise RuntimeError('marker write failed')
+     monkeypatch.setattr(Journal,'set_setting',fail);dest=tmp_path/'imported'
+>    with pytest.raises(RuntimeError,match='marker write failed'):restore_bundle(b['path'],dest,'long independently owned fixture password',pair.identities['alice'].network)
+E    Failed: DID NOT RAISE <class 'RuntimeError'>
+
+work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py:105: Failed
+=========================== short test summary info ============================
+FAILED work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py::test_marker_failure_does_not_publish_restore
+1 failed, 15 deselected in 0.81s

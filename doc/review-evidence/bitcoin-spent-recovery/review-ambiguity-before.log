@@ -1,0 +1,41 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+__________________ test_review_ambiguity_outpoints[two_vouts] __________________
+
+pair = <test_execution_v2.Pair object at 0x10b778490>, variant = 'two_vouts'
+
+    @pytest.mark.parametrize('variant',['two_vouts','historical_plus_live'])
+    def test_review_ambiguity_outpoints(pair,variant):
+     c,d,h=setup(pair,'unique');rpc=h.rpc
+     if variant=='historical_plus_live':h.add(OTHER,0)
+     def r(m,*a):
+      out=rpc(m,*a)
+      if m=='decoderawtransaction' and variant=='two_vouts':out['vout'].append({**out['vout'][0],'n':1})
+      return out
+     d.rpc=r
+>    with pytest.raises(SwapError) as error:c.tick_one(pair.sid)
+E    Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+
+work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py:155: Failed
+____________ test_review_ambiguity_outpoints[historical_plus_live] _____________
+
+pair = <test_execution_v2.Pair object at 0x10b778590>
+variant = 'historical_plus_live'
+
+    @pytest.mark.parametrize('variant',['two_vouts','historical_plus_live'])
+    def test_review_ambiguity_outpoints(pair,variant):
+     c,d,h=setup(pair,'unique');rpc=h.rpc
+     if variant=='historical_plus_live':h.add(OTHER,0)
+     def r(m,*a):
+      out=rpc(m,*a)
+      if m=='decoderawtransaction' and variant=='two_vouts':out['vout'].append({**out['vout'][0],'n':1})
+      return out
+     d.rpc=r
+>    with pytest.raises(SwapError) as error:c.tick_one(pair.sid)
+E    Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+
+work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py:155: Failed
+=========================== short test summary info ============================
+FAILED work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py::test_review_ambiguity_outpoints[two_vouts]
+FAILED work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py::test_review_ambiguity_outpoints[historical_plus_live]
+2 failed, 22 deselected in 0.38s

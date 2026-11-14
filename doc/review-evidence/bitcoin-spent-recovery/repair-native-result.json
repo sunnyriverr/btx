@@ -1,0 +1,106 @@
+{
+  "status": "PASS_ORIGINAL_SPENT_PAYMENT_RETAINED",
+  "target": "d7b9594b1d6f0b69fc743341725ae04cbf9681fb",
+  "scope": "Current production Python coordinator/driver and real Bitcoin Core30.4 wallet/chain; simulated BTX counterleg, no embedded native BTX runtime",
+  "binary_sha256": "e4f5c68ea419820592a50a744040ab0c08f84fff5942ebe92eca21f5ccddcb5c",
+  "cases": [],
+  "original": {
+    "funding": {
+      "txid": "2783af1cbf54f49475c159202b5f128ced3025d6cee8986211071852605422a7",
+      "vout": 1
+    },
+    "claim_txid": "5b042fbc859e19af86b4f024ae7b09665a5ca208ed6e7ff2fbdb27b149f8e785",
+    "principal_atoms": 10000,
+    "claim_received_atoms": 9900,
+    "claim_fee_atoms": 100,
+    "wallet_history_present": true,
+    "spent_on_chain": true
+  },
+  "lookup_after_restore": null,
+  "restored_before": {
+    "stage": "committed",
+    "funding_prepared": false,
+    "funding_broadcast": false,
+    "refs": {}
+  },
+  "funding_attempts_after_restore": 0,
+  "restored_after": {
+    "stage": "secret_exposed",
+    "funding_prepared": true,
+    "funding_broadcast": true,
+    "refs": {
+      "a": {
+        "txid": "2783af1cbf54f49475c159202b5f128ced3025d6cee8986211071852605422a7",
+        "vout": 1
+      }
+    },
+    "last_error": null
+  },
+  "another_payment": false,
+  "reopened": {
+    "stage": "secret_exposed",
+    "funding_prepared": true,
+    "funding_broadcast": true,
+    "refs": {
+      "a": {
+        "txid": "2783af1cbf54f49475c159202b5f128ced3025d6cee8986211071852605422a7",
+        "vout": 1
+      }
+    }
+  },
+  "rpc_funding_calls": [
+    {
+      "wallet": "alice",
+      "method": "walletcreatefundedpsbt",
+      "decoded": {
+        "txid": "2783af1cbf54f49475c159202b5f128ced3025d6cee8986211071852605422a7",
+        "hash": "2783af1cbf54f49475c159202b5f128ced3025d6cee8986211071852605422a7",
+        "version": 2,
+        "size": 137,
+        "vsize": 137,
+        "weight": 548,
+        "locktime": 0,
+        "vin": [
+          {
+            "txid": "6896a61461e8d04abaf273fb8e08405db666ee9e74d51e1eb467d1de4972af6c",
+            "vout": 0,
+            "scriptSig": {
+              "asm": "",
+              "hex": ""
+            },
+            "sequence": 4294967294
+          }
+        ],
+        "vout": [
+          {
+            "value": "49.99989670",
+            "n": 0,
+            "scriptPubKey": {
+              "asm": "1 773548dce473e65d859831b296416858c8eafa89255d30fe8bd6c16da5209248",
+              "desc": "rawtr(773548dce473e65d859831b296416858c8eafa89255d30fe8bd6c16da5209248)#d92zwevl",
+              "hex": "5120773548dce473e65d859831b296416858c8eafa89255d30fe8bd6c16da5209248",
+              "address": "bcrt1pwu653h8yw0n9mpvcxxefvstgtryw475fy4wnpl5t6mqkmffqjfyqzmd407",
+              "type": "witness_v1_taproot"
+            }
+          },
+          {
+            "value": "0.00010000",
+            "n": 1,
+            "scriptPubKey": {
+              "asm": "0 dd3d25605e74cb3001edfc2746f44a0dcced7c9b41dd692fa326fd3e39c4b32c",
+              "desc": "addr(bcrt1qm57j2cz7wn9nqq0dlsn5daz2phxw6lymg8wkjtarym7nuwwykvkqvmzvkq)#s4qqtpnp",
+              "hex": "0020dd3d25605e74cb3001edfc2746f44a0dcced7c9b41dd692fa326fd3e39c4b32c",
+              "address": "bcrt1qm57j2cz7wn9nqq0dlsn5daz2phxw6lymg8wkjtarym7nuwwykvkqvmzvkq",
+              "type": "witness_v0_scripthash"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "rpc_funding_attempts": [
+    {
+      "wallet": "alice"
+    }
+  ]
+}

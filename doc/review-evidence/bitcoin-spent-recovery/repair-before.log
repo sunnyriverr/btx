@@ -1,0 +1,234 @@
+FFFF.FF..FFFFFF                                                          [100%]
+=================================== FAILURES ===================================
+_____________ test_restored_history_refuses_fresh_funding[missing] _____________
+
+pair = <test_execution_v2.Pair object at 0x107341750>, mode = 'missing'
+
+    @pytest.mark.parametrize('mode',['missing','incomplete','ambiguous','empty'])
+    def test_restored_history_refuses_fresh_funding(pair,mode):
+     c,d,h=setup(pair,mode)
+     try:c.tick_one(pair.sid);c.tick_one(pair.sid)
+     except SwapError:pass
+>    assert d.funding_calls==0
+E    assert 1 == 0
+E     +  where 1 = <test_history_repair.Probe object at 0x107341290>.funding_calls
+
+work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py:46: AssertionError
+___________ test_restored_history_refuses_fresh_funding[incomplete] ____________
+
+pair = <test_execution_v2.Pair object at 0x107019050>, mode = 'incomplete'
+
+    @pytest.mark.parametrize('mode',['missing','incomplete','ambiguous','empty'])
+    def test_restored_history_refuses_fresh_funding(pair,mode):
+     c,d,h=setup(pair,mode)
+     try:c.tick_one(pair.sid);c.tick_one(pair.sid)
+     except SwapError:pass
+>    assert d.funding_calls==0
+E    assert 1 == 0
+E     +  where 1 = <test_history_repair.Probe object at 0x1073371d0>.funding_calls
+
+work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py:46: AssertionError
+____________ test_restored_history_refuses_fresh_funding[ambiguous] ____________
+
+pair = <test_execution_v2.Pair object at 0x1072ecb50>, mode = 'ambiguous'
+
+    @pytest.mark.parametrize('mode',['missing','incomplete','ambiguous','empty'])
+    def test_restored_history_refuses_fresh_funding(pair,mode):
+     c,d,h=setup(pair,mode)
+     try:c.tick_one(pair.sid);c.tick_one(pair.sid)
+     except SwapError:pass
+>    assert d.funding_calls==0
+E    assert 1 == 0
+E     +  where 1 = <test_history_repair.Probe object at 0x1072ed390>.funding_calls
+
+work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py:46: AssertionError
+______________ test_restored_history_refuses_fresh_funding[empty] ______________
+
+pair = <test_execution_v2.Pair object at 0x10730a150>, mode = 'empty'
+
+    @pytest.mark.parametrize('mode',['missing','incomplete','ambiguous','empty'])
+    def test_restored_history_refuses_fresh_funding(pair,mode):
+     c,d,h=setup(pair,mode)
+     try:c.tick_one(pair.sid);c.tick_one(pair.sid)
+     except SwapError:pass
+>    assert d.funding_calls==0
+E    assert 1 == 0
+E     +  where 1 = <test_history_repair.Probe object at 0x107018a50>.funding_calls
+
+work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py:46: AssertionError
+_____________________ test_spent_history_adopts_no_funding _____________________
+
+pair = <test_execution_v2.Pair object at 0x107324450>
+
+    def test_spent_history_adopts_no_funding(pair):
+     c,d,h=setup(pair,'unique');c.tick_one(pair.sid);c.tick_one(pair.sid)
+>    assert d.funding_calls==0 and pair.state('alice')['refs']['a']=={'txid':TXID,'vout':0}
+E    assert (1 == 0)
+E     +  where 1 = <test_history_repair.Probe object at 0x106efab10>.funding_calls
+
+work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py:56: AssertionError
+_______________ test_restore_marker_installed_before_publication _______________
+
+pair = <test_execution_v2.Pair object at 0x107091310>
+tmp_path = PosixPath('/Volumes/BTX-S1-HistoryRepair/t-before/test_restore_marker_installed_0')
+
+    def test_restore_marker_installed_before_publication(pair,tmp_path):
+     pair.start();pair.deliver();folder=pair.path/'alice';key=b'0123456789abcdef0123456789abcdef';atomic_private_write(folder/'vault.key',key);pair.nodes['alice'][3].vault.save();(folder/'foreign-vault.json').write_bytes((folder/'vault.json').read_bytes())
+     b=export_bundle(pair.nodes['alice'][1],folder,'long independently owned fixture password',pair.identities['alice'].network)
+     dest=tmp_path/'imported';restore_bundle(b['path'],dest,'long independently owned fixture password',pair.identities['alice'].network)
+     s=Store(dest/'state.sqlite')
+>    try:assert Journal(s).setting('restored_session:'+pair.sid) is True
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E    AssertionError: assert None is True
+E     +  where None = setting(('restored_session:' + '4ca56839feffbbafeb8f1fe6d0a6ae744dd438cd5f3559d6d268542581ed6049'))
+E     +    where setting = <swapnet.journal.Journal object at 0x107091cd0>.setting
+E     +      where <swapnet.journal.Journal object at 0x107091cd0> = Journal(<swapnet.store.Store object at 0x1070910d0>)
+E     +    and   '4ca56839feffbbafeb8f1fe6d0a6ae744dd438cd5f3559d6d268542581ed6049' = <test_execution_v2.Pair object at 0x107091310>.sid
+
+work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py:65: AssertionError
+________________ test_incomplete_history_never_funds[scanning] _________________
+
+pair = <test_execution_v2.Pair object at 0x107091c90>, failure = 'scanning'
+
+    @pytest.mark.parametrize('failure',['scanning','changed_count','changed_tip','bad_page','bad_raw','conflict'])
+    def test_incomplete_history_never_funds(pair,failure):
+     c,d,h=setup(pair,'unique');wallet=h.wallet;rpc=h.rpc;calls=[0];tips=[0]
+     def w(m,*a):
+      if m=='getwalletinfo':
+       calls[0]+=1;return {'txcount':calls[0] if failure=='changed_count' else 2,'scanning':{'duration':1} if failure=='scanning' else False}
+      if m=='listtransactions' and failure=='bad_page':return {'transactions':[]}
+      if m=='gettransaction' and failure=='bad_raw':return {'txid':a[0],'hex':''}
+      if m=='gettransaction' and failure=='conflict':return {**wallet(m,*a),'confirmations':-1}
+      return wallet(m,*a)
+     def r(m,*a):
+      if m=='getbestblockhash' and failure=='changed_tip':tips[0]+=1;return str(tips[0])
+      return rpc(m,*a)
+     d.wallet=d.watch=w;d.rpc=r
+>    with pytest.raises(SwapError):c.tick_one(pair.sid)
+E    Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+
+work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py:97: Failed
+______________ test_incomplete_history_never_funds[changed_count] ______________
+
+pair = <test_execution_v2.Pair object at 0x1070194d0>, failure = 'changed_count'
+
+    @pytest.mark.parametrize('failure',['scanning','changed_count','changed_tip','bad_page','bad_raw','conflict'])
+    def test_incomplete_history_never_funds(pair,failure):
+     c,d,h=setup(pair,'unique');wallet=h.wallet;rpc=h.rpc;calls=[0];tips=[0]
+     def w(m,*a):
+      if m=='getwalletinfo':
+       calls[0]+=1;return {'txcount':calls[0] if failure=='changed_count' else 2,'scanning':{'duration':1} if failure=='scanning' else False}
+      if m=='listtransactions' and failure=='bad_page':return {'transactions':[]}
+      if m=='gettransaction' and failure=='bad_raw':return {'txid':a[0],'hex':''}
+      if m=='gettransaction' and failure=='conflict':return {**wallet(m,*a),'confirmations':-1}
+      return wallet(m,*a)
+     def r(m,*a):
+      if m=='getbestblockhash' and failure=='changed_tip':tips[0]+=1;return str(tips[0])
+      return rpc(m,*a)
+     d.wallet=d.watch=w;d.rpc=r
+>    with pytest.raises(SwapError):c.tick_one(pair.sid)
+E    Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+
+work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py:97: Failed
+_______________ test_incomplete_history_never_funds[changed_tip] _______________
+
+pair = <test_execution_v2.Pair object at 0x107335590>, failure = 'changed_tip'
+
+    @pytest.mark.parametrize('failure',['scanning','changed_count','changed_tip','bad_page','bad_raw','conflict'])
+    def test_incomplete_history_never_funds(pair,failure):
+     c,d,h=setup(pair,'unique');wallet=h.wallet;rpc=h.rpc;calls=[0];tips=[0]
+     def w(m,*a):
+      if m=='getwalletinfo':
+       calls[0]+=1;return {'txcount':calls[0] if failure=='changed_count' else 2,'scanning':{'duration':1} if failure=='scanning' else False}
+      if m=='listtransactions' and failure=='bad_page':return {'transactions':[]}
+      if m=='gettransaction' and failure=='bad_raw':return {'txid':a[0],'hex':''}
+      if m=='gettransaction' and failure=='conflict':return {**wallet(m,*a),'confirmations':-1}
+      return wallet(m,*a)
+     def r(m,*a):
+      if m=='getbestblockhash' and failure=='changed_tip':tips[0]+=1;return str(tips[0])
+      return rpc(m,*a)
+     d.wallet=d.watch=w;d.rpc=r
+>    with pytest.raises(SwapError):c.tick_one(pair.sid)
+E    Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+
+work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py:97: Failed
+________________ test_incomplete_history_never_funds[bad_page] _________________
+
+pair = <test_execution_v2.Pair object at 0x1072d4610>, failure = 'bad_page'
+
+    @pytest.mark.parametrize('failure',['scanning','changed_count','changed_tip','bad_page','bad_raw','conflict'])
+    def test_incomplete_history_never_funds(pair,failure):
+     c,d,h=setup(pair,'unique');wallet=h.wallet;rpc=h.rpc;calls=[0];tips=[0]
+     def w(m,*a):
+      if m=='getwalletinfo':
+       calls[0]+=1;return {'txcount':calls[0] if failure=='changed_count' else 2,'scanning':{'duration':1} if failure=='scanning' else False}
+      if m=='listtransactions' and failure=='bad_page':return {'transactions':[]}
+      if m=='gettransaction' and failure=='bad_raw':return {'txid':a[0],'hex':''}
+      if m=='gettransaction' and failure=='conflict':return {**wallet(m,*a),'confirmations':-1}
+      return wallet(m,*a)
+     def r(m,*a):
+      if m=='getbestblockhash' and failure=='changed_tip':tips[0]+=1;return str(tips[0])
+      return rpc(m,*a)
+     d.wallet=d.watch=w;d.rpc=r
+>    with pytest.raises(SwapError):c.tick_one(pair.sid)
+E    Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+
+work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py:97: Failed
+_________________ test_incomplete_history_never_funds[bad_raw] _________________
+
+pair = <test_execution_v2.Pair object at 0x1072ff090>, failure = 'bad_raw'
+
+    @pytest.mark.parametrize('failure',['scanning','changed_count','changed_tip','bad_page','bad_raw','conflict'])
+    def test_incomplete_history_never_funds(pair,failure):
+     c,d,h=setup(pair,'unique');wallet=h.wallet;rpc=h.rpc;calls=[0];tips=[0]
+     def w(m,*a):
+      if m=='getwalletinfo':
+       calls[0]+=1;return {'txcount':calls[0] if failure=='changed_count' else 2,'scanning':{'duration':1} if failure=='scanning' else False}
+      if m=='listtransactions' and failure=='bad_page':return {'transactions':[]}
+      if m=='gettransaction' and failure=='bad_raw':return {'txid':a[0],'hex':''}
+      if m=='gettransaction' and failure=='conflict':return {**wallet(m,*a),'confirmations':-1}
+      return wallet(m,*a)
+     def r(m,*a):
+      if m=='getbestblockhash' and failure=='changed_tip':tips[0]+=1;return str(tips[0])
+      return rpc(m,*a)
+     d.wallet=d.watch=w;d.rpc=r
+>    with pytest.raises(SwapError):c.tick_one(pair.sid)
+E    Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+
+work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py:97: Failed
+________________ test_incomplete_history_never_funds[conflict] _________________
+
+pair = <test_execution_v2.Pair object at 0x1072ba650>, failure = 'conflict'
+
+    @pytest.mark.parametrize('failure',['scanning','changed_count','changed_tip','bad_page','bad_raw','conflict'])
+    def test_incomplete_history_never_funds(pair,failure):
+     c,d,h=setup(pair,'unique');wallet=h.wallet;rpc=h.rpc;calls=[0];tips=[0]
+     def w(m,*a):
+      if m=='getwalletinfo':
+       calls[0]+=1;return {'txcount':calls[0] if failure=='changed_count' else 2,'scanning':{'duration':1} if failure=='scanning' else False}
+      if m=='listtransactions' and failure=='bad_page':return {'transactions':[]}
+      if m=='gettransaction' and failure=='bad_raw':return {'txid':a[0],'hex':''}
+      if m=='gettransaction' and failure=='conflict':return {**wallet(m,*a),'confirmations':-1}
+      return wallet(m,*a)
+     def r(m,*a):
+      if m=='getbestblockhash' and failure=='changed_tip':tips[0]+=1;return str(tips[0])
+      return rpc(m,*a)
+     d.wallet=d.watch=w;d.rpc=r
+>    with pytest.raises(SwapError):c.tick_one(pair.sid)
+E    Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+
+work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py:97: Failed
+=========================== short test summary info ============================
+FAILED work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py::test_restored_history_refuses_fresh_funding[missing]
+FAILED work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py::test_restored_history_refuses_fresh_funding[incomplete]
+FAILED work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py::test_restored_history_refuses_fresh_funding[ambiguous]
+FAILED work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py::test_restored_history_refuses_fresh_funding[empty]
+FAILED work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py::test_spent_history_adopts_no_funding
+FAILED work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py::test_restore_marker_installed_before_publication
+FAILED work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py::test_incomplete_history_never_funds[scanning]
+FAILED work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py::test_incomplete_history_never_funds[changed_count]
+FAILED work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py::test_incomplete_history_never_funds[changed_tip]
+FAILED work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py::test_incomplete_history_never_funds[bad_page]
+FAILED work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py::test_incomplete_history_never_funds[bad_raw]
+FAILED work/btx-lanes/session-1/swapnet-spent-bitcoin-recovery/test_history_repair.py::test_incomplete_history_never_funds[conflict]
+12 failed, 3 passed in 2.90s
