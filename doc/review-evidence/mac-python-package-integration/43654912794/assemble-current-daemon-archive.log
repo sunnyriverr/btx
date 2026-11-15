@@ -1,0 +1,21 @@
+Traceback (most recent call last):
+  File "/Users/runner/work/btx/btx/product/scripts/release/package_release_archive.py", line 928, in <module>
+    raise SystemExit(main(sys.argv[1:]))
+                     ^^^^^^^^^^^^^^^^^^
+  File "/Users/runner/work/btx/btx/product/scripts/release/package_release_archive.py", line 891, in main
+    release_root, included_paths, skipped_binaries = stage_release_tree(
+                                                     ^^^^^^^^^^^^^^^^^^^
+  File "/Users/runner/work/btx/btx/product/scripts/release/package_release_archive.py", line 675, in stage_release_tree
+    verify_shipped_btxd(btxd_path)
+  File "/Users/runner/work/btx/btx/product/scripts/release/package_release_archive.py", line 445, in verify_shipped_btxd
+    module.verify_path_for_ship(btxd_path)
+  File "/Users/runner/work/btx/btx/product/scripts/release/verify_release_btxd.py", line 636, in verify_path_for_ship
+    how = verify_binary(path)
+          ^^^^^^^^^^^^^^^^^^^
+  File "/Users/runner/work/btx/btx/product/scripts/release/verify_release_btxd.py", line 539, in verify_binary
+    verify_macos(path, require_zmq=want_zmq)
+  File "/Users/runner/work/btx/btx/product/scripts/release/verify_release_btxd.py", line 426, in verify_macos
+    verify_macos_portable(path, dylibs)
+  File "/Users/runner/work/btx/btx/product/scripts/release/verify_release_btxd.py", line 391, in verify_macos_portable
+    raise VerifyError(
+verify_release_btxd.VerifyError: /Users/runner/work/btx/btx/current-inputs/bin/btxd: macOS release binary must not load Homebrew dylibs (clean Mac without brew will not launch). Found: ['/opt/homebrew/opt/python@3.12/Frameworks/Python.framework/Versions/3.12/Python']

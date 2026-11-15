@@ -1,0 +1,102 @@
+package_release_archive: skip btx-hcpd (absent from the build directory; not shipped)
+package_release_archive: skip btx-hosted (absent from the build directory; not shipped)
+package_release_archive: skip btx-open (absent from the build directory; not shipped)
+package_release_archive: skip btx-capability (absent from the build directory; not shipped)
+package_release_archive: skip btx-capabilityd (absent from the build directory; not shipped)
+package_release_archive: skip btx-modelcheck (absent from the build directory; not shipped)
+package_release_archive: skip btx-matmul-backend-info (absent from the build directory; not shipped)
+package_release_archive: skip btx-hcpd (absent from the build directory; not shipped)
+package_release_archive: skip btx-hosted (absent from the build directory; not shipped)
+package_release_archive: skip btx-open (absent from the build directory; not shipped)
+package_release_archive: skip btx-capability (absent from the build directory; not shipped)
+package_release_archive: skip btx-capabilityd (absent from the build directory; not shipped)
+package_release_archive: skip btx-modelcheck (absent from the build directory; not shipped)
+package_release_archive: skip btx-matmul-backend-info (absent from the build directory; not shipped)
+package_release_archive: skip btx-hcpd (absent from the build directory; not shipped)
+package_release_archive: skip btx-hosted (absent from the build directory; not shipped)
+package_release_archive: skip btx-open (absent from the build directory; not shipped)
+package_release_archive: skip btx-capability (absent from the build directory; not shipped)
+package_release_archive: skip btx-capabilityd (absent from the build directory; not shipped)
+package_release_archive: skip btx-modelcheck (absent from the build directory; not shipped)
+package_release_archive: skip btx-matmul-backend-info (absent from the build directory; not shipped)
+package_release_archive: skip btx-hcpd (absent from the build directory; not shipped)
+package_release_archive: skip btx-hosted (absent from the build directory; not shipped)
+package_release_archive: skip btx-open (absent from the build directory; not shipped)
+package_release_archive: skip btx-capability (absent from the build directory; not shipped)
+package_release_archive: skip btx-capabilityd (absent from the build directory; not shipped)
+package_release_archive: skip btx-modelcheck (absent from the build directory; not shipped)
+package_release_archive: skip btx-matmul-backend-info (absent from the build directory; not shipped)
+package_release_archive: skip btx-hcpd (absent from the build directory; not shipped)
+package_release_archive: skip btx-hosted (absent from the build directory; not shipped)
+package_release_archive: skip btx-open (absent from the build directory; not shipped)
+package_release_archive: skip btx-capability (absent from the build directory; not shipped)
+package_release_archive: skip btx-capabilityd (absent from the build directory; not shipped)
+package_release_archive: skip btx-modelcheck (absent from the build directory; not shipped)
+package_release_archive: skip btx-matmul-backend-info (absent from the build directory; not shipped)
+
+======================================================================
+ERROR: test_macos_checks_finished_images_after_runtime_bundling (__main__.PackageReleaseArchiveTest) (broken=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/runner/work/btx/btx/product/test/util/package_release_archive_test.py", line 553, in test_macos_checks_finished_images_after_runtime_bundling
+    self.assertEqual(self.module.main(args), 0)
+  File "/Users/runner/work/btx/btx/product/scripts/release/package_release_archive.py", line 891, in main
+    release_root, included_paths, skipped_binaries = stage_release_tree(
+  File "/Users/runner/work/btx/btx/product/scripts/release/package_release_archive.py", line 675, in stage_release_tree
+    verify_shipped_btxd(btxd_path)
+  File "/Users/runner/work/btx/btx/product/test/util/package_release_archive_test.py", line 524, in gate
+    raise RuntimeError("unrelocated producer dependency")
+RuntimeError: unrelocated producer dependency
+
+======================================================================
+FAIL: test_macos_checks_finished_images_after_runtime_bundling (__main__.PackageReleaseArchiveTest) (broken='btxd.real')
+----------------------------------------------------------------------
+RuntimeError: unrelocated producer dependency
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/runner/work/btx/btx/product/test/util/package_release_archive_test.py", line 550, in test_macos_checks_finished_images_after_runtime_bundling
+    self.module.main(args)
+AssertionError: "invalid final image" does not match "unrelocated producer dependency"
+
+======================================================================
+FAIL: test_macos_checks_finished_images_after_runtime_bundling (__main__.PackageReleaseArchiveTest) (broken='btx-cli.real')
+----------------------------------------------------------------------
+RuntimeError: unrelocated producer dependency
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/runner/work/btx/btx/product/test/util/package_release_archive_test.py", line 550, in test_macos_checks_finished_images_after_runtime_bundling
+    self.module.main(args)
+AssertionError: "invalid final image" does not match "unrelocated producer dependency"
+
+======================================================================
+FAIL: test_macos_checks_finished_images_after_runtime_bundling (__main__.PackageReleaseArchiveTest) (broken='btx-util.real')
+----------------------------------------------------------------------
+RuntimeError: unrelocated producer dependency
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/runner/work/btx/btx/product/test/util/package_release_archive_test.py", line 550, in test_macos_checks_finished_images_after_runtime_bundling
+    self.module.main(args)
+AssertionError: "invalid final image" does not match "unrelocated producer dependency"
+
+======================================================================
+FAIL: test_macos_checks_finished_images_after_runtime_bundling (__main__.PackageReleaseArchiveTest) (broken='btx-modeld.real')
+----------------------------------------------------------------------
+RuntimeError: unrelocated producer dependency
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/runner/work/btx/btx/product/test/util/package_release_archive_test.py", line 550, in test_macos_checks_finished_images_after_runtime_bundling
+    self.module.main(args)
+AssertionError: "invalid final image" does not match "unrelocated producer dependency"
+
+----------------------------------------------------------------------
+Ran 1 test in 0.055s
+
+FAILED (failures=4, errors=1)

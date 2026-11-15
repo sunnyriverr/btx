@@ -1,0 +1,15 @@
+E
+======================================================================
+ERROR: test_standalone_native_module_outside_framework_is_relocated (__main__.MacRuntimeTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/runner/work/btx/btx/product/test/util/bundle_macos_python_runtime_test.py", line 130, in test_standalone_native_module_outside_framework_is_relocated
+    included = m.bundle_macos_python(root, source_root=base / "source", python="python")
+  File "/Users/runner/work/btx/btx/product/scripts/release/bundle_macos_python_runtime.py", line 226, in bundle_macos_python
+    raise RuntimeError(f'Cannot identify source for {target}')
+RuntimeError: Cannot identify source for /private/var/folders/2s/vty41l455yv698g4xkgfv7z00000gn/T/tmp19x9apuj/release/lib/Python.framework/Versions/3.12/lib/python3.12/site-packages/_cffi_backend.cpython-312-darwin.so
+
+----------------------------------------------------------------------
+Ran 1 test in 0.010s
+
+FAILED (errors=1)

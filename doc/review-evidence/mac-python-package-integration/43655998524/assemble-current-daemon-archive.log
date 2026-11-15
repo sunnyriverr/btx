@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/Users/runner/work/btx/btx/product/scripts/release/package_release_archive.py", line 941, in <module>
+    raise SystemExit(main(sys.argv[1:]))
+                     ^^^^^^^^^^^^^^^^^^
+  File "/Users/runner/work/btx/btx/product/scripts/release/package_release_archive.py", line 904, in main
+    release_root, included_paths, skipped_binaries = stage_release_tree(
+                                                     ^^^^^^^^^^^^^^^^^^^
+  File "/Users/runner/work/btx/btx/product/scripts/release/package_release_archive.py", line 759, in stage_release_tree
+    included += mac_python.bundle_macos_python(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/runner/work/btx/btx/product/scripts/release/bundle_macos_python_runtime.py", line 226, in bundle_macos_python
+    raise RuntimeError(f'Cannot identify source for {target}')
+RuntimeError: Cannot identify source for /private/var/folders/2s/vty41l455yv698g4xkgfv7z00000gn/T/btx-release-archive-8ft0_fb3/btx-0.34.16/lib/Python.framework/Versions/3.12/lib/python3.12/site-packages/_cffi_backend.cpython-312-darwin.so
