@@ -39,7 +39,7 @@ try:
   out=subprocess.run(['readelf','-d','obj/bin/'+name],capture_output=True,text=True,check=True,timeout=10)
   (records/(name+'-dynamic.txt')).write_text(out.stdout)
  needed=set()
- for file in records.glob('*-dynamic.txt'):needed.update(re.findall(r'\[([^\]]+)\]',file.read_text()))
+ for file in records.glob('*-dynamic.txt'):needed.update(re.findall(r'\(NEEDED\)[^\n]*\[([^\]]+)\]',file.read_text()))
  cache=subprocess.run(['/sbin/ldconfig','-p'],capture_output=True,text=True,check=True,timeout=10).stdout
  for name in needed:
   matches=re.findall(r'=> (\S+)', '\n'.join(line for line in cache.splitlines() if line.strip().startswith(name+' ')))
