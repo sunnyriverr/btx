@@ -1,4 +1,4 @@
-name: Wallet checkpoint restore and static dependency verification
+name: Bounded wallet seed recovery regtest
 on:
   push:
     branches: [codex/ci-wallet-recovery-configure]
@@ -8,7 +8,7 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 18
+    timeout-minutes: 50
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -29,9 +29,19 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 wallet-retention-verify.py
+      - name: Single bounded disposable wallet recovery scenario
+        timeout-minutes: 33
+        run: |
+          python3 w3-fixture/run_bounded.py \
+            --checkpoint-root "$GITHUB_WORKSPACE" \
+            --runtime-root "$GITHUB_WORKSPACE/w3-private-runtime" \
+            --receipt "$GITHUB_WORKSPACE/w3-public-receipt.json"
+      - name: Collect only structured results and sanitized diagnostics
+        if: always()
+        run: python3 wallet-w3-diagnostics.py
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: session3-wallet-retention-verification
+          name: session3-wallet-W3-records
           path: records/
           retention-days: 7
