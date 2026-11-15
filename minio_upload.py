@@ -20,6 +20,9 @@ def write_exact_model(path,total=2*CHUNK):
     return hashlib.sha384(blob).hexdigest()
 
 class UploadControl(ModelNetMinioLayoutsTest):
+    def set_test_params(self):
+        super().set_test_params()
+
     def _minio_image(self):
         ref=os.environ.get('BTX_MINIO_IMAGE','')
         assert ref.startswith('sha256:') or '@sha256:' in ref, 'pin existing MinIO image by digest/ID'
