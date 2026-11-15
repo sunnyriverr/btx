@@ -1,0 +1,53 @@
+.EFE....
+======================================================================
+ERROR: test_explicit_head_mode_records_actual_manifest_and_dirty_state (__main__.LocalMacMatrixReceiptTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-task>/before/test/util/local_mac_matrix_test.py", line 162, in test_explicit_head_mode_records_actual_manifest_and_dirty_state
+    self.fixture_run(dirty=True, allow_dirty=True)
+  File "<local-task>/before/test/util/local_mac_matrix_test.py", line 137, in fixture_run
+    receipt = json.loads((result_dir / "run.json").read_text())
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/pathlib.py", line 1256, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/pathlib.py", line 1242, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/pathlib.py", line 1110, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '<temporary-path>/run.json'
+
+======================================================================
+ERROR: test_source_receipt_survives_worktree_cleanup (__main__.LocalMacMatrixReceiptTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-task>/before/test/util/local_mac_matrix_test.py", line 156, in test_source_receipt_survives_worktree_cleanup
+    self.fixture_run()
+  File "<local-task>/before/test/util/local_mac_matrix_test.py", line 137, in fixture_run
+    receipt = json.loads((result_dir / "run.json").read_text())
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/pathlib.py", line 1256, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/pathlib.py", line 1242, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/pathlib.py", line 1110, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '<temporary-path>/run.json'
+
+======================================================================
+FAIL: test_receipt_write_failure_prevents_dispatch (__main__.LocalMacMatrixReceiptTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-task>/before/test/util/local_mac_matrix_test.py", line 165, in test_receipt_write_failure_prevents_dispatch
+    self.fixture_run(write_failure=True)
+  File "<local-task>/before/test/util/local_mac_matrix_test.py", line 125, in fixture_run
+    self.assertNotEqual(run.returncode, 0, run.stdout + run.stderr)
+AssertionError: 0 == 0 : [local-matrix] start 000_readiness_receipt-probe workflow=readiness target=receipt-probe timeout=1m pid=21143
+[local-matrix] PASS 000_readiness_receipt-probe target=receipt-probe elapsed=2s
+[local-matrix] done pass=1 fail=0 total=1
+[local-matrix] summary: <temporary-path>/summary.tsv
+job_key                      workflow   job_name  target         status  started               finished              elapsed_s  timeout_min  log_path                                                                                                                                                     worktree
+000_readiness_receipt-probe  readiness  probe     receipt-probe  PASS    2026-11-15T03:33:13Z  2026-11-15T03:33:15Z  2          1            <temporary-path>/run.log  <temporary-path>/000_readiness_receipt-probe
+
+
+----------------------------------------------------------------------
+Ran 8 tests in 7.742s
+
+FAILED (failures=1, errors=2)

@@ -1,0 +1,42 @@
+.FFF....
+======================================================================
+FAIL: test_explicit_head_mode_records_actual_manifest_and_dirty_state (__main__.LocalMacMatrixReceiptTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-task>/before/test/util/local_mac_matrix_test.py", line 162, in test_explicit_head_mode_records_actual_manifest_and_dirty_state
+    self.fixture_run(dirty=True, allow_dirty=True)
+  File "<local-task>/before/test/util/local_mac_matrix_test.py", line 135, in fixture_run
+    self.assertEqual(run.returncode, 0, run.stdout + run.stderr)
+AssertionError: 1 != 0 : [local-matrix] start 000_readiness_receipt-probe workflow=readiness target=receipt-probe timeout=1m pid=20855
+[local-matrix] PASS 000_readiness_receipt-probe target=receipt-probe elapsed=2s
+warning: working tree has uncommitted tracked changes; local replica will test committed HEAD cd31412a81f9e5f62eaa3e028b1eb8395cfd5d1f
+<temporary-path>/run_local_mac_matrix.sh: line 387: new_pids[@]: unbound variable
+
+
+======================================================================
+FAIL: test_receipt_write_failure_prevents_dispatch (__main__.LocalMacMatrixReceiptTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-task>/before/test/util/local_mac_matrix_test.py", line 165, in test_receipt_write_failure_prevents_dispatch
+    self.fixture_run(write_failure=True)
+  File "<local-task>/before/test/util/local_mac_matrix_test.py", line 126, in fixture_run
+    self.assertFalse(marker.exists(), "receipt failure must precede dispatch")
+AssertionError: True is not false : receipt failure must precede dispatch
+
+======================================================================
+FAIL: test_source_receipt_survives_worktree_cleanup (__main__.LocalMacMatrixReceiptTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-task>/before/test/util/local_mac_matrix_test.py", line 156, in test_source_receipt_survives_worktree_cleanup
+    self.fixture_run()
+  File "<local-task>/before/test/util/local_mac_matrix_test.py", line 135, in fixture_run
+    self.assertEqual(run.returncode, 0, run.stdout + run.stderr)
+AssertionError: 1 != 0 : [local-matrix] start 000_readiness_receipt-probe workflow=readiness target=receipt-probe timeout=1m pid=20978
+[local-matrix] PASS 000_readiness_receipt-probe target=receipt-probe elapsed=2s
+<temporary-path>/run_local_mac_matrix.sh: line 387: new_pids[@]: unbound variable
+
+
+----------------------------------------------------------------------
+Ran 8 tests in 7.730s
+
+FAILED (failures=3)
