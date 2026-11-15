@@ -1,4 +1,4 @@
-name: Bounded wallet seed recovery regtest
+name: Wallet current incremental build from verified checkpoint
 on:
   push:
     branches: [codex/ci-wallet-recovery-configure]
@@ -8,7 +8,7 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 50
+    timeout-minutes: 55
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -19,29 +19,38 @@ jobs:
           ref: 61f13b8870ed98c7b10db2e32c04fb647023f4ef
           path: reference-source
           persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 1e2f8b5f12295002334d3390c12cac0bb4ae2aff
+          path: current-source
+          persist-credentials: false
       - name: Provision the previously qualified environment
         timeout-minutes: 6
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends cmake ninja-build binutils libboost-dev libevent-dev libsqlite3-dev libssl-dev
+          sudo apt-get install -y --no-install-recommends build-essential cmake ninja-build binutils libboost-dev libevent-dev libsqlite3-dev libssl-dev
       - name: Verify and restore bytes; inspect ELF without executing BTX
         timeout-minutes: 10
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 wallet-retention-verify.py
-      - name: Single bounded disposable wallet recovery scenario
-        timeout-minutes: 33
-        run: |
-          python3 w3-fixture/run_bounded.py \
-            --checkpoint-root "$GITHUB_WORKSPACE" \
-            --runtime-root "$GITHUB_WORKSPACE/w3-private-runtime" \
-            --receipt "$GITHUB_WORKSPACE/w3-public-receipt.json"
-      - name: Collect only structured results and sanitized diagnostics
-        if: always()
-        run: python3 wallet-w3-diagnostics.py
+      - name: Preserve unchanged objects and overlay current source
+        timeout-minutes: 5
+        run: python3 wallet-current-overlay.py
+      - name: Bounded incremental build and retention
+        timeout-minutes: 42
+        run: python3 wallet-current-build.py
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: session3-wallet-W3-records
+          name: session3-wallet-current-build-records
           path: records/
           retention-days: 7
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: session3-wallet-current-checkpoint
+          path: retained/
+          retention-days: 7
+          compression-level: 0
