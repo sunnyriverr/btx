@@ -43,4 +43,23 @@ class SystemDependencyTest(unittest.TestCase):
    with patch.object(v,'pe_imports',return_value=['unknown-runtime.dll']):self.assertTrue(v.pe_problems(root,[image]))
    with patch.object(v,'pe_imports',return_value=['libomp140.x86_64.dll']):self.assertTrue(v.pe_problems(root,[image]))
 
+class OpenMPRuntimeTest(unittest.TestCase):
+ def setUp(self):
+  RuntimeTest.setUp(self)
+  self.verify.pe_imports=lambda p:['libomp140.x86_64.dll'] if p.name=='btxd.exe' else []
+  self.omp=self.root/'omp';self.omp.mkdir();(self.omp/'libomp.dll').write_bytes(self.pe);(self.omp/'LICENSE.txt').write_text('LLVM license')
+ def test_openmp_explicit_required(self):
+  with self.assertRaisesRegex(RuntimeError,'requires'):m.bundle_windows_openmp(self.release,None)
+ def test_openmp_single_alias_and_licence(self):
+  m.bundle_windows_openmp(self.release,self.omp)
+  self.assertEqual((self.release/'bin/libomp140.x86_64.dll').read_bytes(),bytes(self.pe));self.assertFalse((self.release/'bin/libomp.dll').exists());self.assertTrue((self.release/'share/licenses/llvm-openmp/LICENSE.txt').is_file())
+ def test_openmp_unknown_dependency_refused(self):
+  self.verify.pe_problems=lambda *args:['unknown.dll']
+  with self.assertRaisesRegex(RuntimeError,'unknown.dll'):m.bundle_windows_openmp(self.release,self.omp)
+ def test_openmp_mixed_names_refused(self):
+  self.verify.pe_imports=lambda p:['libomp.dll','libomp140.x86_64.dll']
+  with self.assertRaisesRegex(RuntimeError,'mixed'):m.bundle_windows_openmp(self.release,self.omp)
+ # RuntimeTest's Python cases require the Python-specific mock instead.
+
+
 if __name__=='__main__':unittest.main()

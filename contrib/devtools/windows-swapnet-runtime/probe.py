@@ -1,5 +1,6 @@
 from pathlib import Path
 import os,sys,json,hashlib,subprocess,shutil,zipfile,urllib.request,ctypes,time,socket,base64,urllib.error,traceback
+from native_closure import prepare, qualify_openmp, loaded_modules
 W=Path(os.environ['GITHUB_WORKSPACE']);R=W/'records';R.mkdir(exist_ok=True);state={'source':'648899223329bd962146fb4e17fcfe3516075e17','complete':False,'cases':[]};owned=[]
 ctypes.windll.kernel32.SetErrorMode(0x0001|0x0002|0x8000)
 def sha(b):return hashlib.sha256(b).hexdigest()
@@ -37,6 +38,10 @@ def lifecycle(root,label,enable=True,reuse=None,expect=False):
     text=(R/(label+'.log')).read_text();assert expect and ('SwapNet' in text or 'Python' in text or 'encodings' in text),text[-1500:]
     return
    assert not expect,'Unexpectedly healthy fault control'
+   modules=loaded_modules(p.pid);row['runtime_modules']=[x for x in modules if Path(x).name.lower().startswith(('python','libomp'))]
+   expected_root=str(root.resolve()).lower()+os.sep
+   assert row['runtime_modules'] and all(x.lower().startswith(expected_root) for x in row['runtime_modules']),row
+   assert any(Path(x).name.lower()=='libomp140.x86_64.dll' for x in row['runtime_modules']),row
    info=rpc(d,port,'getswapnetworkinfo');row['info']=info
    if enable:assert info['result']['in_process'] is True and info['result']['automatic_spend_atoms']=='0' and info['result']['wallet_loaded'] is False
    else:assert info['error']['code']==-1
@@ -69,14 +74,8 @@ def main():
 
  product=W/'product';source=product/'scripts/release';fixture=Path(__file__).parent
  runtime=W/'official runtime';runtime.mkdir()
- url='https://www.python.org/ftp/python/3.12.10/python-3.12.10-embed-amd64.zip'
- with urllib.request.urlopen(url,timeout=60) as r:payload=r.read()
- state['embeddable']={'url':url,'sha256':sha(payload)};save()
- with zipfile.ZipFile(__import__('io').BytesIO(payload)) as z:
-  for n in z.namelist():
-   assert not Path(n).is_absolute() and '..' not in Path(n).parts
-   p=runtime/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(z.read(n))
- run([sys.executable,'-m','pip','install','--only-binary=:all:','--target',runtime/'Lib/site-packages','cryptography==46.0.4'],'stage-pinned-wheels',timeout=180).check_returncode()
+ omp=prepare(fixture,runtime,R,W)
+ state['inputs_pinned']=True;save()
  baseargs=[sys.executable,source/'package_release_archive.py','--version','0.34.16','--platform-id','windows-x86_64','--btxd',binary/'btxd.exe','--btx-cli',binary/'btx-cli.exe','--btx-util',binary/'btx-util.exe','--source-root',product]
  def unpack(out,label):
   archives=list(out.glob('*.zip'));assert len(archives)==1;archive=archives[0];state.setdefault('archives',{})[label]={'sha256':sha(archive.read_bytes()),'bytes':archive.stat().st_size}
@@ -87,14 +86,38 @@ def main():
  for name in ('package_release_archive.py','bundle_windows_python_runtime.py','verify_release_btxd.py'):shutil.copy2(fixture/name,source/name)
  shutil.copy2(fixture/'bundle_windows_python_runtime_test.py',product/'test/util/bundle_windows_python_runtime_test.py')
  run([sys.executable,product/'test/util/bundle_windows_python_runtime_test.py'],'maintained-windows-runtime-tests').check_returncode()
- out=W/'candidate-archive';run(baseargs+['--output-dir',out,'--windows-python-runtime',runtime],'candidate-archive-assembly',timeout=180).check_returncode();candidate=unpack(out,'candidate')
+ out=W/'candidate-archive';run(baseargs+['--output-dir',out,'--windows-python-runtime',runtime,'--windows-openmp-runtime',omp],'candidate-archive-assembly',timeout=180).check_returncode();candidate=unpack(out,'candidate')
  assert sha((candidate/'bin/btxd.exe').read_bytes())==state['binary_hashes']['btxd.exe']
  spec=__import__('importlib.util',fromlist=['util']).spec_from_file_location('verify',source/'verify_release_btxd.py');v=__import__('importlib.util',fromlist=['util']).module_from_spec(spec);spec.loader.exec_module(v)
  images=[p for p in candidate.rglob('*') if p.is_file() and v.classify(p)=='pe'];problems=v.pe_problems(candidate,images);state['full_archive_dependency_problems']=problems
- assert problems and all('libomp140.x86_64.dll' in p for p in problems),problems
- state['full_archive_portable_gate']='REJECTED: OpenMP remains unresolved; not suppressed'
+ assert not problems,problems
+ state['full_archive_portable_gate']='PASS: all PE imports closed with explicit app-local runtime inputs'
+ # Existing archive verifier, including member safety, all bundled image dependencies and launch.
+ archive=next(out.glob('*.zip'))
+ run([sys.executable,source/'verify_release_btxd.py','--archive',archive],'actual-archive-release-gate',timeout=180).check_returncode()
+ # A missing runtime must still be rejected by the static gate on the same extracted tree.
+ target=candidate/'bin/libomp140.x86_64.dll';backup=target.with_suffix('.held');target.rename(backup)
+ try:
+  negative=v.pe_problems(candidate,[x for x in images if x!=target]);assert len(negative)==5 and all('libomp140.x86_64.dll' in x for x in negative),negative
+  state['missing_openmp_control']=negative
+ finally:backup.rename(target)
+ state['openmp']=qualify_openmp(candidate,R);save()
+ poison=W/'hostile Python path';(poison/'cryptography').mkdir(parents=True)
+ (poison/'cryptography/__init__.py').write_text("raise RuntimeError('HOST PATH MUST NOT LOAD')")
+ ENV['PYTHONHOME']=str(poison);ENV['PYTHONPATH']=str(poison)
+ probe="import sys,json,cryptography,_cffi_backend;from cryptography.hazmat.bindings import _rust;print(json.dumps({'paths':sys.path,'cryptography':cryptography.__file__,'rust':_rust.__file__,'cffi':_cffi_backend.__file__,'isolated':sys.flags.isolated}))"
+ probe_result=run([candidate/'bin/python.exe','-c',probe],'actual-archive-isolation',env=ENV);probe_result.check_returncode();origins=json.loads(probe_result.stdout)
+ assert origins['isolated']==1 and all(str(candidate.resolve()).lower() in x.lower() for x in origins['paths']),origins
+ assert all(str(candidate.resolve()).lower() in origins[x].lower() for x in ('cryptography','rust','cffi')),origins
+ state['isolated_python']=origins
+ for exe in (candidate/'bin').glob('btx*.exe'):
+  flag='-help' if exe.name=='btx-tx.exe' else '-version'
+  run([exe,flag],'tool-'+exe.stem,env=ENV).check_returncode()
+ # Save exact candidate bytes and checksum as a fork CI artifact, not a release upload.
+ retained=R/'archive';retained.mkdir();shutil.copy2(archive,retained/archive.name)
+ (retained/'SHA256SUMS').write_text(sha(archive.read_bytes())+'  '+archive.name+'\n')
  lifecycle(candidate/'bin','actual-archive-on');lifecycle(candidate/'bin','actual-archive-restart',reuse='actual-archive-on');lifecycle(candidate/'bin','actual-archive-default-off',enable=False)
- state['complete']=True;state['scope']='Python packaging/actual ZIP native lifecycle qualified on hosted Windows with host OpenMP. Full portable archive correctly rejected for missing OpenMP. No release qualification.'
+ state['complete']=True;state['scope']='Saved-binary actual Windows command-line archive: complete static gate, app-local runtime paths, two-worker OpenMP ABI, isolated pinned Python, on/restart/default-off and clean shutdown. Not a current node build, full units, installer, funded SwapNet or release qualification.'
 try:main()
 except Exception as e:state['error']=str(e);(R/'exception.txt').write_text(traceback.format_exc())
 finally:

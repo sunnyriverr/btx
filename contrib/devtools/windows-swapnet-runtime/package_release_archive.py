@@ -395,6 +395,8 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         default=str(ROOT),
         help="Repository root used to source helper scripts and docs (default: repo root).",
     )
+    parser.add_argument("--windows-openmp-runtime", type=Path,
+                        help="Explicit redistributable x64 LLVM OpenMP input directory with licence")
     parser.add_argument("--windows-python-runtime", type=Path,
                         help="Prepared matching x64 embeddable Python distribution with pinned dependencies")
     parser.add_argument(
@@ -648,6 +650,7 @@ def stage_release_tree(
     require_model_helpers: bool = False,
     python: str | None = None,
     windows_python_runtime: Path | None = None,
+    windows_openmp_runtime: Path | None = None,
 ) -> tuple[Path, list[str], list[str]]:
     config = PLATFORM_CONFIGS[platform_id]
     release_root = temp_root / f"btx-{version}"
@@ -751,6 +754,7 @@ def stage_release_tree(
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
         included += module.bundle_windows_python(release_root, windows_python_runtime)
+        included += module.bundle_windows_openmp(release_root, windows_openmp_runtime)
 
     if platform_id.startswith("linux-"):
         # After the Qt bundle: libpython it already placed in lib/ must match.
@@ -913,6 +917,7 @@ def main(argv: list[str]) -> int:
             require_model_helpers=args.require_model_helpers,
             python=args.python,
             windows_python_runtime=args.windows_python_runtime,
+            windows_openmp_runtime=args.windows_openmp_runtime,
         )
         if PLATFORM_CONFIGS[args.platform_id]["archive_format"] == "zip":
             write_zip(archive_path, release_root)

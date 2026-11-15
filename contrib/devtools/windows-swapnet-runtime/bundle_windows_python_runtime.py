@@ -129,3 +129,40 @@ def bundle_windows_python(release_root, runtime):
     if problems:
         raise RuntimeError('; '.join(problems))
     return sorted(set(included))
+
+
+def bundle_windows_openmp(release_root, runtime):
+    """Stage one explicitly supplied LLVM runtime under the linked MSVC name.
+
+    LLVM's OPENMP_MSVC_NAME_SCHEME uses this filename for the same runtime.
+    The producer must verify the official payload, licence and imported symbols.
+    Never discover a host Visual Studio debug_nonredist runtime implicitly.
+    """
+    root = Path(release_root)
+    verify = verifier()
+    images = [p for p in (root / 'bin').glob('*.exe') if verify.classify(p) == 'pe']
+    names = {name.lower() for p in images for name in verify.pe_imports(p)
+             if name.lower().startswith('libomp')}
+    if not names:
+        return []
+    if names != {'libomp140.x86_64.dll'}:
+        raise RuntimeError('Unsupported or mixed OpenMP runtime names')
+    if runtime is None:
+        raise RuntimeError('Linked OpenMP requires --windows-openmp-runtime')
+    source = Path(runtime)
+    dll = source / 'libomp.dll'
+    licence = source / 'LICENSE.txt'
+    if dll.is_symlink() or licence.is_symlink() or not dll.is_file() or not licence.is_file():
+        raise RuntimeError('Explicit LLVM runtime and licence are required')
+    require_x64(dll)
+    destination = root / 'bin/libomp140.x86_64.dll'
+    if destination.exists() and destination.read_bytes() != dll.read_bytes():
+        raise RuntimeError('Conflicting OpenMP runtime destination')
+    shutil.copy2(dll, destination)
+    notice = root / 'share/licenses/llvm-openmp/LICENSE.txt'
+    notice.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(licence, notice)
+    problems = verify.pe_problems(root, [destination])
+    if problems:
+        raise RuntimeError('; '.join(problems))
+    return [str(destination.relative_to(root)), str(notice.relative_to(root))]
