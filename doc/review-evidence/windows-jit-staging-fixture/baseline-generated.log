@@ -1,0 +1,18 @@
+clang-cl: warning: argument unused during compilation: '/Zc:preprocessor' [-Wunused-command-line-argument]
+D:\a\btx\btx\btx\src\test\modelnet_jit_ensure_tests.cpp(893,7): error: no member named 'setenv' in the global namespace
+  893 |     ::setenv("TMPDIR", fs::PathToString(link_tmp).c_str(), 1);
+      |     ~~^
+D:\a\btx\btx\btx\src\test\modelnet_jit_ensure_tests.cpp(903,7): error: no member named 'setenv' in the global namespace
+  903 |     ::setenv("TMPDIR", fs::PathToString(open_tmp).c_str(), 1);
+      |     ~~^
+D:\a\btx\btx\btx\src\test\modelnet_jit_ensure_tests.cpp(909,11): error: no member named 'setenv' in the global namespace
+  909 |         ::setenv("TMPDIR", saved_tmpdir.c_str(), 1);
+      |         ~~^
+D:\a\btx\btx\btx\src\test\modelnet_jit_ensure_tests.cpp(911,11): error: no member named 'unsetenv' in the global namespace; did you mean 'getenv'?
+  911 |         ::unsetenv("TMPDIR");
+      |         ~~^~~~~~~~
+      |           getenv
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\stdlib.h(1184,28): note: 'getenv' declared here
+ 1184 |     _DCRTIMP char* __cdecl getenv(
+      |                            ^
+4 errors generated.
