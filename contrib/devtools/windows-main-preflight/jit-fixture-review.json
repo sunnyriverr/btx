@@ -1,0 +1,30 @@
+{
+  "baseline_source_sha256": "47c247630acde6d6a96de705dcf12de8448f4ae868592ec476a0b696e3bccb0b",
+  "candidate_source_sha256": "4cefe3d5ff4c058e2c554c55554ddd813ad2e542ad2c8ce56370dc6fbbb8cae7",
+  "posix_body_sha256": "fca0092516a49f9e8fc57b11fb425971341aca238abb23555ad6c4d80eb37509",
+  "posix_body_byte_identical": true,
+  "portable_cases_preserved": [
+    "JIT_BASE_02",
+    "JIT_API_01",
+    "JIT_API_03",
+    "JIT_API_05",
+    "JIT_API_08",
+    "JIT_API_06",
+    "JIT_UPDATE_01",
+    "JIT_UPDATE_02",
+    "JIT_UPDATE_04",
+    "JIT_UPDATE_07",
+    "JIT_ENSURE_IDEMPOTENCY_KEY_PAYLOAD",
+    "hello_capability_objects_name_min_max",
+    "JIT_JOURNEY_01",
+    "JIT_JOURNEY_02",
+    "JIT_JOURNEY_04",
+    "JIT_JOURNEY_12",
+    "remaining_capability_rpc_surface"
+  ],
+  "windows_excluded_case": "ensure_staging_dir_is_private",
+  "baseline_revision": "89f8f94749575fec3891bf7ea1b76f9c20169c6f",
+  "current_release": "cd8283904c23a840d071924fd2c4612d139d516f",
+  "current_target_file_identical": true,
+  "reason": "TMPDIR redirection and chmod-style group/other permission tightening are POSIX; Windows helper instead refuses pre-existing broad ACLs. Do not fake platform equivalence."
+}
