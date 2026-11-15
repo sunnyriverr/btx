@@ -93,7 +93,7 @@ def main():
  lifecycle(candidate/'bin','actual-archive-on');lifecycle(candidate/'bin','actual-archive-restart',reuse='actual-archive-on');lifecycle(candidate/'bin','actual-archive-default-off',enable=False)
  state['complete']=True;state['scope']='Current074 actual Windows command-line archive: complete static gate, app-local runtime paths, two-worker OpenMP ABI, isolated pinned Python, on/restart/default-off and clean shutdown. Not full units, installer, funded SwapNet or release qualification.'
 try:main()
-except Exception as e:state['error']=str(e);(R/'exception.txt').write_text(traceback.format_exc())
+except Exception as e:state['error']=str(e);(R/'exception.txt').write_text(traceback.format_exc());print(traceback.format_exc(),flush=True)
 finally:
  for p in owned:
   if p.poll() is None:p.kill();p.wait(timeout=8)
