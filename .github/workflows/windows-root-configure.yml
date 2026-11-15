@@ -1,5 +1,5 @@
 {
-  "name": "Windows verified unit resume current release17 j4",
+  "name": "Windows capability directory compatibility controls",
   "on": {
     "push": {
       "branches": [
@@ -18,7 +18,7 @@
   "jobs": {
     "plan": {
       "runs-on": "windows-2025",
-      "timeout-minutes": 45,
+      "timeout-minutes": 20,
       "steps": [
         {
           "name": "Exact source bytes",
@@ -37,7 +37,7 @@
           "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
           "with": {
             "repository": "btxchain/btx",
-            "ref": "a4d86d123a714956477dbe6a81abf506cd9bd89b",
+            "ref": "61f13b8870ed98c7b10db2e32c04fb647023f4ef",
             "path": "btx",
             "persist-credentials": false
           }
@@ -63,7 +63,7 @@
           "uses": "actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830",
           "with": {
             "path": "D:\\btx-native-035\\project-build\nD:\\btx-native-035\\vcpkg-installed",
-            "key": "btx-release17-unit-43708498693",
+            "key": "btx-release17-unit-43711509525",
             "fail-on-cache-miss": true
           }
         },
@@ -88,17 +88,12 @@
           }
         },
         {
-          "name": "Verify partial checkpoint and measure remaining plan, refuse repeated completed test objects",
+          "name": "Compile exact ensure candidate and run native directory controls",
           "shell": "cmd",
           "env": {
             "GH_TOKEN": "${{ github.token }}"
           },
-          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/resume2_unit_plan.py\nexit /b %errorlevel%\n"
-        },
-        {
-          "name": "Resource-admitted four-job continuation; inventory only if linked",
-          "shell": "cmd",
-          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/resume2_unit_build.py\nexit /b %errorlevel%\n"
+          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/ensure_native.py\nexit /b %errorlevel%\n"
         },
         {
           "name": "Capture current partial or linked checkpoint",
@@ -112,7 +107,7 @@
           "uses": "actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830",
           "with": {
             "path": "D:\\btx-native-035\\project-build\nD:\\btx-native-035\\vcpkg-installed",
-            "key": "btx-release17-unit-${{ github.run_id }}"
+            "key": "btx-ensure-candidate-${{ github.run_id }}"
           }
         },
         {
@@ -120,7 +115,7 @@
           "if": "always()",
           "uses": "actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f",
           "with": {
-            "name": "windows-release17-unit-resume2",
+            "name": "windows-ensure-directory-candidate",
             "path": "D:\\btx-native-035\\unit-plan-evidence",
             "retention-days": 14
           }
