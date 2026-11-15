@@ -1,5 +1,5 @@
 {
-  "name": "Windows single bridge object diagnostic",
+  "name": "Windows bridge exact generated compile command",
   "on": {
     "push": {
       "branches": [
@@ -88,19 +88,19 @@
           }
         },
         {
-          "name": "Verify cache, configure, compile only bridge object",
+          "name": "Verify cache and execute only generated bridge compiler command",
           "shell": "cmd",
           "env": {
             "GH_TOKEN": "${{ github.token }}"
           },
-          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/bridge_plan.py\nexit /b %errorlevel%\n"
+          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/bridge_direct.py\nexit /b %errorlevel%\n"
         },
         {
           "name": "Retain unit preflight evidence",
           "if": "always()",
           "uses": "actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f",
           "with": {
-            "name": "windows-bridge-object-diagnostic",
+            "name": "windows-bridge-direct-diagnostic",
             "path": "D:\\btx-native-035\\unit-plan-evidence",
             "retention-days": 14
           }
