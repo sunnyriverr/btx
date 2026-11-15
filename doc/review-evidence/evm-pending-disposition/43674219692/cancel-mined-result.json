@@ -1,0 +1,298 @@
+{
+  "case": "cancel-mined",
+  "source": "f40eb37a6fb8b665340fe92a2f248ff3f23ec7f6",
+  "contract_runtime_hash": "a06e30bad714ff02db5a2401a898bd7194d1c475b61bdab312ae194b1509e45d",
+  "status": "MEASUREMENT_COMPLETE",
+  "scope": "actual Anvil/HTLC/EVMDriver/coordinator/export+restore; simulated BTX leg",
+  "backup_state": {
+    "stage": "committed",
+    "funding_prepared": false,
+    "funding_broadcast": false,
+    "reference": null,
+    "operations": [],
+    "nonces": [],
+    "account": "0xe8ac8cccec81146485045cd1b99ffcbd29860948"
+  },
+  "backup_sha256": "2fe8506eb7c4dfdbd3198453e62c49f0ca1be8c414efd59368d48333dcb3db50",
+  "original_pending": {
+    "stage": "funded",
+    "funding_prepared": true,
+    "funding_broadcast": true,
+    "reference": {
+      "lock_id": "095b20c509cf6f019e4bf067fb8e883091cec039c47b672a5cf7b0948d0293c6",
+      "salt": "793ea3fade25ff81c88817c8a83f0fb9fa1389dd7d233ff4a820d820b594a72f",
+      "txid": "0xabc64fb1e972d8733838e3a93aaf181b112f55bf88674494bcee7c4a439c2a71"
+    },
+    "operations": [
+      {
+        "kind": "fund",
+        "txid": "0xabc64fb1e972d8733838e3a93aaf181b112f55bf88674494bcee7c4a439c2a71",
+        "state": "broadcast"
+      }
+    ],
+    "nonces": [
+      [
+        0
+      ]
+    ],
+    "account": "0xe8ac8cccec81146485045cd1b99ffcbd29860948"
+  },
+  "pending_nonce": 1,
+  "original_nonce": 0,
+  "replacement_tx": "0x8943749b3706fc3cf5640af340a045edf5e7226aeb112667214d97705a67a858",
+  "pending_nonce_after_action": 1,
+  "mined_cancellation_before_restore": {
+    "txid": "0x8943749b3706fc3cf5640af340a045edf5e7226aeb112667214d97705a67a858",
+    "status": 1,
+    "nonce": 1,
+    "contract_lock_absent": true
+  },
+  "restored_before_retry": {
+    "stage": "committed",
+    "funding_prepared": false,
+    "funding_broadcast": false,
+    "reference": null,
+    "operations": [],
+    "nonces": [],
+    "account": "0xe8ac8cccec81146485045cd1b99ffcbd29860948"
+  },
+  "retry_prepare": "returned",
+  "restored_after_retry": {
+    "stage": "funded",
+    "funding_prepared": true,
+    "funding_broadcast": true,
+    "reference": {
+      "lock_id": "095b20c509cf6f019e4bf067fb8e883091cec039c47b672a5cf7b0948d0293c6",
+      "salt": "793ea3fade25ff81c88817c8a83f0fb9fa1389dd7d233ff4a820d820b594a72f",
+      "txid": "0x5cb086bba5d14090c782660416b3590d5efa2caf0f20defa49f4e6b2465b2630"
+    },
+    "operations": [
+      {
+        "kind": "fund",
+        "txid": "0x5cb086bba5d14090c782660416b3590d5efa2caf0f20defa49f4e6b2465b2630",
+        "state": "broadcast"
+      }
+    ],
+    "nonces": [
+      [
+        1
+      ]
+    ],
+    "account": "0xe8ac8cccec81146485045cd1b99ffcbd29860948"
+  },
+  "same_lock_id": true,
+  "funding_receipts": [
+    {
+      "txid": "0xabc64fb1e972d8733838e3a93aaf181b112f55bf88674494bcee7c4a439c2a71",
+      "nonce": null,
+      "receipt": null
+    },
+    {
+      "txid": "0x8943749b3706fc3cf5640af340a045edf5e7226aeb112667214d97705a67a858",
+      "nonce": 0,
+      "receipt": {
+        "status": 1,
+        "gas_used": 21000,
+        "gas_cost": 75427155720000
+      }
+    },
+    {
+      "txid": "0x5cb086bba5d14090c782660416b3590d5efa2caf0f20defa49f4e6b2465b2630",
+      "nonce": 1,
+      "receipt": {
+        "status": 1,
+        "gas_used": 142967,
+        "gas_cost": 192569928055263
+      }
+    }
+  ],
+  "adoptable_after_mining": {
+    "txid": "0x5cb086bba5d14090c782660416b3590d5efa2caf0f20defa49f4e6b2465b2630",
+    "lock_id": "095b20c509cf6f019e4bf067fb8e883091cec039c47b672a5cf7b0948d0293c6",
+    "salt": "793ea3fade25ff81c88817c8a83f0fb9fa1389dd7d233ff4a820d820b594a72f"
+  },
+  "adopted_snapshot": {
+    "stage": "funded",
+    "funding_prepared": true,
+    "funding_broadcast": true,
+    "reference": {
+      "lock_id": "095b20c509cf6f019e4bf067fb8e883091cec039c47b672a5cf7b0948d0293c6",
+      "salt": "793ea3fade25ff81c88817c8a83f0fb9fa1389dd7d233ff4a820d820b594a72f",
+      "txid": "0x5cb086bba5d14090c782660416b3590d5efa2caf0f20defa49f4e6b2465b2630"
+    },
+    "operations": [
+      {
+        "kind": "fund",
+        "txid": "0x5cb086bba5d14090c782660416b3590d5efa2caf0f20defa49f4e6b2465b2630",
+        "state": "broadcast"
+      }
+    ],
+    "nonces": [
+      [
+        1
+      ]
+    ],
+    "account": "0xe8ac8cccec81146485045cd1b99ffcbd29860948"
+  },
+  "new_funding_operation_count": 1,
+  "actual_funding_reference": {
+    "lock_id": "095b20c509cf6f019e4bf067fb8e883091cec039c47b672a5cf7b0948d0293c6",
+    "salt": "793ea3fade25ff81c88817c8a83f0fb9fa1389dd7d233ff4a820d820b594a72f",
+    "txid": "0x5cb086bba5d14090c782660416b3590d5efa2caf0f20defa49f4e6b2465b2630"
+  },
+  "adopted_reopened_snapshot": {
+    "stage": "funded",
+    "funding_prepared": true,
+    "funding_broadcast": true,
+    "reference": {
+      "lock_id": "095b20c509cf6f019e4bf067fb8e883091cec039c47b672a5cf7b0948d0293c6",
+      "salt": "793ea3fade25ff81c88817c8a83f0fb9fa1389dd7d233ff4a820d820b594a72f",
+      "txid": "0x5cb086bba5d14090c782660416b3590d5efa2caf0f20defa49f4e6b2465b2630"
+    },
+    "operations": [
+      {
+        "kind": "fund",
+        "txid": "0x5cb086bba5d14090c782660416b3590d5efa2caf0f20defa49f4e6b2465b2630",
+        "state": "broadcast"
+      }
+    ],
+    "nonces": [
+      [
+        1
+      ]
+    ],
+    "account": "0xe8ac8cccec81146485045cd1b99ffcbd29860948"
+  },
+  "state_after_finalization": {
+    "stage": "funded",
+    "funding_prepared": true,
+    "funding_broadcast": true,
+    "reference": {
+      "lock_id": "095b20c509cf6f019e4bf067fb8e883091cec039c47b672a5cf7b0948d0293c6",
+      "salt": "793ea3fade25ff81c88817c8a83f0fb9fa1389dd7d233ff4a820d820b594a72f",
+      "txid": "0x5cb086bba5d14090c782660416b3590d5efa2caf0f20defa49f4e6b2465b2630"
+    },
+    "operations": [
+      {
+        "kind": "fund",
+        "txid": "0x5cb086bba5d14090c782660416b3590d5efa2caf0f20defa49f4e6b2465b2630",
+        "state": "broadcast"
+      }
+    ],
+    "nonces": [
+      [
+        1
+      ]
+    ],
+    "account": "0xe8ac8cccec81146485045cd1b99ffcbd29860948"
+  },
+  "locked_events": 1,
+  "refund_stage": "refunded",
+  "refund_observation": {
+    "present": true,
+    "exact_terms": true,
+    "canonical": true,
+    "confirmations": 1,
+    "finalized": true,
+    "claimed": false,
+    "refunded": true,
+    "conflicting": false,
+    "observed_at": 1794736942
+  },
+  "terminal_snapshot": {
+    "stage": "refunded",
+    "funding_prepared": true,
+    "funding_broadcast": true,
+    "reference": {
+      "lock_id": "095b20c509cf6f019e4bf067fb8e883091cec039c47b672a5cf7b0948d0293c6",
+      "salt": "793ea3fade25ff81c88817c8a83f0fb9fa1389dd7d233ff4a820d820b594a72f",
+      "txid": "0x5cb086bba5d14090c782660416b3590d5efa2caf0f20defa49f4e6b2465b2630"
+    },
+    "operations": [
+      {
+        "kind": "fund",
+        "txid": "0x5cb086bba5d14090c782660416b3590d5efa2caf0f20defa49f4e6b2465b2630",
+        "state": "broadcast"
+      },
+      {
+        "kind": "refund",
+        "txid": "0xfbaf8f79180255883eff8fee13d703f87fae0fe16be2ff9aa19bda1f6a485e23",
+        "state": "broadcast"
+      },
+      {
+        "kind": "withdraw",
+        "txid": "0x7c1bee694b97a3dce9e816e561a89d923e14e8825ba8c154e0f8a56ca0fe0d90",
+        "state": "broadcast"
+      }
+    ],
+    "nonces": [
+      [
+        1
+      ],
+      [
+        2
+      ],
+      [
+        3
+      ]
+    ],
+    "account": "0xe8ac8cccec81146485045cd1b99ffcbd29860948"
+  },
+  "reopened_snapshot": {
+    "stage": "refunded",
+    "funding_prepared": true,
+    "funding_broadcast": true,
+    "reference": {
+      "lock_id": "095b20c509cf6f019e4bf067fb8e883091cec039c47b672a5cf7b0948d0293c6",
+      "salt": "793ea3fade25ff81c88817c8a83f0fb9fa1389dd7d233ff4a820d820b594a72f",
+      "txid": "0x5cb086bba5d14090c782660416b3590d5efa2caf0f20defa49f4e6b2465b2630"
+    },
+    "operations": [
+      {
+        "kind": "fund",
+        "txid": "0x5cb086bba5d14090c782660416b3590d5efa2caf0f20defa49f4e6b2465b2630",
+        "state": "broadcast"
+      },
+      {
+        "kind": "refund",
+        "txid": "0xfbaf8f79180255883eff8fee13d703f87fae0fe16be2ff9aa19bda1f6a485e23",
+        "state": "broadcast"
+      },
+      {
+        "kind": "withdraw",
+        "txid": "0x7c1bee694b97a3dce9e816e561a89d923e14e8825ba8c154e0f8a56ca0fe0d90",
+        "state": "broadcast"
+      }
+    ],
+    "nonces": [
+      [
+        1
+      ],
+      [
+        2
+      ],
+      [
+        3
+      ]
+    ],
+    "account": "0xe8ac8cccec81146485045cd1b99ffcbd29860948"
+  },
+  "recovery_receipts": [
+    {
+      "kind": "refund",
+      "txid": "0xfbaf8f79180255883eff8fee13d703f87fae0fe16be2ff9aa19bda1f6a485e23",
+      "gas_cost": 73352574933264
+    },
+    {
+      "kind": "withdraw",
+      "txid": "0x7c1bee694b97a3dce9e816e561a89d923e14e8825ba8c154e0f8a56ca0fe0d90",
+      "gas_cost": 52274698848672
+    }
+  ],
+  "original_principal_wei": 1000000000000000000,
+  "sender_balance_before": 1000000000000000000000,
+  "sender_balance_after": 999999606375642442801,
+  "contract_balance_after": 0,
+  "total_gas_wei": 393624357557199,
+  "balance_reconciles": true
+}
