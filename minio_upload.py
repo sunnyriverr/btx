@@ -43,7 +43,7 @@ class UploadControl(ModelNetMinioLayoutsTest):
             return {**{k.lower():v for k,v in r.headers.items()}, "observed-http-status": r.status}
 
     def run_test(self):
-        receipt=Path(self.options.tmpdir)/'bounded-upload.json'
+        receipt=Path(os.environ['BTX_UPLOAD_RECEIPT'])
         out={'status':'INCOMPLETE','provider':'MINIO','fake':False,'source_bytes':2*CHUNK}
         def save(): receipt.write_text(json.dumps(out,indent=2)+'\n')
         self.creds=Path(self.options.tmpdir)/'cloud-creds.ini'

@@ -12,6 +12,7 @@ docker build -t btx-cloud-upload:owned minio-image
 export BTX_MINIO_IMAGE
 BTX_MINIO_IMAGE=$(docker image inspect --format '{{.Id}}' btx-cloud-upload:owned)
 printf '%s\n' "$BTX_MINIO_IMAGE" > records/minio-image-id.txt
+export BTX_UPLOAD_RECEIPT="$PWD/records/bounded-upload.json"
 export UPLOAD_TMPDIR="/tmp/btx-upload-${GITHUB_RUN_ID}"
 set +e
 timeout --signal=TERM --kill-after=15s 600s python3 product/test/functional/minio_upload.py --configfile="$PWD/obj/test/config.ini" --tmpdir="$UPLOAD_TMPDIR" --timeout-factor=1 > records/native.log 2>&1
