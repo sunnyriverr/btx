@@ -1,0 +1,150 @@
+{
+  "source": "074dac167c26c1e091198f691ed5727817dba88a",
+  "product_compilation": true,
+  "tests_run": false,
+  "cache_saved": false,
+  "commands": [
+    {
+      "name": "head",
+      "exit": 0,
+      "seconds": 0.11
+    },
+    {
+      "name": "compiler",
+      "exit": 0,
+      "seconds": 5.25
+    },
+    {
+      "name": "cmake",
+      "exit": 0,
+      "seconds": 1.09
+    },
+    {
+      "name": "ninja",
+      "exit": 0,
+      "seconds": 0.16
+    },
+    {
+      "name": "vcpkg-clone",
+      "exit": 0,
+      "seconds": 11.72
+    },
+    {
+      "name": "vcpkg-checkout",
+      "exit": 0,
+      "seconds": 3.31
+    },
+    {
+      "name": "python-dependencies",
+      "exit": 0,
+      "seconds": 0.12
+    },
+    {
+      "name": "configure",
+      "exit": 0,
+      "seconds": 37.12
+    },
+    {
+      "name": "verify-globs",
+      "exit": 0,
+      "seconds": 0.03
+    },
+    {
+      "name": "bridge-dry-run",
+      "exit": 0,
+      "seconds": 0.41
+    },
+    {
+      "name": "bridge-symbols",
+      "exit": 0,
+      "seconds": 0.09
+    }
+  ],
+  "sdk": "10.0.26100.0\\",
+  "toolset": "14.51.36231",
+  "verified_files": 12921,
+  "verified_objects": 5907,
+  "openssl_receipt": {
+    "source_sha256": "967311f84955316969bdb1d8d4b983718ef42338639c621ec4c34fddef355e99",
+    "toolset": "14.51.36231",
+    "files": {
+      "include/openssl/opensslv.h": "df513ae26e8baebbc641ba19f3d16f3e9ac0895cb092c81a39e1669f7fcb9c5c",
+      "lib/libssl.lib": "860ce6dd4edf55af8a82a958afb9bae9cd025f3ef7e263bcc266d79cdd5179e8",
+      "lib/libcrypto.lib": "f9385fc262485a1c779aa9a740ee3bde3025b9eb61b113e311024c9571899e12",
+      "bin/openssl.exe": "c63c66cb528c20dbd9f474679c8a19ea13d40f57c7f8efa4085ceb6dbe5c5552"
+    },
+    "configuration": "VC-WIN64A no-shared no-tests, libdir=lib; staticCRT per pinned OpenSSL config",
+    "makefile_sha256": "493f8ad3f9d8d86885660f7376c6085426f45bda42d7c7a35925d860d8a17238"
+  },
+  "compile_commands": {
+    "before": 3273,
+    "after": 5928,
+    "added": 2655,
+    "changed": 0,
+    "removed": 0
+  },
+  "bridge_compile_commands": [
+    {
+      "directory": "D:/btx-native-035/project-build",
+      "command": "\"C:\\Program Files\\LLVM\\bin\\clang-cl.exe\"  /nologo -TP -DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_NO_USER_CONFIG -DBTX_REFERENCE_TEST_VECTORS_PATH=\\\"D:/a/btx/btx/btx/test/reference/shielded_test_vectors.json\\\" -DMODELNET_AHP_FIXTURE_DIR=\\\"D:/a/btx/btx/btx/src/test/data/agent-package\\\" -DMODELNET_B0_CODEC_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_b0_codec_vectors.json\\\" -DMODELNET_BOUNTY_VECTORS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/bounty/reference/golden-vectors.json\\\" -DMODELNET_BTXD_PATH=\\\"D:/btx-native-035/project-build/bin/btxd.exe\\\" -DMODELNET_BTX_OPEN_PATH=\\\"D:/btx-native-035/project-build/bin/btx-open.exe\\\" -DMODELNET_BTX_PACKAGE_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/btx-package-vectors\\\" -DMODELNET_CRL12_OPERATIONS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/operations-v1.2.json\\\" -DMODELNET_CRL12_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12-portal/index.html\\\" -DMODELNET_CRL12_SCHEMA_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\\\" -DMODELNET_HCP_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/hcp-portal/index.html\\\" -DMODELNET_MODELD_PATH=\\\"D:/btx-native-035/project-build/bin/btx-modeld.exe\\\" -DMODELNET_V11_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_v11_vectors.json\\\" -DNOMINMAX -DPy_NO_LINK_LIB -DUNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING -D_UNICODE -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:/btx-native-035/project-build/src -ID:/a/btx/btx/btx/src -ID:/a/btx/btx/btx/src/secp256k1/include -ID:/a/btx/btx/btx/src/libbitcoinpqc/include -ID:/a/btx/btx/btx/src/compat/mingw -ID:/a/btx/btx/btx/src/univalue/include -imsvcD:/btx-native-035/vcpkg-installed/x64-windows-static/include -imsvcD:/btx-native-035/openssl-3.5.4-static/include -imsvcC:/hostedtoolcache/windows/Python/3.12.10/x64/Include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -std:c++20 -MT /utf-8 /Zc:preprocessor /Zc:__cplusplus /sdl /W3 /wd4018 /wd4146 /wd4244 /wd4267 /wd4715 /wd4805 -Xclang -fopenmp /Fosrc\\test\\CMakeFiles\\test_btx.dir\\modelnet_bridge_tests.cpp.obj /Fdsrc\\test\\CMakeFiles\\test_btx.dir\\ -c -- D:\\a\\btx\\btx\\btx\\src\\test\\modelnet_bridge_tests.cpp ",
+      "file": "D:/a/btx/btx/btx/src/test/modelnet_bridge_tests.cpp",
+      "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/modelnet_bridge_tests.cpp.obj"
+    }
+  ],
+  "objects_libraries_binaries_unchanged_before_diagnostic": true,
+  "selected_target": "src/test/CMakeFiles/test_btx.dir/modelnet_bridge_tests.cpp.obj",
+  "bridge_actions": [
+    "[1/15] Generating bitcoin-build-info.h",
+    "[2/15] Building CXX object src/test/CMakeFiles/test_translation_stub.dir/util/translation_stub.cpp.obj",
+    "[3/15] Building CXX object src/CMakeFiles/bitcoin_clientversion.dir/clientversion.cpp.obj",
+    "[4/15] Building CXX object src/CMakeFiles/bitcoin_common.dir/matmul/matmul_v4_rc_production_canary.cpp.obj",
+    "[5/15] Building CXX object src/CMakeFiles/bitcoin_common.dir/matmul/matmul_v4_rc_production_golden_manifest.cpp.obj",
+    "[6/15] Building CXX object src/CMakeFiles/swapnet_transport_test.dir/swapnet/test_transport.cpp.obj",
+    "[7/15] Building CXX object src/CMakeFiles/swapnet_embed_test.dir/swapnet/test_embed.cpp.obj",
+    "[8/15] Linking CXX static library lib\\bitcoin_clientversion.lib",
+    "[9/15] Linking CXX static library lib\\bitcoin_common.lib",
+    "[10/15] Linking CXX executable bin\\swapnet_transport_test.exe",
+    "[11/15] Linking CXX executable bin\\swapnet_embed_test.exe",
+    "[12/15] Linking CXX executable bin\\btxd.exe",
+    "[13/15] Linking CXX executable bin\\btx-modeld.exe",
+    "[14/15] Linking CXX executable bin\\btx-open.exe",
+    "[15/15] Building CXX object src/test/CMakeFiles/test_btx.dir/modelnet_bridge_tests.cpp.obj"
+  ],
+  "candidate_source_sha256": "4a1c12d47ca35a70d6c70d5011498d1bcb9b40dd3aab83bf2e4c5a8869057d62",
+  "ninja_prerequisites_not_executed": true,
+  "executed_generated_command": {
+    "directory": "D:/btx-native-035/project-build",
+    "command": "\"C:\\Program Files\\LLVM\\bin\\clang-cl.exe\"  /nologo -TP -DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_NO_USER_CONFIG -DBTX_REFERENCE_TEST_VECTORS_PATH=\\\"D:/a/btx/btx/btx/test/reference/shielded_test_vectors.json\\\" -DMODELNET_AHP_FIXTURE_DIR=\\\"D:/a/btx/btx/btx/src/test/data/agent-package\\\" -DMODELNET_B0_CODEC_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_b0_codec_vectors.json\\\" -DMODELNET_BOUNTY_VECTORS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/bounty/reference/golden-vectors.json\\\" -DMODELNET_BTXD_PATH=\\\"D:/btx-native-035/project-build/bin/btxd.exe\\\" -DMODELNET_BTX_OPEN_PATH=\\\"D:/btx-native-035/project-build/bin/btx-open.exe\\\" -DMODELNET_BTX_PACKAGE_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/btx-package-vectors\\\" -DMODELNET_CRL12_OPERATIONS_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/operations-v1.2.json\\\" -DMODELNET_CRL12_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12-portal/index.html\\\" -DMODELNET_CRL12_SCHEMA_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/crl12/schemas/CognitiveReserveLayer.schema.json\\\" -DMODELNET_HCP_PORTAL_PATH=\\\"D:/a/btx/btx/btx/contrib/modelnet/hcp-portal/index.html\\\" -DMODELNET_MODELD_PATH=\\\"D:/btx-native-035/project-build/bin/btx-modeld.exe\\\" -DMODELNET_V11_VECTORS_PATH=\\\"D:/a/btx/btx/btx/src/test/data/modelnet_v11_vectors.json\\\" -DNOMINMAX -DPy_NO_LINK_LIB -DUNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS -D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING -D_UNICODE -D_WIN32_IE=0x0A00 -D_WIN32_WINNT=0x0A00 -ID:/btx-native-035/project-build/src -ID:/a/btx/btx/btx/src -ID:/a/btx/btx/btx/src/secp256k1/include -ID:/a/btx/btx/btx/src/libbitcoinpqc/include -ID:/a/btx/btx/btx/src/compat/mingw -ID:/a/btx/btx/btx/src/univalue/include -imsvcD:/btx-native-035/vcpkg-installed/x64-windows-static/include -imsvcD:/btx-native-035/openssl-3.5.4-static/include -imsvcC:/hostedtoolcache/windows/Python/3.12.10/x64/Include /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 -std:c++20 -MT /utf-8 /Zc:preprocessor /Zc:__cplusplus /sdl /W3 /wd4018 /wd4146 /wd4244 /wd4267 /wd4715 /wd4805 -Xclang -fopenmp /Fosrc\\test\\CMakeFiles\\test_btx.dir\\modelnet_bridge_tests.cpp.obj /Fdsrc\\test\\CMakeFiles\\test_btx.dir\\ -c -- D:\\a\\btx\\btx\\btx\\src\\test\\modelnet_bridge_tests.cpp ",
+    "file": "D:/a/btx/btx/btx/src/test/modelnet_bridge_tests.cpp",
+    "output": "D:/btx-native-035/project-build/src/test/CMakeFiles/test_btx.dir/modelnet_bridge_tests.cpp.obj"
+  },
+  "bridge_exit": 0,
+  "bridge_seconds": 12.41,
+  "bridge_error_lines": [],
+  "status": "BRIDGE_CANDIDATE_COMPILES",
+  "object_sha256": "e32bb4ad390a90f534ddfe0fba5f4d5deb198e0fb8d2d676a53d1bda3b51d51e",
+  "portable_case_symbols": {
+    "api_v1_search_readonly_json": true,
+    "api_v1_models_hex_id_non_btx_is_400": true,
+    "malformed_uri_is_400": true,
+    "valid_uri_returns_canonical": true,
+    "wallet_paths_refused": true,
+    "mixed_case_disclosure_fields_present": true,
+    "native_pq_failure_does_not_set_native_fallback": true,
+    "overlong_hostname_token_rejected": true,
+    "get_wallet_403_post_sign_405_dump_403": true,
+    "rejects_http_file_and_arbitrary_ips": true,
+    "body_never_claims_pq_end_to_end_true": true,
+    "wildcard_cert_depth_is_zero": true,
+    "dns_split_42_43_labels_and_join": true,
+    "byte_range_maps_to_pieces_json_only": true,
+    "cache_key_uses_full_canonical_uri": true,
+    "public_download_default_false_never_fetches": true,
+    "link_only_html_landing": true,
+    "public_download_verified_chunks_before_emission": true,
+    "try_dequeue_hint_consumer_unpins_max_hints": true,
+    "dequeued_hint_same_policy_for_any_from_addr": true
+  },
+  "unix_case_absent_in_windows_object": true,
+  "unrelated_objects_libraries_binaries_unchanged": true
+}
