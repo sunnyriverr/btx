@@ -25,6 +25,16 @@ def main():
  assert c.sha(target)=='e7d8593e3bcef03fa98299be0334dbaa293f16f0bbeceabd5d1f17aad3846cf6'
  assert c.sha(test_target)=='a7c2fde1b3a09eef025dcef6ae364365f6d2d138ff07e3ae1939789318c03c93'
  c.STATE['repair']={'script_sha256':c.sha(target),'tests_sha256':c.sha(test_target),'baseline_native_run':43654912794,'regression_and_suites_run':43655829259};c.save()
+ bundle=S/'scripts/release/bundle_macos_python_runtime.py';bundle_test=S/'test/util/bundle_macos_python_runtime_test.py'
+ original_bundle=bundle.read_bytes();original_bundle_tests=bundle_test.read_bytes()
+ bundle_test.write_bytes((F/'mac-runtime-tests.py').read_bytes())
+ case='MacRuntimeTest.test_standalone_native_module_outside_framework_is_relocated'
+ before,log=c.cmd(['/usr/bin/python3',bundle_test,case],'single-module-regression-before',60,check=False)
+ assert before!=0 and 'Cannot identify source' in log and 'Ran 1 test' in log
+ bundle.write_bytes((F/'mac-runtime-candidate.py').read_bytes())
+ c.cmd(['/usr/bin/python3',bundle_test,case],'single-module-regression-after',60)
+ c.STATE['repair'].update(bundle_sha256=c.sha(bundle),bundle_tests_sha256=c.sha(bundle_test));c.save()
+
  c.cmd(['brew','install','--force-bottle','python@3.12','libomp'],'package-runtime-prerequisites',480)
  _,prefix=c.cmd(['brew','--prefix','python@3.12'],'package-python-prefix',30);python=Path(prefix.strip())/'bin/python3.12'
  # Disposable hosted Python installation only. The product probe is isolated
@@ -52,7 +62,8 @@ def main():
  c.STATE['audit']=json.loads((R/'archive-audit.json').read_text());c.STATE['lifecycle']=json.loads((R/'archive-runtime/lifecycle.json').read_text())
  assert c.sha(target)==c.STATE['repair']['script_sha256'] and c.sha(test_target)==c.STATE['repair']['tests_sha256']
  c.cmd(['git','-C',S,'diff','--stat'],'final-package-source-diff',30)
- target.write_bytes(original);test_target.write_bytes(original_tests)
+ assert c.sha(bundle)==c.STATE['repair']['bundle_sha256'] and c.sha(bundle_test)==c.STATE['repair']['bundle_tests_sha256']
+ target.write_bytes(original);test_target.write_bytes(original_tests);bundle.write_bytes(original_bundle);bundle_test.write_bytes(original_bundle_tests)
  c.cmd(['git','-C',S,'diff','--exit-code'],'restored-package-source-unchanged',30)
  c.STATE['complete']=True;c.STATE['btx_compiled']=False;c.save()
 try:main()
