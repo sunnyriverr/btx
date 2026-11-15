@@ -39,8 +39,8 @@ class UploadControl(ModelNetMinioLayoutsTest):
 
     def head(self,key,query=''):
         with urllib.request.urlopen(self._sigv4('HEAD',key,query),timeout=30) as r:
-            assert r.status==200
-            return {k.lower():v for k,v in r.headers.items()}
+            assert r.status==(206 if query else 200), (r.status, query)
+            return {**{k.lower():v for k,v in r.headers.items()}, "observed-http-status": r.status}
 
     def run_test(self):
         receipt=Path(self.options.tmpdir)/'bounded-upload.json'
