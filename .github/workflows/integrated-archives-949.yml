@@ -1,0 +1,57 @@
+name: Integrated 949 Mac archive qualification
+on:
+  push:
+    branches: [codex/ci-integrated-archives-949]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: integrated-archives-949
+  cancel-in-progress: false
+jobs:
+  native:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: macos-15
+    timeout-minutes: 40
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+      HOMEBREW_NO_AUTO_UPDATE: '1'
+      HOMEBREW_NO_INSTALL_UPGRADE: '1'
+      HOMEBREW_NO_INSTALL_CLEANUP: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: /ci/integrated-archives-949/
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 949a98e34222cc4cdb5b1d5bd650aa3b7bcbff72
+          path: product
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Bounded integrated build and archive checks
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 ci/integrated-archives-949/integrated.py
+      - name: Preserve resumable build and exact evidence
+        if: always()
+        timeout-minutes: 8
+        run: python3 ci/integrated-archives-949/preserve.py
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: integrated-archives-949-records
+          path: |
+            records/*.log
+            records/*.json
+            records/archive-runtime/lifecycle.json
+          retention-days: 14
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: integrated-archives-949-checkpoint
+          path: retained
+          retention-days: 14
+          compression-level: 0
