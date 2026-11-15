@@ -1,0 +1,49 @@
+{
+  "name": "Windows ensure fixture cleanup control only",
+  "on": {
+    "push": {
+      "branches": [
+        "codex/ci-windows-root-configure"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "read",
+    "actions": "read"
+  },
+  "concurrency": {
+    "group": "windows-main-configure-preflight",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "plan": {
+      "runs-on": "windows-2025",
+      "timeout-minutes": 20,
+      "steps": [
+        {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "path": "controls",
+            "persist-credentials": false,
+            "sparse-checkout": "contrib/devtools/windows-main-preflight"
+          }
+        },
+        {
+          "name": "Close-stream cleanup verification only",
+          "shell": "cmd",
+          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\nif not exist records mkdir records\nclang-cl /nologo /std:c++20 /EHsc /MT controls/contrib/devtools/windows-main-preflight/ensure-cleanup-controls.cpp /Forecords/cleanup.obj /Ferecords/cleanup.exe\nif errorlevel 1 exit /b %errorlevel%\nrecords\\cleanup.exe > records\\cleanup-result.txt 2>&1\nexit /b %errorlevel%\n"
+        },
+        {
+          "name": "Retain cleanup result",
+          "if": "always()",
+          "uses": "actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f",
+          "with": {
+            "name": "windows-ensure-cleanup-control",
+            "path": "records/cleanup-result.txt",
+            "retention-days": 14
+          }
+        }
+      ]
+    }
+  }
+}
