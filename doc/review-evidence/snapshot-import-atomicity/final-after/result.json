@@ -1,0 +1,147 @@
+{
+  "phase": "IMPORT_ATOMICITY_PASS",
+  "profile": "retained native macOS arm64 integration; exact current lab_api.cpp plus optional atomicity patch; other objects retained",
+  "binary_sha256": "b7f4f6e7d9bd84bcef1340adea36473bf2a123a6c42747ea574b2455c43ed4b7",
+  "valid_import_control": true,
+  "late_rejection": "BTX035_SCHEMA",
+  "live_partial_after_rejection": false,
+  "disk_unchanged_immediately": true,
+  "partial_saved_by_later_write": false,
+  "valid_control_preserved": true,
+  "valid_model_import_after_rejection": true,
+  "valid_model_after_restart": true,
+  "valid_model_export_after_restart": true,
+  "partial_after_restart": false,
+  "valid_control_after_restart": true,
+  "test_processes_stopped": true,
+  "events": [
+    {
+      "method": "lab.state_get",
+      "result": {
+        "target_kind": "repository",
+        "target_key": "e774699d83307f3e5f4ed06433760de8328a0c7cd9362b6846ef7f555eeb23fcbcf04862c71678c6f765d6f65fa7630a",
+        "exists": false,
+        "generation": "0",
+        "value_id": null,
+        "policy_epoch": "0",
+        "state_token": null
+      }
+    },
+    {
+      "method": "lab.snapshot_import",
+      "result": {
+        "repository_id": "e774699d83307f3e5f4ed06433760de8328a0c7cd9362b6846ef7f555eeb23fcbcf04862c71678c6f765d6f65fa7630a",
+        "object_count": 1
+      }
+    },
+    {
+      "method": "lab.state_get",
+      "result": {
+        "target_kind": "repository",
+        "target_key": "e774699d83307f3e5f4ed06433760de8328a0c7cd9362b6846ef7f555eeb23fcbcf04862c71678c6f765d6f65fa7630a",
+        "exists": true,
+        "generation": "1",
+        "value_id": "e774699d83307f3e5f4ed06433760de8328a0c7cd9362b6846ef7f555eeb23fcbcf04862c71678c6f765d6f65fa7630a",
+        "policy_epoch": "0",
+        "state_token": null
+      }
+    },
+    {
+      "method": "lab.state_get",
+      "result": {
+        "target_kind": "repository",
+        "target_key": "baa9ca0c35628fff7135522267eefd44af9476a38a08cdd1b9413e50c387e86505810ca852bc0bf060fa667c3c9a3345",
+        "exists": false,
+        "generation": "0",
+        "value_id": null,
+        "policy_epoch": "0",
+        "state_token": null
+      }
+    },
+    {
+      "method": "lab.snapshot_import",
+      "error": "BTX035_SCHEMA"
+    },
+    {
+      "method": "lab.state_get",
+      "result": {
+        "target_kind": "repository",
+        "target_key": "baa9ca0c35628fff7135522267eefd44af9476a38a08cdd1b9413e50c387e86505810ca852bc0bf060fa667c3c9a3345",
+        "exists": false,
+        "generation": "0",
+        "value_id": null,
+        "policy_epoch": "0",
+        "state_token": null
+      }
+    },
+    {
+      "method": "lab.repository_create",
+      "result": {
+        "repository_id": "52c060fc35a76ca7ca425c13631017d2403f96ff5a149bdda4d31450eb939d3cf2a460347ba185a35e04dd91e5eea606",
+        "repository_genesis_id": "f2945bffd69c5ff7385082d9b2ccb9983a1e510a9bd2bffef51c63884c11216ca16707194730d7639c4073ed603fe5e9"
+      }
+    },
+    {
+      "method": "lab.snapshot_import",
+      "result": {
+        "repository_id": "416a4f09de4350ae365215ea0a50e5cfcac9e9e23f74f72496f4cffb0d105770bf147d743e2eb321ab78a025b9416a6f",
+        "object_count": 2
+      }
+    },
+    {
+      "method": "lab.state_get",
+      "result": {
+        "target_kind": "repository",
+        "target_key": "416a4f09de4350ae365215ea0a50e5cfcac9e9e23f74f72496f4cffb0d105770bf147d743e2eb321ab78a025b9416a6f",
+        "exists": true,
+        "generation": "1",
+        "value_id": "416a4f09de4350ae365215ea0a50e5cfcac9e9e23f74f72496f4cffb0d105770bf147d743e2eb321ab78a025b9416a6f",
+        "policy_epoch": "0",
+        "state_token": null
+      }
+    },
+    {
+      "method": "lab.state_get",
+      "result": {
+        "target_kind": "repository",
+        "target_key": "416a4f09de4350ae365215ea0a50e5cfcac9e9e23f74f72496f4cffb0d105770bf147d743e2eb321ab78a025b9416a6f",
+        "exists": true,
+        "generation": "1",
+        "value_id": "416a4f09de4350ae365215ea0a50e5cfcac9e9e23f74f72496f4cffb0d105770bf147d743e2eb321ab78a025b9416a6f",
+        "policy_epoch": "0",
+        "state_token": null
+      }
+    },
+    {
+      "method": "lab.snapshot_export",
+      "result": {
+        "manifest": "{\"objects\":[{\"kind\":\"model\",\"digest\":\"6706d30e31e4815305c30b069d2052cff16ce785b2bd7b1008005066059f549dd8dbfd2eb1ef64d924c17233239ff57e\",\"content\":\"legitimate model bytes\"},{\"kind\":\"piece\",\"digest\":\"1d532daef29af642b626474d72c6a2e243c520727a2e4ca4f4284dbe3a7f255cc8fbaa1361c1406676c05e68488b8026\",\"content\":\"v1|6706d30e31e4815305c30b069d2052cff16ce785b2bd7b1008005066059f549dd8dbfd2eb1ef64d924c17233239ff57e|0|6c65676974696d617465206d6f64656c206279746573\"}]}",
+        "object_count": 2
+      }
+    },
+    {
+      "method": "lab.state_get",
+      "result": {
+        "target_kind": "repository",
+        "target_key": "baa9ca0c35628fff7135522267eefd44af9476a38a08cdd1b9413e50c387e86505810ca852bc0bf060fa667c3c9a3345",
+        "exists": false,
+        "generation": "0",
+        "value_id": null,
+        "policy_epoch": "0",
+        "state_token": null
+      }
+    },
+    {
+      "method": "lab.state_get",
+      "result": {
+        "target_kind": "repository",
+        "target_key": "e774699d83307f3e5f4ed06433760de8328a0c7cd9362b6846ef7f555eeb23fcbcf04862c71678c6f765d6f65fa7630a",
+        "exists": true,
+        "generation": "1",
+        "value_id": "e774699d83307f3e5f4ed06433760de8328a0c7cd9362b6846ef7f555eeb23fcbcf04862c71678c6f765d6f65fa7630a",
+        "policy_epoch": "0",
+        "state_token": null
+      }
+    }
+  ]
+}
