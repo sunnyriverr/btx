@@ -58,5 +58,5 @@ int main(int argc,char** argv){try {std::cout.setf(std::ios::unitbuf);
 #else
  ::chmod(broad.c_str(),0777);check(EnsurePrivateDir(broad,err),"tighten own directory");struct stat st{};check(::lstat(broad.c_str(),&st)==0&&(st.st_mode&077)==0,"private mode retained");const auto link=root/"symlink";std::filesystem::create_directory_symlink(good,link);check(!EnsurePrivateDir(link,err),"refuse symlink");std::filesystem::remove(link);
 #endif
- check(EnsurePrivateDir(good,err),"healthy retry after refusals");std::ifstream in(file);std::string bytes;in>>bytes;check(bytes=="retained","existing file unchanged");std::filesystem::remove_all(root);return 0;
+ check(EnsurePrivateDir(good,err),"healthy retry after refusals");std::ifstream in(file);std::string bytes;in>>bytes;check(bytes=="retained","existing file unchanged");in.close();std::filesystem::remove_all(root);return 0;
  }catch(const std::exception& e){std::cerr<<"CONTROL_FAILURE: "<<e.what()<<"\n";return 1;}}
