@@ -1,5 +1,5 @@
 """Hosted preparation only. Never launches a product executable or test case."""
-import hashlib, io, json, os, pathlib, subprocess, sys, urllib.request, urllib.parse, zipfile
+import hashlib, io, json, os, pathlib, subprocess, sys, urllib.request, urllib.parse, zipfile, re
 P=pathlib.Path
 records=P('records');records.mkdir(exist_ok=True)
 receipt={'native_execution':False,'artifacts':[],'imports':False,'status':'INCOMPLETE'}
@@ -38,6 +38,15 @@ try:
  for name in ('btxd','btx-cli','btx-modeld'):
   out=subprocess.run(['readelf','-d','obj/bin/'+name],capture_output=True,text=True,check=True,timeout=10)
   (records/(name+'-dynamic.txt')).write_text(out.stdout)
+ needed=set()
+ for file in records.glob('*-dynamic.txt'):needed.update(re.findall(r'\[([^\]]+)\]',file.read_text()))
+ cache=subprocess.run(['/sbin/ldconfig','-p'],capture_output=True,text=True,check=True,timeout=10).stdout
+ for name in needed:
+  matches=re.findall(r'=> (\S+)', '\n'.join(line for line in cache.splitlines() if line.strip().startswith(name+' ')))
+  assert any(P(f).is_file() for f in matches), 'missing runtime library: '+name
+ for name in ('btxd','btx-cli','btx-modeld'):
+  path=P('obj/bin')/name;path.chmod(0o755);assert os.access(path,os.X_OK)
+ receipt['runtime_libraries_resolved']=sorted(needed);receipt['execute_modes_prepared']=True
  receipt['status']='PASS';receipt['note']='No adapter/native method, BTX, MinIO, Docker container or validator tests executed.';save()
 except Exception as exc:
  receipt['status']='FAIL_OR_BLOCKED';receipt['failure']=repr(exc);save();raise
