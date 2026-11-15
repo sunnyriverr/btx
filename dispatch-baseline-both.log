@@ -1,0 +1,7 @@
+DIRECT
+The RPC fuzz target (src/test/fuzz/rpc.cpp) aborts at start-up unless every registered RPC is in exactly one of its two lists.
+Add each new command to RPC_COMMANDS_NOT_SAFE_FOR_FUZZING unless it is plainly cheap and free of side effects; see the header of this script.
+
+"probe_rpc" is in both RPC_COMMANDS_SAFE_FOR_FUZZING and RPC_COMMANDS_NOT_SAFE_FOR_FUZZING
+
+MATRIX
