@@ -39,7 +39,7 @@ class SystemDependencyTest(unittest.TestCase):
   v=m.verifier()
   with tempfile.TemporaryDirectory() as d:
    root=Path(d);image=root/'native.pyd';image.write_bytes(b'fixture')
-   with patch.object(v,'pe_imports',return_value=['bcryptprimitives.dll','propsys.dll']):self.assertEqual(v.pe_problems(root,[image]),[])
+   with patch.object(v,'pe_imports',return_value=['bcryptprimitives.dll','propsys.dll','cabinet.dll','msi.dll']):self.assertEqual(v.pe_problems(root,[image]),[])
    with patch.object(v,'pe_imports',return_value=['unknown-runtime.dll']):self.assertTrue(v.pe_problems(root,[image]))
    with patch.object(v,'pe_imports',return_value=['libomp140.x86_64.dll']):self.assertTrue(v.pe_problems(root,[image]))
 
