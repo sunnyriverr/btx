@@ -1,0 +1,215 @@
+{
+  "utc": "2026-11-15T22:49:44.155181+00:00",
+  "verdict": "SCOPED_PASS: fresh encrypted deferred recovery repaired; maintained existing-wallet guard test passes",
+  "base_source": "1e2f8b5f12295002334d3390c12cac0bb4ae2aff",
+  "source_delta": {
+    "src/wallet/rpc/backup.cpp": "a445cd498bbdce98f685d13a7094f0ff4a4d2347cde852b8314544a673618ed0",
+    "test/functional/test_runner.py": "97280ea6016d9c027f63db534e09300969eb9450311e33be8b4db105514e45de",
+    "test/functional/wallet_seed_pruned_recovery.py": "fcd5d01a16936fbfaa56405682129ae85e2c2f83c7a2dce9f815cb84efe6e466"
+  },
+  "patch_sha256": "eb65faa9f71e2610c1e3455f3bba6dc4d159d9d4cd96592dc5d3e3461c41e3bb",
+  "test_runner_run": "https://github.com/sunnyriverr/btx/actions/runs/43770868266",
+  "workflow_head": "36a8fe774cda3e5adc3b59accf3eebd28983d259",
+  "normal_runner_results": [
+    {
+      "test": "wallet_importbundle_shielded.py --descriptors",
+      "status": "Passed",
+      "duration(seconds)": "47"
+    },
+    {
+      "test": "wallet_seed_pruned_recovery.py --descriptors",
+      "status": "Passed",
+      "duration(seconds)": "111"
+    },
+    {
+      "test": "ALL",
+      "status": "Passed",
+      "duration(seconds)": "159"
+    }
+  ],
+  "normal_runner_total_s_including_cache_cleanup": 194.4,
+  "build": {
+    "status": "BUILD_PASS",
+    "seconds": 19.23,
+    "planned_steps": 10,
+    "reused_checkpoint": 14183311941,
+    "restored_objects": 725,
+    "cold_build": false
+  },
+  "binary_sha256": {
+    "btxd": "0fa653224d703386d3e33b1f013cafae4ae4ba995befdebdc44a87a28f3e09d8",
+    "btx-cli": "e91168c3a2be11bfd79bc6857a6c8c400a8eb0a3a7d33e45ada51a7c98025c5c"
+  },
+  "before": {
+    "receipt": "../current-integration/qualification-receipt.json",
+    "run": 43769085141,
+    "current_unpatched": "FAIL72s, fresh restore RPC-4 seed guard",
+    "same_recovery_fixture_sha256": "fcd5d01a16936fbfaa56405682129ae85e2c2f83c7a2dce9f815cb84efe6e466",
+    "rerun": false
+  },
+  "guard_test": {
+    "path": "test/functional/wallet_importbundle_shielded.py",
+    "sha256": "b2dde2912902931b63ade652ee1f9016edb65f009319b81540303bcc9ea7bdc8",
+    "unchanged_from_upstream": true,
+    "covers": [
+      "legitimate empty-existing-wallet import with immediate note discovery and restart",
+      "own-bundle replacement refused and own note retained",
+      "different-seed replacement in funded existing wallet refused; own note remains spendable"
+    ]
+  },
+  "recovery": {
+    "status": "PASS",
+    "events": [
+      {
+        "stage": "HEALTHY_CONTROL",
+        "original_note": [
+          [
+            "bc11240a12b10ad999890a80aafc85074585c9f1364722a43fdfcd79ff045564",
+            "1.00000000",
+            "e35e31c8f2aea0248338baa3309845abb3ff4f4fb77bdd208d6519f770eee06e"
+          ]
+        ],
+        "block": "e35e31c8f2aea0248338baa3309845abb3ff4f4fb77bdd208d6519f770eee06e",
+        "height": 133,
+        "bundle_sha256": "b2b9effc929e2773b2595c28cb58b2621b9ba23269f59671a85785e41b367f34",
+        "first_receive": "btxrt1zhhw2ey8sgylyv088ruh984fq3ppm62ezm8alkju0nyrya5hs3c7qxw75c6",
+        "funding_txid": "4220ddf5a6b92fed4fd07080254b4daed96e5b6161b8cc45f0f6f3f684e294d2"
+      },
+      {
+        "stage": "PRUNE_ADMITTED",
+        "pruneheight": 135,
+        "tip": 461,
+        "original_block_missing": true
+      },
+      {
+        "stage": "INCOMPLETE_RECOVERY",
+        "first_receive": "btxrt1zhhw2ey8sgylyv088ruh984fq3ppm62ezm8alkju0nyrya5hs3c7qxw75c6",
+        "failed_full_scan": true
+      },
+      {
+        "stage": "DURABLE_DATABASE",
+        "backup_sha256": "7be756df5b17a778d4bce7e376a78fdd45d86737275c6b90e8d287475ae8b502",
+        "first_receive": "btxrt1zhhw2ey8sgylyv088ruh984fq3ppm62ezm8alkju0nyrya5hs3c7qxw75c6"
+      },
+      {
+        "stage": "CONFIRMED_CONTINUED_USE",
+        "spend_txid": "4750f7cd0d83ff891a883f7510fd715a6cf7cf6a670028ea210e68347b5086d8",
+        "fee": "0.01226020",
+        "sender_change": "0.73773980",
+        "recipient_received": "0.25",
+        "later_receive_txid": "edd8b8d9acaa061bd467fe0f9fc28c8f44d9f0e53172ebc610fe496b822e1fb1",
+        "final_height": 463
+      }
+    ],
+    "setup": {
+      "receipt_file": {
+        "file": "blk00035.dat",
+        "file_number": 35,
+        "payload_offset": 8,
+        "allocated_bytes": 32768
+      },
+      "delimiter_block": "33e7ea32a6c145d6720c934a115418e3bae36b95ef309725cf17463fc48e9e46",
+      "delimiter_height": 134,
+      "delimiter_bytes": 82773,
+      "delimiter_file": {
+        "file": "blk00036.dat",
+        "file_number": 36,
+        "payload_offset": 8,
+        "allocated_bytes": 98304
+      },
+      "following_file": {
+        "file": "blk00037.dat",
+        "file_number": 37,
+        "payload_offset": 8,
+        "allocated_bytes": 16384
+      },
+      "prune_attempts": [
+        {
+          "tip": 461,
+          "requested": 233,
+          "returned": 134,
+          "pruneheight": 135,
+          "buffered_retention_ceiling": 162,
+          "initialblockdownload": false,
+          "receipt_file_present": false,
+          "block_files": [
+            {
+              "file": "blk00037.dat",
+              "allocated_bytes": 65322
+            },
+            {
+              "file": "blk00038.dat",
+              "allocated_bytes": 65536
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "records_artifact": {
+    "id": 14183889716,
+    "node_id": "MDg6QXJ0aWZhY3QxNDE4Mzg4OTcxNg==",
+    "name": "session3-wallet-fresh-fix-records",
+    "size_in_bytes": 717053,
+    "url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14183889716",
+    "archive_download_url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14183889716/zip",
+    "expired": false,
+    "digest": "sha256:752e6c91ad35917b143b64ebf7d25091d5d45d617cff792ec5b22a300e07822a",
+    "created_at": "2026-11-15T22:48:08Z",
+    "updated_at": "2026-11-15T22:48:08Z",
+    "expires_at": "2026-11-22T22:48:07Z",
+    "workflow_run": {
+      "id": 43770868266,
+      "repository_id": 1440653358,
+      "head_repository_id": 1440653358,
+      "head_branch": "codex/ci-wallet-recovery-configure",
+      "head_sha": "36a8fe774cda3e5adc3b59accf3eebd28983d259"
+    }
+  },
+  "records_zip_verified_locally": true,
+  "checkpoint_artifact": {
+    "id": 14184148961,
+    "node_id": "MDg6QXJ0aWZhY3QxNDE4NDE0ODk2MQ==",
+    "name": "session3-wallet-fresh-fix-checkpoint",
+    "size_in_bytes": 216078916,
+    "url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14184148961",
+    "archive_download_url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14184148961/zip",
+    "expired": false,
+    "digest": "sha256:929b94cfa91ef0eccf81ca8aa3d39da4ce1133311f0ed7811def9c7928278063",
+    "created_at": "2026-11-15T22:48:10Z",
+    "updated_at": "2026-11-15T22:48:10Z",
+    "expires_at": "2026-11-22T22:48:08Z",
+    "workflow_run": {
+      "id": 43770868266,
+      "repository_id": 1440653358,
+      "head_repository_id": 1440653358,
+      "head_branch": "codex/ci-wallet-recovery-configure",
+      "head_sha": "36a8fe774cda3e5adc3b59accf3eebd28983d259"
+    }
+  },
+  "repaired_checkpoint_restored_independently": false,
+  "cleanup": {
+    "group_absent": true,
+    "private_data_removed": true,
+    "max_private_bytes": 93754744,
+    "raw_logs_uploaded": false
+  },
+  "internal_review": "INDEPENDENT-REVIEW.md; source-only, no platform replication",
+  "cancelled_setup_run": {
+    "id": 43770792721,
+    "before_compilation_and_tests": true,
+    "reason": "Preflight adjusted for intentional .github checkpoint exclusion"
+  },
+  "limitations": [
+    "Ubuntu24.04 x86_64 Release CPU wallet/SQLite only",
+    "Two selected functional tests, not whole suite",
+    "No dedicated issued-index-only, corruption, concurrent-issuance stress or abrupt-interruption test",
+    "No Windows/macOS runtime or production wallet qualification",
+    "No independently restored repaired checkpoint"
+  ],
+  "publication": {
+    "PR_or_comment": false,
+    "product_branch_pushed": false,
+    "dedicated_existing_fork_CI_used": true
+  }
+}

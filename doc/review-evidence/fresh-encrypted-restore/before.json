@@ -1,0 +1,135 @@
+{
+  "case": "current",
+  "binary_sha256": {
+    "btxd": "9b9ba0f8c993c4880c06b2bacbf448b71a8882a9beae461b030d557d81428583",
+    "btx-cli": "5f0b5907cb70132b791b4941c4f0ed0d5a63c06f2613c3291e5bd6501bc9327d"
+  },
+  "suite_inputs": {
+    "test_runner.py": "97280ea6016d9c027f63db534e09300969eb9450311e33be8b4db105514e45de",
+    "wallet_seed_pruned_recovery.py": "fcd5d01a16936fbfaa56405682129ae85e2c2f83c7a2dce9f815cb84efe6e466"
+  },
+  "normal_runner": true,
+  "budget_s": 1800,
+  "scratch_limit_bytes": 536870912,
+  "exit": 1,
+  "stop_reason": null,
+  "cleanup_group_absent": true,
+  "observations": {
+    "status": "FAIL",
+    "events": [
+      {
+        "stage": "HEALTHY_CONTROL",
+        "original_note": [
+          [
+            "3aa6904356027d667602560ae589b4098bffb87b3b4ba3cb2210300198d8ca93",
+            "1.00000000",
+            "7ca41380d8d24d9068687a3f2644410127067e130bdc25f253bc628950b70b64"
+          ]
+        ],
+        "block": "7ca41380d8d24d9068687a3f2644410127067e130bdc25f253bc628950b70b64",
+        "height": 133,
+        "bundle_sha256": "af8c36be960c72e76342cb3c8f1c285369826698d6701786a4f9ff051c3e10dc",
+        "first_receive": "btxrt1zwy7zqkrnse3qh8rsftye7pvrl7jxl7qfkevu2g8pehjczwmwvn9qkkqn6j",
+        "funding_txid": "b3fbf649a59d02b0c4521c5f363ded938950cb23dcc6e44411c67b1d26a092b9"
+      },
+      {
+        "stage": "PRUNE_ADMITTED",
+        "pruneheight": 135,
+        "tip": 461,
+        "original_block_missing": true
+      }
+    ],
+    "setup": {
+      "receipt_file": {
+        "file": "blk00035.dat",
+        "file_number": 35,
+        "payload_offset": 8,
+        "allocated_bytes": 32768
+      },
+      "delimiter_block": "7ac41f4929844c998f1c1374e76a545004337a3a159a35f2e2165bf34f26fdf9",
+      "delimiter_height": 134,
+      "delimiter_bytes": 82437,
+      "delimiter_file": {
+        "file": "blk00036.dat",
+        "file_number": 36,
+        "payload_offset": 8,
+        "allocated_bytes": 98304
+      },
+      "following_file": {
+        "file": "blk00037.dat",
+        "file_number": 37,
+        "payload_offset": 8,
+        "allocated_bytes": 16384
+      },
+      "prune_attempts": [
+        {
+          "tip": 461,
+          "requested": 233,
+          "returned": 134,
+          "pruneheight": 135,
+          "buffered_retention_ceiling": 162,
+          "initialblockdownload": false,
+          "receipt_file_present": false,
+          "block_files": [
+            {
+              "file": "blk00037.dat",
+              "allocated_bytes": 65322
+            },
+            {
+              "file": "blk00038.dat",
+              "allocated_bytes": 65536
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "results_csv": [
+    {
+      "test": "wallet_seed_pruned_recovery.py --descriptors",
+      "status": "Failed",
+      "duration(seconds)": "72"
+    },
+    {
+      "test": "ALL",
+      "status": "Failed",
+      "duration(seconds)": "72"
+    }
+  ],
+  "source_frames": [
+    {
+      "file": "WORKSPACE/source/test/functional/test_framework/test_framework.py",
+      "line": 142,
+      "function": "main"
+    },
+    {
+      "file": "WORKSPACE/build/test/functional/wallet_seed_pruned_recovery.py",
+      "line": 163,
+      "function": "run_test"
+    },
+    {
+      "file": "WORKSPACE/build/test/functional/wallet_seed_pruned_recovery.py",
+      "line": 258,
+      "function": "scenario"
+    },
+    {
+      "file": "WORKSPACE/source/test/functional/test_framework/coverage.py",
+      "line": 50,
+      "function": "__call__"
+    },
+    {
+      "file": "WORKSPACE/source/test/functional/test_framework/authproxy.py",
+      "line": 151,
+      "function": "__call__"
+    }
+  ],
+  "exception_classes": [],
+  "result": "RESTORE_REFUSED_BY_SEED_GUARD",
+  "boundary_line": 258,
+  "seed_guard_message_observed": true,
+  "rpc_minus4_observed": true,
+  "elapsed_s": 100.11,
+  "maximum_sampled_private_bytes": 66262270,
+  "private_data_removed": true,
+  "raw_logs_uploaded": false
+}

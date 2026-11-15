@@ -1,0 +1,77 @@
+{
+  "source_pin": "1e2f8b5f12295002334d3390c12cac0bb4ae2aff",
+  "targets": [
+    "btxd",
+    "btx-cli"
+  ],
+  "parallel": 2,
+  "compile_budget_s": 1800,
+  "tests_invoked": false,
+  "binaries_executed": false,
+  "checkpoint_required": true,
+  "compile_exit": 0,
+  "stop_reason": null,
+  "compile_elapsed_s": 19.23,
+  "status": "BUILD_PASS",
+  "remaining_plan": [
+    "ninja: Entering directory `build'",
+    "[1/7] Generating bitcoin-build-info.h",
+    "[2/7] Building CXX object src/CMakeFiles/bitcoin_clientversion.dir/clientversion.cpp.o",
+    "[3/7] Building CXX object src/CMakeFiles/bitcoin_common.dir/matmul/matmul_v4_rc_production_canary.cpp.o",
+    "[4/7] Linking CXX static library lib/libbitcoin_clientversion.a",
+    "[5/7] Linking CXX static library lib/libbitcoin_common.a",
+    "[6/7] Linking CXX executable bin/btxd",
+    "[7/7] Linking CXX executable bin/btx-cli"
+  ],
+  "binary_sha256": {
+    "btxd": "0fa653224d703386d3e33b1f013cafae4ae4ba995befdebdc44a87a28f3e09d8",
+    "btx-cli": "e91168c3a2be11bfd79bc6857a6c8c400a8eb0a3a7d33e45ada51a7c98025c5c"
+  },
+  "object_count": 725,
+  "build_bytes": 384544131,
+  "candidate_overlay": {
+    "source": "1e2f8b5f12295002334d3390c12cac0bb4ae2aff",
+    "files_sha256": {
+      "src/wallet/rpc/backup.cpp": "a445cd498bbdce98f685d13a7094f0ff4a4d2347cde852b8314544a673618ed0",
+      "test/functional/test_runner.py": "97280ea6016d9c027f63db534e09300969eb9450311e33be8b4db105514e45de",
+      "test/functional/wallet_seed_pruned_recovery.py": "fcd5d01a16936fbfaa56405682129ae85e2c2f83c7a2dce9f815cb84efe6e466"
+    },
+    "base_binary_sha256": {
+      "btxd": "9b9ba0f8c993c4880c06b2bacbf448b71a8882a9beae461b030d557d81428583",
+      "btx-cli": "5f0b5907cb70132b791b4941c4f0ed0d5a63c06f2613c3291e5bd6501bc9327d"
+    },
+    "base_checkpoint": 14183311941,
+    "retained_objects": 725,
+    "intentional_archive_missing_workflows": [
+      ".github/ISSUE_TEMPLATE/bug.yml",
+      ".github/ISSUE_TEMPLATE/config.yml",
+      ".github/ISSUE_TEMPLATE/feature_request.yml",
+      ".github/PULL_REQUEST_TEMPLATE.md",
+      ".github/actionlint.yaml",
+      ".github/actions/configure-docker/action.yml",
+      ".github/actions/configure-environment/action.yml",
+      ".github/actions/restore-caches/action.yml",
+      ".github/actions/save-caches/action.yml",
+      ".github/workflows/README.md",
+      ".github/workflows/atlas-native.yml",
+      ".github/workflows/atlas-source.yml",
+      ".github/workflows/release-atlas-binaries.yml"
+    ],
+    "pending_steps": 10,
+    "test_scope": [
+      "wallet_seed_pruned_recovery.py --descriptors",
+      "wallet_importbundle_shielded.py --descriptors"
+    ]
+  },
+  "source_identity": "1e2f8b5f12295002334d3390c12cac0bb4ae2aff",
+  "submodules": "",
+  "checkpoint": {
+    "name": "checkpoint.tar.gz",
+    "bytes": 149293982,
+    "sha256": "260bd2489d64afc9e7ef3c4e272422e2bdd5f5ee1d9d59ee0cab4fc26885c4da",
+    "root": "/home/runner/work/btx/btx",
+    "source_git_metadata_included": false,
+    "restore_contract": "Restore under identical source/build absolute paths; verify source hashes/pin/toolchain/cache before continuing, never execute based solely on archive name."
+  },
+  "total_s": 25.09
+}
