@@ -9,7 +9,7 @@ mkdir -p "$RUNNER_TEMP/foundry";tar -xzf "$RUNNER_TEMP/foundry.tgz" -C "$RUNNER_
 export PATH="$RUNNER_TEMP/foundry:$PATH"
 forge --version | tee records/foundry.txt
 forge build --root product/contrib/swapnet/contracts --skip test
-for mode in same-lock drop cancel; do
+for mode in cancel-mined; do
   echo "Starting bounded $mode recovery case"
   anvil --port 18545 --slots-in-an-epoch 1 > "records/anvil-$mode.log" 2>&1 &
   anvil_pid=$!

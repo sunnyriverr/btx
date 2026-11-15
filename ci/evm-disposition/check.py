@@ -15,7 +15,7 @@ from swapnet.coordinator import Coordinator
 from swapnet.policy import SafetyPolicy
 from swapnet.terms import Agreement
 from swapnet.errors import SwapError
-root=Path(sys.argv[1]);root.mkdir(mode=0o700,parents=True);mode=sys.argv[2];assert mode in ('same-lock','drop','cancel')
+root=Path(sys.argv[1]);root.mkdir(mode=0o700,parents=True);mode=sys.argv[2];assert mode in ('same-lock','drop','cancel','cancel-mined')
 def rpc(method,*args):
  with urlopen(Request('http://127.0.0.1:18545',json.dumps({'jsonrpc':'2.0','id':1,'method':method,'params':args}).encode(),{'Content-Type':'application/json'}),timeout=15) as r:d=json.load(r)
  if d.get('error'):raise RuntimeError(d['error'])
@@ -96,6 +96,13 @@ try:
   assert rpc('eth_getTransactionByHash',original_tx) is None
  result['replacement_tx']=replacement_tx
  result['pending_nonce_after_action']=int(rpc('eth_getTransactionCount',sender,'pending'),16)
+ if mode=='cancel-mined':
+  mine(4)
+  cancelled=receipt(replacement_tx)
+  assert rpc('eth_getTransactionReceipt',original_tx) is None
+  terms_before_restore=Agreement.parse(p.state('alice')['agreement']).long_leg
+  assert find_funding_output(driver,terms_before_restore,p.sid) is None
+  result['mined_cancellation_before_restore']={'txid':replacement_tx,'status':int(cancelled['status'],16),'nonce':int(rpc('eth_getTransactionCount',sender,'latest'),16),'contract_lock_absent':True}
  p.close('alice');p.nodes.pop('alice');saved=root/'immutable-backup.snr';shutil.copyfile(backup,saved);dest=root/'restored';dest.mkdir(mode=0o700);restore_bundle(saved,dest/'alice',phrase,te.NETWORK);p.path=dest;p.open('alice')
  result['restored_before_retry']=snapshot();assert result['restored_before_retry']['account']==sender
  try:
