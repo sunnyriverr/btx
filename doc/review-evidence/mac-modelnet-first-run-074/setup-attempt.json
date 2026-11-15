@@ -1,0 +1,92 @@
+{
+  "profile": "positive first-run subset; reused949 binaries and main074 CLI source",
+  "rows": {
+    "readiness": {
+      "status": "BLOCKED"
+    },
+    "doctor": {
+      "status": "BLOCKED"
+    },
+    "init": {
+      "status": "BLOCKED"
+    },
+    "profile": {
+      "status": "BLOCKED"
+    },
+    "check": {
+      "status": "BLOCKED"
+    },
+    "host": {
+      "status": "BLOCKED"
+    },
+    "search": {
+      "status": "BLOCKED"
+    },
+    "cleanup": {
+      "status": "PASS"
+    }
+  },
+  "events": [
+    {
+      "process": "helper",
+      "pid": 45783,
+      "argv": [
+        "<EVIDENCE_ROOT>/package/btx-0.34.16/bin/btx-modeld",
+        "-modeldir=<SCRATCH_A>/models",
+        "-modelrpcsocket=<SCRATCH_A>/m.sock",
+        "-modelstorage=8MiB",
+        "-modellandiscovery=0",
+        "-modelfollowpeers=0",
+        "-modelnatpmp=0"
+      ]
+    },
+    {
+      "process": "node",
+      "pid": 45794,
+      "argv": [
+        "<EVIDENCE_ROOT>/package/btx-0.34.16/bin/btxd",
+        "-regtest",
+        "-datadir=<SCRATCH_A>/node",
+        "-rpcport=39621",
+        "-port=39622",
+        "-listen=0",
+        "-connect=0",
+        "-dnsseed=0",
+        "-discover=0",
+        "-disablewallet",
+        "-swapnet=0",
+        "-modelnet=1",
+        "-modelrpcsocket=<SCRATCH_A>/m.sock",
+        "-modellandiscovery=0",
+        "-modelfollowpeers=0",
+        "-modelnatpmp=0",
+        "-dbcache=4",
+        "-par=1",
+        "-server"
+      ]
+    },
+    {
+      "process": "node",
+      "exit": 1
+    },
+    {
+      "process": "helper",
+      "exit": 0
+    }
+  ],
+  "source": "main/074dac167c26c1e091198f691ed5727817dba88a; compatible reused949a98e3 packaged binaries",
+  "archive_sha256": "22ee49b866f7d1539387d7e30bc82b38174b0925e84a103f590d92485569de73",
+  "omitted": [
+    "full functional fixture",
+    "single-file hosting",
+    "exact search identity discovery",
+    "restart persistence",
+    "wallet/spending",
+    "runtime inference",
+    "stopped investigations",
+    "cloud/transfer/package workflows"
+  ],
+  "restart_tested": false,
+  "failure": "RuntimeError('test process exited')",
+  "verdict": "FAILED_OR_BLOCKED"
+}
