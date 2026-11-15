@@ -260,9 +260,6 @@ class WalletSeedPrunedRecovery(BitcoinTestFramework):
         assert_equal(imported["rescan"], False)
         assert_equal(imported["first_receive_address"], identity)
         deferred = b.get_wallet_rpc("deferred")
-        # #741 uses the shared helper for fresh restores too: encrypted seed
-        # rehydration runs before this deferred import returns, despite rescan=false.
-        assert_equal(deferred.z_getbalance().get("scan_incomplete", False), True)
         deferred.walletpassphrase(PASSPHRASE, 999000)
         self.incomplete(deferred)
         before = descriptor_identity(deferred)

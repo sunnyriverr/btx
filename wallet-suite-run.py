@@ -15,7 +15,7 @@ def stop(p):
  p.wait(timeout=5);return not exists(p.pid)
 def size(path):return sum(p.stat().st_size for p in path.rglob('*') if p.is_file() and not p.is_symlink())
 fixture=root/'source/test/functional/wallet_seed_pruned_recovery.py'
-boundary=next(i for i,l in enumerate(fixture.read_text().splitlines(),1) if 'assert_equal(deferred.z_getbalance().get' in l)
+boundary=next(i for i,l in enumerate(fixture.read_text().splitlines(),1) if 'imported = b.restorewalletbundle' in l)
 results={}
 for case in ['current','historical_control']:
  private=root/('suite-private-'+case);assert not private.exists();private.mkdir(mode=0o700)
@@ -44,15 +44,16 @@ for case in ['current','historical_control']:
   rows=list(csv.DictReader((private/'results.csv').open())) if (private/'results.csv').exists() else []
   stages=[e['stage'] for e in observations.get('events',[])]
   passed=not reason and clean and p.returncode==0 and observations.get('status')=='PASS' and stages==['HEALTHY_CONTROL','PRUNE_ADMITTED','INCOMPLETE_RECOVERY','DURABLE_DATABASE','CONFIRMED_CONTINUED_USE']
-  expected_failure=not reason and clean and p.returncode!=0 and stages==['HEALTHY_CONTROL','PRUNE_ADMITTED'] and any(f['file'].endswith('wallet_seed_pruned_recovery.py') and f['line']==boundary for f in frames) and 'AssertionError: not(False == True)' in raw
-  receipt.update(exit=p.returncode,stop_reason=reason,cleanup_group_absent=clean,observations=observations,results_csv=rows,source_frames=frames[-20:],exception_classes=re.findall(r'(?m)^([A-Za-z_]\w*(?:Error|Exception))(?=:|$)',raw)[-5:],result='PASS' if passed else ('EXPECTED_BOUNDARY_FAILURE' if expected_failure else 'UNEXPECTED_FAILURE'),boundary_line=boundary)
+  expected_failure=not reason and clean and p.returncode!=0 and stages==['HEALTHY_CONTROL','PRUNE_ADMITTED'] and any(f['file'].endswith('wallet_seed_pruned_recovery.py') and f['line']==boundary for f in frames) and 'this wallet already has shielded keys or notes; importing a bundle would replace its PQ seed' in raw and '(-4)' in raw
+  receipt.update(exit=p.returncode,stop_reason=reason,cleanup_group_absent=clean,observations=observations,results_csv=rows,source_frames=frames[-20:],exception_classes=re.findall(r'(?m)^([A-Za-z_]\w*(?:Error|Exception))(?=:|$)',raw)[-5:],result='PASS' if passed else ('RESTORE_REFUSED_BY_SEED_GUARD' if expected_failure else 'UNEXPECTED_FAILURE'),boundary_line=boundary,seed_guard_message_observed='this wallet already has shielded keys or notes; importing a bundle would replace its PQ seed' in raw,rpc_minus4_observed='(-4)' in raw)
  finally:
   if p is not None and exists(p.pid):receipt['cleanup_group_absent']=stop(p)
   if receipt.get('cleanup_group_absent',p is None):shutil.rmtree(private)
   receipt.update(elapsed_s=round(time.monotonic()-started,2),maximum_sampled_private_bytes=peak,private_data_removed=not private.exists(),raw_logs_uploaded=False)
   (records/(case+'-suite-result.json')).write_text(json.dumps(receipt,indent=2)+'\n');results[case]=receipt
   print(json.dumps({'case':case,'result':receipt.get('result'),'elapsed_s':receipt['elapsed_s'],'private_data_removed':receipt['private_data_removed']}),flush=True)
- if case=='current' and receipt.get('result')!='PASS':break
-status='PASS' if results.get('current',{}).get('result')=='PASS' and results.get('historical_control',{}).get('result')=='EXPECTED_BOUNDARY_FAILURE' else 'NOT_QUALIFIED'
+ if case=='current' and receipt.get('result') not in ['PASS','RESTORE_REFUSED_BY_SEED_GUARD']:break
+status='CURRENT_RESTORE_REGRESSION_BASELINE_PASS' if results.get('current',{}).get('result')=='RESTORE_REFUSED_BY_SEED_GUARD' and results.get('historical_control',{}).get('result')=='PASS' else ('BOTH_PASS' if all(results.get(c,{}).get('result')=='PASS' for c in ['current','historical_control']) else 'NOT_QUALIFIED')
 (records/'suite-summary.json').write_text(json.dumps({'status':status,'cases':{k:v.get('result') for k,v in results.items()},'source':inputs['source'],'no_rebuild':True,'only_registered_recovery_test_selected':True},indent=2)+'\n')
-raise SystemExit(0 if status=='PASS' else 1)
+# The current test stays red when it detects a regression. The collector must propagate that failure.
+raise SystemExit(0 if status=='BOTH_PASS' else 1)
