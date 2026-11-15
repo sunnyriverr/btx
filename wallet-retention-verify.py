@@ -1,6 +1,6 @@
 from pathlib import Path
 import urllib.request,urllib.parse,hashlib,json,zipfile,tarfile,re,subprocess,os,shutil,time
-r=Path('records');r.mkdir(exist_ok=True);start=time.monotonic();result={'tests_run':False,'BTX_binaries_executed':False,'compiled':False,'source_pin':'61f13b8870ed98c7b10db2e32c04fb647023f4ef'}
+r=Path('records');r.mkdir(exist_ok=True);start=time.monotonic();result={'tests_run':False,'BTX_binaries_executed':False,'compiled':False,'source_pin':'1e2f8b5f12295002334d3390c12cac0bb4ae2aff'}
 class Redirect(urllib.request.HTTPRedirectHandler):
  def redirect_request(self,req,fp,code,msg,headers,url):
   v=super().redirect_request(req,fp,code,msg,headers,url)
@@ -18,16 +18,16 @@ def sha(p):
 def read(args):return subprocess.check_output(args,text=True,timeout=120)
 try:
  assert shutil.disk_usage('.').free>15*2**30
- with get('repos/sunnyriverr/btx/actions/artifacts/14162310743') as f:meta=json.load(f)
- assert not meta['expired'] and meta['workflow_run']['id']==43713295880 and meta['size_in_bytes']==215980593
- with get('repos/sunnyriverr/btx/actions/artifacts/14162310743/zip') as f,Path('checkpoint.zip').open('wb') as out:shutil.copyfileobj(f,out)
- assert sha(Path('checkpoint.zip'))=='e1722e43e66be27d99e66e76f8c8cc9f11b910956c61f10769cbf84e91c58ca8'
+ with get('repos/sunnyriverr/btx/actions/artifacts/14183311941') as f:meta=json.load(f)
+ assert not meta['expired'] and meta['workflow_run']['id']==43767699457 and meta['size_in_bytes']==216099914
+ with get('repos/sunnyriverr/btx/actions/artifacts/14183311941/zip') as f,Path('checkpoint.zip').open('wb') as out:shutil.copyfileobj(f,out)
+ assert sha(Path('checkpoint.zip'))=='42cdb5586a4300e9fa72938154b30343a38283febdc2744c5d8f29af93b5be93'
  saved=Path('saved');saved.mkdir()
  with zipfile.ZipFile('checkpoint.zip') as z:
   assert set(z.namelist())=={'btxd','btx-cli','checkpoint.tar.gz','producer.json'}
   for n in z.namelist():(saved/n).write_bytes(z.read(n))
  prod=json.loads((saved/'producer.json').read_text());assert prod['source_identity']==result['source_pin'] and prod['status']=='BUILD_PASS'
- assert sha(saved/'checkpoint.tar.gz')=='6c5a136395948f43ee49d06768c5dd684aa91643373ce4d0200bce2bcab47829'
+ assert sha(saved/'checkpoint.tar.gz')=='3d9f7c320296532854ec344109806b5bdcc78971c668611d843182dea665a91c'
  assert str(Path.cwd())==prod['checkpoint']['root'];assert not Path('source').exists() and not Path('build').exists()
  owned_absolute_links=[]
  def owned_filter(member,dest):
