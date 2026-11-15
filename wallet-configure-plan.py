@@ -7,14 +7,14 @@ try:
  assert subprocess.check_output(['git','-C',str(source),'rev-parse','HEAD'],text=True).strip()==pin
  result['disk_before']=shutil.disk_usage('.')._asdict();result['memory_before']=pathlib.Path('/proc/meminfo').read_text();assert shutil.disk_usage('.').free>15*2**30
  run('toolchain',['bash','-c','uname -a; cmake --version; ninja --version; c++ --version; python3 --version; dpkg-query -W libsqlite3-dev libevent-dev libssl-dev libboost-dev'])
- opts={'BUILD_DAEMON':'ON','BUILD_CLI':'ON','ENABLE_WALLET':'ON','WITH_SQLITE':'ON','WITH_BDB':'OFF','BUILD_GUI':'OFF','BUILD_TESTS':'OFF','BUILD_GUI_TESTS':'OFF','BUILD_BENCH':'OFF','BUILD_FUZZ_BINARY':'OFF','BUILD_TX':'OFF','BUILD_UTIL':'OFF','BUILD_WALLET_TOOL':'OFF','WITH_MODELNET':'OFF','WITH_ZMQ':'OFF','BTX_ENABLE_CUDA_EXPERIMENTAL':'OFF','ENABLE_EXTERNAL_SIGNER':'OFF','WITH_CCACHE':'OFF'}
+ opts={'CMAKE_SUPPRESS_REGENERATION':'ON','BUILD_DAEMON':'ON','BUILD_CLI':'ON','ENABLE_WALLET':'ON','WITH_SQLITE':'ON','WITH_BDB':'OFF','BUILD_GUI':'OFF','BUILD_TESTS':'OFF','BUILD_GUI_TESTS':'OFF','BUILD_BENCH':'OFF','BUILD_FUZZ_BINARY':'OFF','BUILD_TX':'OFF','BUILD_UTIL':'OFF','BUILD_WALLET_TOOL':'OFF','WITH_MODELNET':'OFF','WITH_ZMQ':'OFF','BTX_ENABLE_CUDA_EXPERIMENTAL':'OFF','ENABLE_EXTERNAL_SIGNER':'OFF','WITH_CCACHE':'OFF'}
  args=['cmake','-S',str(source),'-B',str(build),'-G','Ninja','-DCMAKE_BUILD_TYPE=Release']+['-D'+k+'='+v for k,v in opts.items()]
  assert run('configure',args,600)==0,'configure failed; no build attempted'
  cache=(build/'CMakeCache.txt').read_text();(r/'CMakeCache.txt').write_text(cache)
  for k,v in opts.items():assert re.search(r'^'+re.escape(k)+r':[^=]+='+v+r'$' ,cache,re.M),k
  assert run('ninja-dry-run',['ninja','-C',str(build),'-n','btxd','btx-cli'],180)==0
  assert run('ninja-commands',['ninja','-C',str(build),'-t','commands','btxd','btx-cli'],180)==0
- text=(r/'ninja-dry-run.log').read_text();result['planned_steps']=sum(1 for l in text.splitlines() if l.startswith('['));result['planned_object_steps']=text.count('Building CXX object')+text.count('Building C object');result['dry_run_tail']=text.splitlines()[-8:]
+ text=(r/'ninja-dry-run.log').read_text();result['planned_steps']=sum(1 for l in text.splitlines() if l.startswith('['));result['planned_object_steps']=text.count('Building CXX object')+text.count('Building C object');result['dry_run_tail']=text.splitlines()[-8:];assert result['planned_steps']>20 and result['planned_object_steps']>0,'dry-run stopped before target plan'
  config=build/'test/config.ini';assert config.is_file();(r/'config.ini').write_bytes(config.read_bytes())
  result['BTX_object_files_found']=[str(p.relative_to(build)) for p in build.rglob('*') if p.is_file() and p.suffix in ['.o','.obj'] and not any(x in str(p) for x in ['CMakeScratch','CompilerId','CMakeTmp'])];assert not result['BTX_object_files_found']
  result['BTX_binaries_found']=[str(p) for p in (build/'bin').glob('*') if p.is_file()];assert not result['BTX_binaries_found'];result['status']='CONFIGURE_AND_DRY_RUN_PASS'
