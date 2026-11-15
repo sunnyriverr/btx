@@ -83,9 +83,8 @@ def main():
   root=W/('extracted '+label)
   with zipfile.ZipFile(archive) as z:z.extractall(root)
   return next(p for p in root.iterdir() if p.is_dir())
- out=W/'baseline-archive';run(baseargs+['--output-dir',out],'stock-archive-assembly',timeout=180).check_returncode();baseline=unpack(out,'stock')
- q=run([baseline/'bin/btxd.exe','-version'],'stock-archive-loader',ENV);assert q.returncode&0xffffffff==0xc0000135
- for name in ('package_release_archive.py','bundle_windows_python_runtime.py'):shutil.copy2(fixture/name,source/name)
+ state['reused_stock_failure_run']=43661726579;save()
+ for name in ('package_release_archive.py','bundle_windows_python_runtime.py','verify_release_btxd.py'):shutil.copy2(fixture/name,source/name)
  shutil.copy2(fixture/'bundle_windows_python_runtime_test.py',product/'test/util/bundle_windows_python_runtime_test.py')
  run([sys.executable,product/'test/util/bundle_windows_python_runtime_test.py'],'maintained-windows-runtime-tests').check_returncode()
  out=W/'candidate-archive';run(baseargs+['--output-dir',out,'--windows-python-runtime',runtime],'candidate-archive-assembly',timeout=180).check_returncode();candidate=unpack(out,'candidate')

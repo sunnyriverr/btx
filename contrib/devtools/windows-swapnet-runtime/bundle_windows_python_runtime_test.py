@@ -28,4 +28,13 @@ class RuntimeTest(unittest.TestCase):
  def test_unknown_dependency(self):
   self.verify.pe_imports=lambda p:['python312.dll'] if p.name=='btxd.exe' else ['foreign.dll']
   with self.assertRaisesRegex(RuntimeError,'dependency'):m.bundle_windows_python(self.release,self.source)
+class SystemDependencyTest(unittest.TestCase):
+ def test_windows_crypto_system_dependency_and_unknown_refusal(self):
+  v=m.verifier()
+  with tempfile.TemporaryDirectory() as d:
+   root=Path(d);image=root/'native.pyd';image.write_bytes(b'fixture')
+   with patch.object(v,'pe_imports',return_value=['bcryptprimitives.dll']):self.assertEqual(v.pe_problems(root,[image]),[])
+   with patch.object(v,'pe_imports',return_value=['unknown-runtime.dll']):self.assertTrue(v.pe_problems(root,[image]))
+   with patch.object(v,'pe_imports',return_value=['libomp140.x86_64.dll']):self.assertTrue(v.pe_problems(root,[image]))
+
 if __name__=='__main__':unittest.main()

@@ -42,6 +42,8 @@ def bundle_windows_python(release_root, runtime):
     if not names:
         if any(name.lower().startswith('python') for name in imports):
             raise RuntimeError('Unsupported Python runtime ABI')
+        if b'SwapNet Python initialization failed' in binary.read_bytes():
+            raise RuntimeError('SwapNet has no supported shared Python DLL import')
         return []
     if len(names) != 1:
         raise RuntimeError('Ambiguous Python runtime ABI')
