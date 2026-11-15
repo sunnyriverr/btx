@@ -19,6 +19,8 @@ jobs:
           ref: 8d6d8b1aabf371b12f2b1f5797b950fed7962d4e
           path: product
           persist-credentials: false
+      - name: Restore the known runtime prerequisites
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq libevent-dev libzmq3-dev
       - name: Restore, hash and import only
         run: python3 stage.py
         env:
