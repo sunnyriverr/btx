@@ -66,7 +66,11 @@ def main():
  for line in (binary/'SHA256SUMS.txt').read_text().splitlines():
   h,n=line.split(maxsplit=1);n=n.lstrip('*').removeprefix('./');assert sha((binary/n).read_bytes())==h;hashes[n]=h
  assert hashes['btxd.exe']=='d8bd7dda90ab42e92882bd02005d919185a0cac4331af007a9ef78a0a9af16ab';state['binary_hashes']=hashes;save()
- omp=Path('C:/Program Files/LLVM/bin/libomp140.x86_64.dll');assert omp.is_file()
+ candidates=list(Path('C:/Program Files/Microsoft Visual Studio').rglob('libomp140.x86_64.dll'))
+ candidates += list(Path('C:/Program Files/LLVM').rglob('libomp140.x86_64.dll'))
+ candidates=[p for p in candidates if 'arm64' not in str(p).lower() and 'x86/' not in p.as_posix().lower()]
+ assert candidates,'No x64 OpenMP runtime found in installed toolchains'
+ omp=sorted(candidates,key=lambda p:('redist' not in str(p).lower(),len(str(p))))[0];state['omp_source']=str(omp);save()
  roots={}
  for name in ('raw','omp-only','dll-no-stdlib','no-crypto','healthy'):
   root=W/('relocated '+name);root.mkdir();shutil.copy2(binary/'btxd.exe',root/'btxd.exe');roots[name]=root
