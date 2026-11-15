@@ -1,0 +1,279 @@
+{
+  "status": "PASS",
+  "rows": {
+    "independent_copy": "PASS",
+    "old_state_preserved_off_path": "PASS",
+    "restore_same_identity_bytes": "PASS",
+    "restart_exact_bytes_backup_intact": "PASS"
+  },
+  "events": [
+    {
+      "process": "source-helper",
+      "pid": 55256,
+      "argv": [
+        "<BINARY_EVIDENCE_ROOT>/package/btx-0.34.16/bin/btx-modeld",
+        "-modeldir=<SCRATCH>/models-A",
+        "-modelrpcsocket=<SCRATCH>/m.sock",
+        "-modelstorage=8MiB",
+        "-modellandiscovery=0",
+        "-modelfollowpeers=0",
+        "-modelnatpmp=0"
+      ]
+    },
+    {
+      "process": "source-node",
+      "pid": 55264,
+      "argv": [
+        "<BINARY_EVIDENCE_ROOT>/package/btx-0.34.16/bin/btxd",
+        "-regtest",
+        "-datadir=<SCRATCH>/node",
+        "-rpcport=39631",
+        "-port=39632",
+        "-server",
+        "-disablewallet",
+        "-swapnet=0",
+        "-modelnet=1",
+        "-modelrpcsocket=<SCRATCH>/m.sock",
+        "-listen=0",
+        "-connect=0",
+        "-dnsseed=0",
+        "-discover=0",
+        "-modellandiscovery=0",
+        "-modelfollowpeers=0",
+        "-dbcache=4",
+        "-par=1"
+      ]
+    },
+    {
+      "stage": "initial-import",
+      "argv": [
+        "<BINARY_EVIDENCE_ROOT>/package/btx-0.34.16/bin/btx-cli",
+        "-regtest",
+        "-datadir=<SCRATCH>/node",
+        "-rpcport=39631",
+        "importmodel",
+        "<SCRATCH>/original",
+        "{\"publish\":false,\"pin\":true}"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"schema_version\": 2,\n  \"uri\": \"btx://pq7q5yg8qmx9xucejyj3lmes067uqlx9lkr7389c9utqsf4fgvaqgmgqhtq3uavqf0hm9r5geyp2xfz0my96j\",\n  \"model_id\": \"f028441c1b314dcc6644947fbcc1faf701f317f61fa272e0bc58209aa50ce811b402eb0479d6012fbeca3a23240a8c91\",\n  \"artifact_id\": \"5cf0be0cc1b82fba2ebf4f7e30c9adbcc263874a053f31f742197ed33f6fb33c6a8c4bbaf0f8c160698a70d8ce859bf3\",\n  \"admission\": \"PINNED\",\n  \"qualification\": \"structure only; not usefulness, safety, or alignment\",\n  \"seeded\": true,\n  \"pinned\": true,\n  \"propagation\": \"demand\",\n  \"search_published\": false,\n  \"signed_metadata\": false,\n  \"format\": \"safetensors\",\n  \"family\": \"\",\n  \"quantization\": \"\",\n  \"share\": {\n    \"uri\": \"btx://pq7q5yg8qmx9xucejyj3lmes067uqlx9lkr7389c9utqsf4fgvaqgmgqhtq3uavqf0hm9r5geyp2xfz0my96j\",\n    \"copy_text\": \"btx://pq7q5yg8qmx9xucejyj3lmes067uqlx9lkr7389c9utqsf4fgvaqgmgqhtq3uavqf0hm9r5geyp2xfz0my96j format=safetensors\",\n    \"family\": \"\",\n    \"format\": \"safetensors\",\n    \"quantization\": \"\",\n    \"signed\": false,\n    \"size_bytes\": 13,\n    \"file_count\": 2\n  },\n  \"next_actions\": [\n    \"searchmodels {\\\"scope\\\":\\\"LOCAL\\\"}\",\n    \"getmodelsharecard btx://pq7q5yg8qmx9xucejyj3lmes067uqlx9lkr7389c9utqsf4fgvaqgmgqhtq3uavqf0hm9r5geyp2xfz0my96j\",\n    \"getmodeltransfers\",\n    \"automatic_spend_atoms stays 0\"\n  ],\n  \"automatic_spend_atoms\": 0,\n  \"cloud_uploaded\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "stage": "initial-export",
+      "argv": [
+        "<BINARY_EVIDENCE_ROOT>/package/btx-0.34.16/bin/btx-cli",
+        "-regtest",
+        "-datadir=<SCRATCH>/node",
+        "-rpcport=39631",
+        "exportmodelpath",
+        "f028441c1b314dcc6644947fbcc1faf701f317f61fa272e0bc58209aa50ce811b402eb0479d6012fbeca3a23240a8c91"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"schema_version\": 2,\n  \"model_id\": \"f028441c1b314dcc6644947fbcc1faf701f317f61fa272e0bc58209aa50ce811b402eb0479d6012fbeca3a23240a8c91\",\n  \"artifact_id\": \"5cf0be0cc1b82fba2ebf4f7e30c9adbcc263874a053f31f742197ed33f6fb33c6a8c4bbaf0f8c160698a70d8ce859bf3\",\n  \"store_root\": \"<SCRATCH>/models-A/store\",\n  \"source_path\": \"<SCRATCH>/original\",\n  \"path\": \"<SCRATCH>/models-A/checkout/5cf0be0cc1b82fba2ebf4f7e30c9adbcc263874a053f31f742197ed33f6fb33c6a8c4bbaf0f8c160698a70d8ce859bf3\",\n  \"usable_runtime_root\": \"<SCRATCH>/models-A/checkout/5cf0be0cc1b82fba2ebf4f7e30c9adbcc263874a053f31f742197ed33f6fb33c6a8c4bbaf0f8c160698a70d8ce859bf3\",\n  \"materialized\": true,\n  \"inference\": false,\n  \"runtime_started\": false,\n  \"runtime_exec\": false,\n  \"device_loaded\": false,\n  \"files\": [\n    {\n      \"path\": \"assets/config.json\",\n      \"size\": 3,\n      \"sha384\": \"69ada93a3c8690e59d503c7bf06ad10bc064fe4dbefea84745738659f9b561aab0520a68389088af6c82b8b455a049bb\"\n    },\n    {\n      \"path\": \"model.safetensors\",\n      \"size\": 10,\n      \"sha384\": \"61bb86337220737ce7128decad5395f36aa4f35db99ccd526760df8550bbdcabcb5abf2e695ac45a64ed76514d97c9dd\"\n    }\n  ],\n  \"file_count\": 2,\n  \"automatic_spend_atoms\": 0,\n  \"next_actions\": [\n    \"loadmodel\",\n    \"openmodelshare\",\n    \"automatic_spend_atoms stays 0\"\n  ],\n  \"note\": \"Verified local files rebuilt from pieces. This RPC never starts a runtime. Checkout hardlinks source files when they still match.\",\n  \"execution_profile\": 0\n}\n",
+      "stderr": ""
+    },
+    {
+      "process": "restore-helper",
+      "pid": 55293,
+      "argv": [
+        "<BINARY_EVIDENCE_ROOT>/package/btx-0.34.16/bin/btx-modeld",
+        "-modeldir=<SCRATCH>/models-B",
+        "-modelrpcsocket=<SCRATCH>/m.sock",
+        "-modelstorage=8MiB",
+        "-modellandiscovery=0",
+        "-modelfollowpeers=0",
+        "-modelnatpmp=0"
+      ]
+    },
+    {
+      "process": "restore-node",
+      "pid": 55301,
+      "argv": [
+        "<BINARY_EVIDENCE_ROOT>/package/btx-0.34.16/bin/btxd",
+        "-regtest",
+        "-datadir=<SCRATCH>/node",
+        "-rpcport=39631",
+        "-port=39632",
+        "-server",
+        "-disablewallet",
+        "-swapnet=0",
+        "-modelnet=1",
+        "-modelrpcsocket=<SCRATCH>/m.sock",
+        "-listen=0",
+        "-connect=0",
+        "-dnsseed=0",
+        "-discover=0",
+        "-modellandiscovery=0",
+        "-modelfollowpeers=0",
+        "-dbcache=4",
+        "-par=1"
+      ]
+    },
+    {
+      "stage": "restore-import",
+      "argv": [
+        "<BINARY_EVIDENCE_ROOT>/package/btx-0.34.16/bin/btx-cli",
+        "-regtest",
+        "-datadir=<SCRATCH>/node",
+        "-rpcport=39631",
+        "importmodel",
+        "<SCRATCH>/backup/payload",
+        "{\"publish\":false,\"pin\":true}"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"schema_version\": 2,\n  \"uri\": \"btx://pq7q5yg8qmx9xucejyj3lmes067uqlx9lkr7389c9utqsf4fgvaqgmgqhtq3uavqf0hm9r5geyp2xfz0my96j\",\n  \"model_id\": \"f028441c1b314dcc6644947fbcc1faf701f317f61fa272e0bc58209aa50ce811b402eb0479d6012fbeca3a23240a8c91\",\n  \"artifact_id\": \"5cf0be0cc1b82fba2ebf4f7e30c9adbcc263874a053f31f742197ed33f6fb33c6a8c4bbaf0f8c160698a70d8ce859bf3\",\n  \"admission\": \"PINNED\",\n  \"qualification\": \"structure only; not usefulness, safety, or alignment\",\n  \"seeded\": true,\n  \"pinned\": true,\n  \"propagation\": \"demand\",\n  \"search_published\": false,\n  \"signed_metadata\": false,\n  \"format\": \"safetensors\",\n  \"family\": \"\",\n  \"quantization\": \"\",\n  \"share\": {\n    \"uri\": \"btx://pq7q5yg8qmx9xucejyj3lmes067uqlx9lkr7389c9utqsf4fgvaqgmgqhtq3uavqf0hm9r5geyp2xfz0my96j\",\n    \"copy_text\": \"btx://pq7q5yg8qmx9xucejyj3lmes067uqlx9lkr7389c9utqsf4fgvaqgmgqhtq3uavqf0hm9r5geyp2xfz0my96j format=safetensors\",\n    \"family\": \"\",\n    \"format\": \"safetensors\",\n    \"quantization\": \"\",\n    \"signed\": false,\n    \"size_bytes\": 13,\n    \"file_count\": 2\n  },\n  \"next_actions\": [\n    \"searchmodels {\\\"scope\\\":\\\"LOCAL\\\"}\",\n    \"getmodelsharecard btx://pq7q5yg8qmx9xucejyj3lmes067uqlx9lkr7389c9utqsf4fgvaqgmgqhtq3uavqf0hm9r5geyp2xfz0my96j\",\n    \"getmodeltransfers\",\n    \"automatic_spend_atoms stays 0\"\n  ],\n  \"automatic_spend_atoms\": 0,\n  \"cloud_uploaded\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "stage": "restore-export",
+      "argv": [
+        "<BINARY_EVIDENCE_ROOT>/package/btx-0.34.16/bin/btx-cli",
+        "-regtest",
+        "-datadir=<SCRATCH>/node",
+        "-rpcport=39631",
+        "exportmodelpath",
+        "f028441c1b314dcc6644947fbcc1faf701f317f61fa272e0bc58209aa50ce811b402eb0479d6012fbeca3a23240a8c91"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"schema_version\": 2,\n  \"model_id\": \"f028441c1b314dcc6644947fbcc1faf701f317f61fa272e0bc58209aa50ce811b402eb0479d6012fbeca3a23240a8c91\",\n  \"artifact_id\": \"5cf0be0cc1b82fba2ebf4f7e30c9adbcc263874a053f31f742197ed33f6fb33c6a8c4bbaf0f8c160698a70d8ce859bf3\",\n  \"store_root\": \"<SCRATCH>/models-B/store\",\n  \"source_path\": \"<SCRATCH>/backup/payload\",\n  \"path\": \"<SCRATCH>/models-B/checkout/5cf0be0cc1b82fba2ebf4f7e30c9adbcc263874a053f31f742197ed33f6fb33c6a8c4bbaf0f8c160698a70d8ce859bf3\",\n  \"usable_runtime_root\": \"<SCRATCH>/models-B/checkout/5cf0be0cc1b82fba2ebf4f7e30c9adbcc263874a053f31f742197ed33f6fb33c6a8c4bbaf0f8c160698a70d8ce859bf3\",\n  \"materialized\": true,\n  \"inference\": false,\n  \"runtime_started\": false,\n  \"runtime_exec\": false,\n  \"device_loaded\": false,\n  \"files\": [\n    {\n      \"path\": \"assets/config.json\",\n      \"size\": 3,\n      \"sha384\": \"69ada93a3c8690e59d503c7bf06ad10bc064fe4dbefea84745738659f9b561aab0520a68389088af6c82b8b455a049bb\"\n    },\n    {\n      \"path\": \"model.safetensors\",\n      \"size\": 10,\n      \"sha384\": \"61bb86337220737ce7128decad5395f36aa4f35db99ccd526760df8550bbdcabcb5abf2e695ac45a64ed76514d97c9dd\"\n    }\n  ],\n  \"file_count\": 2,\n  \"automatic_spend_atoms\": 0,\n  \"next_actions\": [\n    \"loadmodel\",\n    \"openmodelshare\",\n    \"automatic_spend_atoms stays 0\"\n  ],\n  \"note\": \"Verified local files rebuilt from pieces. This RPC never starts a runtime. Checkout hardlinks source files when they still match.\",\n  \"execution_profile\": 0\n}\n",
+      "stderr": ""
+    },
+    {
+      "process": "restart-helper",
+      "pid": 55326,
+      "argv": [
+        "<BINARY_EVIDENCE_ROOT>/package/btx-0.34.16/bin/btx-modeld",
+        "-modeldir=<SCRATCH>/models-B",
+        "-modelrpcsocket=<SCRATCH>/m.sock",
+        "-modelstorage=8MiB",
+        "-modellandiscovery=0",
+        "-modelfollowpeers=0",
+        "-modelnatpmp=0"
+      ]
+    },
+    {
+      "process": "restart-node",
+      "pid": 55334,
+      "argv": [
+        "<BINARY_EVIDENCE_ROOT>/package/btx-0.34.16/bin/btxd",
+        "-regtest",
+        "-datadir=<SCRATCH>/node",
+        "-rpcport=39631",
+        "-port=39632",
+        "-server",
+        "-disablewallet",
+        "-swapnet=0",
+        "-modelnet=1",
+        "-modelrpcsocket=<SCRATCH>/m.sock",
+        "-listen=0",
+        "-connect=0",
+        "-dnsseed=0",
+        "-discover=0",
+        "-modellandiscovery=0",
+        "-modelfollowpeers=0",
+        "-dbcache=4",
+        "-par=1"
+      ]
+    },
+    {
+      "stage": "restart-export",
+      "argv": [
+        "<BINARY_EVIDENCE_ROOT>/package/btx-0.34.16/bin/btx-cli",
+        "-regtest",
+        "-datadir=<SCRATCH>/node",
+        "-rpcport=39631",
+        "exportmodelpath",
+        "f028441c1b314dcc6644947fbcc1faf701f317f61fa272e0bc58209aa50ce811b402eb0479d6012fbeca3a23240a8c91"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"schema_version\": 2,\n  \"model_id\": \"f028441c1b314dcc6644947fbcc1faf701f317f61fa272e0bc58209aa50ce811b402eb0479d6012fbeca3a23240a8c91\",\n  \"artifact_id\": \"5cf0be0cc1b82fba2ebf4f7e30c9adbcc263874a053f31f742197ed33f6fb33c6a8c4bbaf0f8c160698a70d8ce859bf3\",\n  \"store_root\": \"<SCRATCH>/models-B/store\",\n  \"source_path\": \"<SCRATCH>/backup/payload\",\n  \"path\": \"<SCRATCH>/models-B/checkout/5cf0be0cc1b82fba2ebf4f7e30c9adbcc263874a053f31f742197ed33f6fb33c6a8c4bbaf0f8c160698a70d8ce859bf3\",\n  \"usable_runtime_root\": \"<SCRATCH>/models-B/checkout/5cf0be0cc1b82fba2ebf4f7e30c9adbcc263874a053f31f742197ed33f6fb33c6a8c4bbaf0f8c160698a70d8ce859bf3\",\n  \"materialized\": true,\n  \"inference\": false,\n  \"runtime_started\": false,\n  \"runtime_exec\": false,\n  \"device_loaded\": false,\n  \"files\": [\n    {\n      \"path\": \"assets/config.json\",\n      \"size\": 3,\n      \"sha384\": \"69ada93a3c8690e59d503c7bf06ad10bc064fe4dbefea84745738659f9b561aab0520a68389088af6c82b8b455a049bb\"\n    },\n    {\n      \"path\": \"model.safetensors\",\n      \"size\": 10,\n      \"sha384\": \"61bb86337220737ce7128decad5395f36aa4f35db99ccd526760df8550bbdcabcb5abf2e695ac45a64ed76514d97c9dd\"\n    }\n  ],\n  \"file_count\": 2,\n  \"automatic_spend_atoms\": 0,\n  \"next_actions\": [\n    \"loadmodel\",\n    \"openmodelshare\",\n    \"automatic_spend_atoms stays 0\"\n  ],\n  \"note\": \"Verified local files rebuilt from pieces. This RPC never starts a runtime. Checkout hardlinks source files when they still match.\",\n  \"execution_profile\": 0\n}\n",
+      "stderr": ""
+    },
+    {
+      "process": "restart-node",
+      "exit": 0
+    },
+    {
+      "process": "restart-helper",
+      "exit": 0
+    },
+    {
+      "process": "restore-node",
+      "exit": 0
+    },
+    {
+      "process": "restore-helper",
+      "exit": 0
+    },
+    {
+      "process": "source-node",
+      "exit": 0
+    },
+    {
+      "process": "source-helper",
+      "exit": 0
+    }
+  ],
+  "manifest": {
+    "source": "main/074dac167c26c1e091198f691ed5727817dba88a; compatible reused949a98e3 packaged binaries",
+    "archive_sha256": "22ee49b866f7d1539387d7e30bc82b38174b0925e84a103f590d92485569de73",
+    "inputs": {
+      "daemon": {
+        "path": "<BINARY_EVIDENCE_ROOT>/package/btx-0.34.16/bin/btxd",
+        "sha256": "140720019806b23807767abd1e448d4249cb45e4ef20c17ea49943c9130ffe94",
+        "mode": "0o755"
+      },
+      "daemon_native": {
+        "path": "<BINARY_EVIDENCE_ROOT>/package/btx-0.34.16/libexec/btxd.real",
+        "sha256": "ac96c05d6a83a09dbb902f0d89fd04049897a0ac659660c228926a1ed31b9e6f",
+        "mode": "0o755"
+      },
+      "helper": {
+        "path": "<BINARY_EVIDENCE_ROOT>/package/btx-0.34.16/bin/btx-modeld",
+        "sha256": "7673fa5cd12a231ab93a8ecad03933206f771cfa12e072aa40ec8280a39e332c",
+        "mode": "0o755"
+      },
+      "helper_native": {
+        "path": "<BINARY_EVIDENCE_ROOT>/package/btx-0.34.16/libexec/btx-modeld.real",
+        "sha256": "0d429a06badcb6c8194fbd504a78d3c0ee440fd9d62956fbf84c1cf8fe02d38d",
+        "mode": "0o755"
+      },
+      "cli_script": {
+        "path": "<BINARY_EVIDENCE_ROOT>/btx-model-source.py",
+        "sha256": "fcd696b1da01e8ea3acc5f60b61d4c592b10fc5956b6d8221b3b43765508ed9c"
+      },
+      "node_cli": {
+        "path": "<BINARY_EVIDENCE_ROOT>/package/btx-0.34.16/bin/btx-cli",
+        "sha256": "d6b9aa082a33658a68e1ec658ba8165b73ced7345a34c82af0160fe842c3c513",
+        "mode": "0o755"
+      },
+      "node_cli_native": {
+        "path": "<BINARY_EVIDENCE_ROOT>/package/btx-0.34.16/libexec/btx-cli.real",
+        "sha256": "9e88d7e256725d52828f76a61d6a360f57eeede43cdd92739ed22b57a1d4dcfe",
+        "mode": "0o755"
+      }
+    },
+    "openssl": "/opt/homebrew/opt/openssl@3/bin/openssl",
+    "omitted": [
+      "full functional fixture",
+      "single-file hosting",
+      "exact search identity discovery",
+      "restart persistence",
+      "wallet/spending",
+      "runtime inference",
+      "stopped investigations",
+      "cloud/transfer/package workflows"
+    ],
+    "prepared_only": true,
+    "scope": "Independent copied payload to fresh helper modeldir; same IDs/bytes and same-store restart. No cloud/peer/lab state tests."
+  },
+  "limits": [
+    "tiny2filefixture",
+    "localMac",
+    "noMinIOorpeer",
+    "noinference",
+    "nohardwarelossorcrashqualification"
+  ],
+  "cleanup": true
+}
