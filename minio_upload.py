@@ -10,7 +10,7 @@ CHUNK=8<<20
 
 def write_exact_model(path,total=2*CHUNK):
     # Fixed-width JSON integers keep header length stable while fitting file exactly.
-    header_size=128
+    header_size=120
     n=total-8-header_size
     header=json.dumps({'w':{'dtype':'U8','shape':[n],'data_offsets':[0,n]}},separators=(',',':')).encode()
     assert len(header)<=header_size

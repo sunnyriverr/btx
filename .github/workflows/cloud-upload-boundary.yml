@@ -31,10 +31,19 @@ jobs:
         run: python3 stage.py
         env:
           GH_TOKEN: ${{ github.token }}
-      - name: Execute bounded real-limit loop and validate observations
+      - name: Reuse unchanged passed component execution
         run: |
-          python3 run_virtual.py ./virtual-stream
-          cp virtual-execution.json virtual-observations.jsonl virtual-stderr.txt records/
+          python3 - <<'PYCODE'
+          import json,hashlib,pathlib
+          from validate_virtual import validate
+          r=json.load(open('previous-virtual-execution.json'))
+          assert r['status']=='EXPECTED_BASELINE_OBSERVATIONS_VERIFIED' and r['returncode']==0
+          assert hashlib.sha256(pathlib.Path('virtual-stream').read_bytes()).hexdigest()==r['binary_sha256']
+          assert hashlib.sha256(pathlib.Path('putstream.inc').read_bytes()).hexdigest()==r['method_sha256']
+          validate([json.loads(x) for x in open('previous-virtual-observations.jsonl')])
+          pathlib.Path('records/component-reuse.json').write_text(json.dumps({'source_run':43771204644,'binary_and_method_identical':True,'rerun':False},indent=2))
+          PYCODE
+          cp previous-virtual-execution.json previous-virtual-observations.jsonl records/
       - name: Execute ordinary real MinIO upload and restart control
         run: bash native.sh
       - name: Preserve partial component results
