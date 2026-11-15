@@ -1,5 +1,5 @@
 {
-  "name": "Windows retained archive final controls",
+  "name": "Windows test-enabled configure and plan only",
   "on": {
     "push": {
       "branches": [
@@ -18,8 +18,13 @@
   "jobs": {
     "plan": {
       "runs-on": "windows-2025",
-      "timeout-minutes": 12,
+      "timeout-minutes": 20,
       "steps": [
+        {
+          "name": "Exact source bytes",
+          "shell": "pwsh",
+          "run": "git config --global core.autocrlf false\ngit config --global core.longpaths true"
+        },
         {
           "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
           "with": {
@@ -29,30 +34,74 @@
           }
         },
         {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "repository": "btxchain/btx",
+            "ref": "074dac167c26c1e091198f691ed5727817dba88a",
+            "path": "btx",
+            "persist-credentials": false
+          }
+        },
+        {
+          "name": "Hosted disk admission",
+          "shell": "pwsh",
+          "run": "if ((Get-PSDrive D).Free -lt 12GB) { throw \"Need12GiB before restore\" }"
+        },
+        {
           "uses": "actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1",
           "with": {
             "python-version": "3.12.10"
           }
         },
         {
-          "name": "Verify and extract retained archive",
+          "name": "Install binary-only configure dependencies",
+          "run": "python -m pip install --only-binary=:all: cryptography==46.0.4 cffi==2.0.0 pycparser==2.23"
+        },
+        {
+          "name": "Restore project",
+          "id": "project",
+          "uses": "actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830",
+          "with": {
+            "path": "D:\\btx-native-035\\project-build\nD:\\btx-native-035\\vcpkg-installed",
+            "key": "btx-main074-successor-43687743717",
+            "fail-on-cache-miss": true
+          }
+        },
+        {
+          "name": "Restore dependencies",
+          "id": "dependencies",
+          "uses": "actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830",
+          "with": {
+            "path": "D:\\btx-native-035\\openssl-3.5.4-static\nD:\\btx-native-035\\binary-cache",
+            "key": "btx356-root-v1-windows-14.51.36231-690b2e59699b64766618b28290f0ed35c71e4d28e5d4b61ae407e5724af9d9d7-ossl354-afa249f1",
+            "fail-on-cache-miss": true
+          }
+        },
+        {
+          "name": "Restore ports",
+          "id": "ports",
+          "uses": "actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830",
+          "with": {
+            "path": "D:\\btx-native-035\\binary-cache",
+            "key": "btx356-ports-v1-windows-14.51.36231-690b2e59699b64766618b28290f0ed35c71e4d28e5d4b61ae407e5724af9d9d7-afa249f1-41955207582",
+            "fail-on-cache-miss": true
+          }
+        },
+        {
+          "name": "Verify cache; tests-enabled configure and dry-run only",
+          "shell": "cmd",
           "env": {
             "GH_TOKEN": "${{ github.token }}"
           },
-          "run": "python controls/contrib/devtools/windows-main-preflight/stage_retained.py"
+          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/unit_plan.py\nexit /b %errorlevel%\n"
         },
         {
-          "name": "Producer unavailable and owned process-tree cleanup",
-          "shell": "pwsh",
-          "run": "$ErrorActionPreference = 'Stop'\n$producer = $env:pythonLocation\n$expected = 'C:\\hostedtoolcache\\windows\\Python\\3.12.10\\x64'\nif ($producer -ne $expected -or !(Test-Path \"$producer\\python.exe\")) { throw 'Unexpected producer location' }\n# This is the disposable GitHub-hosted job VM, not a user/system/shared runner.\nif ($env:RUNNER_ENVIRONMENT -ne 'github-hosted') { throw 'Require disposable hosted runner' }\n$held = \"$producer.btx-held-$env:GITHUB_RUN_ID\"\nif (Test-Path $held) { throw 'Held path already exists' }\n$env:BTX_PRODUCER_PATH = $producer\n$env:BTX_ARCHIVE_SHA = 'e10c6c9432e28bebe392f931a1e10fe52dd2995878903be4e25e85b6e9475534'\n$env:TEMP = \"$env:GITHUB_WORKSPACE\\tmp\"\n$env:TMP = $env:TEMP\nNew-Item -ItemType Directory -Force $env:TEMP | Out-Null\n$exe = (Get-ChildItem \"$env:GITHUB_WORKSPACE\\relocated archive\" -Filter python.exe -Recurse | Select-Object -First 1).FullName\n$controller = \"$env:GITHUB_WORKSPACE\\controls\\contrib\\devtools\\windows-main-preflight\\final_controls.py\"\nMove-Item -LiteralPath $producer -Destination $held\ntry {\n if (Test-Path $producer) { throw 'Producer still accessible' }\n & $exe -I $controller\n $verdict = $LASTEXITCODE\n} finally {\n Move-Item -LiteralPath $held -Destination $producer\n if (!(Test-Path \"$producer\\python.exe\")) { throw 'Producer restoration failed' }\n @{ producer=$producer; physically_hidden=$true; restored=$true } | ConvertTo-Json | Set-Content records/producer-restoration.json\n}\nif ($verdict -ne 0) { throw \"Controls failed: $verdict\" }\n"
-        },
-        {
-          "name": "Retain final control evidence",
+          "name": "Retain unit preflight evidence",
           "if": "always()",
           "uses": "actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f",
           "with": {
-            "name": "windows-producer-and-descendant-controls",
-            "path": "records",
+            "name": "windows-unit-configure-plan",
+            "path": "D:\\btx-native-035\\unit-plan-evidence",
             "retention-days": 14
           }
         }
