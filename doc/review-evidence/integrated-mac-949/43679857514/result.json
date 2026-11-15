@@ -1,0 +1,117 @@
+{
+  "base": "949a98e34222cc4cdb5b1d5bd650aa3b7bcbff72",
+  "producer_source": "f40eb37a6fb8b665340fe92a2f248ff3f23ec7f6",
+  "commands": [
+    {
+      "label": "source",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "seconds": 0.53,
+      "bounded_stop": false
+    },
+    {
+      "label": "xcode",
+      "args": [
+        "xcodebuild",
+        "-version"
+      ],
+      "returncode": 0,
+      "seconds": 0.57,
+      "bounded_stop": false
+    },
+    {
+      "label": "compiler",
+      "args": [
+        "xcrun",
+        "clang++",
+        "--version"
+      ],
+      "returncode": 0,
+      "seconds": 1.8,
+      "bounded_stop": false
+    },
+    {
+      "label": "sdk",
+      "args": [
+        "xcrun",
+        "--sdk",
+        "macosx",
+        "--show-sdk-version"
+      ],
+      "returncode": 0,
+      "seconds": 2.39,
+      "bounded_stop": false
+    },
+    {
+      "label": "package-prerequisites",
+      "args": [
+        "brew",
+        "install",
+        "--force-bottle",
+        "python@3.12",
+        "libomp"
+      ],
+      "returncode": 0,
+      "seconds": 12.3,
+      "bounded_stop": false
+    },
+    {
+      "label": "python-prefix",
+      "args": [
+        "brew",
+        "--prefix",
+        "python@3.12"
+      ],
+      "returncode": 0,
+      "seconds": 0.63,
+      "bounded_stop": false
+    },
+    {
+      "label": "actual-archive-release-gate",
+      "args": [
+        "/opt/homebrew/opt/python@3.12/bin/python3.12",
+        "/Users/runner/work/btx/btx/product/scripts/release/verify_release_btxd.py",
+        "--archive",
+        "/Users/runner/work/btx/btx/retained/btx-0.34.16-arm64-apple-darwin.tar.gz"
+      ],
+      "returncode": 0,
+      "seconds": 2.65,
+      "bounded_stop": false
+    },
+    {
+      "label": "all-image-audit",
+      "args": [
+        "/opt/homebrew/opt/python@3.12/bin/python3.12",
+        "/Users/runner/work/btx/btx/ci/integrated-archives-949/clean-audit.py",
+        "/Users/runner/work/btx/btx/relocated current archive with spaces/btx-0.34.16",
+        "/Users/runner/work/btx/btx/product",
+        "/Users/runner/work/btx/btx/records"
+      ],
+      "returncode": 0,
+      "seconds": 4.71,
+      "bounded_stop": false
+    }
+  ],
+  "tests": [],
+  "complete": false,
+  "scope": "Remaining gates on the exact current949 actual archive; no compile, repack or passed-control repetition",
+  "btx_compiled": false,
+  "archive": {
+    "path": "btx-0.34.16-arm64-apple-darwin.tar.gz",
+    "sha256": "22ee49b866f7d1539387d7e30bc82b38174b0925e84a103f590d92485569de73",
+    "bytes": 46410625,
+    "source": "949a98e34222cc4cdb5b1d5bd650aa3b7bcbff72",
+    "producer_run": 43679603417,
+    "unchanged_saved_archive": true
+  },
+  "allowed_framework_app_resources": [
+    "lib/Python.framework/Versions/3.12/Resources/Python.app"
+  ],
+  "error": "name 'framework' is not defined"
+}

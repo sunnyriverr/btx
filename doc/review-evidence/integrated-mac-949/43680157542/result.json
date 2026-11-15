@@ -1,0 +1,172 @@
+{
+  "base": "949a98e34222cc4cdb5b1d5bd650aa3b7bcbff72",
+  "producer_source": "949a98e34222cc4cdb5b1d5bd650aa3b7bcbff72",
+  "commands": [
+    {
+      "label": "source",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "seconds": 0.57,
+      "bounded_stop": false
+    },
+    {
+      "label": "framework-prerequisite",
+      "args": [
+        "brew",
+        "install",
+        "--force-bottle",
+        "python@3.12"
+      ],
+      "returncode": 0,
+      "seconds": 16.34,
+      "bounded_stop": false
+    },
+    {
+      "label": "python-prefix",
+      "args": [
+        "brew",
+        "--prefix",
+        "python@3.12"
+      ],
+      "returncode": 0,
+      "seconds": 0.58,
+      "bounded_stop": false
+    },
+    {
+      "label": "producer-framework-prefix",
+      "args": [
+        "/opt/homebrew/opt/python@3.12/bin/python3.12",
+        "-c",
+        "import sys;print(sys.base_prefix)"
+      ],
+      "returncode": 0,
+      "seconds": 0.52,
+      "bounded_stop": false
+    },
+    {
+      "label": "producer-hidden-lifecycle",
+      "args": [
+        "/usr/bin/python3",
+        "/Users/runner/work/btx/btx/ci/integrated-archives-949/archive-runtime.py",
+        "/Users/runner/work/btx/btx/relocated current archive with spaces/btx-0.34.16",
+        "/opt/homebrew/Cellar/python@3.12/3.12.16/Frameworks/Python.framework",
+        "/Users/runner/work/btx/btx/records/archive-runtime"
+      ],
+      "returncode": 0,
+      "seconds": 8.2,
+      "bounded_stop": false
+    },
+    {
+      "label": "final-source-status",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "status",
+        "--porcelain"
+      ],
+      "returncode": 0,
+      "seconds": 1.65,
+      "bounded_stop": false
+    }
+  ],
+  "tests": [],
+  "complete": true,
+  "scope": "Only missing producer-hidden lifecycle on unchanged audited949archive",
+  "btx_compiled": false,
+  "reused_archive_audit_run": 43679857514,
+  "archive": {
+    "path": "btx-0.34.16-arm64-apple-darwin.tar.gz",
+    "sha256": "22ee49b866f7d1539387d7e30bc82b38174b0925e84a103f590d92485569de73",
+    "bytes": 46410625,
+    "source": "949a98e34222cc4cdb5b1d5bd650aa3b7bcbff72",
+    "producer_run": 43679603417,
+    "unchanged_saved_archive": true
+  },
+  "producer_restored": true,
+  "lifecycle": [
+    {
+      "case": "default-off",
+      "swapnet_argument": "omitted",
+      "wallet_disabled": true,
+      "modelnet_disabled_for_offline_test": true,
+      "network": {
+        "result": null,
+        "error": {
+          "code": -1,
+          "message": "SwapNet is disabled or not initialized"
+        },
+        "id": "archive-acceptance"
+      },
+      "rpc_ready": true,
+      "clean_stop": true,
+      "exit": 0
+    },
+    {
+      "case": "explicit-on",
+      "swapnet_argument": "1",
+      "wallet_disabled": true,
+      "modelnet_disabled_for_offline_test": true,
+      "network": {
+        "result": {
+          "version": "2.0.0",
+          "protocol": 2,
+          "network": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360",
+          "discovery_default": true,
+          "peers": 0,
+          "providers": 0,
+          "routes": 0,
+          "automatic_spend_atoms": "0",
+          "in_process": true,
+          "execution": "durable_htlc_coordinator",
+          "last_tick_error": null,
+          "packet_errors": 0,
+          "recent_packet_errors": [],
+          "wallet_loaded": false,
+          "wallet_warning": "NATIVE_RPC"
+        },
+        "error": null,
+        "id": "archive-acceptance"
+      },
+      "rpc_ready": true,
+      "clean_stop": true,
+      "exit": 0
+    },
+    {
+      "case": "restart-on",
+      "swapnet_argument": "1",
+      "wallet_disabled": true,
+      "modelnet_disabled_for_offline_test": true,
+      "network": {
+        "result": {
+          "version": "2.0.0",
+          "protocol": 2,
+          "network": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360",
+          "discovery_default": true,
+          "peers": 0,
+          "providers": 0,
+          "routes": 0,
+          "automatic_spend_atoms": "0",
+          "in_process": true,
+          "execution": "durable_htlc_coordinator",
+          "last_tick_error": null,
+          "packet_errors": 0,
+          "recent_packet_errors": [],
+          "wallet_loaded": false,
+          "wallet_warning": "NATIVE_RPC"
+        },
+        "error": null,
+        "id": "archive-acceptance"
+      },
+      "rpc_ready": true,
+      "clean_stop": true,
+      "exit": 0
+    }
+  ]
+}

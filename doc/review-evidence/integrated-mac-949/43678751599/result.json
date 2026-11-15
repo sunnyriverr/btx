@@ -1,0 +1,302 @@
+{
+  "base": "949a98e34222cc4cdb5b1d5bd650aa3b7bcbff72",
+  "producer_source": "f40eb37a6fb8b665340fe92a2f248ff3f23ec7f6",
+  "commands": [
+    {
+      "label": "source",
+      "args": [
+        "git",
+        "-C",
+        "/Users/runner/work/btx/btx/product",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "seconds": 0.57,
+      "bounded_stop": false
+    },
+    {
+      "label": "xcode",
+      "args": [
+        "xcodebuild",
+        "-version"
+      ],
+      "returncode": 0,
+      "seconds": 0.59,
+      "bounded_stop": false
+    },
+    {
+      "label": "compiler",
+      "args": [
+        "xcrun",
+        "clang++",
+        "--version"
+      ],
+      "returncode": 0,
+      "seconds": 1.65,
+      "bounded_stop": false
+    },
+    {
+      "label": "sdk",
+      "args": [
+        "xcrun",
+        "--sdk",
+        "macosx",
+        "--show-sdk-version"
+      ],
+      "returncode": 0,
+      "seconds": 1.67,
+      "bounded_stop": false
+    },
+    {
+      "label": "cached-build-prerequisites",
+      "args": [
+        "brew",
+        "install",
+        "--force-bottle",
+        "boost@1.85",
+        "libevent",
+        "zeromq",
+        "libomp",
+        "qt",
+        "qrencode",
+        "librsvg",
+        "libicns",
+        "python@3.12"
+      ],
+      "returncode": 0,
+      "seconds": 145.59,
+      "bounded_stop": false
+    },
+    {
+      "label": "openssl-prefix",
+      "args": [
+        "brew",
+        "--prefix",
+        "openssl@3"
+      ],
+      "returncode": 0,
+      "seconds": 0.58,
+      "bounded_stop": false
+    },
+    {
+      "label": "python-prefix",
+      "args": [
+        "brew",
+        "--prefix",
+        "python@3.12"
+      ],
+      "returncode": 0,
+      "seconds": 0.53,
+      "bounded_stop": false
+    },
+    {
+      "label": "test-env",
+      "args": [
+        "/opt/homebrew/opt/python@3.12/bin/python3.12",
+        "-m",
+        "venv",
+        "/Users/runner/work/btx/btx/test-env"
+      ],
+      "returncode": 0,
+      "seconds": 3.26,
+      "bounded_stop": false
+    },
+    {
+      "label": "fixture-crypto",
+      "args": [
+        "/Users/runner/work/btx/btx/test-env/bin/python",
+        "-m",
+        "pip",
+        "install",
+        "cryptography==46.0.4"
+      ],
+      "returncode": 0,
+      "seconds": 2.16,
+      "bounded_stop": false
+    },
+    {
+      "label": "configure-current",
+      "args": [
+        "cmake",
+        "-S",
+        "/Users/runner/work/btx/btx/product",
+        "-B",
+        "/Users/runner/work/btx/btx/mac-config-build",
+        "-DCMAKE_SUPPRESS_REGENERATION=ON",
+        "-DPython3_EXECUTABLE=/Users/runner/work/btx/btx/test-env/bin/python"
+      ],
+      "returncode": 0,
+      "seconds": 14.28,
+      "bounded_stop": false
+    },
+    {
+      "label": "actual-incremental-plan",
+      "args": [
+        "ninja",
+        "-C",
+        "/Users/runner/work/btx/btx/mac-config-build",
+        "-n",
+        "btxd",
+        "btx-cli",
+        "btx-util",
+        "btx-modeld",
+        "btx-hcpd",
+        "btx-hosted",
+        "btx-open",
+        "btx-capability",
+        "btx-capabilityd",
+        "btx-modelcheck",
+        "btx-matmul-backend-info",
+        "btx-security",
+        "btx-guardd",
+        "btx-tx",
+        "btx-wallet",
+        "btx-native-qualify"
+      ],
+      "returncode": 0,
+      "seconds": 1.62,
+      "bounded_stop": false
+    },
+    {
+      "label": "bounded-current-build",
+      "args": [
+        "ninja",
+        "-C",
+        "/Users/runner/work/btx/btx/mac-config-build",
+        "-j3",
+        "btxd",
+        "btx-cli",
+        "btx-util",
+        "btx-modeld",
+        "btx-hcpd",
+        "btx-hosted",
+        "btx-open",
+        "btx-capability",
+        "btx-capabilityd",
+        "btx-modelcheck",
+        "btx-matmul-backend-info",
+        "btx-security",
+        "btx-guardd",
+        "btx-tx",
+        "btx-wallet",
+        "btx-native-qualify"
+      ],
+      "returncode": 0,
+      "seconds": 25.22,
+      "bounded_stop": false
+    },
+    {
+      "label": "package-framework-crypto",
+      "args": [
+        "/opt/homebrew/opt/python@3.12/bin/python3.12",
+        "-m",
+        "pip",
+        "install",
+        "--break-system-packages",
+        "cryptography==46.0.4"
+      ],
+      "returncode": 0,
+      "seconds": 1.88,
+      "bounded_stop": false
+    },
+    {
+      "label": "framework-prefix",
+      "args": [
+        "/opt/homebrew/opt/python@3.12/bin/python3.12",
+        "-c",
+        "import sys;print(sys.base_prefix)"
+      ],
+      "returncode": 0,
+      "seconds": 0.6,
+      "bounded_stop": false
+    },
+    {
+      "label": "incorporated-archive-assembly",
+      "args": [
+        "/opt/homebrew/opt/python@3.12/bin/python3.12",
+        "/Users/runner/work/btx/btx/product/scripts/release/package_release_archive.py",
+        "--output-dir",
+        "/Users/runner/work/btx/btx/retained",
+        "--version",
+        "0.34.16",
+        "--platform-id",
+        "macos-arm64-metal",
+        "--btxd",
+        "/Users/runner/work/btx/btx/mac-config-build/bin/btxd",
+        "--btx-cli",
+        "/Users/runner/work/btx/btx/mac-config-build/bin/btx-cli",
+        "--btx-util",
+        "/Users/runner/work/btx/btx/mac-config-build/bin/btx-util",
+        "--require-model-helpers",
+        "--metal-lib-dir",
+        "/Users/runner/work/btx/btx/metal-inputs",
+        "--source-root",
+        "/Users/runner/work/btx/btx/product",
+        "--python",
+        "/opt/homebrew/opt/python@3.12/bin/python3.12"
+      ],
+      "returncode": -15,
+      "seconds": 300.39,
+      "bounded_stop": true
+    }
+  ],
+  "tests": [],
+  "complete": false,
+  "scope": "Exact integrated949 Mac command-line archive, no product changes; bounded cached build and native package lifecycle",
+  "restore": {
+    "artifact": 14137836649,
+    "receipt": {
+      "sha256": "24e49a83fecaa5849ce62227f1c03fdfaf989564a73f60f0f917c04a092a57ab",
+      "bytes": 275671218,
+      "live_bytes": 873699790,
+      "files": 21773,
+      "scope": "task source/build and saved baseline; original product tests only, no release qualification"
+    },
+    "objects": 4227,
+    "matched_source_mtimes": 14707
+  },
+  "build_admission": {
+    "actual_edges": 23,
+    "cap": 80,
+    "seconds_cap": 600,
+    "targets": [
+      "btxd",
+      "btx-cli",
+      "btx-util",
+      "btx-modeld",
+      "btx-hcpd",
+      "btx-hosted",
+      "btx-open",
+      "btx-capability",
+      "btx-capabilityd",
+      "btx-modelcheck",
+      "btx-matmul-backend-info",
+      "btx-security",
+      "btx-guardd",
+      "btx-tx",
+      "btx-wallet",
+      "btx-native-qualify"
+    ]
+  },
+  "btx_compiled": true,
+  "binary_manifest": {
+    "btxd": "db58477ac0fab4ccfa4a53c7fded9ed1ece2d5f25d8a72d1707e2ebb89be9a81",
+    "btx-cli": "9e88d7e256725d52828f76a61d6a360f57eeede43cdd92739ed22b57a1d4dcfe",
+    "btx-util": "ab83c4746b30e29b11d769d56035183c20e9e558f4409c565fa985608c317598",
+    "btx-modeld": "0d429a06badcb6c8194fbd504a78d3c0ee440fd9d62956fbf84c1cf8fe02d38d",
+    "btx-hcpd": "36942989d8cca9fea393ad35a6e7030f2c22cd7393c1bcdf69d6c2c971eefdd9",
+    "btx-hosted": "2738c02fd629998c011409520899b97f52709f057316e6fdc16d88d41253ad2b",
+    "btx-open": "ec1f6600473971e8e11fa87a3eb1ed15f0c9ba4a47b65b20e6d666fe9e861bcc",
+    "btx-capability": "f53ab598b4c961b7044e1d8c3f1dc40b36dcd97afb5d3464062a6c57d2b35dc4",
+    "btx-capabilityd": "3eee0f481641ebf03702a1d3d79937c6a74c345e270a672b766bca0f79d63d45",
+    "btx-modelcheck": "831f49c39d07ccb346f63d39492ea2b2c2b604d71de464c7b22b480868c5daae",
+    "btx-matmul-backend-info": "7471a3f393c4776a9e7291791f5478954d83c7ef7bbfe8ca3ef3f28a39a17028",
+    "btx-security": "7c6503fc4761416cf8f099cb8f9285c35511bf343157a20eed8fe1a488735068",
+    "btx-guardd": "4f6a495452ba02c5e71848407a5f047db4b9d07cf5a091396d125a1a5ef240e0",
+    "btx-tx": "ac497a613a5e2714ae356fd44e01cfa611a60fcc6234ae738ca8d61edf8e0552",
+    "btx-wallet": "7e00af5ff04a1358223f0d48b79f1cc8de24ba79b9ae2ab7d3c0dd91a2fe18c0",
+    "btx-native-qualify": "b1d65fa80e60932a669f0ea3ca06f25d3b439c2da18dab4422e1d3cfb9f21170"
+  },
+  "error": "incorporated-archive-assembly failed; exact log retained"
+}
