@@ -1,0 +1,70 @@
+{
+  "source": "074dac167c26c1e091198f691ed5727817dba88a",
+  "complete": false,
+  "cases": [
+    {
+      "label": "candidate-archive-assembly",
+      "exit": 0,
+      "unsigned_exit": 0
+    },
+    {
+      "label": "actual-archive-release-gate",
+      "exit": 0,
+      "unsigned_exit": 0
+    },
+    {
+      "label": "actual-archive-isolation",
+      "exit": 0,
+      "unsigned_exit": 0
+    },
+    {
+      "label": "tool-btx-cli",
+      "exit": 0,
+      "unsigned_exit": 0
+    },
+    {
+      "label": "tool-btx-guardd",
+      "exit": 1,
+      "unsigned_exit": 1
+    }
+  ],
+  "binary_hashes": {
+    "btx-cli.exe": "973ed4ca9aa3017e330b9078059b79e28eea08c073e2740e497dafbb5df8eb8f",
+    "btx-guardd.exe": "bfd4331505537a01fee41d32f649d7b6f5ac9ad41b581a8a44769809d02031c2",
+    "btx-modeld.exe": "d44250480ab654c2d067deb46e6abba82399f18bebd1cbd14803ca7682bef7aa",
+    "btx-open.exe": "7ab1ef286ab9c0382779a778f2df48eb44951b1aefbb843bf8cf98a79dfbc18e",
+    "btx-security.exe": "2bba61742ad302b4c95453ce0cc9ec1c818b46f97e560591067f74db23a00d22",
+    "btx-tx.exe": "e7251222a66cf637ca8dee2dbd1c42b524b4f937606b1a6df5c181945707fd07",
+    "btx-util.exe": "247ec7fea3b5770328b8dd7242029ec0a8187dd4296389604732da226d636abc",
+    "btxd.exe": "389f3a998b38c3635e7bcab112a53e36c09eee8e98295498eef6ab3791f127c0",
+    "test_btx.exe": "446a2d951095f9274a083af475a504c6f7ebd5c50782e2cb69a6150459ab4b00",
+    "windows_candidate_batch.exe": "13a76aa9a60ec9de32dae15de61654932af601fb092ae5a72cdbd59818e75803",
+    "windows_fixture_boundaries.exe": "973df0d79ab7c6d6ff491306f19b625e6365211ccc8cc0288d6c3e6ad031bde9",
+    "windows_fixture_controls.exe": "6d0e62e551580c7186153a1d4253e6dd0376d7e588ec0fbe4d2fcb8eb34dd452",
+    "windows_fixture_five.exe": "7974ac22de597eb05e9ca2d1d50ace2584e570e0bb82ca6bbf3691653f080e4b",
+    "windows_pipe_fixture.exe": "11fa9d6281eb5f3575610d0e6aacc36cb5713c160eb055af3eb54b24d1a4b87f",
+    "windows_wan_fixture.exe": "30b40b3b8f58d0c8b08cdf5257d5b54a840f0aa51f84c7a9c2a088e1405db446"
+  },
+  "inputs_pinned": true,
+  "reused_stock_failure_run": 43661726579,
+  "archives": {
+    "candidate": {
+      "sha256": "e10c6c9432e28bebe392f931a1e10fe52dd2995878903be4e25e85b6e9475534",
+      "bytes": 49948430
+    }
+  },
+  "full_archive_dependency_problems": [],
+  "full_archive_portable_gate": "PASS: all PE imports closed with explicit app-local runtime inputs",
+  "isolated_python": {
+    "paths": [
+      "D:\\a\\btx\\btx\\extracted candidate\\btx-0.34.16\\bin\\python312.zip",
+      "D:\\a\\btx\\btx\\extracted candidate\\btx-0.34.16\\bin",
+      "D:\\a\\btx\\btx\\extracted candidate\\btx-0.34.16\\bin\\Lib\\site-packages"
+    ],
+    "cryptography": "D:\\a\\btx\\btx\\extracted candidate\\btx-0.34.16\\bin\\Lib\\site-packages\\cryptography\\__init__.py",
+    "rust": "D:\\a\\btx\\btx\\extracted candidate\\btx-0.34.16\\bin\\Lib\\site-packages\\cryptography\\hazmat\\bindings\\_rust.pyd",
+    "cffi": "D:\\a\\btx\\btx\\extracted candidate\\btx-0.34.16\\bin\\Lib\\site-packages\\_cffi_backend.cp312-win_amd64.pyd",
+    "isolated": 1
+  },
+  "error": "Command '['D:\\\\a\\\\btx\\\\btx\\\\extracted candidate\\\\btx-0.34.16\\\\bin\\\\btx-guardd.exe', '-version']' returned non-zero exit status 1."
+}

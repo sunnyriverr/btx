@@ -1,0 +1,62 @@
+{
+  "name": "Windows retained archive final controls",
+  "on": {
+    "push": {
+      "branches": [
+        "codex/ci-windows-root-configure"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "read",
+    "actions": "read"
+  },
+  "concurrency": {
+    "group": "windows-main-configure-preflight",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "plan": {
+      "runs-on": "windows-2025",
+      "timeout-minutes": 12,
+      "steps": [
+        {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "path": "controls",
+            "persist-credentials": false,
+            "sparse-checkout": "contrib/devtools/windows-main-preflight"
+          }
+        },
+        {
+          "uses": "actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1",
+          "with": {
+            "python-version": "3.12.10"
+          }
+        },
+        {
+          "name": "Verify and extract retained archive",
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          },
+          "run": "python controls/contrib/devtools/windows-main-preflight/stage_retained.py"
+        },
+        {
+          "name": "Producer unavailable and owned process-tree cleanup",
+          "shell": "pwsh",
+          "run": "$ErrorActionPreference = 'Stop'\n$producer = $env:pythonLocation\n$expected = 'C:\\hostedtoolcache\\windows\\Python\\3.12.10\\x64'\nif ($producer -ne $expected -or !(Test-Path \"$producer\\python.exe\")) { throw 'Unexpected producer location' }\n# This is the disposable GitHub-hosted job VM, not a user/system/shared runner.\nif ($env:RUNNER_ENVIRONMENT -ne 'github-hosted') { throw 'Require disposable hosted runner' }\n$held = \"$producer.btx-held-$env:GITHUB_RUN_ID\"\nif (Test-Path $held) { throw 'Held path already exists' }\n$env:BTX_PRODUCER_PATH = $producer\n$env:BTX_ARCHIVE_SHA = 'e10c6c9432e28bebe392f931a1e10fe52dd2995878903be4e25e85b6e9475534'\n$env:TEMP = \"$env:GITHUB_WORKSPACE\\tmp\"\n$env:TMP = $env:TEMP\nNew-Item -ItemType Directory -Force $env:TEMP | Out-Null\n$exe = (Get-ChildItem \"$env:GITHUB_WORKSPACE\\relocated archive\" -Filter python.exe -Recurse | Select-Object -First 1).FullName\n$controller = \"$env:GITHUB_WORKSPACE\\controls\\contrib\\devtools\\windows-main-preflight\\final_controls.py\"\nMove-Item -LiteralPath $producer -Destination $held\ntry {\n if (Test-Path $producer) { throw 'Producer still accessible' }\n & $exe -I $controller\n $verdict = $LASTEXITCODE\n} finally {\n Move-Item -LiteralPath $held -Destination $producer\n if (!(Test-Path \"$producer\\python.exe\")) { throw 'Producer restoration failed' }\n @{ producer=$producer; physically_hidden=$true; restored=$true } | ConvertTo-Json | Set-Content records/producer-restoration.json\n}\nif ($verdict -ne 0) { throw \"Controls failed: $verdict\" }\n"
+        },
+        {
+          "name": "Retain final control evidence",
+          "if": "always()",
+          "uses": "actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f",
+          "with": {
+            "name": "windows-producer-and-descendant-controls",
+            "path": "records",
+            "retention-days": 14
+          }
+        }
+      ]
+    }
+  }
+}

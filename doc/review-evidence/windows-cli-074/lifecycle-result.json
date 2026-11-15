@@ -1,0 +1,152 @@
+{
+  "source": "074dac167c26c1e091198f691ed5727817dba88a",
+  "complete": true,
+  "cases": [
+    {
+      "label": "archive-assembly",
+      "exit": 0,
+      "unsigned_exit": 0
+    },
+    {
+      "label": "tool-btx-open",
+      "exit": 0,
+      "unsigned_exit": 0
+    },
+    {
+      "label": "tool-btx-modeld",
+      "exit": 0,
+      "unsigned_exit": 0
+    },
+    {
+      "label": "tool-btx-tx",
+      "exit": 0,
+      "unsigned_exit": 0
+    },
+    {
+      "label": "tool-btx-util",
+      "exit": 0,
+      "unsigned_exit": 0
+    },
+    {
+      "label": "tool-btxd",
+      "exit": 0,
+      "unsigned_exit": 0
+    },
+    {
+      "label": "security-usage",
+      "exit": 1,
+      "unsigned_exit": 1
+    },
+    {
+      "label": "archive-default-off",
+      "enabled": false,
+      "rpc_ready": true,
+      "runtime_modules": [
+        "D:\\a\\btx\\btx\\relocated archive\\btx-0.34.16\\bin\\libomp140.x86_64.dll",
+        "D:\\a\\btx\\btx\\relocated archive\\btx-0.34.16\\bin\\python312.dll"
+      ],
+      "info": {
+        "result": null,
+        "error": {
+          "code": -1,
+          "message": "SwapNet is disabled or not initialized"
+        },
+        "id": "probe"
+      },
+      "clean_stop": true
+    },
+    {
+      "label": "archive-on",
+      "enabled": true,
+      "rpc_ready": true,
+      "runtime_modules": [
+        "D:\\a\\btx\\btx\\relocated archive\\btx-0.34.16\\bin\\libomp140.x86_64.dll",
+        "D:\\a\\btx\\btx\\relocated archive\\btx-0.34.16\\bin\\python312.dll",
+        "D:\\a\\btx\\btx\\relocated archive\\btx-0.34.16\\bin\\python3.DLL"
+      ],
+      "info": {
+        "result": {
+          "version": "2.0.0",
+          "protocol": 2,
+          "network": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360",
+          "discovery_default": true,
+          "peers": 0,
+          "providers": 0,
+          "routes": 0,
+          "automatic_spend_atoms": "0",
+          "in_process": true,
+          "execution": "durable_htlc_coordinator",
+          "last_tick_error": null,
+          "packet_errors": 0,
+          "recent_packet_errors": [],
+          "wallet_loaded": false,
+          "wallet_warning": "NATIVE_RPC"
+        },
+        "error": null,
+        "id": "probe"
+      },
+      "clean_stop": true
+    },
+    {
+      "label": "archive-restart",
+      "enabled": true,
+      "rpc_ready": true,
+      "runtime_modules": [
+        "D:\\a\\btx\\btx\\relocated archive\\btx-0.34.16\\bin\\libomp140.x86_64.dll",
+        "D:\\a\\btx\\btx\\relocated archive\\btx-0.34.16\\bin\\python312.dll",
+        "D:\\a\\btx\\btx\\relocated archive\\btx-0.34.16\\bin\\python3.DLL"
+      ],
+      "info": {
+        "result": {
+          "version": "2.0.0",
+          "protocol": 2,
+          "network": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360",
+          "discovery_default": true,
+          "peers": 0,
+          "providers": 0,
+          "routes": 0,
+          "automatic_spend_atoms": "0",
+          "in_process": true,
+          "execution": "durable_htlc_coordinator",
+          "last_tick_error": null,
+          "packet_errors": 0,
+          "recent_packet_errors": [],
+          "wallet_loaded": false,
+          "wallet_warning": "NATIVE_RPC"
+        },
+        "error": null,
+        "id": "probe"
+      },
+      "clean_stop": true
+    }
+  ],
+  "archive": {
+    "sha256": "e10c6c9432e28bebe392f931a1e10fe52dd2995878903be4e25e85b6e9475534",
+    "bytes": 49948430
+  },
+  "selected_binary_hashes": {
+    "btxd": "389f3a998b38c3635e7bcab112a53e36c09eee8e98295498eef6ab3791f127c0",
+    "btx-cli": "973ed4ca9aa3017e330b9078059b79e28eea08c073e2740e497dafbb5df8eb8f",
+    "btx-tx": "e7251222a66cf637ca8dee2dbd1c42b524b4f937606b1a6df5c181945707fd07",
+    "btx-util": "247ec7fea3b5770328b8dd7242029ec0a8187dd4296389604732da226d636abc",
+    "btx-open": "7ab1ef286ab9c0382779a778f2df48eb44951b1aefbb843bf8cf98a79dfbc18e",
+    "btx-modeld": "d44250480ab654c2d067deb46e6abba82399f18bebd1cbd14803ca7682bef7aa",
+    "btx-guardd": "bfd4331505537a01fee41d32f649d7b6f5ac9ad41b581a8a44769809d02031c2",
+    "btx-security": "2bba61742ad302b4c95453ce0cc9ec1c818b46f97e560591067f74db23a00d22"
+  },
+  "reused_passes": {
+    "run": 43688614528,
+    "checks": [
+      "actual archive release gate",
+      "PE dependency closure",
+      "Python isolation",
+      "btx-cli version"
+    ],
+    "same_selected_executables": true,
+    "archive_reassembled": true
+  },
+  "guard_eof_clean": true,
+  "security_usage_expected_exit": 1,
+  "owned_nodes_exited": true,
+  "scope": "Current074 savedbuild nativeWindows: missing executable contracts and relocated defaultoff/on/samedatadirRPCrestart/cleanstop. Earlier gate/isolation results reused; no compilation or fullunits."
+}
