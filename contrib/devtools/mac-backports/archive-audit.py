@@ -12,6 +12,8 @@ target=root/'libexec/btxd.real';original=target.read_bytes();digest=hashlib.sha2
 try:
  deps=m.helper('verify_release_btxd').macho_load_paths(target)[0];dep=next(x for x in deps if not m.system_load(x))
  subprocess.run(['install_name_tool','-change',dep,'/opt/homebrew/forbidden-archive-control.dylib',str(target)],check=True,capture_output=True)
+ # Keep the dependency control distinct from the signature control below.
+ subprocess.run(['codesign','--force','--sign','-',str(target)],check=True,capture_output=True)
  try:m.verify_closure([target],root)
  except RuntimeError as e:
   assert 'homebrew' in str(e).lower();row['bad_load_rejected']=str(e)
