@@ -1,0 +1,291 @@
+--- a/src/modelnet/relay_reserve.cpp
++++ b/src/modelnet/relay_reserve.cpp
+@@ -68,6 +68,9 @@
+ {
+     m_rsvp.erase(std::remove_if(m_rsvp.begin(), m_rsvp.end(),
+                                 [&](const RelayReservation& r) {
++                                    // Retain the accounting record until in-flight I/O is reconciled.
++                                    // Admission and byte claims still reject expired/idle reservations.
++                                    if (r.conns > 0 || r.bytes_pending > 0) return false;
+                                     if (r.expiry_ms <= now_ms) return true;
+                                     return now_ms - r.last_activity_ms > m_lim.idle_ms;
+                                 }),
+@@ -79,7 +82,7 @@
+     Expire(now_ms);
+     for (auto& r : m_rsvp) {
+         if (r.reservation_id != reservation_id) continue;
+-        if (r.expiry_ms <= now_ms) {
++        if (r.expiry_ms <= now_ms || now_ms - r.last_activity_ms > m_lim.idle_ms) {
+             err = "expired";
+             return false;
+         }
+@@ -87,7 +90,9 @@
+             err = "connection ceiling";
+             return false;
+         }
+-        if (r.bytes_used + nbytes > r.byte_ceiling) {
++        if (r.bytes_used >= r.byte_ceiling ||
++            r.bytes_pending > r.byte_ceiling - r.bytes_used ||
++            nbytes > r.byte_ceiling - r.bytes_used - r.bytes_pending) {
+             err = "byte ceiling";
+             return false;
+         }
+@@ -102,16 +107,42 @@
+     return false;
+ }
+ 
+-void RelayTable::AddForwardedBytes(const std::string& reservation_id, uint64_t nbytes, int64_t now_ms)
+-{
+-    if (nbytes == 0) return;
++uint64_t RelayTable::ReserveForwardBytes(const std::string& reservation_id, uint64_t max_bytes, int64_t now_ms)
++{
+     for (auto& r : m_rsvp) {
+         if (r.reservation_id != reservation_id) continue;
+-        r.bytes_used += nbytes;
+-        r.last_activity_ms = now_ms;
+-        m_forwarded += nbytes;
+-        return;
+-    }
++        if (r.expiry_ms <= now_ms || now_ms - r.last_activity_ms > m_lim.idle_ms ||
++            r.bytes_used >= r.byte_ceiling ||
++            r.bytes_pending >= r.byte_ceiling - r.bytes_used) return 0;
++        const uint64_t granted = std::min(max_bytes, r.byte_ceiling - r.bytes_used - r.bytes_pending);
++        r.bytes_pending += granted;
++        if (granted > 0) r.last_activity_ms = now_ms;
++        return granted;
++    }
++    return 0;
++}
++
++bool RelayTable::FinishForwardBytes(const std::string& reservation_id, uint64_t reserved_bytes,
++                                   uint64_t forwarded_bytes, int64_t now_ms)
++{
++    if (forwarded_bytes > reserved_bytes) return false;
++    for (auto& r : m_rsvp) {
++        if (r.reservation_id != reservation_id) continue;
++        if (reserved_bytes > r.bytes_pending) return false;
++        r.bytes_pending -= reserved_bytes;
++        r.bytes_used += forwarded_bytes;
++        m_forwarded += forwarded_bytes;
++        if (forwarded_bytes > 0) r.last_activity_ms = now_ms;
++        return true;
++    }
++    return false;
++}
++
++uint64_t RelayTable::AddForwardedBytes(const std::string& reservation_id, uint64_t nbytes, int64_t now_ms)
++{
++    const uint64_t granted = ReserveForwardBytes(reservation_id, nbytes, now_ms);
++    (void)FinishForwardBytes(reservation_id, granted, granted, now_ms);
++    return granted;
+ }
+ 
+ void RelayTable::CloseConn(const std::string& reservation_id)
+--- a/src/modelnet/relay_reserve.h
++++ b/src/modelnet/relay_reserve.h
+@@ -33,6 +33,7 @@
+     int conn_ceiling{RELAY_DEFAULT_CONN_CEILING};
+     int stream_ceiling{RELAY_DEFAULT_STREAM_CEILING};
+     uint64_t bytes_used{0};
++    uint64_t bytes_pending{0};
+     int conns{0};
+     int streams{0};
+     int64_t last_activity_ms{0};
+@@ -63,7 +64,11 @@
+                   RelayReservation& out, std::string& err);
+     void Expire(int64_t now_ms);
+     bool AllowForward(const std::string& reservation_id, uint64_t nbytes, int64_t now_ms, std::string& err);
+-    void AddForwardedBytes(const std::string& reservation_id, uint64_t nbytes, int64_t now_ms);
++    // Callers serialize table access. Pending claims count against the shared ceiling.
++    uint64_t ReserveForwardBytes(const std::string& reservation_id, uint64_t max_bytes, int64_t now_ms);
++    bool FinishForwardBytes(const std::string& reservation_id, uint64_t reserved_bytes,
++                            uint64_t forwarded_bytes, int64_t now_ms);
++    uint64_t AddForwardedBytes(const std::string& reservation_id, uint64_t nbytes, int64_t now_ms);
+     void CloseConn(const std::string& reservation_id);
+     bool Has(const std::string& reservation_id) const;
+     bool Get(const std::string& reservation_id, RelayReservation& out) const;
+--- a/src/modelnet/helper.cpp
++++ b/src/modelnet/helper.cpp
+@@ -3638,7 +3638,6 @@
+         resp.splice_host = host;
+         resp.splice_port = port;
+         resp.splice_reservation_id = rr.reservation_id;
+-        resp.splice_byte_ceiling = rsvp.byte_ceiling > rsvp.bytes_used ? rsvp.byte_ceiling - rsvp.bytes_used : 0;
+         return true;
+     }
+     if (req.path == root + "ext/autonat/probe" && req.method == "POST") {
+@@ -12496,13 +12495,10 @@
+                 }
+                 freeaddrinfo(res);
+             }
+-            const uint64_t cap = nresp.splice_byte_ceiling > 0 ? nresp.splice_byte_ceiling : RELAY_DEFAULT_BYTE_CEILING;
+             if (dfd >= 0) {
+                 SetPq1SocketOpts(dfd, true);
+-                uint64_t moved = 0;
+                 const auto splice_start = std::chrono::steady_clock::now();
+                 while (!stop || !stop->load()) {
+-                    if (moved >= cap) break;
+                     if (std::chrono::duration_cast<std::chrono::milliseconds>(
+                             std::chrono::steady_clock::now() - splice_start)
+                             .count() >= PQ1_RELAY_SPLICE_MS) {
+@@ -12516,28 +12512,49 @@
+                     const int pr = poll(pf, 2, 1000);
+                     if (pr <= 0) break;
+                     unsigned char buf[16384];
+-                    if (pf[0].revents & POLLIN) {
+-                        const int n = SSL_read(ssl, buf, sizeof(buf));
+-                        if (n <= 0) break;
+-                        if (::send(dfd, buf, n, 0) != n) break;
+-                        moved += static_cast<uint64_t>(n);
+-                    }
+-                    if (pf[1].revents & POLLIN) {
+-                        const int n = ::recv(dfd, buf, sizeof(buf), 0);
+-                        if (n <= 0) break;
+-                        if (SSL_write(ssl, buf, n) != n) break;
+-                        moved += static_cast<uint64_t>(n);
+-                    }
++                    // Claim before each read: all connections and both directions share the budget.
++                    auto forward = [&](bool from_client) {
++                        uint64_t granted;
++                        bool pending = false;
++                        {
++                            std::lock_guard<std::mutex> lock(g_swarm.conn_mu);
++                            const int64_t now = ConnNowMs();
++                            granted = g_swarm.relays.ReserveForwardBytes(
++                                nresp.splice_reservation_id, sizeof(buf), now);
++                            RelayReservation current;
++                            pending = granted == 0 &&
++                                g_swarm.relays.Get(nresp.splice_reservation_id, current) &&
++                                current.expiry_ms > now && current.bytes_pending > 0 &&
++                                current.bytes_used < current.byte_ceiling;
++                        }
++                        if (granted == 0) {
++                            if (!pending) return false;
++                            // Another read can return unused allowance. Keep this connection alive
++                            // within the existing splice deadline, without spinning on a ready fd.
++                            std::this_thread::sleep_for(std::chrono::milliseconds(10));
++                            return true;
++                        }
++                        const int n = from_client ? SSL_read(ssl, buf, static_cast<int>(granted))
++                                                  : ::recv(dfd, buf, static_cast<size_t>(granted), 0);
++                        const int sent = n <= 0 ? 0 : (from_client ? ::send(dfd, buf, n, 0)
++                                                                 : SSL_write(ssl, buf, n));
++                        {
++                            std::lock_guard<std::mutex> lock(g_swarm.conn_mu);
++                            (void)g_swarm.relays.FinishForwardBytes(
++                                nresp.splice_reservation_id, granted,
++                                sent > 0 ? static_cast<uint64_t>(sent) : 0, ConnNowMs());
++                        }
++                        return n > 0 && sent == n;
++                    };
++                    if ((pf[0].revents & POLLIN) && !forward(true)) break;
++                    if ((pf[1].revents & POLLIN) && !forward(false)) break;
+                 }
+                 close(dfd);
+-                if (moved > 0 && !nresp.splice_reservation_id.empty()) {
+-                    std::lock_guard<std::mutex> lock(g_swarm.conn_mu);
+-                    g_swarm.relays.AddForwardedBytes(nresp.splice_reservation_id, moved, ConnNowMs());
+-                }
+             }
+             if (!nresp.splice_reservation_id.empty()) {
+                 std::lock_guard<std::mutex> lock(g_swarm.conn_mu);
+                 g_swarm.relays.CloseConn(nresp.splice_reservation_id);
++                g_swarm.relays.Expire(ConnNowMs());
+             }
+             break;
+         }
+--- a/src/test/modelnet_conn_tests.cpp
++++ b/src/test/modelnet_conn_tests.cpp
+@@ -248,6 +248,92 @@
+     BOOST_CHECK(route("240.0.0.1", /*manual=*/false) == ModelDialRoute::DIRECT);
+     BOOST_CHECK(route("1233:3432:2434:2343:3234:2345:6546:4534", /*manual=*/false) == ModelDialRoute::REFUSED);
+     BOOST_CHECK(route("fd00::1", /*manual=*/false) == ModelDialRoute::REFUSED);
++}
++
++
++BOOST_AUTO_TEST_CASE(relay_shared_byte_budget)
++{
++    using namespace modelnet;
++    RelayLimits limits;
++    limits.byte_ceiling = 100;
++    RelayTable table{limits};
++    RelayReservation r, current;
++    std::string err;
++    BOOST_REQUIRE(table.Reserve("svc", "ng", "203.0.113.1:29447", 0, r, err));
++    BOOST_REQUIRE(table.AllowForward(r.reservation_id, 0, 1, err));
++    BOOST_REQUIRE(table.AllowForward(r.reservation_id, 0, 2, err));
++    const uint64_t a = table.ReserveForwardBytes(r.reservation_id, 60, 3);
++    const uint64_t b = table.ReserveForwardBytes(r.reservation_id, 60, 4);
++    BOOST_REQUIRE_EQUAL(a, 60);
++    BOOST_REQUIRE_EQUAL(b, 40);
++    BOOST_CHECK_EQUAL(table.ReserveForwardBytes(r.reservation_id, 1, 5), 0);
++    // A temporary pending claim is not permanent byte exhaustion.
++    BOOST_REQUIRE(table.AllowForward(r.reservation_id, 0, 5, err));
++    table.CloseConn(r.reservation_id);
++    BOOST_REQUIRE(table.FinishForwardBytes(r.reservation_id, a, a, 6));
++    BOOST_REQUIRE(table.FinishForwardBytes(r.reservation_id, b, b, 7));
++    table.CloseConn(r.reservation_id);
++    table.CloseConn(r.reservation_id);
++    BOOST_REQUIRE(table.Get(r.reservation_id, current));
++    BOOST_CHECK_EQUAL(current.bytes_used, 100);
++    BOOST_CHECK_EQUAL(current.bytes_pending, 0);
++    BOOST_CHECK_EQUAL(current.conns, 0);
++    BOOST_CHECK_EQUAL(table.ForwardedBytes(), 100);
++    BOOST_CHECK(!table.AllowForward(r.reservation_id, 0, 8, err));
++}
++
++BOOST_AUTO_TEST_CASE(relay_byte_claim_cleanup)
++{
++    using namespace modelnet;
++    RelayLimits limits;
++    limits.byte_ceiling = 100;
++    RelayTable table{limits};
++    RelayReservation r, current;
++    std::string err;
++    BOOST_REQUIRE(table.Reserve("svc", "ng", "203.0.113.1:29447", 0, r, err));
++    BOOST_REQUIRE(table.AllowForward(r.reservation_id, 0, 1, err));
++    const uint64_t claim = table.ReserveForwardBytes(r.reservation_id, 100, 2);
++    BOOST_REQUIRE_EQUAL(claim, 100);
++    // A failed write must return its entire claim; partial writes debit only sent bytes.
++    BOOST_REQUIRE(table.FinishForwardBytes(r.reservation_id, claim, 0, 3));
++    BOOST_REQUIRE_EQUAL(table.ReserveForwardBytes(r.reservation_id, 100, 4), 100);
++    BOOST_CHECK(!table.FinishForwardBytes(r.reservation_id, 100, 101, 5));
++    BOOST_REQUIRE(table.FinishForwardBytes(r.reservation_id, 100, 7, 6));
++    BOOST_REQUIRE_EQUAL(table.ReserveForwardBytes(r.reservation_id, 100, 7), 93);
++    BOOST_REQUIRE(table.FinishForwardBytes(r.reservation_id, 93, 13, 8));
++    table.CloseConn(r.reservation_id);
++    BOOST_REQUIRE(table.Get(r.reservation_id, current));
++    BOOST_CHECK_EQUAL(current.bytes_used, 20);
++    BOOST_CHECK_EQUAL(current.bytes_pending, 0);
++    BOOST_CHECK_EQUAL(current.conns, 0);
++    BOOST_CHECK_EQUAL(table.ForwardedBytes(), 20);
++    BOOST_REQUIRE_EQUAL(table.ReserveForwardBytes(r.reservation_id, 100, 9), 80);
++    BOOST_REQUIRE(table.FinishForwardBytes(r.reservation_id, 80, 0, 10));
++}
++
++BOOST_AUTO_TEST_CASE(relay_claim_expires_without_fresh_allowance)
++{
++    using namespace modelnet;
++    RelayLimits limits;
++    limits.byte_ceiling = 100;
++    limits.ttl_ms = 20;
++    RelayTable table{limits};
++    RelayReservation r;
++    std::string err;
++    BOOST_REQUIRE(table.Reserve("svc", "ng", "203.0.113.1:29447", 0, r, err));
++    BOOST_REQUIRE(table.AllowForward(r.reservation_id, 0, 1, err));
++    BOOST_REQUIRE_EQUAL(table.ReserveForwardBytes(r.reservation_id, UINT64_MAX, 2), 100);
++    BOOST_CHECK_EQUAL(table.ReserveForwardBytes(r.reservation_id, 1, 21), 0);
++    table.Expire(21);
++    BOOST_CHECK(table.Has(r.reservation_id));
++    BOOST_CHECK(!table.AllowForward(r.reservation_id, 0, 21, err));
++    BOOST_REQUIRE(table.FinishForwardBytes(r.reservation_id, 100, 0, 22));
++    table.CloseConn(r.reservation_id);
++    table.Expire(22);
++    BOOST_CHECK_EQUAL(table.StatusJson()["active_forwarded"].getInt<int>(), 0);
++    BOOST_CHECK(!table.Has(r.reservation_id));
++    BOOST_CHECK(!table.AllowForward(r.reservation_id, 0, 23, err));
++    BOOST_CHECK_EQUAL(table.ReserveForwardBytes(r.reservation_id, 1, 24), 0);
+ }
+ 
+ BOOST_AUTO_TEST_CASE(conn_rly_01_to_10)

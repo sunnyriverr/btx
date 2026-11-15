@@ -1,0 +1,68 @@
+name: Relay full helper integration
+on:
+  push:
+    branches: [codex/ci-relay-helper-integration]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  relay:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 61f13b8870ed98c7b10db2e32c04fb647023f4ef
+          path: accepted-source
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: 14162812891
+          run-id: 43716018430
+          github-token: ${{ github.token }}
+          path: saved-checkpoint
+          merge-multiple: true
+      - name: Bounded verified full helper build and expiry test
+        timeout-minutes: 45
+        run: |
+          set -euo pipefail
+          mkdir -p records
+          image=ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11
+          docker pull "$image"
+          docker run --name relay-build --init -v "$GITHUB_WORKSPACE:$GITHUB_WORKSPACE" -w "$GITHUB_WORKSPACE" -e GITHUB_WORKSPACE "$image" bash -e -c 'timeout --kill-after=20s 10m bash setup.sh && /opt/hostedtoolcache/Python/3.12.16/x64/bin/python3 build.py' 2>&1 | tee records/build-console.log
+          docker commit relay-build relay-runtime:local
+      - name: Native PQ1 relay over isolated TEST-NET loopback
+        timeout-minutes: 8
+        run: |
+          set -euo pipefail
+          image=relay-runtime:local
+          docker run --rm --init --network none --cap-add NET_ADMIN -v "$GITHUB_WORKSPACE:$GITHUB_WORKSPACE" -w "$GITHUB_WORKSPACE" -e GITHUB_WORKSPACE "$image" bash -e -c 'ip addr add 203.0.113.1/32 dev lo && /opt/hostedtoolcache/Python/3.12.16/x64/bin/python3 native_test.py' 2>&1 | tee records/native-console.log
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: relay-helper-binaries
+          path: binaries/
+          retention-days: 14
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: relay-helper-records
+          path: |
+            records/*.json
+            records/*.log
+            records/*.jsonl
+            records/runtime-*/*.log
+          retention-days: 14
+          if-no-files-found: error
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: relay-helper-checkpoint
+          path: resume-checkpoint/
+          retention-days: 14
+          if-no-files-found: warn

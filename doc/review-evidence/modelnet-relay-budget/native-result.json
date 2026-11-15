@@ -1,0 +1,156 @@
+{
+  "cases": [
+    {
+      "variant": "baseline",
+      "case": "valid",
+      "helper_sha256": "04b068ab4aebd2be1893268d384fe6561cfc06ee72c84f8701ee5e3dc5fe9458",
+      "observed_bytes": 65536,
+      "contract_pass": true,
+      "relay_after": {
+        "reservations": 1,
+        "forwarded_bytes": 65536,
+        "active_forwarded": 0,
+        "automatic_spend_atoms": 0
+      },
+      "streams": [
+        {
+          "bytes": 65536,
+          "done": true,
+          "sha256": "1f8745f0d2d1387ec1af2211a3cf417b2e9e885e853472649c1d979d0e9370e3"
+        }
+      ],
+      "completed": true,
+      "helper_exit": 0
+    },
+    {
+      "variant": "baseline",
+      "case": "shared",
+      "helper_sha256": "04b068ab4aebd2be1893268d384fe6561cfc06ee72c84f8701ee5e3dc5fe9458",
+      "observed_bytes": 41943040,
+      "contract_pass": false,
+      "relay_after": {
+        "reservations": 1,
+        "forwarded_bytes": 41943040,
+        "active_forwarded": 0,
+        "automatic_spend_atoms": 0
+      },
+      "streams": [
+        {
+          "bytes": 20971520,
+          "done": true,
+          "sha256": "6adfa0775cbd16a3f50d1fda1d7bd7f375dd1f9af5e6dfb751a87d3dff68699c"
+        },
+        {
+          "bytes": 20971520,
+          "done": true,
+          "sha256": "6adfa0775cbd16a3f50d1fda1d7bd7f375dd1f9af5e6dfb751a87d3dff68699c"
+        }
+      ],
+      "completed": true,
+      "helper_exit": 0
+    },
+    {
+      "variant": "baseline",
+      "case": "exhausted",
+      "helper_sha256": "04b068ab4aebd2be1893268d384fe6561cfc06ee72c84f8701ee5e3dc5fe9458",
+      "reopen_status": 200,
+      "observed_bytes": 33555456,
+      "contract_pass": false,
+      "relay_after": {
+        "reservations": 1,
+        "forwarded_bytes": 33555456,
+        "active_forwarded": 0,
+        "automatic_spend_atoms": 0
+      },
+      "streams": [
+        {
+          "bytes": 33554432,
+          "done": true,
+          "sha256": "05f052c8f6da8ee5228ec291820b559c4be183773b9e97a6b82e30dacff85dd3"
+        },
+        {
+          "bytes": 1024,
+          "done": true,
+          "sha256": "49abd65bbf7f7e40c7055093ed2e3fd75f2f602f2c5fcf955c213e3135eb03f7"
+        }
+      ],
+      "completed": true,
+      "helper_exit": 0
+    },
+    {
+      "variant": "candidate",
+      "case": "valid",
+      "helper_sha256": "c98edadee33ec69aaa82523c3520d3c45cb59a0c385f4e0a6983885d62d2e888",
+      "observed_bytes": 65536,
+      "contract_pass": true,
+      "relay_after": {
+        "reservations": 1,
+        "forwarded_bytes": 65536,
+        "active_forwarded": 0,
+        "automatic_spend_atoms": 0
+      },
+      "streams": [
+        {
+          "bytes": 65536,
+          "done": true,
+          "sha256": "1f8745f0d2d1387ec1af2211a3cf417b2e9e885e853472649c1d979d0e9370e3"
+        }
+      ],
+      "completed": true,
+      "helper_exit": 0
+    },
+    {
+      "variant": "candidate",
+      "case": "shared",
+      "helper_sha256": "c98edadee33ec69aaa82523c3520d3c45cb59a0c385f4e0a6983885d62d2e888",
+      "observed_bytes": 33554432,
+      "contract_pass": true,
+      "relay_after": {
+        "reservations": 1,
+        "forwarded_bytes": 33554432,
+        "active_forwarded": 0,
+        "automatic_spend_atoms": 0
+      },
+      "streams": [
+        {
+          "bytes": 15237497,
+          "done": true,
+          "sha256": "122fc3216c67784d92f739e0ff4a23ffc1bc7abd9c742b21766e1e0a4d4bf0de"
+        },
+        {
+          "bytes": 18316935,
+          "done": true,
+          "sha256": "dc0305be82365fc5042e12b1c4899b0577349cc4948232dea87cd3d4824a0e65"
+        }
+      ],
+      "completed": true,
+      "helper_exit": 0
+    },
+    {
+      "variant": "candidate",
+      "case": "exhausted",
+      "helper_sha256": "c98edadee33ec69aaa82523c3520d3c45cb59a0c385f4e0a6983885d62d2e888",
+      "reopen_status": 403,
+      "observed_bytes": 33554432,
+      "contract_pass": true,
+      "relay_after": {
+        "reservations": 1,
+        "forwarded_bytes": 33554432,
+        "active_forwarded": 0,
+        "automatic_spend_atoms": 0
+      },
+      "streams": [
+        {
+          "bytes": 33554432,
+          "done": true,
+          "sha256": "05f052c8f6da8ee5228ec291820b559c4be183773b9e97a6b82e30dacff85dd3"
+        }
+      ],
+      "completed": true,
+      "helper_exit": 0
+    }
+  ],
+  "network": "Docker --network none; TEST-NET203.0.113.1 on isolated loopback",
+  "cap": 33554432,
+  "complete": true
+}
