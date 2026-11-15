@@ -1,0 +1,96 @@
+{
+  "utc": "2026-11-15T11:21:40.640552+00:00",
+  "results": [
+    {
+      "id": "G0",
+      "result": "PASS",
+      "scope": "two disposable principals, isolated verifier+empty homes"
+    },
+    {
+      "id": "R1",
+      "result": "PASS",
+      "fingerprints": [
+        "7C409421AD3049F1791C8580A34A29FE552488C0",
+        "D8FC14D1DD9AF21461BC02BB8F631C2DDDC2136F"
+      ]
+    },
+    {
+      "id": "R2",
+      "result": "PASS",
+      "rejection": "Checksum signature verification failed for SHA256SUMS.asc: gpg: Signature made Sun Nov 15 21:21:37 2026 AEST\ngpg:                using RSA key 7C409421AD3049F1791C8580A34A29FE552488C0\ngpg: BAD signature from \"BTX disposable A <fixture-a@example.invalid>\" [unknown]"
+    },
+    {
+      "id": "R3",
+      "result": "PASS",
+      "valid_signature": true,
+      "content_rejection": "SHA256SUMS mismatch for asset.bin: expected 4560300377ed524a60bc81a577d3a65d21404a817cd843da5aff650774a55267, got d67e2e944994496c8d8ec76eed0cf9f09679448d584b532bebf941852a37f5ed"
+    },
+    {
+      "id": "R4",
+      "result": "PASS",
+      "valid_B_control": true,
+      "pin_rejected": true,
+      "rollback_byte_exact": true
+    },
+    {
+      "id": "R5",
+      "result": "PASS",
+      "rejection": "Checksum signature verification failed for SHA256SUMS.asc: gpg: keybox '/private/tmp/btx-s3-gpg-runtime/empty/pubring.kbx' created\ngpg: Signature made Sun Nov 15 21:21:37 2026 AEST\ngpg:                using RSA key 7C409421AD3049F1791C8580A34A29FE552488C0\ngpg: Can't check signature: No public key"
+    },
+    {
+      "id": "C2",
+      "result": "PASS",
+      "same_rollback_fixture_retry": true
+    }
+  ],
+  "fingerprints": {
+    "A": "D8FC14D1DD9AF21461BC02BB8F631C2DDDC2136F",
+    "B": "0BFECBB0DF4C5A7A85FD3EC29F97A76DE386C055",
+    "A_signing_subkey": "7C409421AD3049F1791C8580A34A29FE552488C0"
+  },
+  "cleanup": [
+    {
+      "launcher_pid": 65223,
+      "launcher_exit": 0,
+      "forced": false
+    },
+    {
+      "launcher_pid": 65225,
+      "launcher_exit": 0,
+      "forced": false
+    },
+    {
+      "launcher_pid": 65227,
+      "launcher_exit": 0,
+      "forced": false
+    },
+    {
+      "launcher_pid": 65229,
+      "launcher_exit": 0,
+      "forced": false
+    },
+    {
+      "daemon_pid": 65224,
+      "owned_command_verified": true
+    },
+    {
+      "daemon_pid": 65226,
+      "owned_command_verified": true
+    },
+    {
+      "daemon_pid": 65228,
+      "owned_command_verified": true
+    },
+    {
+      "daemon_pid": 65230,
+      "owned_command_verified": true
+    }
+  ],
+  "private_homes_removed": true,
+  "remaining_owned_agents": [],
+  "cleanup_ok": true,
+  "elapsed_s": 7.09,
+  "native_BTX_tests_run": false,
+  "production_keys_used": false,
+  "published": false
+}

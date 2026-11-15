@@ -1,0 +1,267 @@
+[
+  {
+    "command": [
+      "/private/tmp/btx-s3-gpg-runtime/bin/gpg",
+      "--no-options",
+      "--homedir",
+      "/private/tmp/btx-s3-gpg-runtime/a",
+      "--batch",
+      "--no-auto-key-retrieve",
+      "--auto-key-locate",
+      "clear",
+      "--agent-program",
+      "/private/tmp/btx-s3-gpg-runtime/bin/gpg-agent",
+      "--pinentry-mode",
+      "loopback",
+      "--passphrase-fd",
+      "0",
+      "--quick-generate-key",
+      "BTX disposable A <fixture-a@example.invalid>",
+      "rsa2048",
+      "cert",
+      "1d"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": "gpg: keybox '/private/tmp/btx-s3-gpg-runtime/a/pubring.kbx' created\ngpg: /private/tmp/btx-s3-gpg-runtime/a/trustdb.gpg: trustdb created\ngpg: directory '/private/tmp/btx-s3-gpg-runtime/a/openpgp-revocs.d' created\ngpg: revocation certificate stored as '/private/tmp/btx-s3-gpg-runtime/a/openpgp-revocs.d/D8FC14D1DD9AF21461BC02BB8F631C2DDDC2136F.rev'\n"
+  },
+  {
+    "command": [
+      "/private/tmp/btx-s3-gpg-runtime/bin/gpg",
+      "--no-options",
+      "--homedir",
+      "/private/tmp/btx-s3-gpg-runtime/a",
+      "--batch",
+      "--no-auto-key-retrieve",
+      "--auto-key-locate",
+      "clear",
+      "--agent-program",
+      "/private/tmp/btx-s3-gpg-runtime/bin/gpg-agent",
+      "--with-colons",
+      "--list-keys"
+    ],
+    "exit": 0,
+    "stdout": "tru:o:1:1794741694:1:3:1:5\npub:u:2048:1:8F631C2DDDC2136F:1794741694:1794828094::u:::cC::::::23::0:\nfpr:::::::::D8FC14D1DD9AF21461BC02BB8F631C2DDDC2136F:\nuid:u::::1794741694::344481F742D89576FA4F9803B92678D0BCE07DC5::BTX disposable A <fixture-a@example.invalid>::::::::::0:\n",
+    "stderr": "gpg: checking the trustdb\ngpg: marginals needed: 3  completes needed: 1  trust model: pgp\ngpg: depth: 0  valid:   1  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 1u\ngpg: next trustdb check due at 2026-11-16\n"
+  },
+  {
+    "command": [
+      "/private/tmp/btx-s3-gpg-runtime/bin/gpg",
+      "--no-options",
+      "--homedir",
+      "/private/tmp/btx-s3-gpg-runtime/b",
+      "--batch",
+      "--no-auto-key-retrieve",
+      "--auto-key-locate",
+      "clear",
+      "--agent-program",
+      "/private/tmp/btx-s3-gpg-runtime/bin/gpg-agent",
+      "--pinentry-mode",
+      "loopback",
+      "--passphrase-fd",
+      "0",
+      "--quick-generate-key",
+      "BTX disposable B <fixture-b@example.invalid>",
+      "rsa2048",
+      "sign",
+      "1d"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": "gpg: keybox '/private/tmp/btx-s3-gpg-runtime/b/pubring.kbx' created\ngpg: /private/tmp/btx-s3-gpg-runtime/b/trustdb.gpg: trustdb created\ngpg: directory '/private/tmp/btx-s3-gpg-runtime/b/openpgp-revocs.d' created\ngpg: revocation certificate stored as '/private/tmp/btx-s3-gpg-runtime/b/openpgp-revocs.d/0BFECBB0DF4C5A7A85FD3EC29F97A76DE386C055.rev'\n"
+  },
+  {
+    "command": [
+      "/private/tmp/btx-s3-gpg-runtime/bin/gpg",
+      "--no-options",
+      "--homedir",
+      "/private/tmp/btx-s3-gpg-runtime/b",
+      "--batch",
+      "--no-auto-key-retrieve",
+      "--auto-key-locate",
+      "clear",
+      "--agent-program",
+      "/private/tmp/btx-s3-gpg-runtime/bin/gpg-agent",
+      "--with-colons",
+      "--list-keys"
+    ],
+    "exit": 0,
+    "stdout": "tru:o:1:1794741695:1:3:1:5\npub:u:2048:1:9F97A76DE386C055:1794741694:1794828094::u:::scSC::::::23::0:\nfpr:::::::::0BFECBB0DF4C5A7A85FD3EC29F97A76DE386C055:\nuid:u::::1794741694::49660B30DEB1447D731F78E4580DB3DF792B4A54::BTX disposable B <fixture-b@example.invalid>::::::::::0:\n",
+    "stderr": "gpg: checking the trustdb\ngpg: marginals needed: 3  completes needed: 1  trust model: pgp\ngpg: depth: 0  valid:   1  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 1u\ngpg: next trustdb check due at 2026-11-16\n"
+  },
+  {
+    "command": [
+      "/private/tmp/btx-s3-gpg-runtime/bin/gpg",
+      "--no-options",
+      "--homedir",
+      "/private/tmp/btx-s3-gpg-runtime/a",
+      "--batch",
+      "--no-auto-key-retrieve",
+      "--auto-key-locate",
+      "clear",
+      "--agent-program",
+      "/private/tmp/btx-s3-gpg-runtime/bin/gpg-agent",
+      "--pinentry-mode",
+      "loopback",
+      "--passphrase-fd",
+      "0",
+      "--quick-add-key",
+      "D8FC14D1DD9AF21461BC02BB8F631C2DDDC2136F",
+      "rsa2048",
+      "sign",
+      "1d"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/private/tmp/btx-s3-gpg-runtime/bin/gpg",
+      "--no-options",
+      "--homedir",
+      "/private/tmp/btx-s3-gpg-runtime/a",
+      "--batch",
+      "--no-auto-key-retrieve",
+      "--auto-key-locate",
+      "clear",
+      "--agent-program",
+      "/private/tmp/btx-s3-gpg-runtime/bin/gpg-agent",
+      "--with-colons",
+      "--list-keys"
+    ],
+    "exit": 0,
+    "stdout": "tru::1:1794741694:1794828094:3:1:5\npub:u:2048:1:8F631C2DDDC2136F:1794741694:1794828094::u:::cSC::::::23::0:\nfpr:::::::::D8FC14D1DD9AF21461BC02BB8F631C2DDDC2136F:\nuid:u::::1794741694::344481F742D89576FA4F9803B92678D0BCE07DC5::BTX disposable A <fixture-a@example.invalid>::::::::::0:\nsub:u:2048:1:A34A29FE552488C0:1794741695:1794828095:::::s::::::23:\nfpr:::::::::7C409421AD3049F1791C8580A34A29FE552488C0:\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/private/tmp/btx-s3-gpg-runtime/bin/gpg",
+      "--no-options",
+      "--homedir",
+      "/private/tmp/btx-s3-gpg-runtime/a",
+      "--batch",
+      "--no-auto-key-retrieve",
+      "--auto-key-locate",
+      "clear",
+      "--agent-program",
+      "/private/tmp/btx-s3-gpg-runtime/bin/gpg-agent",
+      "--armor",
+      "--export"
+    ],
+    "exit": 0,
+    "stdout": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\n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\noCA9hLj9x4FsM0Nozu1VbFDh2vW0o4lybwgeEA8=\n=BgUX\n-----END PGP PUBLIC KEY BLOCK-----\n",
+    "stderr": ""
+  },
+  {
+    "stage": "public-key-import",
+    "exit": 0,
+    "stdout": "",
+    "stderr": "gpg: keybox '/private/tmp/btx-s3-gpg-runtime/v/pubring.kbx' created\ngpg: /private/tmp/btx-s3-gpg-runtime/v/trustdb.gpg: trustdb created\ngpg: key 8F631C2DDDC2136F: public key \"BTX disposable A <fixture-a@example.invalid>\" imported\ngpg: Total number processed: 1\ngpg:               imported: 1\n"
+  },
+  {
+    "command": [
+      "/private/tmp/btx-s3-gpg-runtime/bin/gpg",
+      "--no-options",
+      "--homedir",
+      "/private/tmp/btx-s3-gpg-runtime/b",
+      "--batch",
+      "--no-auto-key-retrieve",
+      "--auto-key-locate",
+      "clear",
+      "--agent-program",
+      "/private/tmp/btx-s3-gpg-runtime/bin/gpg-agent",
+      "--armor",
+      "--export"
+    ],
+    "exit": 0,
+    "stdout": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nmQENBGr5lb4BCADdC+O5UfGfGWfRhpTL9/UFalVXwXvvcoW5dq5JWJVV35BaagDO\nE/wHj5yzqrCLquMwrANqMrTLniE1xiT7I206sQdYQlqslhWWDtmsrVxqrOI5lpoa\nWf6QFy5jHHQX/5RJG9mOMUNVQwtiQvvExYrD2ncERP2/39Y9hH8ggQVn0dB7A74l\nTZyYFWXooY9vaIsiaS5lj7IkNssDQ3zEZji9fpWqFPDYjL/I/YY4faLV6R17bpr+\nLknHvjeP1FtufuzsNxT99j4wBOnnZBG2oTf7c84vp7kuh+ratdEcapR3Aaglg4/C\nQk5DaBGWPhwXycwW/ODZbGyOi7WfFdopiV4pABEBAAG0LEJUWCBkaXNwb3NhYmxl\nIEIgPGZpeHR1cmUtYkBleGFtcGxlLmludmFsaWQ+iQFXBBMBCABBFiEEC/7LsN9M\nWnqF/T7Cn5enbeOGwFUFAmr5lb4CGwMFCQABUYAFCwkIBwICIgIGFQoJCAsCBBYC\nAwECHgcCF4AACgkQn5enbeOGwFVmywf/axCFEFMslO6mZEiTFkc4tKvIN/WpiwNg\noD+YbMQ1tOOCoyq+3ywOmnM/e2OEpD3zTVulfDl68G1GtGGgggr9DcsbssH9b4JL\nR/JNxeUwTQt15AoG3ry6NgdrOZp/oz1vfwQom5CggStMDyzL6GTB90+HTNa776lw\n7uFpHU0+9kHwn1YL7qLBjLA1Pwj4G9FKxaWYKe2w/2W3pC4nwom3V1S561CqcW43\nk2HWJc+LciuhMdG/Vky1EzuZZkDPQK0QHsWDPqe8Yci3MuDbUXcWEMOQJIvpc0Cn\nYgnc3Bv8K5FsQGUat6K+3+1SaOZcFjIN7OILY6r7HRMabg+peOqdBQ==\n=qXdO\n-----END PGP PUBLIC KEY BLOCK-----\n",
+    "stderr": ""
+  },
+  {
+    "stage": "public-key-import",
+    "exit": 0,
+    "stdout": "",
+    "stderr": "gpg: key 9F97A76DE386C055: public key \"BTX disposable B <fixture-b@example.invalid>\" imported\ngpg: Total number processed: 1\ngpg:               imported: 1\n"
+  },
+  {
+    "command": [
+      "/Library/Developer/CommandLineTools/usr/bin/python3",
+      "-B",
+      "<BTX_SOURCE>/scripts/release/sign_release_bundle.py",
+      "--bundle-dir",
+      "/private/tmp/btx-s3-gpg-runtime/fixtures/validA",
+      "--sign-with",
+      "7C409421AD3049F1791C8580A34A29FE552488C0!",
+      "--expected-signing-fingerprint",
+      "D8FC14D1DD9AF21461BC02BB8F631C2DDDC2136F",
+      "--gpg",
+      "/private/tmp/btx-s3-gpg-runtime/gpg-a",
+      "--gpg-passphrase-env",
+      "BTX_TEST_SECRET"
+    ],
+    "exit": 0,
+    "stdout": "{\n  \"bundle_dir\": \"/private/tmp/btx-s3-gpg-runtime/fixtures/validA\",\n  \"signature_file\": \"SHA256SUMS.asc\",\n  \"verified_signing_fingerprints\": [\n    \"7C409421AD3049F1791C8580A34A29FE552488C0\",\n    \"D8FC14D1DD9AF21461BC02BB8F631C2DDDC2136F\"\n  ]\n}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Library/Developer/CommandLineTools/usr/bin/python3",
+      "-B",
+      "<BTX_SOURCE>/scripts/release/sign_release_bundle.py",
+      "--bundle-dir",
+      "/private/tmp/btx-s3-gpg-runtime/fixtures/validB",
+      "--sign-with",
+      "0BFECBB0DF4C5A7A85FD3EC29F97A76DE386C055",
+      "--expected-signing-fingerprint",
+      "0BFECBB0DF4C5A7A85FD3EC29F97A76DE386C055",
+      "--gpg",
+      "/private/tmp/btx-s3-gpg-runtime/gpg-b",
+      "--gpg-passphrase-env",
+      "BTX_TEST_SECRET"
+    ],
+    "exit": 0,
+    "stdout": "{\n  \"bundle_dir\": \"/private/tmp/btx-s3-gpg-runtime/fixtures/validB\",\n  \"signature_file\": \"SHA256SUMS.asc\",\n  \"verified_signing_fingerprints\": [\n    \"0BFECBB0DF4C5A7A85FD3EC29F97A76DE386C055\"\n  ]\n}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Library/Developer/CommandLineTools/usr/bin/python3",
+      "-B",
+      "<BTX_SOURCE>/scripts/release/sign_release_bundle.py",
+      "--bundle-dir",
+      "/private/tmp/btx-s3-gpg-runtime/fixtures/wrong-pin",
+      "--sign-with",
+      "0BFECBB0DF4C5A7A85FD3EC29F97A76DE386C055",
+      "--expected-signing-fingerprint",
+      "D8FC14D1DD9AF21461BC02BB8F631C2DDDC2136F",
+      "--gpg",
+      "/private/tmp/btx-s3-gpg-runtime/gpg-b",
+      "--gpg-passphrase-env",
+      "BTX_TEST_SECRET"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"<BTX_SOURCE>/scripts/release/sign_release_bundle.py\", line 78, in <module>\n    raise SystemExit(main(sys.argv[1:]))\n  File \"<BTX_SOURCE>/scripts/release/sign_release_bundle.py\", line 59, in main\n    raise RuntimeError(\nRuntimeError: Checksum signature signer mismatch: expected D8FC14D1DD9AF21461BC02BB8F631C2DDDC2136F, got 0BFECBB0DF4C5A7A85FD3EC29F97A76DE386C055\n"
+  },
+  {
+    "command": [
+      "/Library/Developer/CommandLineTools/usr/bin/python3",
+      "-B",
+      "<BTX_SOURCE>/scripts/release/sign_release_bundle.py",
+      "--bundle-dir",
+      "/private/tmp/btx-s3-gpg-runtime/fixtures/wrong-pin",
+      "--sign-with",
+      "7C409421AD3049F1791C8580A34A29FE552488C0!",
+      "--expected-signing-fingerprint",
+      "D8FC14D1DD9AF21461BC02BB8F631C2DDDC2136F",
+      "--gpg",
+      "/private/tmp/btx-s3-gpg-runtime/gpg-a",
+      "--gpg-passphrase-env",
+      "BTX_TEST_SECRET"
+    ],
+    "exit": 0,
+    "stdout": "{\n  \"bundle_dir\": \"/private/tmp/btx-s3-gpg-runtime/fixtures/wrong-pin\",\n  \"signature_file\": \"SHA256SUMS.asc\",\n  \"verified_signing_fingerprints\": [\n    \"7C409421AD3049F1791C8580A34A29FE552488C0\",\n    \"D8FC14D1DD9AF21461BC02BB8F631C2DDDC2136F\"\n  ]\n}\n",
+    "stderr": ""
+  }
+]
