@@ -1,195 +1,111 @@
-name: C-K01 Windows linked JIT retry
-permissions:
-  contents: read
-jobs:
-  configure:
-    if: github.repository == 'sunnyriverr/btx'
-    runs-on: windows-2025
-    timeout-minutes: 60
-    env:
-      BTX_NATIVE_ROOT: D:\btx-native-035
-    steps:
-    - name: Preserve source checkout bytes
-      shell: pwsh
-      run: 'git config --global core.autocrlf false
-
-        git config --global core.longpaths true
-
-        '
-    - name: Checkout diagnostic controls
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-      with:
-        path: controls
-        persist-credentials: false
-    - name: Checkout exact accepted BTX source
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-      with:
-        repository: btxchain/btx
-        ref: 666673a3153225ba264c7870e0e82e354df86765
-        path: btx
-        persist-credentials: false
-    - name: Identify native compiler cache profile
-      id: environment
-      shell: pwsh
-      run: '$vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
-        -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
-        -property installationPath
-
-        if (-not $vs) { throw "Native Visual Studio tools missing" }
-
-        $toolset = (Get-Content "$vs\VC\Auxiliary\Build\Microsoft.VCToolsVersion.default.txt").Trim()
-
-        "toolset=$toolset" >> $env:GITHUB_OUTPUT
-
-        '
-    - name: Reuse exact-profile dependency binaries
-      uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
-      with:
-        path: 'D:\btx-native-035\openssl-3.5.4-static
-
-          D:\btx-native-035\binary-cache
-
-          '
-        key: btx356-root-v1-windows-${{ steps.environment.outputs.toolset }}-${{ hashFiles('btx/vcpkg.json')
-          }}-ossl354-afa249f1
-      id: dependency_restore
-    - name: Require retained native dependency payload before any setup compilation
-      shell: pwsh
-      env:
-        MATCHED_DEPENDENCIES: ${{ steps.dependency_restore.outputs.cache-matched-key
-          }}
-      run: if (-not $env:MATCHED_DEPENDENCIES) { throw "Existing dependency cache
-        required; refusing cold setup build" }
-    - name: Reuse completed vcpkg port binaries
-      uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
-      with:
-        path: D:\btx-native-035\binary-cache
-        key: btx356-ports-v1-windows-${{ steps.environment.outputs.toolset }}-${{
-          hashFiles('btx/vcpkg.json') }}-afa249f1-${{ github.run_id }}
-        restore-keys: 'btx356-ports-v1-windows-${{ steps.environment.outputs.toolset
-          }}-${{ hashFiles(''btx/vcpkg.json'') }}-afa249f1-
-
-          '
-    - name: Provision verified native static OpenSSL
-      shell: cmd
-      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
-        Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
-        -property installationPath`) do set "BTX_VS=%%i"
-
-        if not defined BTX_VS exit /b 2
-
-        call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
-
-        if errorlevel 1 exit /b %errorlevel%
-
-        set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
-
-        set "CL="
-
-        set "_CL_="
-
-        python controls/contrib/devtools/windows-root-configure/runner.py openssl
-
-        exit /b %errorlevel%
-
-        '
-    - name: Provision exact pinned vcpkg via verified official asset
-      shell: cmd
-      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
-        Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
-        -property installationPath`) do set "BTX_VS=%%i"
-
-        if not defined BTX_VS exit /b 2
-
-        call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
-
-        if errorlevel 1 exit /b %errorlevel%
-
-        set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
-
-        set "CL="
-
-        set "_CL_="
-
-        python controls/contrib/devtools/windows-root-configure/pinned-vcpkg.py vcpkg
-
-        exit /b %errorlevel%
-
-        '
-    - name: Fingerprint source and native build profile
-      id: project_profile
-      shell: cmd
-      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
-        Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
-        -property installationPath`) do set "BTX_VS=%%i"
-
-        if not defined BTX_VS exit /b 2
-
-        call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
-
-        if errorlevel 1 exit /b %errorlevel%
-
-        set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
-
-        set "CL="
-
-        set "_CL_="
-
-        python controls/contrib/devtools/windows-root-configure/runner.py profile
-
-        exit /b %errorlevel%
-
-        '
-    - name: Restore exact source and profile project objects
-      id: project_restore
-      uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
-      with:
-        path: 'D:\btx-native-035\project-build
-
-          D:\btx-native-035\vcpkg-installed
-
-          '
-        key: btx356-dac9-build-v1-42584109380
-    - name: Require existing exact-profile checkpoint for restore proof
-      shell: pwsh
-      env:
-        MATCHED_CACHE: ${{ steps.project_restore.outputs.cache-matched-key }}
-      run: 'if (-not $env:MATCHED_CACHE) { throw "Restore proof requires an existing
-        cache; refusing fresh rebuild" }
-
-        '
-    - name: Link the exact C-K01 candidate and run the maintained JIT suite
-      id: prepare
-      shell: cmd
-      run: 'for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft
-        Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64
-        -property installationPath`) do set "BTX_VS=%%i"
-
-        if not defined BTX_VS exit /b 2
-
-        call "%BTX_VS%\Common7\Tools\VsDevCmd.bat" -no_logo -arch=x64 -host_arch=x64
-
-        if errorlevel 1 exit /b %errorlevel%
-
-        set "PATH=C:\Program Files\LLVM\bin;C:\Strawberry\perl\bin;C:\Program Files\NASM;%PATH%"
-
-        set "CL="
-
-        set "_CL_="
-
-        python controls/contrib/devtools/windows-root-configure/ck01-jit.py
-
-        exit /b %errorlevel%
-
-        '
-    - name: Retain compiler and JIT evidence
-      uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
-      if: always()
-      with:
-        name: ck01-windows-jit
-        path: D:\btx-native-035\evidence
-        retention-days: 7
-'on':
-  push:
-    branches:
-    - codex/ci-windows-root-configure
+{
+  "name": "Windows main configure-only cache preflight",
+  "on": {
+    "push": {
+      "branches": [
+        "codex/ci-windows-root-configure"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "read",
+    "actions": "read"
+  },
+  "concurrency": {
+    "group": "windows-main-configure-preflight",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "plan": {
+      "runs-on": "windows-2025",
+      "timeout-minutes": 30,
+      "steps": [
+        {
+          "name": "Exact source bytes",
+          "shell": "pwsh",
+          "run": "git config --global core.autocrlf false\ngit config --global core.longpaths true"
+        },
+        {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "path": "controls",
+            "persist-credentials": false,
+            "sparse-checkout": "contrib/devtools/windows-main-preflight"
+          }
+        },
+        {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "repository": "btxchain/btx",
+            "ref": "dac9aee53520bd49ed320ec7a49b9072fc7d88d9",
+            "path": "btx",
+            "persist-credentials": false
+          }
+        },
+        {
+          "name": "Hosted disk admission",
+          "shell": "pwsh",
+          "run": "if ((Get-PSDrive D).Free -lt 12GB) { throw \"Need12GiB before restore\" }"
+        },
+        {
+          "uses": "actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1",
+          "with": {
+            "python-version": "3.12.10"
+          }
+        },
+        {
+          "name": "Install binary-only configure dependencies",
+          "run": "python -m pip install --only-binary=:all: cryptography==46.0.4 cffi==2.0.0 pycparser==2.23"
+        },
+        {
+          "name": "Restore project",
+          "id": "project",
+          "uses": "actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830",
+          "with": {
+            "path": "D:\\btx-native-035\\project-build\nD:\\btx-native-035\\vcpkg-installed",
+            "key": "btx356-dac9-build-v1-42584109380",
+            "fail-on-cache-miss": true
+          }
+        },
+        {
+          "name": "Restore dependencies",
+          "id": "dependencies",
+          "uses": "actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830",
+          "with": {
+            "path": "D:\\btx-native-035\\openssl-3.5.4-static\nD:\\btx-native-035\\binary-cache",
+            "key": "btx356-root-v1-windows-14.51.36231-690b2e59699b64766618b28290f0ed35c71e4d28e5d4b61ae407e5724af9d9d7-ossl354-afa249f1",
+            "fail-on-cache-miss": true
+          }
+        },
+        {
+          "name": "Restore ports",
+          "id": "ports",
+          "uses": "actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830",
+          "with": {
+            "path": "D:\\btx-native-035\\binary-cache",
+            "key": "btx356-ports-v1-windows-14.51.36231-690b2e59699b64766618b28290f0ed35c71e4d28e5d4b61ae407e5724af9d9d7-afa249f1-41955207582",
+            "fail-on-cache-miss": true
+          }
+        },
+        {
+          "name": "Verify cache and profile; configure and dry-run only",
+          "shell": "cmd",
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          },
+          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/native_plan.py\nexit /b %errorlevel%\n"
+        },
+        {
+          "name": "Retain preflight evidence",
+          "if": "always()",
+          "uses": "actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f",
+          "with": {
+            "name": "windows-main-configure-plan",
+            "path": "D:\\btx-native-035\\preflight-evidence",
+            "retention-days": 14
+          }
+        }
+      ]
+    }
+  }
+}
