@@ -59,6 +59,9 @@ def bundle_windows_python(release_root, runtime):
     site = source / 'Lib/site-packages'
     if not (site / 'cryptography/__init__.py').is_file():
         raise RuntimeError('Pinned cryptography package is missing')
+    native_crypto = list((site / 'cryptography/hazmat/bindings').glob('_rust*.pyd'))
+    if len(native_crypto) != 1:
+        raise RuntimeError('Native cryptography package is missing or ambiguous')
     native_cffi = list(site.glob('_cffi_backend*.pyd'))
     if len(native_cffi) != 1:
         raise RuntimeError('Native CFFI package is missing or ambiguous')
@@ -111,9 +114,12 @@ def bundle_windows_python(release_root, runtime):
         for name in verify.pe_imports(image):
             if name.lower() in verify.WINDOWS_SYSTEM_DLLS or name.lower().startswith(('api-ms-win-', 'ext-ms-')):
                 continue
-            if (image.parent / name).is_file():
-                continue
             candidate = next((p for p in out.iterdir() if p.is_file() and p.name.lower() == name.lower()), None)
+            sibling = image.parent / name
+            if sibling.is_file():
+                if candidate is not None and sibling.read_bytes() != candidate.read_bytes():
+                    raise RuntimeError(f'Conflicting runtime dependency: {name}')
+                continue
             if candidate is None:
                 raise RuntimeError(f'Runtime dependency is missing: {name}')
             alias = image.parent / name

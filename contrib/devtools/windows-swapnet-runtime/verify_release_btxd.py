@@ -887,7 +887,7 @@ WINDOWS_SYSTEM_DLLS = frozenset({
     "dbghelp.dll", "dnsapi.dll", "dwmapi.dll", "dwrite.dll", "dxgi.dll", "gdi32.dll",
     "imm32.dll", "iphlpapi.dll", "kernel32.dll", "mpr.dll", "msvcrt.dll", "mswsock.dll",
     "ncrypt.dll", "netapi32.dll", "normaliz.dll", "ntdll.dll", "nvcuda.dll", "ole32.dll",
-    "oleaut32.dll", "opengl32.dll", "powrprof.dll", "psapi.dll", "rpcrt4.dll",
+    "oleaut32.dll", "opengl32.dll", "powrprof.dll", "propsys.dll", "psapi.dll", "rpcrt4.dll",
     "secur32.dll", "setupapi.dll", "shcore.dll", "shell32.dll", "shlwapi.dll",
     "ucrtbase.dll", "user32.dll", "userenv.dll", "uxtheme.dll", "version.dll",
     "winhttp.dll", "wininet.dll", "winmm.dll", "winspool.drv", "wldap32.dll",
