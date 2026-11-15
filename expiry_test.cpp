@@ -1,4 +1,6 @@
 #include <modelnet/relay_reserve.h>
+#include <util/translation.h>
+const TranslateFn G_TRANSLATION_FUN{nullptr};
 #include <iostream>
 #include <stdexcept>
 using namespace modelnet;

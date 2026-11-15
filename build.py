@@ -1,7 +1,7 @@
 from pathlib import Path
 import os,sys,json,subprocess,tarfile,shutil,time,selectors,signal,hashlib
 from checkpoint import sha,restore_timestamps,verify_restored,create
-HEAD='61f13b8870ed98c7b10db2e32c04fb647023f4ef';OLD='f40eb37a6fb8b665340fe92a2f248ff3f23ec7f6';ARCHIVE='f273aa4bdabef3aff92dde54b55aabd8b36f54cd5243529c794effe7d6b47852'
+HEAD='61f13b8870ed98c7b10db2e32c04fb647023f4ef';OLD='61f13b8870ed98c7b10db2e32c04fb647023f4ef';ARCHIVE='4f7f48d97f2124b2d946611cc13480136ea3cc5b94bfa3b60e4baa8a50d89c27'
 w=Path(os.environ['GITHUB_WORKSPACE']);out=w/'records';out.mkdir(exist_ok=True);r={'source':HEAD,'checkpoint_source':OLD,'complete':False,'commands':[]};restored=False
 
 def save():(out/'build-result.json').write_text(json.dumps(r,indent=2)+'\n')
@@ -60,11 +60,18 @@ try:
    run(['git','apply','--check',w/'candidate.patch'],'patch-check',cwd=source)
    run(['git','apply',w/'candidate.patch'],'patch-apply',cwd=source)
   run(['cmake','-S',source,'-B',build,'-DRELAY_CANDIDATE='+('ON' if variant=='candidate' else 'OFF')],variant+'-configure',180)
-  dry=run(['ninja','-C',build,'-n','btx-modeld','relay-expiry-check'],variant+'-dry',120)
+  globs=run(['cmake','-P',build/'CMakeFiles/VerifyGlobs.cmake'],variant+'-verify-globs',120,cwd=build)
+  assert 'GLOB mismatch!' not in globs
+  observed=out/(variant+'-observed.ninja');shutil.copy2(build/'build.ninja',observed)
+  dry=run(['ninja','-C',build,'-f',observed,'-d','explain','-n','btx-modeld','relay-expiry-check'],variant+'-dry',120)
+  assert 'Re-running CMake' not in dry, 'dry run must show actual compile actions'
   steps=[x for x in dry.splitlines() if x.startswith('[')];assert 0<len(steps)<=160,(variant,len(steps));r[variant+'_planned_steps']=len(steps);save()
-  run(['cmake','--build',build,'--parallel','2','--target','btx-modeld','relay-expiry-check'],variant+'-build',1000)
   dest=w/'binaries'/variant;dest.mkdir(parents=True)
-  for name in ['btx-modeld','relay-expiry-check']:shutil.copy2(build/'bin'/name,dest/name)
+  run(['cmake','--build',build,'--parallel','2','--target','btx-modeld'],variant+'-helper-build',1000)
+  shutil.copy2(build/'bin/btx-modeld',dest/'btx-modeld')
+  r[variant+'_helper_sha256']=sha(dest/'btx-modeld');save()
+  run(['cmake','--build',build,'--parallel','2','--target','relay-expiry-check'],variant+'-expiry-build',120)
+  shutil.copy2(build/'bin/relay-expiry-check',dest/'relay-expiry-check')
   r[variant+'_sha256']={f.name:sha(f) for f in dest.iterdir()};save()
   expiry=run([dest/'relay-expiry-check'],variant+'-expiry',30,expected=1 if variant=='baseline' else 0)
   if variant=='baseline':assert 'expired_active_after_cleanup=1' in expiry and 'FAIL expired connection cleanup must release active count' in expiry
