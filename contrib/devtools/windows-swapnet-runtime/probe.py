@@ -66,29 +66,12 @@ def main():
  for line in (binary/'SHA256SUMS.txt').read_text().splitlines():
   h,n=line.split(maxsplit=1);n=n.lstrip('*').removeprefix('./');assert sha((binary/n).read_bytes())==h;hashes[n]=h
  assert hashes['btxd.exe']=='d8bd7dda90ab42e92882bd02005d919185a0cac4331af007a9ef78a0a9af16ab';state['binary_hashes']=hashes;save()
- candidates=list(Path('C:/Program Files/Microsoft Visual Studio').rglob('libomp140.x86_64.dll'))
- candidates += list(Path('C:/Program Files/LLVM').rglob('libomp140.x86_64.dll'))
- candidates=[p for p in candidates if 'arm64' not in str(p).lower() and 'x86/' not in p.as_posix().lower()]
- assert candidates,'No x64 OpenMP runtime found in installed toolchains'
- omp=sorted(candidates,key=lambda p:('redist' not in str(p).lower(),len(str(p))))[0];state['omp_source']=str(omp);save()
- roots={}
- for name in ('raw','omp-only','dll-no-stdlib','no-crypto','healthy'):
-  root=W/('relocated '+name);root.mkdir();shutil.copy2(binary/'btxd.exe',root/'btxd.exe');roots[name]=root
-  if name!='raw':shutil.copy2(omp,root/omp.name)
- for name in ('raw','omp-only'):
-  p=run([roots[name]/'btxd.exe','-version'],name,ENV);assert p.returncode&0xffffffff==0xc0000135,(name,p.returncode)
- pyroot=Path(sys.base_prefix);dll=pyroot/'python312.dll';assert dll.is_file();state['runtime']={'python':sys.version,'root':str(pyroot),'python_dll_sha256':sha(dll.read_bytes()),'omp_sha256':sha(omp.read_bytes())};save()
- root=roots['dll-no-stdlib'];shutil.copy2(dll,root/dll.name);(root/'python312._pth').write_text('.\nLib\nDLLs\nLib/site-packages\n');lifecycle(root,'missing-stdlib',expect=True)
- for name in ('no-crypto','healthy'):
-  root=roots[name]
-  for item in ('python312.dll','python3.dll','DLLs','Lib'):
-   src=pyroot/item
-   if src.is_dir():shutil.copytree(src,root/item,ignore=shutil.ignore_patterns('site-packages','__pycache__','test','tests'))
-   elif src.is_file():shutil.copy2(src,root/item)
-  (root/'python312._pth').write_text('.\nLib\nDLLs\nLib/site-packages\n')
- lifecycle(roots['no-crypto'],'missing-crypto',expect=True)
- run([sys.executable,'-m','pip','install','--only-binary=:all:','--target',roots['healthy']/'Lib/site-packages','cryptography==46.0.4'],'healthy-crypto-install',timeout=180).check_returncode()
- lifecycle(roots['healthy'],'healthy-on');lifecycle(roots['healthy'],'healthy-restart',reuse='healthy-on');lifecycle(roots['healthy'],'healthy-default-off',enable=False)
+ # Only the missing reverse DLL control; all other cases retained from43660128422.
+ root=W/'python only control';root.mkdir();shutil.copy2(binary/'btxd.exe',root/'btxd.exe')
+ dll=Path(sys.base_prefix)/'python312.dll';assert dll.is_file();shutil.copy2(dll,root/dll.name)
+ p=run([root/'btxd.exe','-version'],'python-only-no-openmp',ENV)
+ assert p.returncode&0xffffffff==0xc0000135,p.returncode
+ state['reused_run']=43660128422
  assert all(p.poll() is not None for p in owned);state['complete']=True;state['scope']='Saved JPP binary, controlled application-local runtime with explicit ._pth; not stock-package fix/current-source or full-release qualification'
 try:main()
 except Exception as e:state['error']=str(e);(R/'exception.txt').write_text(traceback.format_exc())
