@@ -1,0 +1,21 @@
+name: Community27 exact site checks
+on: [push]
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: sunnyriverr/btx-community
+          ref: 95a62aa0e25c743d2c17f1812a44c717a02bcf9c
+          persist-credentials: false
+      - name: Exact site checks
+        run: |
+          python3 -m venv .venv
+          .venv/bin/pip install --quiet --disable-pip-version-check -r site/requirements.txt
+          .venv/bin/python -m unittest discover -s site/tests
+          node --test site/tests/*.test.js
+          .venv/bin/python site/build.py --out _site
