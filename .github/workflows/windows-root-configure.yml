@@ -1,5 +1,5 @@
 {
-  "name": "Windows current archive from verified saved build",
+  "name": "Windows missing tool and lifecycle checks",
   "on": {
     "push": {
       "branches": [
@@ -93,16 +93,16 @@
           "run": "python -c \"import json,hashlib,pathlib; r=pathlib.Path('D:/btx-native-035'); j=json.loads((r/'project-build/btx-successor.json').read_text()); assert j['source']=='074dac167c26c1e091198f691ed5727817dba88a'; assert j['build_result']['status']=='BUILD_PASS'; [(None if hashlib.sha256((r/n).read_bytes()).hexdigest()==v['sha256'] else (_ for _ in ()).throw(AssertionError(n))) for n,v in j['files'].items()]; print('Verified',len(j['files']),'saved files')\""
         },
         {
-          "name": "Actual current archive and bounded lifecycle",
+          "name": "Missing tool contracts and RPC restart cleanup",
           "shell": "cmd",
-          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/native_archive.py\nexit /b %errorlevel%\n"
+          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/native_lifecycle.py\nexit /b %errorlevel%\n"
         },
         {
           "name": "Retain archive results",
           "if": "always()",
           "uses": "actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f",
           "with": {
-            "name": "windows-main-archive-resume",
+            "name": "windows-main-lifecycle",
             "path": "records",
             "retention-days": 14
           }
