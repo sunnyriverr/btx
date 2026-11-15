@@ -29,8 +29,18 @@ try:
  prod=json.loads((saved/'producer.json').read_text());assert prod['source_identity']==result['source_pin'] and prod['status']=='BUILD_PASS'
  assert sha(saved/'checkpoint.tar.gz')=='6c5a136395948f43ee49d06768c5dd684aa91643373ce4d0200bce2bcab47829'
  assert str(Path.cwd())==prod['checkpoint']['root'];assert not Path('source').exists() and not Path('build').exists()
+ owned_absolute_links=[]
+ def owned_filter(member,dest):
+  if member.issym() and os.path.isabs(member.linkname):
+   target=Path(member.linkname).resolve();base=Path.cwd().resolve();assert base in target.parents and target.relative_to(base).parts[0] in ['source','build'],member.linkname
+   relative=os.path.relpath(target,(base/member.name).parent)
+   safe=tarfile.data_filter(member.replace(linkname=relative),dest)
+   owned_absolute_links.append({'name':member.name,'target':member.linkname})
+   return safe.replace(linkname=member.linkname)
+  return tarfile.data_filter(member,dest)
  with tarfile.open(saved/'checkpoint.tar.gz') as t:
-  assert all(Path(m.name).parts[0] in ['source','build'] for m in t.getmembers());t.extractall('.',filter='data')
+  assert all(Path(m.name).parts[0] in ['source','build'] for m in t.getmembers());t.extractall('.',filter=owned_filter)
+ result['owned_absolute_links_preserved']=owned_absolute_links
  for n,h in prod['binary_sha256'].items():assert sha(saved/n)==h and sha(Path('build/bin')/n)==h
  result['binary_sha256']=prod['binary_sha256'];result['restored_objects']=sum(1 for p in Path('build').rglob('*.o'));assert result['restored_objects']==725
  result['source_manifest_verified']=0;excluded=[];extra=[]
