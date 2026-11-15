@@ -1,0 +1,242 @@
+{
+  "source": "648899223329bd962146fb4e17fcfe3516075e17",
+  "complete": true,
+  "cases": [
+    {
+      "label": "maintained-windows-runtime-tests",
+      "exit": 0,
+      "unsigned_exit": 0
+    },
+    {
+      "label": "candidate-archive-assembly",
+      "exit": 0,
+      "unsigned_exit": 0
+    },
+    {
+      "label": "actual-archive-release-gate",
+      "exit": 0,
+      "unsigned_exit": 0
+    },
+    {
+      "label": "actual-archive-isolation",
+      "exit": 0,
+      "unsigned_exit": 0
+    },
+    {
+      "label": "tool-btx-cli",
+      "exit": 0,
+      "unsigned_exit": 0
+    },
+    {
+      "label": "tool-btx-modeld",
+      "exit": 0,
+      "unsigned_exit": 0
+    },
+    {
+      "label": "tool-btx-tx",
+      "exit": 0,
+      "unsigned_exit": 0
+    },
+    {
+      "label": "tool-btx-util",
+      "exit": 0,
+      "unsigned_exit": 0
+    },
+    {
+      "label": "tool-btxd",
+      "exit": 0,
+      "unsigned_exit": 0
+    },
+    {
+      "label": "actual-archive-on",
+      "enabled": true,
+      "rpc_ready": true,
+      "runtime_modules": [
+        "D:\\a\\btx\\btx\\extracted candidate\\btx-0.34.16\\bin\\libomp140.x86_64.dll",
+        "D:\\a\\btx\\btx\\extracted candidate\\btx-0.34.16\\bin\\python312.dll",
+        "D:\\a\\btx\\btx\\extracted candidate\\btx-0.34.16\\bin\\python3.DLL"
+      ],
+      "info": {
+        "result": {
+          "version": "2.0.0",
+          "protocol": 2,
+          "network": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360",
+          "discovery_default": true,
+          "peers": 0,
+          "providers": 0,
+          "routes": 0,
+          "automatic_spend_atoms": "0",
+          "in_process": true,
+          "execution": "durable_htlc_coordinator",
+          "last_tick_error": null,
+          "packet_errors": 0,
+          "recent_packet_errors": [],
+          "wallet_loaded": false,
+          "wallet_warning": "NATIVE_RPC"
+        },
+        "error": null,
+        "id": "probe"
+      },
+      "clean_stop": true
+    },
+    {
+      "label": "actual-archive-restart",
+      "enabled": true,
+      "rpc_ready": true,
+      "runtime_modules": [
+        "D:\\a\\btx\\btx\\extracted candidate\\btx-0.34.16\\bin\\libomp140.x86_64.dll",
+        "D:\\a\\btx\\btx\\extracted candidate\\btx-0.34.16\\bin\\python312.dll",
+        "D:\\a\\btx\\btx\\extracted candidate\\btx-0.34.16\\bin\\python3.DLL"
+      ],
+      "info": {
+        "result": {
+          "version": "2.0.0",
+          "protocol": 2,
+          "network": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360",
+          "discovery_default": true,
+          "peers": 0,
+          "providers": 0,
+          "routes": 0,
+          "automatic_spend_atoms": "0",
+          "in_process": true,
+          "execution": "durable_htlc_coordinator",
+          "last_tick_error": null,
+          "packet_errors": 0,
+          "recent_packet_errors": [],
+          "wallet_loaded": false,
+          "wallet_warning": "NATIVE_RPC"
+        },
+        "error": null,
+        "id": "probe"
+      },
+      "clean_stop": true
+    },
+    {
+      "label": "actual-archive-default-off",
+      "enabled": false,
+      "rpc_ready": true,
+      "runtime_modules": [
+        "D:\\a\\btx\\btx\\extracted candidate\\btx-0.34.16\\bin\\libomp140.x86_64.dll",
+        "D:\\a\\btx\\btx\\extracted candidate\\btx-0.34.16\\bin\\python312.dll"
+      ],
+      "info": {
+        "result": null,
+        "error": {
+          "code": -1,
+          "message": "SwapNet is disabled or not initialized"
+        },
+        "id": "probe"
+      },
+      "clean_stop": true
+    }
+  ],
+  "binary_hashes": {
+    "bitcoin-build-info.h": "f27e699983d3877c1bea79059ce4badd2cb1ff5a98aab1d721938b763b216a97",
+    "btx-cli.exe": "a1b5af7fd46290d98cacc503351f163cb537b096113db0182a416f27c08f3f79",
+    "btx-modeld.exe": "8db7b6f1703045e8b4260d556991add52eaef18b6fbaf4aea4ae578d8a75750a",
+    "btx-tx.exe": "117e89e08935f57e09216ef6ee38f4f3db894057aca0f8c48aedea0e83798bbd",
+    "btx-util.exe": "e4928be762e6296765c8f8693a2926ca9098d413854d25d8e62b4276007fb498",
+    "btxd-dependents.txt": "b2b8c3475f1d91e847f500450af119a4c803a2e99dda60b5423f688fefd51539",
+    "btxd.exe": "d8bd7dda90ab42e92882bd02005d919185a0cac4331af007a9ef78a0a9af16ab"
+  },
+  "inputs_pinned": true,
+  "reused_stock_failure_run": 43661726579,
+  "archives": {
+    "candidate": {
+      "sha256": "284e5de24ed14c5eba78a2af4a347cddb247968fcd2dc6eabbfb284d6bff9918",
+      "bytes": 46800927
+    }
+  },
+  "full_archive_dependency_problems": [],
+  "full_archive_portable_gate": "PASS: all PE imports closed with explicit app-local runtime inputs",
+  "missing_openmp_control": [
+    "bin\\btx-cli.exe: imports libomp140.x86_64.dll, which is neither next to it in the archive nor a Windows system DLL; it will not start",
+    "bin\\btx-modeld.exe: imports libomp140.x86_64.dll, which is neither next to it in the archive nor a Windows system DLL; it will not start",
+    "bin\\btx-tx.exe: imports libomp140.x86_64.dll, which is neither next to it in the archive nor a Windows system DLL; it will not start",
+    "bin\\btx-util.exe: imports libomp140.x86_64.dll, which is neither next to it in the archive nor a Windows system DLL; it will not start",
+    "bin\\btxd.exe: imports libomp140.x86_64.dll, which is neither next to it in the archive nor a Windows system DLL; it will not start"
+  ],
+  "openmp": {
+    "imported_symbols": {
+      "btx-cli.exe": [
+        "__kmpc_critical",
+        "__kmpc_end_critical",
+        "__kmpc_for_static_fini",
+        "__kmpc_for_static_init_4",
+        "__kmpc_for_static_init_8",
+        "__kmpc_fork_call",
+        "__kmpc_global_thread_num",
+        "__kmpc_push_num_threads",
+        "omp_get_max_threads"
+      ],
+      "btx-modeld.exe": [
+        "__kmpc_critical",
+        "__kmpc_end_critical",
+        "__kmpc_for_static_fini",
+        "__kmpc_for_static_init_4",
+        "__kmpc_for_static_init_8",
+        "__kmpc_fork_call",
+        "__kmpc_global_thread_num",
+        "__kmpc_push_num_threads",
+        "omp_get_max_threads"
+      ],
+      "btx-tx.exe": [
+        "__kmpc_critical",
+        "__kmpc_end_critical",
+        "__kmpc_for_static_fini",
+        "__kmpc_for_static_init_4",
+        "__kmpc_for_static_init_8",
+        "__kmpc_fork_call",
+        "__kmpc_global_thread_num",
+        "__kmpc_push_num_threads",
+        "omp_get_max_threads"
+      ],
+      "btx-util.exe": [
+        "__kmpc_critical",
+        "__kmpc_end_critical",
+        "__kmpc_for_static_fini",
+        "__kmpc_for_static_init_4",
+        "__kmpc_for_static_init_8",
+        "__kmpc_fork_call",
+        "__kmpc_global_thread_num",
+        "__kmpc_push_num_threads",
+        "omp_get_max_threads"
+      ],
+      "btxd.exe": [
+        "__kmpc_critical",
+        "__kmpc_end_critical",
+        "__kmpc_for_static_fini",
+        "__kmpc_for_static_init_4",
+        "__kmpc_for_static_init_8",
+        "__kmpc_fork_call",
+        "__kmpc_global_thread_num",
+        "__kmpc_push_num_threads",
+        "omp_get_max_threads"
+      ]
+    },
+    "parallel_workers": [
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        2
+      ]
+    ],
+    "dll_sha256": "a12116ba72d1d6820407cf30be23da04ce79d6bb8a71a5ee71759c5a1faa6f1c",
+    "alias": "official libomp.dll exact bytes, one shipped compatibility filename"
+  },
+  "isolated_python": {
+    "paths": [
+      "D:\\a\\btx\\btx\\extracted candidate\\btx-0.34.16\\bin\\python312.zip",
+      "D:\\a\\btx\\btx\\extracted candidate\\btx-0.34.16\\bin",
+      "D:\\a\\btx\\btx\\extracted candidate\\btx-0.34.16\\bin\\Lib\\site-packages"
+    ],
+    "cryptography": "D:\\a\\btx\\btx\\extracted candidate\\btx-0.34.16\\bin\\Lib\\site-packages\\cryptography\\__init__.py",
+    "rust": "D:\\a\\btx\\btx\\extracted candidate\\btx-0.34.16\\bin\\Lib\\site-packages\\cryptography\\hazmat\\bindings\\_rust.pyd",
+    "cffi": "D:\\a\\btx\\btx\\extracted candidate\\btx-0.34.16\\bin\\Lib\\site-packages\\_cffi_backend.cp312-win_amd64.pyd",
+    "isolated": 1
+  },
+  "scope": "Saved-binary actual Windows command-line archive: complete static gate, app-local runtime paths, two-worker OpenMP ABI, isolated pinned Python, on/restart/default-off and clean shutdown. Not a current node build, full units, installer, funded SwapNet or release qualification."
+}

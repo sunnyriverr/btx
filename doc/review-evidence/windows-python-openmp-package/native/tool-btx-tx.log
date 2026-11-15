@@ -1,0 +1,123 @@
+BTX bitcoin-tx utility version v0.34.16
+
+The btx-tx tool (legacy alias: bitcoin-tx) is used for creating and modifying bitcoin transactions.
+
+btx-tx can be used with "<hex-tx> [commands]" to update a hex-encoded bitcoin transaction, or with "-create [commands]" to create a hex-encoded bitcoin transaction.
+
+Usage: btx-tx [options] <hex-tx> [commands]
+or:    btx-tx [options] -create [commands]
+
+Options:
+
+  -create
+       Create new, empty TX.
+
+  -help
+       Print this help message and exit (also -h or -?)
+
+  -json
+       Select JSON output
+
+  -txid
+       Output only the hex-encoded transaction id of the resultant transaction.
+
+  -version
+       Print version and exit
+
+Debugging/Testing options:
+
+Chain selection options:
+
+  -chain=<chain>
+       Use the chain <chain> (default: main). Allowed values: main, test,
+       testnet4, signet, regtest, shieldedv2dev
+
+  -shieldedv2dev
+       Use the isolated shieldedv2dev development chain. Equivalent to
+       -chain=shieldedv2dev.
+
+  -signet
+       Use the signet chain. Equivalent to -chain=signet. Note that the network
+       is defined by the -signetchallenge parameter
+
+  -signetblocktime
+       Difficulty adjustment will target a block time of the given amount in
+       seconds (only for custom signet networks, must have
+       -signetchallenge set; defaults to 10 minutes)
+
+  -signetchallenge
+       Blocks must satisfy the given script to be considered valid (only for
+       signet networks; defaults to the global default signet test
+       network challenge)
+
+  -signetseednode
+       Specify a seed node for the signet network, in the hostname[:port]
+       format, e.g. sig.net:1234 (may be used multiple times to specify
+       multiple seed nodes; defaults to the global default signet test
+       network seed node(s))
+
+  -testnet
+       Use the testnet3 chain. Equivalent to -chain=test. Support for testnet3
+       is deprecated and will be removed in an upcoming release.
+       Consider moving to testnet4 now by using -testnet4.
+
+  -testnet4
+       Use the testnet4 chain. Equivalent to -chain=testnet4.
+
+Commands:
+
+  delin=N
+       Delete input N from TX
+
+  delout=N
+       Delete output N from TX
+
+  in=TXID:VOUT(:SEQUENCE_NUMBER)
+       Add input to TX
+
+  locktime=N
+       Set TX lock time to N
+
+  nversion=N
+       Set TX version to N
+
+  outaddr=VALUE:ADDRESS
+       Add address-based output to TX
+
+  outdata=[VALUE:]DATA
+       Add data-based output to TX
+
+  outmultisig=VALUE:REQUIRED:PUBKEYS:PUBKEY1:PUBKEY2:....[:FLAGS]
+       Add Pay To n-of-m Multi-sig output to TX. n = REQUIRED, m = PUBKEYS.
+       Optionally add the "W" flag to produce a
+       pay-to-witness-script-hash output. Optionally add the "S" flag to
+       wrap the output in a pay-to-script-hash.
+
+  outpubkey=VALUE:PUBKEY[:FLAGS]
+       Add pay-to-pubkey output to TX. Optionally add the "W" flag to produce a
+       pay-to-witness-pubkey-hash output. Optionally add the "S" flag to
+       wrap the output in a pay-to-script-hash.
+
+  outscript=VALUE:SCRIPT[:FLAGS]
+       Add raw script output to TX. Optionally add the "W" flag to produce a
+       pay-to-witness-script-hash output. Optionally add the "S" flag to
+       wrap the output in a pay-to-script-hash.
+
+  replaceable(=N)
+       Sets Replace-By-Fee (RBF) opt-in sequence number for input N. If N is
+       not provided, the command attempts to opt-in all available inputs
+       for RBF. If the transaction has no inputs, this option is
+       ignored.
+
+  sign=SIGHASH-FLAGS
+       Disabled on BTX by post-quantum policy. WIF/ECDSA signing is refused;
+       use wallet P2MR signing.
+
+Register Commands:
+
+  load=NAME:FILENAME
+       Load JSON file FILENAME into register NAME
+
+  set=NAME:JSON-STRING
+       Set register NAME to given JSON-STRING
+
