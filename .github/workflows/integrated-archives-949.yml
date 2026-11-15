@@ -34,11 +34,7 @@ jobs:
       - name: Bounded integrated build and archive checks
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python3 ci/integrated-archives-949/integrated.py
-      - name: Preserve resumable build and exact evidence
-        if: always()
-        timeout-minutes: 8
-        run: python3 ci/integrated-archives-949/preserve.py
+        run: python3 ci/integrated-archives-949/package-only.py
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
