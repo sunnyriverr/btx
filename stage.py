@@ -10,7 +10,7 @@ class SafeRedirect(urllib.request.HTTPRedirectHandler):
   if urllib.parse.urlsplit(req.full_url).netloc!=urllib.parse.urlsplit(url).netloc:out.remove_header('Authorization')
   return out
 try:
- for aid,digest,dest in [(14095850633,'60cdff188dcc6642125b7ebac17803c81c33bae21c109dfd41744198240305b7','.'),(14137827346,'295a95fb52da660bca4daeaf926805057d5af13641f95f5a1ae4cce6b80f250f','candidate')]:
+ for aid,digest,dest in [(14095850633,'60cdff188dcc6642125b7ebac17803c81c33bae21c109dfd41744198240305b7','.'),(14163077249,'54a9415ab959a1557c7dacf47927e15b4b290938005de7f00c81e6123e6ac1b4','candidate')]:
   req=urllib.request.Request(f'https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/{aid}/zip',headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'User-Agent':'btx-staging'})
   data=urllib.request.build_opener(SafeRedirect()).open(req,timeout=60).read(80*1024**2);assert hashlib.sha256(data).hexdigest()==digest
   with zipfile.ZipFile(io.BytesIO(data)) as z:
@@ -20,19 +20,19 @@ try:
    z.extractall(dest)
   receipt['artifacts'].append({'id':aid,'sha256':digest});save()
  import shutil,configparser
- shutil.copy2('candidate/btx-modeld','obj/bin/btx-modeld')
+ shutil.copy2('candidate/baseline/btx-modeld','obj/bin/btx-modeld')
  for line in P('expected-binaries.sha256').read_text().splitlines():
   expected,name=line.split(None,1);assert hashlib.sha256(P(name).read_bytes()).hexdigest()==expected
  receipt['binary_hashes']='PASS';save()
  cfg=P('obj/test/config.ini');c=configparser.ConfigParser();c.read(cfg)
  c['environment']['SRCDIR']=str(P('product').resolve());c['environment']['BUILDDIR']=str(P('obj').resolve());c['environment']['RPCAUTH']=str(P('product/share/rpcauth/rpcauth.py').resolve())
  with cfg.open('w') as f:c.write(f)
- for name in ('source_files_cases.py','base_minio.py','validate_source_files.py'):shutil.copy2(name,'product/test/functional/'+name)
+ for name in ('minio_upload.py','base_minio.py','validate_minio.py'):shutil.copy2(name,'product/test/functional/'+name)
  # Import only: __main__ and all fixture methods remain uncalled.
  sys.path.insert(0,str(P('product/test/functional').resolve()))
- import source_files_cases
- assert source_files_cases.SourceFilesCases.__dict__.get('run_test') is not None
- assert source_files_cases.SourceFilesCases.__dict__.get('set_test_params') is not None
+ import minio_upload
+ assert minio_upload.UploadControl.__dict__.get('run_test') is not None
+ assert hasattr(minio_upload.UploadControl, 'set_test_params')
  receipt['imports']=True;save()
  # Inspect ELF headers/dependencies without invoking product executables or loader.
  for name in ('btxd','btx-cli','btx-modeld'):
@@ -47,6 +47,6 @@ try:
  for name in ('btxd','btx-cli','btx-modeld'):
   path=P('obj/bin')/name;path.chmod(0o755);assert os.access(path,os.X_OK)
  receipt['runtime_libraries_resolved']=sorted(needed);receipt['execute_modes_prepared']=True
- receipt['status']='PASS';receipt['note']='No adapter/native method, BTX, MinIO, Docker container or validator tests executed.';save()
+ receipt['status']='PASS';receipt['note']='No adapter/native method, BTX, MinIO or Docker container executed.';save()
 except Exception as exc:
  receipt['status']='FAIL_OR_BLOCKED';receipt['failure']=repr(exc);save();raise

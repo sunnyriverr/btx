@@ -1,0 +1,52 @@
+name: Bounded cloud upload qualification
+on:
+  push:
+    branches: [codex/ci-cloud-upload-boundary]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  upload:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 1e2f8b5f12295002334d3390c12cac0bb4ae2aff
+          path: product
+          persist-credentials: false
+      - name: Restore known runtime prerequisites
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq libevent-dev libzmq3-dev
+      - name: Compile exact-method component adapter
+        run: |
+          mkdir -p records
+          g++ --version > records/compiler.txt
+          g++ -std=c++20 -O2 -Wall -Wextra -Werror virtual_stream.cpp -o virtual-stream 2> records/compile.log
+          sha256sum virtual-stream putstream.inc > records/component-identities.sha256
+      - name: Stage, verify binaries, and import without execution
+        run: python3 stage.py
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - name: Execute bounded real-limit loop and validate observations
+        run: |
+          python3 run_virtual.py ./virtual-stream
+          cp virtual-execution.json virtual-observations.jsonl virtual-stderr.txt records/
+      - name: Execute ordinary real MinIO upload and restart control
+        run: bash native.sh
+      - name: Preserve partial component results
+        if: always()
+        run: |
+          mkdir -p records
+          cp -f virtual-execution.json virtual-observations.jsonl virtual-stderr.txt virtual-partial-stdout.txt records/ 2>/dev/null || true
+          cp input-manifest.json records/
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: cloud-upload-bounded-records
+          path: records/
+          retention-days: 14
+          if-no-files-found: error
