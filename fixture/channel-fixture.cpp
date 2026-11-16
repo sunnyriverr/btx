@@ -5,8 +5,10 @@
 #include <modelnet/resource_uri.h>
 #include <support/cleanse.h>
 #include <util/strencodings.h>
+#include <util/translation.h>
 #include <iostream>
 #include <stdexcept>
+const TranslateFn G_TRANSLATION_FUN{nullptr};
 using namespace modelnet;
 int main()
 {
