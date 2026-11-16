@@ -32,6 +32,8 @@ def build():
  assert '20.1.8' in command('diagnostic-compiler',['clang-cl','--version'])
  assert os.environ['VCToolsVersion'].rstrip('\\')=='14.51.36231'
  assert os.environ['WindowsSDKVersion'].rstrip('\\')=='10.0.26100.0'
+ baseline_imports=command('baseline-imports',['dumpbin','/imports',str(B/'bin/test_btx.exe')]);r['baseline_import_dlls']=sorted(set(re.findall(r'^\s+([A-Za-z0-9_.-]+\.dll)\s*$',baseline_imports,re.M|re.I)))
+ assert r['baseline_import_dlls']
  snapshot()
  for n,info in cp['source_files'].items():
   path=S/n;assert sha(path)==info['sha256'];os.utime(path,ns=(path.stat().st_atime_ns,info['mtime_ns']))
@@ -46,6 +48,9 @@ def build():
   matches=[i for i,line in enumerate(lines) if line.startswith('build '+target+':')];assert len(matches)==1,target
   i=matches[0];edge=[lines[i].split(' || ',1)[0]];j=i+1
   while j<len(lines) and lines[j].startswith('  '):edge.append(lines[j]);j+=1
+  if target=='bin/test_btx.exe':
+   assert any(line.startswith('  POST_BUILD = ') and 'vcpkg' in line for line in edge)
+   edge=['  POST_BUILD = cd .' if line.startswith('  POST_BUILD = ') else line for line in edge]
   edges.append('\n'.join(edge))
  # Keep exact generated rules, flags and link inputs. Unchanged binaries/objects
  # are immutable leaf inputs; this is an instrumentation-only graph, not a full build.
@@ -59,6 +64,7 @@ def build():
   assert any(s in a for s in ['resource_governor_tests.cpp.obj','fs_helpers.cpp.obj','bitcoin_util.lib','bin\\test_btx.exe','bin/test_btx.exe']),a
   assert 'Re-running CMake' not in a
  command('diagnostic-build',['ninja','-C',str(B),'-f',str(plan),'-j2','bin/test_btx.exe'],cap=480)
+ diag_imports=command('diagnostic-imports',['dumpbin','/imports',str(B/'bin/test_btx.exe')]);r['diagnostic_import_dlls']=sorted(set(re.findall(r'^\s+([A-Za-z0-9_.-]+\.dll)\s*$',diag_imports,re.M|re.I)));assert r['diagnostic_import_dlls']==r['baseline_import_dlls']
  r['diagnostic_binary_sha256']=sha(B/'bin/test_btx.exe');assert r['diagnostic_binary_sha256']!=r['test_btx_sha256'];r['production_rule_change']=False;r['instrumentation_only']=True;save()
 def restore():
  if not (BACK/'files.json').exists():r['diagnostic_restore']='NO_MUTATION';save();return
