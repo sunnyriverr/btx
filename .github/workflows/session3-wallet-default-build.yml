@@ -1,0 +1,120 @@
+{
+  "name": "Session3 current wallet binaries \u2014 bounded build only",
+  "on": {
+    "push": {
+      "branches": [
+        "codex/ci-wallet-default-regression-build"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "read",
+    "actions": "read"
+  },
+  "concurrency": {
+    "group": "session3-wallet-default-regression-build",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "build": {
+      "if": "github.repository == 'sunnyriverr/btx' && github.ref == 'refs/heads/codex/ci-wallet-default-regression-build'",
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 50,
+      "env": {
+        "PYTHONOPTIMIZE": "0"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "persist-credentials": false
+          }
+        },
+        {
+          "name": "Check pinned release head only",
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          },
+          "timeout-minutes": 2,
+          "run": "python3 proposal/driver.py head"
+        },
+        {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "repository": "btxchain/btx",
+            "ref": "1e2f8b5f12295002334d3390c12cac0bb4ae2aff",
+            "path": "reference-source",
+            "persist-credentials": false
+          }
+        },
+        {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "repository": "btxchain/btx",
+            "ref": "371013d61dc124a363521df5b94e97f64d2464f2",
+            "path": "current-reference",
+            "persist-credentials": false
+          }
+        },
+        {
+          "name": "Provision matching build dependencies",
+          "timeout-minutes": 6,
+          "run": "sudo apt-get update -qq\nsudo apt-get install -y --no-install-recommends build-essential cmake ninja-build pkg-config binutils libboost-dev libevent-dev libsqlite3-dev libssl-dev"
+        },
+        {
+          "name": "Restore and verify exact baseline checkpoint",
+          "timeout-minutes": 8,
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          },
+          "run": "python3 proposal/verify_baseline.py"
+        },
+        {
+          "name": "Verify compiler, transition source and inspect actual two-target plan",
+          "timeout-minutes": 6,
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          },
+          "run": "python3 proposal/driver.py prepare"
+        },
+        {
+          "name": "Bounded daemon and CLI build \u2014 no execution",
+          "timeout-minutes": 32,
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          },
+          "run": "python3 proposal/driver.py build"
+        },
+        {
+          "name": "Retain current checkpoint and static binary evidence",
+          "if": "always()",
+          "timeout-minutes": 6,
+          "run": "python3 proposal/driver.py retain"
+        },
+        {
+          "uses": "actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f",
+          "if": "always()",
+          "timeout-minutes": 2,
+          "with": {
+            "name": "session3-wallet-default-build-records",
+            "path": "records/",
+            "retention-days": 7,
+            "if-no-files-found": "warn"
+          }
+        },
+        {
+          "uses": "actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f",
+          "if": "always()",
+          "timeout-minutes": 2,
+          "with": {
+            "name": "session3-wallet-default-checkpoint",
+            "path": "retained/",
+            "retention-days": 7,
+            "compression-level": 0,
+            "if-no-files-found": "warn"
+          }
+        }
+      ]
+    }
+  }
+}
