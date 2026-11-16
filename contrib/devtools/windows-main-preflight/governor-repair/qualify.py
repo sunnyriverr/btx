@@ -1,6 +1,6 @@
 """Matched native governor regressions through the normal generated test target."""
 from pathlib import Path
-import os, sys, json, hashlib, subprocess, shutil, time, re, urllib.request
+import os, sys, json, hashlib, subprocess, shutil, time, re, urllib.request, io, zipfile
 P=Path(__file__).resolve().parent; R=Path('D:/btx-native-035'); B=R/'project-build'; S=Path(os.environ['GITHUB_WORKSPACE'])/'btx'; E=R/'governor-repair-evidence'; E.mkdir(exist_ok=True)
 sys.path.insert(0,str(P.parent/'governor-helper-control'))
 from batch_results import classify
@@ -13,17 +13,23 @@ def sha(p):
   for b in iter(lambda:f.read(1048576),b''):h.update(b)
  return h.hexdigest()
 def run(label,args,cap=180,cwd=B,check=True):
- st=time.monotonic();log=E/(label+'.log')
+ st=time.monotonic();log=E/(label+'.log');last_sample=st;offset=0
+ print(label,'starting',flush=True)
  with log.open('wb') as out:
   proc=subprocess.Popen(args,cwd=cwd,stdout=out,stderr=subprocess.STDOUT)
   try:
    while proc.poll() is None:
     time.sleep(1)
+    if time.monotonic()-last_sample>=15:
+     with log.open('rb') as progress:
+      progress.seek(offset);chunk=progress.read();offset=progress.tell()
+     print(label,'LIVE',round(time.monotonic()-st),'seconds; freeMiB',shutil.disk_usage(R).free//1048576,chunk[-2000:].decode(errors='replace'),flush=True)
+     last_sample=time.monotonic()
     assert shutil.disk_usage(R).free>1342177280,'disk reserve'
     if time.monotonic()-st>cap:raise TimeoutError(label)
   finally:
    if proc.poll() is None:subprocess.run(['taskkill','/PID',str(proc.pid),'/T','/F'],capture_output=True);proc.wait()
- text=log.read_text(errors='replace');result['commands'].append({'label':label,'exit':proc.returncode,'seconds':round(time.monotonic()-st,3),'sha256':sha(log)});save()
+ text=log.read_text(errors='replace');result['commands'].append({'label':label,'exit':proc.returncode,'seconds':round(time.monotonic()-st,3),'sha256':sha(log),'execution_run':os.environ['GITHUB_RUN_ID']});save()
  print(label,proc.returncode,text[-1200:],flush=True)
  if check:assert proc.returncode==0,label
  return proc.returncode,text
@@ -57,7 +63,9 @@ def tools():
  run('python-dependencies',[sys.executable,'-I','-c','import cryptography,sqlite3;from cryptography.hazmat.primitives.ciphers.aead import AESGCM'])
 
 def build(phase):
- _,text=run(phase+'-dry-run',['ninja','-C',str(B),'-n','-d','explain','test_btx'])
+ text=''
+ if phase=='baseline':
+  _,text=run(phase+'-dry-run',['ninja','-C',str(B),'-n','-d','explain','test_btx'])
  if 'Re-running CMake' in text:
   assert phase=='baseline', 'Unexpected second reconfigure'
   # Refresh only normal CMake metadata. Compare every generated compiler command
@@ -122,19 +130,56 @@ def tests(phase):
 
 D=R/('gov-runtime-'+os.environ['GITHUB_RUN_ID']);tree=None
 try:
- assert sha(B/'btx-successor.json')=='d980ca1fae8a45385fc5ca9777fc89ffb3ae977f5af7b841dde18f3352e0d515'
+ resume_file=P/'resume-input.json'
+ resumed=resume_file.exists()
+ if resumed:
+  resumed_from=json.loads(resume_file.read_text())
+  assert sha(B/'btx-governor-checkpoint.json')==resumed_from['checkpoint_sha256']
+  cp=json.loads((B/'btx-governor-checkpoint.json').read_text())
+  # Source checkout is pristine pinned1e; reconstruct exactly the two candidate
+  # files and the previously retained746 guard before checking every source.
+  shutil.copyfile(P.parent/'modelnet_jit_ensure_tests.fixed.cpp',S/'src/test/modelnet_jit_ensure_tests.cpp')
+  shutil.copyfile(P/'resource_governor_tests.cpp',S/'src/test/resource_governor_tests.cpp')
+  shutil.copyfile(P/'helper.cpp',S/'src/modelnet/helper.cpp')
+  for name,info in cp['files'].items():assert sha(R/name)==info['sha256'],name
+  # Retrieve the completed baseline result and complete generated graph, never
+  # another executable or a replacement test body. Authenticate exact ZIP bytes.
+  request=urllib.request.Request(resumed_from['artifact_url'],headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/octet-stream','User-Agent':'BTX verification'})
+  class Redirect(urllib.request.HTTPRedirectHandler):
+   def redirect_request(self,req,fp,code,msg,headers,url):
+    q=super().redirect_request(req,fp,code,msg,headers,url)
+    if q and urllib.parse.urlparse(url).netloc!='api.github.com':q.remove_header('Authorization')
+    return q
+  with urllib.request.build_opener(Redirect).open(request,timeout=90) as handle:data=handle.read(8*1024**2)
+  assert hashlib.sha256(data).hexdigest()==resumed_from['artifact_sha256']
+  with zipfile.ZipFile(io.BytesIO(data)) as archive:
+   assert archive.testzip() is None
+   def member(name):
+    selected=[n for n in archive.namelist() if Path(n).name==name];assert len(selected)==1;return archive.read(selected[0])
+   previous=member('result.json');result=json.loads(previous)
+   assert result['source']==m['source'] and result['phases']['baseline']['tests']['announced']==4
+   assert result['phases']['baseline']['tests']['state']=='failed'
+   assert result['configure_refresh']['compile_command_delta']=={'added':0,'removed':0,'changed':0}
+   assert sha(B/'bin/test_btx.exe')==result['phases']['baseline']['binary_sha256']
+   graph=member('normal-target.ninja');assert hashlib.sha256(graph).hexdigest()==result['full_generated_graph_sha256']
+   (E/'normal-target.ninja').write_bytes(graph);(E/'prior-result.json').write_bytes(previous)
+  result['resume']={**resumed_from,'baseline_repeated':False,'source_and_cached_files_verified':len(cp['files'])}
+  result['prior_attempt_error']=result.pop('error',None);result['status']='CANDIDATE_RESUMING';save()
+ else:
+  assert sha(B/'btx-successor.json')=='d980ca1fae8a45385fc5ca9777fc89ffb3ae977f5af7b841dde18f3352e0d515'
+  assert sha(S/'src/modelnet/helper.cpp')==m['baseline_sha256']
+  assert sha(S/'src/test/resource_governor_tests.cpp')==m['tests']['baseline_sha256']
  assert cp['source']==m['source']
- assert sha(S/'src/modelnet/helper.cpp')==m['baseline_sha256']
- assert sha(S/'src/test/resource_governor_tests.cpp')==m['tests']['baseline_sha256']
  assert sha(P/'helper.cpp')==m['candidate_sha256'] and sha(P/'resource_governor_tests.cpp')==m['tests']['candidate_sha256']
- for n,v in cp['source_files'].items():
-  path=S/n;assert sha(path)==v['sha256'];os.utime(path,ns=(path.stat().st_atime_ns,v['mtime_ns']))
+ for name,info in cp['source_files'].items():
+  path=S/name;assert sha(path)==info['sha256'],name;os.utime(path,ns=(path.stat().st_atime_ns,info['mtime_ns']))
  tools();tree=ProcessTree();assert tree.active()==1
  assert not D.exists() and not Path('S:/').exists();D.mkdir();(D/'tmp').mkdir();run('short-root',['subst','S:',str(D)],cwd=R)
  for key in ['TEMP','TMP','TMPDIR']:os.environ[key]='S:/tmp'
- shutil.copyfile(P/'resource_governor_tests.cpp',S/'src/test/resource_governor_tests.cpp')
- build('baseline');tests('baseline');assert tree.active()==1
- shutil.copyfile(P/'helper.cpp',S/'src/modelnet/helper.cpp')
+ if not resumed:
+  shutil.copyfile(P/'resource_governor_tests.cpp',S/'src/test/resource_governor_tests.cpp')
+  build('baseline');tests('baseline');assert tree.active()==1
+  shutil.copyfile(P/'helper.cpp',S/'src/modelnet/helper.cpp')
  build('candidate');tests('candidate');assert tree.active()==1
  shutil.copy2(B/'bin/test_btx.exe',E/'test_btx.exe')
  shutil.copy2(P/'candidate.patch',E/'candidate.patch');shutil.copy2(P/'source-manifest.json',E/'source-manifest.json')
