@@ -109,18 +109,18 @@ def build(phase):
  assert len(actions)<=30,actions
  for line in actions:
   if 'Building CXX object' in line:
-   assert any(n in line for n in ['resource_governor_tests.cpp.obj','helper.cpp.obj','bitcoin_clientversion.dir/clientversion.cpp.obj','bitcoin_common.dir/matmul/matmul_v4_rc_production_canary.cpp.obj']),line
+   assert any(n in line for n in ['resource_governor_tests.cpp.obj','helper.cpp.obj','bitcoin_clientversion.dir/clientversion.cpp.obj','bitcoin_common.dir/matmul/matmul_v4_rc_production_canary.cpp.obj','/resource_governor.cpp.obj']),line
  assert not any('Re-running CMake' in a for a in actions),actions
  run(phase+'-normal-build',['ninja','-C',str(B),'-f',str(plan),'-j2','test_btx'],cap=1200)
  result['phases'][phase]['binary_sha256']=sha(B/'bin/test_btx.exe');save()
 
 def tests(phase):
- names=m['tests']['selectors'];sels=['resource_governor_tests/'+n for n in names]
+ names=[v.split('/',1)[1] for v in extra['selectors']] if phase=='supplement' else m['tests']['selectors'];sels=['resource_governor_tests/'+n for n in names]
  report=E/(phase+'.xml');args=[str(B/'bin/test_btx.exe'),'--run_test=resource_governor_tests/'+','.join(names),'--log_level=test_suite','--report_level=detailed','--report_format=XML','--report_sink='+str(report),'--catch_system_errors=yes','--','-testdatadir=S:/'+phase]
  code,log=run(phase+'-tests',args,cap=180,check=False)
  out=classify(sels,log,report.read_text(errors='replace') if report.exists() else '',code)
  cases=out.pop('cases');out['cases']={n:cases[n] for n in sels if n in cases};result['phases'][phase]['tests']=out;save()
- assert len(out['cases'])==4 and out['announced']==4,out
+ assert len(out['cases'])==len(names) and out['announced']==len(names),out
  assert all(int(row.get('assertions_passed','0'))>0 for row in out['cases'].values()),out
  assert not any(row.get('result')=='skipped' for row in out['cases'].values())
  if phase=='baseline':
@@ -129,9 +129,11 @@ def tests(phase):
  else:assert out['state']=='passed' and code==0,out
 
 D=R/('gov-runtime-'+os.environ['GITHUB_RUN_ID']);tree=None
+supplement=(P/'supplement-input.json').exists();extra=json.loads((P/'raw-fixture/manifest.json').read_text()) if supplement else None
 try:
  resume_file=P/'resume-input.json'
  resumed=resume_file.exists()
+ assert not supplement or resumed, 'Supplement must reuse completed core qualification'
  if resumed:
   resumed_from=json.loads(resume_file.read_text())
   assert sha(B/'btx-governor-checkpoint.json')==resumed_from['checkpoint_sha256']
@@ -150,7 +152,7 @@ try:
     q=super().redirect_request(req,fp,code,msg,headers,url)
     if q and urllib.parse.urlparse(url).netloc!='api.github.com':q.remove_header('Authorization')
     return q
-  with urllib.request.build_opener(Redirect).open(request,timeout=90) as handle:data=handle.read(8*1024**2)
+  with urllib.request.build_opener(Redirect).open(request,timeout=90) as handle:data=handle.read(200*1024**2)
   assert hashlib.sha256(data).hexdigest()==resumed_from['artifact_sha256']
   with zipfile.ZipFile(io.BytesIO(data)) as archive:
    assert archive.testzip() is None
@@ -160,10 +162,13 @@ try:
    assert result['source']==m['source'] and result['phases']['baseline']['tests']['announced']==4
    assert result['phases']['baseline']['tests']['state']=='failed'
    assert result['configure_refresh']['compile_command_delta']=={'added':0,'removed':0,'changed':0}
-   assert sha(B/'bin/test_btx.exe')==result['phases']['baseline']['binary_sha256']
+   reused_phase=resumed_from.get('reuse_phase','baseline')
+   assert sha(B/'bin/test_btx.exe')==result['phases'][reused_phase]['binary_sha256']
+   if supplement:assert result['phases']['candidate']['tests']['state']=='passed'
    graph=member('normal-target.ninja');assert hashlib.sha256(graph).hexdigest()==result['full_generated_graph_sha256']
    (E/'normal-target.ninja').write_bytes(graph);(E/'prior-result.json').write_bytes(previous)
-  result['resume']={**resumed_from,'baseline_repeated':False,'source_and_cached_files_verified':len(cp['files'])}
+  result.setdefault('resume_chain',[]).append(result.get('resume',{}))
+  result['resume']={**resumed_from,'baseline_repeated':False,'qualified_core_repeated':False,'source_and_cached_files_verified':len(cp['files'])}
   result['prior_attempt_error']=result.pop('error',None);result['status']='CANDIDATE_RESUMING';save()
  else:
   assert sha(B/'btx-successor.json')=='d980ca1fae8a45385fc5ca9777fc89ffb3ae977f5af7b841dde18f3352e0d515'
@@ -180,10 +185,22 @@ try:
   shutil.copyfile(P/'resource_governor_tests.cpp',S/'src/test/resource_governor_tests.cpp')
   build('baseline');tests('baseline');assert tree.active()==1
   shutil.copyfile(P/'helper.cpp',S/'src/modelnet/helper.cpp')
- build('candidate');tests('candidate');assert tree.active()==1
+ if supplement:
+  for candidate,source,old_hash,new_hash in [
+      ('resource_governor_tests.cpp','src/test/resource_governor_tests.cpp','original_fixture_sha256','candidate_fixture_sha256'),
+      ('resource_governor.cpp','src/node/resource_governor.cpp','node_baseline_sha256','node_candidate_sha256')]:
+   assert sha(S/source)==extra[old_hash],source
+   assert sha(P/'raw-fixture'/candidate)==extra[new_hash],candidate
+   shutil.copyfile(P/'raw-fixture'/candidate,S/source)
+  result['supplement_source']=extra;save()
+  build('supplement');tests('supplement')
+ else:
+  build('candidate');tests('candidate')
+ assert tree.active()==1
  shutil.copy2(B/'bin/test_btx.exe',E/'test_btx.exe')
- shutil.copy2(P/'candidate.patch',E/'candidate.patch');shutil.copy2(P/'source-manifest.json',E/'source-manifest.json')
- result['status']='WINDOWS_SEED_BEFORE_AFTER_PASS';result['normal_target']='test_btx through complete byte-identical frozen generated graph after explicit normal configure; all targets/dependencies/post-link hooks retained';save()
+ shutil.copy2(P/('raw-fixture/candidate.patch' if supplement else 'candidate.patch'),E/'candidate.patch');shutil.copy2(P/'source-manifest.json',E/'source-manifest.json')
+ if supplement:shutil.copy2(P/'raw-fixture/manifest.json',E/'supplement-manifest.json')
+ result['status']='WINDOWS_SUPPLEMENT_PASS' if supplement else 'WINDOWS_SEED_BEFORE_AFTER_PASS';result['normal_target']='test_btx through complete byte-identical frozen generated graph after explicit normal configure; all targets/dependencies/post-link hooks retained';save()
 except BaseException as ex:
  result['status']='INCOMPLETE';result['error']=repr(ex);save();raise
 finally:
