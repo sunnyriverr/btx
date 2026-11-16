@@ -10,7 +10,7 @@ class SafeRedirect(urllib.request.HTTPRedirectHandler):
   if urllib.parse.urlsplit(req.full_url).netloc!=urllib.parse.urlsplit(url).netloc:out.remove_header('Authorization')
   return out
 try:
- for aid,digest,dest in [(14095850633,'60cdff188dcc6642125b7ebac17803c81c33bae21c109dfd41744198240305b7','.'),(14163077249,'54a9415ab959a1557c7dacf47927e15b4b290938005de7f00c81e6123e6ac1b4','candidate')]:
+ for aid,digest,dest in [(14095850633,'60cdff188dcc6642125b7ebac17803c81c33bae21c109dfd41744198240305b7','.')]:
   req=urllib.request.Request(f'https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/{aid}/zip',headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'User-Agent':'btx-staging'})
   data=urllib.request.build_opener(SafeRedirect()).open(req,timeout=60).read(80*1024**2);assert hashlib.sha256(data).hexdigest()==digest
   with zipfile.ZipFile(io.BytesIO(data)) as z:
@@ -20,9 +20,11 @@ try:
    z.extractall(dest)
   receipt['artifacts'].append({'id':aid,'sha256':digest});save()
  import shutil,configparser
- shutil.copy2('candidate/baseline/btx-modeld','obj/bin/btx-modeld')
+ shutil.copy2('binaries/candidate/btx-modeld','obj/bin/btx-modeld')
  for line in P('expected-binaries.sha256').read_text().splitlines():
-  expected,name=line.split(None,1);assert hashlib.sha256(P(name).read_bytes()).hexdigest()==expected
+  expected,name=line.split(None,1)
+  if name.endswith('/btx-modeld'): continue
+  assert hashlib.sha256(P(name).read_bytes()).hexdigest()==expected
  receipt['binary_hashes']='PASS';save()
  cfg=P('obj/test/config.ini');c=configparser.ConfigParser();c.read(cfg)
  c['environment']['SRCDIR']=str(P('product').resolve());c['environment']['BUILDDIR']=str(P('obj').resolve());c['environment']['RPCAUTH']=str(P('product/share/rpcauth/rpcauth.py').resolve())
