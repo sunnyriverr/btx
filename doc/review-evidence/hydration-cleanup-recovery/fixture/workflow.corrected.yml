@@ -1,0 +1,108 @@
+name: PR737 bounded matched repair qualification
+on:
+  push:
+    branches: [codex/ci-pr737-interruption-review]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: pr737-review
+  cancel-in-progress: false
+jobs:
+  recovery:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 1e2f8b5f12295002334d3390c12cac0bb4ae2aff
+          path: accepted-source
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: 14230080307
+          run-id: 43873349021
+          github-token: ${{ github.token }}
+          path: saved-checkpoint
+          merge-multiple: true
+      - name: Verify immutable original helper
+        run: python3 stage.py
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: 14229615313
+          run-id: 43873349021
+          github-token: ${{ github.token }}
+          path: prior-records
+          merge-multiple: true
+      - name: Reuse unchanged native baseline preflight
+        run: |
+          mkdir -p records
+          python3 - <<'PYCODE'
+          import hashlib,json,pathlib,shutil
+          lines=pathlib.Path('prior-records/source-fixture-hashes.txt').read_text().splitlines()
+          expected=next(line.split()[0] for line in lines if line.split()[-1]=='native.py')
+          assert hashlib.sha256(pathlib.Path('native.py').read_bytes()).hexdigest()==expected
+          d=json.load(open('prior-records/native-baseline-host/result.json'))
+          assert d['status']=='FAIL' and set(d['failures'])=={'interrupted_restart_not_local','legacy_restart_not_local'} and d['owned_helpers_exited'] and d['scratch_removed']
+          assert d['helper_sha256']=='cb783882585291c6ab7d5f0796129336d36dc3963be3db2310bbd25fe6737eae'
+          shutil.copytree('prior-records/native-baseline-host','records/native-baseline-host')
+          pathlib.Path('records/native-baseline-reuse.json').write_text(json.dumps({'run':43873349021,'native_fixture_identical':True,'rerun':False},indent=2))
+          PYCODE
+      - name: Matched native build and recovery qualification
+        run: |
+          set -euo pipefail
+          mkdir -p records
+          gcc -shared -fPIC -Wall -Wextra -Werror interruption.c -ldl -o interruption.so
+          image=ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11
+          docker pull "$image"
+          docker run --name pr737-owned-build --init \
+            -v "$GITHUB_WORKSPACE:$GITHUB_WORKSPACE" -w "$GITHUB_WORKSPACE" \
+            -e GITHUB_WORKSPACE "$image" bash -e -c \
+            'timeout --kill-after=20s 10m bash setup.sh && /opt/hostedtoolcache/Python/3.12.16/x64/bin/python3 build.py' \
+            2>&1 | tee records/console.log
+      - name: Same-host candidate native recovery and final validation
+        run: |
+          export BTX737_HELPER="$PWD/built/candidate/btx-modeld"
+          export BTX737_CREATOR="$PWD/binary/baseline/btx-modeld"
+          export BTX737_HELPER_SHA="$(sha256sum built/candidate/btx-modeld | cut -d' ' -f1)"
+          export BTX737_OUTPUT="$PWD/records/native-candidate-host"
+          timeout --kill-after=10 180 python3 native.py > records/candidate-native.log 2>&1
+          python3 - <<'PYCODE'
+          import json,pathlib
+          p=pathlib.Path('records/build-result.json'); b=json.loads(p.read_text());r=json.load(open('records/native-candidate-host/result.json'))
+          assert b['status']=='BUILDS_AND_COMPONENTS_PASS_HOST_RUNTIME_PENDING'
+          assert r['helper_sha256']==b['candidate_helper_sha256'] and r['status']=='PASS' and not r['failures'] and r['owned_helpers_exited'] and r['scratch_removed']
+          b['status']='MATCHED_BEFORE_AFTER_AND_CONTROLS_PASS';b['candidate_native']='PASS';b['native_runtime']='same Ubuntu24.04 hosted job for both binaries';pathlib.Path('records/final-validation.json').write_text(json.dumps(b,indent=2)+'\n')
+          PYCODE
+      - name: Preserve tested source and fixture identities
+        if: always()
+        run: |
+          mkdir -p records
+          sha256sum file_stream.cpp base-file_stream.cpp modelnet_file_stream_tests.cpp component.cpp native.py build.py > records/source-fixture-hashes.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: pr737-repair-records
+          path: records/
+          retention-days: 14
+          if-no-files-found: error
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: pr737-repair-binaries
+          path: built/
+          retention-days: 14
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: pr737-repair-checkpoint
+          path: resume-checkpoint/
+          retention-days: 14
+          if-no-files-found: warn

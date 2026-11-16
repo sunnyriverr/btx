@@ -1,0 +1,22 @@
+2026-11-16T13:23:40.5445546Z [36;1mb['status']='MATCHED_BEFORE_AFTER_AND_CONTROLS_PASS';b['candidate_native']='PASS';b['native_runtime']='same Ubuntu24.04 hosted job for both binaries';p.write_text(json.dumps(b,indent=2)+'\n')[0m
+2026-11-16T13:23:40.5446054Z [36;1mPYCODE[0m
+2026-11-16T13:23:40.5471974Z shell: /usr/bin/bash -e {0}
+2026-11-16T13:23:40.5472189Z ##[endgroup]
+2026-11-16T13:23:49.8126773Z Traceback (most recent call last):
+2026-11-16T13:23:49.8127088Z   File "<stdin>", line 5, in <module>
+2026-11-16T13:23:49.8127358Z   File "/usr/lib/python3.12/pathlib.py", line 1049, in write_text
+2026-11-16T13:23:49.8498175Z     with self.open(mode='w', encoding=encoding, errors=errors, newline=newline) as f:
+2026-11-16T13:23:49.8498660Z          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-16T13:23:49.8498974Z   File "/usr/lib/python3.12/pathlib.py", line 1015, in open
+2026-11-16T13:23:49.8499269Z     return io.open(self, mode, buffering, encoding, errors, newline)
+2026-11-16T13:23:49.8498660Z          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-16T13:23:49.8498974Z   File "/usr/lib/python3.12/pathlib.py", line 1015, in open
+2026-11-16T13:23:49.8499269Z     return io.open(self, mode, buffering, encoding, errors, newline)
+2026-11-16T13:23:49.8499528Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-16T13:23:49.8499816Z PermissionError: [Errno 13] Permission denied: 'records/build-result.json'
+2026-11-16T13:23:49.8641647Z ##[error]Process completed with exit code 1.
+2026-11-16T13:23:49.8676450Z ##[group]Run mkdir -p records
+2026-11-16T13:23:49.8676670Z [36;1mmkdir -p records[0m
+2026-11-16T13:23:49.8677112Z [36;1msha256sum file_stream.cpp base-file_stream.cpp modelnet_file_stream_tests.cpp component.cpp native.py build.py > records/source-fixture-hashes.txt[0m
+2026-11-16T13:23:49.8703671Z shell: /usr/bin/bash -e {0}
+2026-11-16T13:23:49.8703872Z ##[endgroup]
