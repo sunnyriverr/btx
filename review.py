@@ -103,6 +103,21 @@ with tempfile.TemporaryDirectory(prefix='btx737-',dir='/tmp') as temp:
    stop(p);p=start(name+'-restart-2',md);case['second_restart']=rpc(sock,'getmodel',[mid])
    case['healthy_control']=rpc(sock,'getmodel',[control['model_id']]);assert case['healthy_control'].get('status')=='local';assert bytes_at(md,control['artifact_id'])==control_body
    case['exact_live_bytes_preserved']=bytes_at(md,art)==body;case['remaining_jobs']=[str(x.relative_to(md)) for x in (md/'file_stream_jobs').glob('*')];stop(p);save()
+   if interrupt:
+    import urllib.request
+    key=next(k for k,v in objects.items() if art in k and k.endswith('/0.piece'))
+    with urllib.request.urlopen(f'http://127.0.0.1:{server.server_port}'+key,timeout=5) as reply:
+     assert reply.status==200 and reply.read()==body
+    case['independent_origin_read_matches']=True
+    assert len(case['remaining_jobs'])==1
+    # Diagnostic intervention on disposable state only, not a product repair.
+    (md/case['remaining_jobs'][0]).unlink()
+    p=start(name+'-stale-job-cleared',md)
+    case['stale_job_only_removed_recovery']=rpc(sock,'getmodel',[mid]);assert case['stale_job_only_removed_recovery'].get('status')=='local'
+    assert bytes_at(md,art)==body
+    stop(p);p=start(name+'-repaired-state-restart',md)
+    case['after_manual_state_recovery_restart']=rpc(sock,'getmodel',[mid]);assert case['after_manual_state_recovery_restart'].get('status')=='local'
+    assert bytes_at(md,art)==body;stop(p);save()
   normal=R['cases']['normal'];assert all(x.get('status')=='local' for x in normal['first_restart_attempts']) and normal['second_restart'].get('status')=='local'
   bad=R['cases']['interrupted'];R['actual_impact_proved']=all(x.get('status')!='local' for x in bad['first_restart_attempts']) and bad['second_restart'].get('status')!='local'
   R['status']='RECOVERY_STALL_REPRODUCED' if R['actual_impact_proved'] else 'HYPOTHESIS_NOT_REPRODUCED';save()
