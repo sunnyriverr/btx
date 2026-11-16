@@ -1,5 +1,5 @@
 {
-  "name": "Windows governor permit categorized diagnostic",
+  "name": "Windows actual governor helper reader controls",
   "on": {
     "push": {
       "branches": [
@@ -76,37 +76,37 @@
         {
           "name": "Verify immutable checkpoint and binary, no build",
           "shell": "cmd",
-          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/governor-diagnostic/native.py prepare\nexit /b %errorlevel%\n"
+          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/governor-helper-control/native.py prepare\nexit /b %errorlevel%\n"
         },
         {
-          "name": "Bounded diagnostic plan and two-object rebuild",
+          "name": "Bounded single fixture object and test link",
           "shell": "cmd",
-          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/governor-diagnostic/build.py build\nexit /b %errorlevel%\n"
+          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/governor-helper-control/build.py build\nexit /b %errorlevel%\n"
         },
         {
-          "name": "Only failed governor case with categorized observation",
+          "name": "Three actual helper reader controls",
           "shell": "cmd",
-          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/governor-diagnostic/native.py run\nexit /b %errorlevel%\n"
+          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/governor-helper-control/native.py run\nexit /b %errorlevel%\n"
         },
         {
           "name": "Restore original source, objects, library and binary",
           "if": "always()",
           "shell": "cmd",
-          "run": "python controls/contrib/devtools/windows-main-preflight/governor-diagnostic/build.py restore"
+          "run": "python controls/contrib/devtools/windows-main-preflight/governor-helper-control/build.py restore"
         },
         {
           "name": "Clean only owned runtime and verify immutable cache",
           "if": "always()",
           "shell": "cmd",
-          "run": "python controls/contrib/devtools/windows-main-preflight/governor-diagnostic/native.py cleanup"
+          "run": "python controls/contrib/devtools/windows-main-preflight/governor-helper-control/native.py cleanup"
         },
         {
           "name": "Retain exact runtime results",
           "if": "always()",
           "uses": "actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f",
           "with": {
-            "name": "windows-governor-diagnostic-evidence",
-            "path": "D:\\btx-native-035\\unit-governor-evidence",
+            "name": "windows-governor-helper-evidence",
+            "path": "D:\\btx-native-035\\unit-governor-helper-evidence",
             "retention-days": 14
           }
         }
