@@ -1,4 +1,4 @@
-name: FeedStore integrated build pilot
+name: FeedStore integrated paired qualification
 on:
   push:
     branches: [codex/ci-feedstore-integrated]
@@ -8,7 +8,7 @@ permissions:
 jobs:
   upload:
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 55
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -27,7 +27,7 @@ jobs:
           path: saved-checkpoint
           merge-multiple: true
       - name: Restore and bounded incremental candidate build
-        timeout-minutes: 15
+        timeout-minutes: 45
         run: |
           set -euo pipefail
           mkdir -p records
@@ -37,7 +37,14 @@ jobs:
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
-          name: feedstore-integrated-plan
+          name: feedstore-integrated-results
           path: records/
           retention-days: 14
           if-no-files-found: error
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: feedstore-integrated-checkpoint
+          path: resume-checkpoint/
+          retention-days: 14
+          if-no-files-found: warn

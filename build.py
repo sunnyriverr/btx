@@ -57,14 +57,39 @@ try:
  shutil.copy2(w/'maintained-feed-tests.cpp', source/'src/test/modelnet_feed_tests.cpp')
  run(['cmake','-S',source,'-B',build,'-DBUILD_TESTS=ON'],'integrated-configure',180)
  run(['cmake','-P',build/'CMakeFiles/VerifyGlobs.cmake'],'integrated-globs',120,cwd=build)
- dry=run(['ninja','-C',build,'-n','test_btx'],'integrated-plan',120)
+ observed=build/'feedstore-observed.ninja'; shutil.copy2(build/'build.ninja',observed)
+ dry=run(['ninja','-C',build,'-f',observed,'-n','test_btx'],'integrated-plan',120)
  steps=[x for x in dry.splitlines() if x.startswith('[')]
  r['planned_steps']=len(steps)
  r['build_tests']= [x for x in (build/'CMakeCache.txt').read_text().splitlines() if x.startswith(('BUILD_TESTS:','WITH_MODELNET:','ENABLE_WALLET:'))]
  tests=run(['ctest','--test-dir',build,'-N','-R','^modelnet_feed(_restart)?_tests$'],'integrated-registration',120)
  assert 'modelnet_feed_tests' in tests and 'modelnet_feed_restart_tests' in tests
+
+ assert 'Re-running CMake' not in dry
+ assert 0<len(steps)<=3000, 'Unexpected build size: '+str(len(steps))
+ save()
+ run(['ninja','-C',build,'-f',observed,'-j2','test_btx'],'baseline-build',1500)
+ binary=build/'bin/test_btx'; assert binary.is_file()
+ r['baseline_binary_sha256']=sha(binary); save()
+ failing={'publisher_observation_matches_after_reopen','publisher_history_survives_expired_events_and_legacy_load','malformed_publisher_history_keeps_valid_new_publishers'}
+ cases=['modelnet_feed_tests','modelnet_feed_restart_tests/complete_pages_continue_after_reopen','modelnet_feed_restart_tests/publisher_observation_matches_after_reopen','modelnet_feed_restart_tests/publisher_history_survives_expired_events_and_legacy_load','modelnet_feed_restart_tests/unlock_only_history_preserves_first_publisher_observation','modelnet_feed_restart_tests/malformed_publisher_history_keeps_valid_new_publishers']
+ for case in cases:
+  run([binary,'--run_test='+case,'--log_level=test_suite'],'baseline-'+case.replace('/','-'),60,expected=201 if case.rsplit('/',1)[-1] in failing else 0)
+ # The maintained cases are identical; change only the current feed implementation.
+ assert sha(source/'src/modelnet/feed.cpp')==sha(w/'baseline-feed.cpp')
+ shutil.copy2(w/'candidate-feed.cpp',source/'src/modelnet/feed.cpp')
+ candidate_dry=run(['ninja','-C',build,'-f',observed,'-n','test_btx'],'candidate-plan',120)
+ assert 'Re-running CMake' not in candidate_dry
+ run(['ninja','-C',build,'-f',observed,'-j2','test_btx'],'candidate-build',300)
+ r['candidate_binary_sha256']=sha(binary); save()
+ for case in cases:
+  run([binary,'--run_test='+case,'--log_level=test_suite'],'candidate-'+case.replace('/','-'),60)
+ run(['ctest','--test-dir',build,'-R','^modelnet_feed(_restart)?_tests$','--output-on-failure'],'candidate-ctest',120)
  r['complete']=True
 except Exception as e:r['error']=repr(e);print('PILOT ERROR',repr(e),flush=True)
 finally:
+ if restored:
+  try:r['retained_checkpoint_sha256']=create(w,w/'resume-checkpoint',{'source':HEAD,'purpose':'Integrated FeedStore test_btx qualification','complete':r['complete']})['archive_sha256']
+  except Exception as e:r['retention_error']=repr(e)
  save()
 raise SystemExit(0 if r['complete'] and not r.get('error') else 1)
