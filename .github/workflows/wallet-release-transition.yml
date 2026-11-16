@@ -1,0 +1,40 @@
+name: Session3 wallet transition static preflight
+on:
+  push:
+    branches: [codex/ci-wallet-release-transition]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 1e2f8b5f12295002334d3390c12cac0bb4ae2aff
+          path: reference-source
+          persist-credentials: false
+      - name: Provision static inspection tools and retained runtime dependencies
+        timeout-minutes: 6
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends cmake ninja-build binutils libboost-dev libevent-dev libsqlite3-dev libssl-dev
+      - name: Verify retained current source, binaries and static dependencies
+        timeout-minutes: 8
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 verify-current.py
+      - name: Inspect exact old archive, launchers and ELF payloads without execution
+        timeout-minutes: 9
+        run: python3 inspect-old.py
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: session3-wallet-transition-static-records
+          path: records/
+          retention-days: 7
