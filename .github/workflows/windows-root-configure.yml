@@ -1,5 +1,5 @@
 {
-  "name": "Windows pinned catalog and events25 native unit batch",
+  "name": "Windows pinned platform and recovery25 native unit batch",
   "on": {
     "push": {
       "branches": [
@@ -66,26 +66,26 @@
         {
           "name": "Verify immutable checkpoint and binary, no build",
           "shell": "cmd",
-          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/runtime3/native.py prepare\nexit /b %errorlevel%\n"
+          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/runtime4/native.py prepare\nexit /b %errorlevel%\n"
         },
         {
-          "name": "One bounded twenty-five-case catalog and events batch",
+          "name": "One bounded twenty-five-case platform and recovery batch",
           "shell": "cmd",
-          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/runtime3/native.py run\nexit /b %errorlevel%\n"
+          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/runtime4/native.py run\nexit /b %errorlevel%\n"
         },
         {
           "name": "Clean only owned runtime and verify immutable cache",
           "if": "always()",
           "shell": "cmd",
-          "run": "python controls/contrib/devtools/windows-main-preflight/runtime3/native.py cleanup"
+          "run": "python controls/contrib/devtools/windows-main-preflight/runtime4/native.py cleanup"
         },
         {
           "name": "Retain exact runtime results",
           "if": "always()",
           "uses": "actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f",
           "with": {
-            "name": "windows-unit-runtime3-evidence",
-            "path": "D:\\btx-native-035\\unit-runtime3-evidence",
+            "name": "windows-unit-runtime4-evidence",
+            "path": "D:\\btx-native-035\\unit-runtime4-evidence",
             "retention-days": 14
           }
         }
