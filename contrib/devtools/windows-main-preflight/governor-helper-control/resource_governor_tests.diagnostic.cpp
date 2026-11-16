@@ -1008,6 +1008,37 @@ BOOST_AUTO_TEST_CASE(gov_helper_reader_locked_file_keeps_last_pause)
 }
 #endif
 
+
+#ifdef _WIN32
+BOOST_AUTO_TEST_CASE(gov_helper_reader_one_byte_lock_control)
+{
+    modelnet::ModelCatalog cat{m_path_root / "gov-helper-one-byte", 8 << 20};
+    const fs::path dir=cat.Store().Root().parent_path();fs::create_directories(dir);
+    const fs::path path=dir/"governor-permit.json";
+    {
+        std::ofstream out(path,std::ios::binary|std::ios::trunc);
+        out << "{\"schema_version\":1,\"seeding_allowed\":true,\"upload_bps\":65536}";
+        out.close();BOOST_REQUIRE(out.good());
+    }
+    const bool enabled_allows=modelnet::AllowModelSeedBytes(cat,1);
+    BOOST_REQUIRE(enabled_allows);
+    ResourceGovernor g;g.SetMode(GovernorMode::OFF);
+    BOOST_REQUIRE(g.WritePermitFile(fs::PathToString(path)));
+    const bool before_denies=!modelnet::AllowModelSeedBytes(cat,1);BOOST_REQUIRE(before_denies);
+    const HANDLE held=CreateFileW(path.c_str(),GENERIC_READ,0,nullptr,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,nullptr);
+    BOOST_REQUIRE(held!=INVALID_HANDLE_VALUE);
+    struct CloseOnExit{HANDLE value;~CloseOnExit(){if(value!=INVALID_HANDLE_VALUE)CloseHandle(value);}} guard{held};
+    uint64_t allowed{0};std::map<unsigned long,uint64_t> errors;
+    for(int i=0;i<100;++i){SetLastError(0);_set_doserrno(0);errno=0;const bool ok=modelnet::AllowModelSeedBytes(cat,1);const auto error=GetLastError();allowed+=ok?1:0;++errors[error];}
+    BOOST_REQUIRE(CloseHandle(held));guard.value=INVALID_HANDLE_VALUE;
+    const bool after_denies=!modelnet::AllowModelSeedBytes(cat,1);
+    UniValue codes(UniValue::VOBJ);for(const auto& [key,value]:errors)codes.pushKV(std::to_string(key),value);
+    UniValue info(UniValue::VOBJ);info.pushKV("requested_bytes_per_check",1);info.pushKV("enabled_allows",enabled_allows);info.pushKV("before_lock_denies",before_denies);info.pushKV("locked_checks",100);info.pushKV("locked_allowed",allowed);info.pushKV("caller_win32",codes);info.pushKV("after_release_denies",after_denies);info.pushKV("bytes_transferred",0);
+    BOOST_TEST_MESSAGE("GOV_HELPER_ONE_BYTE " << info.write());
+    BOOST_CHECK_EQUAL(allowed,0U);BOOST_CHECK(after_denies);
+}
+#endif
+
 BOOST_AUTO_TEST_CASE(gov_permit_file_is_never_read_half_written)
 {
     // btxd rewrites governor-permit.json every 2 s while btx-modeld reads it

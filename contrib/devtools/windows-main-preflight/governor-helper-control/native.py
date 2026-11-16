@@ -57,7 +57,7 @@ def run():
  row,log=invoke('governor-helper-3',args,M['batch_budget_seconds']);out=classify(M['selectors'],log,report.read_text(errors='replace') if report.exists() else '',row['exit'],row['budget_stop']);out['report_sha256']=sha(report) if report.exists() else None
  # Preserve the selected cases; unselected skip nodes are not selected-case passes.
  cases=out.pop('cases');out['unselected_report_nodes']=len(set(cases)-set(M['selectors']));out['cases']={n:cases[n] for n in M['selectors'] if n in cases};out['selected_assertions_present']=len(out['cases'])==M['expected_cases'] and all(int(v.get('assertions_passed','0'))>0 for v in out['cases'].values());r['batch']=out;r['hardware_not_run_messages']=[x for x in log.splitlines() if 'NOT_RUN' in x];r['status']='BATCH_PASSED' if out['state']=='passed' and out['selected_assertions_present'] else 'BATCH_NOT_PASSED';save();print(json.dumps(r['batch'],indent=2),flush=True)
- assert out['announced']==3 and out['selected_assertions_present'];r['status']='DIAGNOSTIC_OBSERVED';save()
+ assert out['announced']==1 and out['selected_assertions_present'];r['status']='DIAGNOSTIC_OBSERVED';save()
 
 def cleanup():
  # Previous test controller has exited; its Job Object closes all descendants even on error.
