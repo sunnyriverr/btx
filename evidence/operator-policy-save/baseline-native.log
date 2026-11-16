@@ -1,0 +1,31 @@
+Running 2 test cases...
+[1;34;49mEntering test module "Bitcoin Core Test Suite"
+[0;39;49m[1;34;49m<POLICY_QUAL>/driver.cpp:9: Entering test suite "policy_save_pair"
+[0;39;49m[1;34;49m<POLICY_QUAL>/driver.cpp:11: Entering test case "rejected_policy_save_keeps_live_settings_and_allows_retry"
+[0;39;49m<POLICY_QUAL>/driver.cpp:44: [1;31;49merror: in "policy_save_pair/rejected_policy_save_keeps_live_settings_and_allows_retry": check out.write() == before.write() has failed [{"schema_version":2,"seed":"off","seed_upon_download":false,"seed_upon_download_opt_in":false,"preserve_rare":true,"follow_configured_peers":false,"allow_encrypted":false,"storage_quota_bytes":8388608,"upload_bps":1024,"giveback_ratio":1,"automatic_spend_atoms":0,"retrieval_default":"FREE_ONLY","demand_propagation":false,"preservation_propagation":true,"peer_follow_propagation":false,"release_propagation":false,"unsolicited_fetch":"bounded FREE_ONLY acquisition follows strict-PQ1 same-chain catalog contacts from configured peers, expiring PEX, and enabled private-LAN discovery when follow_peers, seed=auto and storage>0; unverified public advertisements do not authorize acquisition or execution","auto_pay":false} != {"schema_version":2,"seed":"off","seed_upon_download":false,"seed_upon_download_opt_in":false,"preserve_rare":false,"follow_configured_peers":false,"allow_encrypted":false,"storage_quota_bytes":8388608,"upload_bps":1024,"giveback_ratio":1,"automatic_spend_atoms":0,"retrieval_default":"FREE_ONLY","demand_propagation":false,"preservation_propagation":false,"peer_follow_propagation":false,"release_propagation":false,"unsolicited_fetch":"bounded FREE_ONLY acquisition follows strict-PQ1 same-chain catalog contacts from configured peers, expiring PEX, and enabled private-LAN discovery when follow_peers, seed=auto and storage>0; unverified public advertisements do not authorize acquisition or execution","auto_pay":false}][0;39;49m
+<POLICY_QUAL>/driver.cpp:45: [1;31;49merror: in "policy_save_pair/rejected_policy_save_keeps_live_settings_and_allows_retry": check !cat.Policy().preserve_rare has failed[0;39;49m
+[1;34;49m<POLICY_QUAL>/driver.cpp:11: Leaving test case "rejected_policy_save_keeps_live_settings_and_allows_retry"; testing time: 2696us
+[0;39;49m[1;34;49m<POLICY_QUAL>/driver.cpp:69: Entering test case "saved_policy_quota_matches_catalog_normalization"
+[0;39;49m[1;34;49m<POLICY_QUAL>/driver.cpp:69: Leaving test case "saved_policy_quota_matches_catalog_normalization"; testing time: 1803us
+[0;39;49m[1;34;49m<POLICY_QUAL>/driver.cpp:9: Leaving test suite "policy_save_pair"; testing time: 4516us
+[0;39;49m[1;34;49mLeaving test module "Bitcoin Core Test Suite"; testing time: 4525us
+[0;39;49m
+Test module "Bitcoin Core Test Suite" has failed with:
+  1 test case out of 2 passed
+  1 test case out of 2 failed
+  42 assertions out of 44 passed
+  2 assertions out of 44 failed
+
+  Test suite "policy_save_pair" has failed with:
+    1 test case out of 2 passed
+    1 test case out of 2 failed
+    42 assertions out of 44 passed
+    2 assertions out of 44 failed
+
+    Test case "policy_save_pair/rejected_policy_save_keeps_live_settings_and_allows_retry" has failed with:
+      24 assertions out of 26 passed
+      2 assertions out of 26 failed
+
+    Test case "policy_save_pair/saved_policy_quota_matches_catalog_normalization" has passed with:
+      18 assertions out of 18 passed
+
