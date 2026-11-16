@@ -1,0 +1,99 @@
+{
+  "complete": true,
+  "cases": {
+    "known_error200_retry": {
+      "observation": {
+        "classification": "documented_error_correctly_rejected",
+        "byte_exact_retry": true,
+        "same_object_path": true,
+        "first_upload_ok": false,
+        "first_http_status": 200,
+        "abort_observed": true,
+        "signed_requests_observed": 13,
+        "multipart_completions": 2
+      },
+      "same_client_retry": true,
+      "length_mode": "known",
+      "bytes": 8392704,
+      "payload_sha256": "a4321010c5c9d20c1bf0f3caff552cbb322abc5c38db4c34ebb13c2a7bf78c36",
+      "origin_closed": true
+    },
+    "unknown_error200_retry": {
+      "observation": {
+        "classification": "documented_error_correctly_rejected",
+        "byte_exact_retry": true,
+        "same_object_path": true,
+        "first_upload_ok": false,
+        "first_http_status": 200,
+        "abort_observed": true,
+        "signed_requests_observed": 13,
+        "multipart_completions": 2
+      },
+      "same_client_retry": true,
+      "length_mode": "unknown",
+      "bytes": 8392704,
+      "payload_sha256": "a4321010c5c9d20c1bf0f3caff552cbb322abc5c38db4c34ebb13c2a7bf78c36",
+      "origin_closed": true
+    },
+    "known_error500_retry": {
+      "observation": {
+        "classification": "documented_error_correctly_rejected",
+        "byte_exact_retry": true,
+        "same_object_path": true,
+        "first_upload_ok": false,
+        "first_http_status": 500,
+        "abort_observed": true,
+        "signed_requests_observed": 13,
+        "multipart_completions": 2
+      },
+      "same_client_retry": true,
+      "length_mode": "known",
+      "bytes": 8392704,
+      "payload_sha256": "a4321010c5c9d20c1bf0f3caff552cbb322abc5c38db4c34ebb13c2a7bf78c36",
+      "origin_closed": true
+    },
+    "clean_known": {
+      "observation": {
+        "classification": "valid_upload_pass",
+        "byte_exact": true,
+        "signed_requests_observed": 6,
+        "multipart_completions": 1
+      },
+      "same_client_retry": false,
+      "length_mode": "known",
+      "bytes": 8392704,
+      "payload_sha256": "a4321010c5c9d20c1bf0f3caff552cbb322abc5c38db4c34ebb13c2a7bf78c36",
+      "origin_closed": true
+    },
+    "clean_unknown": {
+      "observation": {
+        "classification": "valid_upload_pass",
+        "byte_exact": true,
+        "signed_requests_observed": 6,
+        "multipart_completions": 1
+      },
+      "same_client_retry": false,
+      "length_mode": "unknown",
+      "bytes": 8392704,
+      "payload_sha256": "a4321010c5c9d20c1bf0f3caff552cbb322abc5c38db4c34ebb13c2a7bf78c36",
+      "origin_closed": true
+    },
+    "small_put": {
+      "observation": {
+        "classification": "valid_upload_pass",
+        "byte_exact": true,
+        "signed_requests_observed": 3,
+        "multipart_completions": 0
+      },
+      "same_client_retry": false,
+      "length_mode": "known",
+      "bytes": 4096,
+      "payload_sha256": "5926d460797e567240a3fe92a401386b609f9caec03ecf515bcece11ea1349af",
+      "origin_closed": true
+    }
+  },
+  "scope": "unmodified real S3 client and loopback HTTP transport; controlled origin, not AWS/MinIO/FakeS3; no signature-validation claim",
+  "seconds": 1.4228679679999914,
+  "peak_parent_rss_kib": 89012,
+  "peak_client_rss_kib": 89012
+}

@@ -1,0 +1,146 @@
+{
+  "source": "1e2f8b5f12295002334d3390c12cac0bb4ae2aff",
+  "checkpoint_source": "1e2f8b5f12295002334d3390c12cac0bb4ae2aff",
+  "complete": true,
+  "commands": [
+    {
+      "step": "openssl",
+      "exit": 0,
+      "seconds": 0.0018814989999782483
+    },
+    {
+      "step": "gcc",
+      "exit": 0,
+      "seconds": 0.0007557059999498961
+    },
+    {
+      "step": "cmake",
+      "exit": 0,
+      "seconds": 0.16555286199997
+    },
+    {
+      "step": "driver-compile",
+      "exit": 0,
+      "seconds": 1.2561358030000065
+    },
+    {
+      "step": "baseline-link",
+      "exit": 0,
+      "seconds": 1.0006082099999958
+    },
+    {
+      "step": "same-probe-before",
+      "exit": 1,
+      "seconds": 1.7112340489999838
+    },
+    {
+      "step": "candidate-client-compile",
+      "exit": 0,
+      "seconds": 4.400256486000046
+    },
+    {
+      "step": "candidate-link",
+      "exit": 0,
+      "seconds": 1.0045118730000127
+    },
+    {
+      "step": "same-probe-after",
+      "exit": 0,
+      "seconds": 1.5599733679999872
+    },
+    {
+      "step": "unit-driver-compile",
+      "exit": 0,
+      "seconds": 12.440271510000002
+    },
+    {
+      "step": "unit-link",
+      "exit": 0,
+      "seconds": 1.0471457969999847
+    },
+    {
+      "step": "maintained-envelope-vectors",
+      "exit": 0,
+      "seconds": 0.004547073000026103
+    },
+    {
+      "step": "maintained-source-syntax",
+      "exit": 0,
+      "seconds": 2.8004800420000038
+    }
+  ],
+  "checkpoint_verified": true,
+  "current_source_applicability": {
+    "current_release": "371013d61dc124a363521df5b94e97f64d2464f2",
+    "executed_cache_source": "1e2f8b5f + exact778/779/780",
+    "files": {
+      "src/modelnet/s3_client.cpp": {
+        "current_blob": "de1d7b4ccea35ea2e7ca233a864987c18f84f456",
+        "retained_base_blob": "de1d7b4ccea35ea2e7ca233a864987c18f84f456",
+        "unchanged": true
+      },
+      "src/modelnet/s3_client.h": {
+        "current_blob": "f956913c4584532fb73ec412ff922639d81ac75c",
+        "retained_base_blob": "f956913c4584532fb73ec412ff922639d81ac75c",
+        "unchanged": true
+      },
+      "src/modelnet/supervisor.h": {
+        "current_blob": "42a5dcc3dc969fbecf3540b71938f9d5090adb30",
+        "retained_base_blob": "42a5dcc3dc969fbecf3540b71938f9d5090adb30",
+        "unchanged": true
+      },
+      "src/modelnet/supervisor.cpp": {
+        "current_blob": "ffb2d96a2b3f84c3d06e937edbbbc0ea59db8298",
+        "retained_base_blob": "ffb2d96a2b3f84c3d06e937edbbbc0ea59db8298",
+        "unchanged": true
+      }
+    },
+    "scope": "Unchanged S3 wire/client implementation; not whole new release binary qualification"
+  },
+  "s3_source_unchanged": true,
+  "baseline_binary_sha256": "43910d6681bdcac710387b5b3ed0d0e1e395daad7d2ca62ae7ba8e07a42388d9",
+  "before": {
+    "complete": true,
+    "correctness_pass": false,
+    "failed_cases": [
+      "known_error200_retry",
+      "unknown_error200_retry"
+    ],
+    "passed_cases": [
+      "known_error500_retry",
+      "clean_known",
+      "clean_unknown",
+      "small_put"
+    ],
+    "scope": "unmodified real S3 client and loopback HTTP transport; controlled origin, not AWS/MinIO/FakeS3; no signature-validation claim",
+    "same_observer": true
+  },
+  "candidate_binary_sha256": "59b951c5d1314cd96347f1f21efd70b1d8b92939361eaa0bdef6a885a7431557",
+  "after": {
+    "complete": true,
+    "correctness_pass": true,
+    "failed_cases": [],
+    "passed_cases": [
+      "known_error200_retry",
+      "unknown_error200_retry",
+      "known_error500_retry",
+      "clean_known",
+      "clean_unknown",
+      "small_put"
+    ],
+    "scope": "unmodified real S3 client and loopback HTTP transport; controlled origin, not AWS/MinIO/FakeS3; no signature-validation claim",
+    "same_observer": true
+  },
+  "candidate_sources": {
+    "src/modelnet/s3_client.cpp": "105c047ae52114ec948d2e52cfe4dc270b59bab8f3345278410ca562ed8bf217",
+    "src/modelnet/s3_client.h": "e09b3007764e2cdde0623d4a7bdd3a2e40862cf4e9bc096dad0a95ecce4efc68",
+    "src/test/modelnet_cloud_tests.cpp": "09aacb1d4d363817f8b22a69bcb723373b8c1a8985ede4c71f59e9b047c1d0f0"
+  },
+  "same_wire_fixture_sha256": {
+    "origin.py": "92ae8867befe3d4ae73cde4608458d1a69531e5dfb884919ec2dd213edca7070",
+    "run.py": "6c4940b19c247d9cc336f154754782e640ce984642b292ac6023f3e2812f4ea8",
+    "validator.py": "9b9fdfb86829313e939b3274dd94c29c7582e9f93e7cf3c65ed3147f365fb0b6",
+    "client.cpp": "c86b018503287bf539e81c2a043ba4d3f7f0056236096b4f8b8334ebcceab141"
+  },
+  "retained_binaries_sha256": "70330991cfc18cf5f8150a7f7d17e43d9289b646788cab59890d9021257d0eb5"
+}

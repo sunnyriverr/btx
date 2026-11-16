@@ -1,0 +1,118 @@
+{
+  "utc": "2026-11-16T21:48:32.548566+00:00",
+  "verdict": "NARROW_COMPLETION_REPAIR_QUALIFIED",
+  "target": "371013d61dc124a363521df5b94e97f64d2464f2",
+  "run": "https://github.com/sunnyriverr/btx/actions/runs/43962846451",
+  "ci_head": "b9f816d0209ce836e678fd8a58e2d0c222bdefca",
+  "product_files": {
+    "src/modelnet/s3_client.cpp": "105c047ae52114ec948d2e52cfe4dc270b59bab8f3345278410ca562ed8bf217",
+    "src/modelnet/s3_client.h": "e09b3007764e2cdde0623d4a7bdd3a2e40862cf4e9bc096dad0a95ecce4efc68",
+    "src/test/modelnet_cloud_tests.cpp": "09aacb1d4d363817f8b22a69bcb723373b8c1a8985ede4c71f59e9b047c1d0f0"
+  },
+  "patch_sha256": "06160549a476b63d2fb387bf5ed33b4420f96931600c9b90dbac78288e2bf6af",
+  "before": {
+    "complete": true,
+    "correctness_pass": false,
+    "failed_cases": [
+      "known_error200_retry",
+      "unknown_error200_retry"
+    ],
+    "passed_cases": [
+      "known_error500_retry",
+      "clean_known",
+      "clean_unknown",
+      "small_put"
+    ],
+    "scope": "unmodified real S3 client and loopback HTTP transport; controlled origin, not AWS/MinIO/FakeS3; no signature-validation claim",
+    "same_observer": true
+  },
+  "after": {
+    "complete": true,
+    "correctness_pass": true,
+    "failed_cases": [],
+    "passed_cases": [
+      "known_error200_retry",
+      "unknown_error200_retry",
+      "known_error500_retry",
+      "clean_known",
+      "clean_unknown",
+      "small_put"
+    ],
+    "scope": "unmodified real S3 client and loopback HTTP transport; controlled origin, not AWS/MinIO/FakeS3; no signature-validation claim",
+    "same_observer": true
+  },
+  "candidate_only_predicate_checks": {
+    "count": 18,
+    "maintained_body_executed_in": "StandaloneBoostcomponentharness",
+    "normal_maintained_source": "syntaxPASS with actual normaltestcompileflags; not fulltest_btxexecution",
+    "new_API": "Not present in baseline; no paired-before claim for these18vectors"
+  },
+  "executed_binaries": {
+    "baseline": "43910d6681bdcac710387b5b3ed0d0e1e395daad7d2ca62ae7ba8e07a42388d9",
+    "candidate": "59b951c5d1314cd96347f1f21efd70b1d8b92939361eaa0bdef6a885a7431557",
+    "baseline_matches_original_reproduction": true
+  },
+  "native_controls": "Exact six observer/client/origin/validator sources unchanged. Fixedknown/unknown200Error rejected,healthwritefalse,abortonce,zero pendingfixtureuploads; sameclient/key retry restores exactbytes;500abort/freshmultipart/smallPUT preserved.",
+  "implementation": "One success-envelope predicate and live_complete call; existing abort callers/partsize/retry unchanged; fixed redacted diagnostic. Not fullXMLvalidation.",
+  "applicability": "Current371S3client/header unchanged from retained1e2+778/779/780libraries. Compile fullcandidateS3TU, explicitlinkobject; no currentdaemon/fullsuite rebuild.",
+  "source_composition": {
+    "current371_patch": "dryrunPASS",
+    "754_capacity_patch": "textcompositionPASS, not combinedruntimequalification"
+  },
+  "artifacts": [
+    {
+      "id": 14275167819,
+      "node_id": "MDg6QXJ0aWZhY3QxNDI3NTE2NzgxOQ==",
+      "name": "cloud-completion-repair-binaries",
+      "size_in_bytes": 48743069,
+      "url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14275167819",
+      "archive_download_url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14275167819/zip",
+      "expired": false,
+      "digest": "sha256:d47bf1a9bb5a0eaaffc98291d032678fd5695be567786fd55114bd06fb61eef6",
+      "created_at": "2026-11-16T21:44:52Z",
+      "updated_at": "2026-11-16T21:44:52Z",
+      "expires_at": "2026-11-30T21:44:50Z",
+      "workflow_run": {
+        "id": 43962846451,
+        "repository_id": 1440653358,
+        "head_repository_id": 1440653358,
+        "head_branch": "codex/ci-cloud-completion-repair",
+        "head_sha": "b9f816d0209ce836e678fd8a58e2d0c222bdefca"
+      }
+    },
+    {
+      "id": 14275137843,
+      "node_id": "MDg6QXJ0aWZhY3QxNDI3NTEzNzg0Mw==",
+      "name": "cloud-completion-repair-results",
+      "size_in_bytes": 474031,
+      "url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14275137843",
+      "archive_download_url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14275137843/zip",
+      "expired": false,
+      "digest": "sha256:8152f3e21fdc03340bcff85d5febd106f5175c517996ba3512c458915c4bd06a",
+      "created_at": "2026-11-16T21:44:50Z",
+      "updated_at": "2026-11-16T21:44:50Z",
+      "expires_at": "2026-11-30T21:44:49Z",
+      "workflow_run": {
+        "id": 43962846451,
+        "repository_id": 1440653358,
+        "head_repository_id": 1440653358,
+        "head_branch": "codex/ci-cloud-completion-repair",
+        "head_sha": "b9f816d0209ce836e678fd8a58e2d0c222bdefca"
+      }
+    }
+  ],
+  "binary_archive_inner_sha256": "70330991cfc18cf5f8150a7f7d17e43d9289b646788cab59890d9021257d0eb5",
+  "result_archive_digest": "sha256:8152f3e21fdc03340bcff85d5febd106f5175c517996ba3512c458915c4bd06a",
+  "scope_erratum": "Raw unchanged observer scope string says unmodified real S3client in both phases. That legacy label is accurate only for baseline; candidate uses full patched productionS3client TU. Raw evidence retained unchanged; this receipt supersedes phase wording without changing test logic or repeating execution.",
+  "limits": [
+    "Real LinuxHTTPclient against controlledlocalorigin; notAWS/MinIO orFakeS3",
+    "SigV4headers observed, notserverauthenticated; noTLS qualification",
+    "No fullhelper/catalog/currentdaemon/fullsuite/Windows/Mac/release qualification",
+    "Envelope recognition does not validate arbitrary malformedattributes/interior XML",
+    "Fixture orphancleanup does not prove providerbilling/lifetime"
+  ],
+  "product_posted": false,
+  "776_parked_untouched": true,
+  "next": "Onefocusedreviewable productPR with maintainedtable and pairedwireevidence only when publication authorized; recheckheads then, no repeatvalid tests.",
+  "final_internal_review": "PASS: exactsources/binary identities/samewirecases/abort-retry-valid controls and18maintainedcasebody checked. No material blocker; component/platform/XMLenvelope limits retained."
+}

@@ -1,0 +1,64 @@
+{
+  "origin": "controlled local HTTP response fixture; not AWS/MinIO/FakeS3",
+  "sigv4_validation": false,
+  "mode": "success",
+  "retained_bytes": 4096,
+  "objects": {
+    "/completion-probe/small_put": {
+      "bytes": 4096,
+      "sha256": "5926d460797e567240a3fe92a401386b609f9caec03ecf515bcece11ea1349af"
+    }
+  },
+  "uploads": {},
+  "aborted_uploads": [],
+  "requests": [
+    {
+      "method": "PUT",
+      "path": "/completion-probe/small_put",
+      "query": {},
+      "request_bytes": 4096,
+      "authorization_present": true,
+      "sigv4_scheme": true,
+      "credential_scope": "20261116/us-east-1/s3/aws4_request",
+      "amz_date_present": true,
+      "response_status": 200,
+      "response_kind": "ordinary-put",
+      "object_exists_after": true,
+      "object_sha256_after": "5926d460797e567240a3fe92a401386b609f9caec03ecf515bcece11ea1349af",
+      "upload_count_after": 0,
+      "completion_mode": "success"
+    },
+    {
+      "method": "HEAD",
+      "path": "/completion-probe/small_put",
+      "query": {},
+      "request_bytes": 0,
+      "authorization_present": true,
+      "sigv4_scheme": true,
+      "credential_scope": "20261116/us-east-1/s3/aws4_request",
+      "amz_date_present": true,
+      "response_status": 200,
+      "response_kind": "object-read",
+      "object_exists_after": true,
+      "object_sha256_after": "5926d460797e567240a3fe92a401386b609f9caec03ecf515bcece11ea1349af",
+      "upload_count_after": 0,
+      "completion_mode": "success"
+    },
+    {
+      "method": "GET",
+      "path": "/completion-probe/small_put",
+      "query": {},
+      "request_bytes": 0,
+      "authorization_present": true,
+      "sigv4_scheme": true,
+      "credential_scope": "20261116/us-east-1/s3/aws4_request",
+      "amz_date_present": true,
+      "response_status": 200,
+      "response_kind": "object-read",
+      "object_exists_after": true,
+      "object_sha256_after": "5926d460797e567240a3fe92a401386b609f9caec03ecf515bcece11ea1349af",
+      "upload_count_after": 0,
+      "completion_mode": "success"
+    }
+  ]
+}
