@@ -32,11 +32,17 @@ def tools():
  assert '20.1.8' in run('compiler',['clang-cl','--version'])[1]
  assert os.environ['VCToolsVersion'].rstrip('\\')=='14.51.36231'
  assert os.environ['WindowsSDKVersion'].rstrip('\\')=='10.0.26100.0'
- V=R/'vcpkg';V.mkdir(exist_ok=False)
+ V=R/'vcpkg'
+ assert not V.exists()
  os.environ.update(VCPKG_ROOT=str(V),VCPKG_DISABLE_METRICS='1',VCPKG_BINARY_SOURCES='clear;files,'+str(R/'binary-cache')+',read')
- run('vcpkg-init',['git','init',str(V)],cwd=R)
- run('vcpkg-fetch',['git','-C',str(V),'fetch','--depth=1','https://github.com/microsoft/vcpkg.git','afa249f12f52ed8a3b919f195495ba8b330288d1'],cap=300,cwd=R)
- run('vcpkg-checkout',['git','-C',str(V),'checkout','--detach','FETCH_HEAD'],cwd=R)
+ run('vcpkg-clone',['git','clone','--no-checkout','https://github.com/microsoft/vcpkg.git',str(V)],cap=300,cwd=R)
+ run('vcpkg-checkout',['git','-C',str(V),'checkout','--detach','afa249f12f52ed8a3b919f195495ba8b330288d1'],cwd=R)
+ # The source manifest baseline differs from the checkout/tool revision.
+ # Verify it before invoking configure instead of rediscovering missing history.
+ manifest=json.loads((S/'vcpkg.json').read_text())
+ baseline=manifest.get('builtin-baseline')
+ assert baseline and re.fullmatch('[0-9a-f]{40}',baseline)
+ run('vcpkg-manifest-baseline',['git','-C',str(V),'show',baseline+':versions/baseline.json'],cwd=R)
  req=urllib.request.Request('https://api.github.com/repos/microsoft/vcpkg-tool/releases/assets/690264732',headers={'Accept':'application/octet-stream','User-Agent':'BTX verification','Authorization':'Bearer '+os.environ['GH_TOKEN']})
  class Redirect(urllib.request.HTTPRedirectHandler):
   def redirect_request(self,req,fp,code,msg,headers,url):
@@ -68,7 +74,16 @@ def build(phase):
   result['configure_refresh']={'compile_command_delta':delta,'reason_log':phase+'-dry-run.log'};save()
   assert delta=={'added':0,'removed':0,'changed':0},delta
   shutil.copy2(B/'CMakeCache.txt',E/'after-CMakeCache.txt')
-  _,text=run(phase+'-configured-dry-run',['ninja','-C',str(B),'-n','-d','explain','test_btx'])
+ # Ninja's forced glob probe makes -n conservatively predict a CMake rerun
+ # even after a completed configure. Freeze the ENTIRE freshly validated graph
+ # (all ordinary targets, dependencies and post-link hooks, no stripped edges).
+ plan=E/'normal-target.ninja'
+ if phase=='baseline':
+  shutil.copy2(B/'build.ninja',plan)
+  assert sha(plan)==sha(B/'build.ninja')
+  result['full_generated_graph_sha256']=sha(plan);save()
+ else:assert sha(plan)==result['full_generated_graph_sha256']
+ _,text=run(phase+'-configured-dry-run',['ninja','-C',str(B),'-f',str(plan),'-n','-d','explain','test_btx'])
  actions=[line for line in text.splitlines() if re.match(r'^\[\d+/\d+\]',line)]
  result['phases'][phase]={'actions':actions};save()
  assert len(actions)<=30,actions
@@ -76,7 +91,7 @@ def build(phase):
   if 'Building CXX object' in line:
    assert any(n in line for n in ['resource_governor_tests.cpp.obj','helper.cpp.obj']),line
  assert not any('Re-running CMake' in a for a in actions),actions
- run(phase+'-normal-build',['ninja','-C',str(B),'-j2','test_btx'],cap=1200)
+ run(phase+'-normal-build',['ninja','-C',str(B),'-f',str(plan),'-j2','test_btx'],cap=1200)
  result['phases'][phase]['binary_sha256']=sha(B/'bin/test_btx.exe');save()
 
 def tests(phase):
@@ -111,7 +126,7 @@ try:
  build('candidate');tests('candidate');assert tree.active()==1
  shutil.copy2(B/'bin/test_btx.exe',E/'test_btx.exe')
  shutil.copy2(P/'candidate.patch',E/'candidate.patch');shutil.copy2(P/'source-manifest.json',E/'source-manifest.json')
- result['status']='WINDOWS_SEED_BEFORE_AFTER_PASS';result['normal_target']='ninja -j2 test_btx; unchanged generated graph/post-link hooks';save()
+ result['status']='WINDOWS_SEED_BEFORE_AFTER_PASS';result['normal_target']='test_btx through complete byte-identical frozen generated graph after explicit normal configure; all targets/dependencies/post-link hooks retained';save()
 except BaseException as ex:
  result['status']='INCOMPLETE';result['error']=repr(ex);save();raise
 finally:
