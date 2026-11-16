@@ -40,7 +40,7 @@ class ConcurrentReservationsTest(BitcoinTestFramework):
         self.setup_clean_chain = True
         self.extra_args = [list(REGTEST_GENERIC_P2P_MATMUL_ARGS) + [
             "-autoshieldcoinbase=0", "-fallbackfee=0.0002", "-rpcthreads=2", "-swapnet=0",
-            "-autoupdate=0", "-dnsseed=0", "-listen=0", "-listenonion=0", "-natpmp=0",
+            "-autoupdate=0", "-dnsseed=0", "-networkactive=0", "-listenonion=0", "-natpmp=0",
         ]]
 
     def setup_network(self):
