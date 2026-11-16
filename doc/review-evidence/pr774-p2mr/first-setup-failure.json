@@ -1,0 +1,45 @@
+{
+  "utc": "2026-11-16T12:01:09.102718+00:00",
+  "run": 43862116688,
+  "url": "https://github.com/sunnyriverr/btx/actions/runs/43862116688",
+  "head": "c7458c452a5fb8dcf00da8aa709fd5c12903c5c1",
+  "artifact": 14223511945,
+  "artifact_sha256": "2c9adc39763b1db9b01b587f50a4f89b5b7cdc2bab79cc68485ce96f7c4037a3",
+  "artifact_digest_verified": true,
+  "candidate_build": "PASS16NinjaSteps",
+  "paired_results": {
+    "base": "1e2f8b5f12295002334d3390c12cac0bb4ae2aff",
+    "candidate": "e6ff36dd95e0a685f23e6378b875f1144a92d0db",
+    "fixture_sha256": "e3925459af2e44e1bf3ae5dfdd9d04094635a55a36c61dca99a6fd8cd1c5facf",
+    "cases": [
+      {
+        "label": "baseline",
+        "binaries": {
+          "btxd": "9b9ba0f8c993c4880c06b2bacbf448b71a8882a9beae461b030d557d81428583",
+          "btx-cli": "5f0b5907cb70132b791b4941c4f0ed0d5a63c06f2613c3291e5bd6501bc9327d"
+        },
+        "timeout": false,
+        "peak_sampled_scratch": 20392102,
+        "exit_code": 1,
+        "group_absent": true,
+        "observation": {
+          "stage": "setup",
+          "policy_count": 100,
+          "policy_size_vbytes": 1024000,
+          "fee_rate": "2",
+          "rpc_error": {
+            "code": -5,
+            "message": "No such mempool transaction. Use -txindex or provide a block hash to enable blockchain transaction queries. Use gettransaction for wallet transactions."
+          }
+        },
+        "scratch_removed": true
+      }
+    ],
+    "scope": "Direct functional framework, same fixture, no full suite"
+  },
+  "candidate_test_run": false,
+  "classification": "Fixture setup failure before chain construction; confirmed first deposit queried without txindex",
+  "correction": "Initial confirmed outpoint from wallet listunspent; independent later deposit decoded from funder gettransaction",
+  "corrected_fixture_sha256": "5e323a5eb6277520b61ae1518d0d16969e6c80d6c5a471499b92a88154f6ddbd",
+  "correction_executed": false
+}

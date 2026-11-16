@@ -1,0 +1,25 @@
+2026-11-16T12:04:58.573000Z TestFramework (INFO): PRNG seed is: 1292534463088834514
+2026-11-16T12:04:58.574000Z TestFramework (INFO): Initializing test directory /home/runner/work/btx/btx/aps-private-baseline/regtest
+2026-11-16T12:05:27.283000Z TestFramework (ERROR): Unexpected exception
+Traceback (most recent call last):
+  File "/home/runner/work/btx/btx/source/test/functional/test_framework/test_framework.py", line 142, in main
+    self.run_test()
+  File "/home/runner/work/btx/btx/source/test/functional/wallet_p2mr_aps_payment.py", line 123, in run_test
+    payment = aps.sendtoaddress(payment_address, Decimal("0.65"),
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/btx/btx/source/test/functional/test_framework/coverage.py", line 50, in __call__
+    return_val = self.auth_service_proxy_instance.__call__(*args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/btx/btx/source/test/functional/test_framework/authproxy.py", line 151, in __call__
+    raise JSONRPCException(response['error'], status)
+test_framework.authproxy.JSONRPCException: Unconfirmed UTXOs are available, but spending them creates a chain of transactions that will be rejected by the mempool (-6)
+2026-11-16T12:05:27.334000Z TestFramework (INFO): Not stopping nodes as test failed. The dangling processes will be cleaned up later.
+2026-11-16T12:05:27.334000Z TestFramework (WARNING): Not cleaning up dir /home/runner/work/btx/btx/aps-private-baseline/regtest
+2026-11-16T12:05:27.334000Z TestFramework (ERROR): Test failed. Test logging available at /home/runner/work/btx/btx/aps-private-baseline/regtest/test_framework.log
+2026-11-16T12:05:27.334000Z TestFramework (ERROR): 
+2026-11-16T12:05:27.334000Z TestFramework (ERROR): Hint: Call /home/runner/work/btx/btx/source/test/functional/combine_logs.py '/home/runner/work/btx/btx/aps-private-baseline/regtest' to consolidate all logs
+2026-11-16T12:05:27.334000Z TestFramework (ERROR): 
+2026-11-16T12:05:27.334000Z TestFramework (ERROR): If this failure happened unexpectedly or intermittently, please file a bug and provide a link or upload of the combined log.
+2026-11-16T12:05:27.334000Z TestFramework (ERROR): https://github.com/btxchain/btx/issues
+2026-11-16T12:05:27.334000Z TestFramework (ERROR): 
+[node 0] Cleaning up leftover process
