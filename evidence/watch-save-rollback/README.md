@@ -1,0 +1,13 @@
+# Watch save rollback: paired Mac component evidence
+
+Same maintained creation/replacement cases fail on release1e2f8b5f and pass with this repair. Baseline:2 failed cases,5 failed assertions/45; candidate:2 passing cases,44/44 assertions. Count differs because the unchanged loop checks every action and baseline wrongly emits an extra action. Logs retain expected before/after and exact case names.
+
+Real temporary-file obstruction (watches.json.tmp directory) preserves the old file while exercising production WriteJson. Controls cover unchanged queued-action JSON before/after rejected save and successful retry, unrelated watches, old/new selector matching, durable old state on reopen and healthy retry/reopen. No action execution or wallet calls.
+
+Executed on macOS arm64: complete current watch implementation/current header, exported watch symbols renamed for isolation, retained CMake support archives. driver.cpp contains the exact maintained case bodies and existing MakeSigned classified-event fixture. final-execution.json records sanitized executed commands; placeholders describe original paths, not a self-contained fresh-build recipe. Archive provenance is retained locally; these results do not claim a clean integrated current build. Full modified test translation unit passed syntax-only compilation. Setup corrections and limits are disclosed here; no Linux/Windows/full helper process restart/concurrency/real download qualification.
+
+The first qualification caught missing fstream/iterator includes in the maintained file; fixed before the final pair. An attempted old helper-dispatch removal control did not compile in this isolated runner and was excluded before final pairing; no result is claimed for it. Existing565 native removal/restart proof remains reused. No existing removal assertions were changed.
+
+For a normal current integrated build, the maintained entry points are modelnet_watch_tests/failed_watch_creation_preserves_live_state_actions_and_retry and modelnet_watch_tests/failed_watch_replacement_preserves_live_state_actions_and_retry. Running those via test_btx is a reconstruction/integration instruction, not an execution claimed by this receipt.
+
+The minimal repair restores the extracted prior map node or erases a failed creation under the existing mutex. It does not modify queued actions, validation, mandates, channels or mirror partial-policy-save semantics. Internal review passed. Extends the existing watch test fixture and565 removal rollback; existing contributor authorship is preserved. Prepared with Codex; paired commands, logs and limitations reviewed.

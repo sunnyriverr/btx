@@ -1,0 +1,33 @@
+Running 2 test cases...
+[1;34;49mEntering test module "Bitcoin Core Test Suite"
+[0;39;49m[1;34;49m<WATCH_QUAL>/driver.cpp:27: Entering test suite "watch_put_rollback"
+[0;39;49m[1;34;49m<WATCH_QUAL>/driver.cpp:107: Entering test case "failed_watch_creation_preserves_live_state_actions_and_retry"
+[0;39;49m<WATCH_QUAL>/driver.cpp:65: [1;31;49merror: in "watch_put_rollback/failed_watch_creation_preserves_live_state_actions_and_retry": check found == replacing has failed [true != false][0;39;49m
+<WATCH_QUAL>/driver.cpp:79: [1;31;49merror: in "watch_put_rollback/failed_watch_creation_preserves_live_state_actions_and_retry": check new_count == 0U has failed [1 != 0][0;39;49m
+[1;34;49m<WATCH_QUAL>/driver.cpp:107: Leaving test case "failed_watch_creation_preserves_live_state_actions_and_retry"; testing time: 2ms
+[0;39;49m[1;34;49m<WATCH_QUAL>/driver.cpp:112: Entering test case "failed_watch_replacement_preserves_live_state_actions_and_retry"
+[0;39;49m<WATCH_QUAL>/driver.cpp:66: [1;31;49merror: in "watch_put_rollback/failed_watch_replacement_preserves_live_state_actions_and_retry": check got.publisher_id == "old-publisher" has failed [new-publisher != old-publisher][0;39;49m
+<WATCH_QUAL>/driver.cpp:79: [1;31;49merror: in "watch_put_rollback/failed_watch_replacement_preserves_live_state_actions_and_retry": check new_count == 0U has failed [1 != 0][0;39;49m
+<WATCH_QUAL>/driver.cpp:80: [1;31;49merror: in "watch_put_rollback/failed_watch_replacement_preserves_live_state_actions_and_retry": check old_count == replacing ? 1U : 0U has failed [0 != 1][0;39;49m
+[1;34;49m<WATCH_QUAL>/driver.cpp:112: Leaving test case "failed_watch_replacement_preserves_live_state_actions_and_retry"; testing time: 1718us
+[0;39;49m[1;34;49m<WATCH_QUAL>/driver.cpp:27: Leaving test suite "watch_put_rollback"; testing time: 3733us
+[0;39;49m[1;34;49mLeaving test module "Bitcoin Core Test Suite"; testing time: 3740us
+[0;39;49m
+Test module "Bitcoin Core Test Suite" has failed with:
+  2 test cases out of 2 failed
+  40 assertions out of 45 passed
+  5 assertions out of 45 failed
+
+  Test suite "watch_put_rollback" has failed with:
+    2 test cases out of 2 failed
+    40 assertions out of 45 passed
+    5 assertions out of 45 failed
+
+    Test case "watch_put_rollback/failed_watch_creation_preserves_live_state_actions_and_retry" has failed with:
+      19 assertions out of 21 passed
+      2 assertions out of 21 failed
+
+    Test case "watch_put_rollback/failed_watch_replacement_preserves_live_state_actions_and_retry" has failed with:
+      21 assertions out of 24 passed
+      3 assertions out of 24 failed
+
