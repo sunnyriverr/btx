@@ -78,6 +78,7 @@ try:
     # Only source locations and exception names; never retain wallet/RPC dumps.
     receipt['failure_frames']=[dict(file=f.replace(str(root),'WORKSPACE'),line=int(n),function=fn)
          for f,n,fn in re.findall(r'File "([^"\n]+)", line (\d+), in ([^\n]+)', raw)][-12:]
+    receipt['startup_errors'] = [re.sub(r'/[^ \n]+', 'PATH', line)[:700] for line in raw.splitlines() if 'FailedToStartError:' in line or 'Error:' in line][-8:]
     receipt['exception_classes']=re.findall(r'(?m)^([A-Za-z_]\w*(?:Error|Exception))(?=:|$)',raw)[-5:]
 finally:
     if process is not None and group_exists(process.pid): receipt['group_absent']=stop_owned(process)
