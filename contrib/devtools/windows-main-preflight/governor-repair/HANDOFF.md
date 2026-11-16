@@ -28,4 +28,4 @@ Existing product/fixture authorship remains in the accepted history. The new rep
 Remaining campaign work
 =======================
 This focused repair is not waiting on the unrelated 15,511-case accounting. That account remains unfinished: preserve the 85 baseline passes, separately classify historical evidence/applicability and run only required uncovered groups. The full Windows unit gate remains open.
-A clean focused product branch/commit and local wiki/cursor synchronization remain to prepare after disk recovery. This evidence branch is not an upstream PR. No new execution was requested by adding this report.
+Clean focused candidate: https://github.com/sunnyriverr/btx/commit/8a3b19650886b59d398c3a853424dea26201acd6 (one commit; four qualified source files; hashes in focused-branch-receipt.json). Local source/controller, records and cursor were synchronized after disk recovery. This evidence record is not an upstream PR. The user publication hold remains. No additional test run was requested to package the identical source.
