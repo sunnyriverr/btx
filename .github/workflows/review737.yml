@@ -1,0 +1,35 @@
+name: PR737 isolated interruption recovery
+on:
+  push:
+    branches: [codex/ci-pr737-interruption-review]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  recovery:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Verify retained exact-release baseline helper
+        run: python3 stage.py
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - name: Build test-only interruption hook and check dependencies
+        run: |
+          mkdir -p records
+          gcc -shared -fPIC -Wall -Wextra -Werror interruption.c -ldl -o interruption.so
+          ldd binary/baseline/btx-modeld > records/dependencies.txt
+          if grep -q 'not found' records/dependencies.txt; then exit 1; fi
+          sha256sum review.py stage.py interruption.c interruption.so > records/fixture-hashes.txt
+      - name: Ordinary recovery, boundary interruption, two restarts and unrelated-model control
+        run: timeout --signal=TERM --kill-after=10 180 python3 review.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: pr737-interruption-records
+          path: records/
+          retention-days: 14
+          if-no-files-found: error
