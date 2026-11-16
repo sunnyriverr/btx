@@ -16,8 +16,19 @@ try:
   command=['g++','-std=c++20','-O2','-Wall','-Wextra','-Werror','virtual_stream.cpp','-o',variant+'-component']
   if variant=='candidate':command.insert(1,'-DCANDIDATE')
   c=subprocess.run(command,capture_output=True,text=True,timeout=60);(out/(variant+'-compile.log')).write_text(c.stdout+c.stderr);assert c.returncode==0
+  if variant=='baseline':
+   previous=json.load(open('previous-component-result.json'))['variants']['baseline']
+   assert hashlib.sha256((p/'baseline-component').read_bytes()).hexdigest()==previous['binary_sha256']
+   assert hashlib.sha256((p/'baseline-putstream.inc').read_bytes()).hexdigest()==previous['method_sha256']
+   rows=[json.loads(x) for x in Path('previous-baseline-observations.jsonl').read_text().splitlines()]
+   assert len(rows)==11 and len({x['case'] for x in rows})==11
+   for row in rows:
+    assert tuple(row[k] for k in ('ok','parts','bytes','consumed','aborts','completes','max_buffer'))==expected[row['case']]
+   r['variants']['baseline']={**previous,'reused_from_run':43779345103,'rerun':False}
+   (out/'baseline-observations.jsonl').write_text(Path('previous-baseline-observations.jsonl').read_text())
+   continue
   start=time.monotonic();x=subprocess.run([str(p/(variant+'-component'))],capture_output=True,text=True,timeout=120,preexec_fn=limits)
-  (out/(variant+'-observations.jsonl')).write_text(x.stdout);(out/(variant+'-stderr.txt')).write_text(x.stderr);assert x.returncode==0
+  (out/(variant+'-observations.jsonl')).write_text(x.stdout);(out/(variant+'-stderr.txt')).write_text(x.stderr);r[variant+'_exit']=x.returncode;assert x.returncode==0
   rows=[json.loads(l) for l in x.stdout.splitlines()];assert len(rows)==11 and len({x['case'] for x in rows})==11
   for row in rows:
    assert row['fake'] is False and row['branch']=='live-adapted'

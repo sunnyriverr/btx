@@ -207,6 +207,7 @@ bool S3Client::PutStream(const std::string& key, std::istream& body, uint64_t co
         return false;
     }
     uint64_t remaining = content_length;
+    std::vector<unsigned char> buf;
     while (remaining > 0) {
         if (part > kS3HttpsMaxParts) {
             live_abort(upload_id);
@@ -215,7 +216,6 @@ bool S3Client::PutStream(const std::string& key, std::istream& body, uint64_t co
             return false;
         }
         const size_t n = static_cast<size_t>(std::min<uint64_t>(remaining, chunk));
-        std::vector<unsigned char> buf;
         if (!read_n(buf, n) || buf.size() != n) {
             live_abort(upload_id);
             err = "cloud put chunk read failed";
