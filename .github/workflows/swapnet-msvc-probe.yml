@@ -1,4 +1,4 @@
-name: SwapNet MSVC matched embedding acceptance
+name: SwapNet MSVC 19.44 matched embedding acceptance
 on:
   push:
     branches: [codex/ci-swapnet-msvc-bootstrap]
@@ -6,7 +6,7 @@ permissions:
   contents: read
 jobs:
   embedding:
-    runs-on: windows-2025
+    runs-on: windows-2022
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
@@ -23,7 +23,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: swapnet-msvc-embedding-results
+          name: swapnet-msvc1944-embedding-results
           path: probe-results
           retention-days: 14
           if-no-files-found: error

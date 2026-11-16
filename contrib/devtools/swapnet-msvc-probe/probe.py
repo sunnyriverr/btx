@@ -10,16 +10,27 @@ record={'target':TARGET,'old_generator_revision':BASE,'python':sys.version,'enco
 try:
  assert sys.platform=='win32'
  vswhere=Path(os.environ['ProgramFiles(x86)'])/'Microsoft Visual Studio/Installer/vswhere.exe'
- install=subprocess.check_output([str(vswhere),'-latest','-products','*','-requires','Microsoft.VisualStudio.Component.VC.Tools.x86.x64','-property','installationPath'],text=True).strip()
- assert install,'No native MSVC installation'
+ installs=json.loads(subprocess.check_output([str(vswhere),'-all','-products','*','-requires','Microsoft.VisualStudio.Component.VC.Tools.x86.x64','-format','json'],text=True))
+ inventory=[];available=[]
+ for installation in installs:
+  root=Path(installation['installationPath']);tools=root/'VC/Tools/MSVC'
+  versions=sorted(x.name for x in tools.iterdir() if x.is_dir()) if tools.is_dir() else []
+  inventory.append({'installation':str(root),'installation_version':installation.get('installationVersion'),'toolsets':versions})
+  for version in versions:
+   if version.startswith('14.44.') and (tools/version/'bin/Hostx64/x64/cl.exe').is_file():available.append((version,str(root)))
+ record['installed_compiler_inventory']=inventory
+ assert available,'MSVC14.44 not preinstalled; stop without installing or falling back'
+ version,install=next((x for x in available if x[0]=='14.44.35207'),sorted(available,reverse=True)[0])
+ record['requested_toolset']=version
  dev=Path(install)/'Common7/Tools/VsDevCmd.bat';assert dev.is_file()
- env=subprocess.check_output(f'call "{dev}" -arch=x64 -host_arch=x64 >nul && set',shell=True,text=True)
+ env=subprocess.check_output(f'call "{dev}" -arch=x64 -host_arch=x64 -vcvars_ver={version} >nul && set',shell=True,text=True)
  for line in env.splitlines():
   if '=' in line and not line.startswith('='):
    k,v=line.split('=',1);os.environ[k]=v
  record['visual_studio']=install;record['vctools_version']=os.environ.get('VCToolsVersion');record['sdk_version']=os.environ.get('WindowsSDKVersion')
  pre=run(['cl.exe'], 'compiler.txt');record['compiler_output']=pre.stdout.decode(errors='replace')
- assert b'Microsoft' in pre.stdout and b'x64' in pre.stdout,record['compiler_output']
+ assert b'Microsoft' in pre.stdout and b'x64' in pre.stdout and re.search(rb'Version 19\.44\.',pre.stdout),record['compiler_output']
+ assert record['vctools_version'].rstrip('\\')==version,'Selected toolset mismatch'
  current=ROOT/'contrib/swapnet/generate_embedded.py';source=ROOT/'contrib/swapnet/swapnet'
  old=OUT/'old_generate_embedded.py'
  old.write_bytes(urllib.request.urlopen(f'https://raw.githubusercontent.com/btxchain/btx/{BASE}/contrib/swapnet/generate_embedded.py',timeout=30).read())
