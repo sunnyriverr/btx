@@ -2,7 +2,7 @@ BOOST_AUTO_TEST_CASE(import_path_refreshes_verified_source_durably)
 {
     for (const bool initially_pinned : {false, true}) {
         for (const bool request_pin : {false, true}) {
-            const fs::path tmp = m_path_root / (std::string("rehost-") +
+            const fs::path tmp = m_path_root / fs::PathFromString(std::string("rehost-") +
                 (initially_pinned ? "pinned-" : "unpinned-") + (request_pin ? "pin" : "no-pin"));
             const fs::path catalog_dir = tmp / "catalog";
             modelnet::ModelCatalog cat{catalog_dir, 8 << 20};
