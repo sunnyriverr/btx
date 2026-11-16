@@ -1,5 +1,5 @@
 {
-  "name": "Windows pinned release17 verified remaining unit build j4",
+  "name": "Windows pinned binary first JIT ensure runtime batch",
   "on": {
     "push": {
       "branches": [
@@ -18,7 +18,7 @@
   "jobs": {
     "plan": {
       "runs-on": "windows-2025",
-      "timeout-minutes": 55,
+      "timeout-minutes": 20,
       "steps": [
         {
           "name": "Exact source bytes",
@@ -54,74 +54,46 @@
           }
         },
         {
-          "name": "Install binary-only configure dependencies",
-          "run": "python -m pip install --only-binary=:all: cryptography==46.0.4 cffi==2.0.0 pycparser==2.23"
-        },
-        {
           "name": "Restore project",
           "id": "project",
           "uses": "actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830",
           "with": {
             "path": "D:\\btx-native-035\\project-build\nD:\\btx-native-035\\vcpkg-installed",
-            "key": "btx-release17-unit-43767186934",
+            "key": "btx-release17-unit-43770878562",
             "fail-on-cache-miss": true
           }
         },
         {
-          "name": "Restore dependencies",
-          "id": "dependencies",
-          "uses": "actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830",
-          "with": {
-            "path": "D:\\btx-native-035\\openssl-3.5.4-static\nD:\\btx-native-035\\binary-cache",
-            "key": "btx356-root-v1-windows-14.51.36231-690b2e59699b64766618b28290f0ed35c71e4d28e5d4b61ae407e5724af9d9d7-ossl354-afa249f1",
-            "fail-on-cache-miss": true
-          }
-        },
-        {
-          "name": "Restore ports",
-          "id": "ports",
-          "uses": "actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830",
-          "with": {
-            "path": "D:\\btx-native-035\\binary-cache",
-            "key": "btx356-ports-v1-windows-14.51.36231-690b2e59699b64766618b28290f0ed35c71e4d28e5d4b61ae407e5724af9d9d7-afa249f1-41955207582",
-            "fail-on-cache-miss": true
-          }
-        },
-        {
-          "name": "Verify partial checkpoint and measure remaining plan, refuse repeated completed test objects",
+          "name": "Verify complete checkpoint and export exact binary",
           "shell": "cmd",
-          "env": {
-            "GH_TOKEN": "${{ github.token }}"
-          },
-          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/resume5_unit_plan.py\nexit /b %errorlevel%\n"
+          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/runtime1/native.py prepare\nexit /b %errorlevel%\n"
         },
         {
-          "name": "Resource-admitted four-job continuation; inventory only if linked",
+          "uses": "actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f",
+          "with": {
+            "name": "windows-pinned-test-btx-binary",
+            "path": "D:\\btx-native-035\\unit-runtime1-binary",
+            "retention-days": 14
+          }
+        },
+        {
+          "name": "Bounded native selection control and 17-case suite",
           "shell": "cmd",
-          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/resume5_unit_build.py\nexit /b %errorlevel%\n"
+          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/runtime1/native.py run\nexit /b %errorlevel%\n"
         },
         {
-          "name": "Capture current partial or linked checkpoint",
+          "name": "Clean only owned runtime and verify immutable cache",
           "if": "always()",
           "shell": "cmd",
-          "run": "for /f \"usebackq tokens=*\" %%i in (`\"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set \"BTX_VS=%%i\"\nif not defined BTX_VS exit /b 2\ncall \"%BTX_VS%\\Common7\\Tools\\VsDevCmd.bat\" -no_logo -arch=x64 -host_arch=x64\nif errorlevel 1 exit /b %errorlevel%\nset \"PATH=C:\\Program Files\\LLVM\\bin;%PATH%\"\nset \"CL=\"\nset \"_CL_=\"\npython controls/contrib/devtools/windows-main-preflight/retain_release17.py\nexit /b %errorlevel%\n"
+          "run": "python controls/contrib/devtools/windows-main-preflight/runtime1/native.py cleanup"
         },
         {
-          "name": "Preserve compiled objects under unique immutable key",
-          "if": "always()",
-          "uses": "actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830",
-          "with": {
-            "path": "D:\\btx-native-035\\project-build\nD:\\btx-native-035\\vcpkg-installed",
-            "key": "btx-release17-unit-${{ github.run_id }}"
-          }
-        },
-        {
-          "name": "Retain unit build and inventory evidence",
+          "name": "Retain exact runtime results",
           "if": "always()",
           "uses": "actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f",
           "with": {
-            "name": "windows-release17-unit-resume5",
-            "path": "D:\\btx-native-035\\unit-plan-evidence",
+            "name": "windows-unit-runtime1-evidence",
+            "path": "D:\\btx-native-035\\unit-runtime1-evidence",
             "retention-days": 14
           }
         }
