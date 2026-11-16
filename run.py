@@ -24,7 +24,10 @@ for name, digest in inputs.items():
     (root / 'source/test/functional' / name).write_bytes(source.read_bytes())
 for name, digest in producer['binary_sha256'].items():
     assert sha(root / 'build/bin' / name) == digest
-# The verified checkpoint already has the source/build functional-test symlink.
+# Configure normally creates per-script links; add only this new test link.
+link = root / 'build/test/functional/wallet_bcp1_recovery.py'
+assert not link.exists() and not link.is_symlink()
+link.symlink_to(root / 'source/test/functional/wallet_bcp1_recovery.py')
 assert (root / 'build/test/functional/wallet_bcp1_recovery.py').is_file()
 private = root / 'deposit-private'
 assert not private.exists()
