@@ -11,7 +11,9 @@
 #include <vector>
 template<class T> using Span = std::span<T>;
 constexpr size_t kCloudStreamChunkBytes = size_t{8} << 20;
-constexpr int kS3HttpsMaxParts = 10000;
+constexpr int kCloudMaxMultipartParts = 10000;
+constexpr size_t kCloudMaxUploadPartBytes = size_t{64} << 20;
+constexpr int kS3HttpsMaxParts = kCloudMaxMultipartParts;
 constexpr uint64_t kS3HttpsMaxControlBytes = uint64_t{1} << 20;
 struct SigV4Request {std::string method;std::map<std::string,std::string> query;};
 struct S3HttpResult {std::vector<unsigned char> body;std::string etag;bool ok=true;};
@@ -47,7 +49,12 @@ public:
  bool Put(const std::string&,Span<const unsigned char> b,std::string&){++rec.direct;rec.bytes+=b.size();return true;}
  bool PutStream(const std::string&,std::istream&,uint64_t,std::string&);
 };
-#include "putstream.inc"
+#ifdef CANDIDATE
+#include "policy.inc"
+#include "candidate-putstream.inc"
+#else
+#include "baseline-putstream.inc"
+#endif
 class VirtualBytes:public std::streambuf {
 public:
  uint64_t remaining,consumed=0;
@@ -67,7 +74,10 @@ int main(){
  {"normal_two_parts",2*kCloudStreamChunkBytes,2*kCloudStreamChunkBytes,0},
  {"short_read",kCloudStreamChunkBytes,2*kCloudStreamChunkBytes,0},
  {"backend_failure",2*kCloudStreamChunkBytes,2*kCloudStreamChunkBytes,2},
- {"normal_direct",1024,1024,0}};
+ {"normal_direct",1024,1024,0},
+ {"large_400GiB",uint64_t{400}<<30,uint64_t{400}<<30,0},
+ {"maximum_plus_one",uint64_t{64*10000}*(1<<20)+1,uint64_t{64*10000}*(1<<20)+1,0},
+ {"uint64_max",UINT64_MAX,UINT64_MAX,0}};
  for(const auto& c:cases){
   rec={};rec.fail_part=c.fail;S3Client client;VirtualBytes buf(c.actual);std::istream in(&buf);std::string err;
   bool ok=client.PutStream("bounded-test",in,c.declared,err);

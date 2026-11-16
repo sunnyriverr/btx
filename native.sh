@@ -9,13 +9,14 @@ curl -fsSL --max-time 120 --retry 2 "https://github.com/minio/minio/releases/dow
 chmod +x minio-image/minio
 printf 'FROM scratch\nCOPY minio /minio\nENV HOME=/root\nENTRYPOINT ["/minio"]\n' > minio-image/Dockerfile
 docker build -t btx-cloud-upload:owned minio-image
+export BTXMODELD="$PWD/binaries/candidate/btx-modeld"
 export BTX_MINIO_IMAGE
 BTX_MINIO_IMAGE=$(docker image inspect --format '{{.Id}}' btx-cloud-upload:owned)
 printf '%s\n' "$BTX_MINIO_IMAGE" > records/minio-image-id.txt
 export BTX_UPLOAD_RECEIPT="$PWD/records/bounded-upload.json"
 export UPLOAD_TMPDIR="/tmp/btx-upload-${GITHUB_RUN_ID}"
 set +e
-timeout --signal=TERM --kill-after=15s 600s python3 product/test/functional/minio_upload.py --configfile="$PWD/obj/test/config.ini" --tmpdir="$UPLOAD_TMPDIR" --timeout-factor=1 > records/native.log 2>&1
+timeout --signal=TERM --kill-after=15s 600s python3 accepted-source/test/functional/minio_upload.py --configfile="$PWD/obj/test/config.ini" --tmpdir="$UPLOAD_TMPDIR" --timeout-factor=1 > records/native.log 2>&1
 status=$?
 set -e
 printf '%s\n' "$status" > records/framework-exit.txt
