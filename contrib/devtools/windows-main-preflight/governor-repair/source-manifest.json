@@ -1,0 +1,25 @@
+{
+  "source": "1e2f8b5f12295002334d3390c12cac0bb4ae2aff",
+  "created_utc": "2026-11-16T02:27:57.585503+00:00",
+  "file": "src/modelnet/helper.cpp",
+  "baseline_sha256": "5aa85915065d2485d5e1e2a14835c97cec1ae5b34e34deb8b4ad77a6504535c2",
+  "candidate_sha256": "82d2dc5f1aa58664f110aa13df9800ae44d12916a509b44b3ee24127faccdf57",
+  "limits": "Uncompiled candidate; no pass claim; actual preservation daemon unsupported on Windows via ListenUnix1634; POSIX integration remains required.",
+  "tests": {
+    "baseline_sha256": "1ce7685281e2f6c30be5004cb5daf2d9a1b2c34e4a32a7d7e7179c84fa697106",
+    "candidate_sha256": "9ce8f68ba58b3bca5c04e8683cd78d57ecc0eaa657e9dc61a7216fa377ed0a38",
+    "selectors": [
+      "gov_helper_permit_healthy_and_absent",
+      "gov_helper_invalid_permit_denies_then_recovers",
+      "gov_helper_locked_permit_denies_positive_bytes_then_recovers",
+      "gov_helper_replacing_paused_permit_denies_positive_bytes"
+    ],
+    "scope": "actual seed consumer only; preservation integration still pending"
+  },
+  "review_corrections": [
+    "explicit input stream EOF/bad completion",
+    "cleared errno before open; existing parent for absent fallback",
+    "concurrent writer RAII join/exception capture",
+    "directory read no-throw control"
+  ]
+}
