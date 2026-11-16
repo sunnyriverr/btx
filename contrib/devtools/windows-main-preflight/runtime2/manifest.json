@@ -1,0 +1,123 @@
+{
+  "source": "1e2f8b5f12295002334d3390c12cac0bb4ae2aff",
+  "patch": "746 exactguard",
+  "binary_sha256": "cb4e3bf9276747f3e017bf739b61541192a14628fecf3e8ea63ffba88d8df2b6",
+  "checkpoint_sha256": "d980ca1fae8a45385fc5ca9777fc89ffb3ae977f5af7b841dde18f3352e0d515",
+  "cache_id": 10570607889,
+  "cache_key": "btx-release17-unit-43770878562",
+  "selectors": [
+    "modelnet_b0_disc_store_tests/store_09_resume_quota_credits_verified_active_pieces",
+    "modelnet_b0_disc_store_tests/store_10_resume_quota_preserves_unrelated_models",
+    "modelnet_b0_disc_store_tests/store_10b_shared_artifact_stays_active_until_last_transfer_ends",
+    "modelnet_b0_disc_store_tests/store_11_resume_quota_refuses_invalid_cached_credit",
+    "modelnet_b0_remaining_tests/download_quota_refused_before_eviction",
+    "modelnet_file_stream_tests/short_final_checkpoint_survives_publication_quota_failure",
+    "modelnet_file_stream_tests/only_complete_file_integrity_mismatches_mark_rejection",
+    "modelnet_file_stream_tests/finished_hydration_releases_its_quarantine_copy",
+    "modelnet_release_store_tests/loadcampaigns_reports_a_file_that_cannot_be_read",
+    "modelnet_release_store_tests/loadcampaigns_names_the_entries_it_skips",
+    "modelnet_helper_store_race_tests/concurrent_store_rpcs_keep_every_change",
+    "modelnet_file_stream_tests/fullcloud_04_05_stream_segments_and_verifies",
+    "modelnet_file_stream_tests/fullcloud_06_mid_file_corruption_fails",
+    "modelnet_file_stream_tests/fullcloud_07_unverified_not_advertised",
+    "modelnet_file_stream_tests/fullcloud_08_resume_is_one_range_not_per_piece",
+    "modelnet_file_stream_tests/fullcloud_09_file_stream_job_roundtrip",
+    "modelnet_file_stream_tests/fullcloud_09_helper_restart_one_range",
+    "modelnet_file_stream_tests/fullcloud_09_job_persists_across_reload",
+    "modelnet_file_stream_tests/whole_file_fallback_keeps_a_piece_and_does_not_wait_out_the_deadline"
+  ],
+  "expected_cases": 19,
+  "suite": null,
+  "batch_budget_seconds": 300,
+  "same_binary_prior_runtime_cases": [],
+  "reuse_disposition": "11new since historicalaccount;8old controls intentionallyrequalified because FileStreamHydration publication/checkpoint I/O implementationchanged. Preserve oldproofs and allotherunchangedpasses; no same-binaryrepeats.",
+  "known_limits": [
+    "In-process maintained unit tests with toy local files, not live cloud/nativehelper daemon/full release",
+    "No GPU/fullproof/network/mainnet/funded/production/wallet scope",
+    "Windows POSIX-only writefaultcases notregistered remain excluded"
+  ],
+  "runner_reused_files": {
+    "job_tree.py": "801ab483fe151f355e097e3d8905d83a1273e38720fba0a8acdf93b44cbdc31d",
+    "batch_results.py": "03b36c3f869f6ae67f85a086fb54a526220c36dfbb9951391fd76b6093a17882"
+  },
+  "selector_expression": "modelnet_b0_disc_store_tests/store_09_resume_quota_credits_verified_active_pieces:modelnet_b0_disc_store_tests/store_10_resume_quota_preserves_unrelated_models:modelnet_b0_disc_store_tests/store_10b_shared_artifact_stays_active_until_last_transfer_ends:modelnet_b0_disc_store_tests/store_11_resume_quota_refuses_invalid_cached_credit:modelnet_b0_remaining_tests/download_quota_refused_before_eviction:modelnet_file_stream_tests/short_final_checkpoint_survives_publication_quota_failure:modelnet_file_stream_tests/only_complete_file_integrity_mismatches_mark_rejection:modelnet_file_stream_tests/finished_hydration_releases_its_quarantine_copy:modelnet_release_store_tests/loadcampaigns_reports_a_file_that_cannot_be_read:modelnet_release_store_tests/loadcampaigns_names_the_entries_it_skips:modelnet_helper_store_race_tests/concurrent_store_rpcs_keep_every_change:modelnet_file_stream_tests/fullcloud_04_05_stream_segments_and_verifies:modelnet_file_stream_tests/fullcloud_06_mid_file_corruption_fails:modelnet_file_stream_tests/fullcloud_07_unverified_not_advertised:modelnet_file_stream_tests/fullcloud_08_resume_is_one_range_not_per_piece:modelnet_file_stream_tests/fullcloud_09_file_stream_job_roundtrip:modelnet_file_stream_tests/fullcloud_09_helper_restart_one_range:modelnet_file_stream_tests/fullcloud_09_job_persists_across_reload:modelnet_file_stream_tests/whole_file_fallback_keeps_a_piece_and_does_not_wait_out_the_deadline",
+  "new_cases": [
+    "modelnet_b0_disc_store_tests/store_09_resume_quota_credits_verified_active_pieces",
+    "modelnet_b0_disc_store_tests/store_10_resume_quota_preserves_unrelated_models",
+    "modelnet_b0_disc_store_tests/store_10b_shared_artifact_stays_active_until_last_transfer_ends",
+    "modelnet_b0_disc_store_tests/store_11_resume_quota_refuses_invalid_cached_credit",
+    "modelnet_b0_remaining_tests/download_quota_refused_before_eviction",
+    "modelnet_file_stream_tests/short_final_checkpoint_survives_publication_quota_failure",
+    "modelnet_file_stream_tests/only_complete_file_integrity_mismatches_mark_rejection",
+    "modelnet_file_stream_tests/finished_hydration_releases_its_quarantine_copy",
+    "modelnet_release_store_tests/loadcampaigns_reports_a_file_that_cannot_be_read",
+    "modelnet_release_store_tests/loadcampaigns_names_the_entries_it_skips",
+    "modelnet_helper_store_race_tests/concurrent_store_rpcs_keep_every_change"
+  ],
+  "changed_path_controls": [
+    "modelnet_file_stream_tests/fullcloud_04_05_stream_segments_and_verifies",
+    "modelnet_file_stream_tests/fullcloud_06_mid_file_corruption_fails",
+    "modelnet_file_stream_tests/fullcloud_07_unverified_not_advertised",
+    "modelnet_file_stream_tests/fullcloud_08_resume_is_one_range_not_per_piece",
+    "modelnet_file_stream_tests/fullcloud_09_file_stream_job_roundtrip",
+    "modelnet_file_stream_tests/fullcloud_09_helper_restart_one_range",
+    "modelnet_file_stream_tests/fullcloud_09_job_persists_across_reload",
+    "modelnet_file_stream_tests/whole_file_fallback_keeps_a_piece_and_does_not_wait_out_the_deadline"
+  ],
+  "historical_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+  "no_match_control_reused_from": 43779246167,
+  "binary_artifact_reused": 14188085237,
+  "historical_controls": {
+    "modelnet_file_stream_tests/fullcloud_04_05_stream_segments_and_verifies": {
+      "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+      "prior_result": "passed",
+      "disposition": "older_source_modelnet_only"
+    },
+    "modelnet_file_stream_tests/fullcloud_06_mid_file_corruption_fails": {
+      "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+      "prior_result": "passed",
+      "disposition": "older_source_modelnet_only"
+    },
+    "modelnet_file_stream_tests/fullcloud_07_unverified_not_advertised": {
+      "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+      "prior_result": "passed",
+      "disposition": "older_source_modelnet_only"
+    },
+    "modelnet_file_stream_tests/fullcloud_08_resume_is_one_range_not_per_piece": {
+      "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+      "prior_result": "passed",
+      "disposition": "older_source_modelnet_only"
+    },
+    "modelnet_file_stream_tests/fullcloud_09_file_stream_job_roundtrip": {
+      "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+      "prior_result": "passed",
+      "disposition": "older_source_modelnet_only"
+    },
+    "modelnet_file_stream_tests/fullcloud_09_helper_restart_one_range": {
+      "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+      "prior_result": "passed",
+      "disposition": "older_source_modelnet_only"
+    },
+    "modelnet_file_stream_tests/fullcloud_09_job_persists_across_reload": {
+      "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+      "prior_result": "passed",
+      "disposition": "older_source_modelnet_only"
+    },
+    "modelnet_file_stream_tests/whole_file_fallback_keeps_a_piece_and_does_not_wait_out_the_deadline": {
+      "prior_source": "70f1886f1028b4d78b5689f4fd2f80ba1d195d96",
+      "prior_result": "passed",
+      "disposition": "older_source_modelnet_only"
+    }
+  },
+  "source_review": {
+    "maximum_selected_file_buffer": "about12MiB plus small catalog proof buffers",
+    "private_scratch_bound_bytes": 536870912,
+    "external_cloud_or_node": false,
+    "actual_helper_daemon": false,
+    "threads_in_race_case": 4,
+    "writes_each_thread_each_rpc_kind": 8,
+    "native_windows_case_bodies_present": true,
+    "current_source_checks": "all5sourcefiles from pinned1e; selected declarations are outside POSIX-only guard blocks",
+    "legacy_pure_alignment_redaction_and_metadata_cases": "retained, not repeated"
+  }
+}
