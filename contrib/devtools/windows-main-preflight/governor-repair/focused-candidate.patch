@@ -1,0 +1,609 @@
+--- a/src/modelnet/helper.cpp
++++ b/src/modelnet/helper.cpp
+@@ -5520,10 +5520,43 @@
+ // Set by RunModelDaemon so a pacing upload wakes on shutdown.
+ static std::atomic<bool>* g_seed_pace_stop{nullptr};
+ 
++// An absent permit preserves standalone helper policy. An existing permit that
++// cannot be read must not turn a governor pause into permission for optional work.
++static bool ReadGovernorPermit(const ModelCatalog& cat, UniValue& permit)
++{
++    const fs::path path = HelperDir(cat) / "governor-permit.json";
++    errno = 0;
++    std::ifstream in(path, std::ios::binary);
++    const int open_error = errno;
++    if (!in) {
++        std::error_code ec;
++        const auto status = fs::symlink_status(path, ec);
++        // Keep the original open error: a sharing/access error must not become
++        // standalone mode merely because the pathname changes before this check.
++        if (open_error == ENOENT &&
++            (!ec || ec == std::errc::no_such_file_or_directory) &&
++            status.type() == fs::file_type::not_found) {
++            const bool parent_exists = fs::is_directory(path.parent_path(), ec);
++            if (!parent_exists || ec) return false;
++            permit = UniValue(UniValue::VOBJ);
++            return true;
++        }
++        return false;
++    }
++    std::string contents;
++    char buffer[4096];
++    while (in) {
++        in.read(buffer, sizeof(buffer));
++        contents.append(buffer, static_cast<size_t>(in.gcount()));
++    }
++    if (in.bad() || !in.eof() || !permit.read(contents) || !permit.isObject()) return false;
++    return true;
++}
++
+ bool AllowModelSeedBytes(const ModelCatalog& cat, size_t n)
+ {
+     UniValue o;
+-    ReadJsonFile(HelperDir(cat) / "governor-permit.json", o);
++    if (!ReadGovernorPermit(cat, o)) return false;
+     bool seeding_allowed = true;
+     if (o.exists("seeding_allowed") && o["seeding_allowed"].isBool()) {
+         seeding_allowed = o["seeding_allowed"].get_bool();
+@@ -5581,7 +5614,7 @@
+ static bool PreservationPermitted(const ModelCatalog& cat)
+ {
+     UniValue o;
+-    ReadJsonFile(HelperDir(cat) / "governor-permit.json", o);
++    if (!ReadGovernorPermit(cat, o)) return false;
+     if (!o.exists("preservation_allowed")) return true;
+     return o["preservation_allowed"].isBool() && o["preservation_allowed"].get_bool();
+ }
+--- a/src/test/resource_governor_tests.cpp
++++ b/src/test/resource_governor_tests.cpp
+@@ -13,9 +13,19 @@
+ #include <chrono>
+ #include <cstdlib>
+ #include <fstream>
++#include <exception>
+ #include <iterator>
+ #include <string>
+ #include <thread>
++
++
++#ifdef MODELNET_MODELD_PATH
++#include <modelnet/catalog.h>
++namespace modelnet { bool AllowModelSeedBytes(const ModelCatalog& cat, size_t n); }
++#endif
++#ifdef _WIN32
++#include <windows.h>
++#endif
+ 
+ BOOST_FIXTURE_TEST_SUITE(resource_governor_tests, BasicTestingSetup)
+ 
+@@ -922,26 +932,68 @@
+ 
+ BOOST_AUTO_TEST_CASE(gov_permit_file_is_never_read_half_written)
+ {
+-    // btxd rewrites governor-permit.json every 2 s while btx-modeld reads it
+-    // before each seeded piece. A file it cannot parse counts as "no governor"
+-    // there, so a reader must always find the whole permit.
++    // A successful open sees a complete old or new permit. Windows may refuse
++    // an open during replacement with a sharing violation; the separate helper
++    // consumer tests require optional work to remain denied on such failures.
+     ResourceGovernor g;
+     const fs::path path = m_path_root / "governor-permit.json";
+     BOOST_REQUIRE(g.WritePermitFile(fs::PathToString(path)));
+     std::atomic<bool> stop{false};
++    uint64_t written{0};
++    std::exception_ptr writer_error;
+     std::thread writer([&] {
+-        while (!stop.load()) (void)g.WritePermitFile(fs::PathToString(path));
++        try {
++            while (!stop.load()) if (g.WritePermitFile(fs::PathToString(path))) ++written;
++        } catch (...) { writer_error = std::current_exception(); }
+     });
+-    int unreadable{0};
++    struct StopWriter {
++        std::atomic<bool>& stop;
++        std::thread& thread;
++        ~StopWriter() { stop.store(true); if (thread.joinable()) thread.join(); }
++    } stop_writer{stop, writer};
++    auto complete_permit = [](std::ifstream& in) {
++        std::string body;
++        char buffer[4096];
++        while (in) {
++            in.read(buffer, sizeof(buffer));
++            body.append(buffer, static_cast<size_t>(in.gcount()));
++        }
++        UniValue permit;
++        return !in.bad() && in.eof() && permit.read(body) && permit.isObject() &&
++               permit["schema_version"].isNum() && permit["schema_version"].getInt<int>() == 1 &&
++               permit["seeding_allowed"].isBool() && permit["preservation_allowed"].isBool() &&
++               permit["upload_bps"].isNum();
++    };
++    uint64_t opened{0}, sharing{0}, unexpected_open_errors{0}, invalid_opened{0};
+     for (int i = 0; i < 20000; ++i) {
+-        std::ifstream in{path};
+-        const std::string body{std::istreambuf_iterator<char>(in), std::istreambuf_iterator<char>()};
+-        UniValue permit;
+-        if (!permit.read(body) || !permit.isObject() || !permit.exists("seeding_allowed")) ++unreadable;
++#ifdef _WIN32
++        SetLastError(ERROR_SUCCESS);
++#endif
++        std::ifstream in{path, std::ios::binary};
++        if (!in) {
++#ifdef _WIN32
++            const DWORD error = GetLastError();
++            if (error == ERROR_SHARING_VIOLATION) ++sharing;
++            else ++unexpected_open_errors;
++#else
++            ++unexpected_open_errors;
++#endif
++            continue;
++        }
++        ++opened;
++        if (!complete_permit(in)) ++invalid_opened;
+     }
+-    stop = true;
++    stop.store(true);
+     writer.join();
+-    BOOST_CHECK_EQUAL(unreadable, 0);
++    BOOST_CHECK(!writer_error);
++    BOOST_CHECK_GT(written, 0U);
++    BOOST_CHECK_GT(opened, 0U);
++    BOOST_CHECK_EQUAL(opened + sharing + unexpected_open_errors, 20000U);
++    BOOST_CHECK_EQUAL(unexpected_open_errors, 0U);
++    BOOST_CHECK_EQUAL(invalid_opened, 0U);
++    std::ifstream final_in{path, std::ios::binary};
++    BOOST_REQUIRE(final_in.is_open());
++    BOOST_CHECK(complete_permit(final_in));
+ }
+ 
+ BOOST_AUTO_TEST_CASE(gov_observe_and_reports_from_two_threads)
+@@ -976,4 +1028,139 @@
+     BOOST_CHECK_EQUAL(reports, 20000);
+ }
+ 
++
++#ifdef MODELNET_MODELD_PATH
++BOOST_AUTO_TEST_CASE(gov_helper_missing_parent_denies_then_recovers)
++{
++    modelnet::ModelCatalog cat{m_path_root / "gov-parent", 8 << 20};
++    const fs::path dir = cat.Store().Root().parent_path();
++    const fs::path held = m_path_root / "gov-parent-held";
++    BOOST_REQUIRE(fs::is_directory(dir));
++    BOOST_REQUIRE(!fs::exists(dir / "governor-permit.json"));
++    fs::rename(dir, held);
++    struct RestoreDirectory {
++        fs::path from, to;
++        bool active{true};
++        ~RestoreDirectory() { if (active) { std::error_code ec; fs::rename(from, to, ec); } }
++    } restore{held, dir};
++    BOOST_CHECK(!modelnet::AllowModelSeedBytes(cat, 1));
++    fs::rename(held, dir);
++    restore.active = false;
++    BOOST_CHECK(modelnet::AllowModelSeedBytes(cat, 1));
++}
++#endif
++
++#ifdef MODELNET_MODELD_PATH
++namespace {
++void WriteGovernorControl(const fs::path& path, const std::string& text)
++{
++    std::ofstream out(path, std::ios::binary | std::ios::trunc);
++    out << text;
++    out.close();
++    BOOST_REQUIRE(out.good());
++}
++}
++
++BOOST_AUTO_TEST_CASE(gov_helper_permit_healthy_and_absent)
++{
++    modelnet::ModelCatalog cat{m_path_root / "gov-permit-valid", 8 << 20};
++    const fs::path dir = cat.Store().Root().parent_path();
++    fs::create_directories(dir);
++    const fs::path path = dir / "governor-permit.json";
++    BOOST_REQUIRE(!fs::exists(path));
++    BOOST_CHECK(modelnet::AllowModelSeedBytes(cat, 1)); // Standalone helper.
++    WriteGovernorControl(path, "{}");
++    BOOST_CHECK(modelnet::AllowModelSeedBytes(cat, 1)); // Existing optional-field semantics.
++    WriteGovernorControl(path, R"({"seeding_allowed":true,"upload_bps":65536})");
++    BOOST_CHECK(modelnet::AllowModelSeedBytes(cat, 1));
++    WriteGovernorControl(path, R"({"seeding_allowed":false,"upload_bps":65536})");
++    BOOST_CHECK(!modelnet::AllowModelSeedBytes(cat, 1));
++    for (const auto cap : {0, -1}) {
++        WriteGovernorControl(path, "{\"seeding_allowed\":true,\"upload_bps\":" + std::to_string(cap) + "}");
++        BOOST_CHECK(!modelnet::AllowModelSeedBytes(cat, 1));
++    }
++    WriteGovernorControl(path, R"({"seeding_allowed":true,"upload_bps":65536})");
++    BOOST_CHECK(modelnet::AllowModelSeedBytes(cat, 1));
++    BOOST_REQUIRE(fs::remove(path));
++    BOOST_CHECK(modelnet::AllowModelSeedBytes(cat, 1));
++}
++
++BOOST_AUTO_TEST_CASE(gov_helper_invalid_permit_denies_then_recovers)
++{
++    modelnet::ModelCatalog cat{m_path_root / "gov-permit-invalid", 8 << 20};
++    const fs::path dir = cat.Store().Root().parent_path();
++    fs::create_directories(dir);
++    const fs::path path = dir / "governor-permit.json";
++    for (const std::string text : {"", "{", "[]", "null", "true", "123"}) {
++        WriteGovernorControl(path, text);
++        BOOST_CHECK_MESSAGE(!modelnet::AllowModelSeedBytes(cat, 1), "invalid permit: " << text);
++        WriteGovernorControl(path, R"({"seeding_allowed":true,"upload_bps":65536})");
++        BOOST_CHECK(modelnet::AllowModelSeedBytes(cat, 1));
++    }
++    BOOST_REQUIRE(fs::remove(path));
++    BOOST_REQUIRE(fs::create_directory(path));
++    bool directory_allowed{true};
++    BOOST_CHECK_NO_THROW(directory_allowed = modelnet::AllowModelSeedBytes(cat, 1));
++    BOOST_CHECK(!directory_allowed);
++    BOOST_REQUIRE(fs::remove(path));
++    WriteGovernorControl(path, R"({"seeding_allowed":false,"upload_bps":65536})");
++    BOOST_CHECK(!modelnet::AllowModelSeedBytes(cat, 1));
++}
++
++#ifdef _WIN32
++BOOST_AUTO_TEST_CASE(gov_helper_locked_permit_denies_positive_bytes_then_recovers)
++{
++    modelnet::ModelCatalog cat{m_path_root / "gov-permit-locked", 8 << 20};
++    const fs::path dir = cat.Store().Root().parent_path();
++    fs::create_directories(dir);
++    const fs::path path = dir / "governor-permit.json";
++    WriteGovernorControl(path, R"({"seeding_allowed":false,"upload_bps":65536})");
++    BOOST_REQUIRE(!modelnet::AllowModelSeedBytes(cat, 1));
++    struct HandleGuard {
++        HANDLE handle;
++        ~HandleGuard() { if (handle != INVALID_HANDLE_VALUE) CloseHandle(handle); }
++    } held{CreateFileW(path.c_str(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr)};
++    BOOST_REQUIRE(held.handle != INVALID_HANDLE_VALUE);
++    for (int i = 0; i < 100; ++i) BOOST_CHECK(!modelnet::AllowModelSeedBytes(cat, 1));
++    BOOST_REQUIRE(CloseHandle(held.handle));
++    held.handle = INVALID_HANDLE_VALUE;
++    BOOST_CHECK(!modelnet::AllowModelSeedBytes(cat, 1));
++    WriteGovernorControl(path, R"({"seeding_allowed":true,"upload_bps":65536})");
++    BOOST_CHECK(modelnet::AllowModelSeedBytes(cat, 1));
++}
++
++BOOST_AUTO_TEST_CASE(gov_helper_replacing_paused_permit_denies_positive_bytes)
++{
++    modelnet::ModelCatalog cat{m_path_root / "gov-permit-replacing", 8 << 20};
++    const fs::path dir = cat.Store().Root().parent_path();
++    fs::create_directories(dir);
++    const fs::path path = dir / "governor-permit.json";
++    ResourceGovernor governor;
++    governor.SetMode(GovernorMode::OFF);
++    BOOST_REQUIRE(governor.WritePermitFile(fs::PathToString(path)));
++    std::atomic<bool> stop{false};
++    uint64_t written{0};
++    std::exception_ptr writer_error;
++    std::thread writer([&] {
++        try {
++            while (!stop.load()) if (governor.WritePermitFile(fs::PathToString(path))) ++written;
++        } catch (...) { writer_error = std::current_exception(); }
++    });
++    struct StopWriter {
++        std::atomic<bool>& stop;
++        std::thread& thread;
++        ~StopWriter() { stop.store(true); if (thread.joinable()) thread.join(); }
++    } stop_writer{stop, writer};
++    uint64_t allowed{0};
++    for (int i = 0; i < 20000; ++i) allowed += modelnet::AllowModelSeedBytes(cat, 1) ? 1 : 0;
++    stop.store(true);
++    writer.join();
++    BOOST_CHECK(writer_error == nullptr);
++    BOOST_CHECK_GT(written, 0U);
++    BOOST_CHECK_EQUAL(allowed, 0U);
++    BOOST_CHECK(!modelnet::AllowModelSeedBytes(cat, 1));
++}
++#endif
++#endif
++
+ BOOST_AUTO_TEST_SUITE_END()
+--- a/src/node/resource_governor.cpp
++++ b/src/node/resource_governor.cpp
+@@ -772,9 +772,9 @@
+     o.pushKV("pause_reason_seed", PauseReasonName(m_seed_reason));
+     o.pushKV("pause_reason_preserve", PauseReasonName(m_preserve_reason));
+     o.pushKV("automatic_spend_atoms", 0);
+-    // btx-modeld reads this file before each seeded piece and treats a file it
+-    // cannot parse as "no governor". Write a temporary file and rename it over
+-    // the permit, so a reader sees either the old permit or the new one.
++    // Write a temporary file and rename it over the permit, so a successful
++    // read sees the complete old or new permit. The helper refuses optional
++    // work when an existing permit cannot be read or parsed.
+     const fs::path target = fs::PathFromString(path);
+     const fs::path tmp = fs::PathFromString(path + ".tmp");
+     {
+--- /dev/null
++++ b/contrib/modelnet/test-governor-permit.py
+@@ -0,0 +1,293 @@
++#!/usr/bin/env python3
++# Copyright (c) 2026 The BTX developers
++# Distributed under the MIT software license; see COPYING.
++"""Native POSIX regression: a malformed governor permit cannot enable preservation.
++
++Uses two disposable btx-modeld processes with authenticated loopback PQ1 and tiny
++public test models. Requires a PQ1-capable helper. Never uses a wallet or btxd.
++The same test is run unchanged on baseline and candidate helpers.
++"""
++import argparse
++import errno
++import hashlib
++import json
++import os
++from pathlib import Path
++import signal
++import socket
++import struct
++import subprocess
++import tempfile
++import time
++
++
++def rpc(path, method, params=None):
++    request = {'jsonrpc': '1.0', 'id': 'governor-test', 'method': method, 'params': params or []}
++    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as connection:
++        connection.settimeout(30 if method == 'importmodel' else 5)
++        connection.connect(str(path))
++        connection.sendall((json.dumps(request) + '\n').encode())
++        connection.shutdown(socket.SHUT_WR)
++        parts = []
++        size = 0
++        while True:
++            block = connection.recv(65536)
++            if not block:
++                break
++            size += len(block)
++            if size > 8 * 1024 * 1024:
++                raise RuntimeError('Unexpected oversized fixture RPC reply')
++            parts.append(block)
++    response = json.loads(b''.join(parts))
++    if response.get('error') is not None:
++        raise RuntimeError(f'{method}: {response["error"]}')
++    return response['result']
++
++
++def wait_for(read, ready, label, seconds=35):
++    end = time.monotonic() + seconds
++    while time.monotonic() < end:
++        value = read()
++        if ready(value):
++            return value
++        time.sleep(0.2)
++    raise RuntimeError(f'Timeout: {label}')
++
++
++def write_permit(directory, text):
++    temporary = directory / 'governor-permit.test-tmp'
++    temporary.write_text(text)
++    temporary.replace(directory / 'governor-permit.json')
++
++
++def run(helper, output):
++    result = {'helper_sha256': hashlib.sha256(helper.read_bytes()).hexdigest(),
++              'scope': 'Native POSIX strict-PQ1 rare preservation; tiny local public models',
++              'failures': [], 'status': 'INCOMPLETE', 'processes': [], 'controls': {}}
++    processes = []
++    logs = []
++    output.parent.mkdir(parents=True, exist_ok=True)
++    with tempfile.TemporaryDirectory(prefix='btx-gov-', dir='/tmp') as temporary:
++        root = Path(temporary)
++        os.chmod(root, 0o700)
++        provider, receiver = root / 'provider', root / 'receiver'
++        provider.mkdir(mode=0o700)
++        receiver.mkdir(mode=0o700)
++        permit = json.dumps({'schema_version': 1, 'seeding_allowed': True, 'upload_bps': 1048576,
++                             'preservation_allowed': False})
++        write_permit(provider, permit)
++        write_permit(receiver, permit)
++        def termination_requested(_signal, _frame):
++            raise RuntimeError('Fixture termination requested; cleaning owned helpers')
++        previous_term = signal.signal(signal.SIGTERM, termination_requested)
++        try:
++            def start(name, directory, extra):
++                log = (root / (name + '.log')).open('wb')
++                logs.append((name, log))
++                args = [str(helper), f'-modeldir={directory}', '-modelstorage=64MiB',
++                        f'-modelrpcsocket={directory / "rpc.sock"}', '-pwcchain=regtest',
++                        '-modelnatpmp=0', '-modellandiscovery=0', '-modelfollowpeers=0',
++                        '-modelseed=auto'] + extra
++                process = subprocess.Popen(args, stdout=log, stderr=subprocess.STDOUT,
++                                           start_new_session=True)
++                processes.append((name, process))
++                result['processes'].append({'name': name, 'pid': process.pid, 'args': args})
++                path = directory / 'rpc.sock'
++                def probe():
++                    if process.poll() is not None:
++                        raise RuntimeError(f'{name} exited before readiness: {process.returncode}')
++                    try:
++                        return rpc(path, 'getmodelpeers')
++                    except (OSError, json.JSONDecodeError):
++                        return None
++                wait_for(probe, lambda value: value is not None, name + ' readiness')
++                return path
++
++            with socket.socket() as probe:
++                probe.bind(('127.0.0.1', 0))
++                port = probe.getsockname()[1]
++            provider_rpc = start('provider', provider,
++                                 [f'-modelbind=127.0.0.1:{port}', '-modelhost=1', '-modelpreserverare=0'])
++
++            def import_tiny(tag):
++                source = root / ('source-' + tag)
++                source.mkdir()
++                header = json.dumps({'__metadata__': {'fixture': tag}, 'tensor': {'dtype': 'F32', 'shape': [1], 'data_offsets': [0, 4]}}, separators=(',', ':')).encode()
++                header += b' ' * ((-len(header)) % 8)
++                body = struct.pack('<Q', len(header)) + header + struct.pack('<f', {'first': 1.0, 'second': 2.0, 'third': 3.0}[tag])
++                (source / 'model.safetensors').write_bytes(body)
++                imported = rpc(provider_rpc, 'importmodel', [str(source), {'publish': False, 'pin': True}])
++                seeded = rpc(provider_rpc, 'seedmodel', [imported['model_id']])
++                if seeded.get('seeded') is not True:
++                    raise RuntimeError('Provider did not seed exact fixture model')
++                return imported, body
++
++            first, first_bytes = import_tiny('first')
++            receiver_rpc = start('receiver', receiver,
++                                 [f'-modelpeer=127.0.0.1:{port}', '-modelpreserverare=1'])
++            model = first['model_id']
++
++            def snapshot():
++                if any(p.poll() is not None for _, p in processes):
++                    raise RuntimeError('A helper exited during the test')
++                return {'participation': rpc(receiver_rpc, 'getmodelpeers')['native_participation'],
++                        'models': rpc(receiver_rpc, 'listmodels')['models'],
++                        'jobs': rpc(receiver_rpc, 'getmodeljob')['jobs']}
++
++            def observed_twice(after=0):
++                timestamps = set()
++                def read():
++                    state = snapshot()
++                    peers = state['participation']['peer_observations']
++                    for peer in peers:
++                        if (peer['endpoint'] == f'127.0.0.1:{port}' and
++                            model in peer['advertised_models'] and
++                            len(peer['transport_pin']) == 96 and peer['observed_at_ms'] > after):
++                            timestamps.add(peer['observed_at_ms'])
++                    return state
++                state = wait_for(read, lambda _: len(timestamps) >= 2,
++                                 'two fresh authenticated candidate observations')
++                return state, max(timestamps)
++
++            def absent(state, previous_count=0):
++                return (not any(m['model_id'] == model for m in state['models']) and
++                        not any(j['model_id'] == model for j in state['jobs']) and
++                        state['participation']['acquired_models'] == previous_count)
++
++            def recovered(expected, body, minimum_count):
++                def complete(state):
++                    return (state['participation']['acquired_models'] >= minimum_count and any(m['model_id'] == expected['model_id'] and m.get('bytes_verified') is True
++                                and not m.get('incomplete', False) for m in state['models']) and
++                            any(j['model_id'] == expected['model_id'] and j['status'] == 'done'
++                                and j.get('result', {}).get('status') == 'retrieved' for j in state['jobs']))
++                state = wait_for(snapshot, complete, 'verified automatic recovery', seconds=45)
++                piece = receiver / 'store/artifacts' / expected['artifact_id'] / '0/0.piece'
++                if piece.read_bytes() != body:
++                    raise RuntimeError('Recovered fixture bytes differ')
++                return {'passed': True, 'model_id': expected['model_id'],
++                        'artifact_id': expected['artifact_id'], 'piece_sha384': hashlib.sha384(body).hexdigest(),
++                        'snapshot': state}
++
++
++            paused, timestamp = observed_twice()
++            result['controls']['valid_pause'] = {'passed': absent(paused), 'snapshot': paused}
++            if not absent(paused):
++                raise RuntimeError('Valid pause control did not prevent acquisition')
++            write_permit(receiver, '{')
++            malformed, timestamp = observed_twice(timestamp)
++            refused = absent(malformed)
++            result['controls']['malformed_pause'] = {'passed': refused, 'snapshot': malformed}
++            if not refused:
++                result['failures'].append('malformed_permit_enabled_preservation')
++                result['controls']['baseline_malformed_completion'] = recovered(first, first_bytes, 1)
++
++            # Test a separate I/O failure against a new model, so baseline's
++            # first unwanted acquisition cannot mask this second boundary.
++            write_permit(receiver, permit)
++            previous_count = snapshot()['participation']['acquired_models']
++            second, second_bytes = import_tiny('second')
++            if second['model_id'] == model:
++                raise RuntimeError('I/O control must use a distinct model')
++            model = second['model_id']
++            paused_again, timestamp = observed_twice(timestamp)
++            result['controls']['valid_pause_second_model'] = {'passed': absent(paused_again, previous_count),
++                                                              'snapshot': paused_again}
++            if not absent(paused_again, previous_count):
++                raise RuntimeError('Second valid pause control did not prevent acquisition')
++            # Atomic replacement by a symlink to a private directory makes the
++            # permit present but unreadable as file data, even under root. There
++            # is no absent-path interval or need to change user privileges.
++            unreadable = receiver / 'permit-read-error'
++            unreadable.mkdir()
++            link = receiver / 'governor-permit.test-tmp'
++            link.symlink_to(unreadable.name)
++            link.replace(receiver / 'governor-permit.json')
++            try:
++                (receiver / 'governor-permit.json').read_bytes()
++            except OSError as error:
++                if error.errno != errno.EISDIR:
++                    raise
++            else:
++                raise RuntimeError('Unreadable permit control did not reach EISDIR')
++            io_state, _ = observed_twice(timestamp)
++            io_refused = absent(io_state, previous_count)
++            result['controls']['unreadable_pause'] = {'passed': io_refused, 'fixture_errno': errno.EISDIR,
++                                                      'snapshot': io_state}
++            if not io_refused:
++                result['failures'].append('unreadable_permit_enabled_preservation')
++                result['controls']['baseline_unreadable_completion'] = recovered(second, second_bytes, 2)
++            write_permit(receiver, json.dumps({'schema_version': 1, 'seeding_allowed': True, 'upload_bps': 1048576,
++                                               'preservation_allowed': True}))
++            result['controls']['same_first_model_recovery'] = recovered(first, first_bytes, 1)
++            result['controls']['same_second_model_recovery'] = recovered(second, second_bytes, 2)
++            # Both original model jobs may already be complete on the
++            # failing baseline. A third distinct model proves NEW enabled work.
++            before_third = wait_for(snapshot, lambda state: state['participation']['acquired_models'] >= 2, 'completed original-model accounting')
++            third, third_bytes = import_tiny('third')
++            if any(m['model_id'] == third['model_id'] for m in before_third['models']):
++                raise RuntimeError('Fresh candidate already existed before provider import')
++            count_before = before_third['participation']['acquired_models']
++            if count_before != 2:
++                raise RuntimeError('First two model completions were not accounted exactly once')
++            fresh = recovered(third, third_bytes, 3)
++            if fresh['snapshot']['participation']['acquired_models'] != count_before + 1:
++                raise RuntimeError('Fresh acquisition did not increment accounting exactly once')
++            fresh['absent_before_provider_import'] = True
++            fresh['acquired_before'] = count_before
++            result['controls']['fresh_enabled_acquisition'] = fresh
++            final = snapshot()
++            if final['participation']['acquired_models'] != 3:
++                raise RuntimeError('Unexpected automatic acquisition accounting')
++            result['status'] = 'FAIL' if result['failures'] else 'PASS'
++        except Exception as error:
++            result['error'] = repr(error)
++            result['status'] = 'INCOMPLETE'
++        finally:
++            signal.signal(signal.SIGTERM, signal.SIG_IGN)
++            cleanup_errors = []
++            for name, process in reversed(processes):
++                try:
++                    if process.poll() is None:
++                        try:
++                            os.killpg(process.pid, signal.SIGTERM)
++                        except ProcessLookupError:
++                            pass
++                    try:
++                        process.wait(timeout=20)
++                    except subprocess.TimeoutExpired:
++                        cleanup_errors.append(name + ': graceful shutdown timed out')
++                        try:
++                            os.killpg(process.pid, signal.SIGKILL)
++                        except ProcessLookupError:
++                            pass
++                        process.wait(timeout=10)
++                    result.setdefault('shutdown', {})[name] = process.returncode
++                    if process.returncode != 0:
++                        cleanup_errors.append(name + ': nonzero shutdown ' + str(process.returncode))
++                except Exception as error:
++                    cleanup_errors.append(name + ': ' + repr(error))
++            for name, stream in logs:
++                try:
++                    stream.close()
++                    (output.parent / (output.stem + '-' + name + '.log')).write_bytes((root / (name + '.log')).read_bytes())
++                except Exception as error:
++                    cleanup_errors.append(name + ' log: ' + repr(error))
++            result['cleanup_errors'] = cleanup_errors
++            result['clean_shutdown'] = not cleanup_errors and all(p.poll() is not None for _, p in processes)
++            if not result['clean_shutdown']:
++                result['status'] = 'INCOMPLETE'
++            signal.signal(signal.SIGTERM, previous_term)
++    result['private_runtime_removed'] = not root.exists()
++    output.write_text(json.dumps(result, indent=2) + '\n')
++    print(json.dumps({k: result.get(k) for k in ['status', 'failures', 'error', 'clean_shutdown']}))
++    return 0 if result['status'] == 'PASS' else 1 if result['status'] == 'FAIL' else 2
++
++
++if __name__ == '__main__':
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument('--helper', type=Path, required=True)
++    parser.add_argument('--output', type=Path, required=True)
++    args = parser.parse_args()
++    if os.name != 'posix':
++        parser.error('Requires the native POSIX helper RPC transport')
++    raise SystemExit(run(args.helper.resolve(), args.output.resolve()))
