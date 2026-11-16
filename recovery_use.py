@@ -33,6 +33,9 @@ def create_model(root):
 
 
 class RecoveryUse(UploadControl):
+    def set_test_params(self):
+        super().set_test_params()
+
     def _stop_container(self):
         if not self.container:
             return
