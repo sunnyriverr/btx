@@ -1,0 +1,49 @@
+name: Session3 P2MR payment regression qualification
+on:
+  push:
+    branches: [codex/ci-p2mr-aps-payment]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  qualify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 1e2f8b5f12295002334d3390c12cac0bb4ae2aff
+          path: reference-source
+          persist-credentials: false
+      - name: Prepare matching Ubuntu build dependencies
+        timeout-minutes: 5
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends build-essential cmake ninja-build pkg-config binutils libboost-dev libevent-dev libsqlite3-dev libssl-dev
+      - name: Restore and verify retained baseline
+        timeout-minutes: 8
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 proposal/verify.py
+      - name: Preserve baseline and inspect candidate build
+        timeout-minutes: 3
+        run: python3 proposal/prepare.py
+      - name: Build candidate daemon only
+        timeout-minutes: 21
+        run: |
+          set -o pipefail
+          timeout --signal=TERM --kill-after=20s 1200s cmake --build build --target btxd --parallel 2 2>&1 | tee records/candidate-build.log
+      - name: One bounded paired disposable regtest
+        timeout-minutes: 11
+        run: python3 proposal/run_pair.py
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        timeout-minutes: 2
+        with:
+          name: session3-p2mr-aps-payment-records
+          path: records/
+          retention-days: 7
