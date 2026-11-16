@@ -1,0 +1,182 @@
+{
+  "source": "1e2f8b5f12295002334d3390c12cac0bb4ae2aff",
+  "checkpoint_source": "1e2f8b5f12295002334d3390c12cac0bb4ae2aff",
+  "complete": true,
+  "commands": [
+    {
+      "step": "openssl",
+      "exit": 0,
+      "seconds": 0.001399103000011337
+    },
+    {
+      "step": "gcc",
+      "exit": 0,
+      "seconds": 0.5011690249999958
+    },
+    {
+      "step": "cmake",
+      "exit": 0,
+      "seconds": 0.09476840399997855
+    },
+    {
+      "step": "channel-fixture-compile",
+      "exit": 0,
+      "seconds": 0.8812791920000222
+    },
+    {
+      "step": "channel-fixture-link",
+      "exit": 0,
+      "seconds": 0.09159011399998462
+    },
+    {
+      "step": "channel-fixture-payloads",
+      "exit": 0,
+      "seconds": 0.10393900299999359
+    },
+    {
+      "step": "baseline-native-helper",
+      "exit": 0,
+      "seconds": 3.4357200210000087
+    },
+    {
+      "step": "candidate-native-helper",
+      "exit": 0,
+      "seconds": 3.244685669000006
+    }
+  ],
+  "checkpoint_verified": true,
+  "binaries_verified": true,
+  "prior_binary_hashes": {
+    "baseline": {
+      "test_btx": "877472557ff942435d99353c92727fa4722040b1fd1095566a50193e27199627",
+      "btx-modeld": "d9cfd2960ea8626cc03d0095cbf1e4af24c4c1c8aec8dd79ad66762388334933"
+    },
+    "candidate": {
+      "test_btx": "5d79dec2e27c523af37b94c053374f3a2d025c770f73f48a2a90ca9e52c5f36a",
+      "btx-modeld": "4bcfc2cbd7e729a63ff8b2632bad282338db5d65f8f4b5cab644ead3d0683137"
+    }
+  },
+  "fixture_utility_sha256": "c353d0881c0ff44c2bfd5c53bf980a89541bd30951e5ba558219e910e266f3fd",
+  "baseline_native": {
+    "helper_sha256": "d9cfd2960ea8626cc03d0095cbf1e4af24c4c1c8aec8dd79ad66762388334933",
+    "channel_fixture_sha256": "24c6e037c2d3a0771c390db974e2b803e77efebc473c4c9a0277a07569d4ae32",
+    "expect": "baseline",
+    "cases": {
+      "watch_creation": {
+        "checks": {
+          "rejected_creation_absent_live": false,
+          "identical_retry_has_one_target": false,
+          "healthy_retry_survives_restart_once": false
+        },
+        "contract_pass": false,
+        "helper_clean_starts": 2
+      },
+      "watch_replacement_via_mirror": {
+        "checks": {
+          "rejected_replacement_keeps_previous_live": false,
+          "healthy_fresh_key_retry_survives_restart": true
+        },
+        "contract_pass": false,
+        "helper_clean_starts": 2
+      },
+      "channel_creation": {
+        "checks": {
+          "rejected_creation_absent_live": false,
+          "identical_signed_retry_accepted_without_restart": false,
+          "healthy_retry_emits_exactly_one_update": false,
+          "healthy_retry_survives_restart": false,
+          "retry_event_survives_restart": false
+        },
+        "contract_pass": false,
+        "helper_clean_starts": 2
+      },
+      "channel_replacement": {
+        "checks": {
+          "rejected_sequence_keeps_previous_live": false,
+          "identical_signed_retry_accepted_without_restart": false,
+          "healthy_retry_emits_exactly_one_update": false,
+          "healthy_retry_survives_restart": false,
+          "retry_event_survives_restart": false
+        },
+        "contract_pass": false,
+        "helper_clean_starts": 2
+      },
+      "policy": {
+        "checks": {
+          "rejected_policy_keeps_previous_live": false,
+          "retry_durable_before_shutdown": true,
+          "documented_launch_reset_and_reapply_work": true
+        },
+        "contract_pass": false,
+        "helper_clean_starts": 2
+      }
+    },
+    "scope": "native helper/private Unix RPC and real files/signatures; no node/wallet/peers/action execution",
+    "scratch_removed": true,
+    "expected_observation": true,
+    "complete": true,
+    "seconds": 3.3550192509999874
+  },
+  "candidate_native": {
+    "helper_sha256": "4bcfc2cbd7e729a63ff8b2632bad282338db5d65f8f4b5cab644ead3d0683137",
+    "channel_fixture_sha256": "24c6e037c2d3a0771c390db974e2b803e77efebc473c4c9a0277a07569d4ae32",
+    "expect": "candidate",
+    "cases": {
+      "watch_creation": {
+        "checks": {
+          "rejected_creation_absent_live": true,
+          "identical_retry_has_one_target": true,
+          "healthy_retry_survives_restart_once": true
+        },
+        "contract_pass": true,
+        "helper_clean_starts": 2
+      },
+      "watch_replacement_via_mirror": {
+        "checks": {
+          "rejected_replacement_keeps_previous_live": true,
+          "healthy_fresh_key_retry_survives_restart": true
+        },
+        "contract_pass": true,
+        "helper_clean_starts": 2
+      },
+      "channel_creation": {
+        "checks": {
+          "rejected_creation_absent_live": true,
+          "identical_signed_retry_accepted_without_restart": true,
+          "healthy_retry_emits_exactly_one_update": true,
+          "healthy_retry_survives_restart": true,
+          "retry_event_survives_restart": true
+        },
+        "contract_pass": true,
+        "helper_clean_starts": 2
+      },
+      "channel_replacement": {
+        "checks": {
+          "rejected_sequence_keeps_previous_live": true,
+          "identical_signed_retry_accepted_without_restart": true,
+          "healthy_retry_emits_exactly_one_update": true,
+          "healthy_retry_survives_restart": true,
+          "retry_event_survives_restart": true
+        },
+        "contract_pass": true,
+        "helper_clean_starts": 2
+      },
+      "policy": {
+        "checks": {
+          "rejected_policy_keeps_previous_live": true,
+          "retry_durable_before_shutdown": true,
+          "documented_launch_reset_and_reapply_work": true
+        },
+        "contract_pass": true,
+        "helper_clean_starts": 2
+      }
+    },
+    "scope": "native helper/private Unix RPC and real files/signatures; no node/wallet/peers/action execution",
+    "scratch_removed": true,
+    "expected_observation": true,
+    "complete": true,
+    "seconds": 3.1698261410000157
+  },
+  "no_product_rebuild": true,
+  "retained_fixture_archive_sha256": "3e330e922d40ae316fb4771e57d56a6baeee7b5f14a98067d6c8459b3678f2a3"
+}

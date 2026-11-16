@@ -1,0 +1,26 @@
+Running 1 test case...
+Entering test module "Bitcoin Core Test Suite"
+./test/modelnet_first_run_tests.cpp(34): Entering test suite "modelnet_first_run_tests"
+./test/modelnet_first_run_tests.cpp(1595): Entering test case "rejected_policy_save_keeps_live_settings_and_allows_retry"
+./test/modelnet_first_run_tests.cpp(1628): error: in "modelnet_first_run_tests/rejected_policy_save_keeps_live_settings_and_allows_retry": check out.write() == before.write() has failed [{"schema_version":2,"seed":"off","seed_upon_download":false,"seed_upon_download_opt_in":false,"preserve_rare":true,"follow_configured_peers":false,"allow_encrypted":false,"storage_quota_bytes":8388608,"upload_bps":1024,"giveback_ratio":1,"automatic_spend_atoms":0,"retrieval_default":"FREE_ONLY","demand_propagation":false,"preservation_propagation":true,"peer_follow_propagation":false,"release_propagation":false,"unsolicited_fetch":"bounded FREE_ONLY acquisition follows strict-PQ1 same-chain catalog contacts from configured peers, expiring PEX, and enabled private-LAN discovery when follow_peers, seed=auto and storage>0; unverified public advertisements do not authorize acquisition or execution","auto_pay":false} != {"schema_version":2,"seed":"off","seed_upon_download":false,"seed_upon_download_opt_in":false,"preserve_rare":false,"follow_configured_peers":false,"allow_encrypted":false,"storage_quota_bytes":8388608,"upload_bps":1024,"giveback_ratio":1,"automatic_spend_atoms":0,"retrieval_default":"FREE_ONLY","demand_propagation":false,"preservation_propagation":false,"peer_follow_propagation":false,"release_propagation":false,"unsolicited_fetch":"bounded FREE_ONLY acquisition follows strict-PQ1 same-chain catalog contacts from configured peers, expiring PEX, and enabled private-LAN discovery when follow_peers, seed=auto and storage>0; unverified public advertisements do not authorize acquisition or execution","auto_pay":false}]
+./test/modelnet_first_run_tests.cpp(1629): error: in "modelnet_first_run_tests/rejected_policy_save_keeps_live_settings_and_allows_retry": check !cat.Policy().preserve_rare has failed
+./test/modelnet_first_run_tests.cpp(1595): Leaving test case "rejected_policy_save_keeps_live_settings_and_allows_retry"; testing time: 4390us
+./test/modelnet_first_run_tests.cpp(34): Leaving test suite "modelnet_first_run_tests"; testing time: 4598us
+Leaving test module "Bitcoin Core Test Suite"; testing time: 23443us
+
+Test module "Bitcoin Core Test Suite" has failed with:
+  1 test case out of 15598 failed
+  15597 test cases out of 15598 skipped
+  24 assertions out of 26 passed
+  2 assertions out of 26 failed
+
+  Test suite "modelnet_first_run_tests" has failed with:
+    1 test case out of 34 failed
+    33 test cases out of 34 skipped
+    24 assertions out of 26 passed
+    2 assertions out of 26 failed
+
+    Test case "modelnet_first_run_tests/rejected_policy_save_keeps_live_settings_and_allows_retry" has failed with:
+      24 assertions out of 26 passed
+      2 assertions out of 26 failed
+

@@ -1,0 +1,60 @@
+{
+  "helper_sha256": "4bcfc2cbd7e729a63ff8b2632bad282338db5d65f8f4b5cab644ead3d0683137",
+  "channel_fixture_sha256": "24c6e037c2d3a0771c390db974e2b803e77efebc473c4c9a0277a07569d4ae32",
+  "expect": "candidate",
+  "cases": {
+    "watch_creation": {
+      "checks": {
+        "rejected_creation_absent_live": true,
+        "identical_retry_has_one_target": true,
+        "healthy_retry_survives_restart_once": true
+      },
+      "contract_pass": true,
+      "helper_clean_starts": 2
+    },
+    "watch_replacement_via_mirror": {
+      "checks": {
+        "rejected_replacement_keeps_previous_live": true,
+        "healthy_fresh_key_retry_survives_restart": true
+      },
+      "contract_pass": true,
+      "helper_clean_starts": 2
+    },
+    "channel_creation": {
+      "checks": {
+        "rejected_creation_absent_live": true,
+        "identical_signed_retry_accepted_without_restart": true,
+        "healthy_retry_emits_exactly_one_update": true,
+        "healthy_retry_survives_restart": true,
+        "retry_event_survives_restart": true
+      },
+      "contract_pass": true,
+      "helper_clean_starts": 2
+    },
+    "channel_replacement": {
+      "checks": {
+        "rejected_sequence_keeps_previous_live": true,
+        "identical_signed_retry_accepted_without_restart": true,
+        "healthy_retry_emits_exactly_one_update": true,
+        "healthy_retry_survives_restart": true,
+        "retry_event_survives_restart": true
+      },
+      "contract_pass": true,
+      "helper_clean_starts": 2
+    },
+    "policy": {
+      "checks": {
+        "rejected_policy_keeps_previous_live": true,
+        "retry_durable_before_shutdown": true,
+        "documented_launch_reset_and_reapply_work": true
+      },
+      "contract_pass": true,
+      "helper_clean_starts": 2
+    }
+  },
+  "scope": "native helper/private Unix RPC and real files/signatures; no node/wallet/peers/action execution",
+  "scratch_removed": true,
+  "expected_observation": true,
+  "complete": true,
+  "seconds": 3.1698261410000157
+}
