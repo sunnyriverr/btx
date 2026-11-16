@@ -17,7 +17,9 @@ class RehostCases(UploadControl):
             first=self._zero_spend(node.importmodel(str(original)),'first');assert first.get('cloud_uploaded') is True
             uri=first['uri'];artifact=first['artifact_id'];out.update(uri=uri,artifact=artifact)
             keys=[k for k in self._bucket_keys() if artifact in k and re.search(r'/files/\d+$',k)];assert len(keys)==1;key=keys[0]
-            def check_bytes(path):assert hashlib.sha384(path.read_bytes()).hexdigest()==out['source_sha384']
+            def check_bytes(path):
+                source=path/'model.safetensors' if path.is_dir() else path
+                assert hashlib.sha384(source.read_bytes()).hexdigest()==out['source_sha384']
             def attempt(label,path):
                 check_bytes(path);assert self._s3('DELETE',key=key)[0] in (200,204)
                 assert self._s3('GET',key=key)[0]==404
