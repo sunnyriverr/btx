@@ -1,0 +1,99 @@
+{
+  "source": "1e2f8b5f12295002334d3390c12cac0bb4ae2aff",
+  "cases": [
+    {
+      "label": "original",
+      "fixture_sha256": "c3e588e4bcdb1f1b2ca5e1a38b01c13994669b80851c78713a0c80ba5672c66b",
+      "binaries": {
+        "btxd": "9b9ba0f8c993c4880c06b2bacbf448b71a8882a9beae461b030d557d81428583",
+        "btx-cli": "5f0b5907cb70132b791b4941c4f0ed0d5a63c06f2613c3291e5bd6501bc9327d"
+      },
+      "timeout": false,
+      "resource_stop": false,
+      "group_absent": true,
+      "peak_sampled_scratch": 22897981,
+      "exit_code": 1,
+      "methods": [
+        {
+          "method": "test_anti_fee_sniping",
+          "status": "passed",
+          "elapsed_s": 2.111
+        },
+        {
+          "method": "test_tx_size_too_large",
+          "status": "failed",
+          "error_type": "JSONRPCException",
+          "error": {
+            "code": -8,
+            "message": "Only address type 'p2mr' is supported"
+          },
+          "elapsed_s": 0.001
+        }
+      ],
+      "scratch_removed": true
+    },
+    {
+      "label": "draft",
+      "fixture_sha256": "78024d8bccffb3f1ed326ac90cfa77a9aacab57070131a56c2d6f76cb58080b1",
+      "binaries": {
+        "btxd": "9b9ba0f8c993c4880c06b2bacbf448b71a8882a9beae461b030d557d81428583",
+        "btx-cli": "5f0b5907cb70132b791b4941c4f0ed0d5a63c06f2613c3291e5bd6501bc9327d"
+      },
+      "timeout": false,
+      "resource_stop": false,
+      "group_absent": true,
+      "peak_sampled_scratch": 27674122,
+      "exit_code": 0,
+      "methods": [
+        {
+          "method": "test_anti_fee_sniping",
+          "status": "passed",
+          "elapsed_s": 2.124
+        },
+        {
+          "method": "test_tx_size_too_large",
+          "status": "passed",
+          "elapsed_s": 48.811
+        },
+        {
+          "method": "test_create_too_long_mempool_chain",
+          "status": "passed",
+          "elapsed_s": 24.486
+        },
+        {
+          "method": "test_version3",
+          "status": "passed",
+          "elapsed_s": 0.48
+        },
+        {
+          "method": "test_setfeerate",
+          "status": "passed",
+          "elapsed_s": 0.714
+        }
+      ],
+      "scratch_removed": true
+    }
+  ],
+  "compiled": false,
+  "shared_args": [
+    "-regtestmatmulv4height=2147483647",
+    "-regtestrcheight=2147483647",
+    "-regtestrccoupledheight=2147483647",
+    "-regtestmatmulproductdigestheight=2147483647",
+    "-regtestmatmulbindingheight=2147483647",
+    "-regtestmatmulrequireproductpayload=0",
+    "-autoshieldcoinbase=0",
+    "-addresstype=p2mr",
+    "-fallbackfee=0.0002",
+    "-walletrejectlongchains=1",
+    "-spendzeroconfchange=1",
+    "-limitancestorcount=100",
+    "-limitdescendantcount=100",
+    "-limitancestorsize=1024",
+    "-limitdescendantsize=1024",
+    "-swapnet=0",
+    "-autoupdate=0",
+    "-networkactive=0"
+  ],
+  "scope": "Direct normal functional framework with common startup profile and method observers; no product substitutions"
+}

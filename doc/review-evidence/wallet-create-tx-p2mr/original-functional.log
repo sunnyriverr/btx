@@ -1,0 +1,33 @@
+2026-11-16T12:58:58.826000Z TestFramework (INFO): PRNG seed is: 8077055617807976574
+2026-11-16T12:58:58.827000Z TestFramework (INFO): Initializing test directory /home/runner/work/btx/btx/create-tx-private-original/regtest
+2026-11-16T12:59:00.159000Z TestFramework (INFO): Create some old blocks
+2026-11-16T12:59:14.017000Z TestFramework (INFO): Check that we have some (old) blocks and that anti-fee-sniping is disabled
+2026-11-16T12:59:14.987000Z TestFramework (INFO): Check that anti-fee-sniping is enabled when we mine a recent block
+2026-11-16T12:59:16.142000Z TestFramework (ERROR): Unexpected exception
+Traceback (most recent call last):
+  File "/home/runner/work/btx/btx/source/test/functional/test_framework/test_framework.py", line 142, in main
+    self.run_test()
+  File "/home/runner/work/btx/btx/proposal/original-wallet_create_tx.py", line 39, in run_test
+    self.test_tx_size_too_large()
+  File "/home/runner/work/btx/btx/proposal/run_case.py", line 37, in wrapper
+    result = method(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/btx/btx/proposal/original-wallet_create_tx.py", line 87, in test_tx_size_too_large
+    outputs = {self.nodes[0].getnewaddress(address_type='bech32'): 0.000025 for _ in range(400)}
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/btx/btx/source/test/functional/test_framework/coverage.py", line 50, in __call__
+    return_val = self.auth_service_proxy_instance.__call__(*args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/btx/btx/source/test/functional/test_framework/authproxy.py", line 151, in __call__
+    raise JSONRPCException(response['error'], status)
+test_framework.authproxy.JSONRPCException: Only address type 'p2mr' is supported (-8)
+2026-11-16T12:59:16.193000Z TestFramework (INFO): Not stopping nodes as test failed. The dangling processes will be cleaned up later.
+2026-11-16T12:59:16.193000Z TestFramework (WARNING): Not cleaning up dir /home/runner/work/btx/btx/create-tx-private-original/regtest
+2026-11-16T12:59:16.193000Z TestFramework (ERROR): Test failed. Test logging available at /home/runner/work/btx/btx/create-tx-private-original/regtest/test_framework.log
+2026-11-16T12:59:16.193000Z TestFramework (ERROR): 
+2026-11-16T12:59:16.193000Z TestFramework (ERROR): Hint: Call /home/runner/work/btx/btx/source/test/functional/combine_logs.py '/home/runner/work/btx/btx/create-tx-private-original/regtest' to consolidate all logs
+2026-11-16T12:59:16.193000Z TestFramework (ERROR): 
+2026-11-16T12:59:16.193000Z TestFramework (ERROR): If this failure happened unexpectedly or intermittently, please file a bug and provide a link or upload of the combined log.
+2026-11-16T12:59:16.194000Z TestFramework (ERROR): https://github.com/btxchain/btx/issues
+2026-11-16T12:59:16.194000Z TestFramework (ERROR): 
+[node 0] Cleaning up leftover process
