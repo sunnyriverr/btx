@@ -1,7 +1,7 @@
 from pathlib import Path
 import os,sys,json,subprocess,tarfile,shutil,time,selectors,signal,hashlib
 from checkpoint import sha,restore_timestamps,verify_restored,create
-HEAD='1e2f8b5f12295002334d3390c12cac0bb4ae2aff';OLD=HEAD;ARCHIVE='e6cf08741c9f309c9f7b2f985a900b5e8fea7174b8c24de6f57f84cca304bbdb'
+HEAD='1e2f8b5f12295002334d3390c12cac0bb4ae2aff';OLD=HEAD;ARCHIVE='b6a46502efbdc8b5c7f2151a18f7960f817aaafd6780194150cbb7118026520c'
 w=Path(os.environ['GITHUB_WORKSPACE']);out=w/'records';out.mkdir(exist_ok=True);r={'source':HEAD,'checkpoint_source':OLD,'complete':False,'commands':[]};restored=False
 
 def save():(out/'build-result.json').write_text(json.dumps(r,indent=2)+'\n')
