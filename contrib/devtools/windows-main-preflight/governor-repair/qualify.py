@@ -33,6 +33,7 @@ def tools():
  assert os.environ['VCToolsVersion'].rstrip('\\')=='14.51.36231'
  assert os.environ['WindowsSDKVersion'].rstrip('\\')=='10.0.26100.0'
  V=R/'vcpkg';V.mkdir(exist_ok=False)
+ os.environ.update(VCPKG_ROOT=str(V),VCPKG_DISABLE_METRICS='1',VCPKG_BINARY_SOURCES='clear;files,'+str(R/'binary-cache')+',read')
  run('vcpkg-init',['git','init',str(V)],cwd=R)
  run('vcpkg-fetch',['git','-C',str(V),'fetch','--depth=1','https://github.com/microsoft/vcpkg.git','afa249f12f52ed8a3b919f195495ba8b330288d1'],cap=300,cwd=R)
  run('vcpkg-checkout',['git','-C',str(V),'checkout','--detach','FETCH_HEAD'],cwd=R)
@@ -50,7 +51,24 @@ def tools():
  run('python-dependencies',[sys.executable,'-I','-c','import cryptography,sqlite3;from cryptography.hazmat.primitives.ciphers.aead import AESGCM'])
 
 def build(phase):
- _,text=run(phase+'-dry-run',['ninja','-C',str(B),'-n','test_btx'])
+ _,text=run(phase+'-dry-run',['ninja','-C',str(B),'-n','-d','explain','test_btx'])
+ if 'Re-running CMake' in text:
+  assert phase=='baseline', 'Unexpected second reconfigure'
+  # Refresh only normal CMake metadata. Compare every generated compiler command
+  # before permitting any compilation; a changed profile never passes this gate.
+  before=json.loads((B/'compile_commands.json').read_text())
+  shutil.copy2(B/'CMakeCache.txt',E/'before-CMakeCache.txt')
+  shutil.copy2(B/'compile_commands.json',E/'before-compile_commands.json')
+  cache=(B/'CMakeCache.txt').read_text()
+  assert '--only-binarycaching' in cache and re.search(r'^VCPKG_MANIFEST_NO_DEFAULT_FEATURES:[^=]+=ON$', cache, re.M)
+  run('configure-refresh',['cmake','--regenerate-during-build','-S',str(S),'-B',str(B)],cap=600)
+  after=json.loads((B/'compile_commands.json').read_text())
+  old={v['output']:v for v in before};new={v['output']:v for v in after}
+  delta={'added':len(new.keys()-old.keys()),'removed':len(old.keys()-new.keys()),'changed':sum(old[k]!=new[k] for k in old.keys()&new.keys())}
+  result['configure_refresh']={'compile_command_delta':delta,'reason_log':phase+'-dry-run.log'};save()
+  assert delta=={'added':0,'removed':0,'changed':0},delta
+  shutil.copy2(B/'CMakeCache.txt',E/'after-CMakeCache.txt')
+  _,text=run(phase+'-configured-dry-run',['ninja','-C',str(B),'-n','-d','explain','test_btx'])
  actions=[line for line in text.splitlines() if re.match(r'^\[\d+/\d+\]',line)]
  result['phases'][phase]={'actions':actions};save()
  assert len(actions)<=30,actions
