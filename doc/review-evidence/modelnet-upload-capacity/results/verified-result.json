@@ -1,0 +1,282 @@
+{
+  "utc": "2026-11-16T00:36:25.662013+00:00",
+  "status": "COMPLETE_LOCAL_PUBLICATION_HELD",
+  "base": "1e2f8b5f12295002334d3390c12cac0bb4ae2aff",
+  "tested_ci_commit": "6994227bb7d505c6141dfe9ac378fdb1d07181c3",
+  "run": 43779884495,
+  "patch_sha256": "041b2c7fb8cca9b693dc7c49f667d3502c91cd3f8fbe1f4506fa90def4d1a656",
+  "source_sha256": {
+    "src/test/modelnet_r2_storage_tests.cpp": "712c4439ac20f8f231b7f9b2fce0c7500a346db74bf172b6db55675d94492652",
+    "src/modelnet/s3_client.h": "1782411a4af1e9bd9cf21dfeb08f7e2b23fa35fb821ba7f8e836e6d3af67151b",
+    "src/modelnet/s3_client.cpp": "9a23cc7efacac5314669f5383fa506ac0e1d8affd5be6396484419919e774cef"
+  },
+  "component": {
+    "status": "PASS",
+    "cases": 11,
+    "variants": {
+      "baseline": {
+        "returncode": 0,
+        "seconds": 39.562776271000004,
+        "binary_sha256": "933d35ea5fbc623f79d413a82ad9a928c7ed0921c479cf4d7fe75b1a70c9ff36",
+        "method_sha256": "d53f215cc0a571c13fda2c4f9265d511353a90a67e5129ea5b895925ac461003",
+        "all11_cases_verified": true,
+        "reused_from_run": 43779345103,
+        "rerun": false
+      },
+      "candidate": {
+        "returncode": 0,
+        "seconds": 21.603616014,
+        "binary_sha256": "445a5574ad810efb95b5dfe6e0f43859d211ef1efa68415a7a5a99106a23fc87",
+        "method_sha256": "ba89aba5ae549058d52391b8ad22031c9e94e1371f25a0c25c2731c44628dcc4",
+        "all11_cases_verified": true
+      }
+    },
+    "network": false,
+    "candidate_exit": 0
+  },
+  "build": {
+    "source": "1e2f8b5f12295002334d3390c12cac0bb4ae2aff",
+    "checkpoint_source": "61f13b8870ed98c7b10db2e32c04fb647023f4ef",
+    "complete": true,
+    "commands": [
+      {
+        "step": "accepted-head",
+        "exit": 0,
+        "seconds": 0.0012788620000065976
+      },
+      {
+        "step": "accepted-files",
+        "exit": 0,
+        "seconds": 0.005497273999992558
+      },
+      {
+        "step": "openssl",
+        "exit": 0,
+        "seconds": 0.0017472780000105104
+      },
+      {
+        "step": "gcc",
+        "exit": 0,
+        "seconds": 0.0006467000000043299
+      },
+      {
+        "step": "cmake",
+        "exit": 0,
+        "seconds": 0.16175470900000732
+      },
+      {
+        "step": "patch-check",
+        "exit": 0,
+        "seconds": 0.0017649010000013732
+      },
+      {
+        "step": "patch-apply",
+        "exit": 0,
+        "seconds": 0.002057328999995889
+      },
+      {
+        "step": "candidate-configure",
+        "exit": 0,
+        "seconds": 1.0868085150000013
+      },
+      {
+        "step": "candidate-verify-globs",
+        "exit": 0,
+        "seconds": 0.23422998899999925
+      },
+      {
+        "step": "candidate-dry",
+        "exit": 0,
+        "seconds": 0.14876414500000124
+      },
+      {
+        "step": "candidate-build",
+        "exit": 0,
+        "seconds": 280.940512791
+      },
+      {
+        "step": "candidate-production-policy",
+        "exit": 0,
+        "seconds": 0.0871120440000368
+      }
+    ],
+    "checkpoint_verified": true,
+    "changed_source_files": [
+      "contrib/swapnet/contracts/foundry.toml",
+      "contrib/swapnet/swapnet/coordinator.py",
+      "contrib/swapnet/swapnet/drivers.py",
+      "contrib/swapnet/swapnet/embedded.py",
+      "contrib/swapnet/swapnet/evm.py",
+      "contrib/swapnet/swapnet/policy.py",
+      "contrib/swapnet/tests/test_evm_check_cache.py",
+      "contrib/swapnet/tests/test_execution_v2.py",
+      "contrib/swapnet/tests/test_restore_tool.py",
+      "contrib/swapnet/tests/test_terminal_observation_persistence.py",
+      "contrib/swapnet/tools/restore_recovery.py",
+      "doc/modelnet/cloud-seeding.md",
+      "doc/release-notes-0.34.17.md",
+      "doc/swapnet/OPERATIONS.md",
+      "doc/swapnet/RECOVERY.md",
+      "doc/swapnet/RPC.md",
+      "doc/swapnet/TESTING_AND_RELEASE.md",
+      "scripts/release/package_release_archive.py",
+      "src/btx-open.cpp",
+      "src/interfaces/chain.h",
+      "src/logging.cpp",
+      "src/modelnet/CMakeLists.txt",
+      "src/modelnet/capability_ensure.cpp",
+      "src/modelnet/file_stream.cpp",
+      "src/modelnet/helper.cpp",
+      "src/modelnet/relay_reserve.cpp",
+      "src/modelnet/relay_reserve.h",
+      "src/modelnet/training_launch.cpp",
+      "src/net.cpp",
+      "src/net_processing.cpp",
+      "src/netaddress.cpp",
+      "src/netaddress.h",
+      "src/node/interfaces.cpp",
+      "src/rpc/modelnet.cpp",
+      "src/rpc/util.cpp",
+      "src/test/fuzz/netaddress.cpp",
+      "src/test/logging_tests.cpp",
+      "src/test/modelnet_035_launch_tests.cpp",
+      "src/test/modelnet_conn_tests.cpp",
+      "src/test/modelnet_file_stream_tests.cpp",
+      "src/test/net_tests.cpp",
+      "src/test/netbase_tests.cpp",
+      "src/test/util_tests.cpp",
+      "src/wallet/rpc/backup.cpp",
+      "src/wallet/rpc/transactions.cpp",
+      "src/wallet/shielded_wallet.cpp",
+      "src/wallet/shielded_wallet.h",
+      "test/functional/feature_block_download_slot_reclaim.py",
+      "test/functional/feature_modelnet_cr12.py",
+      "test/functional/feature_modelnet_funding_refund_recovery.py",
+      "test/functional/feature_modelnet_minio.py",
+      "test/functional/feature_modelnet_packages.py",
+      "test/functional/p2p_addr_relay.py",
+      "test/functional/p2p_compactblocks.py",
+      "test/functional/p2p_tx_download.py",
+      "test/functional/rpc_scantxoutset_range_end.py",
+      "test/functional/test_runner.py",
+      "test/functional/wallet_importbundle_shielded.py",
+      "test/functional/wallet_listreceivedby.py",
+      "test/functional/wallet_startup.py",
+      "test/functional/wallet_swapnet_relock.py"
+    ],
+    "source_verified": true,
+    "planned_steps": 34,
+    "binary_sha256": {
+      "btx-modeld": "012e0e9386e842c9a80ecc44bf734e83cc99a022d3bc43382169acafbbdf2a74",
+      "cloud-upload-policy-check": "e6dd92ca0f0dd8ce29c709d1b41eacc8833b7f351f22d700446af6fee2f05b36"
+    },
+    "checkpoint_sha256": "da9efe44de9bff39237c6c60fb1fc99023fed38efc9e74bbfe5159068cda1472"
+  },
+  "native": {
+    "status": "PASS",
+    "provider": "MINIO",
+    "fake": false,
+    "source_bytes": 16777216,
+    "minio_image_id": "sha256:9ba50b1ff7062a8814cd38d435f7a73581264e7a1259a8dca0c742221df07f17",
+    "source_sha384": "3cfbfbd5efeaeef2f9b4b8b3fe583cf1b3e30fecd4e5f1b4e50c224955a15e10041d6a6202ee48f5a833b2a66e97dd90",
+    "head": {
+      "accept-ranges": "bytes",
+      "content-length": "16777216",
+      "content-type": "binary/octet-stream",
+      "etag": "\"09d9b936f80ae50e3e6d8e02acae224b-2\"",
+      "last-modified": "Mon, 16 Nov 2026 00:28:54 GMT",
+      "server": "MinIO",
+      "strict-transport-security": "max-age=31536000; includeSubDomains",
+      "vary": "Accept-Encoding",
+      "x-amz-id-2": "dd9025bab4ad464b049177c95eb6ebf374d3b3fd1af9251148b658df7ac2e3e8",
+      "x-amz-request-id": "18E85F06D5275C4E",
+      "x-content-type-options": "nosniff",
+      "x-ratelimit-limit": "4375",
+      "x-ratelimit-remaining": "4375",
+      "x-xss-protection": "1; mode=block",
+      "date": "Mon, 16 Nov 2026 00:28:54 GMT",
+      "connection": "close",
+      "observed-http-status": 200
+    },
+    "part_heads": [
+      {
+        "accept-ranges": "bytes",
+        "content-length": "8388608",
+        "content-range": "bytes 0-8388607/16777216",
+        "content-type": "binary/octet-stream",
+        "etag": "\"09d9b936f80ae50e3e6d8e02acae224b-2\"",
+        "last-modified": "Mon, 16 Nov 2026 00:28:54 GMT",
+        "server": "MinIO",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "vary": "Accept-Encoding",
+        "x-amz-id-2": "dd9025bab4ad464b049177c95eb6ebf374d3b3fd1af9251148b658df7ac2e3e8",
+        "x-amz-request-id": "18E85F06D53A87C4",
+        "x-content-type-options": "nosniff",
+        "x-ratelimit-limit": "4375",
+        "x-ratelimit-remaining": "4375",
+        "x-xss-protection": "1; mode=block",
+        "x-amz-mp-parts-count": "2",
+        "date": "Mon, 16 Nov 2026 00:28:54 GMT",
+        "connection": "close",
+        "observed-http-status": 206
+      },
+      {
+        "accept-ranges": "bytes",
+        "content-length": "8388608",
+        "content-range": "bytes 8388608-16777215/16777216",
+        "content-type": "binary/octet-stream",
+        "etag": "\"09d9b936f80ae50e3e6d8e02acae224b-2\"",
+        "last-modified": "Mon, 16 Nov 2026 00:28:54 GMT",
+        "server": "MinIO",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "vary": "Accept-Encoding",
+        "x-amz-id-2": "dd9025bab4ad464b049177c95eb6ebf374d3b3fd1af9251148b658df7ac2e3e8",
+        "x-amz-request-id": "18E85F06D54BEB1D",
+        "x-content-type-options": "nosniff",
+        "x-ratelimit-limit": "4375",
+        "x-ratelimit-remaining": "4375",
+        "x-xss-protection": "1; mode=block",
+        "x-amz-mp-parts-count": "2",
+        "date": "Mon, 16 Nov 2026 00:28:54 GMT",
+        "connection": "close",
+        "observed-http-status": 206
+      }
+    ],
+    "before_restart": true,
+    "after_restart": true
+  },
+  "final_verification": {
+    "binary_artifact": 14188570970,
+    "archive_digest": "sha256:4130c1ec6f82c3644eb613cf3601e0a4d0134c2a8edccdf3db0ed9d449427340",
+    "actual_zip_digest_verified": true,
+    "members": [
+      {
+        "member": "candidate/btx-modeld",
+        "sha256": "012e0e9386e842c9a80ecc44bf734e83cc99a022d3bc43382169acafbbdf2a74",
+        "bytes": 36595512
+      },
+      {
+        "member": "candidate/cloud-upload-policy-check",
+        "sha256": "e6dd92ca0f0dd8ce29c709d1b41eacc8833b7f351f22d700446af6fee2f05b36",
+        "bytes": 36588336
+      }
+    ],
+    "patch_fork_bytes_match": true,
+    "patch_sha256": "041b2c7fb8cca9b693dc7c49f667d3502c91cd3f8fbe1f4506fa90def4d1a656",
+    "release_head": "1e2f8b5f12295002334d3390c12cac0bb4ae2aff",
+    "matching_open_prs": [],
+    "checkpoint_artifact": [
+      {
+        "id": 14188536130,
+        "digest": "sha256:b8e91dee77f37a6992386f3affefdb16ab601020ee73ad659e4df28fc5245f21",
+        "expires_at": "2026-11-30T00:29:00Z"
+      }
+    ]
+  },
+  "framework_exit": 0,
+  "wrapper_exit": 0,
+  "internal_review": "source + buffer-lifetime reviewed, no blocker; not independent platform evidence",
+  "full_test_btx": false,
+  "real_large_provider_upload": false,
+  "upstream_publication": false
+}
