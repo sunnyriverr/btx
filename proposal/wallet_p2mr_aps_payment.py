@@ -14,7 +14,7 @@ from pathlib import Path
 from test_framework.authproxy import JSONRPCException
 from test_framework.blocktools import REGTEST_GENERIC_P2P_MATMUL_ARGS
 from test_framework.test_framework import BitcoinTestFramework
-from test_framework.util import assert_equal, find_vout_for_address
+from test_framework.util import assert_equal
 
 
 class P2MRAPSInputTest(BitcoinTestFramework):
@@ -65,8 +65,11 @@ class P2MRAPSInputTest(BitcoinTestFramework):
             first_address = new_address(aps)
             first = funder.sendtoaddress(first_address, Decimal("0.3"), fee_rate=self.FEE_RATE)
             self.generatetoaddress(node, 1, mining_address)
-            assert_equal(len(aps.listunspent()), 1)
-            previous = (first, find_vout_for_address(node, first, first_address))
+            initial = aps.listunspent()
+            assert_equal(len(initial), 1)
+            assert_equal(initial[0]['txid'], first)
+            assert_equal(initial[0]['address'], first_address)
+            previous = (first, initial[0]['vout'])
             chain = []
             chain_sizes = []
             evidence["stage"] = "building_chain"
@@ -90,7 +93,11 @@ class P2MRAPSInputTest(BitcoinTestFramework):
             confirmed_address = new_address(aps)
             confirmed_txid = funder.sendtoaddress(confirmed_address, Decimal("0.7"), fee_rate=self.FEE_RATE)
             assert_equal(node.getmempoolancestors(confirmed_txid), [])
-            confirmed = (confirmed_txid, find_vout_for_address(node, confirmed_txid, confirmed_address))
+            deposit = node.decoderawtransaction(funder.gettransaction(confirmed_txid)['hex'])
+            matches = [x['n'] for x in deposit['vout']
+                       if x['scriptPubKey'].get('address') == confirmed_address]
+            assert_equal(len(matches), 1)
+            confirmed = (confirmed_txid, matches[0])
             block_hash = self.generateblock(node, mining_address, [confirmed_txid])["hash"]
             assert_equal(node.getblock(block_hash)["tx"][1:], [confirmed_txid])
             assert_equal(set(node.getrawmempool()), set(chain))
