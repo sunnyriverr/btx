@@ -18,7 +18,12 @@ class WalletBCP1RecoveryTest(BitcoinTestFramework):
         self.num_nodes = 1
         self.setup_clean_chain = True
         self.extra_args = [list(REGTEST_GENERIC_P2P_MATMUL_ARGS) + [
-            "-autoshieldcoinbase=0", "-nomodelnet"]]
+            "-autoshieldcoinbase=0"]]
+
+    def setup_network(self):
+        if self.config["components"].getboolean("ENABLE_MODELNET", fallback=False):
+            self.extra_args[0].append("-nomodelnet")
+        self.setup_nodes()
 
     def skip_test_if_missing_module(self):
         self.skip_if_no_wallet()
