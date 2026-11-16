@@ -63,6 +63,9 @@ def build(phase):
   # Refresh only normal CMake metadata. Compare every generated compiler command
   # before permitting any compilation; a changed profile never passes this gate.
   before=json.loads((B/'compile_commands.json').read_text())
+  generated=B/'src/matmul-rc-production-golden-manifest-data.h'
+  generated_before={'sha256':sha(generated),'mtime_ns':generated.stat().st_mtime_ns}
+
   shutil.copy2(B/'CMakeCache.txt',E/'before-CMakeCache.txt')
   shutil.copy2(B/'compile_commands.json',E/'before-compile_commands.json')
   cache=(B/'CMakeCache.txt').read_text()
@@ -73,6 +76,9 @@ def build(phase):
   delta={'added':len(new.keys()-old.keys()),'removed':len(old.keys()-new.keys()),'changed':sum(old[k]!=new[k] for k in old.keys()&new.keys())}
   result['configure_refresh']={'compile_command_delta':delta,'reason_log':phase+'-dry-run.log'};save()
   assert delta=={'added':0,'removed':0,'changed':0},delta
+  assert sha(generated)==generated_before['sha256'],'Unexpected golden manifest content change'
+  os.utime(generated,ns=(generated.stat().st_atime_ns,generated_before['mtime_ns']))
+  result['configure_refresh']['unchanged_generated_header_mtime_preserved']=generated_before;save()
   shutil.copy2(B/'CMakeCache.txt',E/'after-CMakeCache.txt')
  # Ninja's forced glob probe makes -n conservatively predict a CMake rerun
  # even after a completed configure. Freeze the ENTIRE freshly validated graph
@@ -83,13 +89,19 @@ def build(phase):
   assert sha(plan)==sha(B/'build.ninja')
   result['full_generated_graph_sha256']=sha(plan);save()
  else:assert sha(plan)==result['full_generated_graph_sha256']
+ # Generate ordinary version metadata before interpreting the complete plan.
+ # Ninja's restat can avoid actual consumer compilation when bytes are unchanged.
+ if phase=='baseline':
+  header=B/'src/bitcoin-build-info.h';before_header=sha(header)
+  run('normal-build-info',['ninja','-C',str(B),'-f',str(plan),'src/bitcoin-build-info.h'],cap=60)
+  result['build_info']={'before_sha256':before_header,'after_sha256':sha(header)};save()
  _,text=run(phase+'-configured-dry-run',['ninja','-C',str(B),'-f',str(plan),'-n','-d','explain','test_btx'])
  actions=[line for line in text.splitlines() if re.match(r'^\[\d+/\d+\]',line)]
  result['phases'][phase]={'actions':actions};save()
  assert len(actions)<=30,actions
  for line in actions:
   if 'Building CXX object' in line:
-   assert any(n in line for n in ['resource_governor_tests.cpp.obj','helper.cpp.obj']),line
+   assert any(n in line for n in ['resource_governor_tests.cpp.obj','helper.cpp.obj','bitcoin_clientversion.dir/clientversion.cpp.obj','bitcoin_common.dir/matmul/matmul_v4_rc_production_canary.cpp.obj']),line
  assert not any('Re-running CMake' in a for a in actions),actions
  run(phase+'-normal-build',['ninja','-C',str(B),'-f',str(plan),'-j2','test_btx'],cap=1200)
  result['phases'][phase]['binary_sha256']=sha(B/'bin/test_btx.exe');save()
