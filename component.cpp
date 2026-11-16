@@ -4,6 +4,8 @@
 #include <modelnet/types.h>
 #include <span.h>
 #include <util/fs.h>
+#include <util/translation.h>
+const TranslateFn G_TRANSLATION_FUN{nullptr};
 #include <iostream>
 #include <stdexcept>
 #include <vector>

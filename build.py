@@ -14,7 +14,7 @@ def run(cmd,label,cap=120,cwd=None,expected=0,env=None):
  return text
 try:
  m=json.loads((w/'saved-checkpoint/manifest.json').read_text());arc=w/'saved-checkpoint/build-state.tar.gz'
- assert m['archive_sha256']==sha(arc)=='176620d62816b6051af71d8d98b7c390ab2874c8cab4a2847b88afa99f03d0a6'
+ assert m['archive_sha256']==sha(arc)=='e2b4e38fe2820002622e7e6c94259d3fd617df23299de2f2bf3fb9109a2c3628'
  assert m['workspace']==str(w) and shutil.disk_usage(w).free>10*1024**3
  with tarfile.open(arc) as t:t.extractall(w,filter='data')
  restore_timestamps(w,m);verify_restored(w,m);r['checkpoint_verified']=True;save()
