@@ -640,7 +640,11 @@ bool FeedStore::Load(int64_t now_ms, std::string& err)
             }
             // Older feed files have no publisher list. Recover what they still record
             // before expiry removes events; history already absent cannot be recovered.
-            if (!has_publisher_history && !ev.rec.publisher_identity.IsNull()) {
+            const bool records_publisher = ev.event_type == FeedEventType::MODEL_PUBLISHED ||
+                                           ev.event_type == FeedEventType::MODEL_METADATA_UPDATED ||
+                                           ev.event_type == FeedEventType::RELEASE_CAMPAIGN_CREATED ||
+                                           ev.event_type == FeedEventType::PUBLISHER_FIRST_OBSERVED;
+            if (!has_publisher_history && records_publisher && !ev.rec.publisher_identity.IsNull()) {
                 m_publisher_models[ev.rec.publisher_identity.Hex()] = 1;
             }
             if (ev.sequence > m_seq) m_seq = ev.sequence;

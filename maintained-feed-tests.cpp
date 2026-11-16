@@ -481,4 +481,27 @@ BOOST_AUTO_TEST_CASE(malformed_publisher_history_keeps_valid_new_publishers)
     BOOST_REQUIRE(restored.NoteSearchRecord(TestRecord(2, 255), 103));
     BOOST_CHECK_EQUAL(restored.Query(q, 104, next).size(), 1U);
 }
+
+BOOST_AUTO_TEST_CASE(legacy_unlock_history_preserves_first_publisher_observation)
+{
+    modelnet::FeedStore continuous, restored;
+    const auto path = m_args.GetDataDirBase() / "feed-legacy-unlock-publisher.json";
+    continuous.SetPath(path); restored.SetPath(path);
+    const auto rec = TestRecord(1, 9);
+    BOOST_REQUIRE(continuous.NoteUnlock(rec.model_id, "release", rec, 100));
+    std::string err; BOOST_REQUIRE(continuous.Save(err));
+    UniValue saved;
+    { std::ifstream in(path); std::string raw((std::istreambuf_iterator<char>(in)), {}); BOOST_REQUIRE(saved.read(raw)); }
+    UniValue legacy(UniValue::VOBJ);
+    legacy.pushKV("schema_version", saved["schema_version"]);
+    legacy.pushKV("sequence", saved["sequence"]);
+    legacy.pushKV("events", saved["events"]);
+    { std::ofstream out(path); out << legacy.write(); }
+    BOOST_REQUIRE(restored.Load(101, err));
+    BOOST_REQUIRE(continuous.NoteSearchRecord(TestRecord(2, 9), 110));
+    BOOST_REQUIRE(restored.NoteSearchRecord(TestRecord(2, 9), 110));
+    CompareEvents(continuous, restored);
+    modelnet::FeedQuery q; q.mode = modelnet::FeedMode::NEW_PUBLISHERS;
+    std::string next; BOOST_CHECK_EQUAL(restored.Query(q, 111, next).size(), 1U);
+}
 BOOST_AUTO_TEST_SUITE_END()

@@ -1,7 +1,7 @@
 from pathlib import Path
 import os,sys,json,subprocess,tarfile,shutil,time,selectors,signal,hashlib
 from checkpoint import sha,restore_timestamps,verify_restored,create
-HEAD='1e2f8b5f12295002334d3390c12cac0bb4ae2aff';OLD=HEAD;ARCHIVE='b6a46502efbdc8b5c7f2151a18f7960f817aaafd6780194150cbb7118026520c'
+HEAD='1e2f8b5f12295002334d3390c12cac0bb4ae2aff';OLD=HEAD;ARCHIVE='ba029ed497516ee984339eabbb3ab6728d30249feb2ab16d07f9153f820ede12'
 w=Path(os.environ['GITHUB_WORKSPACE']);out=w/'records';out.mkdir(exist_ok=True);r={'source':HEAD,'checkpoint_source':OLD,'complete':False,'commands':[]};restored=False
 
 def save():(out/'build-result.json').write_text(json.dumps(r,indent=2)+'\n')
@@ -77,9 +77,16 @@ try:
  binary=build/'bin/test_btx'; assert binary.is_file()
  r['baseline_binary_sha256']=sha(binary); save()
  failing={'publisher_observation_matches_after_reopen','publisher_history_survives_expired_events_and_legacy_load','malformed_publisher_history_keeps_valid_new_publishers'}
- cases=['modelnet_feed_tests','modelnet_feed_restart_tests/complete_pages_continue_after_reopen','modelnet_feed_restart_tests/publisher_observation_matches_after_reopen','modelnet_feed_restart_tests/publisher_history_survives_expired_events_and_legacy_load','modelnet_feed_restart_tests/unlock_only_history_preserves_first_publisher_observation','modelnet_feed_restart_tests/malformed_publisher_history_keeps_valid_new_publishers']
+ cases=['modelnet_feed_tests','modelnet_feed_restart_tests/complete_pages_continue_after_reopen','modelnet_feed_restart_tests/publisher_observation_matches_after_reopen','modelnet_feed_restart_tests/publisher_history_survives_expired_events_and_legacy_load','modelnet_feed_restart_tests/unlock_only_history_preserves_first_publisher_observation','modelnet_feed_restart_tests/malformed_publisher_history_keeps_valid_new_publishers','modelnet_feed_restart_tests/legacy_unlock_history_preserves_first_publisher_observation']
  for case in cases:
   run([binary,'--run_test='+case,'--log_level=test_suite'],'baseline-'+case.replace('/','-'),60,expected=201 if case.rsplit('/',1)[-1] in failing else 0)
+ # Verify the new legacy control catches the intermediate restoration mistake.
+ shutil.copy2(w/'prior-candidate-feed.cpp',source/'src/modelnet/feed.cpp')
+ os.utime(source/'src/modelnet/feed.cpp',None)
+ run(['ninja','-C',build,'-f',observed,'-j'+str(workers),'test_btx'],'prior-candidate-build',300)
+ run([binary,'--run_test=modelnet_feed_restart_tests/legacy_unlock_history_preserves_first_publisher_observation','--log_level=test_suite'],'prior-candidate-legacy-control',60,expected=201)
+ # Restore the baseline bytes before the final source identity assertion.
+ shutil.copy2(w/'baseline-feed.cpp',source/'src/modelnet/feed.cpp')
  # The maintained cases are identical; change only the current feed implementation.
  assert sha(source/'src/modelnet/feed.cpp')==sha(w/'baseline-feed.cpp')
  shutil.copy2(w/'candidate-feed.cpp',source/'src/modelnet/feed.cpp')
