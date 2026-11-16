@@ -33,6 +33,16 @@ jobs:
         run: python3 stage.py
         env:
           GH_TOKEN: ${{ github.token }}
+      - name: Verify final runtime fixture on immutable original helper before compilation
+        run: |
+          mkdir -p records
+          gcc -shared -fPIC -Wall -Wextra -Werror interruption.c -ldl -o interruption.so
+          set +e
+          BTX737_HELPER="$PWD/binary/baseline/btx-modeld" BTX737_CREATOR="$PWD/binary/baseline/btx-modeld" BTX737_HELPER_SHA=cb783882585291c6ab7d5f0796129336d36dc3963be3db2310bbd25fe6737eae BTX737_OUTPUT="$PWD/records/native-baseline-host" timeout --kill-after=10 180 python3 native.py > records/baseline-native-preflight.log 2>&1
+          status=$?
+          set -e
+          test "$status" = 1
+          python3 -c 'import json; d=json.load(open("records/native-baseline-host/result.json")); assert d["status"]=="FAIL" and set(d["failures"])=={"interrupted_restart_not_local","legacy_restart_not_local"} and d["owned_helpers_exited"] and d["scratch_removed"]'
       - name: Matched native build and recovery qualification
         run: |
           set -euo pipefail
@@ -45,6 +55,20 @@ jobs:
             -e GITHUB_WORKSPACE "$image" bash -e -c \
             'timeout --kill-after=20s 10m bash setup.sh && /opt/hostedtoolcache/Python/3.12.16/x64/bin/python3 build.py' \
             2>&1 | tee records/console.log
+      - name: Same-host candidate native recovery and final validation
+        run: |
+          export BTX737_HELPER="$PWD/built/candidate/btx-modeld"
+          export BTX737_CREATOR="$PWD/binary/baseline/btx-modeld"
+          export BTX737_HELPER_SHA="$(sha256sum built/candidate/btx-modeld | cut -d' ' -f1)"
+          export BTX737_OUTPUT="$PWD/records/native-candidate-host"
+          timeout --kill-after=10 180 python3 native.py > records/candidate-native.log 2>&1
+          python3 - <<'PYCODE'
+          import json,pathlib
+          p=pathlib.Path('records/build-result.json'); b=json.loads(p.read_text());r=json.load(open('records/native-candidate-host/result.json'))
+          assert b['status']=='BUILDS_AND_COMPONENTS_PASS_HOST_RUNTIME_PENDING'
+          assert r['helper_sha256']==b['candidate_helper_sha256'] and r['status']=='PASS' and not r['failures'] and r['owned_helpers_exited'] and r['scratch_removed']
+          b['status']='MATCHED_BEFORE_AFTER_AND_CONTROLS_PASS';b['candidate_native']='PASS';b['native_runtime']='same Ubuntu24.04 hosted job for both binaries';p.write_text(json.dumps(b,indent=2)+'\n')
+          PYCODE
       - name: Preserve tested source and fixture identities
         if: always()
         run: |
@@ -62,5 +86,12 @@ jobs:
         with:
           name: pr737-repair-binaries
           path: built/
+          retention-days: 14
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: pr737-repair-checkpoint
+          path: resume-checkpoint/
           retention-days: 14
           if-no-files-found: warn

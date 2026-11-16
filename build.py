@@ -1,6 +1,6 @@
 from pathlib import Path
 import os,json,subprocess,tarfile,shutil,time,hashlib,sys
-from checkpoint import sha,restore_timestamps,verify_restored
+from checkpoint import sha,restore_timestamps,verify_restored,create
 w=Path(os.environ['GITHUB_WORKSPACE']);out=w/'records';out.mkdir(exist_ok=True);build=w/'gui-pilot-runtime/qtbuild';source=w/'product';accepted=w/'accepted-source'
 r={'source':'1e2f8b5f12295002334d3390c12cac0bb4ae2aff','status':'INCOMPLETE','commands':[],'scope':'Focused Linux hydration helper and selected maintained test bodies; no full suite'}
 def save():(out/'build-result.json').write_text(json.dumps(r,indent=2)+'\n')
@@ -54,14 +54,20 @@ try:
   for index,name in enumerate(cases):
    run([dest/'review737',name,w/f'component-scratch-{phase}-{index}'],phase+'-'+name,30,expected=1 if phase=='baseline' and index<2 else 0)
   env={**os.environ,'BTX737_HELPER':str(dest/'btx-modeld'),'BTX737_HELPER_SHA':sha(dest/'btx-modeld'),'BTX737_CREATOR':str(w/'binary/baseline/btx-modeld'),'BTX737_OUTPUT':str(out/('native-'+phase))}
-  run([sys.executable,w/'native.py'],phase+'-native',180,expected=1 if phase=='baseline' else 0,env=env)
-  nr=json.loads((out/('native-'+phase)/'result.json').read_text());r[phase+'_native']=nr['status'];r[phase+'_native_failures']=nr.get('failures');save()
-  assert nr['owned_helpers_exited'] and nr['scratch_removed']
-  if phase=='baseline':assert nr['status']=='FAIL' and set(nr['failures'])=={'interrupted_restart_not_local','legacy_restart_not_local'}
-  else:assert nr['status']=='PASS' and not nr['failures']
- r['status']='MATCHED_BEFORE_AFTER_AND_CONTROLS_PASS'
+  if phase=='baseline':
+   nr=json.loads((out/'native-baseline-host/result.json').read_text());assert nr['helper_sha256']=='cb783882585291c6ab7d5f0796129336d36dc3963be3db2310bbd25fe6737eae'
+   r['baseline_native_reused']='same-final-fixture pre-build original-helper host result';save()
+   r[phase+'_native']=nr['status'];r[phase+'_native_failures']=nr.get('failures');save()
+   assert nr['owned_helpers_exited'] and nr['scratch_removed']
+   assert nr['status']=='FAIL' and set(nr['failures'])=={'interrupted_restart_not_local','legacy_restart_not_local'}
+  else:
+   r['candidate_native']='AWAIT_SAME_HOST_RUNTIME'
+ r['status']='BUILDS_AND_COMPONENTS_PASS_HOST_RUNTIME_PENDING'
 except Exception as e:r['status']='INCOMPLETE';r['error']=repr(e);print(repr(e),flush=True)
 finally:
+ try:
+  if (source/'src/modelnet/file_stream.cpp').exists():r['saved_checkpoint_sha256']=create(w,w/'resume-checkpoint',{'source':r['source'],'status':r['status']})['archive_sha256']
+ except Exception as e:r['checkpoint_error']=repr(e)
  for p in w.glob('component-scratch-*'):shutil.rmtree(p)
  r['component_scratch_removed']=not list(w.glob('component-scratch-*'));save()
-raise SystemExit(0 if r['status']=='MATCHED_BEFORE_AFTER_AND_CONTROLS_PASS' else 1)
+raise SystemExit(0 if r['status']=='BUILDS_AND_COMPONENTS_PASS_HOST_RUNTIME_PENDING' else 1)

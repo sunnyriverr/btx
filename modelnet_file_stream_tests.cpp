@@ -635,7 +635,7 @@ BOOST_AUTO_TEST_CASE(job_cleanup_failure_preserves_valid_eof_checkpoint)
 
     // Reconstruct the saved EOF job after the cleanup obstruction is removed.
     fs::remove_all(job);
-    BOOST_REQUIRE(SaveFileStreamJob(jobs, artifact, 0, rec, err));
+    BOOST_REQUIRE(SaveFileStreamJob(jobs, rec, err));
     FileStreamHydration resumed(artifact, 0, file.size(), live, q);
     resumed.SetJobDir(jobs);
     BOOST_REQUIRE(resumed.ApplyRecord(rec, err));

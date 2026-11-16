@@ -13,7 +13,7 @@
 #define BOOST_REQUIRE_MESSAGE(x,m) do { if (!(x)) throw std::runtime_error(std::string(#x)+": "+(m)); } while(0)
 fs::path m_path_root;
 modelnet::Digest48 DigestOf(const std::vector<unsigned char>& bytes) { modelnet::Digest48 d;CSHA384 h;if(!bytes.empty())h.Write(bytes.data(),bytes.size());h.Finalize(d.data.data());return d;}
-fs::path Scratch(const fs::path& root,const std::string& name){auto p=root/name;fs::create_directories(p);return p;}
+fs::path Scratch(const fs::path& root,const std::string& name){auto p=root/name.c_str();fs::create_directories(p);return p;}
 void job_cleanup_failure_preserves_valid_eof_checkpoint()
 {
     using namespace modelnet;
@@ -43,7 +43,7 @@ void job_cleanup_failure_preserves_valid_eof_checkpoint()
 
     // Reconstruct the saved EOF job after the cleanup obstruction is removed.
     fs::remove_all(job);
-    BOOST_REQUIRE(SaveFileStreamJob(jobs, artifact, 0, rec, err));
+    BOOST_REQUIRE(SaveFileStreamJob(jobs, rec, err));
     FileStreamHydration resumed(artifact, 0, file.size(), live, q);
     resumed.SetJobDir(jobs);
     BOOST_REQUIRE(resumed.ApplyRecord(rec, err));
