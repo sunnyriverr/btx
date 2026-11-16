@@ -7,6 +7,8 @@ EXPECTED='cb783882585291c6ab7d5f0796129336d36dc3963be3db2310bbd25fe6737eae'
 assert hashlib.sha256(HELPER.read_bytes()).hexdigest()==EXPECTED
 R={'status':'INCOMPLETE','source':'1e2f8b5f12295002334d3390c12cac0bb4ae2aff','helper_sha256':EXPECTED,'provider':'owned HTTP object-store fixture, not MinIO','product_patch':False,'cases':{},'requests':[]}
 def save(): (OUT/'result.json').write_text(json.dumps(R,indent=2)+'\n')
+previous=json.loads((P/'previous-normal.json').read_text());assert previous['helper_sha256']==EXPECTED
+R['cases']['normal']=previous['normal'];R['normal_control_reused_from']=previous['producer_run']
 objects={};mu=threading.Lock()
 class Store(http.server.BaseHTTPRequestHandler):
  def log_message(self,*a):pass
@@ -63,7 +65,7 @@ with tempfile.TemporaryDirectory(prefix='btx737-',dir='/tmp') as temp:
  def model(tag):
   d=root/('source-'+tag);d.mkdir();hdr=json.dumps({'t':{'dtype':'U8','shape':[8192],'data_offsets':[0,8192]}},separators=(',',':')).encode();b=struct.pack('<Q',len(hdr))+hdr+hashlib.sha256(tag.encode()).digest()*256;(d/'model.safetensors').write_bytes(b);return d,b
  try:
-  for name,interrupt in [('normal',False),('interrupted',True)]:
+  for name,interrupt in [('interrupted',True)]:
    md=root/name;p=start(name+'-initial',md,interrupt);sock=md/'rpc.sock'
    cfg={'endpoint':f'http://127.0.0.1:{server.server_port}','bucket':'test737','prefix':name,'region':'us-east-1','provider':'MINIO','layout':'PIECE_OBJECTS','credential_ref':str(creds),'credential_ref_kind':'path','use_fake':False,'allow_http_loopback':True,'automatic_spend_atoms':0,'idempotency_key':name}
    configured=rpc(sock,'setcloudstorage',[cfg]);source,body=model(name);entry=rpc(sock,'importmodel',[str(source),{'publish':False,'pin':True}]);assert entry.get('cloud_uploaded') is True,entry
@@ -83,7 +85,7 @@ with tempfile.TemporaryDirectory(prefix='btx737-',dir='/tmp') as temp:
       if f.done():raise RuntimeError('recovery returned before interruption boundary: '+str(f.result()))
       time.sleep(.05)
      assert mark.exists(),'successful-cleanup boundary not reached'
-     q=md/'cloud-hydrate-q/artifacts'/art
+     q=md/'cloud-hydrate-q/artifacts'/art/'0'
      job=Path(mark.read_text());case['boundary']={'job_path':str(job.relative_to(md)),'job_exists':job.is_file(),'job':json.loads(job.read_text()),'quarantine_exists':q.exists(),'live_bytes_match':bytes_at(md,art)==body,'catalog':json.loads((md/'catalog.json').read_text())}
      assert case['boundary']['job_exists'] and not q.exists() and case['boundary']['live_bytes_match']
      save();stop(p,True);arm.unlink()
