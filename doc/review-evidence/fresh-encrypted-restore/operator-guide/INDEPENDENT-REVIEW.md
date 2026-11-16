@@ -1,0 +1,23 @@
+# Independent source review: operator recovery guide
+
+Verdict: no blocking technical inaccuracy found in `SECTION.md` or its insertion in `source/doc/managing-wallets.md`. This is a bounded read-only documentation/source review, not independent runtime qualification. No tests, wallet operations, builds or publication were performed.
+
+## Contract and command review
+
+- The prerequisite is correctly a **successful encrypted seed restore**, not mere existence of a newly created destination. `restorewalletbundle` creates the wallet before `ImportBtxWalletBundleIntoWallet` performs its history preflight; the error path does not remove the destination. Preserving it and choosing a new name avoids prescribing destructive cleanup or seed replacement.
+- `rescan=false` correctly describes skipping the explicit import rescan. The import path still calls shielded rehydration; absence of an explicit rescan does not guarantee absence of shielded scanning. The unpatched `backup-current.cpp` is source context, not evidence that deferred fresh encrypted restore works without #753.
+- `walletlock` -> `backupwallet` -> `unloadwallet name false` matches fixture operations. `backupwallet` copies the database without requiring unlock and refuses an existing destination file. `unloadwallet` accepts a wallet name at the root endpoint; its second Boolean removes startup loading. `operator-guide/wallet.cpp:684-736` and `client.cpp:725-727` support the spelling and Boolean conversion.
+- `restorewallet name path` restores and loads the database. `-stdinwalletpassphrase walletpassphrase 600` is source-valid: `bitcoin-cli.cpp:1509-1527,1575-1591` reads a non-echoed passphrase and inserts it before the timeout, and `client.cpp:237` converts the timeout to a number. The examples expose neither a wallet passphrase nor the seed in shell arguments. The 600-second timeout is an example and the draft explicitly asks the operator to adjust it.
+- `rescanblockchain 0` omits `stop_height`, correctly covers genesis through tip, checks availability before scanning, and reports failure/abort as errors. `transactions.cpp:1067-1153` supports the instruction and the refusal of historical partial shielded scans. The guide correctly avoids promising that disabling pruning recovers deleted history.
+- `z_verifywalletintegrity` exposes `scan_incomplete`, `master_seed_available` and `integrity_ok`; `backup-current.cpp:660-773` supports the requested checks and the need to reassess locked-wallet warnings after unlock. These flags alone do not prove complete address discovery; the draft also requires known receipt verification and explicitly limits address-gap coverage.
+- Plaintext seed export, encrypted database backup and encrypted archive are kept distinct. The same database is transferred, verified, restored and rescanned; no sweep, seed replacement, manual shielded-state edits or use of a parallel original wallet is prescribed. Same-network/full-history requirements and keeping the old copy unloaded are appropriate.
+
+## Evidence and limits
+
+The reviewed `wallet_seed_pruned_recovery.py:254-341` executes the workflow through Python JSON-RPC calls: required-history refusal; a separately named successful encrypted deferred restore; incomplete diagnostics; unavailable-history full-scan failure; restart; locked database backup; unload; copied-file digest equality; full-history database restore; unlock/full scan; original-note and balance checks; confirmed spend; restart and later receiving. `fresh-restore-fix/qualification-receipt.json` records the repaired overlay pass, binary/source hashes and the two selected functional-test results. Its qualification remains two-node CPU regtest on Ubuntu x86_64, not production-scale or platform-wide validation.
+
+The shell snippets were checked against CLI argument handling and RPC source. They were **not executed as CLI commands** by this review or by the Python fixture. The fixture uses an unlock timeout of 999000 rather than the illustrative 600. The statement that the route was checked is supported; it must not be read as an exact shell-transcript claim.
+
+One useful nonblocking wording refinement is to make that distinction explicit in the final evidence paragraph: “The workflow was exercised through JSON-RPC with disposable wallets in a two-node CPU regtest; the CLI examples above were checked against source.” No additional native test campaign is needed for this wording change.
+
+The #753 build prerequisite and same-corrected-build caveat prevent a shipping promise for the still-unadopted release1e2 source. Retain both until the actual adoption target changes. No comment or source/PR modification was made or authorized by this review.
