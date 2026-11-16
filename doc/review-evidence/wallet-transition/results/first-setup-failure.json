@@ -1,0 +1,93 @@
+{
+  "source": "1e2f8b5f12295002334d3390c12cac0bb4ae2aff",
+  "binaries": {
+    "btxd": "9b9ba0f8c993c4880c06b2bacbf448b71a8882a9beae461b030d557d81428583",
+    "btx-cli": "5f0b5907cb70132b791b4941c4f0ed0d5a63c06f2613c3291e5bd6501bc9327d"
+  },
+  "old_entrypoints": {
+    "bin/btxd": "62a4412f57b91f68484ad698e545715e96606f143a2854325ae9a7932f1d5b07",
+    "bin/btx-cli": "e3df2c1206939dc0c8bf9a1668e264518197bdeb60220baf43e5a0e26fa03c6c",
+    "libexec/btxd.real": "8ee5f661b2cab4808d5e859bcf60771335b4dbea549c26f3407e2328f8bf292a",
+    "libexec/btx-cli.real": "32b6687aedc8a498bddb078c2053024b8e35afa8b3d345072fd45b7cf689e032"
+  },
+  "old_source_association": "Publisher claim074dac16; not independently reproduced",
+  "inputs": {
+    "wallet_release_transition.py": "77f1260dc4fe5dcdd45ca8f9f69ec11eae2abc89c8832d8e2e4438d004204476",
+    "test_runner.py": "dde84747efe758bcb2789dc561465665f630b59c200fee0c7faa2d6a19007234"
+  },
+  "normal_runner": true,
+  "compiled": false,
+  "deadline_seconds": 900,
+  "scratch_limit_bytes": 1073741824,
+  "startup": [
+    {
+      "binary": "old",
+      "mode": "version",
+      "exit_code": 0,
+      "output_sha256": "b3650be309fc4c1fe76713b0d43144013b24f2352f4c7b2c37b1609cc7d18c66"
+    },
+    {
+      "binary": "old",
+      "mode": "help",
+      "exit_code": 0,
+      "output_sha256": "68a1fca1001e192894cf6c9659fd08b8b4dbb8dd7e12ed521c9a621ec20c064a"
+    },
+    {
+      "binary": "current",
+      "mode": "version",
+      "exit_code": 0,
+      "output_sha256": "222cce13bf7a31740230e48a3b4a29f2b853b909f0fc1277590d8319633fb29f"
+    },
+    {
+      "binary": "current",
+      "mode": "help",
+      "exit_code": 0,
+      "output_sha256": "78db4f83f9a6c152b49e41e5147b181652903014df5bc0aeb8162e6f2ab147a8"
+    }
+  ],
+  "native_test_attempted": true,
+  "group_absent": true,
+  "old_modelnet_help_option": true,
+  "exit_code": 1,
+  "results_csv": [
+    {
+      "test": "wallet_release_transition.py --descriptors",
+      "status": "Failed",
+      "duration(seconds)": "23"
+    },
+    {
+      "test": "ALL",
+      "status": "Failed",
+      "duration(seconds)": "23"
+    }
+  ],
+  "stop_reason": null,
+  "checkpoints": [],
+  "failure_frames": [
+    {
+      "file": "WORKSPACE/source/test/functional/test_framework/test_framework.py",
+      "line": 142,
+      "function": "main"
+    },
+    {
+      "file": "WORKSPACE/build/test/functional/wallet_release_transition.py",
+      "line": 115,
+      "function": "run_test"
+    },
+    {
+      "file": "WORKSPACE/source/test/functional/test_framework/shielded_utils.py",
+      "line": 175,
+      "function": "fund_trusted_transparent_balance"
+    }
+  ],
+  "exception_classes": [
+    "AssertionError"
+  ],
+  "passed": false,
+  "elapsed_seconds": 50.48,
+  "peak_sampled_private_bytes": 39322471,
+  "private_data_removed": true,
+  "old_package_removed": true,
+  "raw_logs_uploaded": false,
+  "finalization_errors": []
+}
