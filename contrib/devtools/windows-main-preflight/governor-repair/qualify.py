@@ -144,7 +144,7 @@ try:
   for name,info in cp['files'].items():assert sha(R/name)==info['sha256'],name
   # Retrieve the completed baseline result and complete generated graph, never
   # another executable or a replacement test body. Authenticate exact ZIP bytes.
-  request=urllib.request.Request(resumed_from['artifact_url'],headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/octet-stream','User-Agent':'BTX verification'})
+  request=urllib.request.Request(resumed_from['artifact_url'],headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json','User-Agent':'BTX verification'})
   class Redirect(urllib.request.HTTPRedirectHandler):
    def redirect_request(self,req,fp,code,msg,headers,url):
     q=super().redirect_request(req,fp,code,msg,headers,url)
