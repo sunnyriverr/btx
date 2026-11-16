@@ -112,7 +112,8 @@ class WalletReleaseTransitionTest(BitcoinTestFramework):
         payer = node.get_wallet_rpc("payer")
         original = node.get_wallet_rpc("original")
         self.mining = payer.getnewaddress()
-        fund_trusted_transparent_balance(self, node, payer, self.mining, Decimal("20"), sync_fun=self.no_op)
+        # The helper spends one 20-BTX coinbase; leave room for its fee.
+        fund_trusted_transparent_balance(self, node, payer, self.mining, Decimal("18"), sync_fun=self.no_op)
         ensure_ring_diversity(self, node, payer, self.mining, payer.z_getnewaddress(), sync_fun=self.no_op)
         self.receive = original.getnewaddress(address_type="p2mr")
         assert original.getaddressinfo(self.receive)["scriptPubKey"].startswith("5220")
