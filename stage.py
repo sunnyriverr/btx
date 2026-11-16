@@ -27,12 +27,12 @@ try:
  cfg=P('obj/test/config.ini');c=configparser.ConfigParser();c.read(cfg)
  c['environment']['SRCDIR']=str(P('product').resolve());c['environment']['BUILDDIR']=str(P('obj').resolve());c['environment']['RPCAUTH']=str(P('product/share/rpcauth/rpcauth.py').resolve())
  with cfg.open('w') as f:c.write(f)
- for name in ('minio_upload.py','base_minio.py','validate_minio.py'):shutil.copy2(name,'product/test/functional/'+name)
+ for name in ('minio_upload.py','base_minio.py','rehost_cases.py'):shutil.copy2(name,'product/test/functional/'+name)
  # Import only: __main__ and all fixture methods remain uncalled.
  sys.path.insert(0,str(P('product/test/functional').resolve()))
- import minio_upload
- assert minio_upload.UploadControl.__dict__.get('run_test') is not None
- assert hasattr(minio_upload.UploadControl, 'set_test_params')
+ import rehost_cases
+ assert rehost_cases.RehostCases.__dict__.get('run_test') is not None
+ assert hasattr(rehost_cases.RehostCases, 'set_test_params')
  receipt['imports']=True;save()
  # Inspect ELF headers/dependencies without invoking product executables or loader.
  for name in ('btxd','btx-cli','btx-modeld'):

@@ -1,0 +1,36 @@
+name: Relocated source rehosting observation
+on:
+  push:
+    branches: [codex/ci-modelnet-rehost-observation]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  observe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 1e2f8b5f12295002334d3390c12cac0bb4ae2aff
+          path: product
+          persist-credentials: false
+      - name: Restore known runtime prerequisites
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq libevent-dev libzmq3-dev
+      - name: Hash verification and import gate
+        run: python3 stage.py
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - name: Bounded real MinIO rehosting observation
+        run: bash native.sh
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: modelnet-rehost-records
+          path: records/
+          retention-days: 14
+          if-no-files-found: error

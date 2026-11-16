@@ -15,7 +15,7 @@ printf '%s\n' "$BTX_MINIO_IMAGE" > records/minio-image-id.txt
 export BTX_UPLOAD_RECEIPT="$PWD/records/bounded-upload.json"
 export UPLOAD_TMPDIR="/tmp/btx-upload-${GITHUB_RUN_ID}"
 set +e
-timeout --signal=TERM --kill-after=15s 600s python3 product/test/functional/minio_upload.py --configfile="$PWD/obj/test/config.ini" --tmpdir="$UPLOAD_TMPDIR" --timeout-factor=1 > records/native.log 2>&1
+timeout --signal=TERM --kill-after=15s 600s python3 product/test/functional/rehost_cases.py --configfile="$PWD/obj/test/config.ini" --tmpdir="$UPLOAD_TMPDIR" --timeout-factor=1 > records/native.log 2>&1
 status=$?
 set -e
 printf '%s\n' "$status" > records/framework-exit.txt
@@ -25,5 +25,5 @@ fi
 if test -f "$UPLOAD_TMPDIR/test_framework.log"; then
   cp "$UPLOAD_TMPDIR/test_framework.log" records/
 fi
-python3 validate_minio.py records/bounded-upload.json "$status"
+python3 validate_rehost.py records/bounded-upload.json "$status"
 exit "$status"
