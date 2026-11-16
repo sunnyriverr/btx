@@ -254,10 +254,12 @@ class WalletCustodyRecoveryTest(BitcoinTestFramework):
         source = node.get_wallet_rpc("source")
         self.mining_address = miner.getnewaddress()
         self.generatetoaddress(node, 110, self.mining_address)
-        self.addresses = [source.getnewaddress() for _ in range(4)]
+        public_keys = [source.getaddressinfo(source.getnewaddress())["pubkey"] for _ in range(4)]
+        self.addresses = [node.deriveaddresses(f"mr({key})", None,
+                          {"require_checksum": False})[0] for key in public_keys]
         venue = node.get_wallet_rpc("venue")
-        venue.importdepositpool([{"desc": source.getaddressinfo(address)["desc"], "index": index}
-                                 for index, address in enumerate(self.addresses)])
+        venue.importdepositpool([{"pubkey": key, "index": index}
+                                 for index, key in enumerate(public_keys)])
         self.log.info("Restore an older watch-only backup using retained later inventory")
         self.inventory_recovery()
         self.log.info("Reconcile a missed fork and new receipt without restarting")
