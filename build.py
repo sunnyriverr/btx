@@ -1,7 +1,7 @@
 from pathlib import Path
 import os,sys,json,subprocess,tarfile,shutil,time,selectors,signal,hashlib
 from checkpoint import sha,restore_timestamps,verify_restored,create
-HEAD='1e2f8b5f12295002334d3390c12cac0bb4ae2aff';OLD=HEAD;ARCHIVE='4e808f8daa32bba48561d5d87b05a7743d1f0cba12d75333794f0acebdcb3013'
+HEAD='1e2f8b5f12295002334d3390c12cac0bb4ae2aff';OLD=HEAD;ARCHIVE='e6cf08741c9f309c9f7b2f985a900b5e8fea7174b8c24de6f57f84cca304bbdb'
 w=Path(os.environ['GITHUB_WORKSPACE']);out=w/'records';out.mkdir(exist_ok=True);r={'source':HEAD,'checkpoint_source':OLD,'complete':False,'commands':[]};restored=False
 
 def save():(out/'build-result.json').write_text(json.dumps(r,indent=2)+'\n')
@@ -45,6 +45,7 @@ try:
    if a.is_symlink():b.symlink_to(os.readlink(a))
    else:shutil.copy2(a,b)
    changed.append(name)
+   os.utime(b,None) if not b.is_symlink() else None
   if not a.is_symlink():os.chmod(b,a.stat().st_mode & 0o777)
   assert (b.is_symlink() and a.is_symlink() and os.readlink(a)==os.readlink(b)) or (not a.is_symlink() and sha(a)==sha(b) and (a.stat().st_mode&0o777)==(b.stat().st_mode&0o777)),name
  r['changed_source_files']=changed;r['source_verified']=True
@@ -66,9 +67,13 @@ try:
  assert 'modelnet_feed_tests' in tests and 'modelnet_feed_restart_tests' in tests
 
  assert 'Re-running CMake' not in dry
+ r['resources']=run(['bash','-c','nproc; free -b; df -B1 .'],'resume-resources',30)
+ available=int(next(x.split()[1] for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:')))*1024
+ workers=4 if os.cpu_count()>=4 and available>=8*1024**3 else 2
+ r['workers']=workers; save()
  assert 0<len(steps)<=3000, 'Unexpected build size: '+str(len(steps))
  save()
- run(['ninja','-C',build,'-f',observed,'-j2','test_btx'],'baseline-build',1500)
+ run(['ninja','-C',build,'-f',observed,'-j'+str(workers),'test_btx'],'baseline-build',1500)
  binary=build/'bin/test_btx'; assert binary.is_file()
  r['baseline_binary_sha256']=sha(binary); save()
  failing={'publisher_observation_matches_after_reopen','publisher_history_survives_expired_events_and_legacy_load','malformed_publisher_history_keeps_valid_new_publishers'}
@@ -78,9 +83,10 @@ try:
  # The maintained cases are identical; change only the current feed implementation.
  assert sha(source/'src/modelnet/feed.cpp')==sha(w/'baseline-feed.cpp')
  shutil.copy2(w/'candidate-feed.cpp',source/'src/modelnet/feed.cpp')
+ os.utime(source/'src/modelnet/feed.cpp',None)
  candidate_dry=run(['ninja','-C',build,'-f',observed,'-n','test_btx'],'candidate-plan',120)
  assert 'Re-running CMake' not in candidate_dry
- run(['ninja','-C',build,'-f',observed,'-j2','test_btx'],'candidate-build',300)
+ run(['ninja','-C',build,'-f',observed,'-j'+str(workers),'test_btx'],'candidate-build',300)
  r['candidate_binary_sha256']=sha(binary); save()
  for case in cases:
   run([binary,'--run_test='+case,'--log_level=test_suite'],'candidate-'+case.replace('/','-'),60)
