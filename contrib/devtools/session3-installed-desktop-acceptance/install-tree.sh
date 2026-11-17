@@ -13,6 +13,9 @@ export XDG_DATA_HOME="$private/home/data" XDG_CONFIG_HOME="$private/home/config"
 export XDG_CACHE_HOME="$private/home/cache"
 # Sourcing only defines functions; the upstream BASH_SOURCE guard excludes main.
 source "$fixture/source/install.sh"
+# The enclosing runtime is private (0700). Upstream cp -RP respects umask;
+# preserve the admitted 0755/0644 payload modes without exposing that parent.
+umask 022
 install_prebuilt_release_tree "$unpacked/bin" 0.34.16 "$prefix" linux-x86_64 \
   https://github.com/sunnyriverr/btx/actions/runs/44063898937/artifacts/14319148652 \
   074dac167c26c1e091198f691ed5727817dba88a

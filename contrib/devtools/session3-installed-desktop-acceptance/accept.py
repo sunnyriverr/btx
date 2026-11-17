@@ -121,6 +121,10 @@ def admit(outer, root, pins):
     assert sha(HERE / 'source/install.sh') == pins['installer_sha256']
     # Retain tar member types/modes/hashes rather than trusting a successful extraction.
     expected = json.loads((dest / 'members.json').read_text())
+    # Producer manifests retain the archive root under its full name, while
+    # child entries are relative to it. Filesystem snapshots omit that root.
+    root_entry = expected.pop(pins['root'])
+    assert root_entry['type'] == 'directory' and root_entry['size'] == 0
     extracted = root / 'extracted'
     extracted.mkdir()
     with tarfile.open(archive) as tar:
@@ -137,6 +141,7 @@ def admit(outer, root, pins):
             relative = path.relative_to(pins['root']).as_posix()
             if relative == '.':
                 assert m.isdir()
+                assert m.size == root_entry['size'] and oct(m.mode) == root_entry['mode']
                 continue
             want = expected[relative]
             kind = ('file' if m.isfile() else 'directory' if m.isdir()
@@ -148,6 +153,7 @@ def admit(outer, root, pins):
                 assert hashlib.sha256(m.linkname.encode()).hexdigest() == want['link_text_sha256']
         tar.extractall(extracted, filter='data')
     unpacked = extracted / pins['root']
+    unpacked.chmod(int(root_entry['mode'], 8))
     # data_filter intentionally ignores directory modes. Restore only the
     # admitted manifest's modes inside this private parent, before comparison.
     for n, want in expected.items():
