@@ -1,0 +1,68 @@
+{
+  "source": "371013d61dc124a363521df5b94e97f64d2464f2",
+  "source_tree": "466ea00dd1384a287b4c7a3230159aba1bd6b1f7",
+  "artifact": 14284330090,
+  "producer_run": 43978863702,
+  "artifact_zip_sha256": "1f9dbc07d7ce15f01ddbe2d90e192b53444aad2b3f073d95f0c180d6ff2ba8d8",
+  "artifact_zip_bytes": 215419343,
+  "checkpoint_sha256": "cf89499b06844b12b6a0e4a5071e2b29079a0440b8e5ff3cebd3936391a52ffd",
+  "producer_sha256": "08018b9bbcc91dcf8bb51e9460a65120926fa7c538c9d69f98267316e8875a5d",
+  "binary_sha256": {
+    "btxd": "9e2db7364c92d69e6dc07566dee3592492ce6a6882de012865e8c35397fd92d4",
+    "btx-cli": "b58bd8167c53f09dfa1c7bfd9b25a0a77c5e836b2a73e2bc6fbb5ff7e09b636a"
+  },
+  "selected": [
+    "wallet_sendall.py --descriptors"
+  ],
+  "filter": "^wallet_sendall[.]py --descriptors$",
+  "scenario_methods": [
+    "test_cleanup",
+    "sendall_two_utxos",
+    "sendall_split",
+    "sendall_and_spend",
+    "sendall_invalid_recipient_addresses",
+    "sendall_duplicate_recipient",
+    "sendall_invalid_amounts",
+    "sendall_negative_effective_value",
+    "sendall_with_send_max",
+    "sendall_specific_inputs",
+    "sendall_fails_on_missing_input",
+    "sendall_fails_on_no_address",
+    "sendall_fails_on_specific_inputs_with_send_max",
+    "sendall_fails_on_invalid_options",
+    "sendall_fails_on_high_fee",
+    "sendall_fails_on_low_fee",
+    "sendall_watchonly_specific_inputs",
+    "sendall_with_minconf",
+    "sendall_with_maxconf",
+    "sendall_anti_fee_sniping",
+    "sendall_spends_unconfirmed_change",
+    "sendall_spends_unconfirmed_inputs_if_specified",
+    "sendall_does_ancestor_aware_funding",
+    "sendall_fails_with_transaction_too_large"
+  ],
+  "scenario_count": 24,
+  "critical_sources": {
+    "test/functional/create_cache.py": "8242cd83f4d400a604d7ecb0491473cd0ac3392fca8aba9f5187bbb2b12dcbac",
+    "test/functional/test_framework/test_framework.py": "fe48cffa30c687ff85561ae49780008c45978e50aa4d8f31781e783793ceaa09",
+    "test/functional/test_framework/test_node.py": "b6586661b9582b5bfc61e80a32ae0398d989d35fd7e9c4f58c6f77046e585ed3",
+    "test/functional/test_framework/util.py": "b2f88287e5a7050ba8e95d0d138fdd08fb0f9f4aab328fee583327f0640efe01",
+    "test/functional/test_runner.py": "f0f8f44e0767e0faa9e6cc6b012bcd65202fc0b54c4111dbfaa12a3efaa24f88",
+    "test/functional/wallet_sendall.py": "b0034feab28cbac1ce02e527130bdde7776b4af5132c5d8db8f60fa4abec9482"
+  },
+  "bounds": {
+    "attempts": 1,
+    "parallel_tests": 1,
+    "runtime_seconds": 1200,
+    "termination_grace_seconds": 30,
+    "scratch_cap_bytes": 536870912,
+    "host_free_start_min_bytes": 4294967296,
+    "host_free_stop_min_bytes": 1342177280,
+    "rebuild": false,
+    "automatic_retry": false
+  },
+  "port_min": 33000,
+  "port_max_exclusive": 48000,
+  "rebuild": false,
+  "automatic_retry": false
+}

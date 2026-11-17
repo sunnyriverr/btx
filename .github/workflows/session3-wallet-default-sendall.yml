@@ -1,0 +1,79 @@
+{
+  "name": "Session3 normal-runner sendall \u2014 no rebuild",
+  "on": {
+    "push": {
+      "branches": [
+        "codex/ci-wallet-default-sendall-run"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "read",
+    "actions": "read"
+  },
+  "concurrency": {
+    "group": "session3-wallet-default-sendall-run",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "qualify": {
+      "if": "github.repository == 'sunnyriverr/btx' && github.ref == 'refs/heads/codex/ci-wallet-default-sendall-run'",
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 45,
+      "env": {
+        "PYTHONOPTIMIZE": "0"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "persist-credentials": false
+          }
+        },
+        {
+          "name": "Provision runtime/static-inspection dependencies only",
+          "timeout-minutes": 5,
+          "run": "sudo apt-get update -qq\nsudo apt-get install -y --no-install-recommends binutils libevent-2.1-7t64 libevent-pthreads-2.1-7t64 libsqlite3-0 libpython3.12t64 libstdc++6 libgomp1"
+        },
+        {
+          "name": "Restore verified binaries/source/config without configure or compilation",
+          "timeout-minutes": 8,
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          },
+          "run": "python3 proposal/restore.py"
+        },
+        {
+          "name": "Construct normal entrypoint without setup or node startup",
+          "timeout-minutes": 2,
+          "run": "python3 proposal/run.py preflight"
+        },
+        {
+          "name": "One bounded normal-runner sendall descriptor script",
+          "timeout-minutes": 22,
+          "run": "python3 proposal/run.py run",
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          }
+        },
+        {
+          "name": "Preserve logs and qualify exact result; clean owned disposable data",
+          "if": "always()",
+          "timeout-minutes": 3,
+          "run": "python3 proposal/run.py collect"
+        },
+        {
+          "uses": "actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f",
+          "if": "always()",
+          "timeout-minutes": 2,
+          "with": {
+            "name": "session3-wallet-default-sendall-records",
+            "path": "records/",
+            "retention-days": 7,
+            "if-no-files-found": "warn"
+          }
+        }
+      ]
+    }
+  }
+}
