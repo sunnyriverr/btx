@@ -1,0 +1,21 @@
+2026-11-17T02:02:24.409000Z TestFramework (INFO): PRNG seed is: 3486930942048305020
+2026-11-17T02:02:24.410000Z TestFramework (INFO): Initializing test directory /home/runner/work/btx/btx/runtime-baseline
+2026-11-17T02:02:39.971000Z TestFramework (ERROR): Unexpected exception
+Traceback (most recent call last):
+  File "/home/runner/work/btx/btx/product/test/functional/test_framework/test_framework.py", line 142, in main
+    self.run_test()
+  File "/home/runner/work/btx/btx/product/test/functional/feature_swarm_profile_overrides.py", line 136, in run_test
+    assert_equal(node.getmodelnetworkinfo()["quota_bytes"], 8 * 1024 ** 2)
+  File "/home/runner/work/btx/btx/product/test/functional/test_framework/util.py", line 81, in assert_equal
+    raise AssertionError("not(%s)" % " == ".join(str(arg) for arg in (thing1, thing2) + args))
+AssertionError: not(1073741824 == 8388608)
+2026-11-17T02:02:40.022000Z TestFramework (INFO): Not stopping nodes as test failed. The dangling processes will be cleaned up later.
+2026-11-17T02:02:40.022000Z TestFramework (WARNING): Not cleaning up dir /home/runner/work/btx/btx/runtime-baseline
+2026-11-17T02:02:40.022000Z TestFramework (ERROR): Test failed. Test logging available at /home/runner/work/btx/btx/runtime-baseline/test_framework.log
+2026-11-17T02:02:40.022000Z TestFramework (ERROR): 
+2026-11-17T02:02:40.022000Z TestFramework (ERROR): Hint: Call /home/runner/work/btx/btx/product/test/functional/combine_logs.py '/home/runner/work/btx/btx/runtime-baseline' to consolidate all logs
+2026-11-17T02:02:40.022000Z TestFramework (ERROR): 
+2026-11-17T02:02:40.022000Z TestFramework (ERROR): If this failure happened unexpectedly or intermittently, please file a bug and provide a link or upload of the combined log.
+2026-11-17T02:02:40.022000Z TestFramework (ERROR): https://github.com/btxchain/btx/issues
+2026-11-17T02:02:40.022000Z TestFramework (ERROR): 
+[node 0] Cleaning up leftover process

@@ -1,0 +1,271 @@
+{
+  "run": 43999682956,
+  "head": "032427814cfd5e9e6fe635865eb6e039342726ab",
+  "url": "https://github.com/sunnyriverr/btx/actions/runs/43999682956",
+  "conclusion": "success",
+  "records_artifact": 14292016548,
+  "records_zip_sha256": "d16cc7292f28ff9c8124c4736fe6b1a01aedf9226d39f88d8ed0406d29ffa138",
+  "complete": true,
+  "error": null,
+  "commands": [
+    {
+      "step": "product-git-init",
+      "argv": [
+        "git",
+        "init"
+      ],
+      "exit": 0,
+      "seconds": 0.5025571339999715
+    },
+    {
+      "step": "product-git-fetch",
+      "argv": [
+        "git",
+        "fetch",
+        "--depth=1",
+        "https://github.com/btxchain/btx.git",
+        "371013d61dc124a363521df5b94e97f64d2464f2"
+      ],
+      "exit": 0,
+      "seconds": 3.3041197339999826
+    },
+    {
+      "step": "product-git-head",
+      "argv": [
+        "git",
+        "update-ref",
+        "HEAD",
+        "371013d61dc124a363521df5b94e97f64d2464f2"
+      ],
+      "exit": 0,
+      "seconds": 0.0010020149999832029
+    },
+    {
+      "step": "product-index",
+      "argv": [
+        "git",
+        "read-tree",
+        "371013d61dc124a363521df5b94e97f64d2464f2"
+      ],
+      "exit": 0,
+      "seconds": 0.02070110200003228
+    },
+    {
+      "step": "gcc",
+      "argv": [
+        "g++",
+        "-dumpfullversion"
+      ],
+      "exit": 0,
+      "seconds": 0.00043622999999115564
+    },
+    {
+      "step": "openssl",
+      "argv": [
+        "/home/runner/work/btx/btx/gui-pilot-runtime/openssl/bin/openssl",
+        "version"
+      ],
+      "exit": 0,
+      "seconds": 0.0012406280000050174
+    },
+    {
+      "step": "configure",
+      "argv": [
+        "cmake",
+        "-S",
+        "/home/runner/work/btx/btx/product",
+        "-B",
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild"
+      ],
+      "exit": 0,
+      "seconds": 1.8484887849999723
+    },
+    {
+      "step": "baseline-graph-regeneration",
+      "argv": [
+        "ninja",
+        "build.ninja"
+      ],
+      "exit": 0,
+      "seconds": 0.1212406999999871
+    },
+    {
+      "step": "baseline-plan",
+      "argv": [
+        "ninja",
+        "-f",
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild/profile-plan.ninja",
+        "-n",
+        "btxd",
+        "btx-cli",
+        "btx-modeld",
+        "btx-guardd",
+        "test_btx"
+      ],
+      "exit": 0,
+      "seconds": 0.1839987149999729
+    },
+    {
+      "step": "baseline-build",
+      "argv": [
+        "ninja",
+        "-j2",
+        "btxd",
+        "btx-cli",
+        "btx-modeld",
+        "btx-guardd",
+        "test_btx"
+      ],
+      "exit": 0,
+      "seconds": 41.500215986
+    },
+    {
+      "step": "baseline-ldd-btxd",
+      "argv": [
+        "ldd",
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild/bin/btxd"
+      ],
+      "exit": 0,
+      "seconds": 0.0044094790000031026
+    },
+    {
+      "step": "baseline-ldd-btx-modeld",
+      "argv": [
+        "ldd",
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild/bin/btx-modeld"
+      ],
+      "exit": 0,
+      "seconds": 0.0034892850000005637
+    },
+    {
+      "step": "baseline-ldd-btx-guardd",
+      "argv": [
+        "ldd",
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild/bin/btx-guardd"
+      ],
+      "exit": 0,
+      "seconds": 0.0033034570000154417
+    },
+    {
+      "step": "baseline-infra-suite",
+      "argv": [
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild/bin/test_btx",
+        "--run_test=modelnet_infra_tests",
+        "--log_level=test_suite"
+      ],
+      "exit": 0,
+      "seconds": 0.3195236869999576
+    },
+    {
+      "step": "baseline-native",
+      "argv": [
+        "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python3",
+        "/home/runner/work/btx/btx/product/test/functional/feature_swarm_profile_overrides.py",
+        "--configfile=/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild/test/config.ini",
+        "--tmpdir=/home/runner/work/btx/btx/runtime-baseline",
+        "--nocleanup"
+      ],
+      "exit": 1,
+      "seconds": 15.854520847999993
+    },
+    {
+      "step": "patch-check",
+      "argv": [
+        "git",
+        "apply",
+        "--check",
+        "/home/runner/work/btx/btx/proposal/restart-profile.patch"
+      ],
+      "exit": 0,
+      "seconds": 0.0019662400000015623
+    },
+    {
+      "step": "patch-apply",
+      "argv": [
+        "git",
+        "apply",
+        "/home/runner/work/btx/btx/proposal/restart-profile.patch"
+      ],
+      "exit": 0,
+      "seconds": 0.002024555000048167
+    },
+    {
+      "step": "candidate-plan",
+      "argv": [
+        "ninja",
+        "-f",
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild/profile-plan.ninja",
+        "-n",
+        "btxd",
+        "btx-cli",
+        "btx-modeld",
+        "btx-guardd",
+        "test_btx"
+      ],
+      "exit": 0,
+      "seconds": 0.20491514999997662
+    },
+    {
+      "step": "candidate-build",
+      "argv": [
+        "ninja",
+        "-j2",
+        "btxd",
+        "btx-cli",
+        "btx-modeld",
+        "btx-guardd",
+        "test_btx"
+      ],
+      "exit": 0,
+      "seconds": 39.596842848999984
+    },
+    {
+      "step": "candidate-infra-suite",
+      "argv": [
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild/bin/test_btx",
+        "--run_test=modelnet_infra_tests",
+        "--log_level=test_suite"
+      ],
+      "exit": 0,
+      "seconds": 0.323389044999999
+    },
+    {
+      "step": "candidate-native",
+      "argv": [
+        "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python3",
+        "/home/runner/work/btx/btx/product/test/functional/feature_swarm_profile_overrides.py",
+        "--configfile=/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild/test/config.ini",
+        "--tmpdir=/home/runner/work/btx/btx/runtime-candidate",
+        "--nocleanup"
+      ],
+      "exit": 0,
+      "seconds": 65.157627676
+    }
+  ],
+  "baseline_actions": 26,
+  "candidate_actions": 21,
+  "baseline_expected_restart_failure": true,
+  "native_pair_pass": true,
+  "baseline_hash": {
+    "btxd": "57c42583d9fab884ba56b65fedb729ee4b9d193cba09cc328c6d6939a6c3e91b",
+    "btx-cli": "210488247cf9a40b7f2daa31de8ebf6df4ff2495ce48d812be67e5e37166b645",
+    "btx-modeld": "270558fdec824134abd39f436ccdacb30fb5a5460280f8120cfdc832d2a86e61",
+    "btx-guardd": "8c35aefa17618dde4cd51a5b2c40b9782d8efd1c50bd04416155edfdbc10ab95",
+    "test_btx": "8e1aca934b3717363d689185ed0fc62e6ba0e2bd87fef009517b736e3dbaafae"
+  },
+  "candidate_hash": {
+    "btxd": "00636dbeac1c75f808b06ad254b129270e60ccb9551b908eaf64ec18cc870995",
+    "btx-cli": "9f38253c07a76f4064dd6a8d293eb4fd64670932e24f4a2fedec39924b8a7928",
+    "btx-modeld": "aeca4df6cd11fb2dfbee14067fa8bbd512a268ffd1ea3b422a46dcc2c67956db",
+    "btx-guardd": "8c35aefa17618dde4cd51a5b2c40b9782d8efd1c50bd04416155edfdbc10ab95",
+    "test_btx": "07f570d46e244e035fd025547f60d1a227bdf7e1ca474e00b34d7cdf96f0d9e6"
+  },
+  "retention_error": null,
+  "checkpoint": {
+    "id": 14291528526,
+    "digest": "sha256:a39181bd0b29702d4bb7f64b3040816c181fbb1e1659a7629de873efb543521b",
+    "size_in_bytes": 523403226,
+    "expires_at": "2026-12-01T02:04:55Z"
+  },
+  "checkpoint_local_verification": "Not downloaded: disk reserve; metadata retained"
+}
