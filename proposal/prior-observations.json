@@ -1,0 +1,123 @@
+{
+  "complete": false,
+  "cases": {
+    "healthy": {
+      "job_id": "4243f9462eeb2d41455360d00b6e4339",
+      "getmodel_response": {
+        "schema_version": 2,
+        "uri": "btx://pq2q9uzg7a2kmnyns88f4ky0p9pc9zadh9j3uqrlztn0kf4vpllc6erycr6cg758zcld3mnps83au9shnqy4w",
+        "automatic_spend_atoms": 0,
+        "paid_atoms": 0,
+        "free_piece_count": 0,
+        "paid_piece_count": 0,
+        "eta_s": 0,
+        "plan": "WAIT_FREE",
+        "status": "running",
+        "async": true,
+        "job_id": "4243f9462eeb2d41455360d00b6e4339",
+        "peers": 1,
+        "max_routers": 8,
+        "note": "poll getmodeljob; helper unix RPC does not wait for WAN retrieve"
+      },
+      "persisted_active": true,
+      "partial_verified": true,
+      "before_cancel_pieces": {
+        "0.piece": {
+          "bytes": 4194304,
+          "sha256": "caa5dbc39345ae481334d8fc33a0b181a840da4543fbfcd3af0dc095f2868a5f",
+          "inode": 4771658,
+          "mtime_ns": 1794909623787597446
+        }
+      },
+      "saved_before_sha256": "7861e76f7c0c0b5a3a49767cc8ba41a34c180a9a03c60991d0ba136726b7149e",
+      "cancel_reply": {
+        "jsonrpc": "1.0",
+        "id": 6,
+        "result": {
+          "schema_version": 2,
+          "cancelled": true,
+          "job_id": "4243f9462eeb2d41455360d00b6e4339",
+          "jobs": [
+            {
+              "job_id": "4243f9462eeb2d41455360d00b6e4339",
+              "status": "cancelled",
+              "created_ms": 1794909559688,
+              "model_id": "500bc123dd55b7324e073a6b623c250e0a2eb6e5947801fc4b9bec9ab03ffe35919303d611ea1c58fb63b986078f7858",
+              "bytes_committed": 0,
+              "pieces_committed": 0,
+              "file_index": 0,
+              "piece_index": 0,
+              "inflight": 2,
+              "peer_retries": 0,
+              "stalled_for_ms": 64111,
+              "bytes_per_sec": 0,
+              "last_peer": "127.0.0.1:33407"
+            }
+          ],
+          "job_count": 1,
+          "used_bytes": 4194304,
+          "automatic_spend_atoms": 0,
+          "next_actions": [
+            "getmodeltransfers",
+            "getmodel FREE_ONLY",
+            "automatic_spend_atoms stays 0"
+          ]
+        },
+        "error": null
+      },
+      "rpc_error": null,
+      "cancelled_live": true,
+      "persistence_error": false,
+      "old_file_preserved_on_cancel": false,
+      "clean_stop": true,
+      "after_stop_pieces": {
+        "0.piece": {
+          "bytes": 4194304,
+          "sha256": "caa5dbc39345ae481334d8fc33a0b181a840da4543fbfcd3af0dc095f2868a5f",
+          "inode": 4771658,
+          "mtime_ns": 1794909623787597446
+        }
+      },
+      "pieces_preserved": true,
+      "old_file_preserved_on_stop": false,
+      "fault_present_through_stop": false,
+      "saved_job_removed": true,
+      "persistence_warning": false,
+      "origin_still_alive": true,
+      "reopen_ready": true,
+      "new_verified_piece": false,
+      "resumed": false,
+      "quiet_window_complete": true,
+      "reopened_job": {}
+    },
+    "recovered_before_stop": {
+      "job_id": "f206ec75566495a2e62661f65e423ea8",
+      "getmodel_response": {
+        "schema_version": 2,
+        "uri": "btx://pq2q9uzg7a2kmnyns88f4ky0p9pc9zadh9j3uqrlztn0kf4vpllc6erycr6cg758zcld3mnps83au9shnqy4w",
+        "automatic_spend_atoms": 0,
+        "paid_atoms": 0,
+        "free_piece_count": 0,
+        "paid_piece_count": 0,
+        "eta_s": 0,
+        "plan": "WAIT_FREE",
+        "status": "running",
+        "async": true,
+        "job_id": "f206ec75566495a2e62661f65e423ea8",
+        "peers": 1,
+        "max_routers": 8,
+        "note": "poll getmodeljob; helper unix RPC does not wait for WAN retrieve"
+      },
+      "persisted_active": true
+    }
+  },
+  "source_verified": true,
+  "binary_verified": true,
+  "origin_verified": true,
+  "clean_cleanup": true,
+  "completion_exact": false,
+  "seconds": 153.06696606399998,
+  "setup_or_observation_error": "Traceback (most recent call last):\n  File \"/home/runner/work/btx/btx/proposal/observe.py\", line 94, in observe\n    initial=wait_for(lambda:recv.pieces(artifact),75,'no verified partial piece before timeout');verify_pieces(model,initial)\n  File \"/home/runner/work/btx/btx/proposal/observe.py\", line 31, in wait_for\n    raise RuntimeError(message)\nRuntimeError: no verified partial piece before timeout\n",
+  "cleanup_errors": [],
+  "verdict": "INCONCLUSIVE"
+}

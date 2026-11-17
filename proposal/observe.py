@@ -1,8 +1,9 @@
 """Prepared normal-helper test; no native execution at import time."""
 import argparse, errno, os, hashlib, json, math, signal, socket, struct, shutil, tempfile, time
 from pathlib import Path
-from helpers import Helper, completion, digest, require
+from helpers import Helper, completion, digest, require, UPLOAD_BPS
 from classify import classify
+PRIOR_HASH='33d02aaa7300fabeedf08d2bbb09f52af91e6462b3f90098ce0c4ec1f2b49cb6'
 EXPECTED='ddbdfdfacbbf305f1a4e85f9e2ffbabefb79e43e3c260452162b6a4d525e85bf'
 SIZE=16 << 20
 
@@ -27,7 +28,7 @@ def wait_for(fn, seconds, message):
     while time.monotonic()<end:
         result=fn()
         if result:return result
-        time.sleep(.25)
+        time.sleep(1)
     raise RuntimeError(message)
 
 def admit_source(receipt):
@@ -67,9 +68,29 @@ def remove_stopped_runtime(root,stopped):
     shutil.rmtree(root)
     return True
 
-def observe(binary,out,source_verified):
+def load_healthy_receipt(path):
+    require(digest(path)==PRIOR_HASH,'prior observation identity')
+    prior=json.loads(path.read_text());c=prior['cases']['healthy']
+    require(prior['binary_verified'] is True and prior['source_verified'] is True and prior['clean_cleanup'] is True,'prior provenance/cleanup')
+    require(all(c[k] is True for k in ('persisted_active','partial_verified','cancelled_live','clean_stop','pieces_preserved','saved_job_removed','reopen_ready','quiet_window_complete')),'prior healthy control incomplete')
+    require(c['resumed'] is False and c['new_verified_piece'] is False,'prior healthy control resumed')
+    c['reused_from_run']=44060423258
+    c['scope_note']='Original128KiB/s healthy control, same verified helper/source; not repeated at the new512KiB/s diagnostic-fixture pace.'
+    return c
+
+def sample_transfer(receiver,provider,job):
+    snapshot={}
+    try:snapshot['job']=receiver.job(job)
+    except Exception as exc:snapshot['job_error']=repr(exc)
+    try:
+        info=provider.info()
+        snapshot['provider']={k:info.get(k) for k in ('upload_limit','active_transfers','direct_bytes','helper_ready','pq1_ready')}
+    except Exception as exc:snapshot['provider_error']=repr(exc)
+    return snapshot
+
+def observe(binary,out,source_verified,healthy):
     out.mkdir(parents=True,exist_ok=False)
-    r={'complete':False,'cases':{},'source_verified':source_verified,'binary_verified':digest(binary)==EXPECTED,'origin_verified':False,'clean_cleanup':False,'completion_exact':False}
+    r={'complete':False,'cases':{'healthy':healthy},'healthy_reused_from_run':44060423258,'source_verified':source_verified,'binary_verified':digest(binary)==EXPECTED,'origin_verified':False,'clean_cleanup':False,'completion_exact':False}
     helpers=[];faults=[];runtime_root=None;start=time.monotonic()
     def record():
         r['seconds']=time.monotonic()-start
@@ -80,18 +101,30 @@ def observe(binary,out,source_verified):
         require(r['binary_verified'] and source_verified,'binary/source provenance gate')
         runtime_root=Path(tempfile.mkdtemp(prefix="s2-retrieval-control-"))
         root=runtime_root;model=root/'model.safetensors';make_model(model);expected=digest(model,'sha384');total_pieces=math.ceil(model.stat().st_size/(4 << 20))
-        with socket.socket() as sock:sock.bind(('127.0.0.1',0));port=sock.getsockname()[1]
-        provider=Helper(binary,root/'provider',out,'provider',64 << 20,hostport=port);helpers.append(provider);provider.start()
-        imported=provider.ok('importmodel',[str(model),{'pin':True}]);require(imported.get('seeded') is True,'source not serving')
-        uri=imported['uri'];artifact=imported['artifact_id'];require(provider.info()['upload_limit']==128*1024,'provider pacing configuration')
-        r['origin_verified']=True;record()
-        for name in ['healthy','recovered_before_stop','fault_through_stop']:
+        def new_provider(label):
+            with socket.socket() as sock:sock.bind(('127.0.0.1',0));port=sock.getsockname()[1]
+            provider=Helper(binary,root/('provider-'+label),out,'provider-'+label,64 << 20,hostport=port)
+            helpers.append(provider);provider.start()
+            imported=provider.ok('importmodel',[str(model),{'pin':True}]);require(imported.get('seeded') is True,'source not serving')
+            require(provider.info()['upload_limit']==UPLOAD_BPS,'provider pacing configuration')
+            r['origin_verified']=True;record()
+            return provider,port,imported['uri'],imported['artifact_id']
+        for name in ['recovered_before_stop','fault_through_stop']:
+            print('CASE '+name,flush=True)
+            provider,port,uri,artifact=new_provider(name)
             c={};r['cases'][name]=c
             recv=Helper(binary,root/name,out,name,64 << 20,peer=f'127.0.0.1:{port}');helpers.append(recv);recv.start()
             job,answer=recv.request(uri);require(bool(job),'no native job');c['job_id']=job;c['getmodel_response']=answer
             state=recv.store/'retrieve_jobs.json';fault=recv.store/'retrieve_jobs.json.tmp'
             wait_for(lambda:saved(state,job),10,'job not persisted');c['persisted_active']=True
-            initial=wait_for(lambda:recv.pieces(artifact),75,'no verified partial piece before timeout');verify_pieces(model,initial)
+            c['waiting_snapshots']=[]
+            def partial_piece():
+                snap=sample_transfer(recv,provider,job);c['waiting_snapshots'].append(snap);record()
+                status=snap.get('job',{}).get('status')
+                require(status not in ('done','failed','cancelled'),'job ended before partial-piece gate: '+json.dumps(snap))
+                return recv.pieces(artifact)
+            initial=wait_for(partial_piece,75,'no verified partial piece before timeout');verify_pieces(model,initial)
+            print('PARTIAL '+name,flush=True)
             require(len(initial)<total_pieces and recv.job(job)['status'] in ('queued','running'),'job completed before cancellation')
             c['partial_verified']=True;c['before_cancel_pieces']=initial;before=state.read_bytes();c['saved_before_sha256']=digest(state)
             if name!='healthy':
@@ -127,8 +160,10 @@ def observe(binary,out,source_verified):
                 # Capture status for context; it is not sufficient evidence of resumed work.
                 c['reopened_job']=recv.job(job);time.sleep(.5)
             else:c['quiet_window_complete']=True
-            recv.stop();record()
-        # Independent legitimate completion in one receiver, with the same serving origin.
+            recv.stop();provider.stop();record()
+        # Independent fresh provider avoids paced state leaking across cases.
+        print("CASE completion",flush=True)
+        provider,port,uri,artifact=new_provider("completion")
         control=Helper(binary,root/'completion',out,'completion',64 << 20,peer=f'127.0.0.1:{port}');helpers.append(control);control.start();job,_=control.request(uri);row=control.settled(job,240);require(row['status']=='done','uncancelled completion failed');r['completion']=completion(control,uri,expected);r['completion_exact']=True;control.stop();provider.stop()
         r['complete']=True
     except Exception as e:
@@ -147,6 +182,7 @@ def observe(binary,out,source_verified):
     return r
 
 if __name__=='__main__':
-    ap=argparse.ArgumentParser();ap.add_argument('--helper',type=Path,required=True);ap.add_argument('--out',type=Path,required=True);ap.add_argument('--source-receipt',type=Path,required=True);a=ap.parse_args()
+    ap=argparse.ArgumentParser();ap.add_argument('--helper',type=Path,required=True);ap.add_argument('--out',type=Path,required=True);ap.add_argument('--source-receipt',type=Path,required=True);ap.add_argument('--healthy-receipt',type=Path,required=True);a=ap.parse_args()
     receipt=json.loads(a.source_receipt.read_text());require(admit_source(receipt),'source receipt mismatch')
-    result=observe(a.helper.resolve(),a.out.resolve(),True);print(result['verdict']);raise SystemExit(0 if result['complete'] and result['verdict']!='INCONCLUSIVE'else 2)
+    healthy=load_healthy_receipt(a.healthy_receipt)
+    result=observe(a.helper.resolve(),a.out.resolve(),True,healthy);print(result['verdict']);raise SystemExit(0 if result['complete'] and result['verdict']!='INCONCLUSIVE'else 2)

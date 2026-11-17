@@ -4,6 +4,7 @@
 from pathlib import Path
 import hashlib, json, os, signal, socket, subprocess, time
 PIECE=4<<20
+UPLOAD_BPS=512*1024
 BINARY_SHA='0412b4d3d09ecd40e954f031ba4d2487e089a078084669af9ec598b041ba1a6c'
 
 def require(x,msg):
@@ -29,12 +30,12 @@ class Helper:
   r=self.rpc(method,params);require(not r.get('error'),method+': '+str(r.get('error')));return r['result']
  def info(self):return self.ok('getmodelnetworkinfo')
  def profile_options(self):
-  return {'storage_bytes':self.cap,'follow_peers':False,'preserve_rare':False,'seed':'auto' if self.hostport else 'off','upload_bps':128*1024 if self.hostport else 0}
+  return {'storage_bytes':self.cap,'follow_peers':False,'preserve_rare':False,'seed':'auto' if self.hostport else 'off','upload_bps':UPLOAD_BPS if self.hostport else 0}
  def start(self):
   require(self.proc is None and not self.sock.exists(),'helper not cleanly stopped');self.starts+=1
   home=self.root/'home';home.mkdir(exist_ok=True)
   args=[str(self.binary),'-modeldir='+str(self.store),'-modelrpcsocket='+str(self.sock),'-modelstorage='+str(self.cap),'-modelfollowpeers=0','-modellandiscovery=0','-modelnatpmp=0','-modelseed='+('auto' if self.hostport else 'off'),'-pwcchain=regtest']
-  if self.hostport:args+=['-modeluploadlimit=128KiB']
+  if self.hostport:args+=['-modeluploadlimit=512KiB']
   if self.hostport:args+=['-modelhost','-modelbind=127.0.0.1:'+str(self.hostport)]
   else:args+=['-modelhost=0', *['-modelpeer='+x for x in (self.peer if isinstance(self.peer,list) else [self.peer])]]
   self.log=(self.out/(self.label+'-'+str(self.starts)+'.log')).open('wb')
