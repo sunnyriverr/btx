@@ -23,7 +23,7 @@ def run(cmd,label,limit=120,cwd=None,allowed=(0,)):
  return b''.join(data).decode(errors='replace')
 try:
  assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=w/'current-reference',text=True).strip()==PIN
- m=json.loads((w/'saved-checkpoint/manifest.json').read_text());arc=w/'saved-checkpoint/build-state.tar.gz';assert sha(arc)==m['archive_sha256']=='f4cf35a8fb1249883e413747bbfb2c61ccb0428d9c61ca95a99d207b8f2766e6';assert m['workspace']==str(w)
+ m=json.loads((w/'saved-checkpoint/manifest.json').read_text());arc=w/'saved-checkpoint/build-state.tar.gz';assert sha(arc)==m['archive_sha256']=='e06b79000a9d16d221c38d7b17143833da170e797e6287cf95497ff8aa899e47';assert m['workspace']==str(w)
  with tarfile.open(arc)as t:t.extractall(w,filter='data')
  restore_timestamps(w,m);verify_restored(w,m);restored=True;r['checkpoint_verified']=True;save()
  reference=w/'current-reference';files=subprocess.check_output(['git','ls-files','-z'],cwd=reference,text=True).split('\0');files=[x for x in files if x];wanted=set(files);changed=[]
@@ -41,7 +41,7 @@ try:
  r['changed_from_checkpoint']=changed;save()
  assert '11.4.0'in run(['g++','-dumpfullversion'],'gcc');assert 'OpenSSL 3.5.9'in run([w/'gui-pilot-runtime/openssl/bin/openssl','version'],'openssl');os.environ['BTX_OPENSSL']=str(w/'gui-pilot-runtime/openssl/bin/openssl')
  run(['cmake','-S',source,'-B',build],'configure',180)
- targets=['btxd','btx-cli','btx-modeld','test_btx'];dry=run(['ninja','-n',*targets],'baseline-plan',120,build);r['baseline_actions']=len(dry.splitlines());assert r['baseline_actions']<900;r['rebuild_admitted']=True;save()
+ targets=['btxd','btx-cli','btx-modeld','test_btx'];run(['ninja','build.ninja'],'baseline-graph-regeneration',120,build);dry=run(['ninja','-n',*targets],'baseline-plan',120,build);r['baseline_actions']=len(dry.splitlines());assert 'Re-running CMake' not in dry;assert r['baseline_actions']<350;r['rebuild_admitted']=True;save()
  run(['ninja','-j2',*targets],'baseline-build',1500,build)
  test_script=source/'test/functional/feature_swarm_profile_overrides.py';unit=source/'src/test/modelnet_infra_tests.cpp';test_script.write_bytes((w/'proposal/feature_swarm_profile_overrides.py').read_bytes())
  baseline_hash={n:sha(build/'bin'/n)for n in targets};r['baseline_hash']=baseline_hash;save()
