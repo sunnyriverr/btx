@@ -1513,7 +1513,7 @@ BOOST_AUTO_TEST_CASE(cloud_rpc_detach_removal_failure_preserves_origin_and_retry
         fs::path cloud, saved;
         void Restore() {
             std::error_code ec;
-            if (!fs::exists(saved, ec)) return;
+            if (!std::filesystem::exists(saved, ec)) return;
             fs::remove(cloud / "fixture-blocker", ec);
             fs::remove(cloud, ec);
             fs::rename(saved, cloud, ec);

@@ -29,7 +29,7 @@ def run(cmd,label,limit=120,cwd=None,allowed=(0,)):
  return b''.join(data).decode(errors='replace')
 try:
  assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=w/'current-reference',text=True).strip()==PIN
- m=json.loads((w/'saved-checkpoint/manifest.json').read_text());arc=w/'saved-checkpoint/build-state.tar.gz';assert sha(arc)==m['archive_sha256'];assert len(m['archive_sha256'])==64;assert m['workspace']==str(w);assert m['identity']['source']=='371013d61dc124a363521df5b94e97f64d2464f2'
+ m=json.loads((w/'saved-checkpoint/manifest.json').read_text());arc=w/'saved-checkpoint/build-state.tar.gz';assert sha(arc)==m['archive_sha256'];assert len(m['archive_sha256'])==64;assert m['workspace']==str(w);assert m['identity']['source']=='bd847e2b986722c1723b4cd60988d4f4908452d4'
  with tarfile.open(arc)as t:t.extractall(w,filter='data')
  restore_timestamps(w,m);verify_restored(w,m);restored=True;r['checkpoint_verified']=True;save()
  reference=w/'current-reference';files=subprocess.check_output(['git','ls-files','-z'],cwd=reference,text=True).split('\0');files=[x for x in files if x];wanted=set(files);changed=[]
