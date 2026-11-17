@@ -59,8 +59,14 @@ test -n "$qtpaths"
 "$qtpaths" --qt-version | tee "$records/qtpaths.log"
 test "$("$qtpaths" --qt-version)" = 6.2.4
 for program in rsvg-convert convert; do command -v "$program"; done
-pkg-config --modversion libevent sqlite3 libzmq libqrencode Qt6Core Qt6Widgets \
+pkg-config --modversion libevent sqlite3 libzmq libqrencode \
   > "$records/pkg-config-versions.log"
+# Ubuntu 22.04's Qt 6 development packages provide CMake package files, not
+# Qt6Core/Qt6Widgets pkg-config modules. Require the inputs used by configure;
+# the controller's real CMake configure will resolve the Qt 6 targets.
+for component in Qt6 Qt6Core Qt6Widgets; do
+  test -f "/usr/lib/x86_64-linux-gnu/cmake/$component/${component}Config.cmake"
+done
 # The digest is from the reviewed production plan and original immutable setup.
 # Install only into a fresh isolated container; never overwrite a shared prefix.
 python_prefix=/opt/hostedtoolcache/Python/3.12.16/x64
