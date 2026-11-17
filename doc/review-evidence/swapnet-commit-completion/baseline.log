@@ -1,0 +1,48 @@
+FF..FF.F                                                                 [100%]
+=================================== FAILURES ===================================
+_______________ test_commit_replay_after_actual_exit[admission] ________________
+work/btx-lanes/session-1/swapnet-value-selection-20261117/repair/candidate/tests/test_inbox_commit_recovery.py:112: in test_commit_replay_after_actual_exit
+    assert bob.journal.load(sid)[1]['stage']=='committed','Valid replay was ACKed without applying the commit'
+E   AssertionError: Valid replay was ACKed without applying the commit
+E   assert 'offered' == 'committed'
+E     
+E     - committed
+E     + offered
+_________________ test_commit_replay_after_actual_exit[grant] __________________
+work/btx-lanes/session-1/swapnet-value-selection-20261117/repair/candidate/tests/test_inbox_commit_recovery.py:112: in test_commit_replay_after_actual_exit
+    assert bob.journal.load(sid)[1]['stage']=='committed','Valid replay was ACKed without applying the commit'
+E   AssertionError: Valid replay was ACKed without applying the commit
+E   assert 'offered' == 'committed'
+E     
+E     - committed
+E     + offered
+________________ test_legacy_seen_only_revalidated_once[False] _________________
+work/btx-lanes/session-1/swapnet-value-selection-20261117/repair/candidate/tests/test_inbox_commit_recovery.py:130: in test_legacy_seen_only_revalidated_once
+    assert bob.journal.load(sid)[1]['stage']=='committed','Legacy admission masked unapplied commit'
+E   AssertionError: Legacy admission masked unapplied commit
+E   assert 'offered' == 'committed'
+E     
+E     - committed
+E     + offered
+_________________ test_legacy_seen_only_revalidated_once[True] _________________
+work/btx-lanes/session-1/swapnet-value-selection-20261117/repair/candidate/tests/test_inbox_commit_recovery.py:131: in test_legacy_seen_only_revalidated_once
+    assert processed==['commit'],'Legacy seen-only completion must be verified, not backfilled'
+E   AssertionError: Legacy seen-only completion must be verified, not backfilled
+E   assert [] == ['commit']
+E     
+E     Right contains one more item: 'commit'
+E     Use -v to get more diff
+_________________ test_original_refund_after_recovered_commit __________________
+work/btx-lanes/session-1/swapnet-value-selection-20261117/repair/candidate/tests/test_inbox_commit_recovery.py:218: in test_original_refund_after_recovered_commit
+    assert bob.journal.load(sid)[1]['stage']=='committed'
+E   AssertionError: assert 'offered' == 'committed'
+E     
+E     - committed
+E     + offered
+=========================== short test summary info ============================
+FAILED work/btx-lanes/session-1/swapnet-value-selection-20261117/repair/candidate/tests/test_inbox_commit_recovery.py::test_commit_replay_after_actual_exit[admission]
+FAILED work/btx-lanes/session-1/swapnet-value-selection-20261117/repair/candidate/tests/test_inbox_commit_recovery.py::test_commit_replay_after_actual_exit[grant]
+FAILED work/btx-lanes/session-1/swapnet-value-selection-20261117/repair/candidate/tests/test_inbox_commit_recovery.py::test_legacy_seen_only_revalidated_once[False]
+FAILED work/btx-lanes/session-1/swapnet-value-selection-20261117/repair/candidate/tests/test_inbox_commit_recovery.py::test_legacy_seen_only_revalidated_once[True]
+FAILED work/btx-lanes/session-1/swapnet-value-selection-20261117/repair/candidate/tests/test_inbox_commit_recovery.py::test_original_refund_after_recovered_commit
+5 failed, 3 passed, 12 deselected in 0.99s

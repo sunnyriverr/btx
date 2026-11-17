@@ -1,0 +1,72 @@
+{
+  "utc": "2026-11-17T04:07:32.221231+00:00",
+  "status": "QUALIFIED_LOCAL_HANDOFF_READY",
+  "base": "bd847e2b986722c1723b4cd60988d4f4908452d4",
+  "local_package_commit": "499394f52eb0601691538c6564a67487d8cff488",
+  "branch": "codex/swapnet-commit-completion",
+  "publication": "held",
+  "scope": "Mac ARM64 Python3.12, actual child exits + SQLite + production Application/Journal/Coordinator; deterministic chains, test identities/keys/signing and transport callbacks",
+  "files": {
+    "swapnet/application.py": "467b80b5069834bfea92d711a3339dd15e5221e58e6b2062e568db626d8ea4f8",
+    "swapnet/journal.py": "29ebc0be3c1491400107d2ec22f8a0770b7871581a81be13ccc28fba2f7af346",
+    "tests/test_inbox_commit_recovery.py": "e6bac54a084ed312e90ab4ac49d34d1808e84ea30d3cddded17ac4f2f2c7cf5d"
+  },
+  "matched_test_sha256": "e6bac54a084ed312e90ab4ac49d34d1808e84ea30d3cddded17ac4f2f2c7cf5d",
+  "stock": {
+    "selected": 8,
+    "failed": 5,
+    "passed": 3,
+    "interpretation": "Four recovery assertions plus one design-required legacy revalidation assertion; not five defects. Refund stock assertion fails before maturity substeps; original pilot separately proved stock refund safety."
+  },
+  "candidate": {
+    "final_executed": 19,
+    "passed": 19,
+    "skips": 0,
+    "reused_unchanged_capacity_expiry": 1,
+    "unique_regression_cases_qualified": 20
+  },
+  "existing_restore_controls": {
+    "passed": 4,
+    "skips": 0
+  },
+  "review": {
+    "code": "CODE-REVIEW.md no blocking defect",
+    "evidence": "EVIDENCE-REVIEW.md final addendum resolves identity gap"
+  },
+  "protected": "valid legacy replay; completed dedup across reopen; exact existing grant/reservation IDs and budgets; single funding per leg; original maturity/refund bytes; signature/expiry/mandate refusals; shared capacity/FK cleanup",
+  "limitations": [
+    "Not all packet kinds",
+    "No automatic reconstruction of already-ACKed historical packets without replay",
+    "No native funded BTX/BTC/EVM, native PQ/embedded worker, Linux/Windows/full-suite/release qualification"
+  ],
+  "resource_note": "Only owned pytest scratch removed; old inactive JSON metadata losslessly archived with hash receipts, regenerable own bytecode removed. Free reserve fluctuated and dipped during bounded execution; all further execution finished, cleanup restored reserve. No wallet/native binary/build object/active peer files touched.",
+  "free_bytes_at_receipt": 1328775168,
+  "goal_completion_pending": "Final owner/wiki/queue/release/live goal audit",
+  "completion_audit": {
+    "utc": "2026-11-17T04:09:47.771223+00:00",
+    "all_acceptance_evidenced": true,
+    "independent_code_review": "passed",
+    "independent_evidence_review": "passed; identitygapresolved",
+    "current_head_unchanged": true,
+    "wiki_owner_queue_reconciled": true,
+    "publication": "held",
+    "no_campaign_rollover": true,
+    "execution_release": "All component/runtime/git/storage/ledger leases released; only task/evidence root retained for publication hold",
+    "views_check": "CURRENT-PLAN/BACKLOG/CAMPAIGNS match queue and owner",
+    "exact_committed_bytes_verified": true,
+    "remaining_required_work": "None for local qualified-handoff objective; publication held"
+  },
+  "evidence_sha256": {
+    "README.md": "d110a69e69528992fee0e53b0945c388247138a38f704b078ab53e33c5bba1a3",
+    "product.patch": "996f5670d893d4523f158d2509ba7ea402ab87d700b77946a071172b021709f0",
+    "CODE-REVIEW.md": "2274586674bca76da6ae18c09b3ffcf1e8c4f888ae60973bdb77d3bacf002b15",
+    "EVIDENCE-REVIEW.md": "45f75014eb8d7cb656cc52eb662ecedee61661070b3b6d4003e2c2332c16f885",
+    "baseline-results.json": "bafd5975db545d82b439232ca79184f67c49918b467ec15001a21ea0ce3424d7",
+    "candidate-results.json": "b9e044bf7204121ea3daa0d9619d140dc4704d975e1aa7d7c7293896b2331290",
+    "restore-results.json": "0321e97543891a2a26b6a08fc7708f6e4c58abecc92f6cfbc51a857143dd00c1",
+    "initial-candidate-results.json": "eef69cc6d9c84a5108954a0fbebf7863d7e0074efbd313693fafdd9614e9f1e8"
+  },
+  "free_bytes_at_final_audit": 1316495360,
+  "goal_status": "complete",
+  "goal_elapsed_seconds": 867
+}
