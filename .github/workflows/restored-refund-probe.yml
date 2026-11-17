@@ -1,0 +1,35 @@
+name: Restored original refund fee diagnosis
+on:
+  push:
+    branches: [codex/ci-restored-refund-fee-probe]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            contrib/swapnet
+            contrib/devtools/restored-refund-probe
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest==8.4.2 cryptography==46.0.4
+      - name: Existing restored-history fixture and focused controls
+        shell: bash
+        run: |
+          set -o pipefail
+          PYTHONPATH=contrib/swapnet:contrib/swapnet/tests python -m pytest contrib/devtools/restored-refund-probe/test_refund_probe.py -q 2>&1 | tee probe.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: restored-refund-fee-diagnosis
+          path: |
+            probe-result.json
+            probe.log
+          if-no-files-found: error
+          retention-days: 14
