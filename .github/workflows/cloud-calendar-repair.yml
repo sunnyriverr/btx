@@ -1,0 +1,51 @@
+{
+  "name": "Session2 cloud calendar repair qualification",
+  "on": {
+    "push": {
+      "branches": [
+        "codex/ci-cloud-calendar-repair"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "read",
+    "actions": "read"
+  },
+  "jobs": {
+    "observe": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 25,
+      "steps": [
+        {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "persist-credentials": false
+          }
+        },
+        {
+          "name": "Verify retained checkpoint",
+          "timeout-minutes": 8,
+          "run": "python3 -B proposal/stage.py",
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          }
+        },
+        {
+          "name": "Compile narrow store repair and matched maintained regressions",
+          "timeout-minutes": 15,
+          "run": "docker run --name s2-calendar-repair --init -v \"$GITHUB_WORKSPACE:$GITHUB_WORKSPACE\" -w \"$GITHUB_WORKSPACE\" -e GITHUB_WORKSPACE ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11 bash -e -c 'apt-get -o Acquire::Retries=1 update >/dev/null && apt-get install -y --no-install-recommends build-essential libboost-dev libevent-dev libsqlite3-dev libzmq3-dev ninja-build python3 >/dev/null && python3 -B proposal/qualify.py' "
+        },
+        {
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always()",
+          "with": {
+            "name": "cloud-calendar-repair-records",
+            "path": "records/",
+            "retention-days": 14,
+            "if-no-files-found": "error"
+          }
+        }
+      ]
+    }
+  }
+}
