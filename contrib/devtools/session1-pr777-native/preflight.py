@@ -1,4 +1,4 @@
-"""Manual-only hosted Mac build recipe. This file has not been executed."""
+"""PR777 configure-only admission, adapted from Session3 retained Mac build recipe. No compile or runtime entry point."""
 from pathlib import Path, PurePosixPath
 import configparser, hashlib, json, os, platform, shutil, shlex, signal, subprocess, tarfile, time
 import urllib.request, urllib.error, zipfile
@@ -153,6 +153,7 @@ def main():
     assert 'Apple clang version 17.0.0' in cmd(['xcrun', 'clang++', '--version'], 'compiler')
     assert cmd(['xcrun', '--sdk', 'macosx', '--show-sdk-version'], 'sdk').strip() == '15.5'
     restore()
+    assert sha(B / 'CMakeCache.txt') == M['cache_sha256'], 'Retained cache identity mismatch'
     # Use already-present dependencies only. Do not change a runner's packages implicitly.
     STATE['retained_openssl_hashes'] = M['openssl_static_sha256']
     # Establish actual links after configure; ModelNetOFF need not use OpenSSL.
@@ -170,6 +171,8 @@ def main():
     assert (Path(python_info['include']) / 'Python.h').is_file()
     STATE['python'] = {**python_info, 'executable_sha256': sha(python)}
     STATE['python']['header_sha256'] = sha(Path(python_info['include']) / 'Python.h')
+    assert STATE['python']['executable_sha256'] == M['python']['executable_sha256'], 'Pinned Python binary drift'
+    assert STATE['python']['header_sha256'] == M['python']['header_sha256'], 'Pinned Python header drift'
     save()
     assert sha(P / 'dependencies.json') == M['dependency_lock_sha256']
     cmd([python, P / 'bootstrap.py'], 'dependency-bootstrap', 300)
@@ -224,7 +227,7 @@ def main():
     assert 'Re-running CMake' not in plan
     edges = sum(line.startswith('[') for line in plan.splitlines())
     STATE['actual_edges'] = edges
-    assert edges <= 1000, 'Plan exceeds bounded two-target allowance; retain checkpoint'
+    STATE['plan_requires_review'] = True
     commands = cmd(['ninja', '-C', B, '-t', 'commands', 'btxd', 'btx-cli'], 'generated-commands')
     omp_tokens = [token for token in shlex.split(commands) if 'libomp.a' in token]
     if omp_tokens:
@@ -252,16 +255,11 @@ def main():
     STATE['python_dependency_commands_recorded'] = True
     assert shutil.disk_usage(W).free > preservation_floor()
     save()
-    if os.environ.get('BUILD_APPROVED') == 'true':
-        cmd(['ninja', '-C', B, '-j2', 'btxd', 'btx-cli'], 'build', 1200)
-        STATE['compiled'] = True
-        STATE['binaries'] = {n: {'sha256': sha(B / 'bin' / n), 'bytes': (B / 'bin' / n).stat().st_size}
-                             for n in ['btxd', 'btx-cli']}
-        for name in STATE['binaries']:
-            cmd(['file', B / 'bin' / name], name + '-format')
-            cmd(['otool', '-L', B / 'bin' / name], name + '-dependencies')
-        assert all('arm64' in (R / (name + '-format.log')).read_text() for name in STATE['binaries'])
+    assert os.environ.get('BUILD_APPROVED', 'false') == 'false', 'Configure-only job'
     # Deliberately no binary invocation, test execution, overlay application or runtime data.
+    STATE['compile_commands'] = sum('Building CXX' in row or 'Building C ' in row for row in plan.splitlines())
+    STATE['plan_scope'] = 'btxd and btx-cli; no build/test execution'
+    assert STATE['embedded_python_selected'], 'Embedded Python missing from link plan'
     STATE['complete'] = True
 
 if __name__ == '__main__':
