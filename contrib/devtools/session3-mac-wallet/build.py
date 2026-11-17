@@ -22,7 +22,7 @@ def save():
     (R / 'result.json').write_text(json.dumps(STATE, indent=2) + '\n')
 
 def live_bytes():
-    return sum(p.stat().st_size for root in (S, B) if root.exists()
+    return sum(p.stat().st_size for root in (S, B, W / 'job-deps') if root.exists()
                for p in root.rglob('*') if p.is_file() and not p.is_symlink()
                and '.git' not in p.relative_to(W).parts)
 
@@ -100,7 +100,7 @@ def restore():
             assert not path.is_absolute() and '..' not in path.parts
             assert member.name not in seen
             seen.add(member.name)
-            if not member.name.startswith('mac-config-build/'):
+            if not member.name.startswith(('mac-config-build/', 'job-deps/')):
                 continue
             meta = inv[member.name]
             dest = W / member.name
@@ -123,7 +123,7 @@ def restore():
             dest.chmod(meta['mode'])
             os.utime(dest, ns=(meta['mtime_ns'], meta['mtime_ns']))
             assert shutil.disk_usage(W).free > RESERVE
-    selected = {n for n in inv if n.startswith('mac-config-build/')}
+    selected = {n for n in inv if n.startswith(('mac-config-build/', 'job-deps/'))}
     assert selected <= seen, 'Incomplete retained build payload'
     cache = (B / 'CMakeCache.txt').read_text()
     assert 'CMAKE_HOME_DIRECTORY:INTERNAL=' + str(S) + '\n' in cache, 'Nonrelocatable cache: stop'
@@ -144,6 +144,10 @@ def restore():
 def main():
     assert platform.system() == 'Darwin' and platform.machine() == 'arm64'
     assert shutil.disk_usage(W).free >= 15 * 1024**3, 'Independent runner capacity prerequisite'
+    STATE['host'] = {'system': platform.system(), 'architecture': platform.machine(), 'macos': platform.mac_ver()[0]}
+    cmd(['cmake', '--version'], 'cmake-version')
+    cmd(['ninja', '--version'], 'ninja-version')
+    assert 'Xcode 16.4' in cmd(['xcodebuild', '-version'], 'xcode-version')
     assert cmd(['git', '-C', S, 'rev-parse', 'HEAD'], 'head').strip() == M['source']
     assert not cmd(['git', '-C', S, 'status', '--porcelain'], 'initial-source-status').strip()
     assert 'Apple clang version 17.0.0' in cmd(['xcrun', 'clang++', '--version'], 'compiler')
@@ -167,21 +171,43 @@ def main():
     STATE['python'] = {**python_info, 'executable_sha256': sha(python)}
     STATE['python']['header_sha256'] = sha(Path(python_info['include']) / 'Python.h')
     save()
+    assert sha(P / 'dependencies.json') == M['dependency_lock_sha256']
+    cmd([python, P / 'bootstrap.py'], 'dependency-bootstrap', 300)
+    prefix = W / 'job-deps'
+    for library in ['libevent_core.a', 'libevent_extra.a', 'libevent_pthreads.a']:
+        assert 'arm64' in cmd(['lipo', '-archs', prefix / 'lib' / library], library + '-arch')
     # Fresh current checkout removes the old focused699 source overlay entirely.
     for name in ['src/test/CMakeLists.txt', 'src/test/main.cpp']:
         cmd(['git', '-C', S, 'diff', '--exit-code', '--', name], 'source-' + Path(name).name)
     args = ['cmake', '-S', S, '-B', B, '-U_Python3_*', '-UPython3_*',
             '-DCMAKE_SUPPRESS_REGENERATION=ON',
-            '-DCMAKE_BUILD_TYPE=Release', '-DENABLE_WALLET=ON', '-DWITH_SQLITE=ON', '-DBUILD_DAEMON=ON',
+            '-DCMAKE_BUILD_TYPE=Release', '-DCMAKE_PREFIX_PATH=' + str(prefix),
+            '-DBoost_INCLUDE_DIR=' + str(prefix / 'include'), '-DBoost_NO_SYSTEM_PATHS=ON',
+            '-DWITH_BDB=OFF', '-DWITH_MINIUPNPC=OFF', '-DWITH_USDT=OFF', '-DINSTALL_MAN=OFF',
+            '-DWITH_SYSTEM_LEVELDB=OFF', '-DWITH_SYSTEM_LIBSECP256K1=OFF',
+            '-DWITH_SYSTEM_LIBBITCOINPQC=OFF', '-DWITH_CCACHE=OFF',
+            '-DCMAKE_C_COMPILER_LAUNCHER=', '-DCMAKE_CXX_COMPILER_LAUNCHER=',
+            '-DBUILD_TX=OFF', '-DBUILD_UTIL=OFF', '-DBUILD_WALLET_TOOL=OFF',
+            '-DBUILD_FOR_FUZZING=OFF', '-DBTX_ENABLE_METAL=OFF',
+            '-DBTX_MATMUL_METAL_PRECOMPILE_KERNELS=OFF', '-DBTX_ENABLE_CUDA_EXPERIMENTAL=OFF',
+            '-DBTX_CUDA_SM120_MXFP4_NATIVE=OFF', '-DBTX_CUDA_SM100_NATIVE=OFF',
+            '-DBTX_ENABLE_HIP=OFF', '-DBTX_ENABLE_ASCEND=OFF',
+            '-DBTX_ENABLE_TPU_PJRT=OFF', '-DBTX_ENABLE_TRAINIUM_NEURON=OFF',
+            '-DBTX_ALLOW_SERIAL_PROVER=ON', '-DCMAKE_DISABLE_FIND_PACKAGE_OpenMP=ON', '-DENABLE_WALLET=ON', '-DWITH_SQLITE=ON', '-DBUILD_DAEMON=ON',
             '-DBUILD_CLI=ON', '-DBUILD_GUI=OFF', '-DBUILD_GUI_TESTS=OFF',
             '-DBUILD_TESTS=OFF', '-DBUILD_BENCH=OFF', '-DBUILD_FUZZ_BINARY=OFF',
-            '-DWITH_MODELNET=OFF', '-DPython3_EXECUTABLE=' + str(python),
+            '-DWITH_MODELNET=OFF', '-DWITH_ZMQ=OFF', '-DPython3_EXECUTABLE=' + str(python),
             '-DPython3_ROOT_DIR=' + python_info['prefix']]
     cmd(args, 'configure', 240)
     cache = (B / 'CMakeCache.txt').read_text()
-    for row in ['ENABLE_WALLET:BOOL=ON', 'WITH_SQLITE:BOOL=ON', 'BUILD_DAEMON:BOOL=ON', 'BUILD_CLI:BOOL=ON', 'BUILD_GUI:BOOL=OFF', 'BUILD_TESTS:BOOL=OFF', 'WITH_MODELNET:BOOL=OFF']:
+    for row in ['ENABLE_WALLET:BOOL=ON', 'WITH_SQLITE:BOOL=ON', 'BUILD_DAEMON:BOOL=ON', 'BUILD_CLI:BOOL=ON', 'BUILD_GUI:BOOL=OFF', 'BUILD_TESTS:BOOL=OFF', 'WITH_MODELNET:BOOL=OFF', 'WITH_ZMQ:BOOL=OFF']:
         assert row in cache
     assert 'Python3_EXECUTABLE:FILEPATH=' + str(python) in cache or 'Python3_EXECUTABLE:UNINITIALIZED=' + str(python) in cache
+    assert 'Boost_INCLUDE_DIR:PATH=' + str(prefix / 'include') in cache or 'Boost_INCLUDE_DIR:UNINITIALIZED=' + str(prefix / 'include') in cache
+    assert 'LIBEVENT_LINKAGE:INTERNAL=static:' + str(prefix / 'lib/libevent_core.a') in cache
+    for row in ['WITH_BDB:BOOL=OFF', 'WITH_MINIUPNPC:BOOL=OFF', 'WITH_USDT:BOOL=OFF',
+                'BTX_ENABLE_METAL:BOOL=OFF', 'BTX_ALLOW_SERIAL_PROVER:BOOL=ON']:
+        assert row in cache
     shutil.copy2(B / 'CMakeCache.txt', R / 'CMakeCache.txt')
     config = B / 'test/config.ini'
     assert config.is_file(), 'Missing functional-runner configuration'
@@ -190,6 +216,7 @@ def main():
     for flag in ['ENABLE_WALLET', 'USE_SQLITE', 'ENABLE_BITCOIND', 'ENABLE_CLI']:
         assert generated['components'].getboolean(flag)
     assert not generated['components'].getboolean('ENABLE_MODELNET', fallback=False)
+    assert not generated['components'].getboolean('ENABLE_ZMQ', fallback=False)
     assert Path(generated['environment']['SRCDIR']).resolve() == S
     assert Path(generated['environment']['BUILDDIR']).resolve() == B
     shutil.copy2(config, R / 'config.ini')
@@ -199,6 +226,16 @@ def main():
     STATE['actual_edges'] = edges
     assert edges <= 1000, 'Plan exceeds bounded two-target allowance; retain checkpoint'
     commands = cmd(['ninja', '-C', B, '-t', 'commands', 'btxd', 'btx-cli'], 'generated-commands')
+    omp_tokens = [token for token in shlex.split(commands) if 'libomp.a' in token]
+    if omp_tokens:
+        omp_paths = {token for token in omp_tokens if Path(token).is_absolute() and token.endswith('/libomp.a')}
+        assert len(omp_paths) == 1 and all(token in omp_paths for token in omp_tokens), 'Unresolved selected OpenMP archive'
+        omp = Path(next(iter(omp_paths)))
+        assert omp.is_file() and 'arm64' in cmd(['lipo', '-archs', omp], 'selected-openmp-arch')
+        STATE['prover_runtime'] = {'mode': 'selected-static-openmp', 'path': str(omp), 'sha256': sha(omp)}
+    else:
+        assert '-fopenmp' not in commands
+        STATE['prover_runtime'] = {'mode': 'permitted-serial-fallback'}
     selected = {}
     command_tokens = shlex.split(commands)
     for library, expected in M['openssl_static_sha256'].items():
