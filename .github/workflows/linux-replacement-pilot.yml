@@ -1,0 +1,82 @@
+name: Session 3 Linux desktop configure preflight
+on:
+  workflow_dispatch:
+    inputs:
+      authorize_preflight:
+        description: Configure and measure only; no BTX build or test
+        type: boolean
+        required: true
+        default: false
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: session3-linux-desktop-preflight-074
+  cancel-in-progress: false
+jobs:
+  preflight:
+    if: github.repository == 'sunnyriverr/btx' && github.ref == 'refs/heads/codex/ci-session3-linux-desktop-074' && inputs.authorize_preflight
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      EXPECTED_WORKSPACE: /home/runner/work/btx/btx
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          path: control
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 074dac167c26c1e091198f691ed5727817dba88a
+          path: accepted-source
+          persist-credentials: false
+      - name: Verify isolated host and fetch exact retained seed
+        timeout-minutes: 3
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$GITHUB_WORKSPACE" = "$EXPECTED_WORKSPACE"
+          mkdir -p preflight-records
+          python3 control/fetch-inputs.py
+      - name: Configure and measure only in pinned compatibility container
+        id: configure
+        timeout-minutes: 20
+        run: |
+          set -euo pipefail
+          image=ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11
+          timeout --signal=TERM --kill-after=15s 90s docker pull "$image"
+          name="btx-s3-desktop-preflight-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          trap 'docker rm -f "$name" >/dev/null 2>&1 || true' EXIT
+          timeout --signal=TERM --kill-after=15s 1020s docker run --name "$name" --init --platform linux/amd64 \
+            --memory=7g --cpus=2 --pids-limit=1024 \
+            -v "$GITHUB_WORKSPACE:$GITHUB_WORKSPACE" -w "$GITHUB_WORKSPACE" \
+            -e GITHUB_WORKSPACE -e EXPECTED_WORKSPACE "$image" \
+            bash -euo pipefail -c '
+              mkdir -p preflight-records
+              timeout --signal=TERM --kill-after=10s 480s bash control/dependencies/setup.sh "$GITHUB_WORKSPACE/preflight-records" "$GITHUB_WORKSPACE/control/dependencies"
+              /opt/hostedtoolcache/Python/3.12.16/x64/bin/python3 control/controller/controller.py
+            ' > preflight-records/container.log 2>&1
+      - name: Retain measured preflight and verified checkpoint
+        if: always()
+        id: retain
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: session3-linux-desktop-preflight-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            preflight-records/
+            updated-checkpoint/
+            control/dependencies/receipt.json
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
+      - name: Verify uploaded retention identity
+        if: always() && steps.retain.outcome == 'success'
+        timeout-minutes: 1
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARTIFACT_ID: ${{ steps.retain.outputs.artifact-id }}
+          ARTIFACT_DIGEST: ${{ steps.retain.outputs.artifact-digest }}
+        run: |
+          python3 control/verify-retention.py
