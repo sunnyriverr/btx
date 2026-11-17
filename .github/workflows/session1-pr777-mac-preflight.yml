@@ -1,4 +1,4 @@
-name: Session1 PR777 native Mac preflight
+name: Session1 PR777 native Mac bounded build
 on:
   push:
     branches: [codex/ci-pr777-native-preflight]
@@ -12,7 +12,7 @@ jobs:
   prepare:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: macos-15
-    timeout-minutes: 20
+    timeout-minutes: 35
     env:
       DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
       HOMEBREW_NO_AUTO_UPDATE: '1'
@@ -36,13 +36,13 @@ jobs:
           python-version: '3.12.10'
           architecture: arm64
           check-latest: false
-      - name: Verify checkpoint, configure and expose true build plan
-        timeout-minutes: 10
+      - name: Verify checkpoint and build only the measured daemon/CLI targets
+        timeout-minutes: 25
         env:
           GH_TOKEN: ${{ github.token }}
-          BUILD_APPROVED: 'false'
+          BUILD_APPROVED: 'true'
           BTX_BUILD_PYTHON: ${{ steps.python.outputs.python-path }}
-        run: python3 contrib/devtools/session1-pr777-native/preflight.py
+        run: python3 contrib/devtools/session1-pr777-native/build.py
       - name: Preserve source/build checkpoint without running BTX
         if: always()
         timeout-minutes: 5
@@ -50,13 +50,13 @@ jobs:
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: pr777-native-preflight-records
+          name: pr777-native-build-records
           path: records
           retention-days: 14
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: pr777-native-preflight-checkpoint
+          name: pr777-native-build-checkpoint
           path: retained
           compression-level: 0
           retention-days: 14
