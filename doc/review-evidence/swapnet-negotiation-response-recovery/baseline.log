@@ -1,0 +1,40 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+____ test_interrupted_negotiation_replays_saved_response[response-proposal] ____
+<evidence-workspace>/test_negotiation_response_recovery.py:120: in test_interrupted_negotiation_replays_saved_response
+    assert packets(app,response),'Admitted negotiation must recover its missing response'
+E   AssertionError: Admitted negotiation must recover its missing response
+E   assert []
+E    +  where [] = packets(<swapnet.application.Application object at 0x10739b2f0>, 'agreement')
+___ test_interrupted_negotiation_replays_saved_response[response-agreement] ____
+<evidence-workspace>/test_negotiation_response_recovery.py:120: in test_interrupted_negotiation_replays_saved_response
+    assert packets(app,response),'Admitted negotiation must recover its missing response'
+E   AssertionError: Admitted negotiation must recover its missing response
+E   assert []
+E    +  where [] = packets(<swapnet.application.Application object at 0x10738cf50>, 'commit')
+____ test_interrupted_negotiation_replays_saved_response[receipt-proposal] _____
+<evidence-workspace>/test_negotiation_response_recovery.py:122: in test_interrupted_negotiation_replays_saved_response
+    assert snapshot(app,sid)==before and app.journal.commit_completed(mid)
+E   AssertionError: assert ({'budgets': [...1', ...}, ...} == {'budgets': [...1', ...}, ...}
+E     
+E     Omitting 7 identical items, use -vv to show
+E     Use -v to get more diff and False)
+E    +  where False = commit_completed('c20f7d0c35c841fde414b25cf10d94992d2a3c63e8c18b7931ff26a4dbfa5cab')
+E    +    where commit_completed = <swapnet.journal.Journal object at 0x10738ed20>.commit_completed
+E    +      where <swapnet.journal.Journal object at 0x10738ed20> = <swapnet.application.Application object at 0x10738fc80>.journal
+____ test_interrupted_negotiation_replays_saved_response[receipt-agreement] ____
+<evidence-workspace>/test_negotiation_response_recovery.py:122: in test_interrupted_negotiation_replays_saved_response
+    assert snapshot(app,sid)==before and app.journal.commit_completed(mid)
+E   AssertionError: assert ({'budgets': [...1', ...}, ...} == {'budgets': [...1', ...}, ...}
+E     
+E     Omitting 7 identical items, use -vv to show
+E     Use -v to get more diff and False)
+E    +  where False = commit_completed('9340fac579bef2a5d9d07df089defd41ca785dfa6843de1c316a7b7b589ea5cf')
+E    +    where commit_completed = <swapnet.journal.Journal object at 0x1073a5490>.commit_completed
+E    +      where <swapnet.journal.Journal object at 0x1073a5490> = <swapnet.application.Application object at 0x1073a62d0>.journal
+=========================== short test summary info ============================
+FAILED <evidence-workspace>/test_negotiation_response_recovery.py::test_interrupted_negotiation_replays_saved_response[response-proposal]
+FAILED <evidence-workspace>/test_negotiation_response_recovery.py::test_interrupted_negotiation_replays_saved_response[response-agreement]
+FAILED <evidence-workspace>/test_negotiation_response_recovery.py::test_interrupted_negotiation_replays_saved_response[receipt-proposal]
+FAILED <evidence-workspace>/test_negotiation_response_recovery.py::test_interrupted_negotiation_replays_saved_response[receipt-agreement]
+4 failed, 12 deselected in 0.79s
