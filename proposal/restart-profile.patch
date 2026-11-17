@@ -1,0 +1,181 @@
+--- a/src/init.cpp
++++ b/src/init.cpp
+@@ -4527,6 +4527,7 @@
+             if (args.IsArgSet("-modelpreserverare")) ov.preserve_rare = hcfg.preserve_rare;
+             if (args.IsArgSet("-modelseed")) ov.seed = hcfg.seed;
+ 
++            hcfg.profile_overrides = ov;
+             modelnet::OperatorProfile prof = modelnet::OperatorProfile::CUSTOM;
+             modelnet::ProfilePolicy policy;
+             std::string profile_err;
+@@ -4539,6 +4540,7 @@
+                 if (!modelnet::ParseOperatorProfile(args.GetArg("-modelprofile", "custom"), prof)) {
+                     return InitError(_("Invalid -modelprofile (allowed: personal, infrastructure, mirror, custom)"));
+                 }
++                hcfg.explicit_profile = prof;
+                 policy = modelnet::ResolveProfile(prof, ov);
+                 apply_profile = true;
+                 std::string serr;
+--- a/src/modelnet/supervisor.cpp
++++ b/src/modelnet/supervisor.cpp
+@@ -127,8 +127,21 @@
+     return out;
+ }
+ 
+-std::vector<std::string> BuildHelperArgv(const HelperLaunchConfig& cfg)
+-{
++std::vector<std::string> BuildHelperArgv(const HelperLaunchConfig& launch)
++{
++    // The supervisor survives child replacement; live profile changes do not.
++    // Reapply the same explicit-option precedence used by node initialization.
++    HelperLaunchConfig cfg = launch;
++    OperatorProfile profile;
++    ProfilePolicy policy;
++    std::string profile_err;
++    if (launch.explicit_profile) {
++        policy = ResolveProfile(*launch.explicit_profile, launch.profile_overrides);
++        ApplyProfileToLaunchConfig(policy, cfg);
++    } else if (LoadOperatorProfile(OperatorProfilePath(launch.modeldir), profile, policy, profile_err)) {
++        policy = ApplyProfileOverrides(policy, launch.profile_overrides);
++        ApplyProfileToLaunchConfig(policy, cfg);
++    }
+     std::vector<std::string> argv;
+     argv.push_back(fs::PathToString(cfg.helper_exe));
+     argv.push_back("-modeldir=" + fs::PathToString(cfg.modeldir));
+--- a/src/modelnet/supervisor.h
++++ b/src/modelnet/supervisor.h
+@@ -6,6 +6,7 @@
+ #define BITCOIN_MODELNET_SUPERVISOR_H
+ 
+ #include <modelnet/profile.h>
++#include <optional>
+ #include <univalue.h>
+ #include <util/fs.h>
+ 
+@@ -37,6 +38,9 @@
+     fs::path helper_exe;
+     fs::path modeldir;
+     fs::path rpc_socket;
++    /** Explicit node options retain precedence when a saved profile is reloaded. */
++    ProfileOverrides profile_overrides;
++    std::optional<OperatorProfile> explicit_profile;
+     std::string storage_arg{"auto"};
+     std::string seed{"auto"};
+     bool preserve_rare{false};
+--- a/src/test/modelnet_infra_tests.cpp
++++ b/src/test/modelnet_infra_tests.cpp
+@@ -410,6 +410,46 @@
+     BOOST_CHECK(!AutoHostShouldAdvertise(true, true, 8 * MIB, !seeded.empty(), false));
+ }
+ 
++BOOST_AUTO_TEST_CASE(profile_relaunch_reads_saved_policy_and_preserves_overrides)
++{
++    using namespace modelnet;
++    HelperLaunchConfig cfg;
++    cfg.modeldir = m_path_root / "profile-relaunch";
++    fs::create_directories(cfg.modeldir);
++    cfg.storage_arg = "1073741824";
++    const auto original = BuildHelperArgv(cfg);
++    BOOST_CHECK(ArgvHas(original, "-modelstorage=1073741824"));
++    auto policy = ResolveProfile(OperatorProfile::CUSTOM, {});
++    policy.storage_arg = "8388608";
++    policy.follow_peers = false;
++    policy.seed = "off";
++    std::string err;
++    BOOST_REQUIRE_MESSAGE(SaveOperatorProfile(OperatorProfilePath(cfg.modeldir), OperatorProfile::CUSTOM, policy, err), err);
++    auto argv = BuildHelperArgv(cfg);
++    BOOST_CHECK(ArgvHas(argv, "-modelstorage=8388608"));
++    BOOST_CHECK(ArgvHas(argv, "-modelfollowpeers=0"));
++    BOOST_CHECK(ArgvHas(argv, "-modelseed=off"));
++    policy.storage_arg = "0";
++    BOOST_REQUIRE_MESSAGE(SaveOperatorProfile(OperatorProfilePath(cfg.modeldir), OperatorProfile::CUSTOM, policy, err), err);
++    BOOST_CHECK(ArgvHas(BuildHelperArgv(cfg), "-modelstorage=0"));
++    cfg.profile_overrides.storage_arg = "16777216";
++    cfg.profile_overrides.follow_peers = true;
++    cfg.profile_overrides.seed = "manual";
++    argv = BuildHelperArgv(cfg);
++    BOOST_CHECK(ArgvHas(argv, "-modelstorage=16777216"));
++    BOOST_CHECK(!ArgvHas(argv, "-modelfollowpeers=0"));
++    BOOST_CHECK(ArgvHas(argv, "-modelseed=manual"));
++    cfg.profile_overrides = {};
++    cfg.explicit_profile = OperatorProfile::PERSONAL;
++    HelperLaunchConfig expected;
++    ApplyProfileToLaunchConfig(ResolveProfile(OperatorProfile::PERSONAL, {}), expected);
++    BOOST_CHECK(ArgvHas(BuildHelperArgv(cfg), "-modelstorage=" + expected.storage_arg));
++    cfg.explicit_profile.reset();
++    // An unreadable/invalid profile retains the previously resolved launch policy.
++    { std::ofstream file(OperatorProfilePath(cfg.modeldir)); file << "invalid"; }
++    BOOST_CHECK(ArgvHas(BuildHelperArgv(cfg), "-modelstorage=1073741824"));
++}
++
+ BOOST_AUTO_TEST_CASE(infra_12_profile_restart_persist)
+ {
+     using namespace modelnet;
+--- a/test/functional/feature_swarm_profile_overrides.py
++++ b/test/functional/feature_swarm_profile_overrides.py
+@@ -4,6 +4,7 @@
+ import hashlib
+ import json
+ import os
++import signal
+ from pathlib import Path
+ import socket
+ import subprocess
+@@ -54,6 +55,14 @@
+ 
+     def ready(self):
+         self.wait_until(lambda: self.nodes[0].getmodelnetworkinfo().get("helper_ready") is True, timeout=60)
++
++    def restart_managed_helper(self):
++        node = self.nodes[0]
++        before = node.getmodelnetworkinfo()["owner_helper_pid"]
++        assert before > 0
++        os.kill(before, signal.SIGTERM)
++        self.wait_until(lambda: node.getmodelnetworkinfo().get("helper_ready") is True
++                        and node.getmodelnetworkinfo().get("owner_helper_pid") != before, timeout=60)
+ 
+     def test_mirror_cli(self):
+         cli = Path(self.config["environment"]["SRCDIR"]) / "contrib/modelnet/btx-model"
+@@ -123,6 +132,10 @@
+         assert_equal(stored["storage_arg"], "8388608")
+         assert_equal(stored["follow_peers"], False)
+         assert_equal(stored["seed"], "off")
++        self.restart_managed_helper()
++        assert_equal(node.getmodelnetworkinfo()["quota_bytes"], 8 * 1024 ** 2)
++        assert_equal(node.getmodelnetworkinfo()["follow_configured_peers"], False)
++        assert_equal(node.getmodelnetworkinfo()["seed_mode"], "off")
+         policy_file = self.modeldir / "operator_profile.json"
+         original = policy_file.read_bytes()
+         for changes in ({"automatic_spend_atoms": 1}, {"storage_bytes": -1},
+@@ -138,6 +151,8 @@
+         reply = self.helper("setmodelprofile", ["custom", {"storage_bytes": 0, "follow_peers": False}])
+         assert not reply.get("error"), reply
+         self.wait_until(lambda: node.getmodelnetworkinfo()["quota_bytes"] == 0, timeout=10)
++        self.restart_managed_helper()
++        assert_equal(node.getmodelnetworkinfo()["quota_bytes"], 0)
+         assert_equal(node.getmodelnetworkinfo()["automatic_spend_atoms"], 0)
+         assert_equal(node.getblockcount(), 0)
+         # An inspection request may not invoke the helper's action executor.
+@@ -146,6 +161,22 @@
+             assert_equal(peek["drained"], False)
+             assert_equal(peek["executed_free_downloads"], False)
+             assert_equal(peek["automatic_spend_atoms"], 0)
++        # Explicit node options keep precedence at both kinds of restart.
++        base_args = self.extra_args[0]
++        self.restart_node(0, extra_args=base_args + ["-modelstorage=16MiB"])
++        self.ready()
++        assert_equal(node.getmodelnetworkinfo()["quota_bytes"], 16 * 1024 ** 2)
++        assert not self.helper("setmodelprofile", ["custom", {"storage_bytes": 0}]).get("error")
++        self.wait_until(lambda: node.getmodelnetworkinfo()["quota_bytes"] == 0, timeout=10)
++        self.restart_managed_helper()
++        assert_equal(node.getmodelnetworkinfo()["quota_bytes"], 16 * 1024 ** 2)
++        self.restart_node(0, extra_args=base_args + ["-modelprofile=personal"])
++        self.ready()
++        preset_quota = node.getmodelnetworkinfo()["quota_bytes"]
++        assert not self.helper("setmodelprofile", ["custom", {"storage_bytes": 8 * 1024 ** 2}]).get("error")
++        self.wait_until(lambda: node.getmodelnetworkinfo()["quota_bytes"] == 8 * 1024 ** 2, timeout=10)
++        self.restart_managed_helper()
++        assert_equal(node.getmodelnetworkinfo()["quota_bytes"], preset_quota)
+         guard_file = self.modeldir / "swarm" / "guard-process.json"
+         self.wait_until(lambda: guard_file.is_file() and json.loads(guard_file.read_text()).get("ready") is True, timeout=30)
+         running = json.loads(guard_file.read_text())
