@@ -14,7 +14,7 @@ int main(int argc,char** argv){try{
  constexpr int64_t D=1772326800,PREV=D-86400,NEXT_MONTH=1775005200;
  UniValue all(UniValue::VARR);
  for(int kind=0;kind<4;++kind){
-  modelnet::CloudStoreConfig c;c.s3.endpoint="https://acct.r2.cloudflarestorage.com";c.s3.bucket="btx-models";c.s3.prefix="clock-"+std::to_string(kind);c.s3.region="auto";c.s3.use_fake=true;c.s3.creds.kind=modelnet::CredentialRefKind::PATH;c.s3.creds.value=fs::PathToString(creds);c.budget_state_path=root/("budget-"+std::to_string(kind)+".json");
+  modelnet::CloudStoreConfig c;c.s3.endpoint="https://acct.r2.cloudflarestorage.com";c.s3.bucket="btx-models";c.s3.prefix="clock-"+std::to_string(kind);c.s3.region="auto";c.s3.use_fake=true;c.s3.creds.kind=modelnet::CredentialRefKind::PATH;c.s3.creds.value=fs::PathToString(creds);c.budget_state_path=root/fs::PathFromString("budget-"+std::to_string(kind)+".json");
   if(kind==0)c.budget_gets_per_day=1;if(kind==1)c.budget_bytes_per_day=6;if(kind==2)c.budget_gets_per_month=1;if(kind==3)c.budget_bytes_per_month=6;
   UniValue row(UniValue::VOBJ);row.pushKV("kind",kind);UniValue events(UniValue::VARR);
   auto read=[&](int64_t clock,const char* name,bool seed){modelnet::S3PieceStore store(c);store.SetClockForTests(clock);std::string err;need(store.Init(err),err.c_str());if(seed){std::istringstream in("daycap");need(store.PutObject("clock-object",in,6,err),err.c_str());}std::vector<unsigned char> out;bool ok=store.GetObject("clock-object",0,0,out,err);if(ok)need(std::string(out.begin(),out.end())=="daycap","payload mismatch");UniValue e(UniValue::VOBJ);e.pushKV("step",name);e.pushKV("clock",clock);e.pushKV("allowed",ok);e.pushKV("error",err);e.pushKV("health",store.HealthJson());events.push_back(e);return ok;};
