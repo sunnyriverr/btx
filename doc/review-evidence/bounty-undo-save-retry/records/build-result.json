@@ -1,0 +1,159 @@
+{
+  "status": "NORMAL_HELPER_MATCHED_PASS",
+  "commands": [
+    {
+      "label": "configure",
+      "command": [
+        "cmake",
+        "-S",
+        "/home/runner/work/btx/btx/product",
+        "-B",
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild",
+        "-DBUILD_TESTS=OFF"
+      ],
+      "exit": 0,
+      "seconds": 1.5176271450000058
+    },
+    {
+      "label": "candidate-globs",
+      "command": [
+        "cmake",
+        "-P",
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild/CMakeFiles/VerifyGlobs.cmake"
+      ],
+      "exit": 0,
+      "seconds": 0.1645317509999984
+    },
+    {
+      "label": "candidate-plan",
+      "command": [
+        "ninja",
+        "-C",
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild",
+        "-f",
+        "/home/runner/work/btx/btx/records/candidate.ninja",
+        "-n",
+        "btx-modeld"
+      ],
+      "exit": 0,
+      "seconds": 0.1643503829999986
+    },
+    {
+      "label": "candidate-build",
+      "command": [
+        "ninja",
+        "-C",
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild",
+        "-f",
+        "/home/runner/work/btx/btx/records/candidate.ninja",
+        "-j2",
+        "btx-modeld"
+      ],
+      "exit": 0,
+      "seconds": 509.465767796
+    },
+    {
+      "label": "baseline-test",
+      "command": [
+        "runuser",
+        "-u",
+        "nobody",
+        "--",
+        "env",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "LD_LIBRARY_PATH=/tmp/bounty-repair-input/openssl/lib64:/tmp/bounty-repair-input/openssl/lib:/opt/hostedtoolcache/Python/3.12.16/x64/lib",
+        "BTX_OPENSSL=/tmp/bounty-repair-input/openssl/bin/openssl",
+        "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python3",
+        "/tmp/bounty-repair-input/test.py",
+        "/tmp/bounty-repair-input/helper-baseline",
+        "/tmp/bounty-repair-baseline",
+        "/tmp/bounty-repair-results/baseline"
+      ],
+      "exit": 7,
+      "seconds": 4.575617953000005
+    },
+    {
+      "label": "candidate-test",
+      "command": [
+        "runuser",
+        "-u",
+        "nobody",
+        "--",
+        "env",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "LD_LIBRARY_PATH=/tmp/bounty-repair-input/openssl/lib64:/tmp/bounty-repair-input/openssl/lib:/opt/hostedtoolcache/Python/3.12.16/x64/lib",
+        "BTX_OPENSSL=/tmp/bounty-repair-input/openssl/bin/openssl",
+        "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python3",
+        "/tmp/bounty-repair-input/test.py",
+        "/tmp/bounty-repair-input/helper-candidate",
+        "/tmp/bounty-repair-candidate",
+        "/tmp/bounty-repair-results/candidate"
+      ],
+      "exit": 0,
+      "seconds": 4.575654008000015
+    }
+  ],
+  "checkpoint_verified": true,
+  "external_checked": 29776,
+  "external_differences": [],
+  "old_tracked_removed": [],
+  "tracked_updates": [
+    "contrib/swapnet/swapnet/application.py",
+    "contrib/swapnet/swapnet/coordinator.py",
+    "contrib/swapnet/swapnet/drivers.py",
+    "contrib/swapnet/swapnet/fee_bump.py",
+    "contrib/swapnet/swapnet/journal.py",
+    "contrib/swapnet/tests/test_journal_reader_completeness.py",
+    "contrib/swapnet/tests/test_restored_refund_fee.py",
+    "contrib/swapnet/tests/test_vault_retry_durability.py",
+    "doc/build-windows-msvc.md",
+    "doc/release-notes-0.34.17.md",
+    "src/CMakeLists.txt",
+    "src/modelnet/bounty.cpp",
+    "src/modelnet/bounty.h",
+    "src/modelnet/catalog.cpp",
+    "src/modelnet/helper.cpp",
+    "src/modelnet/helper_network02.cpp",
+    "src/modelnet/package_execute.cpp",
+    "src/modelnet/piece_picker.cpp",
+    "src/modelnet/piece_picker.h",
+    "src/modelnet/s3_client.cpp",
+    "src/modelnet/s3_client.h",
+    "src/modelnet/safety.cpp",
+    "src/modelnet/search.cpp",
+    "src/modelnet/search.h",
+    "src/net_processing.cpp",
+    "src/test/modelnet_ahp_acq_exec_tests.cpp",
+    "src/test/modelnet_bounty_tests.cpp",
+    "src/test/modelnet_cloud_tests.cpp",
+    "src/test/modelnet_first_run_tests.cpp",
+    "src/test/modelnet_healer_negcache_tests.cpp",
+    "src/test/modelnet_retrieve_peer_reply_tests.cpp",
+    "src/test/modelnet_safety_tests.cpp",
+    "src/test/modelnet_search_local_policy_tests.cpp",
+    "src/test/modelnet_search_tests.cpp",
+    "src/test/modelnet_swarm_tests.cpp",
+    "test/functional/feature_framework_unit_tests.py",
+    "test/functional/feature_rbf.py",
+    "test/functional/mempool_accept.py",
+    "test/functional/mempool_datacarrier.py",
+    "test/functional/p2p_block_chunk_request_race.py",
+    "test/functional/p2p_block_chunk_transport.py",
+    "test/functional/p2p_outbound_unconnecting_headers.py",
+    "test/functional/rpc_generate.py",
+    "test/functional/rpc_rawtransaction.py",
+    "test/functional/test_framework/address.py",
+    "test/functional/test_framework/crypto/mldsa.py",
+    "test/functional/test_framework/messages.py",
+    "test/functional/test_framework/script.py",
+    "test/functional/test_framework/test_node.py",
+    "test/functional/test_framework/wallet.py",
+    "test/functional/test_runner.py"
+  ],
+  "tracked_bytes_verified": true,
+  "planned_actions": 31,
+  "candidate_binary_sha256": "79d69e9407e9e1150093a8feada25da0a850527234da248d9a990d99a211f333",
+  "candidate_bounty_sha256": "66336bf9569e763bb2eed1aa60a2bba5fb8ed848b6fe1bb11d22b3d5337524ed",
+  "test_sha256": "9f7313520600c366f8b99208f7364312b1043564e763323f554a1dd28322f9e1",
+  "baseline_binary_sha256": "f62fb21f1246658c04c437b96b228bf41f9552f7897e287c8183fa29082c50eb"
+}

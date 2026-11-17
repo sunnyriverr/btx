@@ -1,0 +1,70 @@
+{
+  "status": "VERIFIED_NORMAL_HELPER_BEFORE_AFTER",
+  "verified_utc": "2026-11-17T06:42:03.091395+00:00",
+  "base": "bd847e2b986722c1723b4cd60988d4f4908452d4",
+  "baseline_dependency": "PR815 three-line empty-undo guard included in both phases",
+  "run": 44031548060,
+  "head": "a5c6e37b9a86a67bfb3b3fb0e7850298e359f00e",
+  "remote_input_files_verified": {
+    ".github/workflows/bounty-save-retry-repair.yml": "ae123380143d263c78603da8e37d69e265030c76daa8700484d34c9b5680a056",
+    "repairqual/build.py": "36dfda9afbe5205f667f26c4faa53733426a595abe82b29b191ded0e26c1df60",
+    "repairqual/checkpoint.py": "855a21b01a248045e1dff31959b70e6b1ac997adc7c6082d41cfa96850c1b98e",
+    "repairqual/setup.sh": "49642adc060d1217d3823be1764647318852ec3faa3420b21bf8fb11c502d7f9",
+    "repairqual/test.py": "9f7313520600c366f8b99208f7364312b1043564e763323f554a1dd28322f9e1",
+    "repairqual/candidate-bounty.cpp": "66336bf9569e763bb2eed1aa60a2bba5fb8ed848b6fe1bb11d22b3d5337524ed",
+    "repairqual/baseline-bounty.cpp": "23ab54cd8c29efcdd8c8801ea014e792feb056af428d320644a90bc7424845d7",
+    "repairqual/fix.patch": "e7ae02d8d2f73350d4ebf6b7c40c7cc6edcee340689daf3ef31e9e150f8f913d",
+    "repairqual/source-identities.json": "e7f292efb295b2cdbb8b854bd54b92037d9452c247e4d09604ddc30c2c31942c"
+  },
+  "identities": {
+    "base": "bd847e2b plus existing PR815 three-line guard",
+    "files": {
+      "baseline-bounty.cpp": "23ab54cd8c29efcdd8c8801ea014e792feb056af428d320644a90bc7424845d7",
+      "candidate-bounty.cpp": "66336bf9569e763bb2eed1aa60a2bba5fb8ed848b6fe1bb11d22b3d5337524ed",
+      "fix.patch": "e7ae02d8d2f73350d4ebf6b7c40c7cc6edcee340689daf3ef31e9e150f8f913d",
+      "test.py": "9f7313520600c366f8b99208f7364312b1043564e763323f554a1dd28322f9e1"
+    }
+  },
+  "results": {
+    "baseline": {
+      "result_sha256": "1612227790de744e18518161a61c56a8bac23e9c20da0ac61be7377f98329bf0",
+      "binary_sha256": "f62fb21f1246658c04c437b96b228bf41f9552f7897e287c8183fa29082c50eb",
+      "cases": 7,
+      "starts": 14,
+      "rpc_calls": 144,
+      "contract_checks": 24,
+      "failed_checks": 21,
+      "all_valid_controls_completed": true,
+      "successful_retry_event_ids_seen_in_journal": false
+    },
+    "candidate": {
+      "result_sha256": "a42c47047e3c2a6b6d7bb26aeaa70d00b94fbaec0c92c86579ba769786bf1352",
+      "binary_sha256": "79d69e9407e9e1150093a8feada25da0a850527234da248d9a990d99a211f333",
+      "cases": 7,
+      "starts": 14,
+      "rpc_calls": 144,
+      "contract_checks": 24,
+      "failed_checks": 0,
+      "all_valid_controls_completed": true,
+      "successful_retry_event_ids_seen_in_journal": true
+    }
+  },
+  "record_artifact": {
+    "id": 14305488278,
+    "digest": "sha256:9898a0660be6af7a2fa386913e91139596c5c92777b730bc047cc03ee5cd78f6",
+    "collector_digest_verified": true
+  },
+  "candidate_binary_artifact": {
+    "id": 14305413517,
+    "digest": "sha256:5c0827b9d70fe89f11072b09198b0ebf86fe72a8b1959498d784e12ec2a74755",
+    "retained_remote_not_locally_downloaded": true
+  },
+  "scope": "Ubuntu22.04 x86_64 container on Ubuntu24.04 host; actual normal btx-modeld UnixRPC with UID/GID65534, synthetic watch-only facts, directory-save fault; one same-script run per binary; no Mac/Windows/funds/signing/mainnet/powerloss/full-suite claim",
+  "limits": [
+    "O(facts+bounded undo) temporary index copy per explicit undo",
+    "No durable cross-store outbox; crash window after bounty commit before journal remains",
+    "No arbitrary post-commit exception exactly-once guarantee",
+    "Other bounty writes intentionally retain previous failed-save memory policy"
+  ],
+  "posting": "held by user"
+}
