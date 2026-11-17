@@ -1,0 +1,13 @@
+# Failed acquisition replacement preserves the existing file
+
+Code: `d87147f647b6aa20e810554c6ad39b39f7285225`; base `release-0.34.17` `bd847e2b986722c1723b4cd60988d4f4908452d4`. Follow-up to #803 by repch1c.
+
+The identical standalone controller calls the full production ExecuteBtxAcquisition. Baseline exits 7 because a real short write leaves the destination absent; candidate exits 0 preserving the previous bytes. All eight cases execute: successful replacement, missing/wrong-source refusal, short-write preservation, retry, cache reuse, fresh output and symlink refusal. Failure credit release and stage cleanup are checked.
+
+macOS arm64; source/controller built with Apple clang C++20. Production package execution, path validation, SHA384 and credit implementations are linked, with a retained UniValue archive whose source inputs match the current tree. Resource IDs are empty; an admission trap aborts if entered. This is a direct C++ API controller, not a daemon/RPC or default Boost test. test/standalone/modelnet_acquisition_replace.cpp is the identical test in the product branch.
+
+Raw before/after stdout, exit codes, binary/source/test hashes: repair-results.json and repair-receipt.json. Logs contain workspace placeholders; source hashes refer to original tested bytes. run-repair.py/build-call.py show executed local build orchestration, with retained source/build prerequisites; they are provenance, not a portable one-command clean-build claim. To reconstruct against a configured checkout, compile the test with src/modelnet/package_execute.cpp, package_install.cpp, transfer_session.cpp, types.cpp, crypto/sha384.cpp, crypto/hex_base.cpp, util/time.cpp and libunivalue; use C++20, source/UniValue/generated-config includes, function sections and platform dead stripping. Run the resulting binary with a disposable fixture directory. Run only as a standalone process: its fault changes that process's RLIMIT_FSIZE and SIGXFSZ handling. The controller removes its fixture directory on completion.
+
+Not tested: native Linux/Windows compilation/execution, RPC/helper transport, nonempty admission plans, concurrency, process-crash cleanup, fsync/power-loss durability, full suites or release qualification. Windows lacks this POSIX RLIMIT fault harness; equivalent native failure injection remains needed. Linux should run the same fault and filesystem replacement controls. No private wallet, keys or production node used.
+
+Source review found no scoped blocker; reviewer did not execute tests. Initial candidate compile exposed BTX's deleted path/string operator, corrected with PathFromString before the final matched pair. Original #803 behavior and author credit preserved.

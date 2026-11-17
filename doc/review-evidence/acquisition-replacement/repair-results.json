@@ -1,0 +1,62 @@
+[
+  {
+    "variant": "baseline",
+    "exit": 7,
+    "stdout": "valid_replacement ok=1 code= exists=1 exact=1 old=0 credits=0 pass=1\nmissing_source ok=0 code=MODEL_BYTES_UNVERIFIED exists=1 exact=0 old=1 credits=0 pass=1\ndigest_refusal ok=0 code=MODEL_BYTES_UNVERIFIED exists=1 exact=0 old=1 credits=0 pass=1\nshort_write ok=0 code=IO_ERROR exists=0 exact=0 old=0 credits=0 pass=1\nretry_after_short_write ok=1 code= exists=1 exact=1 old=0 credits=0 pass=1\nmatching_cache_retry ok=1 code= exists=1 exact=1 old=0 credits=0 pass=1\nfresh_destination ok=1 code= exists=1 exact=1 old=0 credits=0 pass=1\nsymlink_refusal ok=0 code=SYMLINK_REFUSED exists=1 exact=1 old=0 credits=0 pass=1\n",
+    "stderr": "FAIL previous destination not preserved after failed replacement\n",
+    "command": [
+      "clang++",
+      "-std=c++20",
+      "-O0",
+      "-ffunction-sections",
+      "-fdata-sections",
+      "-Wl,-dead_strip",
+      "-I<WORKSPACE>/work/btx-review-tools/recovery-integrity-selection-20261117/current/src",
+      "-I<WORKSPACE>/work/btx-review-tools/pr794-real-node-recovery/source/src",
+      "-I<WORKSPACE>/work/btx-review-tools/pr794-real-node-recovery/source/src/univalue/include",
+      "-I<WORKSPACE>/work/btx-review-tools/pr794-real-node-recovery/build/src",
+      "<WORKSPACE>/work/btx-review-tools/recovery-integrity-selection-20261117/current/src/modelnet/package_execute.cpp",
+      "<WORKSPACE>/work/btx-review-tools/recovery-integrity-selection-20261117/current/src/modelnet/package_install.cpp",
+      "<WORKSPACE>/work/btx-review-tools/recovery-integrity-selection-20261117/current/src/modelnet/transfer_session.cpp",
+      "<WORKSPACE>/work/btx-review-tools/recovery-integrity-selection-20261117/current/src/crypto/sha384.cpp",
+      "<WORKSPACE>/work/btx-review-tools/recovery-integrity-selection-20261117/current/src/crypto/hex_base.cpp",
+      "<WORKSPACE>/work/btx-review-tools/recovery-integrity-selection-20261117/current/src/util/time.cpp",
+      "<WORKSPACE>/work/btx-review-tools/pr794-real-node-recovery/source/src/modelnet/types.cpp",
+      "<WORKSPACE>/work/btx-review-tools/recovery-integrity-selection-20261117/acquisition-regression.cpp",
+      "<WORKSPACE>/work/btx-review-tools/pr794-real-node-recovery/build/src/univalue/libunivalue.a",
+      "-o",
+      "<WORKSPACE>/work/btx-review-tools/recovery-integrity-selection-20261117/acquisition-baseline"
+    ],
+    "binary_sha256": "fb2e403495c26886a91b6ac88ad856d7b09184e88a4b0153276ddeb1d4110e9e"
+  },
+  {
+    "variant": "candidate",
+    "exit": 0,
+    "stdout": "valid_replacement ok=1 code= exists=1 exact=1 old=0 credits=0 pass=1\nmissing_source ok=0 code=MODEL_BYTES_UNVERIFIED exists=1 exact=0 old=1 credits=0 pass=1\ndigest_refusal ok=0 code=MODEL_BYTES_UNVERIFIED exists=1 exact=0 old=1 credits=0 pass=1\nshort_write ok=0 code=IO_ERROR exists=1 exact=0 old=1 credits=0 pass=1\nretry_after_short_write ok=1 code= exists=1 exact=1 old=0 credits=0 pass=1\nmatching_cache_retry ok=1 code= exists=1 exact=1 old=0 credits=0 pass=1\nfresh_destination ok=1 code= exists=1 exact=1 old=0 credits=0 pass=1\nsymlink_refusal ok=0 code=SYMLINK_REFUSED exists=1 exact=1 old=0 credits=0 pass=1\n",
+    "stderr": "",
+    "command": [
+      "clang++",
+      "-std=c++20",
+      "-O0",
+      "-ffunction-sections",
+      "-fdata-sections",
+      "-Wl,-dead_strip",
+      "-I<WORKSPACE>/work/btx-review-tools/recovery-integrity-selection-20261117/current/src",
+      "-I<WORKSPACE>/work/btx-review-tools/pr794-real-node-recovery/source/src",
+      "-I<WORKSPACE>/work/btx-review-tools/pr794-real-node-recovery/source/src/univalue/include",
+      "-I<WORKSPACE>/work/btx-review-tools/pr794-real-node-recovery/build/src",
+      "<WORKSPACE>/work/btx-review-tools/recovery-integrity-selection-20261117/repair/src/modelnet/package_execute.cpp",
+      "<WORKSPACE>/work/btx-review-tools/recovery-integrity-selection-20261117/current/src/modelnet/package_install.cpp",
+      "<WORKSPACE>/work/btx-review-tools/recovery-integrity-selection-20261117/current/src/modelnet/transfer_session.cpp",
+      "<WORKSPACE>/work/btx-review-tools/recovery-integrity-selection-20261117/current/src/crypto/sha384.cpp",
+      "<WORKSPACE>/work/btx-review-tools/recovery-integrity-selection-20261117/current/src/crypto/hex_base.cpp",
+      "<WORKSPACE>/work/btx-review-tools/recovery-integrity-selection-20261117/current/src/util/time.cpp",
+      "<WORKSPACE>/work/btx-review-tools/pr794-real-node-recovery/source/src/modelnet/types.cpp",
+      "<WORKSPACE>/work/btx-review-tools/recovery-integrity-selection-20261117/acquisition-regression.cpp",
+      "<WORKSPACE>/work/btx-review-tools/pr794-real-node-recovery/build/src/univalue/libunivalue.a",
+      "-o",
+      "<WORKSPACE>/work/btx-review-tools/recovery-integrity-selection-20261117/acquisition-candidate"
+    ],
+    "binary_sha256": "a9987ff26a1a4b05bc3d5f3abb6786d8329c87bd0c7938ff7d1df2eab0f3ea32"
+  }
+]
