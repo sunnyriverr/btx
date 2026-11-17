@@ -1,124 +1,43 @@
-# Compiled-checkpoint desktop package helper — preparation only
+# Patched packaging helper — source preparation only
 
-`package_candidate.package(w, inputs, python, run, records, tick=...) -> dict` is intended
-for a future authorized packaging-only continuation from the already compiled
-17-target checkpoint. It does not configure or compile C++ or Rust.
-It has not been run, syntax checked, imported, configured, or tested during this
-source-only preparation. No build, package, native product probe, download, CI,
-post, installation, wallet or GUI action was performed.
+This helper preserves the existing package-only API:
+package(w, inputs, python, run, records, tick=...) returns a dictionary.
+It has not been executed, imported, syntax checked or tested during preparation.
 
-The controller must provide an absolute workspace Path, the flat pinned input
-mapping, the exact selected Python executable, its cancellable/logging `run`
-function returning stdout text, and a build-records output Path. The controller
-must supply its deadline/capacity `tick` callback. The helper calls it around
-commands and archive operations, per archive member, and for every 1 MiB block
-while copying or hashing inputs/archive payloads, preserving retention time
-during in-process work as well as subprocesses. The optional no-op default is
-for interface compatibility, not the production controller configuration.
-The controller
-retains responsibility for restore admission, fresh resource/target checks,
-dependency identity, source trust, capacity monitoring, complete process-group
-cancellation and timely verified checkpoint retention on failure or success.
-The successful exact-target producer receipt supplies the compile evidence;
-this continuation must verify the immutable checkpoint before using its bytes.
+The original compiled input remains artifact14313303910/source074. All17 compiled input digests,3368-object controller admission, separate source88 Atlas identity and all18 wrapper/real-component plus guard checks remain required. No C++/Rust/configuration call or altered input binary is introduced. The parent controller retains restore, source/dependency/profile checks, capacity/deadlines/process cancellation and original compiled checkpoint retention.
 
-Expected mapping keys are `source`, `workspace`, `targets`, `atlas_source`,
-`atlas_tree`, `atlas_archive_sha256`, `atlas_binary_sha256`, `atlas_artifact`,
-`atlas_run` and `atlas_fixture`, plus `checkpoint_artifact`, `checkpoint_run`,
-`checkpoint_fixture`, `checkpoint_outer_sha256`, `checkpoint_inner_sha256`,
-`checkpoint_manifest_sha256`, `checkpoint_compile_pass`, `cpp_rebuild`, and
-`compiled_binary_sha256`. All source/component pins are independently
-checked against constants. Product source is `w/product`, C++ binaries are
-`w/gui-pilot-runtime/qtbuild/bin`, and old Atlas inputs are `w/atlas-input`.
+## Explicit packaging implementation delta
 
-`atlas-input/provenance.json` must be the fetcher's normalized envelope:
-`artifact_id`, `run_id`, `producer_head_sha`, `source_sha`, `outer_sha256`,
-`archive_sha256`, `atlas_binary_sha256`, `atlas_tree_sha`, and
-`verified_original_provenance` containing the original complete provenance
-object. That original object must retain `source`,
-`candidate_archive_sha256`, and
-`candidate_files["libexec/btx-atlas.real"].sha256` with their verified values.
-The fetcher is responsible for verifying full remote metadata, outer ZIP,
-inner archive and original provenance before emitting this envelope. This is
-a trust boundary, not a cryptographic signature created by the helper.
+The helper requires inputs.packaging_patch to contain the five pinned values:
+base_source074dac167c26c1e091198f691ed5727817dba88a; relative_path scripts/release/bundle_python_runtime.py; original SHA256018d8dcbb0bfec2c36e62397b80dcad884b67422e0328409d189ba6cfb5aa2d4; candidate721fa1f54b51223cde80a1c85c4b8c996da916c5dab2fd7ff4fc17a8be72eab7; patch9ad1291bf4924465066c0f9ad11d06d823feaa6147a1f08a6c26859bc4795140.
+The scope string is exactly:
+Packaging implementation only; compiled product source and original object/binary bytes unchanged
 
-The checkpoint keys must pin artifact `14313303910`, producer run `44047285383`,
-control `42a4eab0b19f07fe9355060194dc1346bfc96abc`, outer SHA-256
-`e51b4edf0724bbae7044a621c121e9c2437587f2c804c3637c86957af8549961`, inner SHA-256
-`bbd94e974883ddde5f959a2c7347a7abff9cb5fa7440efcbb5a23a9509bba67e`, and manifest SHA-256
-`ac9302cc81c3f85d4253b77c8af43741eb4522bd6ee8063e512c7cefac1aeefb`.
-`checkpoint_compile_pass` must be boolean true and `cpp_rebuild` boolean false.
-`compiled_binary_sha256` must contain exactly the 17 target names mapped to the
-exact digests in `build-package/execution/checkpoint-summary.json`; the helper
-pins this map and hashes every restored binary against it. Compile provenance
-is attributed to that producer run/control/source074, never this continuation.
-The controller must verify full outer/inner/manifest identity and restore,
-dependency/compiler/profile/source identity before calling this helper.
+Portable comparison and independent evidence review SHA256 values are provenance references from the parent inputs, not checks rerun by this helper. Both exact patch and candidate module must exist under control/patch.
 
-The restored `qtbuild/bin/btx-atlas` must already be the regular old-source
-verified Atlas ELF with SHA-256
-`0c2757a32e2540be6a2ed4810a915430cdb1cb7018a0ede75d9f4256910fa13f`.
-The separately fetched immutable old Atlas input and provenance envelope remain
-required and independently verified against the same digest. No old wrappers,
-libraries or mutable Rust cache are used.
-Whole `HEAD:gui/atlas` tree identity and a clean Atlas worktree (including
-ignored/untracked additions) are required. The accepted full source head and
-tracked/untracked worktree are also checked. The helper rejects release-gate
-environment overrides, changed restored input bytes and preexisting output
-paths instead of reusing stale package state.
+After the current host/Atlas/binary prerequisites pass, the helper inventories the entire original product/scripts/release directory, rejecting source symlinks and nonregular entries, with128-file/four-MiB bounds. It copies that closure, including adjacent support_files.txt, to fresh package-overlay/scripts/release and replaces only bundle_python_runtime.py with the pinned candidate. All other file bytes/modes must match. Python output caches are excluded from the source-file map.
 
-Before calling the current packager, the controller stages the exact selected
-interpreter's `libpython3.12.so.1.0` into `qtbuild/lib`, after verifying selected
-interpreter/library identity. This supplies the input ELF's existing host loader
-search path for the packager's first `btxd -version` probe. It is a packaging-host
-loader prerequisite; it neither changes C++ binaries nor bypasses shipping
-gates. No ELF patch, C++ rebuild, global loader configuration, or shipping gate
-override is introduced. The current packager still performs its own Python
-runtime bundling and all final dependency/ABI checks.
+The unchanged source074 packager runs from that overlay with --source-root pointing to the unchanged original product. The final standalone verifier still runs from original product. No all-ELF, ABI, staged-import, dependency, guard, component or environment gate is weakened. The original product Git/source contents remain pristine and protected by controller retention checks; the overlay lies outside compiled checkpoint roots.
 
-The current unmodified native packager receives `--python` pointing to the
-selected interpreter, `--require-gui` and `--require-model-helpers`. The helper
-separately requires all 18 wrappers and real payloads, including Atlas, and
-the regular/hardlinked guard sibling. Current packager all-ELF GLIBC 2.38,
-GLIBCXX, CXXABI, GCC, OpenSSL and reachability gates remain in force. The
-standalone current archive verifier uses `--no-launch` with every model helper
-required. No floor/component override or wallet derivation option is used.
+Source and overlay implementation maps plus exact diagnostic source hash are recorded before use and verified after the diagnostic/packager call even on a controlled failure. A deadline can interrupt this verification; such a result cannot be admitted. The original controller's compiled-object/source integrity checks remain separate. A compiled checkpoint does not include this overlay or imply that the Python patch has been applied to its product source.
 
-Native package/probe subprocesses share a 900-second budget: host runtime
-installation up to 180 seconds, before/after package inventories up to 15 seconds
-each, host Atlas ldd closure up to 30 seconds, packager up to 600 seconds, and
-static archive verifier up to 180 seconds. These are individual maxima; each
-command receives at most the remaining shared budget. The packager itself runs `btxd -version` and Python import
-and bundled-runtime probes. Its execution therefore requires future explicit
-package/probe authority even though standalone verification has no launch.
+## Actual interpreter-selection evidence before packaging
 
-GTK/WebKit and display services remain host dependencies by the current source
-contract. The helper requires the verified Atlas input's builder-host `ldd`
-closure and records its command log. After the checkpoint restore, within the packaging
-phase, it installs the exact Ubuntu 22.04 runtime package list
-`libwebkit2gtk-4.1-0`, `libgtk-3-0`, `libayatana-appindicator3-1`,
-`librsvg2-2`, and `libxdo3`, with apt dependency closure. This uses the setup's
-current package cache, no `apt update`, `--no-install-recommends`,
-`--no-upgrade`, and `DEBIAN_FRONTEND=noninteractive`. It captures full installed
-package/version/status inventories before and after, then aborts if any
-previously installed package version changed or was removed. Newly installed
-package versions are recorded as packaging-host inputs, separate from the
-unchanged compiled-input baseline and preserved compiled objects. No GTK/WebKit development
-packages or Rust compilation are required. This host check does not prove
-the final archive launches on Ubuntu 24.04. Failure stops for an explicit
-dependency decision; it never starts an automatic Rust build.
+record-python-selection.py is a separate bounded diagnostic, not a shipping verdict. It accepts only the recorded isolated workspace and selected toolcache Python3.12.16. It loads the exact original/candidate modules, obtains the maintained SwapNet import list and calls the maintained isolated interpreter probe exactly once. Both pure selectors receive that same actual module map.
 
-The archive manifest hashes every regular payload, legitimate hardlink payload
-and link text without extracting members. It validates bounded canonical
-paths, one expected release root, special modes/types, symlink ancestors and
-ordered regular hardlink targets first. The shipping verifier retains its own
-independent extraction and member checks. The guard's two real names may be
-regular/hardlinked in either tar writer order; their byte digests must match.
-Per-component records distinguish prepackage inputs, final real bytes and
-wrapper bytes; current packager RUNPATH edits may legitimately change final
-staged ELF digests. Those digests are separate from the pinned compiled inputs;
-the continuation preserves the checkpoint's compiled objects and input hashes.
+The diagnostic retains module paths, prefix/stdlib layout, required imports and both selected-root maps in build-records/python-selection.json. It requires host imports to succeed and the actual cryptography module to be in direct nested site-packages, omitted by the original selector and selected at the expected root by the candidate. Failure is separately labelled package-python-selection / SELECTION_DIAGNOSTIC_FAILED, never a package/shipping failure or a pass. The surrounding controller's native-execution disclosure must distinguish this host-Python probe from BTX version checks.
 
-The returned verdict is a static package-gate result with runtime qualification
-pending. It is neither a sealed archive claim nor a GUI, wallet, daemon service
-integration, restart, installed-tree or official-release acceptance pass.
+This60-second probe shares the existing900-second overall package/probe budget. It does not compile or run BTX, but it does execute the selected host Python and imports; future execution authority is required. The current packager subsequently performs the disclosed input btxd-version and staged/bundled Python native probes. Standalone --no-launch does not cancel those earlier probes.
+
+## Evidence and limits
+
+On full successful package/component/final-verifier admission, output sidecars retain:
+- package-implementation.json and python-selection.json;
+- packaging-evidence/nested-site-packages.patch;
+- packaging-evidence/bundle_python_runtime.py;
+- packaging-evidence/record-python-selection.py;
+- packaging-evidence/manifest.json binding exact retained bytes.
+
+These live outside the shipping tar and do not change its contents or gates. Original compiled and old Atlas producer attribution remains separate from candidate packaging implementation provenance. The candidate cannot rely only on a shorter-lived log artifact or mutable branch to explain the patch/diagnostic. On failure, the records artifact retains implementation/selection evidence and the original controller attempts compiled checkpoint retention; no candidate is admitted.
+
+A helper success remains PACKAGE_STATIC_GATES_PASS_RUNTIME_QUALIFICATION_PENDING. It does not prove GUI, installed-tree, wallet/daemon service, restart or official adoption. This preparation performs no script/native probe/test/build/CI/publication, no wallet or key access and no automatic retry.

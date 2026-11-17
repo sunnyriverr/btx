@@ -1,7 +1,7 @@
 # Historical dependency-repair evidence
 
 The original configure-stage repair review remains unchanged at
-[build-package dependency repair review](../../../build-package/payload/dependencies/REPAIR-REVIEW.md).
+[build-package dependency repair review](../../../../build-package/payload/dependencies/REPAIR-REVIEW.md).
 That review describes historical execution and its original configure-only
 recipe; its invalidation and tool-probe requirements do not describe this
 packaging-only continuation.

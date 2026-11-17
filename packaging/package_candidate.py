@@ -9,6 +9,7 @@ import hashlib
 import json
 import os
 import posixpath
+import shutil
 import tarfile
 import time
 from pathlib import Path
@@ -27,6 +28,13 @@ TARGETS = ('btxd', 'btx-cli', 'btx-util', 'btx-tx', 'btx-wallet', 'btx-qt',
 COMPONENTS = (*TARGETS, 'btx-atlas')
 HOST_RUNTIME_PACKAGES = ('libwebkit2gtk-4.1-0', 'libgtk-3-0',
                          'libayatana-appindicator3-1', 'librsvg2-2', 'libxdo3')
+PACKAGING_PATCH = {
+    'base_source': SOURCE,
+    'relative_path': 'scripts/release/bundle_python_runtime.py',
+    'original_sha256': '018d8dcbb0bfec2c36e62397b80dcad884b67422e0328409d189ba6cfb5aa2d4',
+    'candidate_sha256': '721fa1f54b51223cde80a1c85c4b8c996da916c5dab2fd7ff4fc17a8be72eab7',
+    'patch_sha256': '9ad1291bf4924465066c0f9ad11d06d823feaa6147a1f08a6c26859bc4795140',
+}
 COMPILED_CHECKPOINT = {
     'artifact': 14313303910,
     'outer_sha256': 'e51b4edf0724bbae7044a621c121e9c2437587f2c804c3637c86957af8549961',
@@ -179,6 +187,142 @@ def archive_manifest(archive, tick=lambda: None):
     return rows
 
 
+
+def release_implementation_rows(root, tick):
+    """Inventory regular release implementation inputs; Python caches are outputs."""
+    require(root.is_dir() and not root.is_symlink(), 'Regular release implementation directory')
+    rows = {}
+    total = 0
+    for directory, dirs, files in os.walk(root, followlinks=False):
+        tick()
+        base = Path(directory)
+        for name in dirs:
+            require(not (base / name).is_symlink(), 'Release implementation directory symlink')
+        dirs[:] = sorted(name for name in dirs if name != '__pycache__')
+        for name in sorted(files):
+            tick()
+            path = base / name
+            require(path.is_file() and not path.is_symlink(), 'Nonregular release implementation input')
+            relative = path.relative_to(root).as_posix()
+            require('__pycache__' not in Path(relative).parts, 'Unexpected Python cache input')
+            size = path.stat().st_size
+            total += size
+            require(len(rows) < 128 and total <= 4 * 1024**2, 'Release implementation inventory bound')
+            rows[relative] = {'bytes': size, 'mode': path.stat().st_mode & 0o777,
+                              'sha256': sha(path, tick)}
+    require(rows and 'bundle_python_runtime.py' in rows
+            and 'package_release_archive.py' in rows and 'support_files.txt' in rows
+            and 'verify_release_btxd.py' in rows and 'bundle_qt_gui.py' in rows,
+            'Release implementation closure incomplete')
+    return rows
+
+
+def prepare_implementation(w, product, inputs, records, tick):
+    patch = inputs['packaging_patch']
+    require(all(patch.get(key) == value for key, value in PACKAGING_PATCH.items()),
+            'Reviewed packaging patch identity drift')
+    require(patch.get('scope') == 'Packaging implementation only; compiled product source and original object/binary bytes unchanged',
+            'Packaging patch provenance scope')
+    for name in ('portable_comparison_sha256', 'portable_evidence_review_sha256'):
+        value = patch.get(name, '')
+        require(isinstance(value, str) and len(value) == 64
+                and all(c in '0123456789abcdef' for c in value), 'Portable evidence identity absent')
+    patch_file = w / 'control/patch/nested-site-packages.patch'
+    candidate = w / 'control/patch/bundle_python_runtime.py'
+    for path, key in ((patch_file, 'patch_sha256'), (candidate, 'candidate_sha256')):
+        require(path.is_file() and not path.is_symlink() and sha(path, tick) == PACKAGING_PATCH[key],
+                'Reviewed packaging payload bytes changed')
+    source = product / 'scripts/release'
+    original_rows = release_implementation_rows(source, tick)
+    require(original_rows['bundle_python_runtime.py']['sha256'] == PACKAGING_PATCH['original_sha256'],
+            'Original bundler is not the reviewed baseline')
+    overlay = w / 'package-overlay/scripts/release'
+    require(not (w / 'package-overlay').exists(), 'Refuse stale packaging implementation overlay')
+    overlay.mkdir(parents=True)
+    for name in original_rows:
+        tick()
+        src, dst = source / name, overlay / name
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        # The closure has a strict four-MiB aggregate bound. Copy only regular
+        # inputs, never links, preserving source executable/file modes.
+        shutil.copy2(src, dst)
+    shutil.copyfile(candidate, overlay / 'bundle_python_runtime.py')
+    (overlay / 'bundle_python_runtime.py').chmod(original_rows['bundle_python_runtime.py']['mode'])
+    overlay_rows = release_implementation_rows(overlay, tick)
+    expected_rows = {name: dict(row) for name, row in original_rows.items()}
+    expected_rows['bundle_python_runtime.py'].update(
+        bytes=candidate.stat().st_size, sha256=PACKAGING_PATCH['candidate_sha256'])
+    require(overlay_rows == expected_rows, 'Packaging overlay differs beyond the reviewed bundler delta')
+    diagnostic = w / 'control/record-python-selection.py'
+    require(diagnostic.is_file() and not diagnostic.is_symlink()
+            and diagnostic.stat().st_size <= 64 * 1024, 'Regular bounded diagnostic source')
+    value = {'scope': 'Compiled source074 unchanged; packaging implementation source074 plus one reviewed Python selector patch',
+             'base_source': SOURCE, 'patch': dict(patch),
+             'source_directory': str(source), 'overlay_directory': str(overlay),
+             'source_files': original_rows, 'overlay_files': overlay_rows,
+             'diagnostic_script': {'sha256': sha(diagnostic, tick),
+                                   'bytes': diagnostic.stat().st_size,
+                                   'control_path': str(diagnostic)},
+             'source_integrity_after': 'PENDING', 'overlay_integrity_after': 'PENDING',
+             'compile': 'No rebuild; original producer44047285383/artifact14313303910'}
+    write(records / 'package-implementation.json', value)
+    return overlay, value
+
+
+def verify_implementation(w, product, overlay, value, records, tick):
+    # Always run after a package/probe error as well as success. A mismatch
+    # fails admission; it never replaces the original inputs or weakens a gate.
+    value['source_integrity_after'] = 'CHECKING'
+    value['overlay_integrity_after'] = 'CHECKING'
+    write(records / 'package-implementation.json', value)
+    try:
+        require(release_implementation_rows(product / 'scripts/release', tick)
+                == value['source_files'], 'Original release implementation changed')
+        value['source_integrity_after'] = 'PASS'
+        require(release_implementation_rows(overlay, tick) == value['overlay_files'],
+                'Candidate packaging implementation changed during use')
+        value['overlay_integrity_after'] = 'PASS'
+        diagnostic = w / 'control/record-python-selection.py'
+        require(diagnostic.is_file() and not diagnostic.is_symlink()
+                and sha(diagnostic, tick) == value['diagnostic_script']['sha256'],
+                'Selection diagnostic source changed during use')
+        value['diagnostic_integrity_after'] = 'PASS'
+    except BaseException as error:
+        value['integrity_error'] = repr(error)
+        raise
+    finally:
+        write(records / 'package-implementation.json', value)
+
+
+def retain_packaging_evidence(w, overlay, output, implementation, tick):
+    """Retain exact implementation delta outside the immutable shipping tar."""
+    evidence = output / 'packaging-evidence'
+    require(not evidence.exists(), 'Refuse stale candidate implementation evidence')
+    evidence.mkdir()
+    entries = {}
+    files = [
+        ('nested-site-packages.patch', w / 'control/patch/nested-site-packages.patch',
+         PACKAGING_PATCH['patch_sha256']),
+        ('bundle_python_runtime.py', overlay / 'bundle_python_runtime.py',
+         PACKAGING_PATCH['candidate_sha256']),
+        ('record-python-selection.py', w / 'control/record-python-selection.py',
+         implementation['diagnostic_script']['sha256']),
+    ]
+    for name, source, digest in files:
+        tick()
+        require(source.is_file() and not source.is_symlink()
+                and sha(source, tick) == digest, 'Candidate evidence source identity: ' + name)
+        destination = evidence / name
+        shutil.copy2(source, destination)
+        require(destination.is_file() and not destination.is_symlink()
+                and sha(destination, tick) == digest, 'Candidate evidence copy identity: ' + name)
+        entries[name] = {'sha256': digest, 'bytes': destination.stat().st_size}
+    value = {'scope': 'Packaging implementation delta and diagnostic source; outside shipping archive',
+             'base_source': SOURCE, 'compiled_checkpoint': dict(COMPILED_CHECKPOINT),
+             'files': entries}
+    write(evidence / 'manifest.json', value)
+    return value
+
 def package(w, inputs, python, run, records, tick=lambda: None) -> dict:
     package_started = time.monotonic()
     controller_tick = tick
@@ -316,13 +460,27 @@ def package(w, inputs, python, run, records, tick=lambda: None) -> dict:
     require(not output.exists(), 'Refuse stale package output directory')
     output.mkdir()
     scripts = product / 'scripts/release'
-    bounded([str(python), str(scripts / 'package_release_archive.py'),
-             '--version', '0.34.16', '--platform-id', 'linux-x86_64',
-             '--archive-name', 'btx-linux-desktop-074-candidate.tar.gz',
-             '--output-dir', str(output), '--source-root', str(product),
-             '--python', str(python), '--btxd', str(bin_dir / 'btxd'),
-             '--btx-cli', str(bin_dir / 'btx-cli'), '--btx-util', str(bin_dir / 'btx-util'),
-             '--require-gui', '--require-model-helpers'], 'package-current', 600)
+    overlay, implementation = prepare_implementation(w, product, inputs, records, tick)
+    try:
+        # This separate diagnostic records the selected interpreter's actual
+        # module paths and both selectors before the unchanged shipping gates.
+        # Failure is labelled separately, never reported as package admission.
+        bounded([str(python), '-B', str(w / 'control/record-python-selection.py'),
+                 '--workspace', str(w), '--python', str(python)],
+                'package-python-selection', 60)
+        selection_path = records / 'python-selection.json'
+        selection = json.loads(selection_path.read_text())
+        require(selection.get('status') == 'EXPECTED_NESTED_SELECTION_DELTA',
+                'Actual interpreter selection diagnostic did not qualify the intended path')
+        bounded([str(python), str(overlay / 'package_release_archive.py'),
+                 '--version', '0.34.16', '--platform-id', 'linux-x86_64',
+                 '--archive-name', 'btx-linux-desktop-074-candidate.tar.gz',
+                 '--output-dir', str(output), '--source-root', str(product),
+                 '--python', str(python), '--btxd', str(bin_dir / 'btxd'),
+                 '--btx-cli', str(bin_dir / 'btx-cli'), '--btx-util', str(bin_dir / 'btx-util'),
+                 '--require-gui', '--require-model-helpers'], 'package-current', 600)
+    finally:
+        verify_implementation(w, product, overlay, implementation, records, tick)
     archive = output / 'btx-linux-desktop-074-candidate.tar.gz'
     tick()
     manifest = archive_manifest(archive, tick)
@@ -341,21 +499,26 @@ def package(w, inputs, python, run, records, tick=lambda: None) -> dict:
                         'staged_real_sha256': manifest['libexec/' + name + '.real']['sha256'],
                         'wrapper_sha256': manifest['bin/' + name]['sha256']}
                   for name in COMPONENTS}
+    retained_evidence = retain_packaging_evidence(w, overlay, output, implementation, tick)
     verdict = {'verdict': 'PACKAGE_STATIC_GATES_PASS_RUNTIME_QUALIFICATION_PENDING',
                'source': SOURCE, 'archive': str(archive), 'archive_sha256': digest(archive),
                'compiled_checkpoint': dict(COMPILED_CHECKPOINT),
                'compiled_binary_sha256': dict(COMPILED_BINARY_SHA256),
+               'packaging_implementation': implementation,
+               'packaging_implementation_sha256': digest(records / 'package-implementation.json'),
+               'python_selection_sha256': digest(selection_path),
+               'candidate_packaging_evidence': retained_evidence,
                'archive_bytes': archive.stat().st_size, 'components': components,
                'atlas_fetch_envelope_sha256': digest(envelope_path),
                'atlas_original_provenance': provenance,
                'package_host_inputs': host_inputs,
                'member_manifest': str(records / 'package-members.json'),
                'package_probe_seconds': time.monotonic() - start,
-               'execution_disclosure': 'Current packager runs btxd -version and Python runtime/import probes. Standalone archive gate uses --no-launch. No wallet or GUI qualification.',
+               'execution_disclosure': 'Base074 packager with reviewed nested-package selector runs btxd -version and Python runtime/import probes; prior explicit interpreter selection diagnostic. Original standalone archive gate uses --no-launch. No wallet or GUI qualification.',
                'host_runtime_closure': 'Atlas GTK/WebKit and host display services required; verified builder ldd closure only. Archive is not sealed.',
                'qualification_pending': ['Ubuntu24.04 extracted-archive Qt and Atlas launch',
                                          'current daemon/service integration, restart and cleanup'],
-               'shipping_gates': 'Unmodified current packager/verifier; all-ELF GLIBC2.38 and GLIBCXX/CXXABI/dependency gates; no overrides'}
+               'shipping_gates': 'Unmodified base074 packager/verifier and all shipping gates; only reviewed third-party Python selector differs in external overlay. All-ELF GLIBC2.38 and GLIBCXX/CXXABI/dependency gates; no overrides'}
     write(records / 'package-members.json', manifest)
     tick()
     write(records / 'package-provenance.json', verdict)
@@ -364,5 +527,7 @@ def package(w, inputs, python, run, records, tick=lambda: None) -> dict:
     # checkpoint/log artifact, with original Atlas producer attribution intact.
     write(output / 'provenance.json', verdict)
     write(output / 'members.json', manifest)
+    write(output / 'package-implementation.json', implementation)
+    write(output / 'python-selection.json', selection)
     tick()
     return verdict

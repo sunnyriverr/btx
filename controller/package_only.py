@@ -51,7 +51,7 @@ def main():
               'cpp_rebuild': False, 'checkpoint_verified': False,
               'product_compile_started': False, 'product_execution_started': False,
               'product_execution_state': 'NOT_REQUESTED',
-              'native_package_probes': 'Packaging helper performs disclosed isolated probes; no wallet access.'}
+              'native_package_probes': 'Host Python selection diagnostic precedes base packager native probes; packaging implementation includes reviewed selector delta. No wallet access.'}
     env = os.environ.copy()
     last_capacity = 0
 
@@ -100,6 +100,9 @@ def main():
             args[1:1] = ['-c', 'safe.directory=' + str(cwd or w)]
         command_start = time.monotonic()
         row = {'label': label, 'argv': args, 'exit': None}
+        if label == 'package-python-selection':
+            result['python_selection_probe_started'] = True
+            result['python_selection_probe_state'] = 'DIAGNOSTIC_MAY_HAVE_RUN'
         if label == 'package-current':
             # A failed packager may stop before or after its native probes.
             # Unknown is more accurate than claiming they did not run.
@@ -142,6 +145,9 @@ def main():
                 row.update(exit=child.returncode, seconds=time.monotonic() - command_start)
                 save()
         require(child.returncode == 0, label + ' failed')
+        if label == 'package-python-selection':
+            result['python_selection_probe_state'] = 'EXPECTED_SELECTION_DELTA_RECORDED'
+            save()
         if label == 'package-current':
             result['product_execution_started'] = True
             result['product_execution_state'] = 'CURRENT_NATIVE_PACKAGER_GATES_SUCCEEDED'
