@@ -2,6 +2,9 @@
 
 **Same actual-helper test fails before and passes after.** Code `9a4f575e13f90d5902466d4d74a2c7e7430a50c1`, stacked on #815 `13dcacc8632c552a22f23569c72c718e15aed6cb`, tested upstream base `bd847e2b986722c1723b4cd60988d4f4908452d4`. The repair-only commit changes one production file and adds the exact executed standalone regression. Credit repch1c for #468's atomic-save/error policy and #640/#796's saved facts and bounded undo; that policy is preserved for other bounty writes.
 
+
+Publication update: upstream incorporated #815 during submission. Current PR817 code is `5cb66d5e5f513b7172a52ffca5cfb45089bdba14`, reparented onto `0f028a37c0e329a182be2582729ec974223970af` as one fix/test commit with **byte-identical qualified bounty.cpp and regression**. The newer base's bounty.cpp matches the tested815 baseline exactly; bounty.h, event_journal.cpp and model_watch.cpp are unchanged. Its helper.cpp delta only reports cloud-detach failure. Runtime evidence below remains the original bd847+815 pair, not a rerun of the newer integrated tree. Initial code9a4f575e is retained as the original publication mapping.
+
 ## Measured result
 
 [Run44031548060](https://github.com/sunnyriverr/btx/actions/runs/44031548060), CI head a5c6e37b9a86a67bfb3b3fb0e7850298e359f00e. Ubuntu22.04/GCC11.4/x86_64 container on an Ubuntu24.04 hosted runner. Normal CMake btx-modeld target, real UnixRPC, UID/GID65534. One identical-script run per binary:7cases,14helper starts and144RPC calls each. Baseline completes all controls and exits7 (21of24 contract checks fail); candidate exits0 (24of24 pass).
