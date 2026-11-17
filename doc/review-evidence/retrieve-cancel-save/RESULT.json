@@ -1,0 +1,246 @@
+{
+  "utc": "2026-11-17T11:15:09.722469+00:00",
+  "state": "QUALIFIED_LINUX_CURRENT_BASELINE_CANDIDATE",
+  "run": "https://github.com/sunnyriverr/btx/actions/runs/44069193026",
+  "test_commit": "2495347de98fc60d929a3ae861603b8553835ecb",
+  "product_base": "cd3078e76398b20b7f500acd1348a5b5455f3d5e",
+  "baseline_composition": "Exact pinned current tracked source plus same maintained regression used by candidate; retained cache incrementally rebuilt after verified overlay",
+  "candidate_composition": "Same baseline and regression plus helper-only cancellation-save patch",
+  "patch_sha256": "9b9a900493614f87977b4af8a110e1e159966e9183ef41719a2e2a0b1f5bd18c",
+  "build_plan_actions": {
+    "baseline": 33,
+    "candidate": 13
+  },
+  "suite": {
+    "baseline": {
+      "executed": 36,
+      "failed_cases": [
+        "cancelmodeljob_save_failure_preserves_stop_and_retries"
+      ],
+      "failure_count": 1,
+      "filtered": 15616,
+      "cdata_repairs": 0,
+      "exit_code": 201
+    },
+    "candidate": {
+      "executed": 36,
+      "failed_cases": [],
+      "failure_count": 0,
+      "filtered": 15616,
+      "cdata_repairs": 0,
+      "exit_code": 0
+    }
+  },
+  "binaries": {
+    "baseline": {
+      "btx-modeld": "adc65ed9645aa33ca4e6f067164ec824e3cc68ab59ef8c14084e6c989312b8dc",
+      "test_btx": "1fd1de73b1549e6b2590baf1f00cb8a85b08a53393ca421ad3ce095dafac0b8d"
+    },
+    "candidate": {
+      "btx-modeld": "cdf916fc4b9a03421d5d5d115241fd8b969f1ee7f2de46dbc976633ce931bf87",
+      "test_btx": "7851f90b11115478f4b59ad814869a05cdd13d5c656b5808a77019a175030a4d"
+    }
+  },
+  "native": {
+    "baseline": {
+      "seconds": 141.60678360500003,
+      "contract_failures": [
+        "failed_cancel_error",
+        "repeat_cancel_error",
+        "retry_saved_snapshot"
+      ],
+      "first_cancel_error": null,
+      "repeat_cancel_error": null,
+      "live_stopped": true,
+      "worker_terminal": "failed",
+      "worker_error": "stopped",
+      "healthy_retry_cancelled": false,
+      "save_diagnostic": false,
+      "healthy_cancel_restart_quiet": true,
+      "normal_restart": {
+        "same_job": true,
+        "pieces_preserved": true,
+        "completion_exact": true,
+        "completion": {
+          "complete": true,
+          "bytes": 16777291,
+          "sha384": "fd6b50534a695af7d8515366de9deb5573443d347945451055788c4a3ed6db8216eee7432e6830c064fdd6324394c123",
+          "manifest": {
+            "schema_version": 2,
+            "model_uri": "btx://pq2q9uzg7a2kmnyns88f4ky0p9pc9zadh9j3uqrlztn0kf4vpllc6erycr6cg758zcld3mnps83au9shnqy4w",
+            "artifact_uri": "btx://pp85g5l5nsl84refjzafuuunt0g4puyqayt92rfkesyahg0ck80urehwp75udn9qr3t8rph0xtmcs3w5srh47",
+            "model_id": "500bc123dd55b7324e073a6b623c250e0a2eb6e5947801fc4b9bec9ab03ffe35919303d611ea1c58fb63b986078f7858",
+            "artifact_id": "3d114fd270f9ea3ca642ea79ce4d6f4543c203a4595434db30276e87e2c77f079bb83ea71b32807159c61bbccbde2117",
+            "format_profile": 1,
+            "execution_profile": 0,
+            "execution_note": "0 means unqualified; granite MoE/Mamba is not dense-decoder-v1",
+            "files": [
+              {
+                "path": "model.safetensors",
+                "role": "WEIGHTS",
+                "size": 16777291,
+                "sha384": "fd6b50534a695af7d8515366de9deb5573443d347945451055788c4a3ed6db8216eee7432e6830c064fdd6324394c123",
+                "pieces_root": "e463d80996367c2b475945e8dedc8d9651f83cde238ba0929dcb72d9a9cb227323d36554e422a823a822264c76f00737"
+              }
+            ],
+            "file_count": 1,
+            "piece_size": 4194304,
+            "hash_alg": "sha384",
+            "seeded": false,
+            "admission": "BYTES_VERIFIED",
+            "bytes_verified": true,
+            "structure_verified": false,
+            "content_admission": "BYTES_VERIFIED",
+            "qualification": "structure only; not usefulness, safety, or alignment",
+            "complete": true,
+            "incomplete": false
+          },
+          "cap": 67108864
+        }
+      },
+      "clean_cleanup": true,
+      "helper_process_starts": 9,
+      "runtime_removed": true
+    },
+    "candidate": {
+      "seconds": 141.5708466850001,
+      "contract_failures": [],
+      "first_cancel_error": {
+        "code": "IO_ERROR",
+        "message": "Cancellation state could not be saved; any live stop remains effective. After storage recovers, retry cancelmodeljob with this job ID before restarting: write /tmp/s2-cancel-save-ufcm_uzy/save_failure_retry/modeldir/retrieve_jobs.json",
+        "schema_version": 2
+      },
+      "repeat_cancel_error": {
+        "code": "IO_ERROR",
+        "message": "Cancellation state could not be saved; any live stop remains effective. After storage recovers, retry cancelmodeljob with this job ID before restarting: write /tmp/s2-cancel-save-ufcm_uzy/save_failure_retry/modeldir/retrieve_jobs.json",
+        "schema_version": 2
+      },
+      "live_stopped": true,
+      "worker_terminal": "failed",
+      "worker_error": "stopped",
+      "healthy_retry_cancelled": false,
+      "save_diagnostic": true,
+      "healthy_cancel_restart_quiet": true,
+      "normal_restart": {
+        "same_job": true,
+        "pieces_preserved": true,
+        "completion_exact": true,
+        "completion": {
+          "complete": true,
+          "bytes": 16777291,
+          "sha384": "fd6b50534a695af7d8515366de9deb5573443d347945451055788c4a3ed6db8216eee7432e6830c064fdd6324394c123",
+          "manifest": {
+            "schema_version": 2,
+            "model_uri": "btx://pq2q9uzg7a2kmnyns88f4ky0p9pc9zadh9j3uqrlztn0kf4vpllc6erycr6cg758zcld3mnps83au9shnqy4w",
+            "artifact_uri": "btx://pp85g5l5nsl84refjzafuuunt0g4puyqayt92rfkesyahg0ck80urehwp75udn9qr3t8rph0xtmcs3w5srh47",
+            "model_id": "500bc123dd55b7324e073a6b623c250e0a2eb6e5947801fc4b9bec9ab03ffe35919303d611ea1c58fb63b986078f7858",
+            "artifact_id": "3d114fd270f9ea3ca642ea79ce4d6f4543c203a4595434db30276e87e2c77f079bb83ea71b32807159c61bbccbde2117",
+            "format_profile": 1,
+            "execution_profile": 0,
+            "execution_note": "0 means unqualified; granite MoE/Mamba is not dense-decoder-v1",
+            "files": [
+              {
+                "path": "model.safetensors",
+                "role": "WEIGHTS",
+                "size": 16777291,
+                "sha384": "fd6b50534a695af7d8515366de9deb5573443d347945451055788c4a3ed6db8216eee7432e6830c064fdd6324394c123",
+                "pieces_root": "e463d80996367c2b475945e8dedc8d9651f83cde238ba0929dcb72d9a9cb227323d36554e422a823a822264c76f00737"
+              }
+            ],
+            "file_count": 1,
+            "piece_size": 4194304,
+            "hash_alg": "sha384",
+            "seeded": false,
+            "admission": "BYTES_VERIFIED",
+            "bytes_verified": true,
+            "structure_verified": false,
+            "content_admission": "BYTES_VERIFIED",
+            "qualification": "structure only; not usefulness, safety, or alignment",
+            "complete": true,
+            "incomplete": false
+          },
+          "cap": 67108864
+        }
+      },
+      "clean_cleanup": true,
+      "helper_process_starts": 9,
+      "runtime_removed": true
+    }
+  },
+  "artifact_records": {
+    "id": 14323496441,
+    "node_id": "MDg6QXJ0aWZhY3QxNDMyMzQ5NjQ0MQ==",
+    "name": "cancel-save-qualification-records",
+    "size_in_bytes": 868181,
+    "url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14323496441",
+    "archive_download_url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14323496441/zip",
+    "expired": false,
+    "digest": "sha256:6f079a8b4842c763e18ff8c3a68511552adab3252651fa758477cc53d278b638",
+    "created_at": "2026-11-17T11:12:46Z",
+    "updated_at": "2026-11-17T11:12:46Z",
+    "expires_at": "2026-12-01T11:12:44Z",
+    "workflow_run": {
+      "id": 44069193026,
+      "repository_id": 1440653358,
+      "head_repository_id": 1440653358,
+      "head_branch": "codex/ci-retrieval-cancel-save",
+      "head_sha": "2495347de98fc60d929a3ae861603b8553835ecb"
+    }
+  },
+  "retained_artifacts": {
+    "total_count": 2,
+    "artifacts": [
+      {
+        "id": 14323625595,
+        "node_id": "MDg6QXJ0aWZhY3QxNDMyMzYyNTU5NQ==",
+        "name": "cancel-save-qualified-binaries",
+        "size_in_bytes": 212614116,
+        "url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14323625595",
+        "archive_download_url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14323625595/zip",
+        "expired": false,
+        "digest": "sha256:a8d145673094ac53ddcef159f55427a36e51d1e13ee25db78a96e717aff79f52",
+        "created_at": "2026-11-17T11:13:04Z",
+        "updated_at": "2026-11-17T11:13:04Z",
+        "expires_at": "2026-12-01T11:12:46Z",
+        "workflow_run": {
+          "id": 44069193026,
+          "repository_id": 1440653358,
+          "head_repository_id": 1440653358,
+          "head_branch": "codex/ci-retrieval-cancel-save",
+          "head_sha": "2495347de98fc60d929a3ae861603b8553835ecb"
+        }
+      },
+      {
+        "id": 14323496441,
+        "node_id": "MDg6QXJ0aWZhY3QxNDMyMzQ5NjQ0MQ==",
+        "name": "cancel-save-qualification-records",
+        "size_in_bytes": 868181,
+        "url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14323496441",
+        "archive_download_url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14323496441/zip",
+        "expired": false,
+        "digest": "sha256:6f079a8b4842c763e18ff8c3a68511552adab3252651fa758477cc53d278b638",
+        "created_at": "2026-11-17T11:12:46Z",
+        "updated_at": "2026-11-17T11:12:46Z",
+        "expires_at": "2026-12-01T11:12:44Z",
+        "workflow_run": {
+          "id": 44069193026,
+          "repository_id": 1440653358,
+          "head_repository_id": 1440653358,
+          "head_branch": "codex/ci-retrieval-cancel-save",
+          "head_sha": "2495347de98fc60d929a3ae861603b8553835ecb"
+        }
+      }
+    ]
+  },
+  "upstream_head_at_closeout": "cd3078e76398b20b7f500acd1348a5b5455f3d5e",
+  "upstream_publication": "HELD_BY_USER",
+  "limits": [
+    "Ubuntu22.04 x86_64 container on hosted Linux; actual helper/PQ1/UnixRPC/filesystem and16MiB disposable model, not full node or release qualification",
+    "Fault is a directory at disposable retrieve_jobs.json.tmp; no physical disk exhaustion, permission-matrix or power-loss/fsync qualification",
+    "One matched native execution per phase; actual terminal worker failed/stopped path covered; actual terminal-history pruning not forced",
+    "No native Mac/Windows, public WAN, wallets, spend, production data or inference qualification",
+    "Records ZIP digest client-verified; large retained-binary artifact metadata and producer hashes retained without downloading it onto disk-constrained Mac"
+  ],
+  "evidence_manifest_sha256": "397eccf7f07a29d96cb00fa857f8e82a22388442a6858e7ceee65cca6f747f18",
+  "independent_evidence_review": "No material gap for tested repair. Identical regressions; intended baseline failures, candidate IO_ERROR twice, actual worker stop, pre-shutdown persistence retry, healthy cancellation/normal restart exactbytes and clean cleanup verified. Scope excludes durability while storage remains broken and15616filtered tests."
+}
