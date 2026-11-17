@@ -1,0 +1,67 @@
+{
+  "utc": "2026-11-17T01:23:17.564032+00:00",
+  "base": "371013d61dc124a363521df5b94e97f64d2464f2",
+  "platform": "macOS-26.5.1-arm64-arm-64bit",
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "mode": "after",
+  "loaded_source": {
+    "swapnet.vault": {
+      "path": "<workspace>/work/btx-lanes/session-1/swapnet-vault-retry-durability/candidate/swapnet/vault.py",
+      "sha256": "c6ef5589fecc19889112c7a008eaecdb6396b1b9746ebfa22f920b935a4501d1"
+    },
+    "swapnet.coordinator": {
+      "path": "<workspace>/work/btx-lanes/session-1/swapnet-vault-retry-durability/candidate/swapnet/coordinator.py",
+      "sha256": "96ffb4ee1d5305b38288e95d1a069a02350437c50579ce7fc43bdbd3cea6c986"
+    },
+    "swapnet.drivers": {
+      "path": "<workspace>/work/btx-lanes/session-1/swapnet-vault-retry-durability/candidate/swapnet/drivers.py",
+      "sha256": "2f2e77c40bbf2fa5cbd2b10d11283d6e4bb4eaca48037512a7a1e439babe5ba3"
+    }
+  },
+  "cases": [
+    {
+      "case": "tests/test_vault_retry_durability.py::test_healthy_observed_secret_survives_restart",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.34976237500086427
+    },
+    {
+      "case": "tests/test_vault_retry_durability.py::test_failed_start_then_real_bitcoin_key_retry",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.4767341250553727
+    },
+    {
+      "case": "tests/test_vault_retry_durability.py::test_failed_observation_retry_and_restart[1]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.588579542003572
+    },
+    {
+      "case": "tests/test_vault_retry_durability.py::test_failed_observation_retry_and_restart[2]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.7031280830269679
+    },
+    {
+      "case": "tests/test_vault_retry_durability.py::test_directory_sync_failure_retry_preserves_secret",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.42343237495515496
+    },
+    {
+      "case": "tests/test_vault_retry_durability.py::test_existing_observed_secret_is_not_replaced",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.24234970891848207
+    },
+    {
+      "case": "tests/test_vault_retry_durability.py::test_wrong_observed_secret_refuses_without_vault_change",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.20414708403404802
+    }
+  ],
+  "exit_code": 0,
+  "test_sha256": "b5ab66175c056b8dc079bd5b300a176653c61ab456f8dbe0cbb3b6b34838723d"
+}

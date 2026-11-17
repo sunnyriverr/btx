@@ -1,0 +1,21 @@
+..FFF..                                                                  [100%]
+=================================== FAILURES ===================================
+_________________ test_failed_observation_retry_and_restart[1] _________________
+work/btx-lanes/session-1/swapnet-vault-retry-durability/source/tests/test_vault_retry_durability.py:100: in test_failed_observation_retry_and_restart
+    assert disk(v).entries[sid]==expected
+           ^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'secret_4ca56839feffbbafeb8f1fe6d0a6ae744dd438cd5f3559d6d268542581ed6049'
+_________________ test_failed_observation_retry_and_restart[2] _________________
+work/btx-lanes/session-1/swapnet-vault-retry-durability/source/tests/test_vault_retry_durability.py:90: in test_failed_observation_retry_and_restart
+    with pytest.raises(OSError,match='injected vault'):c.tick_one(pair.sid)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'OSError'>
+______________ test_directory_sync_failure_retry_preserves_secret ______________
+work/btx-lanes/session-1/swapnet-vault-retry-durability/source/tests/test_vault_retry_durability.py:132: in test_directory_sync_failure_retry_preserves_secret
+    assert state['directory_calls']==2
+E   assert 1 == 2
+=========================== short test summary info ============================
+FAILED work/btx-lanes/session-1/swapnet-vault-retry-durability/source/tests/test_vault_retry_durability.py::test_failed_observation_retry_and_restart[1]
+FAILED work/btx-lanes/session-1/swapnet-vault-retry-durability/source/tests/test_vault_retry_durability.py::test_failed_observation_retry_and_restart[2]
+FAILED work/btx-lanes/session-1/swapnet-vault-retry-durability/source/tests/test_vault_retry_durability.py::test_directory_sync_failure_retry_preserves_secret
+3 failed, 4 passed in 2.37s

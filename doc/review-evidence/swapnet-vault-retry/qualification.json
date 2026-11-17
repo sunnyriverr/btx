@@ -1,0 +1,48 @@
+{
+  "utc": "2026-11-17T01:26:22.336372+00:00",
+  "base": "371013d61dc124a363521df5b94e97f64d2464f2",
+  "local_branch": "codex/vault-observed-secret-retry",
+  "local_extracted_commit": "bf5ef46b9a4747fb60d78cf4826cc21ce3b4ad71",
+  "commit_scope": "Local extracted tree tracks coordinator baseline plus maintained regression, not full upstream tree",
+  "platform": "macOS-26.5.1-arm64-arm-64bit",
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "before": {
+    "failed": 3,
+    "passed": 4,
+    "seconds": 2.37
+  },
+  "after": {
+    "passed": 7,
+    "skipped": 0,
+    "seconds": 3.09
+  },
+  "existing_controls": {
+    "passed": 45,
+    "skipped": 0,
+    "seconds": 7.4
+  },
+  "same_final_test_hash": "b5ab66175c056b8dc079bd5b300a176653c61ab456f8dbe0cbb3b6b34838723d",
+  "scope": "Mac actual encrypted vault/filesystem/SQLite/coordinator; simulated chain/signing, injected pre-replace and post-replace dir-fsync faults. No native chain/platform/full release qualification.",
+  "independent_review": "REPAIR-REVIEW.md: source-only no blockers; no reviewer execution",
+  "patch_applies_to_exact_base": true,
+  "files": {
+    "candidate/swapnet/coordinator.py": "96ffb4ee1d5305b38288e95d1a069a02350437c50579ce7fc43bdbd3cea6c986",
+    "candidate/tests/test_vault_retry_durability.py": "b5ab66175c056b8dc079bd5b300a176653c61ab456f8dbe0cbb3b6b34838723d",
+    "candidate.patch": "4b1d24e5c6192a2c802a5af2f15f9853846c736cc3828b9c017deaa5f2f0d847",
+    "before.log": "0019cde5ae09ea9ba06d9925251f6b75d05d3b63a642ae966a806b66f3d1e72f",
+    "after.log": "dacb7868b5cf38bfe24446e68f850c5be4aa42bcb0d137eb28b737f10341f6d2",
+    "controls.log": "cea1f900fc4aab7052b454d1226b79808dab0844d8cf3ced36b3ecffc5b1eb32",
+    "before-results.json": "2e5d98300e04160634f3e44e8ed52bfb9dc358847cce1b5e4c6da6d2a21bad31",
+    "after-results.json": "14918de6b70a3db501fe2c521d3db0ca34b8de3d5f9bac84a9b58f29dad3d581",
+    "controls-results.json": "e127b7229fc9be9d825d831d003d2b3c1d10ba9abeb14a32e922f361bb899f68",
+    "REPAIR-REVIEW.md": "6c4c3513730d26dfb15f86e0d6731b89a15e65789d92d22a73a8582cad773769"
+  },
+  "published": false,
+  "cleanup": {
+    "utc": "2026-11-17T01:27:37.676398+00:00",
+    "processes_exited": true,
+    "fixture_databases_closed": true,
+    "own_disposable_synthetic_vault_runtimes_removed": true,
+    "source_tests_logs_evidence_retained": true
+  }
+}
