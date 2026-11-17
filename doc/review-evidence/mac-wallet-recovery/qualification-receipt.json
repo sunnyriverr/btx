@@ -1,0 +1,57 @@
+{
+  "utc": "2026-11-17T05:38:23.554381+00:00",
+  "result": "SCOPED_NATIVE_MAC_RECOVERY_PAYMENT_RESTART_PASS",
+  "run": 44025001701,
+  "url": "https://github.com/sunnyriverr/btx/actions/runs/44025001701",
+  "control_commit": "7f74b81714449da708daa7237b0827b3d9547afa",
+  "source": "bd847e2b986722c1723b4cd60988d4f4908452d4",
+  "build_run": 44018745153,
+  "checkpoint": 14301336421,
+  "binaries": {
+    "btxd": {
+      "sha256": "29208f2e96789cfdb665d919d163e3dd2e713399bd04c6b821161464a0274e11",
+      "bytes": 27189896
+    },
+    "btx-cli": {
+      "sha256": "eb6db5ce6ecb972a03a565d3ed5ca393ed3bd030bf9051c437ed1d8749de3233",
+      "bytes": 3327656
+    }
+  },
+  "fixture_sha256": "a341f8a4a75d749f57e67bfc1fed52e0d28c19c575c755fae32c59b018dabc8a",
+  "host": {
+    "system": "Darwin",
+    "architecture": "arm64",
+    "macos": "15.8.2"
+  },
+  "fixture_seconds": 22.559,
+  "timing_scope": "controller measured fixture invocation plus bounded monitoring/cleanup",
+  "peak_sampled_scratch_bytes": 21842182,
+  "bound_exceeded": false,
+  "exit_code": 0,
+  "observed_markers": [
+    "CONTROL: original locked encrypted wallet recognizes both receipts",
+    "CONTROL: plain backup recovers both receipts without encrypted recovery warning",
+    "RECOVERY: explicit refill/rescan restores exact receipts at same tip; relock succeeds",
+    "PAYMENT: restored signer payment confirmed with exact fee and recipient",
+    "RESTART: exact restored payment and inventory persist; relock succeeds"
+  ],
+  "cleanup_absent": true,
+  "records_artifact": 14302622612,
+  "records_bytes": 719306,
+  "records_sha256": "2f534cc4ecd4494eb79ff8cfb0e1f5f59bc2aefb5bf926b44cc92278ae2878a7",
+  "records_expire": "2026-12-01T05:36:02Z",
+  "all_records_verified": true,
+  "runtime_result_sha256": "3f8d8208710db82dc131079de1acda600e782f7823bbc35be23015c90e83e1b8",
+  "functional_log_sha256": "b6771d9a903433e3c97acd29d774953fd54a09fa8baf7c973acf0eeaaab92bef",
+  "job_log_sha256": "15f655d4cc7f99a4fcfb691d6490b063aa412db3646de2537ba8b49a3af0ce20",
+  "rebuild": false,
+  "runtime_attempts": 1,
+  "upstream_posts": 0,
+  "real_wallet_access": false,
+  "limitations": [
+    "Diagnostic headless CPU permitted-serial-prover profile",
+    "One native Mac ARM64 direct-framework fixture attempt",
+    "Graceful restart, not crash/reorg recovery",
+    "No CLI runtime, GUI/GPU/Metal/ModelNet/SwapNet/shielded spend/full suite or release qualification"
+  ]
+}
