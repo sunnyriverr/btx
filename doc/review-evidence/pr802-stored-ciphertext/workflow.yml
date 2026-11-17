@@ -1,0 +1,76 @@
+name: PR802 bounded fresh build and stored-byte qualification
+on:
+  push:
+    branches: [codex/ci-pr802-ciphertext-review]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: pr802-ciphertext-review
+  cancel-in-progress: false
+jobs:
+  qualification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 895388354cd8b07a947ee245dc555eb02f0e96f6
+          path: accepted-source
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 371013d61dc124a363521df5b94e97f64d2464f2
+          path: baseline-source
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: 14229941876
+          run-id: 43874995738
+          github-token: ${{ github.token }}
+          path: saved-checkpoint
+          merge-multiple: true
+      - name: Fresh native build, checkpoint, identical paired fixture
+        run: |
+          set -euo pipefail
+          mkdir -p records
+          image=ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11
+          docker pull "$image"
+          docker run --name pr802-owned-qualification --init \
+            -v "$GITHUB_WORKSPACE:$GITHUB_WORKSPACE" -w "$GITHUB_WORKSPACE" \
+            -e GITHUB_WORKSPACE "$image" bash -e -c \
+            'timeout --kill-after=20s 6m bash review802qual/setup.sh && /opt/hostedtoolcache/Python/3.12.16/x64/bin/python3 review802qual/build.py' \
+            2>&1 | tee records/console.log
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: pr802-qualification-records
+          path: records/
+          retention-days: 14
+          if-no-files-found: error
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: pr802-qualification-binaries
+          path: built/
+          retention-days: 14
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: pr802-candidate-checkpoint
+          path: candidate-checkpoint/
+          retention-days: 14
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: pr802-final-checkpoint
+          path: final-checkpoint/
+          retention-days: 14
+          if-no-files-found: warn
