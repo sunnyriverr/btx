@@ -37,7 +37,7 @@ try:
   changed.append(f)
  for p in list(source.rglob('*')):
   if (p.is_file()or p.is_symlink())and str(p.relative_to(source))not in wanted and '.git'not in p.parts:p.unlink()
- run(['git','init'],'product-git-init',cwd=source);run(['git','fetch','--depth=1',str(reference),PIN],'product-git-fetch',cwd=source);run(['git','update-ref','HEAD',PIN],'product-git-head',cwd=source);run(['git','read-tree',PIN],'product-index',cwd=source)
+ run(['git','init'],'product-git-init',cwd=source);run(['git','fetch','--depth=1','https://github.com/btxchain/btx.git',PIN],'product-git-fetch',cwd=source);run(['git','update-ref','HEAD',PIN],'product-git-head',cwd=source);run(['git','read-tree',PIN],'product-index',cwd=source)
  r['changed_from_checkpoint']=changed;save()
  assert '11.4.0'in run(['g++','-dumpfullversion'],'gcc');assert 'OpenSSL 3.5.9'in run([w/'gui-pilot-runtime/openssl/bin/openssl','version'],'openssl');os.environ['BTX_OPENSSL']=str(w/'gui-pilot-runtime/openssl/bin/openssl')
  run(['cmake','-S',source,'-B',build],'configure',180)
