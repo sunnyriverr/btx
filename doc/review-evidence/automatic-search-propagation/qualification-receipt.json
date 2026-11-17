@@ -1,0 +1,88 @@
+{
+  "status": "VERIFIED_SCOPED_PASS",
+  "utc": "2026-11-17T08:31:03.156736+00:00",
+  "run": 44045340230,
+  "ci_head": "a4d1044a30c4b0baa8f0962bcff1f5090df26dd6",
+  "source_head": "ea64a31e9b4f83375746ce2e65917bcb3c2026e9",
+  "binary_sha256": "71f06f37edc1f680398ed2acf35711a38459e48e2bf7b5d84afce4e1ddf70258",
+  "script_sha256": "90ad5b3ddd2f931de1e7533f4ce6b13a427610ec0d44a7e4de3b4e43d65f8c32",
+  "source_hashes": {
+    "helper_source_sha256": "bf10a00b38d4f41fc3a69aefdff141a789ba4b4d3950e8dd01a51fba2e64ae17",
+    "search_source_sha256": "175ab7d3cc8b110f50697e706bbc7050e157059435792fca17d367ba3bde1e8b"
+  },
+  "remote_input_files_verified": {
+    ".github/workflows/auto-search-propagation.yml": "3b4ce869ec3b3308ac384dff00f9bea0f4bf955184e47facd190d0e78e6c8fe7",
+    "autoqual/test.py": "90ad5b3ddd2f931de1e7533f4ce6b13a427610ec0d44a7e4de3b4e43d65f8c32",
+    "autoqual/build.py": "e6f5c869e0e471debf62e656e9883b16f03052affd50fa44209be2eebad224b1",
+    "autoqual/retain.py": "d3e20551fc33472803fdf0462291cec33ef2ee606d5bf712e93e26e34219560a",
+    "autoqual/setup.sh": "49642adc060d1217d3823be1764647318852ec3faa3420b21bf8fb11c502d7f9",
+    "autoqual/checkpoint.py": "855a21b01a248045e1dff31959b70e6b1ac997adc7c6082d41cfa96850c1b98e",
+    "autoqual/input-identities.json": "256fa9d8e95b4d8189a483c03bf8b82ddc422f4a69404ccf9a4312be210b2b79"
+  },
+  "actual_build_actions": 32,
+  "build_seconds": 497.08392238299996,
+  "native_seconds": 38.79028654700005,
+  "stages": [
+    {
+      "stage": "no_contact_control",
+      "pass": true,
+      "receiver_rpc_calls": 0
+    },
+    {
+      "stage": "initial_passive_propagation",
+      "pass": true,
+      "exact_signed_records": 17,
+      "receiver_rpc_calls": 0
+    },
+    {
+      "stage": "offline_restart_local",
+      "pass": true,
+      "exact_signed_records": 17,
+      "publisher_offline": true,
+      "saved_bytes_unchanged": true,
+      "remote_queries_and_responses": 0
+    },
+    {
+      "stage": "reconnect_new_record",
+      "pass": true,
+      "exact_signed_records": 18,
+      "same_transport_pin": true
+    },
+    {
+      "stage": "passive_health",
+      "pass": true,
+      "clean_stops": true
+    }
+  ],
+  "helper_starts": 5,
+  "rpc_calls": 22,
+  "receiver_rpcs_before_initial_or_during_reconnect": 0,
+  "receiver_offline_local_rpcs": 2,
+  "snapshots_hash_and_record_identity_verified": true,
+  "same_authenticated_transport_pin_after_reconnect": true,
+  "initial_16_to_17_interval_seconds": 5.026391676000117,
+  "reconnect_observed_17_to_18_interval_seconds": 9.85441526700015,
+  "result_sha256": "71d0867bdf46f4168226b9c233e9edadc04a550bd1ade7e8e59a572c1193fe5a",
+  "build_result_sha256": "16bf520120509e326da459bc6187cea15238d33478928ec8119b44bd795e3951",
+  "record_artifact": {
+    "id": 14311064724,
+    "digest": "sha256:ba6c9108f5f2261be0eb5256cb072ba1b9bb3d0c3ce835b40178171e3623efb4",
+    "download_digest_verified_by_collector": true
+  },
+  "retained_binary": {
+    "id": 14312106388,
+    "digest": "sha256:dbebecddbc5d574667dc081125c0f544f9b9fd81ddbe2da525d66f52d9a3b5c6",
+    "not_locally_downloaded": true
+  },
+  "retained_checkpoint": {
+    "id": 14312635365,
+    "digest": "sha256:0b4d6e9c16c102d1c29185b19a03778ff45fa0859dc61e37cc51cc85be087f7f",
+    "inner_sha256": "40ffa906667ab12cc4404ab84a0f44202277638fec48bf9dfab3e7bc7e526a25",
+    "manifest_rows": 20973,
+    "not_locally_restored_or_downloaded": true
+  },
+  "local_storage": "current.ninja retained losslessly as current.ninja.gz; decompressedSHA256=04701b60ebcb756698f656458cb43a4d4ffb85474ccafd714648c99c65f5bebd",
+  "cleanup": "zero live helper handles; every normal stop asserted exit0; owned container cleanup step succeeded",
+  "scope": "one current normal Linux helper binary, two local helper roles plus no-contact control, UID65534, signed synthetic metadata/PQ1/regtest label; onehost, one run, not physicalLAN/WAN/mainnet/Mac/Windows/modelpayload/inference/fullsuite/release qualification",
+  "posting": "user hold; no upstream handoff"
+}

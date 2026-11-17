@@ -1,0 +1,84 @@
+name: Automatic search propagation qualification
+on:
+  push:
+    branches: [codex/ci-auto-search-propagation]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: auto-search-propagation
+  cancel-in-progress: false
+jobs:
+  qualification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: ea64a31e9b4f83375746ce2e65917bcb3c2026e9
+          path: accepted-source
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 895388354cd8b07a947ee245dc555eb02f0e96f6
+          path: checkpoint-source
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: 14294961995
+          run-id: 44002524681
+          github-token: ${{ github.token }}
+          path: saved-checkpoint
+          merge-multiple: true
+      - name: Verify retained inputs and guarded build plan
+        run: |
+          set -euo pipefail
+          mkdir -p records
+          image=ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11
+          docker pull "$image"
+          docker run -d --name auto-search-owned --init -v "$GITHUB_WORKSPACE:$GITHUB_WORKSPACE" -w "$GITHUB_WORKSPACE" -e GITHUB_WORKSPACE "$image" sleep infinity
+          docker exec auto-search-owned bash -e -c 'timeout --kill-after=20s 6m bash autoqual/setup.sh && /opt/hostedtoolcache/Python/3.12.16/x64/bin/python3 autoqual/build.py prepare' 2>&1 | tee records/preflight-console.log
+      - name: Build normal current helper
+        run: |
+          set -euo pipefail
+          docker exec auto-search-owned /opt/hostedtoolcache/Python/3.12.16/x64/bin/python3 autoqual/build.py compile 2>&1 | tee records/build-console.log
+      - name: Passive propagation, offline restart and reconnect
+        run: |
+          set -euo pipefail
+          docker exec auto-search-owned /opt/hostedtoolcache/Python/3.12.16/x64/bin/python3 autoqual/build.py test 2>&1 | tee records/test-console.log
+      - name: Preserve verified owned build for follow-through
+        if: always()
+        run: |
+          set -euo pipefail
+          if docker inspect auto-search-owned >/dev/null 2>&1; then
+            docker exec auto-search-owned timeout --kill-after=10s 120s /opt/hostedtoolcache/Python/3.12.16/x64/bin/python3 autoqual/retain.py
+          fi
+      - name: Stop only owned container
+        if: always()
+        run: docker rm -f auto-search-owned || true
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: automatic-search-records
+          path: records/
+          retention-days: 14
+          if-no-files-found: error
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: automatic-search-normal-helper
+          path: built/
+          retention-days: 14
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: automatic-search-build-checkpoint
+          path: retained-checkpoint/
+          retention-days: 14
+          if-no-files-found: warn
