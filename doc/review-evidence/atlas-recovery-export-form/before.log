@@ -1,0 +1,121 @@
+✖ export uses confirmed password fields and excludes raw JSON (0.923584ms)
+✖ clear before native review and preserve request on CANCELLED (2.44175ms)
+✖ clear before native review and preserve request on UNKNOWN (0.638416ms)
+✖ clear before native review and preserve request on success (0.511458ms)
+✖ object prefill stays in password controls, not raw JSON (1.731125ms)
+✖ mismatched confirmation does not prepare or execute (0.297083ms)
+✔ ordinary JSON form retains exact single-object request and approval route (1.054ms)
+✔ schema and generated catalogue agree (0.863209ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 2
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 46.165708
+
+✖ failing tests:
+
+test at work/btx-lanes/session-1/swapnet-atlas-operator-workflow/source/gui/atlas/tests/recovery-export.test.mjs:17:1
+✖ export uses confirmed password fields and excludes raw JSON (0.923584ms)
+  AssertionError [ERR_ASSERTION]: Missing dedicated password field
+      at TestContext.<anonymous> (file:///Users/wildwood/Documents/Playground/work/btx-lanes/session-1/swapnet-atlas-operator-workflow/source/gui/atlas/tests/recovery-export.test.mjs:20:50)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.start (node:internal/test_runner/test:1003:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:358:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at work/btx-lanes/session-1/swapnet-atlas-operator-workflow/source/gui/atlas/tests/recovery-export.test.mjs:25:56
+✖ clear before native review and preserve request on CANCELLED (2.44175ms)
+  AssertionError [ERR_ASSERTION]: Credential remains in a form field
+      at cleared (file:///Users/wildwood/Documents/Playground/work/btx-lanes/session-1/swapnet-atlas-operator-workflow/source/gui/atlas/tests/recovery-export.test.mjs:15:28)
+      at TestContext.<anonymous> (file:///Users/wildwood/Documents/Playground/work/btx-lanes/session-1/swapnet-atlas-operator-workflow/source/gui/atlas/tests/recovery-export.test.mjs:31:137)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at work/btx-lanes/session-1/swapnet-atlas-operator-workflow/source/gui/atlas/tests/recovery-export.test.mjs:25:56
+✖ clear before native review and preserve request on UNKNOWN (0.638416ms)
+  AssertionError [ERR_ASSERTION]: Credential remains in a form field
+      at cleared (file:///Users/wildwood/Documents/Playground/work/btx-lanes/session-1/swapnet-atlas-operator-workflow/source/gui/atlas/tests/recovery-export.test.mjs:15:28)
+      at TestContext.<anonymous> (file:///Users/wildwood/Documents/Playground/work/btx-lanes/session-1/swapnet-atlas-operator-workflow/source/gui/atlas/tests/recovery-export.test.mjs:31:137)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at work/btx-lanes/session-1/swapnet-atlas-operator-workflow/source/gui/atlas/tests/recovery-export.test.mjs:25:56
+✖ clear before native review and preserve request on success (0.511458ms)
+  AssertionError [ERR_ASSERTION]: Credential remains in a form field
+      at cleared (file:///Users/wildwood/Documents/Playground/work/btx-lanes/session-1/swapnet-atlas-operator-workflow/source/gui/atlas/tests/recovery-export.test.mjs:15:28)
+      at TestContext.<anonymous> (file:///Users/wildwood/Documents/Playground/work/btx-lanes/session-1/swapnet-atlas-operator-workflow/source/gui/atlas/tests/recovery-export.test.mjs:31:137)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at work/btx-lanes/session-1/swapnet-atlas-operator-workflow/source/gui/atlas/tests/recovery-export.test.mjs:36:1
+✖ object prefill stays in password controls, not raw JSON (1.731125ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(input)
+  
+      at TestContext.<anonymous> (file:///Users/wildwood/Documents/Playground/work/btx-lanes/session-1/swapnet-atlas-operator-workflow/source/gui/atlas/tests/recovery-export.test.mjs:38:56)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:788:18)
+      at Test.postRun (node:internal/test_runner/test:1235:19)
+      at Test.run (node:internal/test_runner/test:1163:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at work/btx-lanes/session-1/swapnet-atlas-operator-workflow/source/gui/atlas/tests/recovery-export.test.mjs:43:1
+✖ mismatched confirmation does not prepare or execute (0.297083ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(repeat)
+  
+      at TestContext.<anonymous> (file:///Users/wildwood/Documents/Playground/work/btx-lanes/session-1/swapnet-atlas-operator-workflow/source/gui/atlas/tests/recovery-export.test.mjs:45:64)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:788:18)
+      at Test.postRun (node:internal/test_runner/test:1235:19)
+      at Test.run (node:internal/test_runner/test:1163:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
