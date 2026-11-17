@@ -1,0 +1,10 @@
+.F.                                                                      [100%]
+=================================== FAILURES ===================================
+__________ test_conflicting_outbox_proposal_refuses[stored_recipient] __________
+work/btx-lanes/session-1/swapnet-initial-proposal-recovery/repair/candidate/tests/test_initial_proposal_retry.py:188: in test_conflicting_outbox_proposal_refuses
+    with pytest.raises(SwapError,match='RECOVERY_CONFLICT'):alice.rpc(Principal('alice'),'acceptswapquote',params)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+=========================== short test summary info ============================
+FAILED work/btx-lanes/session-1/swapnet-initial-proposal-recovery/repair/candidate/tests/test_initial_proposal_retry.py::test_conflicting_outbox_proposal_refuses[stored_recipient]
+1 failed, 2 passed, 27 deselected in 0.31s

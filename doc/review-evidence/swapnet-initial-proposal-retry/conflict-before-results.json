@@ -1,0 +1,42 @@
+{
+  "utc": "2026-11-17T05:39:44.870561+00:00",
+  "mode": "candidate",
+  "source": "bd847e2b986722c1723b4cd60988d4f4908452d4",
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "test_sha256": "e76abc5870223306f531870f8c771f713c3f9270528d584f15e2a2cb69e42201",
+  "loaded": {
+    "swapnet.application": {
+      "path": "<workspace>/work/btx-lanes/session-1/swapnet-initial-proposal-recovery/repair/candidate/swapnet/application.py",
+      "sha256": "c9ae1468e023e0c01c011d0efddca523a2f8ced6f58a0755f589522a1ba14b61"
+    },
+    "swapnet.journal": {
+      "path": "<workspace>/work/btx-lanes/session-1/swapnet-initial-proposal-recovery/repair/candidate/swapnet/journal.py",
+      "sha256": "0795f0f59c6717c2e3d42c1db58c7261feec309829e32d9f7f5d1f0345b59aa5"
+    },
+    "swapnet.coordinator": {
+      "path": "<workspace>/work/btx-lanes/session-1/swapnet-initial-proposal-recovery/repair/candidate/swapnet/coordinator.py",
+      "sha256": "de3265918f02078cf12e5ca75310797029f822c844a5c8d681bb4d1b022a6091"
+    }
+  },
+  "exit_code": 1,
+  "results": [
+    {
+      "case": "tests/test_initial_proposal_retry.py::test_conflicting_outbox_proposal_refuses[payload]",
+      "phase": "call",
+      "result": "passed",
+      "seconds": 0.058358582900837064
+    },
+    {
+      "case": "tests/test_initial_proposal_retry.py::test_conflicting_outbox_proposal_refuses[stored_recipient]",
+      "phase": "call",
+      "result": "failed",
+      "seconds": 0.051519792061299086
+    },
+    {
+      "case": "tests/test_initial_proposal_retry.py::test_conflicting_outbox_proposal_refuses[envelope_recipient]",
+      "phase": "call",
+      "result": "passed",
+      "seconds": 0.050867834012024105
+    }
+  ]
+}
