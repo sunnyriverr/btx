@@ -1,0 +1,27 @@
+F.                                                                       [100%]
+=================================== FAILURES ===================================
+_______ test_legacy_overcap_terminal_history_does_not_truncate_rotation ________
+
+store = <swapnet.store.Store object at 0x1093d31a0>
+
+    def test_legacy_overcap_terminal_history_does_not_truncate_rotation(store):
+        book = Journal(store)
+        _session(book, HIGH)
+        # An existing over-cap database must remain observable even though new
+        # session admission is refused. No limit increase or history deletion.
+        _add_history(book, 'complete', 4097, start=1000)
+        with pytest.raises(SwapError, match='SESSION_LIMIT'):
+            book.ensure_capacity()
+        clock = [NOW]
+        coordinator, seen = _scheduler(book, clock)
+        watched = []
+        for _ in range(4097):
+            seen.clear()
+            coordinator.tick()
+>           assert HIGH in seen and len(seen) == 2
+E           AssertionError: assert ('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff' in ['00000000000000000000000000000000000000000000000000000000000003e8'])
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/baseline/tests/test_journal_reader_completeness.py:322: AssertionError
+=========================== short test summary info ============================
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/baseline/tests/test_journal_reader_completeness.py::test_legacy_overcap_terminal_history_does_not_truncate_rotation
+1 failed, 1 passed, 12 deselected in 0.16s

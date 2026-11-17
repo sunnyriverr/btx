@@ -1,0 +1,851 @@
+........................................FFFFFFFFFFFFFFFFFFFFFFFFFFF..... [ 66%]
+....................................                                     [100%]
+=================================== FAILURES ===================================
+____________________ test_atomic_rollback_and_retry[cancel] ____________________
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_atomic_rollback_and_retry0')
+kind = 'cancel'
+
+    @pytest.mark.parametrize('kind',['cancel','decline'])
+    def test_atomic_rollback_and_retry(tmp_path,kind):
+>       with session(tmp_path/'pair',kind) as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_atomic_rollback_and_retry0/pair')
+kind = 'cancel', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304797184 > (1.25 * (1024 ** 3))
+E        +  where 1304797184 = usage(total=245107195904, used=243802398720, free=1304797184).free
+E        +    where usage(total=245107195904, used=243802398720, free=1304797184) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_atomic_rollback_and_retry0'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_atomic_rollback_and_retry0') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_atomic_rollback_and_retry0/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+___________________ test_atomic_rollback_and_retry[decline] ____________________
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_atomic_rollback_and_retry1')
+kind = 'decline'
+
+    @pytest.mark.parametrize('kind',['cancel','decline'])
+    def test_atomic_rollback_and_retry(tmp_path,kind):
+>       with session(tmp_path/'pair',kind) as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_atomic_rollback_and_retry1/pair')
+kind = 'decline', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304797184 > (1.25 * (1024 ** 3))
+E        +  where 1304797184 = usage(total=245107195904, used=243802398720, free=1304797184).free
+E        +    where usage(total=245107195904, used=243802398720, free=1304797184) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_atomic_rollback_and_retry1'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_atomic_rollback_and_retry1') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_atomic_rollback_and_retry1/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+_________ test_legacy_partial_recovery_preserves_other_budget[cancel] __________
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_legacy_partial_recovery_p0')
+kind = 'cancel'
+
+    @pytest.mark.parametrize('kind',['cancel','decline'])
+    def test_legacy_partial_recovery_preserves_other_budget(tmp_path,kind):
+>       with session(tmp_path/'pair',kind) as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_legacy_partial_recovery_p0/pair')
+kind = 'cancel', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304793088 > (1.25 * (1024 ** 3))
+E        +  where 1304793088 = usage(total=245107195904, used=243802402816, free=1304793088).free
+E        +    where usage(total=245107195904, used=243802402816, free=1304793088) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_legacy_partial_recovery_p0'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_legacy_partial_recovery_p0') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_legacy_partial_recovery_p0/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+_________ test_legacy_partial_recovery_preserves_other_budget[decline] _________
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_legacy_partial_recovery_p1')
+kind = 'decline'
+
+    @pytest.mark.parametrize('kind',['cancel','decline'])
+    def test_legacy_partial_recovery_preserves_other_budget(tmp_path,kind):
+>       with session(tmp_path/'pair',kind) as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_legacy_partial_recovery_p1/pair')
+kind = 'decline', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304784896 > (1.25 * (1024 ** 3))
+E        +  where 1304784896 = usage(total=245107195904, used=243802411008, free=1304784896).free
+E        +    where usage(total=245107195904, used=243802411008, free=1304784896) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_legacy_partial_recovery_p1'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_legacy_partial_recovery_p1') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_legacy_partial_recovery_p1/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+__________ test_healthy_cancel_revokes_grant_and_repeats_once[alice] ___________
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_healthy_cancel_revokes_gr0')
+actor = 'alice'
+
+    @pytest.mark.parametrize('actor',['alice','bob'])
+    def test_healthy_cancel_revokes_grant_and_repeats_once(tmp_path,actor):
+>       with session(tmp_path/'pair','cancel') as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_healthy_cancel_revokes_gr0/pair')
+kind = 'cancel', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304784896 > (1.25 * (1024 ** 3))
+E        +  where 1304784896 = usage(total=245107195904, used=243802411008, free=1304784896).free
+E        +    where usage(total=245107195904, used=243802411008, free=1304784896) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_healthy_cancel_revokes_gr0'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_healthy_cancel_revokes_gr0') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_healthy_cancel_revokes_gr0/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+___________ test_healthy_cancel_revokes_grant_and_repeats_once[bob] ____________
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_healthy_cancel_revokes_gr1')
+actor = 'bob'
+
+    @pytest.mark.parametrize('actor',['alice','bob'])
+    def test_healthy_cancel_revokes_grant_and_repeats_once(tmp_path,actor):
+>       with session(tmp_path/'pair','cancel') as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_healthy_cancel_revokes_gr1/pair')
+kind = 'cancel', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304784896 > (1.25 * (1024 ** 3))
+E        +  where 1304784896 = usage(total=245107195904, used=243802411008, free=1304784896).free
+E        +    where usage(total=245107195904, used=243802411008, free=1304784896) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_healthy_cancel_revokes_gr1'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_healthy_cancel_revokes_gr1') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_healthy_cancel_revokes_gr1/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+________________ test_prepared_and_funded_refusal[False-cancel] ________________
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_prepared_and_funded_refus0')
+kind = 'cancel', funded = False
+
+    @pytest.mark.parametrize('kind',['cancel','decline'])
+    @pytest.mark.parametrize('funded',[False,True])
+    def test_prepared_and_funded_refusal(tmp_path,kind,funded):
+>       with session(tmp_path/'pair',kind,committed=True) as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_prepared_and_funded_refus0/pair')
+kind = 'cancel', committed = True
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304784896 > (1.25 * (1024 ** 3))
+E        +  where 1304784896 = usage(total=245107195904, used=243802411008, free=1304784896).free
+E        +    where usage(total=245107195904, used=243802411008, free=1304784896) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_prepared_and_funded_refus0'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_prepared_and_funded_refus0') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_prepared_and_funded_refus0/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+_______________ test_prepared_and_funded_refusal[False-decline] ________________
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_prepared_and_funded_refus1')
+kind = 'decline', funded = False
+
+    @pytest.mark.parametrize('kind',['cancel','decline'])
+    @pytest.mark.parametrize('funded',[False,True])
+    def test_prepared_and_funded_refusal(tmp_path,kind,funded):
+>       with session(tmp_path/'pair',kind,committed=True) as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_prepared_and_funded_refus1/pair')
+kind = 'decline', committed = True
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304784896 > (1.25 * (1024 ** 3))
+E        +  where 1304784896 = usage(total=245107195904, used=243802411008, free=1304784896).free
+E        +    where usage(total=245107195904, used=243802411008, free=1304784896) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_prepared_and_funded_refus1'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_prepared_and_funded_refus1') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_prepared_and_funded_refus1/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+________________ test_prepared_and_funded_refusal[True-cancel] _________________
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_prepared_and_funded_refus2')
+kind = 'cancel', funded = True
+
+    @pytest.mark.parametrize('kind',['cancel','decline'])
+    @pytest.mark.parametrize('funded',[False,True])
+    def test_prepared_and_funded_refusal(tmp_path,kind,funded):
+>       with session(tmp_path/'pair',kind,committed=True) as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_prepared_and_funded_refus2/pair')
+kind = 'cancel', committed = True
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304784896 > (1.25 * (1024 ** 3))
+E        +  where 1304784896 = usage(total=245107195904, used=243802411008, free=1304784896).free
+E        +    where usage(total=245107195904, used=243802411008, free=1304784896) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_prepared_and_funded_refus2'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_prepared_and_funded_refus2') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_prepared_and_funded_refus2/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+________________ test_prepared_and_funded_refusal[True-decline] ________________
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_prepared_and_funded_refus3')
+kind = 'decline', funded = True
+
+    @pytest.mark.parametrize('kind',['cancel','decline'])
+    @pytest.mark.parametrize('funded',[False,True])
+    def test_prepared_and_funded_refusal(tmp_path,kind,funded):
+>       with session(tmp_path/'pair',kind,committed=True) as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_prepared_and_funded_refus3/pair')
+kind = 'decline', committed = True
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304772608 > (1.25 * (1024 ** 3))
+E        +  where 1304772608 = usage(total=245107195904, used=243802423296, free=1304772608).free
+E        +    where usage(total=245107195904, used=243802423296, free=1304772608) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_prepared_and_funded_refus3'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_prepared_and_funded_refus3') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_prepared_and_funded_refus3/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+________ test_hidden_recovery_obligations_refuse_close[False-operation] ________
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio0')
+evidence = 'operation', closed = False
+
+    @pytest.mark.parametrize('evidence',['operation','coinlock','consumed_grant','funded_reservation','own_reference'])
+    @pytest.mark.parametrize('closed',[False,True])
+    def test_hidden_recovery_obligations_refuse_close(tmp_path,evidence,closed):
+>       with session(tmp_path/'pair','cancel') as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio0/pair')
+kind = 'cancel', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304772608 > (1.25 * (1024 ** 3))
+E        +  where 1304772608 = usage(total=245107195904, used=243802423296, free=1304772608).free
+E        +    where usage(total=245107195904, used=243802423296, free=1304772608) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio0'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio0') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio0/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+________ test_hidden_recovery_obligations_refuse_close[False-coinlock] _________
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio1')
+evidence = 'coinlock', closed = False
+
+    @pytest.mark.parametrize('evidence',['operation','coinlock','consumed_grant','funded_reservation','own_reference'])
+    @pytest.mark.parametrize('closed',[False,True])
+    def test_hidden_recovery_obligations_refuse_close(tmp_path,evidence,closed):
+>       with session(tmp_path/'pair','cancel') as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio1/pair')
+kind = 'cancel', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304772608 > (1.25 * (1024 ** 3))
+E        +  where 1304772608 = usage(total=245107195904, used=243802423296, free=1304772608).free
+E        +    where usage(total=245107195904, used=243802423296, free=1304772608) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio1'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio1') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio1/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+_____ test_hidden_recovery_obligations_refuse_close[False-consumed_grant] ______
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio2')
+evidence = 'consumed_grant', closed = False
+
+    @pytest.mark.parametrize('evidence',['operation','coinlock','consumed_grant','funded_reservation','own_reference'])
+    @pytest.mark.parametrize('closed',[False,True])
+    def test_hidden_recovery_obligations_refuse_close(tmp_path,evidence,closed):
+>       with session(tmp_path/'pair','cancel') as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio2/pair')
+kind = 'cancel', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304772608 > (1.25 * (1024 ** 3))
+E        +  where 1304772608 = usage(total=245107195904, used=243802423296, free=1304772608).free
+E        +    where usage(total=245107195904, used=243802423296, free=1304772608) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio2'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio2') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio2/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+___ test_hidden_recovery_obligations_refuse_close[False-funded_reservation] ____
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio3')
+evidence = 'funded_reservation', closed = False
+
+    @pytest.mark.parametrize('evidence',['operation','coinlock','consumed_grant','funded_reservation','own_reference'])
+    @pytest.mark.parametrize('closed',[False,True])
+    def test_hidden_recovery_obligations_refuse_close(tmp_path,evidence,closed):
+>       with session(tmp_path/'pair','cancel') as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio3/pair')
+kind = 'cancel', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304772608 > (1.25 * (1024 ** 3))
+E        +  where 1304772608 = usage(total=245107195904, used=243802423296, free=1304772608).free
+E        +    where usage(total=245107195904, used=243802423296, free=1304772608) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio3'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio3') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio3/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+______ test_hidden_recovery_obligations_refuse_close[False-own_reference] ______
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio4')
+evidence = 'own_reference', closed = False
+
+    @pytest.mark.parametrize('evidence',['operation','coinlock','consumed_grant','funded_reservation','own_reference'])
+    @pytest.mark.parametrize('closed',[False,True])
+    def test_hidden_recovery_obligations_refuse_close(tmp_path,evidence,closed):
+>       with session(tmp_path/'pair','cancel') as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio4/pair')
+kind = 'cancel', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304772608 > (1.25 * (1024 ** 3))
+E        +  where 1304772608 = usage(total=245107195904, used=243802423296, free=1304772608).free
+E        +    where usage(total=245107195904, used=243802423296, free=1304772608) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio4'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio4') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio4/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+________ test_hidden_recovery_obligations_refuse_close[True-operation] _________
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio5')
+evidence = 'operation', closed = True
+
+    @pytest.mark.parametrize('evidence',['operation','coinlock','consumed_grant','funded_reservation','own_reference'])
+    @pytest.mark.parametrize('closed',[False,True])
+    def test_hidden_recovery_obligations_refuse_close(tmp_path,evidence,closed):
+>       with session(tmp_path/'pair','cancel') as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio5/pair')
+kind = 'cancel', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304768512 > (1.25 * (1024 ** 3))
+E        +  where 1304768512 = usage(total=245107195904, used=243802427392, free=1304768512).free
+E        +    where usage(total=245107195904, used=243802427392, free=1304768512) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio5'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio5') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio5/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+_________ test_hidden_recovery_obligations_refuse_close[True-coinlock] _________
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio6')
+evidence = 'coinlock', closed = True
+
+    @pytest.mark.parametrize('evidence',['operation','coinlock','consumed_grant','funded_reservation','own_reference'])
+    @pytest.mark.parametrize('closed',[False,True])
+    def test_hidden_recovery_obligations_refuse_close(tmp_path,evidence,closed):
+>       with session(tmp_path/'pair','cancel') as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio6/pair')
+kind = 'cancel', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304768512 > (1.25 * (1024 ** 3))
+E        +  where 1304768512 = usage(total=245107195904, used=243802427392, free=1304768512).free
+E        +    where usage(total=245107195904, used=243802427392, free=1304768512) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio6'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio6') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio6/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+______ test_hidden_recovery_obligations_refuse_close[True-consumed_grant] ______
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio7')
+evidence = 'consumed_grant', closed = True
+
+    @pytest.mark.parametrize('evidence',['operation','coinlock','consumed_grant','funded_reservation','own_reference'])
+    @pytest.mark.parametrize('closed',[False,True])
+    def test_hidden_recovery_obligations_refuse_close(tmp_path,evidence,closed):
+>       with session(tmp_path/'pair','cancel') as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio7/pair')
+kind = 'cancel', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304768512 > (1.25 * (1024 ** 3))
+E        +  where 1304768512 = usage(total=245107195904, used=243802427392, free=1304768512).free
+E        +    where usage(total=245107195904, used=243802427392, free=1304768512) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio7'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio7') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio7/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+____ test_hidden_recovery_obligations_refuse_close[True-funded_reservation] ____
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio8')
+evidence = 'funded_reservation', closed = True
+
+    @pytest.mark.parametrize('evidence',['operation','coinlock','consumed_grant','funded_reservation','own_reference'])
+    @pytest.mark.parametrize('closed',[False,True])
+    def test_hidden_recovery_obligations_refuse_close(tmp_path,evidence,closed):
+>       with session(tmp_path/'pair','cancel') as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio8/pair')
+kind = 'cancel', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304768512 > (1.25 * (1024 ** 3))
+E        +  where 1304768512 = usage(total=245107195904, used=243802427392, free=1304768512).free
+E        +    where usage(total=245107195904, used=243802427392, free=1304768512) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio8'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio8') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio8/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+______ test_hidden_recovery_obligations_refuse_close[True-own_reference] _______
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio9')
+evidence = 'own_reference', closed = True
+
+    @pytest.mark.parametrize('evidence',['operation','coinlock','consumed_grant','funded_reservation','own_reference'])
+    @pytest.mark.parametrize('closed',[False,True])
+    def test_hidden_recovery_obligations_refuse_close(tmp_path,evidence,closed):
+>       with session(tmp_path/'pair','cancel') as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio9/pair')
+kind = 'cancel', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304768512 > (1.25 * (1024 ** 3))
+E        +  where 1304768512 = usage(total=245107195904, used=243802427392, free=1304768512).free
+E        +    where usage(total=245107195904, used=243802427392, free=1304768512) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio9'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio9') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_hidden_recovery_obligatio9/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+___________________ test_observation_only_not_closed[cancel] ___________________
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_observation_only_not_clos0')
+kind = 'cancel'
+
+    @pytest.mark.parametrize('kind',['cancel','decline'])
+    def test_observation_only_not_closed(tmp_path,kind):
+>       with session(tmp_path/'pair',kind) as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:144: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_observation_only_not_clos0/pair')
+kind = 'cancel', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304768512 > (1.25 * (1024 ** 3))
+E        +  where 1304768512 = usage(total=245107195904, used=243802427392, free=1304768512).free
+E        +    where usage(total=245107195904, used=243802427392, free=1304768512) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_observation_only_not_clos0'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_observation_only_not_clos0') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_observation_only_not_clos0/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+__________________ test_observation_only_not_closed[decline] ___________________
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_observation_only_not_clos1')
+kind = 'decline'
+
+    @pytest.mark.parametrize('kind',['cancel','decline'])
+    def test_observation_only_not_closed(tmp_path,kind):
+>       with session(tmp_path/'pair',kind) as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:144: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_observation_only_not_clos1/pair')
+kind = 'decline', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304768512 > (1.25 * (1024 ** 3))
+E        +  where 1304768512 = usage(total=245107195904, used=243802427392, free=1304768512).free
+E        +    where usage(total=245107195904, used=243802427392, free=1304768512) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_observation_only_not_clos1'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_observation_only_not_clos1') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_observation_only_not_clos1/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+__________________ test_stale_revision_cannot_release_budget ___________________
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_stale_revision_cannot_rel0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x107299bb0>
+
+    def test_stale_revision_cannot_release_budget(tmp_path,monkeypatch):
+>       with session(tmp_path/'pair','cancel') as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_stale_revision_cannot_rel0/pair')
+kind = 'cancel', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304768512 > (1.25 * (1024 ** 3))
+E        +  where 1304768512 = usage(total=245107195904, used=243802427392, free=1304768512).free
+E        +    where usage(total=245107195904, used=243802427392, free=1304768512) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_stale_revision_cannot_rel0'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_stale_revision_cannot_rel0') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_stale_revision_cannot_rel0/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+____________________ test_wrong_owner_and_peer_do_not_close ____________________
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_wrong_owner_and_peer_do_n0')
+
+    def test_wrong_owner_and_peer_do_not_close(tmp_path):
+>       with session(tmp_path/'pair','cancel') as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_wrong_owner_and_peer_do_n0/pair')
+kind = 'cancel', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304768512 > (1.25 * (1024 ** 3))
+E        +  where 1304768512 = usage(total=245107195904, used=243802427392, free=1304768512).free
+E        +    where usage(total=245107195904, used=243802427392, free=1304768512) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_wrong_owner_and_peer_do_n0'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_wrong_owner_and_peer_do_n0') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_wrong_owner_and_peer_do_n0/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+___________ test_imported_unknown_bitcoin_payment_not_closed[cancel] ___________
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_imported_unknown_bitcoin_0')
+kind = 'cancel'
+
+    @pytest.mark.parametrize('kind',['cancel','decline'])
+    def test_imported_unknown_bitcoin_payment_not_closed(tmp_path,kind):
+>       with session(tmp_path/'pair','cancel') as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:172: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_imported_unknown_bitcoin_0/pair')
+kind = 'cancel', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304764416 > (1.25 * (1024 ** 3))
+E        +  where 1304764416 = usage(total=245107195904, used=243802431488, free=1304764416).free
+E        +    where usage(total=245107195904, used=243802431488, free=1304764416) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_imported_unknown_bitcoin_0'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_imported_unknown_bitcoin_0') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_imported_unknown_bitcoin_0/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+__________ test_imported_unknown_bitcoin_payment_not_closed[decline] ___________
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_imported_unknown_bitcoin_1')
+kind = 'decline'
+
+    @pytest.mark.parametrize('kind',['cancel','decline'])
+    def test_imported_unknown_bitcoin_payment_not_closed(tmp_path,kind):
+>       with session(tmp_path/'pair','cancel') as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:172: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_imported_unknown_bitcoin_1/pair')
+kind = 'cancel', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304764416 > (1.25 * (1024 ** 3))
+E        +  where 1304764416 = usage(total=245107195904, used=243802431488, free=1304764416).free
+E        +    where usage(total=245107195904, used=243802431488, free=1304764416) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_imported_unknown_bitcoin_1'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_imported_unknown_bitcoin_1') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_imported_unknown_bitcoin_1/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+_________ test_unfunded_responder_with_counterparty_payment_can_cancel _________
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_unfunded_responder_with_c0')
+
+    def test_unfunded_responder_with_counterparty_payment_can_cancel(tmp_path):
+>       with session(tmp_path/'pair','cancel') as p:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:185: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_unfunded_responder_with_c0/pair')
+kind = 'cancel', committed = False
+
+    @contextmanager
+    def session(path,kind,committed=False):
+>       assert shutil.disk_usage(path.parent).free>1.25*1024**3
+E       AssertionError: assert 1304764416 > (1.25 * (1024 ** 3))
+E        +  where 1304764416 = usage(total=245107195904, used=243802431488, free=1304764416).free
+E        +    where usage(total=245107195904, used=243802431488, free=1304764416) = <function disk_usage at 0x1064d7f60>(PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_unfunded_responder_with_c0'))
+E        +      where <function disk_usage at 0x1064d7f60> = shutil.disk_usage
+E        +      and   PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_unfunded_responder_with_c0') = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-candidate-controls/test_unfunded_responder_with_c0/pair').parent
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py:16: AssertionError
+=========================== short test summary info ============================
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_atomic_rollback_and_retry[cancel]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_atomic_rollback_and_retry[decline]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_legacy_partial_recovery_preserves_other_budget[cancel]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_legacy_partial_recovery_preserves_other_budget[decline]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_healthy_cancel_revokes_grant_and_repeats_once[alice]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_healthy_cancel_revokes_grant_and_repeats_once[bob]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_prepared_and_funded_refusal[False-cancel]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_prepared_and_funded_refusal[False-decline]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_prepared_and_funded_refusal[True-cancel]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_prepared_and_funded_refusal[True-decline]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_hidden_recovery_obligations_refuse_close[False-operation]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_hidden_recovery_obligations_refuse_close[False-coinlock]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_hidden_recovery_obligations_refuse_close[False-consumed_grant]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_hidden_recovery_obligations_refuse_close[False-funded_reservation]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_hidden_recovery_obligations_refuse_close[False-own_reference]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_hidden_recovery_obligations_refuse_close[True-operation]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_hidden_recovery_obligations_refuse_close[True-coinlock]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_hidden_recovery_obligations_refuse_close[True-consumed_grant]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_hidden_recovery_obligations_refuse_close[True-funded_reservation]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_hidden_recovery_obligations_refuse_close[True-own_reference]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_observation_only_not_closed[cancel]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_observation_only_not_closed[decline]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_stale_revision_cannot_release_budget
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_wrong_owner_and_peer_do_not_close
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_imported_unknown_bitcoin_payment_not_closed[cancel]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_imported_unknown_bitcoin_payment_not_closed[decline]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/candidate/tests/test_atomic_closeout.py::test_unfunded_responder_with_counterparty_payment_can_cancel
+27 failed, 81 passed in 9.75s

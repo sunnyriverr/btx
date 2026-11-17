@@ -1,0 +1,40 @@
+{
+  "utc": "2026-11-17T00:19:01.894425+00:00",
+  "base": "371013d61dc124a363521df5b94e97f64d2464f2",
+  "files": {
+    "contrib/swapnet/swapnet/journal.py": "9770efe61fc7f43e007c9605774cff0d8016c7a72fd107323a7de6c75b9d85f2",
+    "contrib/swapnet/swapnet/coordinator.py": "85f0575ab4d41b4bf4d7649c7f75e178274803d3db91570243eace94d8efa3e4",
+    "contrib/swapnet/swapnet/application.py": "c9ae1468e023e0c01c011d0efddca523a2f8ced6f58a0755f589522a1ba14b61",
+    "contrib/swapnet/tests/test_journal_reader_completeness.py": "4a0f8554936375f32fb96f385d718e671a256cd4ba99d45eb599134741af6f77"
+  },
+  "patch_sha256": "9abe7ffb0277e063c87793a52264c5affcd9867439b68f076ba7d41f5e4466ad",
+  "regression_baseline": {
+    "failed": 6,
+    "passed": 8,
+    "logs": [
+      "baseline-new.log",
+      "baseline-extra.log"
+    ],
+    "split_reason": "First12cases then2review-drivencontrols; no validpasses repeated"
+  },
+  "regression_candidate": {
+    "passed": 14,
+    "logs": [
+      "candidate-new.log",
+      "candidate-extra.log"
+    ]
+  },
+  "existing_controls": {
+    "passed": 108,
+    "logs": [
+      "candidate-controls.log",
+      "atomic-retry.log"
+    ],
+    "initial_27_failure": "diskreserveassertions before testbody; rerunonlythose27 passed"
+  },
+  "initial_collection_error": "SystemPython3.9unsupportedunionannotation; bundled3.12.14 reused",
+  "platform": "macOS ARM64 Python3.12.14/pytest8.4.2 realSQLite; simulatedchain/signing/driver and syntheticsessions",
+  "review": "REPAIR-REVIEW.md no productionblocker",
+  "no_publication": true,
+  "free_bytes": 1359921152
+}

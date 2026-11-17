@@ -1,0 +1,156 @@
+F.F.F.....FF                                                             [100%]
+=================================== FAILURES ===================================
+____ test_scheduler_reaches_live_session_after_retained_history_and_reopen _____
+
+tmp_path = PosixPath('<workspace>/work/btx-lanes/session-1/swapnet-journal-reader-completeness/pytest-baseline-new/test_scheduler_reaches_live_se0')
+
+    def test_scheduler_reaches_live_session_after_retained_history_and_reopen(tmp_path):
+        path = tmp_path / 'state.sqlite'
+        with _book(path) as book:
+            _session(book, HIGH)
+            coordinator, seen = _scheduler(book, [NOW])
+            for _ in range(12):
+                coordinator.tick()
+            assert seen == [HIGH] * 12
+            _add_history(book, 'cancelled', 4096)
+            _add_history(book, 'rejected', 4096, start=10000)
+            book.ensure_capacity()
+            assert len(book.all()) == 512
+            assert len(book.all(limit=4096)) == 4096
+            assert HIGH not in {sid for sid, _, _ in book.all(limit=4096)}
+            seen.clear()
+            for _ in range(12):
+                coordinator.tick()
+>           assert seen == [HIGH] * 12
+E           AssertionError: assert [] == ['fffffffffff...fffffff', ...]
+E             
+E             Right contains 12 more items, first extra item: 'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+E             Use -v to get more diff
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/baseline/tests/test_journal_reader_completeness.py:124: AssertionError
+_______ test_terminal_watch_survives_history_and_keeps_cadence_and_wrap ________
+
+store = <swapnet.store.Store object at 0x107bdc7a0>
+
+    def test_terminal_watch_survives_history_and_keeps_cadence_and_wrap(store):
+        book = Journal(store)
+        active_ids = [f'{n:064x}' for n in range(1, 8)]
+        for sid in active_ids:
+            _session(book, sid)
+        complete, refunded = 'e' * 64, HIGH
+        _session(book, complete, 'complete')
+        _session(book, refunded, 'refunded')
+        _add_history(book, 'cancelled', 4096)
+        _add_history(book, 'rejected', 4096, start=10000)
+        clock = [NOW]
+        coordinator, seen = _scheduler(book, clock)
+    
+        def tick_at(timestamp):
+            clock[0] = timestamp
+            seen.clear()
+            coordinator.tick()
+            active = [sid for sid in seen if sid in active_ids]
+            terminal = [sid for sid in seen if sid in {complete, refunded}]
+            assert len(active) == 4 and len(set(active)) == 4
+            assert len(seen) == len(active) + len(terminal)
+            return terminal
+    
+>       assert tick_at(NOW) == [complete]
+E       AssertionError: assert [] == ['eeeeeeeeeee...eeeeeeeeeeee']
+E         
+E         Right contains one more item: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+E         Use -v to get more diff
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/baseline/tests/test_journal_reader_completeness.py:175: AssertionError
+_____ test_asset_guard_is_complete_before_configuration_side_effects[512] ______
+
+store = <swapnet.store.Store object at 0x107bd8f50>, history_count = 512
+
+    @pytest.mark.parametrize('history_count', [0, 512])
+    def test_asset_guard_is_complete_before_configuration_side_effects(store, history_count):
+        book = Journal(store)
+        active = _session(book, HIGH, 'funded', asset=ASSET)
+        _add_history(book, 'cancelled', history_count)
+        app, calls, original = _configuration_app(book)
+        with pytest.raises(SwapError) as error:
+            _configure(app, READER, ASSET)
+        assert error.value.code == 'OWNER_REQUIRED'
+        assert calls == []
+        assert _configure(app, OWNER, OTHER_ASSET) == {'asset': OTHER_ASSET, 'ready': True}
+        assert calls == [('factory', {'asset': OTHER_ASSET}), 'ready']
+        calls.clear()
+        policy_before = book.setting('asset_policies')
+>       with pytest.raises(SwapError) as error:
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/baseline/tests/test_journal_reader_completeness.py:198: Failed
+____ test_event_ownership_outside_display_page_preserves_privacy_and_cursor ____
+
+store = <swapnet.store.Store object at 0x107bdae10>
+
+    def test_event_ownership_outside_display_page_preserves_privacy_and_cursor(store):
+        book = Journal(store)
+        _session(book, HIGH)
+        app = SimpleNamespace(store=store, journal=book)
+        before = _cursor(book)
+        store.audit({'type': 'reader_control', 'swap_id': HIGH, 'label': 'baseline'})
+        assert _labels(_events(app, READER, before)) == ['baseline']
+        _add_history(book, 'cancelled', 512)
+        other = 'e' * 64
+        _session(book, other, principal='other')
+        assert HIGH not in {sid for sid, _, _ in book.all(READER.name)}
+        before = _cursor(book)
+        inside = f'{1000:064x}'
+        payloads = [
+            {'swap_id': inside, 'label': 'own_inside'},
+            {'swap_id': HIGH, 'label': 'own_outside_swap_id'},
+            {'id': HIGH, 'label': 'own_outside_id'},
+            {'swap_id': other, 'label': 'other'},
+            {'id': 'unassociated', 'label': 'unassociated'},
+            {'id': HIGH, 'swap_id': other, 'label': 'swap_id_precedence'},
+            {'id': HIGH, 'swap_id': None, 'label': 'null_does_not_fall_back'},
+        ]
+        for payload in payloads:
+            store.audit({'type': 'reader_control', **payload})
+        owner = _events(app, OWNER, before)
+        reader = _events(app, READER, before)
+        stranger = _events(app, Principal('other'), before)
+        assert _labels(owner) == [payload['label'] for payload in payloads]
+>       assert _labels(reader) == ['own_inside', 'own_outside_swap_id', 'own_outside_id']
+E       AssertionError: assert ['own_inside'] == ['own_inside'...n_outside_id']
+E         
+E         Right contains 2 more items, first extra item: 'own_outside_swap_id'
+E         Use -v to get more diff
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/baseline/tests/test_journal_reader_completeness.py:272: AssertionError
+__________ test_event_ownership_lookup_accepts_full_500_id_audit_page __________
+
+store = <swapnet.store.Store object at 0x107bdb080>
+
+    def test_event_ownership_lookup_accepts_full_500_id_audit_page(store):
+        book = Journal(store)
+        _add_history(book, 'cancelled', 512)
+        ids = [f'{n:064x}' for n in range(10000, 10500)]
+        # Synthetic retained rows are sufficient: event authorization reads ownership,
+        # not execution state. All500 owned references sort beyond the old prefix.
+        _add_history(book, 'refunded', 500, start=10000)
+        before = _cursor(book)
+        for sid in ids:
+            store.audit({'type': 'reader_control', 'swap_id': sid, 'label': sid})
+        app = SimpleNamespace(store=store, journal=book)
+        result = _events(app, READER, before, 500)
+>       assert _labels(result) == ids
+E       AssertionError: assert [] == ['00000000000...0002715', ...]
+E         
+E         Right contains 500 more items, first extra item: '0000000000000000000000000000000000000000000000000000000000002710'
+E         Use -v to get more diff
+
+work/btx-lanes/session-1/swapnet-journal-reader-completeness/baseline/tests/test_journal_reader_completeness.py:302: AssertionError
+=========================== short test summary info ============================
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/baseline/tests/test_journal_reader_completeness.py::test_scheduler_reaches_live_session_after_retained_history_and_reopen
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/baseline/tests/test_journal_reader_completeness.py::test_terminal_watch_survives_history_and_keeps_cadence_and_wrap
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/baseline/tests/test_journal_reader_completeness.py::test_asset_guard_is_complete_before_configuration_side_effects[512]
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/baseline/tests/test_journal_reader_completeness.py::test_event_ownership_outside_display_page_preserves_privacy_and_cursor
+FAILED work/btx-lanes/session-1/swapnet-journal-reader-completeness/baseline/tests/test_journal_reader_completeness.py::test_event_ownership_lookup_accepts_full_500_id_audit_page
+5 failed, 7 passed in 0.52s
