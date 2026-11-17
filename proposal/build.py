@@ -1,5 +1,5 @@
 from pathlib import Path
-import os,sys,json,subprocess,tarfile,shutil,time,selectors,signal,hashlib
+import os,sys,json,subprocess,tarfile,shutil,time,selectors,signal,hashlib,re
 from checkpoint import sha,restore_timestamps,verify_restored,create
 PIN='371013d61dc124a363521df5b94e97f64d2464f2';w=Path(os.environ['GITHUB_WORKSPACE']);out=w/'records';out.mkdir(exist_ok=True);r={'source':PIN,'complete':False,'commands':[]};source=w/'product';build=w/'gui-pilot-runtime/qtbuild';restored=False;execution_deadline=time.monotonic()+42*60
 
@@ -13,6 +13,12 @@ def run(cmd,label,limit=120,cwd=None,allowed=(0,)):
     chunk=os.read(key.fileobj.fileno(),65536)
     if not chunk:sel.unregister(key.fileobj);continue
     f.write(chunk);f.flush();data.append(chunk);sys.stdout.buffer.write(chunk);sys.stdout.flush()
+    if label in ('baseline-build','candidate-build'):
+     totals=re.findall(rb'\[\d+/(\d+)\] (?:Building|Linking|Generating)',b''.join(data[-3:]))
+     if totals:
+      actual=max(map(int,totals));r[label+'_actual_actions']=actual
+      if actual>(350 if label=='baseline-build' else 100) and p.poll() is None:
+       r['unexpected_rebuild_guard']=label;os.killpg(p.pid,signal.SIGTERM)
    if (time.monotonic()-start>limit or shutil.disk_usage(w).free<3*1024**3)and p.poll()is None:
     os.killpg(p.pid,signal.SIGTERM)
     try:p.wait(10)
@@ -41,7 +47,11 @@ try:
  r['changed_from_checkpoint']=changed;save()
  assert '11.4.0'in run(['g++','-dumpfullversion'],'gcc');assert 'OpenSSL 3.5.9'in run([w/'gui-pilot-runtime/openssl/bin/openssl','version'],'openssl');os.environ['BTX_OPENSSL']=str(w/'gui-pilot-runtime/openssl/bin/openssl')
  run(['cmake','-S',source,'-B',build],'configure',180)
- targets=['btxd','btx-cli','btx-modeld','test_btx'];run(['ninja','build.ninja'],'baseline-graph-regeneration',120,build);dry=run(['ninja','-n',*targets],'baseline-plan',120,build);r['baseline_actions']=len(dry.splitlines());assert 'Re-running CMake' not in dry;assert r['baseline_actions']<350;r['rebuild_admitted']=True;save()
+ targets=['btxd','btx-cli','btx-modeld','test_btx'];run(['ninja','build.ninja'],'baseline-graph-regeneration',120,build)
+ # Snapshot is for read-only planning only. The actual build retains CMake's
+ # normal CONFIGURE_DEPENDS verification and unmodified build.ninja.
+ snapshot=build/'profile-plan.ninja';shutil.copy2(build/'build.ninja',snapshot)
+ dry=run(['ninja','-f',snapshot,'-n',*targets],'baseline-plan',120,build);r['baseline_actions']=len(dry.splitlines());assert 'Re-running CMake' not in dry;assert r['baseline_actions']<350;r['rebuild_admitted']=True;save()
  run(['ninja','-j2',*targets],'baseline-build',1500,build)
  test_script=source/'test/functional/feature_swarm_profile_overrides.py';unit=source/'src/test/modelnet_infra_tests.cpp';test_script.write_bytes((w/'proposal/feature_swarm_profile_overrides.py').read_bytes())
  baseline_hash={n:sha(build/'bin'/n)for n in targets};r['baseline_hash']=baseline_hash;save()
@@ -54,7 +64,7 @@ try:
  # Restore the functional file so the exact five-file patch applies.
  test_script.write_bytes((reference/'test/functional/feature_swarm_profile_overrides.py').read_bytes())
  run(['git','apply','--check',w/'proposal/restart-profile.patch'],'patch-check',30,source);run(['git','apply',w/'proposal/restart-profile.patch'],'patch-apply',30,source)
- dry=run(['ninja','-n',*targets],'candidate-plan',120,build);r['candidate_actions']=len(dry.splitlines());assert r['candidate_actions']<100
+ shutil.copy2(build/'build.ninja',snapshot);dry=run(['ninja','-f',snapshot,'-n',*targets],'candidate-plan',120,build);r['candidate_actions']=len(dry.splitlines());assert r['candidate_actions']<100
  run(['ninja','-j2',*targets],'candidate-build',600,build)
  r['candidate_hash']={n:sha(build/'bin'/n)for n in targets};save()
  run([build/'bin/test_btx','--run_test=modelnet_infra_tests','--log_level=test_suite'],'candidate-infra-suite',120,build)
