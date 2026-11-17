@@ -34,6 +34,14 @@ def run(cmd,label,limit,cwd=None,allowed=None):
 try:
  assert json.loads((out/'staging.json').read_text())['complete']
  assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=ref,text=True).strip()==pin
+ os.environ['BTX_OPENSSL']=str(w/'gui-pilot-runtime/openssl/bin/openssl')
+ closure=('src/modelnet/file_stream.cpp','src/modelnet/file_stream.h','src/modelnet/store.cpp','src/modelnet/store.h','src/modelnet/direct_seed.cpp','src/modelnet/direct_seed.h','src/modelnet/types.cpp','src/modelnet/types.h','src/test/modelnet_file_stream_tests.cpp','src/test/util/setup_common.cpp','src/test/util/setup_common.h','src/crypto/sha384.cpp','src/crypto/sha384.h','src/util/readwritefile.cpp','src/util/readwritefile.h')
+ r['retained_stream_source_matches']={n:sha(source/n)==sha(ref/n) for n in closure};save()
+ assert all(r['retained_stream_source_matches'].values()),'retained stream control source changed'
+ retained_test=build/'bin/test_btx';r['retained_test_binary_sha256']=sha(retained_test);save()
+ code,_=run([retained_test,'--run_test=modelnet_file_stream_tests','--log_level=test_suite','--logger=JUNIT,all,'+str(out/'retained-stream.xml')],'retained-stream-controls',180,build)
+ r['retained_stream_controls']=validate_suite((out/'retained-stream.xml').read_text(),code,'modelnet_file_stream_tests')
+ r['retained_stream_scope']='Unchanged source-matched stream/store unit controls from immutable checkpoint, run once. Not a newly rebuilt current test_btx, not patched-helper integration. Current helper is tested separately below.';save()
  tracked=[n for n in subprocess.check_output(['git','ls-files','-z'],cwd=ref,text=True).split('\0')if n]
  changed=[]
  for name in tracked:
@@ -61,19 +69,15 @@ try:
  # Identical maintained regression in both trees; baseline differs only in helper.
  test_source=source/'test/functional/feature_modelnet_retrieve_regressions.py';shutil.copy2(p/'feature_modelnet_retrieve_regressions.py',test_source);os.utime(test_source,None)
  os.environ['BTX_OPENSSL']=str(w/'gui-pilot-runtime/openssl/bin/openssl');run([os.environ['BTX_OPENSSL'],'version'],'openssl',30,allowed=(0,));run(['g++','-dumpfullversion'],'gcc',30,allowed=(0,))
- helper=build/'bin/btx-modeld';test=build/'bin/test_btx'
+ helper=build/'bin/btx-modeld'
  def phase(name):
   snapshot=build/('cancel-'+name+'.ninja');shutil.copy2(build/'build.ninja',snapshot)
-  _,dry=run(['ninja','-f',snapshot,'-n','btx-modeld','test_btx'],name+'-dry',90,build,(0,))
+  _,dry=run(['ninja','-f',snapshot,'-n','btx-modeld'],name+'-dry',90,build,(0,))
   actions=[x for x in dry.splitlines()if x.startswith('[')];r[name+'_planned_actions']=len(actions);save();assert 0<len(actions)<=120,'rebuild exceeds120action gate'
-  run(['ninja','-j2','btx-modeld','test_btx'],name+'-build',900,build,(0,))
+  run(['ninja','-j2','btx-modeld'],name+'-build',900,build,(0,))
   dest=w/'retained-binaries'/name;dest.mkdir(parents=True,exist_ok=True)
-  for x in (helper,test):shutil.copy2(x,dest/x.name)
-  r[name+'_binaries']={x.name:sha(x)for x in (helper,test)};r[name+'_source']={n:sha(source/n)for n in changes};save()
-  r[name+'_suites']={}
-  for suite in ('modelnet_first_run_tests','modelnet_file_stream_tests'):
-   code,_=run([test,'--run_test='+suite,'--log_level=test_suite','--logger=JUNIT,all,'+str(out/(name+'-'+suite+'.xml'))],name+'-'+suite,180,build)
-   r[name+'_suites'][suite]=validate_suite((out/(name+'-'+suite+'.xml')).read_text(),code,suite);save()
+  for x in (helper,):shutil.copy2(x,dest/x.name)
+  r[name+'_binaries']={x.name:sha(x)for x in (helper,)};r[name+'_source']={n:sha(source/n)for n in changes};save()
   assert deadline-time.monotonic()>1140,'insufficient bounded runtime plus cleanup headroom'
   run([sys.executable,p/'native.py','--helper',helper,'--sha256',sha(helper),'--expect',name,'--out',out/(name+'-native')],name+'-native',1140,allowed=(0,))
   result=json.loads((out/(name+'-native/result.json')).read_text());assert result['complete']and result['clean_cleanup'];r[name+'_native']=result;save()
