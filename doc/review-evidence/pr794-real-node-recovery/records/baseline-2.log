@@ -1,0 +1,21 @@
+2026-11-17T01:02:31.256000Z TestFramework (INFO): PRNG seed is: 3352655106198402975
+2026-11-17T01:02:31.256000Z TestFramework (INFO): Initializing test directory <work>/runtime/baseline-2
+2026-11-17T01:02:38.773000Z TestFramework (INFO): PRIVATE receipt <work>/baseline-2.json: workflow=NOT_COMPLETED intended_path=NON_REPRODUCTION_not_PR794_qualification
+2026-11-17T01:02:38.774000Z TestFramework (ERROR): Unexpected exception
+Traceback (most recent call last):
+  File "<work>/source/test/functional/test_framework/test_framework.py", line 142, in main
+    self.run_test()
+  File "<work>/fixture/p2p_pr794_real_nodes.py", line 109, in run_test
+    raise AssertionError('Original real source peer disconnected; inspect exact logs')
+AssertionError: Original real source peer disconnected; inspect exact logs
+2026-11-17T01:02:38.830000Z TestFramework (INFO): Not stopping nodes as test failed. The dangling processes will be cleaned up later.
+2026-11-17T01:02:38.830000Z TestFramework (WARNING): Not cleaning up dir <work>/runtime/baseline-2
+2026-11-17T01:02:38.830000Z TestFramework (ERROR): Test failed. Test logging available at <work>/runtime/baseline-2/test_framework.log
+2026-11-17T01:02:38.830000Z TestFramework (ERROR): 
+2026-11-17T01:02:38.830000Z TestFramework (ERROR): Hint: Call <work>/source/test/functional/combine_logs.py '<work>/runtime/baseline-2' to consolidate all logs
+2026-11-17T01:02:38.830000Z TestFramework (ERROR): 
+2026-11-17T01:02:38.830000Z TestFramework (ERROR): If this failure happened unexpectedly or intermittently, please file a bug and provide a link or upload of the combined log.
+2026-11-17T01:02:38.830000Z TestFramework (ERROR): https://github.com/btxchain/btx/issues
+2026-11-17T01:02:38.830000Z TestFramework (ERROR): 
+[node 1] Cleaning up leftover process
+[node 0] Cleaning up leftover process
