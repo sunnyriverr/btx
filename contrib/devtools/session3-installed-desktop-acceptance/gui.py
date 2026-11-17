@@ -63,6 +63,19 @@ def owned_processes(prefix):
     return rows
 
 
+def window_rows(prefix, executable, pid, start_ticks, env):
+    row = process(pid)
+    # A packaged shell launcher retains its PID while locating dependencies,
+    # then execs the real app. A pending launcher is not a ready GUI process.
+    # The existing bounded wait must observe the exact app and start identity.
+    expected = (prefix / 'libexec' / executable).resolve()
+    if Path(row['exe']).resolve() != expected or row['start_ticks'] != start_ticks:
+        return []
+    lines = subprocess.check_output(['wmctrl', '-lp'], text=True, env=env, timeout=5).splitlines()
+    return [line.split(None, 4) for line in lines if len(line.split(None, 4)) == 5
+            and line.split(None, 4)[2] == str(pid)]
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--prefix', type=Path, required=True)
@@ -135,13 +148,9 @@ def main():
 
     def windows(label):
         child = processes[label]
-        # The same private installed prefix and actual child PID own the window.
-        row = process(child.pid)
-        assert inside(row['exe'], prefix), (label, 'unexpected executable')
-        lines = subprocess.check_output(['wmctrl', '-lp'], text=True, env=env, timeout=5).splitlines()
-        found = [line.split(None, 4) for line in lines if len(line.split(None, 4)) == 5
-                 and line.split(None, 4)[2] == str(child.pid)]
-        return found
+        leader = next(row for row in state['owned_sessions'] if row['label'] == label)
+        executable = {'qt': 'btx-qt.real', 'atlas': 'btx-atlas.real'}[label]
+        return window_rows(prefix, executable, child.pid, leader['start_ticks'], env)
 
     def close_window(label):
         found = windows(label)
