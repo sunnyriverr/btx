@@ -1,66 +1,50 @@
-name: Session3 Mac wallet build preparation
+name: Session3 no-rebuild Mac wallet recovery
 on:
   workflow_dispatch:
     inputs:
-      compile:
-        description: 'Explicitly authorized bounded daemon and CLI build (no tests)'
+      run_regtest:
+        description: 'Explicitly authorized disposable recovery-to-payment run; no rebuild'
         type: boolean
         default: false
 permissions:
   contents: read
   actions: read
 concurrency:
-  group: session3-mac-wallet-recovery
+  group: session3-mac-wallet-recovery-runtime
   cancel-in-progress: false
 jobs:
-  prepare:
-    if: github.repository == 'sunnyriverr/btx'
+  recovery:
+    if: github.repository == 'sunnyriverr/btx' && inputs.run_regtest
     runs-on: macos-15
-    timeout-minutes: 50
-    env:
-      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
-      HOMEBREW_NO_AUTO_UPDATE: '1'
-      HOMEBREW_NO_INSTALL_UPGRADE: '1'
-      HOMEBREW_NO_INSTALL_CLEANUP: '1'
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
-          sparse-checkout: contrib/devtools/session3-mac-wallet
+          sparse-checkout: contrib/devtools/session3-mac-wallet-runtime
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: btxchain/btx
           ref: bd847e2b986722c1723b4cd60988d4f4908452d4
           path: product
           persist-credentials: false
-      - name: Select pinned isolated Python 3.12
+      - name: Select exact embedded Python runtime
         id: python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.12.10'
           architecture: arm64
           check-latest: false
-      - name: Verify checkpoint, configure and expose true build plan
-        timeout-minutes: 35
+      - name: Verify retained binaries and run bounded disposable wallet recovery
+        timeout-minutes: 30
         env:
           GH_TOKEN: ${{ github.token }}
-          BUILD_APPROVED: ${{ inputs.compile }}
+          RUNTIME_APPROVED: ${{ inputs.run_regtest }}
           BTX_BUILD_PYTHON: ${{ steps.python.outputs.python-path }}
-        run: python3 contrib/devtools/session3-mac-wallet/build.py
-      - name: Preserve source/build checkpoint without running BTX
-        if: always()
-        timeout-minutes: 10
-        run: python3 contrib/devtools/session3-mac-wallet/preserve.py
+        run: python3 contrib/devtools/session3-mac-wallet-runtime/run.py
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: session3-mac-wallet-build-records
+          name: session3-mac-wallet-recovery-records
           path: records
-          retention-days: 14
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
-        if: always()
-        with:
-          name: session3-mac-wallet-build-checkpoint
-          path: retained
-          compression-level: 0
           retention-days: 14
