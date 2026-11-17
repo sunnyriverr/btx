@@ -1,0 +1,72 @@
+{
+  "utc": "2026-11-17T08:34:44.617430+00:00",
+  "status": "LOCAL_FIX_QUALIFIED_PUBLICATION_HELD",
+  "current_source_base": "ea64a31e9b4f83375746ce2e65917bcb3c2026e9",
+  "product_files": [
+    "src/modelnet/s3_store.cpp",
+    "src/test/modelnet_cloud_tests.cpp"
+  ],
+  "production_change": "Two window comparisons != -> > plus explanatory comment; no file schema or save algorithm change",
+  "run": "https://github.com/sunnyriverr/btx/actions/runs/44047253189",
+  "test_commit": "550a7f569d80b358504f33593354c2ad14546f48",
+  "baseline": {
+    "maintained_failed_assertions": 32,
+    "intended_cases_failed": 2,
+    "forward_control_passed": true,
+    "qualification": {
+      "consumer_rows": 4,
+      "consumer_sha256": "c3de7c234c6d56aab2a1eb0f336dfb66169c2d343232104355aab6930b3be2c2",
+      "maintained_exit": 201,
+      "maintained_cases": [
+        "cloud_12f_calendar_rollback_preserves_exhausted_allowance",
+        "cloud_12g_calendar_rollback_preserves_remaining_allowance",
+        "cloud_12b_calendar_day_budget_persists"
+      ],
+      "maintained_wrapper_sha256": "36251541bf0f04762926559e6497d0af80153a1d90e3f9f2d1cd421798b28efa"
+    }
+  },
+  "candidate": {
+    "maintained_passed_assertions": 356,
+    "cases_passed": 3,
+    "consumer_cases_passed": 4,
+    "qualification": {
+      "consumer_rows": 4,
+      "consumer_sha256": "f9822f07a43654dbd9531bef961d60c9231f4fb475bdcb3814d05ad9076b0e30",
+      "maintained_exit": 0,
+      "maintained_cases": [
+        "cloud_12f_calendar_rollback_preserves_exhausted_allowance",
+        "cloud_12g_calendar_rollback_preserves_remaining_allowance",
+        "cloud_12b_calendar_day_budget_persists"
+      ],
+      "maintained_wrapper_sha256": "dc04d52a46616564b531fbca3fce0cbbcd51cc3495afc32d066f4d5fb45d5a3b"
+    }
+  },
+  "unchanged_consumer_source_sha256": "8116e3155e17703ae1f0e8ac6ed42f05d11a657144610b47d845dac4b7914983",
+  "identities": {
+    "baseline_source_sha256": "b256fded8c1d823a38eb2b2dfcfa72d1cd4b3507e006bce04dfdecd54ee350f1",
+    "candidate_source_sha256": "d6e3bd57a7d2d10f509e0ba1b010d005205c362b19637a8e778af5ea5f96f930",
+    "consumer_sha256": "8116e3155e17703ae1f0e8ac6ed42f05d11a657144610b47d845dac4b7914983",
+    "maintained_wrapper_sha256": "4c86f680077a09e3169493020b7a9820a506ec9f0bedf3b74615573cf0bf9e41",
+    "objects": {
+      "consumer": "b0a00a931a40377d3691d4d7dc568a61b1af5c91998c05ace6ae15f04c1847ce",
+      "maintained_wrapper": "94e844271e412477c34a1327702dae4053429c0837ef7792f80b553a0a6bda2d",
+      "candidate_s3_store": "ed52614f4a566dd9df8b6706baa42e68cc4097967554c5222d9b2b5797881183"
+    }
+  },
+  "controls": [
+    "Exhausted daily/monthly GET and byte quotas stay refused across backwards/reopen/return",
+    "Partly-used quotas retain and permit only their remaining allowance across rollback/reopen",
+    "Fresh first use and next-day/month rollover remain valid; newly used allowance persists through reopen",
+    "Rejected reads make zero origin GETs; successful reads return exact6bytes",
+    "Lifetime counters remain monotonic; original source/cache left unchanged"
+  ],
+  "scope": "Linux x86_64 S3PieceStore component linked with retained production libraries and one rebuilt candidate store object; persistent FakeS3 and actual budget file close/reopen. Maintained test bodies compiled in a standalone Boost wrapper. Not full test_btx/helper/node, system-clock modification, real cloud, concurrency or native Windows/macOS runtime.",
+  "future_clock_limit": "A future-dated saved window is retained conservatively until time advances beyond it; the repair does not invent trusted time or undo prior forward jumps",
+  "credit": "Existing BTX copyright/fixture and PR516 persistence work retained; no external code imported for the two comparison changes",
+  "reviews": {
+    "preflight": "Production sound; tightened validator after independent review identified generic-failure acceptance",
+    "final": "No material unresolved issue; exact intended baseline errors, candidate assertions and observations independently reviewed read-only"
+  },
+  "publication": "No upstream PR/comment/product branch published; user-approved fork CI only",
+  "next": "Ready for focused delivery when authorized; recheck current source/ownership before publishing, do not repeat qualified tests absent a relevant change."
+}
