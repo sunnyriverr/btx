@@ -1,0 +1,68 @@
+Compiling 4 files with Solc 0.8.24
+Solc 0.8.24 finished in 1.09s
+Compiler run successful!
+2026-11-17T10:46:59.764912Z  WARN evm::traces: failed to read cache file path="<workspace>/work/btx-lanes/session-1/swapnet-financial-rollback-admission/review-777-native-regression/native-runtime/local/tool-home/.foundry/cache/signatures" err=Read { source: Os { code: 2, kind: NotFound, message: "No such file or directory" }, path: "<workspace>/work/btx-lanes/session-1/swapnet-financial-rollback-admission/review-777-native-regression/native-runtime/local/tool-home/.foundry/cache/signatures" }
+warning[reentrancy-no-eth]: external call can be reentered before `entered` is updated
+    ╭▸ product/contrib/swapnet/contracts/SwapNetHTLC.sol:153:42
+    │
+153 │         (bool ok, bytes memory result) = token.call(data);
+    │                                          ━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-no-eth
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+   ╭▸ product/contrib/swapnet/contracts/SwapNetHTLC.sol:77:13
+   │
+77 │             refundAt < block.timestamp + MIN_LOCK || refundAt > block.timestamp + MAX_LOCK)
+   │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+   ╭▸ product/contrib/swapnet/contracts/SwapNetHTLC.sol:77:54
+   │
+77 │             refundAt < block.timestamp + MIN_LOCK || refundAt > block.timestamp + MAX_LOCK)
+   │                                                      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+   ╭▸ product/contrib/swapnet/contracts/SwapNetHTLC.sol:88:13
+   │
+88 │         if (block.timestamp >= s.refundAt) revert TooLate();
+   │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+   ╭▸ product/contrib/swapnet/contracts/SwapNetHTLC.sol:99:13
+   │
+99 │         if (block.timestamp < s.refundAt) revert TooEarly();
+   │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[reentrancy-eth]: uncapped ETH transfer can be reentered before `entered` is updated
+    ╭▸ product/contrib/swapnet/contracts/SwapNetHTLC.sol:125:26
+    │
+125 │             (bool ok,) = to.call{value: amount}("");
+    │                          ━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-eth
+
+warning[arbitrary-send-eth]: ETH is sent to a user-controlled destination; restrict the destination or the caller
+    ╭▸ product/contrib/swapnet/contracts/SwapNetHTLC.sol:125:26
+    │
+125 │             (bool ok,) = to.call{value: amount}("");
+    │                          ━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/arbitrary-send-eth
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ product/contrib/swapnet/contracts/SwapNetHTLC.sol:136:9
+    │
+136 │         emit Withdrawn(msg.sender, token, to, amount);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+

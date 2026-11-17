@@ -1,0 +1,68 @@
+{
+  "status": "PASS",
+  "case": "refund",
+  "stage": "refund native workflow verified",
+  "evm": {
+    "asset": "evm:ba6749bd4b92051aa84b2cf02420e2328aadf521902051d4e380d166d9646b32:31337:native",
+    "contract": "0x5fbdb2315678afecb367f032d93f642f64180aa3",
+    "runtime_hash": "a06e30bad714ff02db5a2401a898bd7194d1c475b61bdab312ae194b1509e45d",
+    "deployment": "0x09fe4073eba05f82e59e3b7e3f6ed5cf268bf8b1121face9e4875e3c23bfcf4b"
+  },
+  "before_btx_atoms": {
+    "btx-a": 6000000000,
+    "btx-b": 6000000000
+  },
+  "swap_id": "00e24f31cc7b8d9c4ef20f88b9e2887fef4ca5cce0ae8d6704c27e08ccf33103",
+  "last_states": {
+    "btx-a": {
+      "stage": "funded",
+      "funding_broadcast": true,
+      "last_error": null,
+      "last_action": "reconcile_existing_funding",
+      "refs": {
+        "a": {
+          "lock_id": "8d111de233753c3b97ca90e4b4f0a7b6c8508a3a1c36f6dfcd89b97da4bee708",
+          "salt": "c748f529b51a6b6ca60dc40e65c535127849f64c204e89d26dcf867ee8f1e925",
+          "txid": "0x1d4877d105f0ec5570d19a2809a6d5d728d964d828681a8f8786890857f6e838"
+        }
+      }
+    },
+    "btx-b": {
+      "stage": "funded",
+      "funding_broadcast": true,
+      "last_error": null,
+      "last_action": "broadcast_prepared_short_funding",
+      "refs": {
+        "a": {
+          "lock_id": "8d111de233753c3b97ca90e4b4f0a7b6c8508a3a1c36f6dfcd89b97da4bee708",
+          "salt": "c748f529b51a6b6ca60dc40e65c535127849f64c204e89d26dcf867ee8f1e925",
+          "txid": "0x1d4877d105f0ec5570d19a2809a6d5d728d964d828681a8f8786890857f6e838"
+        },
+        "b": {
+          "txid": "37c4a6e047e0dbb6e6517cb6be5060a568566df8235fc7764606ac6726d6297d",
+          "vout": 0
+        }
+      }
+    }
+  },
+  "native_initial_funding": {
+    "role": "maker",
+    "outpoint": {
+      "txid": "37c4a6e047e0dbb6e6517cb6be5060a568566df8235fc7764606ac6726d6297d",
+      "vout": 0
+    },
+    "present_in_real_node": true
+  },
+  "native_refund": {
+    "funding_txid": "37c4a6e047e0dbb6e6517cb6be5060a568566df8235fc7764606ac6726d6297d",
+    "funding_vout": 0,
+    "refund_txid": "b8c7ab13e3b5e1967c60978efd363fff2e795b14d5873ce3ccf797dd27f0d42f",
+    "maturity": 591,
+    "refund_atoms": 9990000,
+    "funding_fee_atoms": 7834,
+    "refund_fee_atoms": 9000,
+    "early_refused": true,
+    "restart_original_preserved": true
+  },
+  "cleanup_errors": []
+}

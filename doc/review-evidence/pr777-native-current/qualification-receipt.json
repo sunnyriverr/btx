@@ -1,0 +1,138 @@
+{
+  "utc": "2026-11-17T10:50:05.407456+00:00",
+  "status": "PASS",
+  "source": "cd3078e76398b20b7f500acd1348a5b5455f3d5e",
+  "binary_sha256": "13389baef507e90f7724235ab799453832fa78fefac8abf924df2fb84a671438",
+  "platform": {
+    "macos": "26.5.1",
+    "architecture": "arm64"
+  },
+  "runtime": {
+    "version": [
+      3,
+      12,
+      10
+    ],
+    "prefix": "<workspace>/work/btx-lanes/session-1/swapnet-financial-rollback-admission/review-777-native-regression/native-runtime/local/python-runtime/Python.framework/Versions/3.12",
+    "architecture": "arm64",
+    "cryptography": "46.0.4",
+    "cffi": "2.1.1",
+    "pycparser": "3.12",
+    "sqlite": "3.49.1",
+    "ssl": "OpenSSL 3.0.16 11 Feb 2025"
+  },
+  "cases": {
+    "settlement": {
+      "status": "PASS",
+      "seconds": 52.416,
+      "native": {
+        "funding_txid": "b6257b02c7db753d6bafdccc0595252b40de5a570099af55898acce50db7eb79",
+        "funding_vout": 1,
+        "claim_txid": "75e542f02a0aaa533e581c317321c73b9ca674f865c378014456a83050f4d454",
+        "locked_atoms": 10000000,
+        "paid_atoms": 9991000,
+        "funding_fee_atoms": 7834,
+        "claim_fee_atoms": 9000,
+        "payout": "btxrt1ztyyv74namk6dg6cfvyz6regwjn7ws0xxx7d7pet0h36qeemd34qqaksk38"
+      },
+      "evm": {
+        "kind": "claim",
+        "funding_txid": "0x26afe9b706a002ca1f7a7ce48f33a0f43310969dcebd5e0d1b5ed5388e4c4905",
+        "settlement_txid": "0x14b12694cdee4ebe29a9b82a8fd6a49e82b798ea6a117ece457398aa699c7be4",
+        "withdrawal_txid": "0x9622e3273652cb73cf080ec56b7e888b7040b0f3b4c25e2fc3f474e1747f81b3",
+        "finalized_block_hash": "0x78b33c91bdf48affd5a4221d6bc22b0d6b42d51c666989ca6f026f410a47b30a",
+        "runtime_hash": "a06e30bad714ff02db5a2401a898bd7194d1c475b61bdab312ae194b1509e45d",
+        "amount_wei": "9999000000000000",
+        "funding_fee_wei": "142967001000769",
+        "settlement_fee_wei": "66320000464240",
+        "withdrawal_fee_wei": "47328000331296",
+        "beneficiary_balance_before_wei": "999999933679999535760",
+        "beneficiary_balance_after_wei": "1000009885351999204464",
+        "remaining_credit_wei": "0",
+        "isolated_withdrawal_balance_verified": true
+      },
+      "terminal_restart_preserved": true
+    },
+    "maker_btx_refund": {
+      "status": "PASS",
+      "seconds": 66.805,
+      "funding_txid": "37c4a6e047e0dbb6e6517cb6be5060a568566df8235fc7764606ac6726d6297d",
+      "funding_vout": 0,
+      "refund_txid": "b8c7ab13e3b5e1967c60978efd363fff2e795b14d5873ce3ccf797dd27f0d42f",
+      "maturity": 591,
+      "refund_atoms": 9990000,
+      "funding_fee_atoms": 7834,
+      "refund_fee_atoms": 9000,
+      "early_refused": true,
+      "restart_original_preserved": true
+    }
+  },
+  "cleanup": {
+    "both_controller_process_groups_absent": true,
+    "node_cleanup_errors": [],
+    "anvil_clean_exit": true,
+    "free_bytes": 2241388544
+  },
+  "limitations": [
+    "One execution per case on macOS26.5.1 ARM64 using exact saved Mac15 build",
+    "Actual native embedded BTX regtest and Anvil EVM; diagnostic serial CPU/MetalOFF/ModelNetOFF, MatMul activation heights deferred",
+    "No full-suite, mainnet, default MatMul or release qualification",
+    "Maker native BTX refund verified; EVM long-leg refund not followed",
+    "Independent chains accelerated; settlement temporarily refused unsafe timeout then recovered under unchanged guards",
+    "No BTX rebuild or upstream publication; Solidity compiled against pinned contract settings"
+  ],
+  "files": {
+    "native-runtime/native_pair.py": {
+      "bytes": 21042,
+      "sha256": "b606471449542ae159a3a966a593e6596c8fd9ff3cafe5403bf12fcce2cf924d"
+    },
+    "native-runtime/evm_verify.py": {
+      "bytes": 10074,
+      "sha256": "eab2f85d4b8c5371d233b130c48b671cc77ce1e8de7aaa9711ed7c6d5969180e"
+    },
+    "native-runtime/run_local.py": {
+      "bytes": 7149,
+      "sha256": "ec2613581f6b464fb256d092b018616e4d8297bcebc35e6a3a34abf501eafb64"
+    },
+    "native-runtime/manifest.json": {
+      "bytes": 1803,
+      "sha256": "82f5c65a78976496921188a3b348b0f508d4ca327d1bcc27531982aaddc378cc"
+    },
+    "native-runtime/REVIEW.md": {
+      "bytes": 5198,
+      "sha256": "c5f4b134019214a7638aafe05e9dcbce19c0052951dba84c7c05b704c86337f5"
+    },
+    "native-runtime/local/records/runtime-result.json": {
+      "bytes": 8979,
+      "sha256": "21a77e820530fd55114b61d829a86ff8cf3e3f006d23f7e7f95a19d22e540d44"
+    },
+    "native-runtime/local/records/settle/result.json": {
+      "bytes": 3376,
+      "sha256": "9662f29578cfa2ce8095ad167e048f14bf264e6bbeb0d7e68204f515d3615dbe"
+    },
+    "native-runtime/local/records/refund/result.json": {
+      "bytes": 2333,
+      "sha256": "f93139336179aab5ac52ee483d3d9f547ef3d5bb495e34a1a9d807c9cfd876fe"
+    },
+    "native-runtime/local/records/native-settle.log": {
+      "bytes": 800,
+      "sha256": "8a8f428114333e415cc0cc8f488b5d256e91adeec44bb1635f5ec2dd62f33cab"
+    },
+    "native-runtime/local/records/native-refund.log": {
+      "bytes": 622,
+      "sha256": "048c1507fcb24cd2d419baffb46e220dcf1d06182041780c08f84afef3dd993b"
+    },
+    "native-runtime/local/records/selective-restore.json": {
+      "bytes": 840,
+      "sha256": "4edcb1e92dfc58d39a23954ddf462d40c417e276d0cfd76c6d0ee2a707409439"
+    },
+    "native-runtime/local/records/dependency-inputs.json": {
+      "bytes": 737,
+      "sha256": "8a25bb35bafd19c461c990d0cdf0765752795e39b299d739c1e964499f7c8847"
+    },
+    "native-runtime/local/records/contract-build.log": {
+      "bytes": 4250,
+      "sha256": "b377a7fcb8edb121ba8126effbf14843d66b17c9491c7584452247babaf4fc34"
+    }
+  }
+}
