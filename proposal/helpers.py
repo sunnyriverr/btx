@@ -28,6 +28,8 @@ class Helper:
  def ok(self,method,params=None):
   r=self.rpc(method,params);require(not r.get('error'),method+': '+str(r.get('error')));return r['result']
  def info(self):return self.ok('getmodelnetworkinfo')
+ def profile_options(self):
+  return {'storage_bytes':self.cap,'follow_peers':False,'preserve_rare':False,'seed':'auto' if self.hostport else 'off','upload_bps':128*1024 if self.hostport else 0}
  def start(self):
   require(self.proc is None and not self.sock.exists(),'helper not cleanly stopped');self.starts+=1
   home=self.root/'home';home.mkdir(exist_ok=True)
@@ -45,7 +47,7 @@ class Helper:
    info=self.info()
    if info.get('helper_ready') and info.get('pq1_ready'):break
    require(time.monotonic()<end,'helper/PQ1 readiness');time.sleep(.1)
-  profile=self.ok('setmodelprofile',['custom',{'storage_bytes':self.cap,'follow_peers':False,'preserve_rare':False,'seed':'auto' if self.hostport else 'off'}]);require(profile.get('applied') is True,'profile unapplied')
+  profile=self.ok('setmodelprofile',['custom',self.profile_options()]);require(profile.get('applied') is True,'profile unapplied')
   while True:
    info=self.info();pol=info.get('propagation',{})
    if pol.get('storage_quota_bytes')==self.cap and pol.get('follow_configured_peers') is False and pol.get('preserve_rare') is False:break
