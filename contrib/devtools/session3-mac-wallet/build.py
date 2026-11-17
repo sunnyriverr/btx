@@ -152,21 +152,36 @@ def main():
     # Use already-present dependencies only. Do not change a runner's packages implicitly.
     STATE['retained_openssl_hashes'] = M['openssl_static_sha256']
     # Establish actual links after configure; ModelNetOFF need not use OpenSSL.
-    python = Path(cmd(['brew', '--prefix', 'python@3.12'], 'python-prefix').strip()) / 'bin/python3.12'
-    assert python.is_file()
-    assert cmd([python, '-c', 'import sys; print(sys.version_info[:2])'], 'python-version').strip() == '(3, 12)'
+    python = Path(os.environ['BTX_BUILD_PYTHON']).resolve()
+    assert python.is_absolute() and python.is_file(), 'setup-python interpreter missing'
+    probe = cmd([python, '-c',
+                 'import json,platform,sys,sysconfig; print(json.dumps(dict(executable=sys.executable, '
+                 'version=list(sys.version_info[:3]), architecture=platform.machine(), '
+                 'prefix=sys.prefix, include=sysconfig.get_path("include"), '
+                 'libdir=sysconfig.get_config_var("LIBDIR"), '
+                 'ldlibrary=sysconfig.get_config_var("LDLIBRARY"))))'], 'python-provenance')
+    python_info = json.loads(probe)
+    assert python_info['version'] == [3, 12, 10] and python_info['architecture'] == 'arm64'
+    assert Path(python_info['executable']).resolve() == python
+    assert (Path(python_info['include']) / 'Python.h').is_file()
+    STATE['python'] = {**python_info, 'executable_sha256': sha(python)}
+    STATE['python']['header_sha256'] = sha(Path(python_info['include']) / 'Python.h')
+    save()
     # Fresh current checkout removes the old focused699 source overlay entirely.
     for name in ['src/test/CMakeLists.txt', 'src/test/main.cpp']:
         cmd(['git', '-C', S, 'diff', '--exit-code', '--', name], 'source-' + Path(name).name)
-    args = ['cmake', '-S', S, '-B', B, '-DCMAKE_SUPPRESS_REGENERATION=ON',
+    args = ['cmake', '-S', S, '-B', B, '-U_Python3_*', '-UPython3_*',
+            '-DCMAKE_SUPPRESS_REGENERATION=ON',
             '-DCMAKE_BUILD_TYPE=Release', '-DENABLE_WALLET=ON', '-DWITH_SQLITE=ON', '-DBUILD_DAEMON=ON',
             '-DBUILD_CLI=ON', '-DBUILD_GUI=OFF', '-DBUILD_GUI_TESTS=OFF',
             '-DBUILD_TESTS=OFF', '-DBUILD_BENCH=OFF', '-DBUILD_FUZZ_BINARY=OFF',
-            '-DWITH_MODELNET=OFF', '-DPython3_EXECUTABLE=' + str(python)]
+            '-DWITH_MODELNET=OFF', '-DPython3_EXECUTABLE=' + str(python),
+            '-DPython3_ROOT_DIR=' + python_info['prefix']]
     cmd(args, 'configure', 240)
     cache = (B / 'CMakeCache.txt').read_text()
     for row in ['ENABLE_WALLET:BOOL=ON', 'WITH_SQLITE:BOOL=ON', 'BUILD_DAEMON:BOOL=ON', 'BUILD_CLI:BOOL=ON', 'BUILD_GUI:BOOL=OFF', 'BUILD_TESTS:BOOL=OFF', 'WITH_MODELNET:BOOL=OFF']:
         assert row in cache
+    assert 'Python3_EXECUTABLE:FILEPATH=' + str(python) in cache or 'Python3_EXECUTABLE:UNINITIALIZED=' + str(python) in cache
     shutil.copy2(B / 'CMakeCache.txt', R / 'CMakeCache.txt')
     config = B / 'test/config.ini'
     assert config.is_file(), 'Missing functional-runner configuration'
