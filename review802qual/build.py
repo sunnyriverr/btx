@@ -57,7 +57,7 @@ def use_phase(name):
  phase=name;r['phase']=name;r[name+'_source_inputs']=i['files'][name];save()
 try:
  assert sha(recipe/'component.cpp')==i['fixture_sha256']
- for directory,key in [(accepted,'candidate'),(base,'baseline')]:assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=directory,text=True).strip()==i[key]
+ for directory,key in [(accepted,'candidate'),(base,'baseline')]:assert subprocess.check_output(['git','-c','safe.directory='+str(directory),'rev-parse','HEAD'],cwd=directory,text=True).strip()==i[key]
  for name,directory in [('baseline',base),('candidate',accepted)]:
   for path,v in i['files'][name].items():assert sha(directory/path)==v['sha256']
  m=json.loads((w/'saved-checkpoint/manifest.json').read_text());arc=w/'saved-checkpoint/build-state.tar.gz'

@@ -16,7 +16,12 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
-const TranslateFn G_TRANSLATION_FUN{nullptr};
+// setup_common.cpp owns G_TRANSLATION_FUN. These optional test-runner callbacks
+// are normally supplied by test/main.cpp; BasicTestingSetup explicitly permits
+// empty callbacks and takes its ordinary default path in that case.
+const std::function<void(const std::string&)> G_TEST_LOG_FUN{};
+const std::function<std::vector<const char*>()> G_TEST_COMMAND_LINE_ARGUMENTS{};
+const std::function<std::string()> G_TEST_GET_FULL_NAME{};
 using namespace modelnet;
 #define BOOST_REQUIRE(x) do { if (!(x)) throw std::runtime_error(#x); } while (0)
 #define BOOST_CHECK(x) BOOST_REQUIRE(x)
