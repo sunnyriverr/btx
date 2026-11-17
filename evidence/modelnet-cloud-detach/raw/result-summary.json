@@ -1,0 +1,276 @@
+{
+  "source": "bd847e2b986722c1723b4cd60988d4f4908452d4",
+  "complete": true,
+  "commands": [
+    {
+      "step": "product-git-init",
+      "argv": [
+        "git",
+        "init"
+      ],
+      "exit": 0,
+      "seconds": 0.5026257780000094
+    },
+    {
+      "step": "product-git-fetch",
+      "argv": [
+        "git",
+        "fetch",
+        "--depth=1",
+        "https://github.com/btxchain/btx.git",
+        "bd847e2b986722c1723b4cd60988d4f4908452d4"
+      ],
+      "exit": 0,
+      "seconds": 3.446036487000015
+    },
+    {
+      "step": "product-git-head",
+      "argv": [
+        "git",
+        "update-ref",
+        "HEAD",
+        "bd847e2b986722c1723b4cd60988d4f4908452d4"
+      ],
+      "exit": 0,
+      "seconds": 0.0010616090000041822
+    },
+    {
+      "step": "product-index",
+      "argv": [
+        "git",
+        "read-tree",
+        "bd847e2b986722c1723b4cd60988d4f4908452d4"
+      ],
+      "exit": 0,
+      "seconds": 0.02094089700000268
+    },
+    {
+      "step": "gcc",
+      "argv": [
+        "g++",
+        "-dumpfullversion"
+      ],
+      "exit": 0,
+      "seconds": 0.0004005469999981415
+    },
+    {
+      "step": "openssl",
+      "argv": [
+        "/home/runner/work/btx/btx/gui-pilot-runtime/openssl/bin/openssl",
+        "version"
+      ],
+      "exit": 0,
+      "seconds": 0.0012396340000009332
+    },
+    {
+      "step": "configure",
+      "argv": [
+        "cmake",
+        "-S",
+        "/home/runner/work/btx/btx/product",
+        "-B",
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild"
+      ],
+      "exit": 0,
+      "seconds": 1.8898096720000126
+    },
+    {
+      "step": "baseline-graph-regeneration",
+      "argv": [
+        "ninja",
+        "build.ninja"
+      ],
+      "exit": 0,
+      "seconds": 0.13176966300000004
+    },
+    {
+      "step": "baseline-plan",
+      "argv": [
+        "ninja",
+        "-f",
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild/detach-plan.ninja",
+        "-n",
+        "btx-modeld",
+        "test_btx"
+      ],
+      "exit": 0,
+      "seconds": 0.20655227899999318
+    },
+    {
+      "step": "baseline-build",
+      "argv": [
+        "ninja",
+        "-j2",
+        "btx-modeld",
+        "test_btx"
+      ],
+      "exit": 0,
+      "seconds": 79.15211716300001
+    },
+    {
+      "step": "baseline-regression",
+      "argv": [
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild/bin/test_btx",
+        "--run_test=modelnet_cloud_tests/cloud_rpc_detach_removal_failure_preserves_origin_and_retry",
+        "--log_level=all",
+        "--log_format=XML",
+        "--log_sink=/home/runner/work/btx/btx/records/baseline-unit.xml"
+      ],
+      "exit": 201,
+      "seconds": 0.3099504799999977
+    },
+    {
+      "step": "baseline-native",
+      "argv": [
+        "runuser",
+        "-u",
+        "nobody",
+        "--",
+        "env",
+        "BTX_OPENSSL=/home/runner/work/btx/btx/gui-pilot-runtime/openssl/bin/openssl",
+        "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python3",
+        "/home/runner/work/btx/btx/proposal/native-detach.py",
+        "--helper",
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild/bin/btx-modeld",
+        "--out",
+        "/home/runner/work/btx/btx/records/baseline-native"
+      ],
+      "exit": 1,
+      "seconds": 1.0860360780000065
+    },
+    {
+      "step": "patch-check",
+      "argv": [
+        "git",
+        "apply",
+        "--check",
+        "/home/runner/work/btx/btx/proposal/cloud-detach.patch"
+      ],
+      "exit": 0,
+      "seconds": 0.0028414239999960955
+    },
+    {
+      "step": "patch-apply",
+      "argv": [
+        "git",
+        "apply",
+        "/home/runner/work/btx/btx/proposal/cloud-detach.patch"
+      ],
+      "exit": 0,
+      "seconds": 0.0029942650000123194
+    },
+    {
+      "step": "candidate-plan",
+      "argv": [
+        "ninja",
+        "-f",
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild/detach-plan.ninja",
+        "-n",
+        "btx-modeld",
+        "test_btx"
+      ],
+      "exit": 0,
+      "seconds": 0.20471674699999198
+    },
+    {
+      "step": "candidate-build",
+      "argv": [
+        "ninja",
+        "-j2",
+        "btx-modeld",
+        "test_btx"
+      ],
+      "exit": 0,
+      "seconds": 381.243661527
+    },
+    {
+      "step": "candidate-cloud-suite",
+      "argv": [
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild/bin/test_btx",
+        "--run_test=modelnet_cloud_tests",
+        "--log_level=test_suite"
+      ],
+      "exit": 0,
+      "seconds": 0.37798133399996914
+    },
+    {
+      "step": "candidate-native",
+      "argv": [
+        "runuser",
+        "-u",
+        "nobody",
+        "--",
+        "env",
+        "BTX_OPENSSL=/home/runner/work/btx/btx/gui-pilot-runtime/openssl/bin/openssl",
+        "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python3",
+        "/home/runner/work/btx/btx/proposal/native-detach.py",
+        "--helper",
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild/bin/btx-modeld",
+        "--out",
+        "/home/runner/work/btx/btx/records/candidate-native"
+      ],
+      "exit": 0,
+      "seconds": 1.0779893320000156
+    }
+  ],
+  "checkpoint_verified": true,
+  "changed_from_checkpoint": [
+    "src/test/modelnet_cloud_tests.cpp"
+  ],
+  "baseline_planned_lines": 44,
+  "baseline-build_actual_actions": 41,
+  "baseline_hash": {
+    "btx-modeld": "029ce20b1ea8c75512b61e3318af9556a6399cd6298436ccc94e7b793bb7de0e",
+    "test_btx": "610d83a7b5a6d5d7d80a18f26a06630dda2da76ae24e7d962c5ef63337507aac"
+  },
+  "baseline_exact_assertion_lines": [
+    1527,
+    1528,
+    1529,
+    1535
+  ],
+  "baseline_native": {
+    "scope": "actual helper, FakeS3, disposable Unix RPC; no node/wallet/peers/real cloud",
+    "helper_sha256": "029ce20b1ea8c75512b61e3318af9556a6399cd6298436ccc94e7b793bb7de0e",
+    "uid": 65534,
+    "complete": true,
+    "checks": {
+      "failed_detach_reports_IO_ERROR": false,
+      "failed_file_retained_and_live_configured": true,
+      "identical_retry_and_absent_detach": true,
+      "detached_after_restart_objects_budget_and_unrelated_unchanged": true
+    },
+    "clean_starts": 3,
+    "contract_pass": false
+  },
+  "candidate-build_actual_actions": 8,
+  "candidate_hash": {
+    "btx-modeld": "7f536bfc4447dbb4a437dd603d1172049f9d21b8dfe9a88a5d4e8313ca616898",
+    "test_btx": "8fdcac17fb4cfeabb64363fe3cbace7d11df35fdb0819355427a797527100195"
+  },
+  "candidate_native": {
+    "scope": "actual helper, FakeS3, disposable Unix RPC; no node/wallet/peers/real cloud",
+    "helper_sha256": "7f536bfc4447dbb4a437dd603d1172049f9d21b8dfe9a88a5d4e8313ca616898",
+    "uid": 65534,
+    "complete": true,
+    "checks": {
+      "failed_detach_reports_IO_ERROR": true,
+      "failed_file_retained_and_live_configured": true,
+      "identical_retry_and_absent_detach": true,
+      "detached_after_restart_objects_budget_and_unrelated_unchanged": true
+    },
+    "clean_starts": 3,
+    "contract_pass": true
+  },
+  "same_regression_pair_pass": true,
+  "checkpoint_retained_summary": {
+    "identity": {
+      "source": "bd847e2b986722c1723b4cd60988d4f4908452d4",
+      "cloud_detach_candidate": true,
+      "complete": true
+    },
+    "workspace": "/home/runner/work/btx/btx",
+    "archive_sha256": "879c18e66619951831f23c857b4729beab4e38b8767da08fb1e1b825920b326d"
+  },
+  "checkpoint_rows_omitted": "Only large checkpoint file inventory omitted; full original result retained in artifact14296707039."
+}
