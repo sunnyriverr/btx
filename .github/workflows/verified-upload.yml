@@ -1,5 +1,5 @@
 {
-  "name": "Session2 verified-piece upload qualification",
+  "name": "Session2 retained upload candidate native qualification",
   "on": {
     "push": {
       "branches": [
@@ -18,7 +18,7 @@
   "jobs": {
     "qualify": {
       "runs-on": "ubuntu-24.04",
-      "timeout-minutes": 55,
+      "timeout-minutes": 18,
       "steps": [
         {
           "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
@@ -27,16 +27,7 @@
           }
         },
         {
-          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
-          "with": {
-            "repository": "btxchain/btx",
-            "ref": "bd847e2b986722c1723b4cd60988d4f4908452d4",
-            "path": "current-reference",
-            "persist-credentials": false
-          }
-        },
-        {
-          "name": "Verify retained archive and checkpoint",
+          "name": "Verify retained compiled candidate; no rebuild",
           "timeout-minutes": 8,
           "run": "python3 -B proposal/stage.py",
           "env": {
@@ -44,38 +35,18 @@
           }
         },
         {
-          "name": "Bounded incremental helper/test build and matched qualification",
-          "timeout-minutes": 42,
-          "run": "set -euo pipefail\ndocker run --name s2-verified-upload --init -v \"$GITHUB_WORKSPACE:$GITHUB_WORKSPACE\" -w \"$GITHUB_WORKSPACE\" -e GITHUB_WORKSPACE ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11 bash -e -c 'timeout --kill-after=15s 8m bash proposal/setup.sh && /opt/hostedtoolcache/Python/3.12.16/x64/bin/python3 -B proposal/offline.py && /opt/hostedtoolcache/Python/3.12.16/x64/bin/python3 -B proposal/qualify.py' 2>&1 | tee records/console.log"
+          "name": "Only remaining actual-helper controls; cloud suite reused",
+          "timeout-minutes": 8,
+          "run": "set -euo pipefail\ndocker run --name s2-upload-native --init -v \"$GITHUB_WORKSPACE:$GITHUB_WORKSPACE\" -w \"$GITHUB_WORKSPACE\" -e GITHUB_WORKSPACE ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11 bash proposal/runtime.sh 2>&1 | tee records/console.log"
         },
         {
           "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
           "if": "always()",
           "with": {
-            "name": "verified-upload-records",
+            "name": "verified-upload-native-records",
             "path": "records/",
             "retention-days": 14,
             "if-no-files-found": "error"
-          }
-        },
-        {
-          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
-          "if": "always()",
-          "with": {
-            "name": "verified-upload-binaries",
-            "path": "retained-binaries/",
-            "retention-days": 14,
-            "if-no-files-found": "warn"
-          }
-        },
-        {
-          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
-          "if": "always()",
-          "with": {
-            "name": "verified-upload-checkpoint",
-            "path": "qualified-checkpoint/",
-            "retention-days": 14,
-            "if-no-files-found": "warn"
           }
         }
       ]
