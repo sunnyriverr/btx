@@ -1,0 +1,43 @@
+{
+  "source": "cd3078e76398b20b7f500acd1348a5b5455f3d5e",
+  "status": "PASS_WITH_FIXTURE_CORRECTION",
+  "unique_checks_passed": 12,
+  "unique_checks_failed_after_correction": 0,
+  "skips_in_executed_selections": 0,
+  "first_attempt": {
+    "passed": 9,
+    "failed": 3,
+    "failure_type": "Fixture compared insertion-order JSON text; actual encoder canonicalizes object keys. Same decoded request/context preserved.",
+    "receipt": "first-attempt-qualification-receipt.json"
+  },
+  "focused_recheck": {
+    "passed": 3,
+    "failed": 0,
+    "only_prior_nonpassing_cases": true,
+    "receipt": "focused-recheck-receipt.json"
+  },
+  "first_retry_note": "One shell attempt used incorrect relative working directory; edit did not occur and the same three failed again. No product changes or broader passes repeated. Corrected runner used absolute paths and sequential checked subprocess execution.",
+  "passed_names": [
+    "page \u2192 form \u2192 real Bridge preserves refundswap request and context",
+    "page \u2192 form \u2192 real Bridge preserves publishswapprovider request and context",
+    "page \u2192 form \u2192 real Bridge preserves getswapwalletinfo request and context",
+    "editing form/global wallet while prepare awaits does not rewrite the prepared operation",
+    "real Bridge preserves CANCELLED and the form never automatically retries",
+    "real Bridge preserves CONNECTION_CHANGED and the form never automatically retries",
+    "real Bridge preserves RPC_-1 and the form never automatically retries",
+    "real Bridge preserves OUTCOME_UNKNOWN and the form never automatically retries",
+    "a failed prepare does not execute and a later healthy attempt keeps its new request",
+    "page \u2192 form \u2192 real Bridge preserves requestswapquote request and context",
+    "page \u2192 form \u2192 real Bridge preserves acceptswapquote request and context",
+    "page \u2192 form \u2192 real Bridge preserves createswapmandate request and context"
+  ],
+  "original_test_sha256": "76b4b133b60ba9d5939f7ecc769a838d5ece319d97b230674c2f88b409ada4dd",
+  "final_test_sha256": "8fd1a2ee149a20928059a6e82fdc54af527bc234923b77516585ba5ff2ded3ac",
+  "reuse_reason": "Nine valid prior passes retained: three unchanged request-shape cases passed stricter JSON byte equality, implying corrected parsed-value equality; six snapshot/outcome/retry cases were unchanged. Only the three nonpassing canonical-order expectations were rerun.",
+  "platform": "macOS-26.5.1-arm64-arm-64bit",
+  "node": "v24.13.0",
+  "native_runtime": "NOT_RUN; Tauri invocation/native confirmation/prepared-store consumption/node replies controlled",
+  "product_patch": false,
+  "posted": false,
+  "utc": "2026-11-17T11:27:39.558968+00:00"
+}

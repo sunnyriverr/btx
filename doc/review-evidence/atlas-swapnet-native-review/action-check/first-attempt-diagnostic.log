@@ -1,0 +1,91 @@
+✖ page → form → real Bridge preserves requestswapquote request and context (5.120583ms)
+✖ page → form → real Bridge preserves acceptswapquote request and context (0.978792ms)
+✔ page → form → real Bridge preserves refundswap request and context (0.597542ms)
+✖ page → form → real Bridge preserves createswapmandate request and context (0.684ms)
+✔ page → form → real Bridge preserves publishswapprovider request and context (0.577166ms)
+✔ page → form → real Bridge preserves getswapwalletinfo request and context (0.413917ms)
+✔ editing form/global wallet while prepare awaits does not rewrite the prepared operation (0.819208ms)
+✔ real Bridge preserves CANCELLED and the form never automatically retries (0.377458ms)
+✔ real Bridge preserves CONNECTION_CHANGED and the form never automatically retries (0.356042ms)
+✔ real Bridge preserves RPC_-1 and the form never automatically retries (0.429166ms)
+✔ real Bridge preserves OUTCOME_UNKNOWN and the form never automatically retries (0.28775ms)
+✔ a failed prepare does not execute and a later healthy attempt keeps its new request (0.360209ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 9
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 73.200333
+
+✖ failing tests:
+
+test at tests/swapnet-action-diagnostic.test.mjs:61:47
+✖ page → form → real Bridge preserves requestswapquote request and context (5.120583ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+      method: 'requestswapquote',
+  +   params_json: '[{"buy_asset":"btc:diagnostic:0:native","sell_asset":"btx:diagnostic:0:native","sell_atoms":"9007199254740993"}]',
+  -   params_json: '[{"sell_asset":"btx:diagnostic:0:native","buy_asset":"btc:diagnostic:0:native","sell_atoms":"9007199254740993"}]',
+      wallet: 'bound wallet'
+    }
+  
+      at TestContext.<anonymous> (file://<local-workspace>/work/btx-lanes/session-1/swapnet-atlas-operator-workflow/action-check/source/gui/atlas/tests/swapnet-action-diagnostic.test.mjs:70:10)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { method: 'requestswapquote', params_json: '[{"buy_asset":"btc:diagnostic:0:native","sell_asset":"btx:diagnostic:0:native","sell_atoms":"9007199254740993"}]', wallet: 'bound wallet' },
+    expected: { method: 'requestswapquote', params_json: '[{"sell_asset":"btx:diagnostic:0:native","buy_asset":"btc:diagnostic:0:native","sell_atoms":"9007199254740993"}]', wallet: 'bound wallet' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/swapnet-action-diagnostic.test.mjs:61:47
+✖ page → form → real Bridge preserves acceptswapquote request and context (0.978792ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+      method: 'acceptswapquote',
+  +   params_json: '[{"mandate_id":"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc","max_local_fee_atoms":"9007199254740993","quote_id":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}]',
+  -   params_json: '[{"quote_id":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","mandate_id":"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc","max_local_fee_atoms":"9007199254740993"}]',
+      wallet: 'bound wallet'
+    }
+  
+      at TestContext.<anonymous> (file://<local-workspace>/work/btx-lanes/session-1/swapnet-atlas-operator-workflow/action-check/source/gui/atlas/tests/swapnet-action-diagnostic.test.mjs:70:10)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { method: 'acceptswapquote', params_json: '[{"mandate_id":"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc","max_local_fee_atoms":"9007199254740993","quote_id":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}]', wallet: 'bound wallet' },
+    expected: { method: 'acceptswapquote', params_json: '[{"quote_id":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","mandate_id":"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc","max_local_fee_atoms":"9007199254740993"}]', wallet: 'bound wallet' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/swapnet-action-diagnostic.test.mjs:61:47
+✖ page → form → real Bridge preserves createswapmandate request and context (0.684ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+      method: 'createswapmandate',
+  +   params_json: '[{"mandate":{"asset":"diagnostic-asset","expires_at":1900000000,"max_fee_atoms":"10000","max_total_atoms":"200000","max_trade_atoms":"100000","nonce":"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd","principal":"owner:cookie"}}]',
+  -   params_json: '[{"mandate":{"principal":"owner:cookie","asset":"diagnostic-asset","max_total_atoms":"200000","max_trade_atoms":"100000","max_fee_atoms":"10000","expires_at":1900000000,"nonce":"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"}}]',
+      wallet: 'bound wallet'
+    }
+  
+      at TestContext.<anonymous> (file://<local-workspace>/work/btx-lanes/session-1/swapnet-atlas-operator-workflow/action-check/source/gui/atlas/tests/swapnet-action-diagnostic.test.mjs:70:10)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { method: 'createswapmandate', params_json: '[{"mandate":{"asset":"diagnostic-asset","expires_at":1900000000,"max_fee_atoms":"10000","max_total_atoms":"200000","max_trade_atoms":"100000","nonce":"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd","principal":"owner:cookie"}}]', wallet: 'bound wallet' },
+    expected: { method: 'createswapmandate', params_json: '[{"mandate":{"principal":"owner:cookie","asset":"diagnostic-asset","max_total_atoms":"200000","max_trade_atoms":"100000","max_fee_atoms":"10000","expires_at":1900000000,"nonce":"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"}}]', wallet: 'bound wallet' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
