@@ -1,0 +1,63 @@
+name: Bounty failed-save retry diagnosis
+on:
+  push:
+    branches: [codex/ci-bounty-save-retry]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: bounty-save-retry
+  cancel-in-progress: false
+jobs:
+  diagnosis:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: 3.12.16
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: 14299733576
+          run-id: 44018574680
+          github-token: ${{ github.token }}
+          path: binaries
+          merge-multiple: true
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: 14294961995
+          run-id: 44002524681
+          github-token: ${{ github.token }}
+          path: checkpoint
+          merge-multiple: true
+      - name: Verify binaries and required runtime
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libevent-2.1-7t64 libsqlite3-0 libzmq5 libqrencode4
+          python3 retryqual/stage.py
+          export LD_LIBRARY_PATH="$GITHUB_WORKSPACE/gui-pilot-runtime/openssl/lib64:$GITHUB_WORKSPACE/gui-pilot-runtime/openssl/lib:/opt/hostedtoolcache/Python/3.12.16/x64/lib"
+          ldd binaries/baseline/btx-modeld | tee records/ldd.txt
+          ! grep -q 'not found' records/ldd.txt
+          mkdir -p records/native
+          sudo chown -R 65534:65534 records/native
+      - name: Run normal helpers as unprivileged user without rebuilding
+        run: |
+          set -euo pipefail
+          export LD_LIBRARY_PATH="$GITHUB_WORKSPACE/gui-pilot-runtime/openssl/lib64:$GITHUB_WORKSPACE/gui-pilot-runtime/openssl/lib:/opt/hostedtoolcache/Python/3.12.16/x64/lib"
+          export BTX_OPENSSL="$GITHUB_WORKSPACE/gui-pilot-runtime/openssl/bin/openssl"
+          for variant in baseline candidate; do
+            sudo -u '#65534' env GITHUB_WORKSPACE="$GITHUB_WORKSPACE" LD_LIBRARY_PATH="$LD_LIBRARY_PATH" BTX_OPENSSL="$BTX_OPENSSL" PYTHONDONTWRITEBYTECODE=1 "$(which python3)" retryqual/test.py "$GITHUB_WORKSPACE/binaries/$variant/btx-modeld" "/tmp/bounty-retry-$variant" "$GITHUB_WORKSPACE/records/native/$variant"
+          done
+          uname -a > records/platform.txt
+          id > records/runner-user.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: bounty-save-retry-records
+          path: records/
+          retention-days: 14
+          if-no-files-found: error
