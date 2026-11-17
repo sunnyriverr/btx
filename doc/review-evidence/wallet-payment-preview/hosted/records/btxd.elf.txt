@@ -1,0 +1,342 @@
+ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 03 00 00 00 00 00 00 00 00 
+  Class:                             ELF64
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - GNU
+  ABI Version:                       0
+  Type:                              DYN (Position-Independent Executable file)
+  Machine:                           Advanced Micro Devices X86-64
+  Version:                           0x1
+  Entry point address:               0x34d570
+  Start of program headers:          64 (bytes into file)
+  Start of section headers:          43922512 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               64 (bytes)
+  Size of program headers:           56 (bytes)
+  Number of program headers:         14
+  Size of section headers:           64 (bytes)
+  Number of section headers:         43
+  Section header string table index: 42
+
+Elf file type is DYN (Position-Independent Executable file)
+Entry point 0x34d570
+There are 14 program headers, starting at offset 64
+
+Program Headers:
+  Type           Offset             VirtAddr           PhysAddr
+                 FileSiz            MemSiz              Flags  Align
+  PHDR           0x0000000000000040 0x0000000000000040 0x0000000000000040
+                 0x0000000000000310 0x0000000000000310  R      0x8
+  INTERP         0x0000000000000350 0x0000000000000350 0x0000000000000350
+                 0x000000000000001c 0x000000000000001c  R      0x1
+      [Requesting program interpreter: /lib64/ld-linux-x86-64.so.2]
+  LOAD           0x0000000000000000 0x0000000000000000 0x0000000000000000
+                 0x0000000000069398 0x0000000000069398  R      0x1000
+  LOAD           0x000000000006a000 0x000000000006a000 0x000000000006a000
+                 0x0000000001b5ba61 0x0000000001b5ba61  R E    0x1000
+  LOAD           0x0000000001bc6000 0x0000000001bc6000 0x0000000001bc6000
+                 0x00000000006e7e75 0x00000000006e7e75  R      0x1000
+  LOAD           0x00000000022ae6a8 0x00000000022ae6a8 0x00000000022ae6a8
+                 0x0000000000030d38 0x0000000000070358  RW     0x1000
+  DYNAMIC        0x00000000022c3ac8 0x00000000022c3ac8 0x00000000022c3ac8
+                 0x00000000000002a0 0x00000000000002a0  RW     0x8
+  NOTE           0x0000000000000370 0x0000000000000370 0x0000000000000370
+                 0x0000000000000040 0x0000000000000040  R      0x8
+  NOTE           0x00000000000003b0 0x00000000000003b0 0x00000000000003b0
+                 0x0000000000000044 0x0000000000000044  R      0x4
+  TLS            0x00000000022ae6a8 0x00000000022ae6a8 0x00000000022ae6a8
+                 0x0000000000000008 0x0000000000000144  R      0x8
+  GNU_PROPERTY   0x0000000000000370 0x0000000000000370 0x0000000000000370
+                 0x0000000000000040 0x0000000000000040  R      0x8
+  GNU_EH_FRAME   0x0000000001f2f99c 0x0000000001f2f99c 0x0000000001f2f99c
+                 0x000000000004c0d4 0x000000000004c0d4  R      0x4
+  GNU_STACK      0x0000000000000000 0x0000000000000000 0x0000000000000000
+                 0x0000000000000000 0x0000000000800000  RW     0x10
+  GNU_RELRO      0x00000000022ae6a8 0x00000000022ae6a8 0x00000000022ae6a8
+                 0x0000000000017958 0x0000000000017958  R      0x1
+
+ Section to Segment mapping:
+  Segment Sections...
+   00     
+   01     .interp 
+   02     .interp .note.gnu.property .note.gnu.build-id .note.ABI-tag .gnu.hash .dynsym .dynstr .gnu.version .gnu.version_r .rela.dyn .rela.plt 
+   03     .init .plt .plt.got .plt.sec .text .fini 
+   04     .rodata .eh_frame_hdr .eh_frame .gcc_except_table 
+   05     .tdata .init_array .fini_array .data.rel.ro .dynamic .got .data .bss 
+   06     .dynamic 
+   07     .note.gnu.property 
+   08     .note.gnu.build-id .note.ABI-tag 
+   09     .tdata .tbss 
+   10     .note.gnu.property 
+   11     .eh_frame_hdr 
+   12     
+   13     .tdata .init_array .fini_array .data.rel.ro .dynamic .got 
+
+Dynamic section at offset 0x22c3ac8 contains 38 entries:
+  Tag        Type                         Name/Value
+ 0x0000000000000001 (NEEDED)             Shared library: [libsqlite3.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libgomp.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libevent_core-2.1.so.7]
+ 0x0000000000000001 (NEEDED)             Shared library: [libevent_extra-2.1.so.7]
+ 0x0000000000000001 (NEEDED)             Shared library: [libevent_pthreads-2.1.so.7]
+ 0x0000000000000001 (NEEDED)             Shared library: [libpython3.12.so.1.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libstdc++.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libgcc_s.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [ld-linux-x86-64.so.2]
+ 0x000000000000001d (RUNPATH)            Library runpath: [$ORIGIN/../lib]
+ 0x000000000000000c (INIT)               0x6a000
+ 0x000000000000000d (FINI)               0x1bc5a54
+ 0x0000000000000019 (INIT_ARRAY)         0x22ae6b0
+ 0x000000000000001b (INIT_ARRAYSZ)       1384 (bytes)
+ 0x000000000000001a (FINI_ARRAY)         0x22aec18
+ 0x000000000000001c (FINI_ARRAYSZ)       8 (bytes)
+ 0x000000006ffffef5 (GNU_HASH)           0x3f8
+ 0x0000000000000005 (STRTAB)             0x4318
+ 0x0000000000000006 (SYMTAB)             0x568
+ 0x000000000000000a (STRSZ)              18725 (bytes)
+ 0x000000000000000b (SYMENT)             24 (bytes)
+ 0x0000000000000015 (DEBUG)              0x0
+ 0x0000000000000003 (PLTGOT)             0x22c3d68
+ 0x0000000000000002 (PLTRELSZ)           13056 (bytes)
+ 0x0000000000000014 (PLTREL)             RELA
+ 0x0000000000000017 (JMPREL)             0x66098
+ 0x0000000000000007 (RELA)               0x94e8
+ 0x0000000000000008 (RELASZ)             379824 (bytes)
+ 0x0000000000000009 (RELAENT)            24 (bytes)
+ 0x000000000000001e (FLAGS)              BIND_NOW
+ 0x000000006ffffffb (FLAGS_1)            Flags: NOW PIE
+ 0x000000006ffffffe (VERNEED)            0x9168
+ 0x000000006fffffff (VERNEEDNUM)         6
+ 0x000000006ffffff0 (VERSYM)             0x8c3e
+ 0x000000006ffffff9 (RELACOUNT)          13447
+ 0x0000000000000000 (NULL)               0x0
+
+Version symbols section '.gnu.version' contains 658 entries:
+ Addr: 0x0000000000008c3e  Offset: 0x00008c3e  Link: 6 (.dynsym)
+  000:   0 (*local*)       1 (*global*)      2 (CXXABI_1.3.9)   3 (GLIBCXX_3.4.26) 
+  004:   4 (GLIBC_2.2.5)   1 (*global*)      5 (GCC_3.0)       6 (GLIBCXX_3.4.21) 
+  008:   4 (GLIBC_2.2.5)   1 (*global*)      7 (GLIBCXX_3.4.15)    4 (GLIBC_2.2.5)
+  00c:   1 (*global*)      8 (CXXABI_1.3.2)   1 (*global*)      9 (GLIBCXX_3.4)
+  010:   4 (GLIBC_2.2.5)   a (GLIBCXX_3.4.20)    9 (GLIBCXX_3.4)   9 (GLIBCXX_3.4)
+  014:   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   b (CXXABI_1.3)    1 (*global*)   
+  018:   4 (GLIBC_2.2.5)   9 (GLIBCXX_3.4)   1 (*global*)      4 (GLIBC_2.2.5)
+  01c:   1 (*global*)      c (GLIBC_2.38)    d (GLIBC_2.14)    e (GLIBCXX_3.4.11) 
+  020:   9 (GLIBCXX_3.4)   3 (GLIBCXX_3.4.26)    9 (GLIBCXX_3.4)   1 (*global*)   
+  024:   1 (*global*)      f (GLIBC_2.33)    3 (GLIBCXX_3.4.26)    4 (GLIBC_2.2.5)
+  028:   1 (*global*)      1 (*global*)     10 (GLIBCXX_3.4.9)   3 (GLIBCXX_3.4.26) 
+  02c:   2 (CXXABI_1.3.9)   1 (*global*)      4 (GLIBC_2.2.5)   1 (*global*)   
+  030:   1 (*global*)      4 (GLIBC_2.2.5)   1 (*global*)      3 (GLIBCXX_3.4.26) 
+  034:   9 (GLIBCXX_3.4)   4 (GLIBC_2.2.5)   9 (GLIBCXX_3.4)   9 (GLIBCXX_3.4)
+  038:   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)  11 (GLIBC_2.2.5)  11 (GLIBC_2.2.5)
+  03c:   3 (GLIBCXX_3.4.26)    1 (*global*)      4 (GLIBC_2.2.5)  12 (GLIBC_2.29) 
+  040:   3 (GLIBCXX_3.4.26)    b (CXXABI_1.3)   13 (CXXABI_1.3.11)   1 (*global*)   
+  044:   4 (GLIBC_2.2.5)   9 (GLIBCXX_3.4)   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)
+  048:   1 (*global*)      9 (GLIBCXX_3.4)   4 (GLIBC_2.2.5)   1 (*global*)   
+  04c:  12 (GLIBC_2.29)    1 (*global*)      3 (GLIBCXX_3.4.26)    1 (*global*)   
+  050:   4 (GLIBC_2.2.5)   1 (*global*)      1 (*global*)      3 (GLIBCXX_3.4.26) 
+  054:  14 (GLIBCXX_3.4.18)    9 (GLIBCXX_3.4)   6 (GLIBCXX_3.4.21)    7 (GLIBCXX_3.4.15) 
+  058:  15 (GCC_7.0.0)     1 (*global*)      9 (GLIBCXX_3.4)   1 (*global*)   
+  05c:   4 (GLIBC_2.2.5)  16 (CXXABI_1.3.13)   9 (GLIBCXX_3.4)   4 (GLIBC_2.2.5)
+  060:   4 (GLIBC_2.2.5)   1 (*global*)      9 (GLIBCXX_3.4)   9 (GLIBCXX_3.4)
+  064:   6 (GLIBCXX_3.4.21)    7 (GLIBCXX_3.4.15)   17 (GLIBC_2.3.4)   b (CXXABI_1.3) 
+  068:   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   3 (GLIBCXX_3.4.26) 
+  06c:   4 (GLIBC_2.2.5)  16 (CXXABI_1.3.13)   1 (*global*)      1 (*global*)   
+  070:   4 (GLIBC_2.2.5)   6 (GLIBCXX_3.4.21)    3 (GLIBCXX_3.4.26)   18 (GLIBC_2.34) 
+  074:  17 (GLIBC_2.3.4)   6 (GLIBCXX_3.4.21)    4 (GLIBC_2.2.5)   3 (GLIBCXX_3.4.26) 
+  078:   3 (GLIBCXX_3.4.26)    6 (GLIBCXX_3.4.21)   14 (GLIBCXX_3.4.18)   19 (CXXABI_1.3.3)
+  07c:   4 (GLIBC_2.2.5)  1a (GOMP_1.0)      6 (GLIBCXX_3.4.21)    1 (*global*)   
+  080:   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   9 (GLIBCXX_3.4)   9 (GLIBCXX_3.4)
+  084:  18 (GLIBC_2.34)   18 (GLIBC_2.34)    7 (GLIBCXX_3.4.15)    4 (GLIBC_2.2.5)
+  088:   6 (GLIBCXX_3.4.21)    4 (GLIBC_2.2.5)  1b (GLIBC_2.4)     1 (*global*)   
+  08c:   1 (*global*)      4 (GLIBC_2.2.5)   3 (GLIBCXX_3.4.26)    3 (GLIBCXX_3.4.26) 
+  090:   9 (GLIBCXX_3.4)   4 (GLIBC_2.2.5)   6 (GLIBCXX_3.4.21)    9 (GLIBCXX_3.4)
+  094:   9 (GLIBCXX_3.4)   1 (*global*)      9 (GLIBCXX_3.4)   4 (GLIBC_2.2.5)
+  098:   9 (GLIBCXX_3.4)  1c (CXXABI_1.3.7)   1 (*global*)      4 (GLIBC_2.2.5)
+  09c:  1d (GLIBC_2.17)    1 (*global*)      1 (*global*)      9 (GLIBCXX_3.4)
+  0a0:   b (CXXABI_1.3)    4 (GLIBC_2.2.5)   1 (*global*)     1e (OMP_1.0)    
+  0a4:  10 (GLIBCXX_3.4.9)  12 (GLIBC_2.29)    1 (*global*)      4 (GLIBC_2.2.5)
+  0a8:   9 (GLIBCXX_3.4)  19 (CXXABI_1.3.3)   1 (*global*)      b (CXXABI_1.3) 
+  0ac:   9 (GLIBCXX_3.4)  1a (GOMP_1.0)      9 (GLIBCXX_3.4)   c (GLIBC_2.38) 
+  0b0:  10 (GLIBCXX_3.4.9)   1 (*global*)      4 (GLIBC_2.2.5)   1 (*global*)   
+  0b4:   4 (GLIBC_2.2.5)   6 (GLIBCXX_3.4.21)    6 (GLIBCXX_3.4.21)    9 (GLIBCXX_3.4)
+  0b8:   e (GLIBCXX_3.4.11)    b (CXXABI_1.3)    1 (*global*)      4 (GLIBC_2.2.5)
+  0bc:  1f (GLIBCXX_3.4.22)   1e (OMP_1.0)       9 (GLIBCXX_3.4)  10 (GLIBCXX_3.4.9)
+  0c0:  12 (GLIBC_2.29)    e (GLIBCXX_3.4.11)    1 (*global*)      3 (GLIBCXX_3.4.26) 
+  0c4:   b (CXXABI_1.3)    4 (GLIBC_2.2.5)   9 (GLIBCXX_3.4)  13 (CXXABI_1.3.11)
+  0c8:   9 (GLIBCXX_3.4)   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   6 (GLIBCXX_3.4.21) 
+  0cc:   1 (*global*)      1 (*global*)      6 (GLIBCXX_3.4.21)    1 (*global*)   
+  0d0:   6 (GLIBCXX_3.4.21)   1e (OMP_1.0)       4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)
+  0d4:   1 (*global*)     20 (GLIBCXX_3.4.29)    4 (GLIBC_2.2.5)   1 (*global*)   
+  0d8:  18 (GLIBC_2.34)    4 (GLIBC_2.2.5)   b (CXXABI_1.3)    9 (GLIBCXX_3.4)
+  0dc:   1 (*global*)     10 (GLIBCXX_3.4.9)  21 (CXXABI_1.3.5)   e (GLIBCXX_3.4.11) 
+  0e0:   9 (GLIBCXX_3.4)   9 (GLIBCXX_3.4)   1 (*global*)      1 (*global*)   
+  0e4:  22 (GLIBC_2.3)     3 (GLIBCXX_3.4.26)    1 (*global*)      3 (GLIBCXX_3.4.26) 
+  0e8:   6 (GLIBCXX_3.4.21)    9 (GLIBCXX_3.4)  11 (GLIBC_2.2.5)   1 (*global*)   
+  0ec:   1 (*global*)      9 (GLIBCXX_3.4)   1 (*global*)      4 (GLIBC_2.2.5)
+  0f0:   4 (GLIBC_2.2.5)   6 (GLIBCXX_3.4.21)    7 (GLIBCXX_3.4.15)   10 (GLIBCXX_3.4.9)
+  0f4:   6 (GLIBCXX_3.4.21)   11 (GLIBC_2.2.5)   9 (GLIBCXX_3.4)  18 (GLIBC_2.34) 
+  0f8:   9 (GLIBCXX_3.4)  17 (GLIBC_2.3.4)   9 (GLIBCXX_3.4)   9 (GLIBCXX_3.4)
+  0fc:   4 (GLIBC_2.2.5)   1 (*global*)      4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)
+  100:   9 (GLIBCXX_3.4)   9 (GLIBCXX_3.4)   6 (GLIBCXX_3.4.21)    1 (*global*)   
+  104:   3 (GLIBCXX_3.4.26)    4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)
+  108:   b (CXXABI_1.3)    4 (GLIBC_2.2.5)   9 (GLIBCXX_3.4)   1 (*global*)   
+  10c:   1 (*global*)      7 (GLIBCXX_3.4.15)    3 (GLIBCXX_3.4.26)    1 (*global*)   
+  110:   4 (GLIBC_2.2.5)   3 (GLIBCXX_3.4.26)    4 (GLIBC_2.2.5)   1 (*global*)   
+  114:   e (GLIBCXX_3.4.11)    5 (GCC_3.0)       3 (GLIBCXX_3.4.26)   23 (GLIBC_2.16) 
+  118:   b (CXXABI_1.3)    1 (*global*)      4 (GLIBC_2.2.5)  10 (GLIBCXX_3.4.9)
+  11c:   9 (GLIBCXX_3.4)   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)
+  120:   9 (GLIBCXX_3.4)   3 (GLIBCXX_3.4.26)    4 (GLIBC_2.2.5)   b (CXXABI_1.3) 
+  124:   9 (GLIBCXX_3.4)   1 (*global*)      1 (*global*)      4 (GLIBC_2.2.5)
+  128:   9 (GLIBCXX_3.4)   1 (*global*)     24 (GLIBCXX_3.4.30)    3 (GLIBCXX_3.4.26) 
+  12c:  25 (GLIBC_2.3)     1 (*global*)      9 (GLIBCXX_3.4)   1 (*global*)   
+  130:   6 (GLIBCXX_3.4.21)    5 (GCC_3.0)      26 (GCC_3.4)      27 (GLIBC_2.27) 
+  134:   1 (*global*)      3 (GLIBCXX_3.4.26)    4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)
+  138:   6 (GLIBCXX_3.4.21)    1 (*global*)      3 (GLIBCXX_3.4.26)   11 (GLIBC_2.2.5)
+  13c:  10 (GLIBCXX_3.4.9)   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)
+  140:  11 (GLIBC_2.2.5)   3 (GLIBCXX_3.4.26)    1 (*global*)      1 (*global*)   
+  144:   6 (GLIBCXX_3.4.21)    1 (*global*)      3 (GLIBCXX_3.4.26)    1 (*global*)   
+  148:   9 (GLIBCXX_3.4)  11 (GLIBC_2.2.5)  28 (GLIBCXX_3.4.19)    6 (GLIBCXX_3.4.21) 
+  14c:   1 (*global*)      6 (GLIBCXX_3.4.21)    1 (*global*)      1 (*global*)   
+  150:   6 (GLIBCXX_3.4.21)    4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)
+  154:   3 (GLIBCXX_3.4.26)    4 (GLIBC_2.2.5)   3 (GLIBCXX_3.4.26)    1 (*global*)   
+  158:   9 (GLIBCXX_3.4)   3 (GLIBCXX_3.4.26)   29 (GLIBCXX_3.4.14)    6 (GLIBCXX_3.4.21) 
+  15c:   1 (*global*)     1a (GOMP_1.0)     14 (GLIBCXX_3.4.18)    4 (GLIBC_2.2.5)
+  160:   6 (GLIBCXX_3.4.21)    4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)
+  164:   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)  1f (GLIBCXX_3.4.22)    1 (*global*)   
+  168:  10 (GLIBCXX_3.4.9)   3 (GLIBCXX_3.4.26)    e (GLIBCXX_3.4.11)    4 (GLIBC_2.2.5)
+  16c:   b (CXXABI_1.3)    4 (GLIBC_2.2.5)   1 (*global*)      9 (GLIBCXX_3.4)
+  170:   9 (GLIBCXX_3.4)   9 (GLIBCXX_3.4)   4 (GLIBC_2.2.5)   3 (GLIBCXX_3.4.26) 
+  174:   6 (GLIBCXX_3.4.21)    4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   9 (GLIBCXX_3.4)
+  178:   4 (GLIBC_2.2.5)   3 (GLIBCXX_3.4.26)    3 (GLIBCXX_3.4.26)    1 (*global*)   
+  17c:  2a (GLIBCXX_3.4.17)    b (CXXABI_1.3)   12 (GLIBC_2.29)   11 (GLIBC_2.2.5)
+  180:   1 (*global*)     2b (CXXABI_1.3.8)   1 (*global*)      1 (*global*)   
+  184:   6 (GLIBCXX_3.4.21)    4 (GLIBC_2.2.5)   6 (GLIBCXX_3.4.21)    4 (GLIBC_2.2.5)
+  188:   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   1 (*global*)      6 (GLIBCXX_3.4.21) 
+  18c:   1 (*global*)      b (CXXABI_1.3)    9 (GLIBCXX_3.4)  11 (GLIBC_2.2.5)
+  190:   9 (GLIBCXX_3.4)  1f (GLIBCXX_3.4.22)    4 (GLIBC_2.2.5)   1 (*global*)   
+  194:   3 (GLIBCXX_3.4.26)    4 (GLIBC_2.2.5)   1 (*global*)      3 (GLIBCXX_3.4.26) 
+  198:  20 (GLIBCXX_3.4.29)    1 (*global*)      1 (*global*)      4 (GLIBC_2.2.5)
+  19c:   9 (GLIBCXX_3.4)   4 (GLIBC_2.2.5)   1 (*global*)      3 (GLIBCXX_3.4.26) 
+  1a0:   e (GLIBCXX_3.4.11)   2c (GLIBCXX_3.4.32)    1 (*global*)     18 (GLIBC_2.34) 
+  1a4:   6 (GLIBCXX_3.4.21)    4 (GLIBC_2.2.5)   9 (GLIBCXX_3.4)   4 (GLIBC_2.2.5)
+  1a8:  2d (GLIBC_2.32)    9 (GLIBCXX_3.4)   f (GLIBC_2.33)    3 (GLIBCXX_3.4.26) 
+  1ac:  2e (GLIBCXX_3.4.31)    b (CXXABI_1.3)    3 (GLIBCXX_3.4.26)    4 (GLIBC_2.2.5)
+  1b0:  11 (GLIBC_2.2.5)   7 (GLIBCXX_3.4.15)    4 (GLIBC_2.2.5)   6 (GLIBCXX_3.4.21) 
+  1b4:   1 (*global*)      3 (GLIBCXX_3.4.26)    1 (*global*)     2f (GLIBC_2.25) 
+  1b8:   1 (*global*)      9 (GLIBCXX_3.4)   6 (GLIBCXX_3.4.21)    9 (GLIBCXX_3.4)
+  1bc:   3 (GLIBCXX_3.4.26)    4 (GLIBC_2.2.5)   c (GLIBC_2.38)    1 (*global*)   
+  1c0:  30 (GOMP_4.0)      7 (GLIBCXX_3.4.15)    e (GLIBCXX_3.4.11)    1 (*global*)   
+  1c4:   4 (GLIBC_2.2.5)   c (GLIBC_2.38)    6 (GLIBCXX_3.4.21)    9 (GLIBCXX_3.4)
+  1c8:   1 (*global*)      9 (GLIBCXX_3.4)   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)
+  1cc:   b (CXXABI_1.3)   11 (GLIBC_2.2.5)  25 (GLIBC_2.3)     e (GLIBCXX_3.4.11) 
+  1d0:   3 (GLIBCXX_3.4.26)   18 (GLIBC_2.34)    4 (GLIBC_2.2.5)  28 (GLIBCXX_3.4.19) 
+  1d4:   3 (GLIBCXX_3.4.26)    7 (GLIBCXX_3.4.15)   29 (GLIBCXX_3.4.14)    3 (GLIBCXX_3.4.26) 
+  1d8:   9 (GLIBCXX_3.4)   4 (GLIBC_2.2.5)   9 (GLIBCXX_3.4)   b (CXXABI_1.3) 
+  1dc:   6 (GLIBCXX_3.4.21)    4 (GLIBC_2.2.5)   9 (GLIBCXX_3.4)   9 (GLIBCXX_3.4)
+  1e0:   1 (*global*)     11 (GLIBC_2.2.5)  31 (GLIBCXX_3.4.5)   9 (GLIBCXX_3.4)
+  1e4:   9 (GLIBCXX_3.4)   1 (*global*)     10 (GLIBCXX_3.4.9)   3 (GLIBCXX_3.4.26) 
+  1e8:   9 (GLIBCXX_3.4)   3 (GLIBCXX_3.4.26)    4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)
+  1ec:   9 (GLIBCXX_3.4)   1 (*global*)     14 (GLIBCXX_3.4.18)    3 (GLIBCXX_3.4.26) 
+  1f0:   1 (*global*)      4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   5 (GCC_3.0)    
+  1f4:   3 (GLIBCXX_3.4.26)    4 (GLIBC_2.2.5)  11 (GLIBC_2.2.5)   1 (*global*)   
+  1f8:  20 (GLIBCXX_3.4.29)    6 (GLIBCXX_3.4.21)    3 (GLIBCXX_3.4.26)    4 (GLIBC_2.2.5)
+  1fc:   4 (GLIBC_2.2.5)  17 (GLIBC_2.3.4)   4 (GLIBC_2.2.5)   1 (*global*)   
+  200:   9 (GLIBCXX_3.4)  32 (GLIBC_2.10)    4 (GLIBC_2.2.5)   1 (*global*)   
+  204:   9 (GLIBCXX_3.4)   3 (GLIBCXX_3.4.26)    1 (*global*)      6 (GLIBCXX_3.4.21) 
+  208:  11 (GLIBC_2.2.5)   9 (GLIBCXX_3.4)   1 (*global*)      3 (GLIBCXX_3.4.26) 
+  20c:  29 (GLIBCXX_3.4.14)   29 (GLIBCXX_3.4.14)    9 (GLIBCXX_3.4)   1 (*global*)   
+  210:   4 (GLIBC_2.2.5)   1 (*global*)      6 (GLIBCXX_3.4.21)    9 (GLIBCXX_3.4)
+  214:   9 (GLIBCXX_3.4)   1 (*global*)     11 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)
+  218:  18 (GLIBC_2.34)    4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   1 (*global*)   
+  21c:   6 (GLIBCXX_3.4.21)   13 (CXXABI_1.3.11)   1 (*global*)      4 (GLIBC_2.2.5)
+  220:   3 (GLIBCXX_3.4.26)    3 (GLIBCXX_3.4.26)    1 (*global*)      7 (GLIBCXX_3.4.15) 
+  224:  13 (CXXABI_1.3.11)   9 (GLIBCXX_3.4)  29 (GLIBCXX_3.4.14)    9 (GLIBCXX_3.4)
+  228:   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   6 (GLIBCXX_3.4.21)    4 (GLIBC_2.2.5)
+  22c:   3 (GLIBCXX_3.4.26)    1 (*global*)     18 (GLIBC_2.34)    4 (GLIBC_2.2.5)
+  230:   3 (GLIBCXX_3.4.26)    4 (GLIBC_2.2.5)   5 (GCC_3.0)       1 (*global*)   
+  234:   4 (GLIBC_2.2.5)   9 (GLIBCXX_3.4)   7 (GLIBCXX_3.4.15)    3 (GLIBCXX_3.4.26) 
+  238:  33 (GLIBC_2.9)     1 (*global*)      9 (GLIBCXX_3.4)   4 (GLIBC_2.2.5)
+  23c:   1 (*global*)      4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   9 (GLIBCXX_3.4)
+  240:   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   9 (GLIBCXX_3.4)   4 (GLIBC_2.2.5)
+  244:   4 (GLIBC_2.2.5)   1 (*global*)      1 (*global*)      3 (GLIBCXX_3.4.26) 
+  248:   b (CXXABI_1.3)    6 (GLIBCXX_3.4.21)    3 (GLIBCXX_3.4.26)    9 (GLIBCXX_3.4)
+  24c:   e (GLIBCXX_3.4.11)   1b (GLIBC_2.4)     4 (GLIBC_2.2.5)   7 (GLIBCXX_3.4.15) 
+  250:   9 (GLIBCXX_3.4)   4 (GLIBC_2.2.5)  17 (GLIBC_2.3.4)   7 (GLIBCXX_3.4.15) 
+  254:   1 (*global*)      c (GLIBC_2.38)    6 (GLIBCXX_3.4.21)    1 (*global*)   
+  258:   1 (*global*)     11 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)  18 (GLIBC_2.34) 
+  25c:   4 (GLIBC_2.2.5)   6 (GLIBCXX_3.4.21)    4 (GLIBC_2.2.5)   1 (*global*)   
+  260:   5 (GCC_3.0)       4 (GLIBC_2.2.5)   1 (*global*)      4 (GLIBC_2.2.5)
+  264:   1 (*global*)      9 (GLIBCXX_3.4)  10 (GLIBCXX_3.4.9)   1 (*global*)   
+  268:   4 (GLIBC_2.2.5)   1 (*global*)      4 (GLIBC_2.2.5)   1 (*global*)   
+  26c:   9 (GLIBCXX_3.4)   1 (*global*)      1 (*global*)      1 (*global*)   
+  270:   1 (*global*)      1 (*global*)      9 (GLIBCXX_3.4)   1 (*global*)   
+  274:   9 (GLIBCXX_3.4)   e (GLIBCXX_3.4.11)    1 (*global*)      e (GLIBCXX_3.4.11) 
+  278:   9 (GLIBCXX_3.4)   1 (*global*)      1 (*global*)      9 (GLIBCXX_3.4)
+  27c:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  280:   1 (*global*)      1 (*global*)      1 (*global*)      4 (GLIBC_2.2.5)
+  284:   1 (*global*)      6 (GLIBCXX_3.4.21)    1 (*global*)      1 (*global*)   
+  288:   1 (*global*)      6 (GLIBCXX_3.4.21)    1 (*global*)      6 (GLIBCXX_3.4.21) 
+  28c:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  290:   1 (*global*)      9 (GLIBCXX_3.4)
+
+Version needs section '.gnu.version_r' contains 6 entries:
+ Addr: 0x0000000000009168  Offset: 0x00009168  Link: 7 (.dynstr)
+  000000: Version: 1  File: ld-linux-x86-64.so.2  Cnt: 1
+  0x0010:   Name: GLIBC_2.3  Flags: none  Version: 34
+  0x0020: Version: 1  File: libgomp.so.1  Cnt: 3
+  0x0030:   Name: GOMP_4.0  Flags: none  Version: 48
+  0x0040:   Name: OMP_1.0  Flags: none  Version: 30
+  0x0050:   Name: GOMP_1.0  Flags: none  Version: 26
+  0x0060: Version: 1  File: libm.so.6  Cnt: 3
+  0x0070:   Name: GLIBC_2.27  Flags: none  Version: 39
+  0x0080:   Name: GLIBC_2.29  Flags: none  Version: 18
+  0x0090:   Name: GLIBC_2.2.5  Flags: none  Version: 17
+  0x00a0: Version: 1  File: libgcc_s.so.1  Cnt: 3
+  0x00b0:   Name: GCC_3.4  Flags: none  Version: 38
+  0x00c0:   Name: GCC_7.0.0  Flags: none  Version: 21
+  0x00d0:   Name: GCC_3.0  Flags: none  Version: 5
+  0x00e0: Version: 1  File: libc.so.6  Cnt: 14
+  0x00f0:   Name: GLIBC_2.9  Flags: none  Version: 51
+  0x0100:   Name: GLIBC_2.10  Flags: none  Version: 50
+  0x0110:   Name: GLIBC_2.25  Flags: none  Version: 47
+  0x0120:   Name: GLIBC_2.32  Flags: none  Version: 45
+  0x0130:   Name: GLIBC_2.3  Flags: none  Version: 37
+  0x0140:   Name: GLIBC_2.16  Flags: none  Version: 35
+  0x0150:   Name: GLIBC_2.17  Flags: none  Version: 29
+  0x0160:   Name: GLIBC_2.4  Flags: none  Version: 27
+  0x0170:   Name: GLIBC_2.34  Flags: none  Version: 24
+  0x0180:   Name: GLIBC_2.3.4  Flags: none  Version: 23
+  0x0190:   Name: GLIBC_2.33  Flags: none  Version: 15
+  0x01a0:   Name: GLIBC_2.14  Flags: none  Version: 13
+  0x01b0:   Name: GLIBC_2.38  Flags: none  Version: 12
+  0x01c0:   Name: GLIBC_2.2.5  Flags: none  Version: 4
+  0x01d0: Version: 1  File: libstdc++.so.6  Cnt: 26
+  0x01e0:   Name: GLIBCXX_3.4.5  Flags: none  Version: 49
+  0x01f0:   Name: GLIBCXX_3.4.31  Flags: none  Version: 46
+  0x0200:   Name: GLIBCXX_3.4.32  Flags: none  Version: 44
+  0x0210:   Name: CXXABI_1.3.8  Flags: none  Version: 43
+  0x0220:   Name: GLIBCXX_3.4.17  Flags: none  Version: 42
+  0x0230:   Name: GLIBCXX_3.4.14  Flags: none  Version: 41
+  0x0240:   Name: GLIBCXX_3.4.19  Flags: none  Version: 40
+  0x0250:   Name: GLIBCXX_3.4.30  Flags: none  Version: 36
+  0x0260:   Name: CXXABI_1.3.5  Flags: none  Version: 33
+  0x0270:   Name: GLIBCXX_3.4.29  Flags: none  Version: 32
+  0x0280:   Name: GLIBCXX_3.4.22  Flags: none  Version: 31
+  0x0290:   Name: CXXABI_1.3.7  Flags: none  Version: 28
+  0x02a0:   Name: CXXABI_1.3.3  Flags: none  Version: 25
+  0x02b0:   Name: CXXABI_1.3.13  Flags: none  Version: 22
+  0x02c0:   Name: GLIBCXX_3.4.18  Flags: none  Version: 20
+  0x02d0:   Name: CXXABI_1.3.11  Flags: none  Version: 19
+  0x02e0:   Name: GLIBCXX_3.4.9  Flags: none  Version: 16
+  0x02f0:   Name: GLIBCXX_3.4.11  Flags: none  Version: 14
+  0x0300:   Name: CXXABI_1.3  Flags: none  Version: 11
+  0x0310:   Name: GLIBCXX_3.4.20  Flags: none  Version: 10
+  0x0320:   Name: GLIBCXX_3.4  Flags: none  Version: 9
+  0x0330:   Name: CXXABI_1.3.2  Flags: none  Version: 8
+  0x0340:   Name: GLIBCXX_3.4.15  Flags: none  Version: 7
+  0x0350:   Name: GLIBCXX_3.4.21  Flags: none  Version: 6
+  0x0360:   Name: GLIBCXX_3.4.26  Flags: none  Version: 3
+  0x0370:   Name: CXXABI_1.3.9  Flags: none  Version: 2
