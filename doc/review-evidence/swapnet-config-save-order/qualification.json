@@ -1,0 +1,50 @@
+{
+  "utc": "2026-11-17T02:10:13.724359+00:00",
+  "base": "371013d61dc124a363521df5b94e97f64d2464f2",
+  "local_branch": "codex/operator-config-save-order",
+  "local_extracted_commit": "7d9483e3908be3ca9256999255ca1efad1de1da8",
+  "commit_scope": "Local extracted SwapNet source tree, not a full upstream-tree commit",
+  "platform": "macOS-26.5.1-arm64-arm-64bit",
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "before": {
+    "failed": 6,
+    "passed": 12,
+    "seconds": 0.37
+  },
+  "after": {
+    "passed": 18,
+    "skipped": 0,
+    "seconds": 0.38
+  },
+  "existing_application_controls": {
+    "passed": 12,
+    "skipped": 0,
+    "seconds": 1.05
+  },
+  "same_final_test_hash": "42b18cf05328b78fca3e73f4dc55f3d769a9526b728f79f1c5a682b13dfd32cd",
+  "scope": "Mac actual Application/Host Python methods + SQLite SQL-rejection triggers and reopened Store/Journal. Thin Host context and deterministic driver/nativewallet-list callbacks. No compiledHost/fullnative restart/fundedchain/platform/release qualification.",
+  "preparation_limit": "Factory/ready can legitimately create EVM account key/settings before policy persistence; those preparations are preserved, not rolled back. Fix only live driver/wallet-binding publication order.",
+  "independent_review": "REPAIR-REVIEW.md final source/test verdict no blocker; no independent execution",
+  "patch_applies_to_exact_base": true,
+  "files": {
+    "candidate/swapnet/application.py": "d81c889f6805eec048af7177ca48674deda0ff555fc001cb43424c575ca76aaf",
+    "candidate/swapnet/embedded.py": "08e221037215a448943134e35bf9d9f8ad6d471dc8a2fe8f7efc413315de03f1",
+    "candidate/tests/test_config_save_order.py": "42b18cf05328b78fca3e73f4dc55f3d769a9526b728f79f1c5a682b13dfd32cd",
+    "candidate.patch": "e802c406c32e08ed6875ff9dcbfe4e761b19437200b956d1f2d0f2cef121c1bc",
+    "before.log": "59beb8b7964acffedcddbe7e3d927a37c9335f06f85a5fc418a46194fc34940a",
+    "after.log": "79e4ba00e63fc08d8d512c2fa4b1016cef741ad8e43a8c7970419d5fd5578dff",
+    "controls.log": "1b08f0c0beaba0c279189ef1c7341e54d766feced764562cbc079af35d44cba8",
+    "before-results.json": "1b857897d8563d371cb3b881ed88a3bb454b0405201dbe38df100029168c5f1a",
+    "after-results.json": "60b0825b00212848b16135b8c4355903872f0b7ca692f4244678a5934b97eef0",
+    "controls-results.json": "f3523bf4c3a3e273df0d4119612712b8127dbb1c06e599e221940677be79413a",
+    "REPAIR-REVIEW.md": "848ce0309342a387e6b9daa847f3c558cf342294600e6814a648e1197610e820"
+  },
+  "published": false,
+  "cleanup": {
+    "utc": "2026-11-17T02:11:04.892959+00:00",
+    "processes_exited": true,
+    "fixture_databases_closed": true,
+    "own_disposable_runtimes_removed": true,
+    "source_candidate_tests_logs_retained": true
+  }
+}

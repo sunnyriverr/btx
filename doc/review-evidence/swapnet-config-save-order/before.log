@@ -1,0 +1,42 @@
+FFFFFF............                                                       [100%]
+=================================== FAILURES ===================================
+_________ test_asset_failed_save_preserves_live_then_retry_reopens[1] __________
+work/btx-lanes/session-1/swapnet-operator-config-durability/baseline/tests/test_config_save_order.py:69: in test_asset_failed_save_preserves_live_then_retry_reopens
+    assert app.drivers[B] is old and app.coordinator._driver(B) is old
+E   assert (<test_execution_v2.Driver object at 0x1079b9eb0> is <test_execution_v2.Driver object at 0x1077c7350>)
+_________ test_asset_failed_save_preserves_live_then_retry_reopens[2] __________
+work/btx-lanes/session-1/swapnet-operator-config-durability/baseline/tests/test_config_save_order.py:69: in test_asset_failed_save_preserves_live_then_retry_reopens
+    assert app.drivers[B] is old and app.coordinator._driver(B) is old
+E   assert (<test_execution_v2.Driver object at 0x1079baed0> is <test_execution_v2.Driver object at 0x1079bac60>)
+____ test_wallet_failed_save_remains_unbound_then_retry_reopens[1-explicit] ____
+work/btx-lanes/session-1/swapnet-operator-config-durability/baseline/tests/test_config_save_order.py:85: in test_wallet_failed_save_remains_unbound_then_retry_reopens
+    assert h._wallet=='' and settings(app)==before and reopen(app,'native_wallet','')==''
+E   AssertionError: assert ('fixture-wallet-a' == ''
+E     
+E     + fixture-wallet-a)
+___ test_wallet_failed_save_remains_unbound_then_retry_reopens[1-automatic] ____
+work/btx-lanes/session-1/swapnet-operator-config-durability/baseline/tests/test_config_save_order.py:85: in test_wallet_failed_save_remains_unbound_then_retry_reopens
+    assert h._wallet=='' and settings(app)==before and reopen(app,'native_wallet','')==''
+E   AssertionError: assert ('fixture-wallet-a' == ''
+E     
+E     + fixture-wallet-a)
+____ test_wallet_failed_save_remains_unbound_then_retry_reopens[2-explicit] ____
+work/btx-lanes/session-1/swapnet-operator-config-durability/baseline/tests/test_config_save_order.py:85: in test_wallet_failed_save_remains_unbound_then_retry_reopens
+    assert h._wallet=='' and settings(app)==before and reopen(app,'native_wallet','')==''
+E   AssertionError: assert ('fixture-wallet-a' == ''
+E     
+E     + fixture-wallet-a)
+___ test_wallet_failed_save_remains_unbound_then_retry_reopens[2-automatic] ____
+work/btx-lanes/session-1/swapnet-operator-config-durability/baseline/tests/test_config_save_order.py:85: in test_wallet_failed_save_remains_unbound_then_retry_reopens
+    assert h._wallet=='' and settings(app)==before and reopen(app,'native_wallet','')==''
+E   AssertionError: assert ('fixture-wallet-a' == ''
+E     
+E     + fixture-wallet-a)
+=========================== short test summary info ============================
+FAILED work/btx-lanes/session-1/swapnet-operator-config-durability/baseline/tests/test_config_save_order.py::test_asset_failed_save_preserves_live_then_retry_reopens[1]
+FAILED work/btx-lanes/session-1/swapnet-operator-config-durability/baseline/tests/test_config_save_order.py::test_asset_failed_save_preserves_live_then_retry_reopens[2]
+FAILED work/btx-lanes/session-1/swapnet-operator-config-durability/baseline/tests/test_config_save_order.py::test_wallet_failed_save_remains_unbound_then_retry_reopens[1-explicit]
+FAILED work/btx-lanes/session-1/swapnet-operator-config-durability/baseline/tests/test_config_save_order.py::test_wallet_failed_save_remains_unbound_then_retry_reopens[1-automatic]
+FAILED work/btx-lanes/session-1/swapnet-operator-config-durability/baseline/tests/test_config_save_order.py::test_wallet_failed_save_remains_unbound_then_retry_reopens[2-explicit]
+FAILED work/btx-lanes/session-1/swapnet-operator-config-durability/baseline/tests/test_config_save_order.py::test_wallet_failed_save_remains_unbound_then_retry_reopens[2-automatic]
+6 failed, 12 passed in 0.37s
