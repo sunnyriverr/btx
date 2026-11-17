@@ -29,7 +29,7 @@ def run(cmd,label,limit=120,cwd=None,allowed=(0,)):
  return b''.join(data).decode(errors='replace')
 try:
  assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=w/'current-reference',text=True).strip()==PIN
- m=json.loads((w/'saved-checkpoint/manifest.json').read_text());arc=w/'saved-checkpoint/build-state.tar.gz';assert sha(arc)==m['archive_sha256']=='e06b79000a9d16d221c38d7b17143833da170e797e6287cf95497ff8aa899e47';assert m['workspace']==str(w)
+ m=json.loads((w/'saved-checkpoint/manifest.json').read_text());arc=w/'saved-checkpoint/build-state.tar.gz';assert sha(arc)==m['archive_sha256']=='1ad855549dd086926439131b777d64aa2d1e00eff0f84688d17492953d049054';assert m['workspace']==str(w)
  with tarfile.open(arc)as t:t.extractall(w,filter='data')
  restore_timestamps(w,m);verify_restored(w,m);restored=True;r['checkpoint_verified']=True;save()
  reference=w/'current-reference';files=subprocess.check_output(['git','ls-files','-z'],cwd=reference,text=True).split('\0');files=[x for x in files if x];wanted=set(files);changed=[]
@@ -55,6 +55,8 @@ try:
  run(['ninja','-j2',*targets],'baseline-build',1500,build)
  test_script=source/'test/functional/feature_swarm_profile_overrides.py';unit=source/'src/test/modelnet_infra_tests.cpp';test_script.write_bytes((w/'proposal/feature_swarm_profile_overrides.py').read_bytes())
  baseline_hash={n:sha(build/'bin'/n)for n in targets};r['baseline_hash']=baseline_hash;save()
+ for name in ('btxd','btx-modeld'):
+  deps=run(['ldd',build/'bin'/name],'baseline-ldd-'+name,30);assert 'not found' not in deps
  run([build/'bin/test_btx','--run_test=modelnet_infra_tests','--log_level=test_suite'],'baseline-infra-suite',120,build)
  # Run same maintained functional entrypoint; expected baseline assertion on helper restart.
  txt=run([sys.executable,test_script,'--configfile='+str(build/'test/config.ini'),'--tmpdir='+str(w/'runtime-baseline'),'--nocleanup'],'baseline-native',240,build,allowed=(1,))

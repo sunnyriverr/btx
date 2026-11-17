@@ -21,6 +21,9 @@ tar -xzf "$python_setup/ubuntu-python.tar.gz" -C "$python_setup/unpacked"
 (cd "$python_setup/unpacked" && RUNNER_TOOL_CACHE=/opt/hostedtoolcache bash setup.sh)
 builder_python=/opt/hostedtoolcache/Python/3.12.16/x64/bin/python3
 "$builder_python" -VV
+printf "%s\n" /opt/hostedtoolcache/Python/3.12.16/x64/lib > /etc/ld.so.conf.d/btx-profile-python.conf
+ldconfig
+ldconfig -p | grep -F libpython3.12.so.1.0
 "$builder_python" -m pip install --disable-pip-version-check --no-deps cmake==3.31.6 ninja==1.11.1.4
 tool_bin=${builder_python%/*}
 ln -s "$tool_bin/cmake" /usr/local/bin/cmake
