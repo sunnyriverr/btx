@@ -32,7 +32,8 @@ def name_ok(name):
 
 def link_destination(name, target):
     require(isinstance(target, str) and target and not target.startswith('/')
-            and '\\' not in target and '\x00' not in target, 'Unsafe link target')
+            and '\\' not in target and '\x00' not in target,
+            'Unsafe link target: ' + repr(name)[:1024] + ' -> ' + repr(target)[:1024])
     parts = list(PurePosixPath(name).parent.parts)
     for part in target.split('/'):
         if part in ('', '.'):
@@ -45,6 +46,36 @@ def link_destination(name, target):
     result = '/'.join(parts)
     name_ok(result)
     return result
+
+def stored_link(workspace, path, raw):
+    """Keep relative links; store only proven within-root absolute links relatively.
+
+    This changes archive metadata, never the live tree. Rejection includes the
+    actual path/target so a failed checkpoint is diagnosable from retained logs.
+    """
+    name = path.relative_to(workspace).as_posix()
+    detail = repr(name)[:1024] + ' -> ' + repr(raw)[:1024]
+    try:
+        require(isinstance(raw, str) and raw and '\\' not in raw and '\x00' not in raw,
+                'Invalid link text')
+        if raw.startswith('/'):
+            absolute = PurePosixPath(raw)
+            # Do not collapse symlink/.. sequences and change their meaning.
+            require(str(absolute) == raw and '..' not in absolute.parts,
+                    'Noncanonical absolute link')
+            relative = absolute.relative_to(PurePosixPath(str(workspace)))
+            name_ok(relative.as_posix())
+            target = os.path.relpath(workspace / relative, path.parent)
+        else:
+            target = raw
+        link_destination(name, target)
+        # Check actual chains as well as lexical location. strict=False permits
+        # build aliases whose within-root destination has not been built yet.
+        resolved = path.resolve(strict=False).relative_to(workspace.resolve())
+        name_ok(resolved.as_posix())
+        return target, resolved.as_posix()
+    except (ValueError, RuntimeError, OSError) as error:
+        raise ValueError('Checkpoint link rejected: ' + detail + ': ' + str(error)[:1024]) from error
 
 def validate_rows(rows):
     require(isinstance(rows, dict) and 0 < len(rows) <= MAX_ENTRIES, 'Entry bound')
@@ -147,7 +178,7 @@ def restore(workspace, archive, manifest, tick=lambda: None):
         os.utime(workspace / name, ns=(row['mtime_ns'], row['mtime_ns']), follow_symlinks=False)
     require(snapshot(workspace, tick) == rows, 'Restored snapshot mismatch')
 
-def snapshot(workspace, tick=lambda: None):
+def snapshot(workspace, tick=lambda: None, *, link_targets=None, link_events=None):
     rows = {}
     def walk(path):
         tick()
@@ -157,7 +188,27 @@ def snapshot(workspace, tick=lambda: None):
         st = path.lstat()
         row = {'mode': stat.S_IMODE(st.st_mode), 'mtime_ns': st.st_mtime_ns}
         if stat.S_ISLNK(st.st_mode):
-            row.update(kind='link', target=os.readlink(path))
+            raw = os.readlink(path)
+            if link_targets is not None:
+                link_targets[name] = raw
+            event = {'path': name[:1024], 'original_target': raw[:1024]}
+            try:
+                target, resolved = stored_link(workspace, path, raw)
+                row.update(kind='link', target=target)
+                event.update(stored_target=target[:1024], resolved=resolved[:1024],
+                             status='normalized' if raw != target else 'relative')
+            except (ValueError, RuntimeError, OSError) as error:
+                event.update(status='rejected', error=str(error)[:2048])
+                if link_events is not None:
+                    # Keep the failing event even if earlier diagnostic rows hit
+                    # the cap. The full raw-target map is only for consistency.
+                    if len(link_events) >= 128:
+                        link_events[-1] = event
+                    else:
+                        link_events.append(event)
+                raise
+            if link_events is not None and len(link_events) < 128:
+                link_events.append(event)
         elif stat.S_ISREG(st.st_mode):
             require(st.st_nlink == 1, 'Hardlinked file')
             row.update(kind='file', bytes=st.st_size, sha256=sha(path))
@@ -176,18 +227,37 @@ def snapshot(workspace, tick=lambda: None):
     validate_rows(rows)
     return rows
 
-def create(workspace, output, identity, tick=lambda: None):
-    before = snapshot(workspace, tick)
-    total = validate_rows(before)
-    require(shutil.disk_usage(workspace).free >= total + RESERVE + 512 * 1024**2, 'Checkpoint headroom')
-    output.mkdir(exist_ok=False)
-    archive = output / 'build-state.tar.gz'
-    with tarfile.open(archive, 'w:gz', compresslevel=1, format=tarfile.PAX_FORMAT) as stream:
-        for name in sorted(before):
-            tick()
-            stream.add(workspace / name, arcname=name, recursive=False)
-    require(snapshot(workspace, tick) == before, 'Tree changed during checkpoint')
-    manifest = {'workspace': str(workspace), 'identity': identity, 'rows': before, 'archive_sha256': sha(archive)}
-    verify_archive(archive, manifest, tick)
-    (output / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
-    return manifest
+def create(workspace, output, identity, tick=lambda: None, *, diagnostics=None):
+    events = []
+    raw_before = {}
+    try:
+        before = snapshot(workspace, tick, link_targets=raw_before, link_events=events)
+        total = validate_rows(before)
+        require(shutil.disk_usage(workspace).free >= total + RESERVE + 512 * 1024**2, 'Checkpoint headroom')
+        output.mkdir(exist_ok=False)
+        archive = output / 'build-state.tar.gz'
+        def metadata(info):
+            # Snapshot metadata is the manifest contract; tarfile otherwise
+            # preserves a live absolute symlink string rather than its stored
+            # relative equivalent. Never rewrite the live symlink itself.
+            if info.issym():
+                info.linkname = before[info.name]['target']
+            return info
+        with tarfile.open(archive, 'w:gz', compresslevel=1, format=tarfile.PAX_FORMAT) as stream:
+            for name in sorted(before):
+                tick()
+                stream.add(workspace / name, arcname=name, recursive=False, filter=metadata)
+        raw_after = {}
+        require(snapshot(workspace, tick, link_targets=raw_after, link_events=events) == before
+                and raw_after == raw_before, 'Tree or original link text changed during checkpoint')
+        manifest = {'workspace': str(workspace), 'identity': identity, 'rows': before,
+                    'archive_sha256': sha(archive),
+                    'link_normalizations': {name: {'original_target': raw, 'stored_target': before[name]['target']}
+                                            for name, raw in raw_before.items() if raw != before[name]['target']}}
+        verify_archive(archive, manifest, tick)
+        (output / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
+        return manifest
+    finally:
+        if diagnostics is not None:
+            diagnostics.write_text(json.dumps({'events': events, 'limit': 128,
+                                                'event_limit_reached': len(events) == 128}, indent=2) + '\n')

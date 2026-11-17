@@ -139,6 +139,11 @@ def main():
             require(Path(path).is_absolute() and sha(path) == digest, 'Python Development bytes changed')
         require(set(development['sha256']) == {development[key] for key in ('header', 'config_header', 'library')},
                 'Incomplete Python Development identity')
+        opengl = dependency['opengl_development']
+        require(opengl['header'] == '/usr/include/GL/gl.h'
+                and opengl['package'] == 'libgl-dev:amd64' and opengl['owner_verified'] is True,
+                'OpenGL header prerequisite identity')
+        require(sha(opengl['header']) == opengl['header_sha256'], 'OpenGL header bytes changed')
         accepted = w / 'accepted-source'
         require(run(['git', 'rev-parse', 'HEAD'], 'accepted-head', cwd=accepted).strip() == SOURCE, 'Accepted HEAD')
         require(not run(['git', 'status', '--porcelain'], 'accepted-clean', cwd=accepted).strip(), 'Dirty accepted source')
@@ -254,7 +259,7 @@ def main():
                                  {'source': SOURCE if result.get('source_updated') else 'PARTIAL_SOURCE_UPDATE',
                                   'seed_source': SEED, 'compile_pass': False,
                                   'preflight_complete': bool(result.get('plan_captured'))},
-                                 lambda: tick(retention=True))
+                                 lambda: tick(retention=True), diagnostics=out / 'checkpoint-links.json')
                 result['checkpoint_verified'] = True
                 result['checkpoint_inner_sha256'] = updated['archive_sha256']
                 result['checkpoint_manifest_sha256'] = sha(out / 'updated-checkpoint/manifest.json')

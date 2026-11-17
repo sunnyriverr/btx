@@ -94,5 +94,15 @@
       "metadata_sha256": "2f8b35ee20ccc932a73315a4fea04b3b88a17a66b23c5305af534a9a6d1f20a2"
     }
   ],
-  "apt_policy": "Exact GCC11/Qt baseline required; record all installed versions, never claim complete reproducibility. Other apt drift does not abort. All old C++ outputs must be invalidated because original installed header content baseline is absent."
+  "opengl_development": {
+    "direct_apt_dependency": "libgl-dev",
+    "package_identity": "libgl-dev:amd64",
+    "required_header": "/usr/include/GL/gl.h",
+    "require_package_owner": true,
+    "historical_observed_version": "1.4.0-1",
+    "version_policy": "Observe installed version; this dependency has no new exact version pin.",
+    "reason": "Corrected configure failed OpenGL include discovery, cascading through Qt6Gui and Qt6Widgets. Original successful producer had libgl-dev and OPENGL_INCLUDE_DIR=/usr/include."
+  },
+  "python_bootstrap_limitation": "The hash-verified archive's bundled setup.sh automatically upgrades pip from the network before wheels.lock is used. No verified skip mechanism for the exact archived installer is available in the retained source evidence; this source-only repair does not change that installer or claim bootstrap reproducibility.",
+  "apt_policy": "Exact GCC11/Qt baseline required; libgl-dev:amd64 and its owned GL/gl.h header required. Record all installed versions, never claim complete reproducibility. Other apt drift does not abort. All old C++ outputs must be invalidated because original installed header content baseline is absent."
 }

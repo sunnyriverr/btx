@@ -29,15 +29,27 @@ apt-get install -y --no-install-recommends \
   ca-certificates curl git build-essential pkg-config python3 perl \
   "gcc-11=$gcc_version" "g++-11=$gcc_version" "cpp-11=$gcc_version" \
   "gcc-11-base=$gcc_version" "libgcc-11-dev=$gcc_version" "libstdc++-11-dev=$gcc_version" \
-  libboost-dev libevent-dev libsqlite3-dev libzmq3-dev libqrencode-dev \
+  libboost-dev libevent-dev libsqlite3-dev libzmq3-dev libqrencode-dev libgl-dev \
   "qt6-base-dev=$qt_base_version" "qt6-base-dev-tools=$qt_base_version" \
   'qt6-tools-dev=6.2.4-1' 'qt6-tools-dev-tools=6.2.4-1' 'qt6-l10n-tools=6.2.4-1' \
   librsvg2-bin imagemagick patchelf binutils
+# Qt6Gui's WrapOpenGL discovery needs GL/gl.h even when the retained runtime
+# libraries and libopengl-dev/libglx-dev are already installed. Fail here,
+# before Python setup or project configure, if that explicit input is absent.
+opengl_header=/usr/include/GL/gl.h
+opengl_package=libgl-dev:amd64
+test -f "$opengl_header"
+test "$(dpkg-query -W -f='${db:Status-Abbrev}' "$opengl_package")" = 'ii '
+dpkg-query -S "$opengl_header" | tee "$records/opengl-header-owner.log"
+test "$(cat "$records/opengl-header-owner.log")" = "$opengl_package: $opengl_header"
+dpkg-query -W -f='${binary:Package}\t${Version}\n' "$opengl_package" \
+  > "$records/opengl-package.log"
+sha256sum "$opengl_header" > "$records/opengl-header-sha256.log"
 # Capture complete observed apt closure. This is evidence, not a reproducible
 # lock or permission to trust old C++ objects without original header hashes.
 dpkg-query -W -f='${binary:Package}\t${Version}\n' | sort > "$records/installed-packages.log"
 apt-cache policy gcc-11 g++-11 qt6-base-dev qt6-base-dev-tools \
-  qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools > "$records/required-apt-policy.log"
+  qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools libgl-dev > "$records/required-apt-policy.log"
 for package in gcc-11 g++-11 cpp-11 gcc-11-base libgcc-11-dev libstdc++-11-dev; do
   test "$(dpkg-query -W -f='${Version}' "$package")" = "$gcc_version"
 done
@@ -123,6 +135,11 @@ assert subprocess.check_output(['/usr/local/bin/cmake','--version'],text=True).s
 # version verbatim (upstream packaging may include a Kitware jobserver suffix).
 ninja_runtime = subprocess.check_output(['/usr/local/bin/ninja','--version'],text=True).strip()
 assert ninja_runtime == '1.11.1' or ninja_runtime.startswith('1.11.1.')
+opengl_header = pathlib.Path('/usr/include/GL/gl.h')
+assert opengl_header.is_file()
+opengl_package, opengl_version = (records / 'opengl-package.log').read_text().strip().split('\t')
+assert opengl_package == 'libgl-dev:amd64'
+assert (records / 'opengl-header-owner.log').read_text().strip() == f'{opengl_package}: {opengl_header}'
 environment = {'BUILDER_PYTHON':str(pathlib.Path(sys.executable)),
  'Python3_ROOT_DIR':sys.prefix, 'Python3_EXECUTABLE':sys.executable,
  'CMAKE_COMMAND':'/usr/local/bin/cmake','NINJA_COMMAND':'/usr/local/bin/ninja',
@@ -133,6 +150,10 @@ receipt = {'schema':1,'status':'READY','python':sys.executable,
  'config_header':str(config_header),'library':str(library),'shared':True,'elf_amd64':True,'ldd_resolved':True,
  'sha256':{str(path):hashlib.sha256(path.read_bytes()).hexdigest() for path in (header,config_header,library)}},
  'ninja_runtime_version':ninja_runtime,
+ 'pip_bootstrap':{'observed_version':importlib.metadata.version('pip'),
+ 'policy':'Bundled archive installer upgrades pip from the network before wheels.lock; bootstrap is not hash locked.'},
+ 'opengl_development':{'header':str(opengl_header),'package':opengl_package,'version':opengl_version,
+ 'owner_verified':True,'header_sha256':hashlib.sha256(opengl_header.read_bytes()).hexdigest()},
  'imports':{'cryptography':cryptography.__version__,'cffi':cffi.__version__,'pycparser':pycparser.__version__,
  'sqlite3':sqlite3.sqlite_version,'AESGCM':AESGCM.__name__},
  'invalidate_all_old_cpp':True,'invalidation_reason':'No original complete installed-header content baseline; all retained C++ objects must be invalidated before configure/plan.',
