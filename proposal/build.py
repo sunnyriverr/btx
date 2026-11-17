@@ -29,7 +29,7 @@ def run(cmd,label,limit=120,cwd=None,allowed=(0,)):
  return b''.join(data).decode(errors='replace')
 try:
  assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=w/'current-reference',text=True).strip()==PIN
- m=json.loads((w/'saved-checkpoint/manifest.json').read_text());arc=w/'saved-checkpoint/build-state.tar.gz';assert sha(arc)==m['archive_sha256']=='1ad855549dd086926439131b777d64aa2d1e00eff0f84688d17492953d049054';assert m['workspace']==str(w)
+ m=json.loads((w/'saved-checkpoint/manifest.json').read_text());arc=w/'saved-checkpoint/build-state.tar.gz';assert sha(arc)==m['archive_sha256']=='e1484fb394cb019cc0f4cbff2a9d7bd05c39428908f9e240c1487e5039afed5d';assert m['workspace']==str(w)
  with tarfile.open(arc)as t:t.extractall(w,filter='data')
  restore_timestamps(w,m);verify_restored(w,m);restored=True;r['checkpoint_verified']=True;save()
  reference=w/'current-reference';files=subprocess.check_output(['git','ls-files','-z'],cwd=reference,text=True).split('\0');files=[x for x in files if x];wanted=set(files);changed=[]
@@ -47,7 +47,7 @@ try:
  r['changed_from_checkpoint']=changed;save()
  assert '11.4.0'in run(['g++','-dumpfullversion'],'gcc');assert 'OpenSSL 3.5.9'in run([w/'gui-pilot-runtime/openssl/bin/openssl','version'],'openssl');os.environ['BTX_OPENSSL']=str(w/'gui-pilot-runtime/openssl/bin/openssl')
  run(['cmake','-S',source,'-B',build],'configure',180)
- targets=['btxd','btx-cli','btx-modeld','test_btx'];run(['ninja','build.ninja'],'baseline-graph-regeneration',120,build)
+ targets=['btxd','btx-cli','btx-modeld','btx-guardd','test_btx'];run(['ninja','build.ninja'],'baseline-graph-regeneration',120,build)
  # Snapshot is for read-only planning only. The actual build retains CMake's
  # normal CONFIGURE_DEPENDS verification and unmodified build.ninja.
  snapshot=build/'profile-plan.ninja';shutil.copy2(build/'build.ninja',snapshot)
@@ -55,7 +55,7 @@ try:
  run(['ninja','-j2',*targets],'baseline-build',1500,build)
  test_script=source/'test/functional/feature_swarm_profile_overrides.py';unit=source/'src/test/modelnet_infra_tests.cpp';test_script.write_bytes((w/'proposal/feature_swarm_profile_overrides.py').read_bytes())
  baseline_hash={n:sha(build/'bin'/n)for n in targets};r['baseline_hash']=baseline_hash;save()
- for name in ('btxd','btx-modeld'):
+ for name in ('btxd','btx-modeld','btx-guardd'):
   deps=run(['ldd',build/'bin'/name],'baseline-ldd-'+name,30);assert 'not found' not in deps
  run([build/'bin/test_btx','--run_test=modelnet_infra_tests','--log_level=test_suite'],'baseline-infra-suite',120,build)
  # Run same maintained functional entrypoint; expected baseline assertion on helper restart.
@@ -77,9 +77,12 @@ finally:
  for phase in ('baseline','candidate'):
   d=w/('runtime-'+phase)
   if d.exists():
-   for log in d.rglob('*.log'):
-    # Evidence allowlist: never upload generated helper identities or cookie data.
-    dest=out/('runtime-'+phase)/log.relative_to(d);dest.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(log,dest)
+   for log in d.rglob('*'):
+    # Exact text-log allowlist excludes LevelDB *.log, wallets and identities.
+    if not log.is_file() or log.is_symlink():continue
+    keep=log.name=='test_framework.log' or (log.name=='debug.log' and log.parent.name=='regtest') or log.name in ('stdout','stderr')
+    if not keep:continue
+    dest=out/('runtime-'+phase)/log.relative_to(d);dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(log,dest);dest.chmod(0o644)
  try:
   if restored:
    # Retain compatible build state even if qualification failed. Not a release package.
