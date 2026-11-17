@@ -64,7 +64,10 @@ try:
   run([sys.executable,p/'native.py','--helper',helper,'--helper-sha256',sha(helper),'--expect',phase,'--out',out/(phase+'-native')],phase+'-native',300,allowed=(2,)if phase=='baseline'else(0,))
   result=json.loads((out/(phase+'-native/result.json')).read_text());assert result['complete'];assert len(result['contract_failures'])==(2 if phase=='baseline' else 0)
   r[phase+'_native_result']=result;save()
- compile_phase('baseline');native('baseline')
+ prior=json.loads((p/'baseline-evidence.json').read_text())
+ assert prior['source']==pin and prior['native_script_sha256']==sha(p/'native.py')
+ assert prior['baseline_native_result']['complete'] and len(prior['baseline_native_result']['contract_failures'])==2
+ r['baseline_reused_from']=prior['run'];r['baseline_native_result']=prior['baseline_native_result'];r['baseline_helper_sha256']=prior['baseline_helper_sha256'];save()
  patch=p/'candidate.patch';run(['git','apply','--check',patch],'patch-check',30,source);run(['git','apply',patch],'patch',30,source)
  changes=json.loads((p/'changes.json').read_text())
  for name,v in changes.items():assert sha(source/name)==v['candidate_sha256'],name
@@ -79,4 +82,9 @@ try:
 except Exception as e:r['error']=repr(e);save();raise
 finally:
  # Existing immutable remote checkpoint remains retained. Upload only binaries and text records.
+ try:
+  from checkpoint import create
+  checkpoint=create(w,w/'qualified-checkpoint',{'source':pin,'upload_candidate':r.get('candidate_payload_verified',False),'complete':r['complete']},reserve=int(1.25*1024**3))
+  r['checkpoint_retained']={'archive_sha256':checkpoint['archive_sha256'],'identity':checkpoint['identity']}
+ except Exception as e:r['checkpoint_retention_error']=repr(e)
  r['retained_binaries']={str(x.relative_to(w/'retained-binaries')):sha(x)for x in (w/'retained-binaries').rglob('*')if x.is_file()}if(w/'retained-binaries').exists()else{};save()

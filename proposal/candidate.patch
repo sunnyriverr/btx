@@ -1,14 +1,6 @@
 --- a/src/test/modelnet_cloud_tests.cpp
 +++ b/src/test/modelnet_cloud_tests.cpp
-@@ -61,6 +61,7 @@
- #include <fstream>
- #include <future>
- #include <string>
-+#include <sstream>
- #include <vector>
- 
- #if defined(_WIN32)
-@@ -1225,6 +1226,9 @@
+@@ -1225,6 +1225,9 @@
      UniValue imported;
      BOOST_REQUIRE_MESSAGE(DispatchHelperRpc(cat, ireq, imported, code, err), err);
      BOOST_CHECK(imported["cloud_uploaded"].get_bool());
@@ -18,7 +10,7 @@
      BOOST_CHECK_EQUAL(imported["cloud_layout"].get_str(), "SOURCE_FILES");
      BOOST_REQUIRE(imported["cloud_files"].isArray());
      BOOST_REQUIRE_GE(imported["cloud_files"].size(), 1U);
-@@ -1475,6 +1479,174 @@
+@@ -1475,6 +1478,174 @@
      for (const auto* xml : refused) BOOST_CHECK_MESSAGE(!S3MultipartCompletionSucceeded(xml), xml);
  }
  
@@ -144,7 +136,7 @@
 +        const auto bytes = UploadModelBytes(size);
 +        const fs::path source = dir / "model.safetensors";
 +        WriteUploadBytes(source, bytes);
-+        ModelCatalog cat{dir / std::to_string(size), 16 << 20};
++        ModelCatalog cat{dir / fs::PathFromString(std::to_string(size)), 16 << 20};
 +        CatalogEntry entry;
 +        std::string err;
 +        BOOST_REQUIRE_MESSAGE(cat.ImportPath(fs::PathToString(source), false, entry, err), err);
@@ -158,7 +150,7 @@
 +        auto corrupt = bytes;
 +        corrupt.resize(std::min<size_t>(size, PIECE_SIZE));
 +        corrupt[0] ^= 1;
-+        const fs::path piece = cat.Store().Root() / "artifacts" / entry.artifact_id.Hex() / "0" / "0.piece";
++        const fs::path piece = cat.Store().Root() / "artifacts" / fs::PathFromString(entry.artifact_id.Hex()) / "0" / "0.piece";
 +        WriteUploadBytes(piece, corrupt);
 +        CatalogFileStream bad{cat, entry.artifact_id, 0, entry.core.files[0]};
 +        char first;

@@ -1,0 +1,647 @@
+{
+  "run": 44030880116,
+  "source": "bd847e2b986722c1723b4cd60988d4f4908452d4",
+  "baseline_helper_sha256": "2e3ac26cca88103937a11c0c771e82b96e3f055b3fe4c45f09a504ed56c29ce9",
+  "baseline_native_result": {
+    "complete": true,
+    "helper_sha256": "2e3ac26cca88103937a11c0c771e82b96e3f055b3fe4c45f09a504ed56c29ce9",
+    "phase": "baseline",
+    "cases": {
+      "SOURCE_FILES-control": {
+        "complete": true,
+        "cloud_success": true,
+        "imported_sha384": "fcbdc00a9577ed0cc0285b82d734cef83d94656e285064eb824febc80d0180302369d36f77f00be3bb1a1280dd0d97fc",
+        "remote_sha384": "fcbdc00a9577ed0cc0285b82d734cef83d94656e285064eb824febc80d0180302369d36f77f00be3bb1a1280dd0d97fc",
+        "boundary_reached": true,
+        "source_changed": false,
+        "identity_matches": true,
+        "failed_upload_preserves_prior_object": true,
+        "same_id_retry": true,
+        "origin": {
+          "origin": "controlled local HTTP response fixture; not AWS/MinIO/FakeS3",
+          "sigv4_validation": false,
+          "mode": "success",
+          "retained_bytes": 16777216,
+          "objects": {
+            "/fixture/SOURCE_FILES-control/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/files/0": {
+              "bytes": 16777216,
+              "sha256": "15f315c138b073619beff8d4d29e8c4a8a6e291df28e3da361f38f73fd552968"
+            }
+          },
+          "uploads": {},
+          "aborted_uploads": [
+            "probe-upload-2"
+          ],
+          "requests": [
+            {
+              "method": "POST",
+              "path": "/fixture/SOURCE_FILES-control/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/files/0",
+              "query": {
+                "uploads": [
+                  ""
+                ]
+              },
+              "request_bytes": 0,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "response_status": 200,
+              "response_kind": "multipart-begin",
+              "object_exists_after": false,
+              "object_sha256_after": null,
+              "upload_count_after": 1,
+              "completion_mode": "success"
+            },
+            {
+              "method": "PUT",
+              "path": "/fixture/SOURCE_FILES-control/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/files/0",
+              "query": {
+                "partNumber": [
+                  "1"
+                ],
+                "uploadId": [
+                  "probe-upload-1"
+                ]
+              },
+              "request_bytes": 8388608,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "response_status": 200,
+              "response_kind": "multipart-part",
+              "object_exists_after": false,
+              "object_sha256_after": null,
+              "upload_count_after": 1,
+              "completion_mode": "success"
+            },
+            {
+              "method": "PUT",
+              "path": "/fixture/SOURCE_FILES-control/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/files/0",
+              "query": {
+                "partNumber": [
+                  "2"
+                ],
+                "uploadId": [
+                  "probe-upload-1"
+                ]
+              },
+              "request_bytes": 8388608,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "response_status": 200,
+              "response_kind": "multipart-part",
+              "object_exists_after": false,
+              "object_sha256_after": null,
+              "upload_count_after": 1,
+              "completion_mode": "success"
+            },
+            {
+              "method": "POST",
+              "path": "/fixture/SOURCE_FILES-control/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/files/0",
+              "query": {
+                "uploadId": [
+                  "probe-upload-1"
+                ]
+              },
+              "request_bytes": 223,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "completion_mode": "success",
+              "response_status": 200,
+              "response_kind": "multipart-success",
+              "object_exists_after": true,
+              "object_sha256_after": "15f315c138b073619beff8d4d29e8c4a8a6e291df28e3da361f38f73fd552968",
+              "upload_count_after": 0
+            },
+            {
+              "method": "POST",
+              "path": "/fixture/SOURCE_FILES-control/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/files/0",
+              "query": {
+                "uploads": [
+                  ""
+                ]
+              },
+              "request_bytes": 0,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "response_status": 200,
+              "response_kind": "multipart-begin",
+              "object_exists_after": true,
+              "object_sha256_after": "15f315c138b073619beff8d4d29e8c4a8a6e291df28e3da361f38f73fd552968",
+              "upload_count_after": 1,
+              "completion_mode": "success"
+            },
+            {
+              "method": "PUT",
+              "path": "/fixture/SOURCE_FILES-control/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/files/0",
+              "query": {
+                "partNumber": [
+                  "1"
+                ],
+                "uploadId": [
+                  "probe-upload-2"
+                ]
+              },
+              "request_bytes": 8388608,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "response_status": 200,
+              "response_kind": "multipart-part",
+              "object_exists_after": true,
+              "object_sha256_after": "15f315c138b073619beff8d4d29e8c4a8a6e291df28e3da361f38f73fd552968",
+              "upload_count_after": 1,
+              "completion_mode": "success"
+            },
+            {
+              "method": "PUT",
+              "path": "/fixture/SOURCE_FILES-control/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/files/0",
+              "query": {
+                "partNumber": [
+                  "2"
+                ],
+                "uploadId": [
+                  "probe-upload-2"
+                ]
+              },
+              "request_bytes": 8388608,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "response_status": 500,
+              "response_kind": "injected-part-error",
+              "object_exists_after": true,
+              "object_sha256_after": "15f315c138b073619beff8d4d29e8c4a8a6e291df28e3da361f38f73fd552968",
+              "upload_count_after": 1,
+              "completion_mode": "success"
+            },
+            {
+              "method": "DELETE",
+              "path": "/fixture/SOURCE_FILES-control/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/files/0",
+              "query": {
+                "uploadId": [
+                  "probe-upload-2"
+                ]
+              },
+              "request_bytes": 0,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "response_status": 204,
+              "response_kind": "multipart-abort",
+              "object_exists_after": true,
+              "object_sha256_after": "15f315c138b073619beff8d4d29e8c4a8a6e291df28e3da361f38f73fd552968",
+              "upload_count_after": 0,
+              "completion_mode": "success"
+            },
+            {
+              "method": "POST",
+              "path": "/fixture/SOURCE_FILES-control/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/files/0",
+              "query": {
+                "uploads": [
+                  ""
+                ]
+              },
+              "request_bytes": 0,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "response_status": 200,
+              "response_kind": "multipart-begin",
+              "object_exists_after": true,
+              "object_sha256_after": "15f315c138b073619beff8d4d29e8c4a8a6e291df28e3da361f38f73fd552968",
+              "upload_count_after": 1,
+              "completion_mode": "success"
+            },
+            {
+              "method": "PUT",
+              "path": "/fixture/SOURCE_FILES-control/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/files/0",
+              "query": {
+                "partNumber": [
+                  "1"
+                ],
+                "uploadId": [
+                  "probe-upload-3"
+                ]
+              },
+              "request_bytes": 8388608,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "response_status": 200,
+              "response_kind": "multipart-part",
+              "object_exists_after": true,
+              "object_sha256_after": "15f315c138b073619beff8d4d29e8c4a8a6e291df28e3da361f38f73fd552968",
+              "upload_count_after": 1,
+              "completion_mode": "success"
+            },
+            {
+              "method": "PUT",
+              "path": "/fixture/SOURCE_FILES-control/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/files/0",
+              "query": {
+                "partNumber": [
+                  "2"
+                ],
+                "uploadId": [
+                  "probe-upload-3"
+                ]
+              },
+              "request_bytes": 8388608,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "response_status": 200,
+              "response_kind": "multipart-part",
+              "object_exists_after": true,
+              "object_sha256_after": "15f315c138b073619beff8d4d29e8c4a8a6e291df28e3da361f38f73fd552968",
+              "upload_count_after": 1,
+              "completion_mode": "success"
+            },
+            {
+              "method": "POST",
+              "path": "/fixture/SOURCE_FILES-control/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/files/0",
+              "query": {
+                "uploadId": [
+                  "probe-upload-3"
+                ]
+              },
+              "request_bytes": 223,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "completion_mode": "success",
+              "response_status": 200,
+              "response_kind": "multipart-success",
+              "object_exists_after": true,
+              "object_sha256_after": "15f315c138b073619beff8d4d29e8c4a8a6e291df28e3da361f38f73fd552968",
+              "upload_count_after": 0
+            }
+          ]
+        },
+        "clean_shutdown": true
+      },
+      "SOURCE_FILES-changed": {
+        "complete": true,
+        "cloud_success": true,
+        "imported_sha384": "fcbdc00a9577ed0cc0285b82d734cef83d94656e285064eb824febc80d0180302369d36f77f00be3bb1a1280dd0d97fc",
+        "remote_sha384": "d6875289e5fb315b1885b4aa84b8c85d050982273b3b617649e13d41288b9da27f81e146d044833833f27cc400ff8f37",
+        "boundary_reached": true,
+        "source_changed": true,
+        "identity_matches": false,
+        "origin": {
+          "origin": "controlled local HTTP response fixture; not AWS/MinIO/FakeS3",
+          "sigv4_validation": false,
+          "mode": "success",
+          "retained_bytes": 16777216,
+          "objects": {
+            "/fixture/SOURCE_FILES-changed/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/files/0": {
+              "bytes": 16777216,
+              "sha256": "b711f5f51ff668fe2d72892bc413ee652208657b6e88350c6a70ae40a85cf768"
+            }
+          },
+          "uploads": {},
+          "aborted_uploads": [],
+          "requests": [
+            {
+              "method": "POST",
+              "path": "/fixture/SOURCE_FILES-changed/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/files/0",
+              "query": {
+                "uploads": [
+                  ""
+                ]
+              },
+              "request_bytes": 0,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "response_status": 200,
+              "response_kind": "multipart-begin",
+              "object_exists_after": false,
+              "object_sha256_after": null,
+              "upload_count_after": 1,
+              "completion_mode": "success"
+            },
+            {
+              "method": "PUT",
+              "path": "/fixture/SOURCE_FILES-changed/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/files/0",
+              "query": {
+                "partNumber": [
+                  "1"
+                ],
+                "uploadId": [
+                  "probe-upload-1"
+                ]
+              },
+              "request_bytes": 8388608,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "response_status": 200,
+              "response_kind": "multipart-part",
+              "object_exists_after": false,
+              "object_sha256_after": null,
+              "upload_count_after": 1,
+              "completion_mode": "success"
+            },
+            {
+              "method": "PUT",
+              "path": "/fixture/SOURCE_FILES-changed/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/files/0",
+              "query": {
+                "partNumber": [
+                  "2"
+                ],
+                "uploadId": [
+                  "probe-upload-1"
+                ]
+              },
+              "request_bytes": 8388608,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "response_status": 200,
+              "response_kind": "multipart-part",
+              "object_exists_after": false,
+              "object_sha256_after": null,
+              "upload_count_after": 1,
+              "completion_mode": "success"
+            },
+            {
+              "method": "POST",
+              "path": "/fixture/SOURCE_FILES-changed/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/files/0",
+              "query": {
+                "uploadId": [
+                  "probe-upload-1"
+                ]
+              },
+              "request_bytes": 223,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "completion_mode": "success",
+              "response_status": 200,
+              "response_kind": "multipart-success",
+              "object_exists_after": true,
+              "object_sha256_after": "b711f5f51ff668fe2d72892bc413ee652208657b6e88350c6a70ae40a85cf768",
+              "upload_count_after": 0
+            }
+          ]
+        },
+        "clean_shutdown": true
+      },
+      "PIECE_OBJECTS-control": {
+        "complete": true,
+        "cloud_success": true,
+        "imported_sha384": "fcbdc00a9577ed0cc0285b82d734cef83d94656e285064eb824febc80d0180302369d36f77f00be3bb1a1280dd0d97fc",
+        "remote_sha384": "fcbdc00a9577ed0cc0285b82d734cef83d94656e285064eb824febc80d0180302369d36f77f00be3bb1a1280dd0d97fc",
+        "boundary_reached": true,
+        "source_changed": false,
+        "identity_matches": true,
+        "origin": {
+          "origin": "controlled local HTTP response fixture; not AWS/MinIO/FakeS3",
+          "sigv4_validation": false,
+          "mode": "success",
+          "retained_bytes": 16777216,
+          "objects": {
+            "/fixture/PIECE_OBJECTS-control/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/0/0.piece": {
+              "bytes": 4194304,
+              "sha256": "4b7540c891938c52c63d0bf320264bcfd9e3d98cad170c77218c4472aeaa4591"
+            },
+            "/fixture/PIECE_OBJECTS-control/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/0/1.piece": {
+              "bytes": 4194304,
+              "sha256": "a58789e910e5f939afc433a00fef5930702927dc192cb237fd9e7449bd6ffe1d"
+            },
+            "/fixture/PIECE_OBJECTS-control/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/0/2.piece": {
+              "bytes": 4194304,
+              "sha256": "a58789e910e5f939afc433a00fef5930702927dc192cb237fd9e7449bd6ffe1d"
+            },
+            "/fixture/PIECE_OBJECTS-control/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/0/3.piece": {
+              "bytes": 4194304,
+              "sha256": "a58789e910e5f939afc433a00fef5930702927dc192cb237fd9e7449bd6ffe1d"
+            }
+          },
+          "uploads": {},
+          "aborted_uploads": [],
+          "requests": [
+            {
+              "method": "PUT",
+              "path": "/fixture/PIECE_OBJECTS-control/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/0/0.piece",
+              "query": {},
+              "request_bytes": 4194304,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "response_status": 200,
+              "response_kind": "ordinary-put",
+              "object_exists_after": true,
+              "object_sha256_after": "4b7540c891938c52c63d0bf320264bcfd9e3d98cad170c77218c4472aeaa4591",
+              "upload_count_after": 0,
+              "completion_mode": "success"
+            },
+            {
+              "method": "PUT",
+              "path": "/fixture/PIECE_OBJECTS-control/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/0/1.piece",
+              "query": {},
+              "request_bytes": 4194304,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "response_status": 200,
+              "response_kind": "ordinary-put",
+              "object_exists_after": true,
+              "object_sha256_after": "a58789e910e5f939afc433a00fef5930702927dc192cb237fd9e7449bd6ffe1d",
+              "upload_count_after": 0,
+              "completion_mode": "success"
+            },
+            {
+              "method": "PUT",
+              "path": "/fixture/PIECE_OBJECTS-control/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/0/2.piece",
+              "query": {},
+              "request_bytes": 4194304,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "response_status": 200,
+              "response_kind": "ordinary-put",
+              "object_exists_after": true,
+              "object_sha256_after": "a58789e910e5f939afc433a00fef5930702927dc192cb237fd9e7449bd6ffe1d",
+              "upload_count_after": 0,
+              "completion_mode": "success"
+            },
+            {
+              "method": "PUT",
+              "path": "/fixture/PIECE_OBJECTS-control/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/0/3.piece",
+              "query": {},
+              "request_bytes": 4194304,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "response_status": 200,
+              "response_kind": "ordinary-put",
+              "object_exists_after": true,
+              "object_sha256_after": "a58789e910e5f939afc433a00fef5930702927dc192cb237fd9e7449bd6ffe1d",
+              "upload_count_after": 0,
+              "completion_mode": "success"
+            }
+          ]
+        },
+        "clean_shutdown": true
+      },
+      "PIECE_OBJECTS-changed": {
+        "complete": true,
+        "cloud_success": true,
+        "imported_sha384": "fcbdc00a9577ed0cc0285b82d734cef83d94656e285064eb824febc80d0180302369d36f77f00be3bb1a1280dd0d97fc",
+        "remote_sha384": "d6875289e5fb315b1885b4aa84b8c85d050982273b3b617649e13d41288b9da27f81e146d044833833f27cc400ff8f37",
+        "boundary_reached": true,
+        "source_changed": true,
+        "identity_matches": false,
+        "origin": {
+          "origin": "controlled local HTTP response fixture; not AWS/MinIO/FakeS3",
+          "sigv4_validation": false,
+          "mode": "success",
+          "retained_bytes": 16777216,
+          "objects": {
+            "/fixture/PIECE_OBJECTS-changed/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/0/0.piece": {
+              "bytes": 4194304,
+              "sha256": "4b7540c891938c52c63d0bf320264bcfd9e3d98cad170c77218c4472aeaa4591"
+            },
+            "/fixture/PIECE_OBJECTS-changed/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/0/1.piece": {
+              "bytes": 4194304,
+              "sha256": "a58789e910e5f939afc433a00fef5930702927dc192cb237fd9e7449bd6ffe1d"
+            },
+            "/fixture/PIECE_OBJECTS-changed/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/0/2.piece": {
+              "bytes": 4194304,
+              "sha256": "370fe580b64c758ed5eead6146c654ac7a7fbca237623bdd7d387c69fc4ca174"
+            },
+            "/fixture/PIECE_OBJECTS-changed/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/0/3.piece": {
+              "bytes": 4194304,
+              "sha256": "a58789e910e5f939afc433a00fef5930702927dc192cb237fd9e7449bd6ffe1d"
+            }
+          },
+          "uploads": {},
+          "aborted_uploads": [],
+          "requests": [
+            {
+              "method": "PUT",
+              "path": "/fixture/PIECE_OBJECTS-changed/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/0/0.piece",
+              "query": {},
+              "request_bytes": 4194304,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "response_status": 200,
+              "response_kind": "ordinary-put",
+              "object_exists_after": true,
+              "object_sha256_after": "4b7540c891938c52c63d0bf320264bcfd9e3d98cad170c77218c4472aeaa4591",
+              "upload_count_after": 0,
+              "completion_mode": "success"
+            },
+            {
+              "method": "PUT",
+              "path": "/fixture/PIECE_OBJECTS-changed/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/0/1.piece",
+              "query": {},
+              "request_bytes": 4194304,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "response_status": 200,
+              "response_kind": "ordinary-put",
+              "object_exists_after": true,
+              "object_sha256_after": "a58789e910e5f939afc433a00fef5930702927dc192cb237fd9e7449bd6ffe1d",
+              "upload_count_after": 0,
+              "completion_mode": "success"
+            },
+            {
+              "method": "PUT",
+              "path": "/fixture/PIECE_OBJECTS-changed/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/0/2.piece",
+              "query": {},
+              "request_bytes": 4194304,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "response_status": 200,
+              "response_kind": "ordinary-put",
+              "object_exists_after": true,
+              "object_sha256_after": "370fe580b64c758ed5eead6146c654ac7a7fbca237623bdd7d387c69fc4ca174",
+              "upload_count_after": 0,
+              "completion_mode": "success"
+            },
+            {
+              "method": "PUT",
+              "path": "/fixture/PIECE_OBJECTS-changed/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/0/3.piece",
+              "query": {},
+              "request_bytes": 4194304,
+              "authorization_present": true,
+              "sigv4_scheme": true,
+              "credential_scope": "20261117/us-east-1/s3/aws4_request",
+              "amz_date_present": true,
+              "response_status": 200,
+              "response_kind": "ordinary-put",
+              "object_exists_after": true,
+              "object_sha256_after": "a58789e910e5f939afc433a00fef5930702927dc192cb237fd9e7449bd6ffe1d",
+              "upload_count_after": 0,
+              "completion_mode": "success"
+            }
+          ]
+        },
+        "clean_shutdown": true
+      }
+    },
+    "scope": "Matched actual-helper upload identity/retry test. Controlled HTTP, no wallet/node/peers.",
+    "contract_failures": [
+      "SOURCE_FILES-changed",
+      "PIECE_OBJECTS-changed"
+    ],
+    "seconds": 3.2238095339999973
+  },
+  "native_script_sha256": "bd02b6d8e8f09ae83827088cb1e7448f3b1b4227a0208c90057823ca4b5dd429",
+  "artifact": {
+    "artifact": {
+      "id": 14304874977,
+      "node_id": "MDg6QXJ0aWZhY3QxNDMwNDg3NDk3Nw==",
+      "name": "verified-upload-records",
+      "size_in_bytes": 51196,
+      "url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14304874977",
+      "archive_download_url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14304874977/zip",
+      "expired": false,
+      "digest": "sha256:c47678f620e0ff87bc15dcd24e6fdb221d53383dedaf2d0fa07d8302af24fb1f",
+      "created_at": "2026-11-17T06:36:43Z",
+      "updated_at": "2026-11-17T06:36:43Z",
+      "expires_at": "2026-12-01T06:36:42Z",
+      "workflow_run": {
+        "id": 44030880116,
+        "repository_id": 1440653358,
+        "head_repository_id": 1440653358,
+        "head_branch": "codex/ci-modelnet-verified-upload",
+        "head_sha": "5aca788e71a5dcfbe26d5284d2af311847e5b850"
+      }
+    },
+    "sha256": "c47678f620e0ff87bc15dcd24e6fdb221d53383dedaf2d0fa07d8302af24fb1f"
+  },
+  "reason": "Only two paths in new candidate C++ tests changed. Exact native.py and release baseline unchanged; reuse verified executed baseline instead of rebuilding/retesting it."
+}
