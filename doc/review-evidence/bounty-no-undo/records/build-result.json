@@ -1,0 +1,182 @@
+{
+  "status": "NORMAL_HELPER_MATCHED_PASS",
+  "commands": [
+    {
+      "label": "configure",
+      "command": [
+        "cmake",
+        "-S",
+        "/home/runner/work/btx/btx/product",
+        "-B",
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild",
+        "-DBUILD_TESTS=OFF"
+      ],
+      "exit": 0,
+      "seconds": 0.6657101739999973
+    },
+    {
+      "label": "baseline-globs",
+      "command": [
+        "cmake",
+        "-P",
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild/CMakeFiles/VerifyGlobs.cmake"
+      ],
+      "exit": 0,
+      "seconds": 0.16460194900000147
+    },
+    {
+      "label": "baseline-plan",
+      "command": [
+        "ninja",
+        "-C",
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild",
+        "-f",
+        "/home/runner/work/btx/btx/records/baseline.ninja",
+        "-n",
+        "btx-modeld"
+      ],
+      "exit": 0,
+      "seconds": 0.11434685500000796
+    },
+    {
+      "label": "baseline-build",
+      "command": [
+        "ninja",
+        "-C",
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild",
+        "-f",
+        "/home/runner/work/btx/btx/records/baseline.ninja",
+        "-j2",
+        "btx-modeld"
+      ],
+      "exit": 0,
+      "seconds": 375.33290578900005
+    },
+    {
+      "label": "baseline-test",
+      "command": [
+        "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python3",
+        "/home/runner/work/btx/btx/bountyqual/test.py",
+        "/home/runner/work/btx/btx/built/baseline/btx-modeld",
+        "/tmp/bounty-baseline",
+        "/home/runner/work/btx/btx/records/baseline"
+      ],
+      "exit": 7,
+      "seconds": 1.3679462960000137
+    },
+    {
+      "label": "candidate-globs",
+      "command": [
+        "cmake",
+        "-P",
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild/CMakeFiles/VerifyGlobs.cmake"
+      ],
+      "exit": 0,
+      "seconds": 0.16444113800002924
+    },
+    {
+      "label": "candidate-plan",
+      "command": [
+        "ninja",
+        "-C",
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild",
+        "-f",
+        "/home/runner/work/btx/btx/records/candidate.ninja",
+        "-n",
+        "btx-modeld"
+      ],
+      "exit": 0,
+      "seconds": 0.11445372600007886
+    },
+    {
+      "label": "candidate-build",
+      "command": [
+        "ninja",
+        "-C",
+        "/home/runner/work/btx/btx/gui-pilot-runtime/qtbuild",
+        "-f",
+        "/home/runner/work/btx/btx/records/candidate.ninja",
+        "-j2",
+        "btx-modeld"
+      ],
+      "exit": 0,
+      "seconds": 20.473043577999988
+    },
+    {
+      "label": "candidate-test",
+      "command": [
+        "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python3",
+        "/home/runner/work/btx/btx/bountyqual/test.py",
+        "/home/runner/work/btx/btx/built/candidate/btx-modeld",
+        "/tmp/bounty-candidate",
+        "/home/runner/work/btx/btx/records/candidate"
+      ],
+      "exit": 0,
+      "seconds": 1.368019600000025
+    }
+  ],
+  "checkpoint_verified": true,
+  "external_checked": 29776,
+  "external_differences": [],
+  "old_tracked_removed": [],
+  "tracked_updates": [
+    "contrib/swapnet/swapnet/application.py",
+    "contrib/swapnet/swapnet/coordinator.py",
+    "contrib/swapnet/swapnet/drivers.py",
+    "contrib/swapnet/swapnet/fee_bump.py",
+    "contrib/swapnet/swapnet/journal.py",
+    "contrib/swapnet/tests/test_journal_reader_completeness.py",
+    "contrib/swapnet/tests/test_restored_refund_fee.py",
+    "contrib/swapnet/tests/test_vault_retry_durability.py",
+    "doc/build-windows-msvc.md",
+    "doc/release-notes-0.34.17.md",
+    "src/CMakeLists.txt",
+    "src/modelnet/bounty.cpp",
+    "src/modelnet/bounty.h",
+    "src/modelnet/catalog.cpp",
+    "src/modelnet/helper.cpp",
+    "src/modelnet/helper_network02.cpp",
+    "src/modelnet/package_execute.cpp",
+    "src/modelnet/piece_picker.cpp",
+    "src/modelnet/piece_picker.h",
+    "src/modelnet/s3_client.cpp",
+    "src/modelnet/s3_client.h",
+    "src/modelnet/safety.cpp",
+    "src/modelnet/search.cpp",
+    "src/modelnet/search.h",
+    "src/net_processing.cpp",
+    "src/test/modelnet_ahp_acq_exec_tests.cpp",
+    "src/test/modelnet_bounty_tests.cpp",
+    "src/test/modelnet_cloud_tests.cpp",
+    "src/test/modelnet_first_run_tests.cpp",
+    "src/test/modelnet_healer_negcache_tests.cpp",
+    "src/test/modelnet_retrieve_peer_reply_tests.cpp",
+    "src/test/modelnet_safety_tests.cpp",
+    "src/test/modelnet_search_local_policy_tests.cpp",
+    "src/test/modelnet_search_tests.cpp",
+    "src/test/modelnet_swarm_tests.cpp",
+    "test/functional/feature_framework_unit_tests.py",
+    "test/functional/feature_rbf.py",
+    "test/functional/mempool_accept.py",
+    "test/functional/mempool_datacarrier.py",
+    "test/functional/p2p_block_chunk_request_race.py",
+    "test/functional/p2p_block_chunk_transport.py",
+    "test/functional/p2p_outbound_unconnecting_headers.py",
+    "test/functional/rpc_generate.py",
+    "test/functional/rpc_rawtransaction.py",
+    "test/functional/test_framework/address.py",
+    "test/functional/test_framework/crypto/mldsa.py",
+    "test/functional/test_framework/messages.py",
+    "test/functional/test_framework/script.py",
+    "test/functional/test_framework/test_node.py",
+    "test/functional/test_framework/wallet.py",
+    "test/functional/test_runner.py"
+  ],
+  "tracked_bytes_verified": true,
+  "baseline_planned_actions": 31,
+  "baseline_binary_sha256": "2e3ac26cca88103937a11c0c771e82b96e3f055b3fe4c45f09a504ed56c29ce9",
+  "baseline_bounty_sha256": "626aeb0d2ff0fc3edd8ca24cfa6a9c372a4e45db526bc5acc54bf4c11c78c6b6",
+  "candidate_planned_actions": 8,
+  "candidate_binary_sha256": "f62fb21f1246658c04c437b96b228bf41f9552f7897e287c8183fa29082c50eb",
+  "candidate_bounty_sha256": "23ab54cd8c29efcdd8c8801ea014e792feb056af428d320644a90bc7424845d7"
+}

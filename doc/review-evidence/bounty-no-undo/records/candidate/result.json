@@ -1,0 +1,924 @@
+{
+  "checks": [
+    {
+      "label": "restarted_no_undo",
+      "pass": true,
+      "before": {
+        "bounty-store.json": "ebdadb6ca74979720af7814d4c4e6ff98972a093c542d110b1a6fdb18de5673b"
+      },
+      "after": {
+        "bounty-store.json": "ebdadb6ca74979720af7814d4c4e6ff98972a093c542d110b1a6fdb18de5673b"
+      },
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 10,
+        "result": null,
+        "error": {
+          "code": "UNDO_UNAVAILABLE",
+          "message": "No observed tip to undo; re-observe verified chain facts or import a known-correct recovery manifest",
+          "schema_version": 2
+        }
+      }
+    },
+    {
+      "label": "repeated_no_undo",
+      "pass": true,
+      "before": {
+        "bounty-store.json": "ebdadb6ca74979720af7814d4c4e6ff98972a093c542d110b1a6fdb18de5673b"
+      },
+      "after": {
+        "bounty-store.json": "ebdadb6ca74979720af7814d4c4e6ff98972a093c542d110b1a6fdb18de5673b"
+      },
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 13,
+        "result": null,
+        "error": {
+          "code": "UNDO_UNAVAILABLE",
+          "message": "No observed tip to undo; re-observe verified chain facts or import a known-correct recovery manifest",
+          "schema_version": 2
+        }
+      }
+    },
+    {
+      "label": "fresh_empty",
+      "pass": true,
+      "before": {},
+      "after": {},
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 24,
+        "result": null,
+        "error": {
+          "code": "UNDO_UNAVAILABLE",
+          "message": "No observed tip to undo; re-observe verified chain facts or import a known-correct recovery manifest",
+          "schema_version": 2
+        }
+      }
+    },
+    {
+      "label": "exhausted_after_valid_undo",
+      "pass": true,
+      "before": {
+        "bounty-store.json": "85c2ace76f8d1ba1d53f763bf376d043b9ba46f907d43f941c4e30467a1563c1"
+      },
+      "after": {
+        "bounty-store.json": "85c2ace76f8d1ba1d53f763bf376d043b9ba46f907d43f941c4e30467a1563c1"
+      },
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 30,
+        "result": null,
+        "error": {
+          "code": "UNDO_UNAVAILABLE",
+          "message": "No observed tip to undo; re-observe verified chain facts or import a known-correct recovery manifest",
+          "schema_version": 2
+        }
+      }
+    }
+  ],
+  "calls": [
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 1,
+        "result": {
+          "epoch": 2,
+          "height": 0,
+          "facts": [],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "observebountychain",
+      "args": [
+        {
+          "outpoint": "synthetic:0",
+          "bounty_id": "synthetic",
+          "lot_id": "lot0",
+          "amount_atoms": "100",
+          "confirmations": 6,
+          "height": 100,
+          "spent": false
+        }
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 2,
+        "result": {
+          "epoch": 3,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": false,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "100",
+          "completeness": "local_watch_only"
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "exportbountyrecovery",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 3,
+        "result": {
+          "bounty_id": "synthetic",
+          "lots": [
+            {
+              "lot_id": "lot0",
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "wallet_seed": false,
+              "private_keys": false
+            }
+          ],
+          "secrets": false,
+          "private_keys": false,
+          "wallet_seed": false
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "observebountychain",
+      "args": [
+        {
+          "outpoint": "synthetic:0",
+          "bounty_id": "synthetic",
+          "lot_id": "lot0",
+          "amount_atoms": "100",
+          "confirmations": 6,
+          "height": 100,
+          "spent": true
+        }
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 4,
+        "result": {
+          "epoch": 4,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": true,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only"
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 5,
+        "result": {
+          "epoch": 4,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": true,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "reorgbountychain",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 6,
+        "result": {
+          "epoch": 5,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": false,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "100",
+          "completeness": "local_watch_only",
+          "reorg": true,
+          "event": {
+            "event_id": "92740b1dc9191ffdc88271a8d607c2bd",
+            "kind": "REORG",
+            "bounty_id": "synthetic",
+            "seq": 1,
+            "epoch": 1,
+            "payload": {
+              "corrective": true,
+              "silent_delete": false
+            },
+            "authority": "local_signed_or_chain"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "observebountychain",
+      "args": [
+        {
+          "outpoint": "synthetic:0",
+          "bounty_id": "synthetic",
+          "lot_id": "lot0",
+          "amount_atoms": "100",
+          "confirmations": 6,
+          "height": 100,
+          "spent": true
+        }
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 7,
+        "result": {
+          "epoch": 6,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": true,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only"
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 8,
+        "result": {
+          "epoch": 3,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": true,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 9,
+        "result": {
+          "epoch": 3,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": true,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "reorgbountychain",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 10,
+        "result": null,
+        "error": {
+          "code": "UNDO_UNAVAILABLE",
+          "message": "No observed tip to undo; re-observe verified chain facts or import a known-correct recovery manifest",
+          "schema_version": 2
+        }
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 11,
+        "result": {
+          "epoch": 3,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": true,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 12,
+        "result": {
+          "epoch": 3,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": true,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "reorgbountychain",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 13,
+        "result": null,
+        "error": {
+          "code": "UNDO_UNAVAILABLE",
+          "message": "No observed tip to undo; re-observe verified chain facts or import a known-correct recovery manifest",
+          "schema_version": 2
+        }
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 14,
+        "result": {
+          "epoch": 3,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": true,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "importbountyrecovery",
+      "args": [
+        {
+          "bounty_id": "synthetic",
+          "lots": [
+            {
+              "lot_id": "lot0",
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "wallet_seed": false,
+              "private_keys": false
+            }
+          ],
+          "secrets": false,
+          "private_keys": false,
+          "wallet_seed": false
+        }
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 15,
+        "result": {
+          "imported": true,
+          "broadcast": false
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 16,
+        "result": {
+          "epoch": 4,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 0,
+              "height": 0,
+              "spent": false,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "100",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 17,
+        "result": {
+          "epoch": 3,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 0,
+              "height": 0,
+              "spent": false,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "100",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 18,
+        "result": {
+          "epoch": 3,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 0,
+              "height": 0,
+              "spent": false,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "100",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "observebountychain",
+      "args": [
+        {
+          "outpoint": "synthetic:0",
+          "bounty_id": "synthetic",
+          "lot_id": "lot0",
+          "amount_atoms": "100",
+          "confirmations": 6,
+          "height": 100,
+          "spent": false
+        }
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 19,
+        "result": {
+          "epoch": 4,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": false,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "100",
+          "completeness": "local_watch_only"
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 20,
+        "result": {
+          "epoch": 4,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": false,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "100",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "exportbountyrecovery",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 21,
+        "result": {
+          "bounty_id": "synthetic",
+          "lots": [
+            {
+              "lot_id": "lot0",
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "wallet_seed": false,
+              "private_keys": false
+            }
+          ],
+          "secrets": false,
+          "private_keys": false,
+          "wallet_seed": false
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 22,
+        "result": {
+          "epoch": 2,
+          "height": 0,
+          "facts": [],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 23,
+        "result": {
+          "epoch": 2,
+          "height": 0,
+          "facts": [],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "reorgbountychain",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 24,
+        "result": null,
+        "error": {
+          "code": "UNDO_UNAVAILABLE",
+          "message": "No observed tip to undo; re-observe verified chain facts or import a known-correct recovery manifest",
+          "schema_version": 2
+        }
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 25,
+        "result": {
+          "epoch": 2,
+          "height": 0,
+          "facts": [],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "observebountychain",
+      "args": [
+        {
+          "outpoint": "synthetic:0",
+          "bounty_id": "synthetic",
+          "lot_id": "lot0",
+          "amount_atoms": "100",
+          "confirmations": 6,
+          "height": 100,
+          "spent": false
+        }
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 26,
+        "result": {
+          "epoch": 3,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": false,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "100",
+          "completeness": "local_watch_only"
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "reorgbountychain",
+      "args": [
+        {
+          "bounty_id": "synthetic",
+          "idempotency_key": "rollback-key"
+        }
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 27,
+        "result": {
+          "epoch": 4,
+          "height": 100,
+          "facts": [],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "reorg": true,
+          "event": {
+            "event_id": "96546f77634e90f5b71e5a487e6a588a",
+            "kind": "REORG",
+            "bounty_id": "synthetic",
+            "seq": 1,
+            "epoch": 1,
+            "payload": {
+              "corrective": true,
+              "silent_delete": false
+            },
+            "authority": "local_signed_or_chain"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "reorgbountychain",
+      "args": [
+        {
+          "bounty_id": "synthetic",
+          "idempotency_key": "rollback-key"
+        }
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 28,
+        "result": {
+          "epoch": 4,
+          "height": 100,
+          "facts": [],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "reorg": true,
+          "event": {
+            "event_id": "96546f77634e90f5b71e5a487e6a588a",
+            "kind": "REORG",
+            "bounty_id": "synthetic",
+            "seq": 1,
+            "epoch": 1,
+            "payload": {
+              "corrective": true,
+              "silent_delete": false
+            },
+            "authority": "local_signed_or_chain"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 29,
+        "result": {
+          "epoch": 4,
+          "height": 100,
+          "facts": [],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "reorgbountychain",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 30,
+        "result": null,
+        "error": {
+          "code": "UNDO_UNAVAILABLE",
+          "message": "No observed tip to undo; re-observe verified chain facts or import a known-correct recovery manifest",
+          "schema_version": 2
+        }
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 31,
+        "result": {
+          "epoch": 4,
+          "height": 100,
+          "facts": [],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    }
+  ],
+  "starts": 4,
+  "binary_sha256": "f62fb21f1246658c04c437b96b228bf41f9552f7897e287c8183fa29082c50eb",
+  "controls": "same-processundo, imported recovery, actual second/third process restart, metadata reobservation, lotdedup, successful keyed replay",
+  "status": "PASS"
+}

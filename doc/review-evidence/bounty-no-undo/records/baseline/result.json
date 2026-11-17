@@ -1,0 +1,1082 @@
+{
+  "checks": [
+    {
+      "label": "restarted_no_undo",
+      "pass": false,
+      "before": {
+        "bounty-store.json": "ebdadb6ca74979720af7814d4c4e6ff98972a093c542d110b1a6fdb18de5673b"
+      },
+      "after": {
+        "bounty-store.json": "ba49524a04ae855f838082c3bae7d32378c650b2f580947eb27c6d7111523afa"
+      },
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 10,
+        "result": {
+          "epoch": 3,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": true,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "reorg": true,
+          "event": {
+            "event_id": "e7330102f8cd7d3f3754c6594f98df98",
+            "kind": "REORG",
+            "bounty_id": "synthetic",
+            "seq": 2,
+            "epoch": 1,
+            "payload": {
+              "corrective": true,
+              "silent_delete": false
+            },
+            "authority": "local_signed_or_chain"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "label": "repeated_no_undo",
+      "pass": false,
+      "before": {
+        "bounty-store.json": "ba49524a04ae855f838082c3bae7d32378c650b2f580947eb27c6d7111523afa"
+      },
+      "after": {
+        "bounty-store.json": "565c3f67f31863738419e8bdb83cab4cf8d291f64deec655a30eb724a547d19d"
+      },
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 13,
+        "result": {
+          "epoch": 3,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": true,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "reorg": true,
+          "event": {
+            "event_id": "943f8bed275e6295116d8f23b7dcfb2b",
+            "kind": "REORG",
+            "bounty_id": "synthetic",
+            "seq": 3,
+            "epoch": 1,
+            "payload": {
+              "corrective": true,
+              "silent_delete": false
+            },
+            "authority": "local_signed_or_chain"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "label": "fresh_empty",
+      "pass": false,
+      "before": {},
+      "after": {
+        "bounty-store.json": "102b2688d3babfed6ee0baa8ace366b1b66f08ef3cedbfb06d8fd8aebcd7f4b8"
+      },
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 24,
+        "result": {
+          "epoch": 2,
+          "height": 0,
+          "facts": [],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "reorg": true,
+          "event": {
+            "event_id": "b61701af65d1485e09524eb16bf3b3cd",
+            "kind": "REORG",
+            "bounty_id": "synthetic",
+            "seq": 1,
+            "epoch": 1,
+            "payload": {
+              "corrective": true,
+              "silent_delete": false
+            },
+            "authority": "local_signed_or_chain"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "label": "exhausted_after_valid_undo",
+      "pass": false,
+      "before": {
+        "bounty-store.json": "f1f2b50487b6bfaa412130c7dab6719dd9fd08fe4b54e7d97934b51cb493d114"
+      },
+      "after": {
+        "bounty-store.json": "c209fdabedb89566bfac95dee3ca0f9987b9fee6a8d00692c002f48a7c70a1c6"
+      },
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 30,
+        "result": {
+          "epoch": 4,
+          "height": 100,
+          "facts": [],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "reorg": true,
+          "event": {
+            "event_id": "c60f19878afbc2d263701c0b0d2712a9",
+            "kind": "REORG",
+            "bounty_id": "synthetic",
+            "seq": 3,
+            "epoch": 1,
+            "payload": {
+              "corrective": true,
+              "silent_delete": false
+            },
+            "authority": "local_signed_or_chain"
+          }
+        },
+        "error": null
+      }
+    }
+  ],
+  "calls": [
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 1,
+        "result": {
+          "epoch": 2,
+          "height": 0,
+          "facts": [],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "observebountychain",
+      "args": [
+        {
+          "outpoint": "synthetic:0",
+          "bounty_id": "synthetic",
+          "lot_id": "lot0",
+          "amount_atoms": "100",
+          "confirmations": 6,
+          "height": 100,
+          "spent": false
+        }
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 2,
+        "result": {
+          "epoch": 3,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": false,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "100",
+          "completeness": "local_watch_only"
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "exportbountyrecovery",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 3,
+        "result": {
+          "bounty_id": "synthetic",
+          "lots": [
+            {
+              "lot_id": "lot0",
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "wallet_seed": false,
+              "private_keys": false
+            }
+          ],
+          "secrets": false,
+          "private_keys": false,
+          "wallet_seed": false
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "observebountychain",
+      "args": [
+        {
+          "outpoint": "synthetic:0",
+          "bounty_id": "synthetic",
+          "lot_id": "lot0",
+          "amount_atoms": "100",
+          "confirmations": 6,
+          "height": 100,
+          "spent": true
+        }
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 4,
+        "result": {
+          "epoch": 4,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": true,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only"
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 5,
+        "result": {
+          "epoch": 4,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": true,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "reorgbountychain",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 6,
+        "result": {
+          "epoch": 5,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": false,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "100",
+          "completeness": "local_watch_only",
+          "reorg": true,
+          "event": {
+            "event_id": "48473a36600e668d483903c312c96c68",
+            "kind": "REORG",
+            "bounty_id": "synthetic",
+            "seq": 1,
+            "epoch": 1,
+            "payload": {
+              "corrective": true,
+              "silent_delete": false
+            },
+            "authority": "local_signed_or_chain"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "observebountychain",
+      "args": [
+        {
+          "outpoint": "synthetic:0",
+          "bounty_id": "synthetic",
+          "lot_id": "lot0",
+          "amount_atoms": "100",
+          "confirmations": 6,
+          "height": 100,
+          "spent": true
+        }
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 7,
+        "result": {
+          "epoch": 6,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": true,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only"
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 8,
+        "result": {
+          "epoch": 3,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": true,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 9,
+        "result": {
+          "epoch": 3,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": true,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "reorgbountychain",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 10,
+        "result": {
+          "epoch": 3,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": true,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "reorg": true,
+          "event": {
+            "event_id": "e7330102f8cd7d3f3754c6594f98df98",
+            "kind": "REORG",
+            "bounty_id": "synthetic",
+            "seq": 2,
+            "epoch": 1,
+            "payload": {
+              "corrective": true,
+              "silent_delete": false
+            },
+            "authority": "local_signed_or_chain"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 11,
+        "result": {
+          "epoch": 3,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": true,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 12,
+        "result": {
+          "epoch": 3,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": true,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "reorgbountychain",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 13,
+        "result": {
+          "epoch": 3,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": true,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "reorg": true,
+          "event": {
+            "event_id": "943f8bed275e6295116d8f23b7dcfb2b",
+            "kind": "REORG",
+            "bounty_id": "synthetic",
+            "seq": 3,
+            "epoch": 1,
+            "payload": {
+              "corrective": true,
+              "silent_delete": false
+            },
+            "authority": "local_signed_or_chain"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 14,
+        "result": {
+          "epoch": 3,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": true,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "importbountyrecovery",
+      "args": [
+        {
+          "bounty_id": "synthetic",
+          "lots": [
+            {
+              "lot_id": "lot0",
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "wallet_seed": false,
+              "private_keys": false
+            }
+          ],
+          "secrets": false,
+          "private_keys": false,
+          "wallet_seed": false
+        }
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 15,
+        "result": {
+          "imported": true,
+          "broadcast": false
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 16,
+        "result": {
+          "epoch": 4,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 0,
+              "height": 0,
+              "spent": false,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "100",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 17,
+        "result": {
+          "epoch": 3,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 0,
+              "height": 0,
+              "spent": false,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "100",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 18,
+        "result": {
+          "epoch": 3,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 0,
+              "height": 0,
+              "spent": false,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "100",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "observebountychain",
+      "args": [
+        {
+          "outpoint": "synthetic:0",
+          "bounty_id": "synthetic",
+          "lot_id": "lot0",
+          "amount_atoms": "100",
+          "confirmations": 6,
+          "height": 100,
+          "spent": false
+        }
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 19,
+        "result": {
+          "epoch": 4,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": false,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "100",
+          "completeness": "local_watch_only"
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 20,
+        "result": {
+          "epoch": 4,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": false,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "100",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "exportbountyrecovery",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 21,
+        "result": {
+          "bounty_id": "synthetic",
+          "lots": [
+            {
+              "lot_id": "lot0",
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "wallet_seed": false,
+              "private_keys": false
+            }
+          ],
+          "secrets": false,
+          "private_keys": false,
+          "wallet_seed": false
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 22,
+        "result": {
+          "epoch": 2,
+          "height": 0,
+          "facts": [],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 23,
+        "result": {
+          "epoch": 2,
+          "height": 0,
+          "facts": [],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "reorgbountychain",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 24,
+        "result": {
+          "epoch": 2,
+          "height": 0,
+          "facts": [],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "reorg": true,
+          "event": {
+            "event_id": "b61701af65d1485e09524eb16bf3b3cd",
+            "kind": "REORG",
+            "bounty_id": "synthetic",
+            "seq": 1,
+            "epoch": 1,
+            "payload": {
+              "corrective": true,
+              "silent_delete": false
+            },
+            "authority": "local_signed_or_chain"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 25,
+        "result": {
+          "epoch": 2,
+          "height": 0,
+          "facts": [],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "observebountychain",
+      "args": [
+        {
+          "outpoint": "synthetic:0",
+          "bounty_id": "synthetic",
+          "lot_id": "lot0",
+          "amount_atoms": "100",
+          "confirmations": 6,
+          "height": 100,
+          "spent": false
+        }
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 26,
+        "result": {
+          "epoch": 3,
+          "height": 100,
+          "facts": [
+            {
+              "outpoint": "synthetic:0",
+              "amount_atoms": "100",
+              "confirmations": 6,
+              "height": 100,
+              "spent": false,
+              "lot_id": "lot0"
+            }
+          ],
+          "confirmed_atoms": "100",
+          "completeness": "local_watch_only"
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "reorgbountychain",
+      "args": [
+        {
+          "bounty_id": "synthetic",
+          "idempotency_key": "rollback-key"
+        }
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 27,
+        "result": {
+          "epoch": 4,
+          "height": 100,
+          "facts": [],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "reorg": true,
+          "event": {
+            "event_id": "8aed2b987aeb75c231b6c0c1397c3b3f",
+            "kind": "REORG",
+            "bounty_id": "synthetic",
+            "seq": 2,
+            "epoch": 1,
+            "payload": {
+              "corrective": true,
+              "silent_delete": false
+            },
+            "authority": "local_signed_or_chain"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "reorgbountychain",
+      "args": [
+        {
+          "bounty_id": "synthetic",
+          "idempotency_key": "rollback-key"
+        }
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 28,
+        "result": {
+          "epoch": 4,
+          "height": 100,
+          "facts": [],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "reorg": true,
+          "event": {
+            "event_id": "8aed2b987aeb75c231b6c0c1397c3b3f",
+            "kind": "REORG",
+            "bounty_id": "synthetic",
+            "seq": 2,
+            "epoch": 1,
+            "payload": {
+              "corrective": true,
+              "silent_delete": false
+            },
+            "authority": "local_signed_or_chain"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 29,
+        "result": {
+          "epoch": 4,
+          "height": 100,
+          "facts": [],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "reorgbountychain",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 30,
+        "result": {
+          "epoch": 4,
+          "height": 100,
+          "facts": [],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "reorg": true,
+          "event": {
+            "event_id": "c60f19878afbc2d263701c0b0d2712a9",
+            "kind": "REORG",
+            "bounty_id": "synthetic",
+            "seq": 3,
+            "epoch": 1,
+            "payload": {
+              "corrective": true,
+              "silent_delete": false
+            },
+            "authority": "local_signed_or_chain"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "method": "getbountyfunding",
+      "args": [
+        "synthetic"
+      ],
+      "reply": {
+        "jsonrpc": "1.0",
+        "id": 31,
+        "result": {
+          "epoch": 4,
+          "height": 100,
+          "facts": [],
+          "confirmed_atoms": "0",
+          "completeness": "local_watch_only",
+          "pledges": [],
+          "pledged_is_not_confirmed": true
+        },
+        "error": null
+      }
+    }
+  ],
+  "starts": 4,
+  "binary_sha256": "2e3ac26cca88103937a11c0c771e82b96e3f055b3fe4c45f09a504ed56c29ce9",
+  "controls": "same-processundo, imported recovery, actual second/third process restart, metadata reobservation, lotdedup, successful keyed replay",
+  "status": "EXPECTED_CONTRACT_FAILURE"
+}
