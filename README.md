@@ -1,0 +1,3 @@
+# Verified-piece upload qualification
+
+User-authorized bounded fork CI only. Reuse checkpoint14296487760, restore exact release bd847e2b baseline, incrementally build btx-modeld/test_btx, run same controlled-origin SOURCE_FILES and PIECE_OBJECTS identity cases, inject later-part failure and same-ID retry, then qualify the six-file candidate and cloud suite. Exact source/binary/result identities retained. No upstream PR/comment, node/wallet/peers, realS3 or release qualification. Existing local-credit/FeedStore holds remain untouched. Reuses Sunny's earlier helper/origin fixture, baseline source and original repository credit preserved.
