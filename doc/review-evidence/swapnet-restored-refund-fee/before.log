@@ -1,0 +1,351 @@
+FFFFFFFFFFFFFF..FFFFFFFF.FFFFFFFFF                                       [100%]
+=================================== FAILURES ===================================
+________________ test_original_fee_recovery_and_restart[False] _________________
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:72: in test_original_fee_recovery_and_restart
+    out=replace(pair,c);after=snapshot(pair)
+        ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+_________________ test_original_fee_recovery_and_restart[True] _________________
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:80: in test_original_fee_recovery_and_restart
+    assert ('getrawtransaction',(TXID,2)) in calls
+E   AssertionError: assert ('getrawtransaction', ('abababababababababababababababababababababababababababababababab', 2)) in [('getmempoolentry', ('191e5055605fffc1892e42d3d3a2da5167261d78d60ce22a8e0245118cf0eb69',)), ('getrawtransaction', ('191e5055605fffc1892e42d3d3a2da5167261d78d60ce22a8e0245118cf0eb69', True))]
+_ test_unknown_or_invalid_fee_refuses_without_effects[fee0-FUNDING_FEE_UNKNOWN] _
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:90: in test_unknown_or_invalid_fee_refuses_without_effects
+    with pytest.raises(SwapError) as error:replace(pair,c)
+                                           ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+_ test_unknown_or_invalid_fee_refuses_without_effects[None-FUNDING_FEE_UNKNOWN] _
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:90: in test_unknown_or_invalid_fee_refuses_without_effects
+    with pytest.raises(SwapError) as error:replace(pair,c)
+                                           ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+_ test_unknown_or_invalid_fee_refuses_without_effects[-0.00000001-RPC_AMOUNT] __
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:90: in test_unknown_or_invalid_fee_refuses_without_effects
+    with pytest.raises(SwapError) as error:replace(pair,c)
+                                           ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+_ test_unknown_or_invalid_fee_refuses_without_effects[0.000000001-RPC_AMOUNT] __
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:90: in test_unknown_or_invalid_fee_refuses_without_effects
+    with pytest.raises(SwapError) as error:replace(pair,c)
+                                           ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+_____ test_unknown_or_invalid_fee_refuses_without_effects[NaN-RPC_AMOUNT] ______
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:90: in test_unknown_or_invalid_fee_refuses_without_effects
+    with pytest.raises(SwapError) as error:replace(pair,c)
+                                           ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+___ test_unknown_or_invalid_fee_refuses_without_effects[Infinity-RPC_AMOUNT] ___
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:90: in test_unknown_or_invalid_fee_refuses_without_effects
+    with pytest.raises(SwapError) as error:replace(pair,c)
+                                           ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+_____ test_unknown_or_invalid_fee_refuses_without_effects[wat-RPC_AMOUNT] ______
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:90: in test_unknown_or_invalid_fee_refuses_without_effects
+    with pytest.raises(SwapError) as error:replace(pair,c)
+                                           ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+____ test_unknown_or_invalid_fee_refuses_without_effects[3e-07-RPC_AMOUNT] _____
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:90: in test_unknown_or_invalid_fee_refuses_without_effects
+    with pytest.raises(SwapError) as error:replace(pair,c)
+                                           ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+_____ test_unknown_or_invalid_fee_refuses_without_effects[True-RPC_AMOUNT] _____
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:90: in test_unknown_or_invalid_fee_refuses_without_effects
+    with pytest.raises(SwapError) as error:replace(pair,c)
+                                           ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+____ test_unknown_or_invalid_fee_refuses_without_effects[1e100-RPC_AMOUNT] _____
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:90: in test_unknown_or_invalid_fee_refuses_without_effects
+    with pytest.raises(SwapError) as error:replace(pair,c)
+                                           ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+_ test_unknown_or_invalid_fee_refuses_without_effects[1e999999999-RPC_AMOUNT] __
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:90: in test_unknown_or_invalid_fee_refuses_without_effects
+    with pytest.raises(SwapError) as error:replace(pair,c)
+                                           ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+_ test_unknown_or_invalid_fee_refuses_without_effects[0.00000030000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001-RPC_AMOUNT] _
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:90: in test_unknown_or_invalid_fee_refuses_without_effects
+    with pytest.raises(SwapError) as error:replace(pair,c)
+                                           ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+________________ test_combined_cap_and_measured_zero[481-False] ________________
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:102: in test_combined_cap_and_measured_zero
+    with pytest.raises(SwapError,match='FEE_CAP'):replace(pair,c)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+______________________ test_wrong_original_refuses[txid] _______________________
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:120: in test_wrong_original_refuses
+    with pytest.raises(SwapError,match='RECOVERY_CONFLICT'):replace(pair,c)
+                                                            ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+_____________________ test_wrong_original_refuses[script] ______________________
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:120: in test_wrong_original_refuses
+    with pytest.raises(SwapError,match='RECOVERY_CONFLICT'):replace(pair,c)
+                                                            ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+_____________________ test_wrong_original_refuses[amount] ______________________
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:120: in test_wrong_original_refuses
+    with pytest.raises(SwapError,match='RECOVERY_CONFLICT'):replace(pair,c)
+                                                            ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+______________________ test_wrong_original_refuses[vout] _______________________
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:120: in test_wrong_original_refuses
+    with pytest.raises(SwapError,match='RECOVERY_CONFLICT'):replace(pair,c)
+                                                            ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+_______________________ test_wrong_original_refuses[raw] _______________________
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:120: in test_wrong_original_refuses
+    with pytest.raises(SwapError,match='RECOVERY_CONFLICT'):replace(pair,c)
+                                                            ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+______________________ test_transport_failure_then_retry _______________________
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:125: in test_transport_failure_then_retry
+    with pytest.raises(RPCTransportTimeout):replace(pair,c)
+                                            ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+___________________ test_explicit_block_hint_not_wallet_fee ____________________
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:132: in test_explicit_block_hint_not_wallet_fee
+    assert replace(pair,c)['fee_atoms']=='20'
+           ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+__________________ test_fee_lookup_binds_chain_and_asset[btc] __________________
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:151: in test_fee_lookup_binds_chain_and_asset
+    assert driver.historical_funding_fee(leg,{'txid':TXID,'vout':0})=='30'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'UTXODriver' object has no attribute 'historical_funding_fee'
+__________________ test_fee_lookup_binds_chain_and_asset[btx] __________________
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:151: in test_fee_lookup_binds_chain_and_asset
+    assert driver.historical_funding_fee(leg,{'txid':TXID,'vout':0})=='30'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'UTXODriver' object has no attribute 'historical_funding_fee'
+_______ test_unavailable_node_fee_preserves_original_and_retries[False] ________
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:162: in test_unavailable_node_fee_preserves_original_and_retries
+    with pytest.raises(SwapError,match='FUNDING_FEE_UNKNOWN'):replace(pair,c)
+                                                              ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+________ test_unavailable_node_fee_preserves_original_and_retries[True] ________
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:162: in test_unavailable_node_fee_preserves_original_and_retries
+    with pytest.raises(SwapError,match='FUNDING_FEE_UNKNOWN'):replace(pair,c)
+                                                              ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+_______________ test_noncanonical_original_refuses[transaction] ________________
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:175: in test_noncanonical_original_refuses
+    with pytest.raises(SwapError,match='CHAIN_CONFLICT'):replace(pair,c)
+                                                         ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+__________________ test_noncanonical_original_refuses[block] ___________________
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:175: in test_noncanonical_original_refuses
+    with pytest.raises(SwapError,match='CHAIN_CONFLICT'):replace(pair,c)
+                                                         ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+_____ test_malformed_original_amount_or_decode_refuses[fractional_output] ______
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:190: in test_malformed_original_amount_or_decode_refuses
+    with pytest.raises(SwapError,match='RECOVERY_CONFLICT' if malformed=='nonobject_decode' else 'RPC_AMOUNT'):replace(pair,c)
+                                                                                                               ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+_______ test_malformed_original_amount_or_decode_refuses[invalid_output] _______
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:190: in test_malformed_original_amount_or_decode_refuses
+    with pytest.raises(SwapError,match='RECOVERY_CONFLICT' if malformed=='nonobject_decode' else 'RPC_AMOUNT'):replace(pair,c)
+                                                                                                               ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+______ test_malformed_original_amount_or_decode_refuses[nonobject_decode] ______
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:190: in test_malformed_original_amount_or_decode_refuses
+    with pytest.raises(SwapError,match='RECOVERY_CONFLICT' if malformed=='nonobject_decode' else 'RPC_AMOUNT'):replace(pair,c)
+                                                                                                               ^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py:63: in replace
+    def replace(pair,c):return bump(c,Principal('alice'),pair.sid,'refund','20')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/swapnet/fee_bump.py:28: in bump
+    funding=coordinator.journal.operation(s['fund_op'])
+                                          ^^^^^^^^^^^^
+E   KeyError: 'fund_op'
+=========================== short test summary info ============================
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_original_fee_recovery_and_restart[False]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_original_fee_recovery_and_restart[True]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_unknown_or_invalid_fee_refuses_without_effects[fee0-FUNDING_FEE_UNKNOWN]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_unknown_or_invalid_fee_refuses_without_effects[None-FUNDING_FEE_UNKNOWN]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_unknown_or_invalid_fee_refuses_without_effects[-0.00000001-RPC_AMOUNT]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_unknown_or_invalid_fee_refuses_without_effects[0.000000001-RPC_AMOUNT]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_unknown_or_invalid_fee_refuses_without_effects[NaN-RPC_AMOUNT]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_unknown_or_invalid_fee_refuses_without_effects[Infinity-RPC_AMOUNT]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_unknown_or_invalid_fee_refuses_without_effects[wat-RPC_AMOUNT]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_unknown_or_invalid_fee_refuses_without_effects[3e-07-RPC_AMOUNT]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_unknown_or_invalid_fee_refuses_without_effects[True-RPC_AMOUNT]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_unknown_or_invalid_fee_refuses_without_effects[1e100-RPC_AMOUNT]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_unknown_or_invalid_fee_refuses_without_effects[1e999999999-RPC_AMOUNT]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_unknown_or_invalid_fee_refuses_without_effects[0.00000030000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001-RPC_AMOUNT]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_combined_cap_and_measured_zero[481-False]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_wrong_original_refuses[txid]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_wrong_original_refuses[script]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_wrong_original_refuses[amount]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_wrong_original_refuses[vout]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_wrong_original_refuses[raw]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_transport_failure_then_retry
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_explicit_block_hint_not_wallet_fee
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_fee_lookup_binds_chain_and_asset[btc]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_fee_lookup_binds_chain_and_asset[btx]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_unavailable_node_fee_preserves_original_and_retries[False]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_unavailable_node_fee_preserves_original_and_retries[True]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_noncanonical_original_refuses[transaction]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_noncanonical_original_refuses[block]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_malformed_original_amount_or_decode_refuses[fractional_output]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_malformed_original_amount_or_decode_refuses[invalid_output]
+FAILED work/btx-lanes/session-1/swapnet-restored-refund-fee-admission/source/tests/test_restored_refund_fee.py::test_malformed_original_amount_or_decode_refuses[nonobject_decode]
+31 failed, 3 passed in 2.48s
