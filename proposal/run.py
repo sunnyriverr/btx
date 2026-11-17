@@ -21,7 +21,8 @@ try:
  if flag in link:link.remove(flag)
  compile=[cc[0],*flags,'-o',obj,'-c',p/'consumer.cpp'];r['compile']=[str(x)for x in compile];r['link']=[str(x)for x in link]
  run(compile,'compile',build);run(link,'link',build);deps=run(['ldd',binary],'ldd');assert 'not found'not in deps
- raw=run([binary,w/'clock-runtime'],'observation',limit=30);rows=json.loads(raw);assert len(rows)==4
+ raw=run([binary,w/'clock-runtime'],'observation',limit=30);rows=json.loads(raw.splitlines()[-1]);assert len(rows)==4
+ assert sum(line.startswith("clock-event ")for line in raw.splitlines())==24
  for row in rows:
   assert len(row['events'])==6
   assert [x['allowed']for x in row['events']][0:2]==[True,False]
