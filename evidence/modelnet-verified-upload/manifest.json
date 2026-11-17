@@ -1,0 +1,145 @@
+{
+  "utc": "2026-11-17T07:13:28.444704+00:00",
+  "status": "LOCAL_FIX_QUALIFIED_NO_UPSTREAM_PUBLICATION",
+  "tested_base": "bd847e2b986722c1723b4cd60988d4f4908452d4",
+  "source_reviewed_rebase": "0afc505f3e063ff8919366464881b81d9e037638",
+  "current_base_binary_run": false,
+  "baseline": {
+    "run": 44030880116,
+    "helper_sha256": "2e3ac26cca88103937a11c0c771e82b96e3f055b3fe4c45f09a504ed56c29ce9",
+    "contract_failures": [
+      "SOURCE_FILES-changed",
+      "PIECE_OBJECTS-changed"
+    ],
+    "native_seconds": 3.2238095339999973
+  },
+  "candidate": {
+    "compile_and_suite_run": 44033377358,
+    "native_run": 44035782075,
+    "helper_sha256": "ddbdfdfacbbf305f1a4e85f9e2ffbabefb79e43e3c260452162b6a4d525e85bf",
+    "test_btx_sha256": "cf6fb8962956b24f30489bca99752c61ced40f559af2045d15d54ef8311c97b0",
+    "contract_failures": [],
+    "native_seconds": 3.4032716030000074,
+    "cloud_cases": 43,
+    "filtered_noncloud_cases": 15604,
+    "required_cases": [
+      "cloud_verified_reader_empty_identity",
+      "cloud_verified_reader_exact_lengths_and_corrupt_piece",
+      "cloud_verified_reader_withholds_invalid_last_piece_and_retries",
+      "cloud_verified_upload_ignores_external_source_changes"
+    ]
+  },
+  "preserved_controls": [
+    "Both unchanged-layout uploads exact",
+    "Timed external source edits produce original imported bytes in both layouts",
+    "Injected later-part failure preserves prior SOURCE_FILES object, aborts pending upload",
+    "Same artifact/model IDs across matched baseline/candidate imports and healthy retry",
+    "Four clean helper starts/shutdowns per phase",
+    "Reader exact lengths, partial/full final piece, empty identity, missing/corrupt bytes, snapshot size/root/fullsha checks",
+    "Retained reader buffer and client chunk counters capped; existing proof scratch/metadata included in limitations"
+  ],
+  "scope": "Actual Linux x86_64 helper on Ubuntu22.04 container, GCC11.4/OpenSSL3.5.9, controlled loopback HTTP;43compiled cloud cases, same normal-helper before/after fixture; one execution per case. No realS3/MinIO/WAN, fullnode, restore/restart, Mac/Windows, totalRSS, concurrent active-removal or release qualification.",
+  "parser_correction": {
+    "raw_xml_sha256": "6165f66539de3d86f96ece3cfc7d273f01a79217a1dc3fc51da43d5c48ba5aa9",
+    "native_suite_exit": 0,
+    "wrapper_failed_after_successful_suite": true,
+    "offline_negative_controls": 6,
+    "suite_rerun": false,
+    "raw_preserved": true
+  },
+  "pilots": [
+    "Attempt1 production helper linked;2newtest fs::path conversions failed, corrected before qualification",
+    "Attempt2 compiled/suitepass; collector malformedBoostCDATA/filter interpretation failed; repaired against retainedresult without rerun",
+    "Attempt3 retainedexacthelper nativeonly completedsuccess, no rebuild/unitrerun"
+  ],
+  "retained_artifacts": [
+    {
+      "id": 14307080874,
+      "node_id": "MDg6QXJ0aWZhY3QxNDMwNzA4MDg3NA==",
+      "name": "verified-upload-records",
+      "size_in_bytes": 378251,
+      "url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14307080874",
+      "archive_download_url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14307080874/zip",
+      "expired": false,
+      "digest": "sha256:5b4978f22b3dcb2aa0e51e046ac9dd8cb5353ce92c95a1a24cab956449e7e3ff",
+      "created_at": "2026-11-17T06:54:48Z",
+      "updated_at": "2026-11-17T06:54:48Z",
+      "expires_at": "2026-12-01T06:54:46Z",
+      "workflow_run": {
+        "id": 44033377358,
+        "repository_id": 1440653358,
+        "head_repository_id": 1440653358,
+        "head_branch": "codex/ci-modelnet-verified-upload",
+        "head_sha": "6475579deec4175a65b6824ce665db4ba48f3683"
+      }
+    },
+    {
+      "id": 14307015983,
+      "node_id": "MDg6QXJ0aWZhY3QxNDMwNzAxNTk4Mw==",
+      "name": "verified-upload-checkpoint",
+      "size_in_bytes": 524117435,
+      "url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14307015983",
+      "archive_download_url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14307015983/zip",
+      "expired": false,
+      "digest": "sha256:3c95a174d999673a005cbe467cd5d9196016d4ddb0e4ba161757049861b3552a",
+      "created_at": "2026-11-17T06:55:13Z",
+      "updated_at": "2026-11-17T06:55:13Z",
+      "expires_at": "2026-12-01T06:54:58Z",
+      "workflow_run": {
+        "id": 44033377358,
+        "repository_id": 1440653358,
+        "head_repository_id": 1440653358,
+        "head_branch": "codex/ci-modelnet-verified-upload",
+        "head_sha": "6475579deec4175a65b6824ce665db4ba48f3683"
+      }
+    },
+    {
+      "id": 14306038226,
+      "node_id": "MDg6QXJ0aWZhY3QxNDMwNjAzODIyNg==",
+      "name": "verified-upload-binaries",
+      "size_in_bytes": 106245603,
+      "url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14306038226",
+      "archive_download_url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14306038226/zip",
+      "expired": false,
+      "digest": "sha256:0e76f178001fcf28828a2065e1404a8c79e82af354ffa79f71e15748fad0ff85",
+      "created_at": "2026-11-17T06:54:58Z",
+      "updated_at": "2026-11-17T06:54:58Z",
+      "expires_at": "2026-12-01T06:54:48Z",
+      "workflow_run": {
+        "id": 44033377358,
+        "repository_id": 1440653358,
+        "head_repository_id": 1440653358,
+        "head_branch": "codex/ci-modelnet-verified-upload",
+        "head_sha": "6475579deec4175a65b6824ce665db4ba48f3683"
+      }
+    }
+  ],
+  "final_native_artifact": {
+    "artifact": {
+      "id": 14306403795,
+      "node_id": "MDg6QXJ0aWZhY3QxNDMwNjQwMzc5NQ==",
+      "name": "verified-upload-native-records",
+      "size_in_bytes": 16997,
+      "url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14306403795",
+      "archive_download_url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14306403795/zip",
+      "expired": false,
+      "digest": "sha256:81d19ae632cb79f9e007a246bb954b25a8d6a12130b4a717a2b2ad13a341ac0e",
+      "created_at": "2026-11-17T07:05:00Z",
+      "updated_at": "2026-11-17T07:05:00Z",
+      "expires_at": "2026-12-01T07:04:59Z",
+      "workflow_run": {
+        "id": 44035782075,
+        "repository_id": 1440653358,
+        "head_repository_id": 1440653358,
+        "head_branch": "codex/ci-modelnet-verified-upload",
+        "head_sha": "9a37c09f70dcffce4eb1cc6e0634a076df62074c"
+      }
+    },
+    "sha256": "81d19ae632cb79f9e007a246bb954b25a8d6a12130b4a717a2b2ad13a341ac0e"
+  },
+  "tested_patch_sha256": "b918263e11fbd7435dccbbf9658043643385942eaa50699012878c6f6e57c2a8",
+  "rebased_patch_sha256": "9c28460f8a87a2c77f0656aa60a99d9196ec4a84310e21f5c1fe4a6904e498cd",
+  "review": "Internal independent source/evidence review found no product blocker; corrected rawXMLhash labeling before closeout. Not human/platform replication.",
+  "publication_hold": "User said no posting yet. Fork test jobs only were explicitly authorized. No upstreamPR/comment or productbranch published.",
+  "latest_upstream_impact": "Source-only rebase from0f to0af preserves search/health/gossip changes. Upload block and catalog/store/client unchanged; no duplicate fix found. Current binary not run."
+}

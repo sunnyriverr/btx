@@ -1,0 +1,55 @@
+{
+  "result": {
+    "cloud_cases": 43,
+    "filtered_noncloud_cases": 15604,
+    "cdata_framing_repairs": 1,
+    "required": [
+      "cloud_verified_reader_empty_identity",
+      "cloud_verified_reader_exact_lengths_and_corrupt_piece",
+      "cloud_verified_reader_withholds_invalid_last_piece_and_retries",
+      "cloud_verified_upload_ignores_external_source_changes"
+    ],
+    "native_exit": 0
+  },
+  "raw_sha256": "6165f66539de3d86f96ece3cfc7d273f01a79217a1dc3fc51da43d5c48ba5aa9",
+  "normalized_sha256": "e680c42a0ac05ed74939a0a68ddff28b7e4a3cff63ec7f7f364c88dcd73255c4",
+  "controls": [
+    {
+      "case": "saved actual pass with filtered suites and embedded CDATA",
+      "reject": false
+    },
+    {
+      "case": "real_failure",
+      "reject": true
+    },
+    {
+      "case": "selected_skip",
+      "reject": true
+    },
+    {
+      "case": "required_missing",
+      "reject": true
+    },
+    {
+      "case": "case_count",
+      "reject": true
+    },
+    {
+      "case": "nonzero_native",
+      "reject": true
+    },
+    {
+      "case": "truncated",
+      "reject": true
+    }
+  ],
+  "rerun": false,
+  "diagnosis": "Boost embeds assertion with ]]> in CDATA; nonselected test suites are valid filtered skips, not skipped cloud execution.",
+  "text_newlines_normalized_sha256": "1e8a4001e0d92ffa78d3a24a663face570f05efba94179c4ab2eea31e9fd89be",
+  "raw_bytes": 6209975,
+  "newline_normalization": {
+    "crlf_pairs": 2,
+    "note": "Python read_text normalized these two CRLF pairs before XML text-framing normalization; raw file bytes preserved unchanged."
+  },
+  "receipt_correction": "Raw hash label corrected after independent evidence review; prior copied CI receipt field hashed newline-normalized text. Test results and raw evidence unchanged."
+}

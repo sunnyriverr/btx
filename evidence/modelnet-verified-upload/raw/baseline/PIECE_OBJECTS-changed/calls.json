@@ -1,0 +1,199 @@
+[
+  {
+    "method": "listmodelwatches",
+    "params": [],
+    "reply": {
+      "jsonrpc": "1.0",
+      "id": "settings-qualification",
+      "result": {
+        "watches": [],
+        "filesystem_watch": false,
+        "automatic_spend_atoms": 0
+      },
+      "error": null
+    }
+  },
+  {
+    "method": "setcloudstorage",
+    "params": [
+      {
+        "endpoint": "http://127.0.0.1:39835",
+        "bucket": "fixture",
+        "prefix": "PIECE_OBJECTS-changed",
+        "region": "us-east-1",
+        "provider": "GENERIC_S3",
+        "layout": "PIECE_OBJECTS",
+        "credential_ref": "/tmp/s2-cloud-rpul7xvx/credentials",
+        "credential_ref_kind": "path",
+        "use_fake": false,
+        "allow_http_loopback": true,
+        "automatic_spend_atoms": 0,
+        "idempotency_key": "PIECE_OBJECTS-changed"
+      }
+    ],
+    "reply": {
+      "jsonrpc": "1.0",
+      "id": "settings-qualification",
+      "result": {
+        "configured": true,
+        "automatic_spend_atoms": 0,
+        "https_enabled": true,
+        "secrets_in_response": false,
+        "endpoint": "http://127.0.0.1:39835",
+        "region": "us-east-1",
+        "bucket": "fixture",
+        "prefix": "PIECE_OBJECTS-changed",
+        "credential_ref_kind": "path",
+        "credential_configured": true,
+        "fake": false,
+        "write_creds_distinct": false,
+        "layout": "PIECE_OBJECTS",
+        "read_strategy": "PIECE_GET",
+        "provider": "GENERIC_S3",
+        "allow_request_heavy_cloud_layout": false,
+        "projected_piece_objects": 0,
+        "reachable": true,
+        "auth": true,
+        "read": false,
+        "write": false,
+        "latency_ms": 0,
+        "errors": 0,
+        "get_count": 0,
+        "put_count": 0,
+        "head_count": 0,
+        "range_count": 0,
+        "multipart_count": 0,
+        "presign_count": 0,
+        "stored_bytes": 0,
+        "object_count": 0,
+        "budget_gets_limited": false,
+        "budget_bytes_limited": false,
+        "budget_gets_per_day_limited": false,
+        "budget_gets_per_month_limited": false,
+        "budget_bytes_per_day_limited": false,
+        "budget_bytes_per_month_limited": false,
+        "origin_bytes": 0,
+        "budget_used_gets": 0,
+        "budget_day_utc": 20774,
+        "budget_month_utc": 1522,
+        "budget_used_gets_day": 0,
+        "budget_used_gets_month": 0,
+        "budget_used_bytes_day": 0,
+        "budget_used_bytes_month": 0,
+        "budget_gets_remaining": null,
+        "budget_bytes_remaining": null,
+        "budget_gets_remaining_day": null,
+        "budget_gets_remaining_month": null,
+        "budget_bytes_remaining_day": null,
+        "budget_bytes_remaining_month": null,
+        "credential_ref": "credentials",
+        "auth_ok": true,
+        "health": {
+          "reachable": true,
+          "auth": true,
+          "read": false,
+          "write": false,
+          "latency_ms": 0,
+          "errors": 0,
+          "https_enabled": true,
+          "fake": false,
+          "get_count": 0,
+          "put_count": 0,
+          "head_count": 0,
+          "range_count": 0,
+          "multipart_count": 0,
+          "presign_count": 0,
+          "stored_bytes": 0,
+          "object_count": 0,
+          "layout": "PIECE_OBJECTS",
+          "read_strategy": "PIECE_GET",
+          "provider": "GENERIC_S3",
+          "budget_gets_limited": false,
+          "budget_bytes_limited": false,
+          "budget_gets_per_day_limited": false,
+          "budget_gets_per_month_limited": false,
+          "budget_bytes_per_day_limited": false,
+          "budget_bytes_per_month_limited": false,
+          "origin_bytes": 0,
+          "budget_used_gets": 0,
+          "budget_day_utc": 20774,
+          "budget_month_utc": 1522,
+          "budget_used_gets_day": 0,
+          "budget_used_gets_month": 0,
+          "budget_used_bytes_day": 0,
+          "budget_used_bytes_month": 0,
+          "budget_gets_remaining": null,
+          "budget_bytes_remaining": null,
+          "budget_gets_remaining_day": null,
+          "budget_gets_remaining_month": null,
+          "budget_bytes_remaining_day": null,
+          "budget_bytes_remaining_month": null
+        },
+        "applied": true,
+        "note": "cloud origin configured locally; credentials stay in the ref"
+      },
+      "error": null
+    }
+  },
+  {
+    "method": "importmodel",
+    "params": [
+      "/tmp/s2-cloud-rpul7xvx/model.safetensors",
+      {
+        "pin": true,
+        "publish": false
+      }
+    ],
+    "reply": {
+      "jsonrpc": "1.0",
+      "id": "settings-qualification",
+      "result": {
+        "schema_version": 2,
+        "uri": "btx://pqj2qkkmaw87w0jk7ln8y38s7ug4xf009pkezyca9rwu6nzyxnvu2unwg8w4dp36m3vur5d6s3xwee5y7v98k",
+        "model_id": "92816b6fae3f9cf95bdf99c913c3dc454c97bca1b6444c74a377353110d36715c9b907755a18eb71670746ea1133b39a",
+        "artifact_id": "0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239",
+        "admission": "PINNED",
+        "qualification": "structure only; not usefulness, safety, or alignment",
+        "seeded": false,
+        "pinned": true,
+        "propagation": "local_only",
+        "search_published": false,
+        "signed_metadata": false,
+        "format": "safetensors",
+        "family": "",
+        "quantization": "",
+        "share": {
+          "uri": "btx://pqj2qkkmaw87w0jk7ln8y38s7ug4xf009pkezyca9rwu6nzyxnvu2unwg8w4dp36m3vur5d6s3xwee5y7v98k",
+          "copy_text": "btx://pqj2qkkmaw87w0jk7ln8y38s7ug4xf009pkezyca9rwu6nzyxnvu2unwg8w4dp36m3vur5d6s3xwee5y7v98k format=safetensors",
+          "family": "",
+          "format": "safetensors",
+          "quantization": "",
+          "signed": false,
+          "size_bytes": 16777216,
+          "file_count": 1
+        },
+        "next_actions": [
+          "searchmodels {\"scope\":\"LOCAL\"}",
+          "getmodelsharecard btx://pqj2qkkmaw87w0jk7ln8y38s7ug4xf009pkezyca9rwu6nzyxnvu2unwg8w4dp36m3vur5d6s3xwee5y7v98k",
+          "getmodeltransfers",
+          "automatic_spend_atoms stays 0"
+        ],
+        "automatic_spend_atoms": 0,
+        "cloud_files": [
+          {
+            "file_index": 0,
+            "path": "model.safetensors",
+            "bytes": 16777216,
+            "logical_pieces": 4,
+            "object_key": "PIECE_OBJECTS-changed/artifacts/0f080f92d8fa65f51e4180541dbd5cdc3422c950d4e10ee7129af881e7ce54a16d6fc387735450e127ec61b3edbb5239/0/0.piece",
+            "ok": true,
+            "piece_objects": 4
+          }
+        ],
+        "cloud_uploaded": true,
+        "cloud_layout": "PIECE_OBJECTS"
+      },
+      "error": null
+    }
+  }
+]
