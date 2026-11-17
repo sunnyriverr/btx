@@ -1,0 +1,68 @@
+{
+  "platform": "Linux-6.12.81-0-virt-aarch64-with",
+  "compiler": "g++ (Alpine 14.2.0) 14.2.0\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "results": [
+    {
+      "variant": "baseline",
+      "exit": 7,
+      "stdout": "valid_replacement ok=1 code= exists=1 exact=1 old=0 credits=0 pass=1\nmissing_source ok=0 code=MODEL_BYTES_UNVERIFIED exists=1 exact=0 old=1 credits=0 pass=1\ndigest_refusal ok=0 code=MODEL_BYTES_UNVERIFIED exists=1 exact=0 old=1 credits=0 pass=1\nshort_write ok=0 code=IO_ERROR exists=0 exact=0 old=0 credits=0 pass=1\nretry_after_short_write ok=1 code= exists=1 exact=1 old=0 credits=0 pass=1\nmatching_cache_retry ok=1 code= exists=1 exact=1 old=0 credits=0 pass=1\nfresh_destination ok=1 code= exists=1 exact=1 old=0 credits=0 pass=1\nsymlink_refusal ok=0 code=SYMLINK_REFUSED exists=1 exact=1 old=0 credits=0 pass=1\n",
+      "stderr": "FAIL previous destination not preserved after failed replacement\n",
+      "command": [
+        "g++",
+        "-std=c++20",
+        "-O0",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Wl,--gc-sections",
+        "-Isrc",
+        "-Isrc/univalue/include",
+        "src/modelnet/package_execute.cpp",
+        "src/modelnet/package_install.cpp",
+        "src/modelnet/transfer_session.cpp",
+        "src/modelnet/types.cpp",
+        "src/crypto/sha384.cpp",
+        "src/crypto/hex_base.cpp",
+        "src/util/time.cpp",
+        "src/univalue/lib/univalue_read.cpp",
+        "src/univalue/lib/univalue.cpp",
+        "src/univalue/lib/univalue_write.cpp",
+        "src/univalue/lib/univalue_get.cpp",
+        "controller.cpp",
+        "-o",
+        "baseline"
+      ],
+      "binary_sha256": "247ea9bbdf0d42e63b7dadc78c422de1fefa0c8469ef1b70c01c490ca35c5e16"
+    },
+    {
+      "variant": "candidate",
+      "exit": 0,
+      "stdout": "valid_replacement ok=1 code= exists=1 exact=1 old=0 credits=0 pass=1\nmissing_source ok=0 code=MODEL_BYTES_UNVERIFIED exists=1 exact=0 old=1 credits=0 pass=1\ndigest_refusal ok=0 code=MODEL_BYTES_UNVERIFIED exists=1 exact=0 old=1 credits=0 pass=1\nshort_write ok=0 code=IO_ERROR exists=1 exact=0 old=1 credits=0 pass=1\nretry_after_short_write ok=1 code= exists=1 exact=1 old=0 credits=0 pass=1\nmatching_cache_retry ok=1 code= exists=1 exact=1 old=0 credits=0 pass=1\nfresh_destination ok=1 code= exists=1 exact=1 old=0 credits=0 pass=1\nsymlink_refusal ok=0 code=SYMLINK_REFUSED exists=1 exact=1 old=0 credits=0 pass=1\n",
+      "stderr": "",
+      "command": [
+        "g++",
+        "-std=c++20",
+        "-O0",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Wl,--gc-sections",
+        "-Isrc",
+        "-Isrc/univalue/include",
+        "candidate.cpp",
+        "src/modelnet/package_install.cpp",
+        "src/modelnet/transfer_session.cpp",
+        "src/modelnet/types.cpp",
+        "src/crypto/sha384.cpp",
+        "src/crypto/hex_base.cpp",
+        "src/util/time.cpp",
+        "src/univalue/lib/univalue_read.cpp",
+        "src/univalue/lib/univalue.cpp",
+        "src/univalue/lib/univalue_write.cpp",
+        "src/univalue/lib/univalue_get.cpp",
+        "controller.cpp",
+        "-o",
+        "candidate"
+      ],
+      "binary_sha256": "6bf8c4f2d93f1097e83cb3df27f74e3e0442afbd67fdb9add0a0d814cdf44790"
+    }
+  ]
+}
