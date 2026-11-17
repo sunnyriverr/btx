@@ -64,7 +64,10 @@ except Exception as e:r['error']=repr(e);print('QUALIFICATION ERROR',repr(e),flu
 finally:
  for phase in ('baseline','candidate'):
   d=w/('runtime-'+phase)
-  if d.exists():shutil.copytree(d,out/('runtime-'+phase),dirs_exist_ok=True,ignore=shutil.ignore_patterns('blocks','chainstate','indexes','wallets','*.dat','.cookie','*.pem','*.key'))
+  if d.exists():
+   for log in d.rglob('*.log'):
+    # Evidence allowlist: never upload generated helper identities or cookie data.
+    dest=out/('runtime-'+phase)/log.relative_to(d);dest.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(log,dest)
  try:
   if restored:
    # Retain compatible build state even if qualification failed. Not a release package.
