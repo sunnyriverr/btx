@@ -89,14 +89,15 @@ def main():
         (W / name).mkdir(exist_ok=False)
     checkpoint_zip = artifact('checkpoint')
     with zipfile.ZipFile(checkpoint_zip) as z:
-        require(len(z.infolist()) <= 1000 and sum(x.file_size for x in z.infolist()) <= 256 * 1024**2, 'Checkpoint ZIP inventory bound')
-        member(z, 'preflight-records/updated-checkpoint/manifest.json', W / 'saved-checkpoint/manifest.json', C['checkpoint_manifest_sha256'], 8 * 1024**2)
-        member(z, 'preflight-records/updated-checkpoint/build-state.tar.gz', W / 'saved-checkpoint/build-state.tar.gz', C['checkpoint_inner_sha256'], 128 * 1024**2)
+        require(len(z.infolist()) <= 1000 and sum(x.file_size for x in z.infolist()) <= 1024 * 1024**2, 'Checkpoint ZIP inventory bound')
+        member(z, 'build-records/updated-checkpoint/manifest.json', W / 'saved-checkpoint/manifest.json', C['checkpoint_manifest_sha256'], 8 * 1024**2)
+        member(z, 'build-records/updated-checkpoint/build-state.tar.gz', W / 'saved-checkpoint/build-state.tar.gz', C['checkpoint_inner_sha256'], 512 * 1024**2)
         for name, identity in C['historical'].items():
-            require(name in ['result.json', 'dependencies-receipt.json', 'CMakeCache.txt', 'compile_commands.json', 'build.ninja'], 'Unexpected historical name')
+            require(name in ['result.json', 'dependencies-receipt.json', 'package-host-inputs.json'], 'Unexpected historical name')
             member(z, identity['zip_member'], W / 'historical' / name, identity['sha256'], identity['bytes'])
     previous = json.loads((W / 'historical/result.json').read_text())
-    require(previous['verdict'] == 'PREFLIGHT_PASS' and previous['source'] == C['source'] and previous['planned_action_count'] == 3555, 'Unqualified checkpoint producer')
+    require(previous['source'] == C['source'] and previous['compile_pass'] is True and previous['checkpoint_verified'] is True and previous['checkpoint_inner_sha256'] == C['checkpoint_inner_sha256'] and previous['checkpoint_manifest_sha256'] == C['checkpoint_manifest_sha256'], 'Unqualified compiled checkpoint producer')
+    require(C['cpp_rebuild'] is False and C['checkpoint_compile_pass'] is True, 'Packaging-only boundary')
     atlas_zip = artifact('atlas')
     archive = W / 'atlas-input/original-candidate.tar.gz'
     provenance = W / 'atlas-input/original-provenance.json'

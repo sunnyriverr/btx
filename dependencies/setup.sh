@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# FUTURE EXECUTION ONLY. Dependency preparation; no restore, project configure,
-# BTX build, tests, BTX execution, Atlas build, or old producer/pilot invocation.
+# FUTURE EXECUTION ONLY. Packaging-host dependency preparation; no compiler,
+# CMake, Ninja, invalidation, configure, build, BTX or Atlas invocation.
 set -euo pipefail
 umask 022
 here=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
@@ -20,7 +20,7 @@ test "$(getconf GNU_LIBC_VERSION)" = 'glibc 2.35'
 export DEBIAN_FRONTEND=noninteractive
 export LC_ALL=C.UTF-8
 apt-get -o Acquire::Retries=2 update
-# These direct dependencies retain the configure/Qt/ModelNet closure. Rust and
+# These direct dependencies retain the original apt closure for comparison. Rust and
 # GTK/WebKit are unnecessary because this stage does not build or run Atlas.
 # Pin required GCC/Qt identities; do not pin unrelated base/security packages.
 gcc_version=11.4.0-1ubuntu1~22.04.3
@@ -59,8 +59,6 @@ done
 for package in qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools; do
   test "$(dpkg-query -W -f='${Version}' "$package")" = 6.2.4-1
 done
-test "$(/usr/bin/g++-11 -dumpfullversion)" = 11.4.0
-/usr/bin/g++-11 -v > "$records/gcc.log" 2>&1
 test "$(/usr/bin/qmake6 -query QT_VERSION)" = 6.2.4
 /usr/bin/qmake6 -query > "$records/qt.log"
 qtpaths=
@@ -73,9 +71,8 @@ test "$("$qtpaths" --qt-version)" = 6.2.4
 for program in rsvg-convert convert; do command -v "$program"; done
 pkg-config --modversion libevent sqlite3 libzmq libqrencode \
   > "$records/pkg-config-versions.log"
-# Ubuntu 22.04's Qt 6 development packages provide CMake package files, not
-# Qt6Core/Qt6Widgets pkg-config modules. Require the inputs used by configure;
-# the controller's real CMake configure will resolve the Qt 6 targets.
+# Preserve original Qt development-file presence evidence without invoking
+# a project generator or performing discovery through CMake.
 for component in Qt6 Qt6Core Qt6Widgets; do
   test -f "/usr/lib/x86_64-linux-gnu/cmake/$component/${component}Config.cmake"
 done
@@ -102,12 +99,8 @@ PIP_CONFIG_FILE=/dev/null "$python" -I -m pip --isolated install \
   --only-binary=:all: --require-hashes -r "$here/wheels.lock"
 PIP_CONFIG_FILE=/dev/null "$python" -I -m pip --isolated check
 "$python" -I -m pip --isolated freeze --all > "$records/python-packages.log"
-# Preserve paths encoded in the retained CMake/Ninja cache without using its
-# configuration. Controller separately invalidates old objects and reconfigures.
-ln -s "$python_prefix/bin/cmake" /usr/local/bin/cmake
-ln -s "$python_prefix/bin/ninja" /usr/local/bin/ninja
-/usr/local/bin/cmake --version > "$records/cmake-version.log"
-/usr/local/bin/ninja --version > "$records/ninja-version.log"
+# Tool wheels remain installed to preserve the exact Python input closure.
+# No compiler, CMake or Ninja executable is invoked or linked into command paths.
 "$python" -I - "$here" "$records" "$control" "$qtpaths" <<'PY'
 import cryptography, cffi, pycparser, hashlib, importlib.metadata, json, os
 import pathlib, platform, sqlite3, subprocess, sys, sysconfig
@@ -130,33 +123,26 @@ assert 'not found' not in linked.stdout
 elf = subprocess.run(['/usr/bin/readelf','-h',str(library)],text=True,capture_output=True,check=True)
 assert 'Advanced Micro Devices X86-64' in elf.stdout
 (records / 'python-shared-elf.log').write_text(elf.stdout)
-assert subprocess.check_output(['/usr/local/bin/cmake','--version'],text=True).splitlines()[0] == 'cmake version 3.31.6'
-# Wheel version/hash is the identity lock. Preserve the bundled Ninja runtime
-# version verbatim (upstream packaging may include a Kitware jobserver suffix).
-ninja_runtime = subprocess.check_output(['/usr/local/bin/ninja','--version'],text=True).strip()
-assert ninja_runtime == '1.11.1' or ninja_runtime.startswith('1.11.1.')
 opengl_header = pathlib.Path('/usr/include/GL/gl.h')
 assert opengl_header.is_file()
 opengl_package, opengl_version = (records / 'opengl-package.log').read_text().strip().split('\t')
 assert opengl_package == 'libgl-dev:amd64'
 assert (records / 'opengl-header-owner.log').read_text().strip() == f'{opengl_package}: {opengl_header}'
 environment = {'BUILDER_PYTHON':str(pathlib.Path(sys.executable)),
- 'Python3_ROOT_DIR':sys.prefix, 'Python3_EXECUTABLE':sys.executable,
- 'CMAKE_COMMAND':'/usr/local/bin/cmake','NINJA_COMMAND':'/usr/local/bin/ninja',
- 'CC':'/usr/bin/gcc-11','CXX':'/usr/bin/g++-11'}
-receipt = {'schema':1,'status':'READY','python':sys.executable,
- 'tools':{'cmake':'/usr/local/bin/cmake','ninja':'/usr/local/bin/ninja','gxx':'/usr/bin/g++-11','qtpaths':qtpaths},
+ 'Python3_ROOT_DIR':sys.prefix, 'Python3_EXECUTABLE':sys.executable}
+receipt = {'schema':2,'status':'READY','scope':'package-only','python':sys.executable,
+ 'tools':{'qtpaths':qtpaths},
  'environment':environment,'python_development':{'include':str(include),'header':str(header),
  'config_header':str(config_header),'library':str(library),'shared':True,'elf_amd64':True,'ldd_resolved':True,
  'sha256':{str(path):hashlib.sha256(path.read_bytes()).hexdigest() for path in (header,config_header,library)}},
- 'ninja_runtime_version':ninja_runtime,
  'pip_bootstrap':{'observed_version':importlib.metadata.version('pip'),
  'policy':'Bundled archive installer upgrades pip from the network before wheels.lock; bootstrap is not hash locked.'},
  'opengl_development':{'header':str(opengl_header),'package':opengl_package,'version':opengl_version,
  'owner_verified':True,'header_sha256':hashlib.sha256(opengl_header.read_bytes()).hexdigest()},
  'imports':{'cryptography':cryptography.__version__,'cffi':cffi.__version__,'pycparser':pycparser.__version__,
  'sqlite3':sqlite3.sqlite_version,'AESGCM':AESGCM.__name__},
- 'invalidate_all_old_cpp':True,'invalidation_reason':'No original complete installed-header content baseline; all retained C++ objects must be invalidated before configure/plan.',
+ 'historical_compiler_probe_not_repeated':True,
+ 'objects_invalidated':False,'rebuild':False,'cpp_rebuild':False,'build_tool_invocations':0,
  'apt_reproducibility_claim':False,
  'inputs':{name:hashlib.sha256((here/name).read_bytes()).hexdigest() for name in ('wheels.lock','input-manifest.json','setup.sh')},
  'installed_packages_sha256':hashlib.sha256((records/'installed-packages.log').read_bytes()).hexdigest(),

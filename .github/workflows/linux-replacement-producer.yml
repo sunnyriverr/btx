@@ -1,9 +1,9 @@
-name: Session 3 bounded Linux desktop producer
+name: Session 3 bounded Linux desktop packaging only
 on:
   workflow_dispatch:
     inputs:
-      authorize_build_package:
-        description: Build current desktop targets and package with version/Python probes
+      authorize_package_only:
+        description: Restore compiled desktop targets and package with version/Python probes; no rebuild
         type: boolean
         required: true
         default: false
@@ -11,13 +11,13 @@ permissions:
   contents: read
   actions: read
 concurrency:
-  group: session3-linux-desktop-build-074
+  group: session3-linux-desktop-package-074
   cancel-in-progress: false
 jobs:
   producer:
-    if: github.repository == 'sunnyriverr/btx' && github.ref == 'refs/heads/codex/ci-session3-linux-desktop-build-074' && inputs.authorize_build_package
+    if: github.repository == 'sunnyriverr/btx' && github.ref == 'refs/heads/codex/ci-session3-linux-desktop-package-074' && inputs.authorize_package_only
     runs-on: ubuntu-24.04
-    timeout-minutes: 130
+    timeout-minutes: 65
     env:
       EXPECTED_WORKSPACE: /home/runner/work/btx/btx
     steps:
@@ -42,23 +42,23 @@ jobs:
           test "$GITHUB_WORKSPACE" = "$EXPECTED_WORKSPACE"
           mkdir -p build-records
           python3 control/fetch-inputs.py
-      - name: Bounded build, current package gates and checkpoint retention
+      - name: Packaging only, current gates and checkpoint retention
         id: producer
-        timeout-minutes: 110
+        timeout-minutes: 43
         run: |
           set -euo pipefail
           image=ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11
           timeout --signal=TERM --kill-after=15s 90s docker pull "$image"
-          name="btx-s3-desktop-build-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          name="btx-s3-desktop-package-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           trap 'docker rm -f "$name" >/dev/null 2>&1 || true' EXIT
           set -o pipefail
-          timeout --signal=TERM --kill-after=15s 6420s docker run --name "$name" --init --platform linux/amd64 \
+          timeout --signal=TERM --kill-after=15s 2400s docker run --name "$name" --init --platform linux/amd64 \
             --memory=7g --cpus=2 --pids-limit=1024 \
             -v "$GITHUB_WORKSPACE:$GITHUB_WORKSPACE" -w "$GITHUB_WORKSPACE" \
             -e GITHUB_WORKSPACE -e EXPECTED_WORKSPACE "$image" \
             bash -euo pipefail -c '
               timeout --signal=TERM --kill-after=10s 480s bash control/dependencies/setup.sh "$GITHUB_WORKSPACE/build-records" "$GITHUB_WORKSPACE/control/dependencies"
-              /opt/hostedtoolcache/Python/3.12.16/x64/bin/python3 control/controller/build.py
+              /opt/hostedtoolcache/Python/3.12.16/x64/bin/python3 control/controller/package_only.py
             ' 2>&1 | tee build-records/container.log
       - name: Retain checkpoint and exact producer records
         if: always()
@@ -66,10 +66,11 @@ jobs:
         timeout-minutes: 5
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: session3-linux-desktop-build-records-${{ github.run_id }}-${{ github.run_attempt }}
+          name: session3-linux-desktop-package-records-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
             build-records/
             control/dependencies/receipt.json
+            historical/dependencies-receipt.json
           if-no-files-found: error
           compression-level: 0
           retention-days: 14
@@ -79,7 +80,7 @@ jobs:
         timeout-minutes: 3
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: session3-linux-desktop-candidate-${{ github.run_id }}-${{ github.run_attempt }}
+          name: session3-linux-desktop-package-candidate-${{ github.run_id }}-${{ github.run_attempt }}
           path: desktop-candidate/
           if-no-files-found: error
           compression-level: 0

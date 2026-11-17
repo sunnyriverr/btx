@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "purpose": "future isolated Ubuntu 22.04 amd64 configure-only preflight",
+  "purpose": "future isolated Ubuntu 22.04 amd64 packaging-only host preparation; no compiler/CMake/Ninja invocation",
   "metadata_observed_utc": "2026-11-17",
   "python": {
     "version": "3.12.16",
@@ -104,5 +104,5 @@
     "reason": "Corrected configure failed OpenGL include discovery, cascading through Qt6Gui and Qt6Widgets. Original successful producer had libgl-dev and OPENGL_INCLUDE_DIR=/usr/include."
   },
   "python_bootstrap_limitation": "The hash-verified archive's bundled setup.sh automatically upgrades pip from the network before wheels.lock is used. No verified skip mechanism for the exact archived installer is available in the retained source evidence; this source-only repair does not change that installer or claim bootstrap reproducibility.",
-  "apt_policy": "Exact GCC11/Qt baseline required; libgl-dev:amd64 and its owned GL/gl.h header required. Record all installed versions, never claim complete reproducibility. Other apt drift does not abort. All old C++ outputs must be invalidated because original installed header content baseline is absent."
+  "apt_policy": "Preserve exact original direct apt inputs and GCC11/Qt package versions for baseline comparison; installed tools are not invoked. Require libgl-dev:amd64 and its owned GL/gl.h header; record all installed versions. Controller requires the complete installed-package digest to match the original compiled-input baseline before packaging. No objects are invalidated or rebuilt; no complete reproducibility claim."
 }

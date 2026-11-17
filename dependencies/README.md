@@ -1,27 +1,75 @@
-# Dependency preparation interface
+# Packaging-host dependency preparation — source only
 
-Originally prepared as source only on 17 November 2026, then exercised by the retained preflight execution described below. No wheels or Python archive were downloaded during initial preparation or this source repair; initial wheel selection used public PyPI JSON package metadata.
+This adapted recipe prepares a future fresh isolated Ubuntu 22.04 amd64
+packaging host. It has not been executed, syntax checked, imported, installed,
+configured or tested during this source-only preparation. Original setup and
+its retained receipts remain immutable evidence.
 
-The dependency recipe was revised after the retained preflight execution exposed a missing OpenGL header prerequisite. The revised source has not been executed, syntax checked, installed or configured. See [REPAIR-REVIEW.md](REPAIR-REVIEW.md) for exact earlier evidence, the narrow repair and remaining bootstrap limitation.
-
-Future invocation, inside the separately authorized fresh Ubuntu 22.04 amd64 container as root:
+Future invocation under separate execution authority:
 
 ```
-bash control/dependencies/setup.sh preflight-records control/dependencies
+bash control/dependencies/setup.sh package-records control/dependencies
 ```
 
-Arguments are the records directory and optional control receipt directory; each is resolved to an absolute path. The receipt directory defaults to the script directory. On success the script writes `receipt.json`, `dependency-env.sh`, and a copy of the receipt in records. On failure it leaves no prior `READY` receipt. The controller must enforce its own timeout and retention margin.
+Arguments remain the records directory and optional control receipt directory;
+both resolve to absolute paths. Success emits a separate `receipt.json`,
+`dependency-env.sh`, and `dependencies-receipt.json` in records. Failure removes
+any previous success receipt from this new receipt directory. The controller
+must never use the historical compiled-input receipt directory as this output.
+The controller enforces timeout, capacity and retention limits.
 
-The receipt includes `status: READY`, `python`, `tools` (`cmake`, `ninja`, `gxx`, `qtpaths`), exported `environment`, dependency input digests, complete observed installed-package receipt digest, Python headers/shared-library evidence, ELF amd64/shared-library closure checks and successful `cryptography`, `sqlite3`, `AESGCM`, `cffi`, `pycparser` imports. Header/library hashes are evidence of this run, not comparisons against the absent historical header baseline. The selected interpreter's import and sysconfig evidence does not replace current CMake's `Interpreter Development` discovery; the controller must require that discovery and pass this exact Python executable/root.
+The receipt contract is `schema: 2`, `status: READY`, `scope: package-only`,
+`cpp_rebuild: false`, `build_tool_invocations: 0`,
+`historical_compiler_probe_not_repeated: true`, `objects_invalidated: false`,
+and `rebuild: false`. It retains `python`, complete `python_development`, complete
+`opengl_development`, complete `imports`, `pip_bootstrap`,
+`installed_packages_sha256`, `records`, and `tools.qtpaths` evidence. Current
+`inputs` hashes cover `setup.sh`, `input-manifest.json`, and `wheels.lock`.
+`environment` contains only `BUILDER_PYTHON`, `Python3_ROOT_DIR`, and
+`Python3_EXECUTABLE`, and those are the only emitted environment exports.
 
-`libgl-dev` is now an explicit apt dependency. Immediately after apt installation, setup requires `/usr/include/GL/gl.h` to exist and be owned by installed `libgl-dev:amd64`; it records the owner, installed package version and header SHA256. The receipt includes those facts under `opengl_development`. The historical producer had version `1.4.0-1`; this repair observes the installed version without adding an exact pin. These checks establish prerequisite presence only. Future current-source configure must still resolve OpenGL, Qt6Gui and Qt6Widgets.
+After restoring and before packaging, the controller compares `python`, all
+`python_development`, all `opengl_development`, all `imports`,
+`installed_packages_sha256`, and `tools.qtpaths` exactly to the original
+compiled-input receipt. The three environment values must match their original
+values. It validates current setup/manifest/lock hashes and requires the wheel
+lock to remain byte-identical to the original. A mismatch is a stop for an input
+decision; this recipe does not authorize invalidation, reconfiguration or a
+rebuild. Historical compiler probes, CMake/Ninja runtime probes and invalidation
+flags remain attributable only to their original runs, never this continuation.
 
-GCC 11.4.0 Ubuntu package `11.4.0-1ubuntu1~22.04.3`, Qt base 6.2.4 Ubuntu package `6.2.4+dfsg-2ubuntu1.1`, and Qt tools/l10n `6.2.4-1` are explicit requirements. All other apt versions are observed in the complete installed-package log, without failing the whole base for unrelated drift. This is not a bit-reproducibility claim. The controller **must invalidate all retained C++ objects** before reconfiguration: the historical package receipt supplies versions, not a full installed-header content baseline. `invalidate_all_old_cpp: true` makes this requirement machine readable. This script does not restore or invalidate any source/build output itself.
+The apt package list and version pins, Python archive URL/hash/prefix and exact
+five-wheel lock retain the original compiled-input closure. GCC/tool packages
+and CMake/Ninja wheels remain installed to allow the complete installed-package
+baseline comparison. No compiler, CMake or Ninja executable is invoked; no
+CMake/Ninja command links are created. Apt package/version evidence and wheel
+metadata checks do not claim fresh compiler or build-tool execution evidence.
+The recipe still observes Qt/qmake/qtpaths identities and the packaging tools,
+OpenGL header owner/version/hash, and Python headers/shared library with ELF
+amd64 and resolved shared-library closure. These are packaging prerequisites.
 
-The five-wheel lock uses exact direct URLs, SHA256, `--require-hashes`, `--only-binary=:all:`, `--no-deps`, `--no-index` and isolated pip; installation cannot silently select an sdist or run a source build. CPython 3.12 satisfies cryptography's `cffi>=2.0.0` marker; cffi requires pycparser. No typing-extensions is needed on Python >=3.11. CMake's conditional importlib_metadata requirement applies only below Python 3.8. Wheels selected target x86_64 manylinux <=2.17 (and a pure Python pycparser wheel), compatible with glibc 2.35. Cryptography's cp311 abi3 wheel supports CPython 3.12. Metadata requires-dist and requires-python fields are retained in `input-manifest.json`; metadata hashes identify observations and are not downloaded wheel hashes.
+GCC 11.4.0 package `11.4.0-1ubuntu1~22.04.3`, Qt base 6.2.4 package
+`6.2.4+dfsg-2ubuntu1.1`, and Qt tools/l10n `6.2.4-1` remain pinned. The complete
+observed installed-package log is hashed, and the controller requires exact
+baseline equality. This does not claim apt bit reproducibility. No GTK/WebKit
+runtime package is added here; the package helper records those later host
+runtime additions separately while rejecting changes to preexisting packages.
 
-The pinned Python archive is the original producer's Ubuntu 22.04 artifact and SHA256. Its bundled setup installer runs only after complete digest verification in the future isolated container and refuses an existing Python prefix. No retained producer `pilot.py`, BTX code, project generators, tests, project configure, builds, restoration, native BTX execution, Rust, Atlas build, GTK or WebKit is invoked. Current CMake configure belongs to the controller. Qt icon tool discovery retains librsvg `rsvg-convert` and ImageMagick `convert`; Boost, event, SQLite, ZMQ, QRencode and Qt development dependencies retain the current configure/Qt/ModelNet closure. Private OpenSSL is restored and validated by the controller, not this script.
+The unchanged Python archive is digest-verified before its bundled installer
+runs in a fresh prefix. The wheel installation retains direct URLs and hashes,
+`--require-hashes`, `--only-binary=:all:`, `--no-deps`, `--no-index`, and isolated
+pip. No application/tool source distribution or implicit source build is
+selected. `cryptography`, `cffi`, `pycparser`, `sqlite3`, and `AESGCM` import and
+Python shared-development evidence remain in the new receipt for exact
+comparison. The archive installer still upgrades pip from the network before
+the five locked wheels; its observed pip version and this bootstrap limitation
+are recorded. The bootstrap has no new reproducibility claim.
 
-The archive installer automatically upgrades pip before the five-wheel lock is used. The retained execution installed pip `26.3` over bundled `25.0.1`. That bootstrap is not hash locked by `wheels.lock`; the receipt now records its observed pip version and limitation. No verified skip control for the exact archived installer is retained, so this repair leaves it unchanged. The five application/tool wheels remain locked as described above; no claim of fully pinned Python setup is made.
-
-The original mutable producer is read-only evidence and remains untouched. Exact original inputs: `producer/setup.sh`, production plan, published `cmake/SwapNet.cmake`, `CMakeLists.txt`, `src/qt/CMakeLists.txt` and run 43428864330's `CMakeCache.txt`, `gcc.log`, `qt.log`, `installed-packages.log`. Source review checked script scope, lock compatibility and closure; no shell syntax check, install, configure or runtime test was performed under source-only authority.
+The controller separately verifies immutable compiled-checkpoint restore,
+source/profile/dependency identity and every original compiled binary digest.
+It stages the exact selected `libpython3.12.so.1.0` into `qtbuild/lib` for the
+existing input ELF loader path before the current packager's native version
+probe. This is a packaging-host prerequisite and leaves current shipping ABI,
+Python bundling and dependency gates intact. This recipe never patches ELF,
+changes global loader configuration, invalidates objects, configures, compiles,
+starts BTX/Atlas, runs a test, opens wallets or launches a GUI.

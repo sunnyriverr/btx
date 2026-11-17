@@ -27,6 +27,37 @@ TARGETS = ('btxd', 'btx-cli', 'btx-util', 'btx-tx', 'btx-wallet', 'btx-qt',
 COMPONENTS = (*TARGETS, 'btx-atlas')
 HOST_RUNTIME_PACKAGES = ('libwebkit2gtk-4.1-0', 'libgtk-3-0',
                          'libayatana-appindicator3-1', 'librsvg2-2', 'libxdo3')
+COMPILED_CHECKPOINT = {
+    'artifact': 14313303910,
+    'outer_sha256': 'e51b4edf0724bbae7044a621c121e9c2437587f2c804c3637c86957af8549961',
+    'inner_sha256': 'bbd94e974883ddde5f959a2c7347a7abff9cb5fa7440efcbb5a23a9509bba67e',
+    'manifest_sha256': 'ac9302cc81c3f85d4253b77c8af43741eb4522bd6ee8063e512c7cefac1aeefb',
+    'compile_pass': True,
+    'run': 44047285383,
+    'control': '42a4eab0b19f07fe9355060194dc1346bfc96abc',
+    'source': SOURCE,
+}
+# Exact compiled input bytes retained in execution/checkpoint-summary.json.
+# Current packager RUNPATH edits belong only in staged_real_sha256 below.
+COMPILED_BINARY_SHA256 = {
+    'btxd': '6ba61e63c2dde82e57f4e9f8817de2c6a251e32dd27cd2e13f96e0b40a03259f',
+    'btx-cli': 'f6951a3073380cff1f878c417670498bce72af9d5466f89acabe8e7f873d1a0b',
+    'btx-util': 'f4e5e8e9985b40a6ebf1cf3c4b89eb9785a0205b567e9af91f938396ebcbdd14',
+    'btx-tx': '9504f57252e1a7b9fa758d812c54c59f501fdf32a9994ddda5c9988efd83eb01',
+    'btx-wallet': 'e52ca0c77b12dbf50bcca346e112996787b6b52f5c712a3e795faf0f566e2fe9',
+    'btx-qt': '1d8f37ec948cf02c472717152b4de47a3fd14020d961a76b37864bde967e941d',
+    'btx-guardd': 'db638adace92887c6272af9a9143025245b225340b5db9727747c166bc2a0850',
+    'btx-security': 'bd8c4f11a8056e2412331da8e8622e75eec57b02c2a9a9e072e516293f81c512',
+    'btx-native-qualify': '26bee02f1c0008a1731af79870a0036938333af31bf2e9d9d6c5400b299c36c4',
+    'btx-modeld': '1fd4691d5553f941d768cc588a65cedab7e4ff54ad22f57505ac8f1e73bb310c',
+    'btx-hcpd': '73121a318c2914dbace7f2e07af6fd613a44f64f4dee381874d974eddf8b54a7',
+    'btx-hosted': '1166225fd92925187f9400e90873da52fe8eafed48b1afd07326ecc493669561',
+    'btx-open': '6dd5323ca44586917ac1652fe9a2b372ce5b3d593da8ac003af0c361c96dab49',
+    'btx-capability': '854bccc070561f8526096c95d183a54dee2cb98057f8fb4d78f321be51faaa2b',
+    'btx-capabilityd': 'ae426e757bcf80963810a270f72edceac00577ad4893a52513bd3aaec7a8778e',
+    'btx-modelcheck': 'e1944c6c9e0c3b588f82b9e3b0672c1a90d113f28f504db11bde14356991f564',
+    'btx-matmul-backend-info': '05975003b4c5c70cfc329832d92d78163fc78c82947b1452afe3588002050341',
+}
 
 
 def require(ok, message):
@@ -169,6 +200,19 @@ def package(w, inputs, python, run, records, tick=lambda: None) -> dict:
     require(inputs['source'] == SOURCE and tuple(inputs['targets']) == TARGETS,
             'Source/17 target identity drift')
     require(str(w) == inputs['workspace'], 'Workspace identity drift')
+    checkpoint_input_keys = {
+        'checkpoint_artifact': 'artifact', 'checkpoint_run': 'run',
+        'checkpoint_fixture': 'control', 'checkpoint_outer_sha256': 'outer_sha256',
+        'checkpoint_inner_sha256': 'inner_sha256',
+        'checkpoint_manifest_sha256': 'manifest_sha256',
+        'checkpoint_compile_pass': 'compile_pass',
+    }
+    require(all(inputs[key] == COMPILED_CHECKPOINT[field]
+                for key, field in checkpoint_input_keys.items()) and
+            inputs['checkpoint_compile_pass'] is True and inputs['cpp_rebuild'] is False,
+            'Compiled checkpoint identity/compile-pass drift')
+    require(inputs['compiled_binary_sha256'] == COMPILED_BINARY_SHA256,
+            'Compiled 17-target digest mapping drift')
     require(inputs['atlas_source'] == OLD_SOURCE and inputs['atlas_tree'] == TREE and
             inputs['atlas_archive_sha256'] == ARCHIVE and inputs['atlas_binary_sha256'] == ATLAS and
             inputs['atlas_artifact'] == 14040930895 and inputs['atlas_run'] == 43428864330 and
@@ -211,20 +255,17 @@ def package(w, inputs, python, run, records, tick=lambda: None) -> dict:
         tick()
         path = bin_dir / name
         elf(path)
-        before[name] = {'path': str(path), 'sha256': digest(path), 'source': SOURCE,
-                        'origin': 'current-source C++ build in this controller run'}
+        compiled_digest = digest(path)
+        require(compiled_digest == COMPILED_BINARY_SHA256[name],
+                f'Restored compiled input digest mismatch: {name}')
+        before[name] = {'path': str(path), 'sha256': compiled_digest, 'source': SOURCE,
+                        'origin': 'reused compiled checkpoint; not freshly built in this run',
+                        'producer': dict(COMPILED_CHECKPOINT)}
     staged_atlas = bin_dir / 'btx-atlas'
-    if os.path.lexists(staged_atlas):
-        # A later explicitly repinned checkpoint may contain the prior package
-        # attempt's unchanged input. Revalidate it; never accept arbitrary stale
-        # files or silently overwrite a changed component.
-        elf(staged_atlas)
-        require(digest(staged_atlas) == ATLAS, 'Existing Atlas staging bytes differ')
-    else:
-        with atlas.open('rb') as source, staged_atlas.open('xb') as destination:
-            for block in iter(lambda: source.read(1024 * 1024), b''):
-                tick()
-                destination.write(block)
+    # This exact compiled checkpoint already contains the former attempt's
+    # unchanged Atlas input. Require it instead of introducing new input bytes.
+    elf(staged_atlas)
+    require(digest(staged_atlas) == ATLAS, 'Restored Atlas staging bytes differ')
     tick()
     (bin_dir / 'btx-atlas').chmod(0o755)
     before['btx-atlas'] = {'path': str(bin_dir / 'btx-atlas'), 'sha256': ATLAS,
@@ -302,6 +343,8 @@ def package(w, inputs, python, run, records, tick=lambda: None) -> dict:
                   for name in COMPONENTS}
     verdict = {'verdict': 'PACKAGE_STATIC_GATES_PASS_RUNTIME_QUALIFICATION_PENDING',
                'source': SOURCE, 'archive': str(archive), 'archive_sha256': digest(archive),
+               'compiled_checkpoint': dict(COMPILED_CHECKPOINT),
+               'compiled_binary_sha256': dict(COMPILED_BINARY_SHA256),
                'archive_bytes': archive.stat().st_size, 'components': components,
                'atlas_fetch_envelope_sha256': digest(envelope_path),
                'atlas_original_provenance': provenance,
