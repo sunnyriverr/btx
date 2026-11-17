@@ -8,6 +8,7 @@ apt-get -o Acquire::Retries=2 update
 apt-get install -y --no-install-recommends ca-certificates curl git build-essential cmake ninja-build pkg-config python3 perl iproute2 libboost-dev libevent-dev libsqlite3-dev libzmq3-dev libqrencode-dev qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools
 git config --global --add safe.directory "$GITHUB_WORKSPACE/accepted-source"
 git config --global --add safe.directory "$GITHUB_WORKSPACE/product"
+git config --global --add safe.directory "$GITHUB_WORKSPACE/current-reference"
 getconf GNU_LIBC_VERSION
 # Match the interpreter and absolute CMake path of the verified checkpoint.
 python_setup=$(mktemp -d)
