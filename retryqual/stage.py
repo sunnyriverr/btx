@@ -17,3 +17,10 @@ expected={'baseline':'2e3ac26cca88103937a11c0c771e82b96e3f055b3fe4c45f09a504ed56
 for phase,h in expected.items():
  p=w/'binaries'/phase/'btx-modeld';assert sha(p)==h;p.chmod(0o755)
 (r/'stage-receipt.json').write_text(json.dumps({'openssl_manifest_files':len(selected),'helpers':expected,'rebuild':False},indent=2));shutil.copyfile(r/'stage-receipt.json',out/'stage-receipt.json')
+
+# The hosted checkout parents are private to runner. Stage only verified inputs in /tmp.
+portable=Path('/tmp/bounty-save-input');assert not portable.exists();portable.mkdir(mode=0o755)
+shutil.copytree(w/prefix,portable/'openssl',symlinks=True)
+for phase in expected:
+ shutil.copy2(w/'binaries'/phase/'btx-modeld',portable/('helper-'+phase));assert sha(portable/('helper-'+phase))==expected[phase]
+shutil.copy2(r/'test.py',portable/'test.py');assert sha(portable/'test.py')==sha(r/'test.py')

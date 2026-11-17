@@ -42,15 +42,18 @@ jobs:
           export LD_LIBRARY_PATH="$GITHUB_WORKSPACE/gui-pilot-runtime/openssl/lib64:$GITHUB_WORKSPACE/gui-pilot-runtime/openssl/lib:/opt/hostedtoolcache/Python/3.12.16/x64/lib"
           ldd binaries/baseline/btx-modeld | tee records/ldd.txt
           ! grep -q 'not found' records/ldd.txt
-          mkdir -p records/native
-          sudo chown -R 65534:65534 records/native
+          mkdir -p /tmp/bounty-save-results
+          sudo chown -R 65534:65534 /tmp/bounty-save-results
+          sudo -u '#65534' test -r /tmp/bounty-save-input/test.py
+          sudo -u '#65534' test -x /tmp/bounty-save-input/helper-baseline
       - name: Run normal helpers as unprivileged user without rebuilding
         run: |
           set -euo pipefail
-          export LD_LIBRARY_PATH="$GITHUB_WORKSPACE/gui-pilot-runtime/openssl/lib64:$GITHUB_WORKSPACE/gui-pilot-runtime/openssl/lib:/opt/hostedtoolcache/Python/3.12.16/x64/lib"
-          export BTX_OPENSSL="$GITHUB_WORKSPACE/gui-pilot-runtime/openssl/bin/openssl"
+          export LD_LIBRARY_PATH="/tmp/bounty-save-input/openssl/lib64:/tmp/bounty-save-input/openssl/lib:/opt/hostedtoolcache/Python/3.12.16/x64/lib"
+          export BTX_OPENSSL="/tmp/bounty-save-input/openssl/bin/openssl"
+          trap 'mkdir -p records/native; cp -R /tmp/bounty-save-results/. records/native/' EXIT
           for variant in baseline candidate; do
-            sudo -u '#65534' env GITHUB_WORKSPACE="$GITHUB_WORKSPACE" LD_LIBRARY_PATH="$LD_LIBRARY_PATH" BTX_OPENSSL="$BTX_OPENSSL" PYTHONDONTWRITEBYTECODE=1 "$(which python3)" retryqual/test.py "$GITHUB_WORKSPACE/binaries/$variant/btx-modeld" "/tmp/bounty-retry-$variant" "$GITHUB_WORKSPACE/records/native/$variant"
+            sudo -u '#65534' env GITHUB_WORKSPACE="$GITHUB_WORKSPACE" LD_LIBRARY_PATH="$LD_LIBRARY_PATH" BTX_OPENSSL="$BTX_OPENSSL" PYTHONDONTWRITEBYTECODE=1 "$(which python3)" /tmp/bounty-save-input/test.py "/tmp/bounty-save-input/helper-$variant" "/tmp/bounty-retry-$variant" "/tmp/bounty-save-results/$variant"
           done
           uname -a > records/platform.txt
           id > records/runner-user.txt
