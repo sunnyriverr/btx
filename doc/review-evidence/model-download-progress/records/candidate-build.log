@@ -1,0 +1,161 @@
+[0/2] Re-checking globbed directories...
+-- GLOB mismatch!
+-- GLOB mismatch!
+[1/2] Re-running CMake...
+-- Found SQLite3: /usr/include (found suitable version "3.37.2", minimum required is "3.7.17")
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Found Python3: /opt/hostedtoolcache/Python/3.12.16/x64/bin/python3 (found suitable version "3.12.16", minimum required is "3.10") found components: Interpreter
+
+Configuring secp256k1 subtree...
+
+
+secp256k1 configure summary
+===========================
+Build artifacts:
+  library type ........................ Static
+Optional modules:
+  ECDH ................................ OFF
+  ECDSA pubkey recovery ............... ON
+  extrakeys ........................... ON
+  schnorrsig .......................... ON
+  musig ............................... OFF
+  ElligatorSwift ...................... ON
+Parameters:
+  ecmult window size .................. 15
+  ecmult gen table size ............... 86 KiB
+Optional features:
+  assembly ............................ x86_64
+  external callbacks .................. OFF
+Optional binaries:
+  benchmark ........................... OFF
+  noverify_tests ...................... ON
+  tests ............................... ON
+  exhaustive tests .................... ON
+  ctime_tests ......................... OFF
+  examples ............................ OFF
+
+Cross compiling ....................... FALSE
+Valgrind .............................. OFF
+Preprocessor defined macros ........... ENABLE_MODULE_ELLSWIFT=1 ENABLE_MODULE_SCHNORRSIG=1 ENABLE_MODULE_EXTRAKEYS=1 ENABLE_MODULE_RECOVERY=1 ECMULT_WINDOW_SIZE=15 COMB_BLOCKS=43 COMB_TEETH=6 USE_ASM_X86_64=1
+C compiler ............................ GNU 11.4.0, /usr/bin/gcc
+CFLAGS ................................ 
+Compile options ....................... -pedantic -Wall -Wcast-align -Wcast-align=strict -Wextra -Wnested-externs -Wno-long-long -Wno-overlength-strings -Wno-unused-function -Wshadow -Wstrict-prototypes -Wundef
+Build type:
+ - CMAKE_BUILD_TYPE ................... Release
+ - CFLAGS ............................. -O2 -g 
+ - LDFLAGS for executables ............ 
+ - LDFLAGS for shared libraries ....... 
+
+
+Configuring libbitcoinpqc subtree...
+-- Configuring libbitcoinpqc with SPHINCS+ variant: ref
+-- Found SQLite3: /usr/include (found version "3.37.2")
+-- Found Python3: /opt/hostedtoolcache/Python/3.12.16/x64/bin/python3 (found suitable version "3.12.16", minimum required is "3.11") found components: Interpreter Development Development.Module Development.Embed
+
+
+Configure summary
+=================
+Executables:
+  btxd (legacy target: bitcoind) ...... ON
+  btx-qt (GUI) ........................ ON (Qt 6)
+  btx-cli ............................. ON
+  libbtxconsensus (legacy: libbitcoinconsensus) OFF
+  btx-tx .............................. ON
+  btx-util ............................ ON
+  btx-wallet .......................... ON
+  btx-chainstate (experimental) ....... OFF
+  libbtxkernel (experimental) ......... OFF
+Optional features:
+  wallet support ...................... ON
+  native model network ............... ON
+   - OpenSSL .......................... 3.5.9
+   - descriptor wallets (SQLite) ...... ON
+   - legacy wallets (Berkeley DB) ..... OFF
+  external signer ..................... ON
+  tor subprocess ...................... ON
+  port mapping using UPnP ............. OFF
+  ZeroMQ .............................. ON
+   - linkage .......................... shared:pkg-config
+  Libevent linkage .................... shared:pkg-config
+  USDT tracing ........................ OFF
+  QR code (GUI) ....................... ON
+  DBus (GUI) .......................... ON
+Tests:
+  test_btx (legacy target: test_bitcoin) .... ON
+  test_btx-qt ........................ OFF
+  bench_btx (legacy target: bench_bitcoin) ... OFF
+  fuzz binary ......................... OFF
+
+Cross compiling ....................... FALSE
+C++ compiler .......................... GNU 11.4.0, /usr/bin/g++
+CMAKE_BUILD_TYPE ...................... Release
+Preprocessor defined macros ........... 
+C++ compiler flags .................... -O2 -std=c++20 -fPIC -fno-extended-identifiers -fdebug-prefix-map=/home/runner/work/btx/btx/product/src=. -fmacro-prefix-map=/home/runner/work/btx/btx/product/src=. -fstack-reuse=none -Wall -Wextra -Wformat -Wformat-security -Wvla -Wredundant-decls -Wdate-time -Wduplicated-branches -Wduplicated-cond -Wlogical-op -Wimplicit-fallthrough -Wundef $<$<COMPILE_LANGUAGE:CXX>:-Woverloaded-virtual> $<$<COMPILE_LANGUAGE:OBJCXX>:-Woverloaded-virtual> $<$<COMPILE_LANGUAGE:CXX>:-Wsuggest-override> $<$<COMPILE_LANGUAGE:OBJCXX>:-Wsuggest-override> -Wno-unused-parameter -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3 -Wstack-protector -fstack-protector-all -fcf-protection=full -fstack-clash-protection
+Linker flags .......................... -O2 -Wl,-z,stack-size=8388608 -fstack-reuse=none -fstack-protector-all -fcf-protection=full -fstack-clash-protection -Wl,-z,relro -Wl,-z,now -Wl,-z,separate-code -fPIE -pie
+
+NOTE: The summary above may not exactly match the final applied build flags
+      if any additional CMAKE_* or environment variables have been modified.
+      To see the exact flags applied, build with the --verbose option.
+
+Attempt to harden executables ......... ON
+Treat compiler warnings as errors ..... OFF
+Use ccache for compiling .............. OFF
+
+
+-- Configuring done (1.3s)
+-- Generating done (0.4s)
+-- Build files have been written to: /home/runner/work/btx/btx/gui-pilot-runtime/qtbuild
+[0/2] Re-checking globbed directories...
+[1/53] Generating bitcoin-build-info.h
+[2/53] Building CXX object src/CMakeFiles/bitcoin_clientversion.dir/clientversion.cpp.o
+[3/53] Linking CXX static library lib/libbitcoin_clientversion.a
+[4/53] Building CXX object src/CMakeFiles/bitcoin_common.dir/matmul/matmul_v4_rc_production_golden_manifest.cpp.o
+[5/53] Building CXX object src/CMakeFiles/bitcoin_common.dir/matmul/matmul_v4_rc_production_canary.cpp.o
+[6/53] Building CXX object src/CMakeFiles/bitcoin_common.dir/matmul/matmul_v4_rc_fri.cpp.o
+[7/53] Building CXX object src/CMakeFiles/bitcoin_common.dir/matmul/matmul_v4_rc_fri_ext3.cpp.o
+[8/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/acc01/acc01.cpp.o
+[9/53] Building CXX object src/CMakeFiles/bitcoin_common.dir/matmul/matmul_v4_rc_gkr.cpp.o
+[10/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/acc04/acc04.cpp.o
+[11/53] Linking CXX static library lib/libbitcoin_common.a
+[12/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/release.cpp.o
+[13/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/funding.cpp.o
+[14/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/economy.cpp.o
+[15/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/http_bridge.cpp.o
+[16/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/feed.cpp.o
+[17/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/catalog.cpp.o
+[18/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/supervisor.cpp.o
+[19/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/search.cpp.o
+[20/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/capability_bridge.cpp.o
+[21/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/bounty.cpp.o
+[22/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/compute_economy.cpp.o
+[23/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/bounty_eval.cpp.o
+[24/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/event_journal.cpp.o
+[25/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/model_watch.cpp.o
+[26/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/subscription_mandate.cpp.o
+[27/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/s3_client.cpp.o
+[28/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/s3_store.cpp.o
+[29/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/package_economy.cpp.o
+[30/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/package_execute.cpp.o
+[31/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/query_router.cpp.o
+[32/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/helper_network02.cpp.o
+[33/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/capability_core.cpp.o
+[34/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/capability_residency.cpp.o
+[35/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/capability_bytes.cpp.o
+[36/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/capability_exec.cpp.o
+[37/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/capability_control.cpp.o
+[38/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/capability_fuse.cpp.o
+[39/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/capability_runtime.cpp.o
+[40/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/capability_compose.cpp.o
+[41/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/capability_prefetch.cpp.o
+[42/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/capability_ensure.cpp.o
+[43/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/capability_peer.cpp.o
+[44/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/capability_moe.cpp.o
+[45/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/capability_sdk.cpp.o
+[46/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/hcp_codec.cpp.o
+[47/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/hcp_cr11.cpp.o
+[48/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/hcp_crl12.cpp.o
+[49/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/hcp_engine.cpp.o
+[50/53] Building CXX object src/modelnet/CMakeFiles/btx-modeld.dir/__/modeld.cpp.o
+[51/53] Building CXX object src/modelnet/CMakeFiles/bitcoin_modelnet.dir/helper.cpp.o
+[52/53] Linking CXX static library lib/libbitcoin_modelnet.a
+[53/53] Linking CXX executable bin/btx-modeld

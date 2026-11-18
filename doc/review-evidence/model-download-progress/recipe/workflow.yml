@@ -1,0 +1,90 @@
+{
+  "name": "Session2 model-scoped progress qualification",
+  "on": {
+    "push": {
+      "branches": [
+        "codex/ci-progress-scope-fix"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "read",
+    "actions": "read"
+  },
+  "concurrency": {
+    "group": "session2-progress-scope-fix",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "qualify": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 70,
+      "steps": [
+        {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "persist-credentials": false
+          }
+        },
+        {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "repository": "btxchain/btx",
+            "ref": "23ee567ea8a2d9cad8ca3264f8793e8371b3eb93",
+            "path": "current-reference",
+            "fetch-depth": 0,
+            "persist-credentials": false
+          }
+        },
+        {
+          "name": "Verify original cache, retained baseline and prior controls",
+          "timeout-minutes": 8,
+          "run": "python3 -B proposal/stage.py && python3 -B proposal/reuse_baseline.py",
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          }
+        },
+        {
+          "name": "Same maintained before/after cases and candidate-only build",
+          "timeout-minutes": 57,
+          "run": "docker run --name s2-progress-fix --init -v \"$GITHUB_WORKSPACE:$GITHUB_WORKSPACE\" -w \"$GITHUB_WORKSPACE\" -e GITHUB_WORKSPACE ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11 bash -c \"bash proposal/setup.sh && python3 -B proposal/qualify.py\""
+        },
+        {
+          "name": "Remove only owned test container",
+          "if": "always()",
+          "run": "docker rm -f s2-progress-fix >/dev/null 2>&1 || true"
+        },
+        {
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always()",
+          "with": {
+            "name": "progress-scope-qualification-records",
+            "path": "records/",
+            "retention-days": 14,
+            "if-no-files-found": "error"
+          }
+        },
+        {
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always()",
+          "with": {
+            "name": "progress-scope-qualified-binaries",
+            "path": "retained-binaries/",
+            "retention-days": 14,
+            "if-no-files-found": "warn"
+          }
+        },
+        {
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always()",
+          "with": {
+            "name": "progress-helper-current-checkpoint",
+            "path": "helper-current-checkpoint/",
+            "retention-days": 14,
+            "if-no-files-found": "warn"
+          }
+        }
+      ]
+    }
+  }
+}

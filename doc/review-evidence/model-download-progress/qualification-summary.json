@@ -1,0 +1,197 @@
+{
+  "utc": "2026-11-18T00:19:39.079549+00:00",
+  "verdict": "LOCAL_QUALIFICATION_PASS_BEFORE_FAIL_AFTER_PASS",
+  "target": "23ee567ea8a2d9cad8ca3264f8793e8371b3eb93",
+  "recipe_commit": "abcf47b550672015e02e5022af81740ad914bea3",
+  "run": "https://github.com/sunnyriverr/btx/actions/runs/44204471443",
+  "product_changes": {
+    "src/modelnet/helper.cpp": {
+      "baseline_sha256": "2299c260ee277ef798846538b166a4fc41741440a011b5d09ab95e2a641adf11",
+      "candidate_sha256": "c85d5798acb0acf35aea965d96a3b3dcc1d649293efcb6a17594e84ce77f8d6a"
+    },
+    "test/functional/feature_modelnet_retrieve_regressions.py": {
+      "baseline_sha256": "48354eb198e8a00606ba194af0e1ef00c87a866dbc3aaeaaca79bf377d74db62",
+      "candidate_sha256": "037da25f97e207546b4700e2b8918cf56d5af35a763fa9b2042b61f6f00af460"
+    }
+  },
+  "patch_sha256": "7293a386d0401611ee90fc5d3b05f0ca51d21400820831b8a5b6b9f8872e47ea",
+  "phases": {
+    "baseline": {
+      "binary_sha256": "28d7ecb6c611e5676d85de7a64038bc7d07cd0b6b2fb2606390d5e6405838ad2",
+      "seconds": 155.75842669099995,
+      "cases": {
+        "progress": {
+          "assertion_failure": true,
+          "observation": {
+            "multi_file": false,
+            "job_id": "90359ea8abf906caa316a2235a8cd2d4",
+            "total": 16777291,
+            "a_bytes": 33554507,
+            "file_count": 1,
+            "actual": 4194304,
+            "reported": 37748811,
+            "percent": 100,
+            "eta_present": false,
+            "stream_attempted": true,
+            "resumed": {
+              "actual": 4194304,
+              "reported": 37748811,
+              "percent": 100,
+              "inflight": 2
+            },
+            "final_reported": 50331798,
+            "b_exact": true,
+            "a_unchanged": true,
+            "restart_preserved_pieces": true
+          }
+        },
+        "progress_multi": {
+          "assertion_failure": true,
+          "observation": {
+            "multi_file": true,
+            "job_id": "97597f0c2881303bfdd31f48f2526b01",
+            "total": 20971668,
+            "a_bytes": 33554507,
+            "file_count": 2,
+            "actual": 4194304,
+            "reported": 37748811,
+            "percent": 100,
+            "eta_present": false,
+            "stream_attempted": true,
+            "final_reported": 54526175,
+            "b_exact": true,
+            "a_unchanged": true,
+            "restart_preserved_pieces": true
+          }
+        }
+      },
+      "zero_exit_helpers": 6,
+      "clean_cleanup": true,
+      "runtime_removed": true
+    },
+    "candidate": {
+      "binary_sha256": "a56c7e2f6fd02acb055ba46983609c2b77bcd887b1d65fa96fe131634eb93ac2",
+      "seconds": 155.96571475999986,
+      "cases": {
+        "progress": {
+          "assertion_failure": false,
+          "observation": {
+            "multi_file": false,
+            "job_id": "f476a85bfb4d3c3d28e74ff65cf1f8ac",
+            "total": 16777291,
+            "a_bytes": 33554507,
+            "file_count": 1,
+            "actual": 4194304,
+            "reported": 4194304,
+            "percent": 24,
+            "eta_present": true,
+            "stream_attempted": true,
+            "resumed": {
+              "actual": 4194304,
+              "reported": 4194304,
+              "percent": 24,
+              "inflight": 2
+            },
+            "final_reported": 16777291,
+            "b_exact": true,
+            "a_unchanged": true,
+            "restart_preserved_pieces": true
+          }
+        },
+        "progress_multi": {
+          "assertion_failure": false,
+          "observation": {
+            "multi_file": true,
+            "job_id": "4c95a2bea614c2a8256571b7ade78f61",
+            "total": 20971668,
+            "a_bytes": 33554507,
+            "file_count": 2,
+            "actual": 4194304,
+            "reported": 4194304,
+            "percent": 19,
+            "eta_present": true,
+            "stream_attempted": true,
+            "final_reported": 20971668,
+            "b_exact": true,
+            "a_unchanged": true,
+            "restart_preserved_pieces": true
+          }
+        }
+      },
+      "zero_exit_helpers": 6,
+      "clean_cleanup": true,
+      "runtime_removed": true
+    }
+  },
+  "candidate_build": {
+    "planned_actions": 52,
+    "seconds": 407.11648635999995,
+    "limit_seconds": 900,
+    "action_limit": 120
+  },
+  "retained_stream_controls": {
+    "cases": 23,
+    "producer_run": 44198067492,
+    "source_matches": {
+      "src/modelnet/file_stream.cpp": true,
+      "src/modelnet/file_stream.h": true,
+      "src/modelnet/store.cpp": true,
+      "src/modelnet/store.h": true,
+      "src/modelnet/direct_seed.cpp": true,
+      "src/modelnet/direct_seed.h": true,
+      "src/modelnet/types.cpp": true,
+      "src/modelnet/types.h": true,
+      "src/test/modelnet_file_stream_tests.cpp": true,
+      "src/test/util/setup_common.cpp": true,
+      "src/test/util/setup_common.h": true,
+      "src/crypto/sha384.cpp": true,
+      "src/crypto/sha384.h": true,
+      "src/util/readwritefile.cpp": true,
+      "src/util/readwritefile.h": true
+    },
+    "rerun": false,
+    "scope": "Previously executed immutable test_btx stream/store controls; current aggregate target not rebuilt."
+  },
+  "artifacts": [
+    {
+      "id": 14384605175,
+      "name": "progress-scope-qualified-binaries",
+      "size_in_bytes": 30196874,
+      "digest": "sha256:00da9389bcbd79ce2da127b8fd0dc444426e37b723e3816e186a3b925b8e58d2",
+      "expires_at": "2026-12-02T00:16:09Z"
+    },
+    {
+      "id": 14383717783,
+      "name": "progress-helper-current-checkpoint",
+      "size_in_bytes": 525065268,
+      "digest": "sha256:3b416cca7c48d49b2ec711521deddb8120d2bd1896614be1571aa9c28543f92d",
+      "expires_at": "2026-12-02T00:16:12Z"
+    },
+    {
+      "id": 14383378722,
+      "name": "progress-scope-qualification-records",
+      "size_in_bytes": 539879,
+      "digest": "sha256:2be72db7086f0ab7e1263009168dec592d27bd90e7181d0ac0a9312013842caa",
+      "expires_at": "2026-12-02T00:16:08Z"
+    }
+  ],
+  "updated_checkpoint": {
+    "archive_sha256": "5651559ef682d598fcb170a761840327a7a3b59a3fd49c195771dbb34753c6b2",
+    "identity": {
+      "source": "23ee567ea8a2d9cad8ca3264f8793e8371b3eb93",
+      "helper_progress_candidate": true,
+      "qualification_complete": true,
+      "test_btx_scope": "old retained binary and unchanged stream controls; current aggregate test target NOT rebuilt"
+    }
+  },
+  "internal_review": "Read-only independent child-agent audit found no material gap; not a human reviewer or separate platform execution.",
+  "scope": "Ubuntu22.04 container on Ubuntu24.04 x86_64 hosted runner, real helper/PQ1/loopback, single/multi-file reporting and clean restart.",
+  "limits": [
+    "No actual Atlas window, full node, current full test_btx/first-run suite, Mac/Windows or release qualification.",
+    "Retained hydration controls do not prove a targeted current-helper partial-Finish fault; stream_attempted establishes entry only.",
+    "Saved pieces preserved, not proof of no retransmission.",
+    "No concurrent external writer to same artifact, altered quotas/credit/retry policy or wire-rate redesign qualified."
+  ],
+  "publication": "No upstream PR/comment authorized or created; public fork test branch/evidence only.",
+  "next": "Ready to prepare and publish focused two-file repair/evidence once authorized; recheck current target/ownership and exact tested code first. No further tests needed absent relevant change."
+}
