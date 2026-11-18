@@ -1,0 +1,527 @@
+{
+  "baseline-final": {
+    "summary": {
+      "tests": 23,
+      "failures": 12,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 4.553
+    },
+    "cases": [
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_confirmation_recovers_original_proposal[False]",
+        "seconds": 0.183,
+        "result": "fail"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_confirmation_recovers_original_proposal[True]",
+        "seconds": 0.304,
+        "result": "fail"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_confirmation_deduplicates_existing_proposal[normal]",
+        "seconds": 0.165,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_confirmation_deduplicates_existing_proposal[not_due]",
+        "seconds": 0.164,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_confirmation_deduplicates_existing_proposal[acknowledged]",
+        "seconds": 0.163,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_confirmation_deduplicates_existing_proposal[preview_write]",
+        "seconds": 0.308,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_confirmation_deduplicates_existing_proposal[expired_envelope]",
+        "seconds": 0.164,
+        "result": "fail"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_expired_preview_can_retry_original_live_authority",
+        "seconds": 0.166,
+        "result": "fail"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_missing_proposal_preserves_recovery_fences[quote_expired-QUOTE_EXPIRED]",
+        "seconds": 0.164,
+        "result": "fail"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_missing_proposal_preserves_recovery_fences[revoked-MANDATE_EXPIRED]",
+        "seconds": 0.161,
+        "result": "fail"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_missing_proposal_preserves_recovery_fences[restored-RECOVERY_READ_ONLY]",
+        "seconds": 0.163,
+        "result": "fail"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_missing_proposal_preserves_recovery_fences[financial-RECOVERY_CONFLICT]",
+        "seconds": 0.165,
+        "result": "fail"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_missing_proposal_preserves_recovery_fences[closed-RESERVATION]",
+        "seconds": 0.162,
+        "result": "fail"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_wrong_preview_context_cannot_recover[ctx0]",
+        "seconds": 0.162,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_wrong_preview_context_cannot_recover[ctx1]",
+        "seconds": 0.165,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_progressed_confirmation_remains_read_only[committed]",
+        "seconds": 0.166,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_progressed_confirmation_remains_read_only[funded]",
+        "seconds": 0.164,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_progressed_confirmation_remains_read_only[complete]",
+        "seconds": 0.165,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_progressed_confirmation_remains_read_only[refunded]",
+        "seconds": 0.167,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_progressed_confirmation_remains_read_only[cancelled]",
+        "seconds": 0.163,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_repeat_failure_then_same_confirmation_recovers[enqueue]",
+        "seconds": 0.168,
+        "result": "fail"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_repeat_failure_then_same_confirmation_recovers[sign]",
+        "seconds": 0.171,
+        "result": "fail"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_conflicting_proposal_is_not_overwritten",
+        "seconds": 0.17,
+        "result": "fail"
+      }
+    ]
+  },
+  "candidate-qualified": {
+    "summary": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 4.869
+    },
+    "cases": [
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_confirmation_recovers_original_proposal[False]",
+        "seconds": 0.2,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_confirmation_recovers_original_proposal[True]",
+        "seconds": 0.332,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_confirmation_deduplicates_existing_proposal[normal]",
+        "seconds": 0.168,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_confirmation_deduplicates_existing_proposal[not_due]",
+        "seconds": 0.179,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_confirmation_deduplicates_existing_proposal[acknowledged]",
+        "seconds": 0.172,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_confirmation_deduplicates_existing_proposal[preview_write]",
+        "seconds": 0.321,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_confirmation_deduplicates_existing_proposal[expired_envelope]",
+        "seconds": 0.171,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_expired_preview_can_retry_original_live_authority",
+        "seconds": 0.179,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_missing_proposal_preserves_recovery_fences[quote_expired-QUOTE_EXPIRED]",
+        "seconds": 0.172,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_missing_proposal_preserves_recovery_fences[revoked-MANDATE_EXPIRED]",
+        "seconds": 0.175,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_missing_proposal_preserves_recovery_fences[restored-RECOVERY_READ_ONLY]",
+        "seconds": 0.171,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_missing_proposal_preserves_recovery_fences[financial-RECOVERY_CONFLICT]",
+        "seconds": 0.171,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_missing_proposal_preserves_recovery_fences[closed-RESERVATION]",
+        "seconds": 0.171,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_wrong_preview_context_cannot_recover[ctx0]",
+        "seconds": 0.169,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_wrong_preview_context_cannot_recover[ctx1]",
+        "seconds": 0.168,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_progressed_confirmation_remains_read_only[committed]",
+        "seconds": 0.168,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_progressed_confirmation_remains_read_only[funded]",
+        "seconds": 0.17,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_progressed_confirmation_remains_read_only[complete]",
+        "seconds": 0.183,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_progressed_confirmation_remains_read_only[refunded]",
+        "seconds": 0.173,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_progressed_confirmation_remains_read_only[cancelled]",
+        "seconds": 0.169,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_repeat_failure_then_same_confirmation_recovers[enqueue]",
+        "seconds": 0.318,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_repeat_failure_then_same_confirmation_recovers[sign]",
+        "seconds": 0.32,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_confirmation_recovery",
+        "case": "test_conflicting_proposal_is_not_overwritten",
+        "seconds": 0.17,
+        "result": "pass"
+      }
+    ]
+  },
+  "compatibility": {
+    "summary": {
+      "tests": 36,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 6.629
+    },
+    "cases": [
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_missing_proposal_retry_and_reopen[accept]",
+        "seconds": 0.347,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_missing_proposal_retry_and_reopen[resume]",
+        "seconds": 0.474,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_existing_exact_packet_is_not_recreated[normal]",
+        "seconds": 0.161,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_existing_exact_packet_is_not_recreated[not_due]",
+        "seconds": 0.159,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_existing_exact_packet_is_not_recreated[acknowledged]",
+        "seconds": 0.158,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_existing_exact_packet_is_not_recreated[beyond_page]",
+        "seconds": 0.172,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_repeated_retry_failure_then_success[save_again]",
+        "seconds": 0.33,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_repeated_retry_failure_then_success[sign]",
+        "seconds": 0.333,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_changed_retry_parameters_refuse[mandate_id-7777777777777777777777777777777777777777777777777777777777777777]",
+        "seconds": 0.158,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_changed_retry_parameters_refuse[max_local_fee_atoms-501]",
+        "seconds": 0.186,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_changed_retry_parameters_refuse[refund_fee_atoms-101]",
+        "seconds": 0.16,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_changed_retry_parameters_refuse[claim_fee_atoms-101]",
+        "seconds": 0.159,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_missing_send_preserves_authority_and_recovery_fences[revoked-MANDATE_EXPIRED]",
+        "seconds": 0.158,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_missing_send_preserves_authority_and_recovery_fences[mandate_expired-MANDATE_EXPIRED]",
+        "seconds": 0.16,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_missing_send_preserves_authority_and_recovery_fences[closed-RESERVATION]",
+        "seconds": 0.157,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_missing_send_preserves_authority_and_recovery_fences[restored-RECOVERY_READ_ONLY]",
+        "seconds": 0.16,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_missing_send_preserves_authority_and_recovery_fences[observation_only-RECOVERY_READ_ONLY]",
+        "seconds": 0.159,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_missing_send_preserves_authority_and_recovery_fences[prepared-RECOVERY_CONFLICT]",
+        "seconds": 0.159,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_wrong_principal_cannot_resume",
+        "seconds": 0.158,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_owner_resume_preserves_original_exhausted_budget",
+        "seconds": 0.331,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_expired_quote_not_extended_and_late_resume_cancels[accept]",
+        "seconds": 0.161,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_expired_quote_not_extended_and_late_resume_cancels[resume]",
+        "seconds": 0.159,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_original_deadlines_are_rechecked_not_regenerated[long_mature-UNSAFE_TIMEOUT]",
+        "seconds": 0.161,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_original_deadlines_are_rechecked_not_regenerated[short_late-LATE_REVEAL]",
+        "seconds": 0.161,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_original_deadlines_are_rechecked_not_regenerated[stale-STALE_CHAIN]",
+        "seconds": 0.162,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_conflicting_outbox_proposal_refuses[payload]",
+        "seconds": 0.161,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_conflicting_outbox_proposal_refuses[stored_recipient]",
+        "seconds": 0.159,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_conflicting_outbox_proposal_refuses[envelope_recipient]",
+        "seconds": 0.158,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_enqueue_succeeded_but_caller_lost_reply_is_deduplicated",
+        "seconds": 0.471,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_initial_proposal_retry",
+        "case": "test_cancel_after_failed_retry_releases_once",
+        "seconds": 0.16,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_application.ApplicationTest",
+        "case": "test_default_observation_discovers_real_signed_offers",
+        "seconds": 0.015,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_application.ApplicationTest",
+        "case": "test_network_payload_cannot_grant_rpc_authority",
+        "seconds": 0.013,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_application.ApplicationTest",
+        "case": "test_pausing_maker_stops_new_public_allocation",
+        "seconds": 0.018,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_application.ApplicationTest",
+        "case": "test_peer_cannot_invoke_owner_surface",
+        "seconds": 0.013,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_application.ApplicationTest",
+        "case": "test_preview_never_creates_a_mandate_or_reservation",
+        "seconds": 0.019,
+        "result": "pass"
+      },
+      {
+        "class": "contrib.swapnet.tests.test_market_application.ApplicationTest",
+        "case": "test_public_offer_becomes_one_requester_bound_quote",
+        "seconds": 0.019,
+        "result": "pass"
+      }
+    ]
+  }
+}

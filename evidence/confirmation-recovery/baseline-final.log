@@ -1,0 +1,86 @@
+FF....FFFFFFF.......FFF                                                  [100%]
+=================================== FAILURES ===================================
+_____________ test_confirmation_recovers_original_proposal[False] ______________
+contrib/swapnet/tests/test_market_confirmation_recovery.py:158: in test_confirmation_recovers_original_proposal
+    assert_delivered(market_apps, sid)
+contrib/swapnet/tests/test_market_confirmation_recovery.py:133: in assert_delivered
+    assert len(packets) == 1, 'Confirmation must restore the missing original proposal'
+E   AssertionError: Confirmation must restore the missing original proposal
+E   assert 0 == 1
+E    +  where 0 = len([])
+______________ test_confirmation_recovers_original_proposal[True] ______________
+contrib/swapnet/tests/test_market_confirmation_recovery.py:158: in test_confirmation_recovers_original_proposal
+    assert_delivered(market_apps, sid)
+contrib/swapnet/tests/test_market_confirmation_recovery.py:133: in assert_delivered
+    assert len(packets) == 1, 'Confirmation must restore the missing original proposal'
+E   AssertionError: Confirmation must restore the missing original proposal
+E   assert 0 == 1
+E    +  where 0 = len([])
+______ test_confirmation_deduplicates_existing_proposal[expired_envelope] ______
+contrib/swapnet/tests/test_market_confirmation_recovery.py:193: in test_confirmation_deduplicates_existing_proposal
+    with pytest.raises(SwapError, match='QUOTE_EXPIRED'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+____________ test_expired_preview_can_retry_original_live_authority ____________
+contrib/swapnet/tests/test_market_confirmation_recovery.py:210: in test_expired_preview_can_retry_original_live_authority
+    assert_delivered(market_apps, sid)
+contrib/swapnet/tests/test_market_confirmation_recovery.py:133: in assert_delivered
+    assert len(packets) == 1, 'Confirmation must restore the missing original proposal'
+E   AssertionError: Confirmation must restore the missing original proposal
+E   assert 0 == 1
+E    +  where 0 = len([])
+_ test_missing_proposal_preserves_recovery_fences[quote_expired-QUOTE_EXPIRED] _
+contrib/swapnet/tests/test_market_confirmation_recovery.py:238: in test_missing_proposal_preserves_recovery_fences
+    with pytest.raises(SwapError, match=code):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+___ test_missing_proposal_preserves_recovery_fences[revoked-MANDATE_EXPIRED] ___
+contrib/swapnet/tests/test_market_confirmation_recovery.py:238: in test_missing_proposal_preserves_recovery_fences
+    with pytest.raises(SwapError, match=code):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+_ test_missing_proposal_preserves_recovery_fences[restored-RECOVERY_READ_ONLY] _
+contrib/swapnet/tests/test_market_confirmation_recovery.py:238: in test_missing_proposal_preserves_recovery_fences
+    with pytest.raises(SwapError, match=code):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+_ test_missing_proposal_preserves_recovery_fences[financial-RECOVERY_CONFLICT] _
+contrib/swapnet/tests/test_market_confirmation_recovery.py:238: in test_missing_proposal_preserves_recovery_fences
+    with pytest.raises(SwapError, match=code):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+_____ test_missing_proposal_preserves_recovery_fences[closed-RESERVATION] ______
+contrib/swapnet/tests/test_market_confirmation_recovery.py:238: in test_missing_proposal_preserves_recovery_fences
+    with pytest.raises(SwapError, match=code):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+_________ test_repeat_failure_then_same_confirmation_recovers[enqueue] _________
+contrib/swapnet/tests/test_market_confirmation_recovery.py:289: in test_repeat_failure_then_same_confirmation_recovers
+    with pytest.raises((sqlite3.IntegrityError, SwapError)):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE any of (<class 'sqlite3.IntegrityError'>, <class 'swapnet.errors.SwapError'>)
+__________ test_repeat_failure_then_same_confirmation_recovers[sign] ___________
+contrib/swapnet/tests/test_market_confirmation_recovery.py:289: in test_repeat_failure_then_same_confirmation_recovers
+    with pytest.raises((sqlite3.IntegrityError, SwapError)):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE any of (<class 'sqlite3.IntegrityError'>, <class 'swapnet.errors.SwapError'>)
+_________________ test_conflicting_proposal_is_not_overwritten _________________
+contrib/swapnet/tests/test_market_confirmation_recovery.py:311: in test_conflicting_proposal_is_not_overwritten
+    with pytest.raises(SwapError, match='RECOVERY_CONFLICT'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'swapnet.errors.SwapError'>
+- generated xml file: <WORKSPACE>/work/btx-lanes/session-1/swapnet-public-confirmation-recovery/repair/baseline-final/results.xml -
+=========================== short test summary info ============================
+FAILED contrib/swapnet/tests/test_market_confirmation_recovery.py::test_confirmation_recovers_original_proposal[False]
+FAILED contrib/swapnet/tests/test_market_confirmation_recovery.py::test_confirmation_recovers_original_proposal[True]
+FAILED contrib/swapnet/tests/test_market_confirmation_recovery.py::test_confirmation_deduplicates_existing_proposal[expired_envelope]
+FAILED contrib/swapnet/tests/test_market_confirmation_recovery.py::test_expired_preview_can_retry_original_live_authority
+FAILED contrib/swapnet/tests/test_market_confirmation_recovery.py::test_missing_proposal_preserves_recovery_fences[quote_expired-QUOTE_EXPIRED]
+FAILED contrib/swapnet/tests/test_market_confirmation_recovery.py::test_missing_proposal_preserves_recovery_fences[revoked-MANDATE_EXPIRED]
+FAILED contrib/swapnet/tests/test_market_confirmation_recovery.py::test_missing_proposal_preserves_recovery_fences[restored-RECOVERY_READ_ONLY]
+FAILED contrib/swapnet/tests/test_market_confirmation_recovery.py::test_missing_proposal_preserves_recovery_fences[financial-RECOVERY_CONFLICT]
+FAILED contrib/swapnet/tests/test_market_confirmation_recovery.py::test_missing_proposal_preserves_recovery_fences[closed-RESERVATION]
+FAILED contrib/swapnet/tests/test_market_confirmation_recovery.py::test_repeat_failure_then_same_confirmation_recovers[enqueue]
+FAILED contrib/swapnet/tests/test_market_confirmation_recovery.py::test_repeat_failure_then_same_confirmation_recovers[sign]
+FAILED contrib/swapnet/tests/test_market_confirmation_recovery.py::test_conflicting_proposal_is_not_overwritten
+12 failed, 11 passed in 4.27s
