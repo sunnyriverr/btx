@@ -1,0 +1,103 @@
+{
+  "utc": "2026-11-18T04:31:52.362133+00:00",
+  "verdict": "QUALIFIED_LOCAL_VISIBILITY_REPAIR_PUBLICATION_HELD",
+  "run": "https://github.com/sunnyriverr/btx/actions/runs/44235389425",
+  "recipe_commit": "9b8423b62868904a525ac86769a43d168319badb",
+  "github_job_conclusion": "failure",
+  "qualification_producer_complete": false,
+  "failure_classification": "Final wrapper summary-format assertion after all product commands completed as expected; raw detailed suite validated offline, no rerun or raw edits.",
+  "prerequisite": {
+    "pr": 853,
+    "head": "ea79c62407d04b6b37e55d8121c463cb13aadb7c",
+    "author": "repch1c",
+    "scope": "Existing shared predicate and feed repair unchanged; our diff is a dependent follow-up."
+  },
+  "current_release_source_admission": "a97af7b3f379e33e3ec65db948468d875ade2841; unchanged relevant ModelNet since23ee, not freshfulla97build",
+  "own_files": [
+    "src/modelnet/helper.cpp",
+    "src/test/modelnet_economy_tests.cpp"
+  ],
+  "own_production_delta": "Three FeedHidesModel calls in LOCALrecent, fundable and recentlyunlocked readers; no new state/locking/by-ID filter.",
+  "patch_sha256": "d843bbb01de659047b6c3459c653687da8dc5255b34e4d76d07a3002892a3c07",
+  "baseline": {
+    "maintained_exit": 201,
+    "expected_failures": [
+      "getrecentreleases: model 0, hidden=1",
+      "getrecentreleases: model 2, hidden=1",
+      "getfundablemodels: model 0, hidden=1",
+      "getrecentlyunlockedmodels: model 2, hidden=1"
+    ],
+    "native_verdict": "REPRODUCED_LISTING_INCONSISTENCY",
+    "native_violations": 8,
+    "binaries": {
+      "btx-modeld": "12b853716a28c6dd66ddf8eeedb78328c7ff2069c21a86c018228589ed479ff4",
+      "s2_visibility_tests": "a7deceadf6affa14a5f95d8ac3e8ca0a863d17e70adbab6d2c0fa45009a6c91a"
+    }
+  },
+  "candidate": {
+    "maintained_exit": 0,
+    "native_verdict": "NOT_REPRODUCED",
+    "native_violations": 0,
+    "binaries": {
+      "btx-modeld": "affec5323b521a56d9533c83de7da390923f8bcb33acf20751ab9d0752e1f9f8",
+      "s2_visibility_tests": "2fee89bb3ac09024d333211398ed843b2d6034544fb387aed7b3ac0451ccb9e1"
+    },
+    "economy_cases": 26,
+    "economy_assertions": 577,
+    "economy_exit": 0
+  },
+  "same_test_source": true,
+  "native_controls": "Search hide/unhide, unrelated lifecycle-correct models, by-ID lookup, unchanged campaign state, hide survivesnormalrestart; both phases2exit0 and runtimegone.",
+  "builds": [
+    {
+      "label": "baseline-build",
+      "seconds": 382.40434100799996,
+      "exit": 0
+    },
+    {
+      "label": "candidate-build",
+      "seconds": 403.404474025,
+      "exit": 0
+    }
+  ],
+  "plans": {
+    "baseline_actions": 2,
+    "candidate_actions": 2
+  },
+  "reporting_repair": "suite-offline-receipt.json;11saved-result negative/positive checks;17native/oracle preflight checks separate. No added native execution.",
+  "source_preparation_failure": "Attempt1 stopped before compilation/tests; nestedgitapply skipped prerequisite. Exact853Gitblob/postimageverification corrected before attempt2.",
+  "internal_review": "Direct actual-source and saved-artifact audit found no material product blocker; internalreview not independentplatform/humanACK.",
+  "artifacts": [
+    {
+      "id": 14397841341,
+      "name": "visibility-qualified-binaries",
+      "digest": "sha256:6c00d63f0b59eca7c4c25e0af9eccb4e9cc5b48cee929ec7bae7833e08d5ac03",
+      "size_in_bytes": 80953835,
+      "expires_at": "2026-12-02T04:25:23Z"
+    },
+    {
+      "id": 14397452671,
+      "name": "visibility-qualified-records",
+      "digest": "sha256:b1115b8a3092dfe7f5cc0ed8315ed520c3750cbd352e8c62bfd369247ae2aeb5",
+      "size_in_bytes": 535697,
+      "expires_at": "2026-12-02T04:25:20Z"
+    },
+    {
+      "id": 14396769905,
+      "name": "visibility-qualified-checkpoint",
+      "digest": "sha256:96966df4dbdfd919ae7fd2aa43f9a65f0ddd8fab82eb210eb75159fdd862a35b",
+      "size_in_bytes": 553400903,
+      "expires_at": "2026-12-02T04:25:30Z"
+    }
+  ],
+  "retention": "Compiled baseline/candidate binaries and updated checkpoint retained until2December. Rawrecords downloaded/digestchecked; binary/checkpoint metadata retained, not locally downloaded. Originalinputcheckpoint immutable/preserved.",
+  "limits": [
+    "Ubuntu22.04x86_64/GCC11.4/OpenSSL3.5.9 in Ubuntu24.04hostedrunner; normalhelper and focusedwholeeconomyTU/main/support, not aggregate test_btx.",
+    "No actualQt/Atlaswindow, nativeMac/Windows, WAN/peer, fullnode or release qualification.",
+    "Newreaders distinctpublisher mute not executed; existing853mute regression passed in economy suite.",
+    "Exact853prerequisite+repair, not a rebuiltcompletecurrenta97tree.",
+    "No productionwallet/node/miner touched; no consensus/authority/automaticspend modification."
+  ],
+  "upstream_posts": 0,
+  "next": "Focused delivery decision after publication authorization, separating853prerequisite and our3-callfollow-up; no additional tests unless relevantfeedback/source change."
+}
