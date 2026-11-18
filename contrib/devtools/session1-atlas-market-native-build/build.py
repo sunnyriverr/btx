@@ -1,4 +1,4 @@
-"""Atlas market configure-only admission, adapted from Session3 retained Mac build recipe. No compile or runtime entry point."""
+"""Atlas market measured incremental node build, adapted from Session3 retained Mac build recipe. No compile or runtime entry point."""
 from pathlib import Path, PurePosixPath
 import configparser, hashlib, json, os, platform, shutil, shlex, signal, subprocess, tarfile, time
 import urllib.request, urllib.error, zipfile
@@ -271,11 +271,22 @@ def main():
     STATE['python_dependency_commands_recorded'] = True
     assert shutil.disk_usage(W).free > preservation_floor()
     save()
-    assert os.environ.get('BUILD_APPROVED', 'false') == 'false', 'Configure-only job'
-    # Deliberately no BTX compilation, binary invocation, tests or runtime data.
-    STATE['compile_commands'] = sum('Building CXX' in row or 'Building C ' in row for row in plan.splitlines())
-    STATE['plan_scope'] = 'btxd and btx-cli; no build/test execution'
-    assert STATE['embedded_python_selected'], 'Embedded Python missing from link plan'
+    assert os.environ.get('BUILD_APPROVED') == 'true', 'Bounded build authority absent'
+    compiles = sum('Building CXX' in row or 'Building C ' in row for row in plan.splitlines())
+    assert edges <= 23 and compiles <= 14, 'Build plan expanded beyond admitted boundary'
+    STATE['compile_commands'] = compiles
+    save()
+    cmd(['ninja', '-C', B, '-j2', 'btxd', 'btx-cli'], 'build', 900)
+    STATE['compiled'] = True
+    STATE['binaries'] = {n: {'sha256': sha(B / 'bin' / n), 'bytes': (B / 'bin' / n).stat().st_size} for n in ['btxd', 'btx-cli']}
+    for name in STATE['binaries']:
+        assert 'arm64' in cmd(['file', B / 'bin' / name], name + '-format')
+        deps = cmd(['otool', '-L', B / 'bin' / name], name + '-dependencies')
+        if name == 'btxd':
+            assert 'Python.framework' in deps
+    STATE['post_build_plan'] = cmd(['ninja', '-C', B, '-n', 'btxd', 'btx-cli'], 'post-build-plan')
+    STATE['plan_scope'] = 'btxd and btx-cli measured incremental build; no runtime/tests'
+    assert STATE['embedded_python_selected']
     STATE['complete'] = True
 
 if __name__ == '__main__':

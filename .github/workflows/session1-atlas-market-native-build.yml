@@ -1,18 +1,18 @@
-name: Session1 Atlas market native configure admission
+name: Session1 Atlas market native bounded build
 on:
   push:
-    branches: [codex/ci-atlas-market-native-admission]
+    branches: [codex/ci-atlas-market-native-build]
 permissions:
   contents: read
   actions: read
 concurrency:
-  group: session1-atlas-market-native-admission
+  group: session1-atlas-market-native-build
   cancel-in-progress: false
 jobs:
   prepare:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: macos-15
-    timeout-minutes: 20
+    timeout-minutes: 30
     env:
       DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
       HOMEBREW_NO_AUTO_UPDATE: '1'
@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
-          sparse-checkout: contrib/devtools/session1-atlas-market-native-admission
+          sparse-checkout: contrib/devtools/session1-atlas-market-native-build
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: btxchain/btx
@@ -36,27 +36,27 @@ jobs:
           python-version: '3.12.10'
           architecture: arm64
           check-latest: false
-      - name: Verify checkpoint, configure and expose true build plan
-        timeout-minutes: 10
+      - name: Verify admitted plan and build only node and CLI
+        timeout-minutes: 23
         env:
           GH_TOKEN: ${{ github.token }}
-          BUILD_APPROVED: 'false'
+          BUILD_APPROVED: 'true'
           BTX_BUILD_PYTHON: ${{ steps.python.outputs.python-path }}
-        run: python3 contrib/devtools/session1-atlas-market-native-admission/preflight.py
+        run: python3 contrib/devtools/session1-atlas-market-native-build/build.py
       - name: Preserve source/build checkpoint without running BTX
         if: always()
         timeout-minutes: 5
-        run: python3 contrib/devtools/session1-atlas-market-native-admission/preserve.py
+        run: python3 contrib/devtools/session1-atlas-market-native-build/preserve.py
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: atlas-market-native-admission-records
+          name: atlas-market-native-build-records
           path: records
           retention-days: 14
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: atlas-market-native-admission-checkpoint
+          name: atlas-market-native-build-checkpoint
           path: retained
           compression-level: 0
           retention-days: 14

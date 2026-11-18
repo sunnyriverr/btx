@@ -26,6 +26,6 @@ if total and shutil.disk_usage(w).free>total+3*1024**3:
  archive=out/'checkpoint.tar.gz'
  with tarfile.open(archive,'w:gz',compresslevel=2,dereference=False) as t:
   for name in inv:t.add(w/name,arcname=name,recursive=False)
- receipt={'sha256':sha(archive),'bytes':archive.stat().st_size,'live_bytes':total,'files':len(inv),'scope':'Session1 PR777 current source/configured build and hash-locked job dependency prefix; no tests/release qualification'}
+ receipt={'sha256':sha(archive),'bytes':archive.stat().st_size,'live_bytes':total,'files':len(inv),'scope':'Session1 Atlas market candidate node build checkpoint; no runtime/fullsuite/release qualification'}
  (out/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\n');shutil.copy2(r/'checkpoint-inventory.json',out/'inventory.json');(r/'preservation-outcome.json').write_text(json.dumps({'preserved':True,**receipt},indent=2)+'\n');print(json.dumps(receipt))
 else:(r/'preservation-outcome.json').write_text(json.dumps({'live_bytes':total,'free':shutil.disk_usage(w).free,'reason':'Insufficient space for a second compressed copy or no restored state'}))
