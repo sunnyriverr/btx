@@ -1,10 +1,10 @@
-name: Session 3 paired Linux RUNPATH repair qualification
+name: Session 3 Ninja-only RUNPATH qualification
 on:
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: session3-linux-runpath-paired-${{ github.ref }}
+  group: session3-linux-runpath-ninja-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   producer:
@@ -81,8 +81,8 @@ jobs:
         run: |
           set -euo pipefail
           records="$RUNNER_TEMP/session3-linux-runpath-records"
-          # MinimumGCC Makefiles+Ninja, minimumClang Makefiles, modernGCC
-          # Makefiles. One batch, no retries or alternate tool substitutions.
+          # Four distinct Ninja profiles only. Prior Makefiles evidence
+          # is retained separately; this run does not repeat or relabel it.
           timeout --kill-after=10s 360s python3 contrib/devtools/session3-linux-runpath/paired.py \
             --fixture "$GITHUB_WORKSPACE/contrib/devtools/session3-linux-runpath" \
             --modern-cmake "$RUNNER_TEMP/session3-linux-runpath-tools/cmake-4.3.0-linux-x86_64/bin/cmake" \
@@ -92,7 +92,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: session3-linux-runpath-paired-${{ github.run_id }}-${{ github.run_attempt }}
+          name: session3-linux-runpath-ninja-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
             ${{ runner.temp }}/session3-linux-runpath-records
             ${{ runner.temp }}/session3-linux-runpath-results

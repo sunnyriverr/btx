@@ -18,20 +18,20 @@ def main():
         parser.error("Refuse existing work; preserve prior attempts")
     args.work.mkdir(parents=True)
     profiles = [
-        ("gcc-minimum", "/usr/bin/cmake", "3.22", "/usr/bin/g++-11", True),
-        ("clang-minimum", "/usr/bin/cmake", "3.22", "/usr/bin/clang++-14", False),
-        ("gcc-modern", str(args.modern_cmake), "4.3", "/usr/bin/g++-11", False),
+        ("gcc-minimum", "/usr/bin/cmake", "3.22", "/usr/bin/g++-11", "lookup-failure"),
+        ("clang-minimum", "/usr/bin/cmake", "3.22", "/usr/bin/clang++-14", "observe"),
+        ("gcc-modern", str(args.modern_cmake), "4.3", "/usr/bin/g++-11", "healthy"),
+        ("clang-modern", str(args.modern_cmake), "4.3", "/usr/bin/clang++-14", "observe"),
     ]
     summary = {"status": "INCOMPLETE", "profiles": [],
                "scope": "inert direct-library producer checks only"}
     started = time.monotonic()
     try:
-        for name, cmake, series, compiler, ninja in profiles:
+        for name, cmake, series, compiler, expectation in profiles:
             argv = [sys.executable, str(args.fixture / "run.py"),
                     "--work", str(args.work / name), "--cmake", cmake,
-                    "--cmake-series", series, "--cxx", compiler]
-            if ninja:
-                argv.append("--ninja")
+                    "--cmake-series", series, "--cxx", compiler,
+                    "--baseline-expectation", expectation]
             entry = {"name": name, "argv": argv, "status": "INCOMPLETE"}
             summary["profiles"].append(entry)
             # A failed profile is retained; the other distinct profiles run
@@ -45,8 +45,7 @@ def main():
                 continue
             result = json.loads(result_path.read_text())
             entry["result_status"] = result.get("status")
-            expected = {(g, v) for g in (["Unix Makefiles", "Ninja"] if ninja else ["Unix Makefiles"])
-                        for v in ["before", "after", "opt-out"]}
+            expected = {("Ninja", v) for v in ["before", "after", "opt-out"]}
             cases = result.get("cases", [])
             observed = [(c.get("generator"), c.get("variant")) for c in cases]
             complete = len(observed) == len(expected) and set(observed) == expected
@@ -61,7 +60,7 @@ def main():
             entry["status"] = ("PASS" if code == 0 and result.get("status") == "PASS"
                                and complete and all_cases_pass and controls_complete
                                else "FAIL_OR_UNCONFIRMED")
-        summary["status"] = ("PASS" if len(summary["profiles"]) == 3
+        summary["status"] = ("PASS" if len(summary["profiles"]) == 4
                              and all(p["status"] == "PASS" for p in summary["profiles"])
                              else "FAIL_OR_UNCONFIRMED")
     except Exception as error:

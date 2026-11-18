@@ -25,7 +25,8 @@ def main():
     parser.add_argument("--cmake-series", choices=("3.22", "4.3"), default="3.22",
                         help="Original minimum version or explicit modern neighbor")
     parser.add_argument("--cxx", type=Path, help="Explicit pre-existing C++ compiler")
-    parser.add_argument("--ninja", action="store_true", help="Also check the neighboring generator")
+    parser.add_argument("--baseline-expectation", choices=("lookup-failure", "healthy", "observe"),
+                        required=True, help="Required baseline outcome or explicit unmeasured neighbor")
     args = parser.parse_args()
     if not sys.platform.startswith("linux"):
         parser.error("This is a Linux ELF generator/loader check")
@@ -40,8 +41,8 @@ def main():
     readelf = shutil.which("readelf")
     if not readelf or not shutil.which("make") or not shutil.which("c++"):
         parser.error("readelf, make and a C++ compiler must already be available")
-    if args.ninja and not shutil.which("ninja"):
-        parser.error("Ninja requested but unavailable; no automatic installation")
+    if not shutil.which("ninja"):
+        parser.error("Ninja required but unavailable; no automatic installation")
     work = args.work.resolve()
     if work.exists():
         parser.error("--work must not exist; preserve prior evidence")
@@ -54,6 +55,7 @@ def main():
     result = {"status": "INCOMPLETE", "scope": "inert exact-module ELF probe only",
               "cmake_series": args.cmake_series,
               "compiler": str(compiler),
+              "baseline_expectation": args.baseline_expectation,
               "cases": [], "commands": [], "inputs": {}}
     started = time.monotonic()
     stage = "admission"
@@ -109,9 +111,8 @@ def main():
         successful([compiler, "--version"])
         successful(["make", "--version"])
         successful([readelf, "--version"])
-        generators = ["Unix Makefiles"] + (["Ninja"] if args.ninja else [])
-        if args.ninja:
-            successful(["ninja", "--version"])
+        generators = ["Ninja"]
+        successful(["ninja", "--version"])
         for generator in generators:
             for variant in ("before", "after", "opt-out"):
                 stage = generator + ":" + variant
@@ -161,34 +162,18 @@ def main():
                 elif variant == "opt-out":
                     require(not runpaths and not rpaths, "RPATH opt-out was not preserved")
                     require(code != 0 and SONAME in output, "Opt-out lookup control was masked")
-                elif args.cmake_series == "4.3":
-                    # Upstream reports the current helper working on 4.3.
-                    # That healthy neighbor must remain working; failure to
-                    # reproduce its baseline is separate from a candidate pass.
-                    if runpaths == ["$ORIGIN/../lib"] and not rpaths and code == 0 and output == EXPECTED_OUTPUT:
-                        case["baseline_disposition"] = "modern healthy baseline observed"
-                    else:
-                        case["baseline_disposition"] = "modern healthy baseline not reproduced"
-                        case["status"] = "BASELINE_UNCONFIRMED"
-                elif generator == "Unix Makefiles":
-                    # Non-reproduction is useful evidence. Do not abort the
-                    # corrected case or its controls just because the source
-                    # spellings produced equivalent linker arguments here.
-                    if runpaths != ["$ORIGIN/../lib"] and code != 0 and SONAME in output:
-                        case["baseline_disposition"] = "old Makefiles lookup failure observed"
-                    else:
-                        case["baseline_disposition"] = "original failure not reproduced"
-                        case["status"] = "BASELINE_UNCONFIRMED"
                 else:
-                    # The report established old Makefiles, not old Ninja.
-                    # A correct old Ninja result is a legitimate control.
-                    if code == 0:
-                        require(runpaths == ["$ORIGIN/../lib"] and not rpaths and output == EXPECTED_OUTPUT,
-                                "Old Ninja success did not match the literal-path contract")
-                        case["baseline_disposition"] = "old Ninja unaffected"
-                    else:
-                        require(SONAME in output, "Old Ninja failed for an unrelated dependency")
-                        case["baseline_disposition"] = "old Ninja lookup failure also observed"
+                    healthy = (runpaths == ["$ORIGIN/../lib"] and not rpaths
+                               and code == 0 and output == EXPECTED_OUTPUT)
+                    lookup_failure = (runpaths != ["$ORIGIN/../lib"]
+                                      and code != 0 and SONAME in output)
+                    expectation = args.baseline_expectation
+                    observed = ("healthy" if healthy else
+                                "lookup-failure" if lookup_failure else "unexpected")
+                    case["baseline_disposition"] = observed
+                    if not (observed == expectation
+                            or expectation == "observe" and observed in ("healthy", "lookup-failure")):
+                        case["status"] = "BASELINE_UNCONFIRMED"
                 if case["status"] == "INCOMPLETE":
                     case["status"] = "PASS"
         result["status"] = ("AFTER_PASS_BASELINE_UNCONFIRMED"
