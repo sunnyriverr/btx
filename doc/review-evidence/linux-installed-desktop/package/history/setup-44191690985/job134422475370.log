@@ -1,0 +1,691 @@
+﻿2026-11-17T22:36:33.0116244Z Current runner version: '2.338.2'
+2026-11-17T22:36:33.0134713Z ##[group]Runner Image Provisioner
+2026-11-17T22:36:33.0135350Z Hosted Compute Agent
+2026-11-17T22:36:33.0135774Z Version: 20261103.629
+2026-11-17T22:36:33.0136172Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+2026-11-17T22:36:33.0136642Z Build Date: 2026-11-03T17:26:59Z
+2026-11-17T22:36:33.0137113Z Worker ID: {87c7fd1b-9a91-441b-88a7-a8ec8401ba52}
+2026-11-17T22:36:33.0137544Z Region: centralus
+2026-11-17T22:36:33.0137913Z Cloud: Azure
+2026-11-17T22:36:33.0138271Z ##[endgroup]
+2026-11-17T22:36:33.0139267Z ##[group]Operating System
+2026-11-17T22:36:33.0139973Z Ubuntu
+2026-11-17T22:36:33.0140304Z 24.04.5
+2026-11-17T22:36:33.0140651Z LTS
+2026-11-17T22:36:33.0140989Z ##[endgroup]
+2026-11-17T22:36:33.0141363Z ##[group]Runner Image
+2026-11-17T22:36:33.0141759Z Image: ubuntu-24.04
+2026-11-17T22:36:33.0142111Z Version: 20261111.370.1
+2026-11-17T22:36:33.0142927Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261111.370/images/ubuntu/Ubuntu2404-Readme.md
+2026-11-17T22:36:33.0143858Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261111.370
+2026-11-17T22:36:33.0144465Z ##[endgroup]
+2026-11-17T22:36:33.0145200Z ##[group]GITHUB_TOKEN Permissions
+2026-11-17T22:36:33.0146577Z Actions: read
+2026-11-17T22:36:33.0146970Z Contents: read
+2026-11-17T22:36:33.0147305Z Metadata: read
+2026-11-17T22:36:33.0147746Z ##[endgroup]
+2026-11-17T22:36:33.0149244Z Secret source: Actions
+2026-11-17T22:36:33.0149850Z Cache mode: write
+2026-11-17T22:36:33.0150337Z Prepare workflow directory
+2026-11-17T22:36:33.0392829Z Prepare all required actions
+2026-11-17T22:36:33.0424854Z Getting action download info
+2026-11-17T22:36:33.2881743Z Download action repository 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' (SHA:11bd71901bbe5b1630ceea73d27597364c9af683)
+2026-11-17T22:36:33.4630131Z Download action repository 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-11-17T22:36:33.7300629Z Complete job name: acceptance
+2026-11-17T22:36:33.7792815Z ##[group]Run test "$EXECUTE" = true
+2026-11-17T22:36:33.7793256Z [36;1mtest "$EXECUTE" = true[0m
+2026-11-17T22:36:33.7793676Z [36;1mtest "$TASK_REF" = codex/ci-session3-installed-desktop-074[0m
+2026-11-17T22:36:33.7813037Z shell: /usr/bin/bash -e {0}
+2026-11-17T22:36:33.7813460Z env:
+2026-11-17T22:36:33.7813707Z   EXECUTE: true
+2026-11-17T22:36:33.7814020Z   TASK_REF: codex/ci-session3-installed-desktop-074
+2026-11-17T22:36:33.7814391Z ##[endgroup]
+2026-11-17T22:36:33.8016931Z ##[group]Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+2026-11-17T22:36:33.8017389Z with:
+2026-11-17T22:36:33.8017652Z   persist-credentials: false
+2026-11-17T22:36:33.8017972Z   repository: sunnyriverr/btx
+2026-11-17T22:36:33.8020279Z   token: ***
+2026-11-17T22:36:33.8020540Z   ssh-strict: true
+2026-11-17T22:36:33.8020797Z   ssh-user: git
+2026-11-17T22:36:33.8021048Z   clean: true
+2026-11-17T22:36:33.8021313Z   sparse-checkout-cone-mode: true
+2026-11-17T22:36:33.8021644Z   fetch-depth: 1
+2026-11-17T22:36:33.8021907Z   fetch-tags: false
+2026-11-17T22:36:33.8022171Z   show-progress: true
+2026-11-17T22:36:33.8022435Z   lfs: false
+2026-11-17T22:36:33.8022679Z   submodules: false
+2026-11-17T22:36:33.8022945Z   set-safe-directory: true
+2026-11-17T22:36:33.8023255Z ##[endgroup]
+2026-11-17T22:36:33.9756790Z Syncing repository: sunnyriverr/btx
+2026-11-17T22:36:33.9758062Z ##[group]Getting Git version info
+2026-11-17T22:36:33.9758731Z Working directory is '/home/runner/work/btx/btx'
+2026-11-17T22:36:33.9759303Z [command]/usr/bin/git version
+2026-11-17T22:36:33.9814002Z git version 2.56.1
+2026-11-17T22:36:33.9827034Z ##[endgroup]
+2026-11-17T22:36:33.9837199Z Temporarily overriding HOME='/home/runner/work/_temp/07fd20b1-89ca-43d4-a9bd-c78011b9e08d' before making global git config changes
+2026-11-17T22:36:33.9838708Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-17T22:36:33.9841154Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/btx/btx
+2026-11-17T22:36:33.9894443Z Deleting the contents of '/home/runner/work/btx/btx'
+2026-11-17T22:36:33.9916751Z ##[group]Initializing the repository
+2026-11-17T22:36:33.9917704Z [command]/usr/bin/git init /home/runner/work/btx/btx
+2026-11-17T22:36:34.0006748Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-17T22:36:34.0007883Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-17T22:36:34.0008653Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-17T22:36:34.0009088Z hint: call:
+2026-11-17T22:36:34.0009324Z hint:
+2026-11-17T22:36:34.0009656Z hint: 	git config --global init.defaultBranch <name>
+2026-11-17T22:36:34.0010015Z hint:
+2026-11-17T22:36:34.0010351Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-17T22:36:34.0010888Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-17T22:36:34.0011327Z hint:
+2026-11-17T22:36:34.0011572Z hint: 	git branch -m <name>
+2026-11-17T22:36:34.0011851Z hint:
+2026-11-17T22:36:34.0012217Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-17T22:36:34.0013552Z Initialized empty Git repository in /home/runner/work/btx/btx/.git/
+2026-11-17T22:36:34.0022833Z [command]/usr/bin/git remote add origin https://github.com/sunnyriverr/btx
+2026-11-17T22:36:34.0101598Z ##[endgroup]
+2026-11-17T22:36:34.0102746Z ##[group]Disabling automatic garbage collection
+2026-11-17T22:36:34.0104487Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-17T22:36:34.0136462Z ##[endgroup]
+2026-11-17T22:36:34.0137259Z ##[group]Setting up auth
+2026-11-17T22:36:34.0142055Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-17T22:36:34.0175489Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-17T22:36:34.0499515Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-17T22:36:34.0536862Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-17T22:36:34.0749788Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-17T22:36:34.0794523Z ##[endgroup]
+2026-11-17T22:36:34.0795314Z ##[group]Fetching the repository
+2026-11-17T22:36:34.0803778Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +286ec834c657ad855d45411c46b20f3866c439da:refs/remotes/origin/codex/ci-session3-installed-desktop-074
+2026-11-17T22:36:37.1211071Z From https://github.com/sunnyriverr/btx
+2026-11-17T22:36:37.1213033Z  * [new ref]         286ec834c657ad855d45411c46b20f3866c439da -> origin/codex/ci-session3-installed-desktop-074
+2026-11-17T22:36:37.1216738Z ##[endgroup]
+2026-11-17T22:36:37.1218006Z ##[group]Determining the checkout info
+2026-11-17T22:36:37.1219572Z ##[endgroup]
+2026-11-17T22:36:37.1221937Z [command]/usr/bin/git sparse-checkout disable
+2026-11-17T22:36:37.1274936Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-17T22:36:37.1308720Z ##[group]Checking out the ref
+2026-11-17T22:36:37.1311396Z [command]/usr/bin/git checkout --progress --force -B codex/ci-session3-installed-desktop-074 refs/remotes/origin/codex/ci-session3-installed-desktop-074
+2026-11-17T22:36:37.8884228Z Switched to a new branch 'codex/ci-session3-installed-desktop-074'
+2026-11-17T22:36:37.8909446Z branch 'codex/ci-session3-installed-desktop-074' set up to track 'origin/codex/ci-session3-installed-desktop-074'.
+2026-11-17T22:36:37.8919528Z ##[endgroup]
+2026-11-17T22:36:37.8974649Z [command]/usr/bin/git log -1 --format=%H
+2026-11-17T22:36:37.9003914Z 286ec834c657ad855d45411c46b20f3866c439da
+2026-11-17T22:36:37.9010687Z ##[group]Removing auth
+2026-11-17T22:36:37.9012793Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-17T22:36:37.9044106Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-17T22:36:37.9235622Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-17T22:36:37.9264399Z http.https://github.com/.extraheader
+2026-11-17T22:36:37.9270030Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-17T22:36:37.9304086Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-17T22:36:37.9489948Z ##[endgroup]
+2026-11-17T22:36:37.9602985Z ##[group]Run set -euo pipefail
+2026-11-17T22:36:37.9603173Z [36;1mset -euo pipefail[0m
+2026-11-17T22:36:37.9603303Z [36;1m. /etc/os-release[0m
+2026-11-17T22:36:37.9603440Z [36;1mtest "$VERSION_ID" = 24.04[0m
+2026-11-17T22:36:37.9603589Z [36;1mtest "$(uname -m)" = x86_64[0m
+2026-11-17T22:36:37.9603792Z [36;1mtest "$(df --output=avail -B1 "$RUNNER_TEMP" | tail -1)" -gt 6442450944[0m
+2026-11-17T22:36:37.9604052Z [36;1mcd contrib/devtools/session3-installed-desktop-acceptance[0m
+2026-11-17T22:36:37.9604278Z [36;1msha256sum --check payload.sha256[0m
+2026-11-17T22:36:37.9604465Z [36;1mgetconf GNU_LIBC_VERSION[0m
+2026-11-17T22:36:37.9604606Z [36;1m/usr/bin/python3 --version[0m
+2026-11-17T22:36:37.9620698Z shell: /usr/bin/bash -e {0}
+2026-11-17T22:36:37.9620836Z ##[endgroup]
+2026-11-17T22:36:37.9762171Z accept.py: OK
+2026-11-17T22:36:37.9762401Z gui.py: OK
+2026-11-17T22:36:37.9762561Z ui.py: OK
+2026-11-17T22:36:37.9762725Z lifecycle.py: OK
+2026-11-17T22:36:37.9762961Z install-tree.sh: OK
+2026-11-17T22:36:37.9763138Z workflow.yml: OK
+2026-11-17T22:36:37.9763307Z inputs.json: OK
+2026-11-17T22:36:37.9763483Z source/install.sh: OK
+2026-11-17T22:36:37.9763919Z pins/members.json: OK
+2026-11-17T22:36:37.9764127Z pins/package-implementation.json: OK
+2026-11-17T22:36:37.9764372Z pins/provenance.json: OK
+2026-11-17T22:36:37.9764578Z pins/python-selection.json: OK
+2026-11-17T22:36:37.9775934Z glibc 2.39
+2026-11-17T22:36:37.9785049Z Python 3.12.3
+2026-11-17T22:36:37.9812064Z ##[group]Run set -euo pipefail
+2026-11-17T22:36:37.9812241Z [36;1mset -euo pipefail[0m
+2026-11-17T22:36:37.9812381Z [36;1mmkdir -p preflight-records[0m
+2026-11-17T22:36:37.9812644Z [36;1mapi=https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14319148652[0m
+2026-11-17T22:36:37.9812922Z [36;1mcurl --fail --silent --show-error --location --max-time 30 \[0m
+2026-11-17T22:36:37.9813369Z [36;1m  -H "Authorization: ***" -H 'Accept: application/vnd.github+json' \[0m
+2026-11-17T22:36:37.9813617Z [36;1m  "$api" -o preflight-records/artifact-metadata.json[0m
+2026-11-17T22:36:37.9813858Z [36;1mjq -e '.id==14319148652 and .expired==false and .size_in_bytes==173356636 and[0m
+2026-11-17T22:36:37.9814076Z [36;1m  .workflow_run.id==44063898937 and[0m
+2026-11-17T22:36:37.9814288Z [36;1m  .workflow_run.head_sha=="3145c20fe7f3c215a06398a052f573d5d5bf47aa" and[0m
+2026-11-17T22:36:37.9814597Z [36;1m  .digest=="sha256:d9f58d9623a3e6d13b15b9e67ba2c2b16bb9b574985bbc9dcd69c4aed3daa664"' \[0m
+2026-11-17T22:36:37.9814853Z [36;1m  preflight-records/artifact-metadata.json[0m
+2026-11-17T22:36:37.9815064Z [36;1mcurl --fail --silent --show-error --location --max-time 240 \[0m
+2026-11-17T22:36:37.9815349Z [36;1m  -H "Authorization: ***" -H 'Accept: application/vnd.github+json' \[0m
+2026-11-17T22:36:37.9815578Z [36;1m  "$api/zip" -o "$RUNNER_TEMP/session3-candidate.zip"[0m
+2026-11-17T22:36:37.9815922Z [36;1mecho "d9f58d9623a3e6d13b15b9e67ba2c2b16bb9b574985bbc9dcd69c4aed3daa664  $RUNNER_TEMP/session3-candidate.zip" | sha256sum --check[0m
+2026-11-17T22:36:37.9830882Z shell: /usr/bin/bash -e {0}
+2026-11-17T22:36:37.9831014Z env:
+2026-11-17T22:36:37.9832242Z   GH_TOKEN: ***
+2026-11-17T22:36:37.9832354Z ##[endgroup]
+2026-11-17T22:36:38.2762480Z true
+2026-11-17T22:36:42.3097989Z /home/runner/work/_temp/session3-candidate.zip: OK
+2026-11-17T22:36:42.3128887Z ##[group]Run set -euo pipefail
+2026-11-17T22:36:42.3129105Z [36;1mset -euo pipefail[0m
+2026-11-17T22:36:42.3129272Z [36;1msources="$RUNNER_TEMP/session3-runtime.sources"[0m
+2026-11-17T22:36:42.3129601Z [36;1mapt_opts=(-o "Dir::Etc::sourcelist=$sources" -o Dir::Etc::sourceparts=- -o Acquire::Retries=0 -o Acquire::https::Timeout=12)[0m
+2026-11-17T22:36:42.3129889Z [36;1mselected=[0m
+2026-11-17T22:36:42.3130211Z [36;1mfor mirror in https://mirrors.edge.kernel.org/ubuntu/ https://mirror.math.princeton.edu/pub/ubuntu/ https://mirrors.mit.edu/ubuntu/; do[0m
+2026-11-17T22:36:42.3130724Z [36;1m  curl --fail --silent --show-error --location --max-time 12 --output /dev/null "${mirror}dists/noble/InRelease" || continue[0m
+2026-11-17T22:36:42.3131184Z [36;1m  curl --fail --silent --show-error --location --max-time 12 --output /dev/null "${mirror}dists/noble-security/InRelease" || continue[0m
+2026-11-17T22:36:42.3131771Z [36;1m  printf '%s\n' 'Types: deb' "URIs: $mirror" 'Suites: noble noble-updates noble-security' 'Components: main universe' 'Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg' > "$sources"[0m
+2026-11-17T22:36:42.3132268Z [36;1m  if sudo timeout 70s apt-get "${apt_opts[@]}" -o APT::Update::Error-Mode=any update; then[0m
+2026-11-17T22:36:42.3132501Z [36;1m    selected=$mirror[0m
+2026-11-17T22:36:42.3132627Z [36;1m    break[0m
+2026-11-17T22:36:42.3132735Z [36;1m  fi[0m
+2026-11-17T22:36:42.3132836Z [36;1mdone[0m
+2026-11-17T22:36:42.3132945Z [36;1mtest -n "$selected"[0m
+2026-11-17T22:36:42.3133151Z [36;1msudo timeout 260s apt-get "${apt_opts[@]}" install -y --no-install-recommends \[0m
+2026-11-17T22:36:42.3133449Z [36;1m  libwebkit2gtk-4.1-0 libgtk-3-0t64 libsqlite3-0 libzmq5 libgomp1 libopengl0 \[0m
+2026-11-17T22:36:42.3133750Z [36;1m  libxkbcommon-x11-0 libayatana-appindicator3-1 xdg-desktop-portal \[0m
+2026-11-17T22:36:42.3134030Z [36;1m  xdg-desktop-portal-gtk zenity xvfb xauth dbus-x11 openbox scrot wmctrl \[0m
+2026-11-17T22:36:42.3134265Z [36;1m  xdotool python3-pyatspi at-spi2-core[0m
+2026-11-17T22:36:42.3134463Z [36;1mdpkg-query -W > preflight-records/host-packages.txt[0m
+2026-11-17T22:36:42.3134683Z [36;1mldconfig -p > preflight-records/host-libraries.txt[0m
+2026-11-17T22:36:42.3150619Z shell: /usr/bin/bash -e {0}
+2026-11-17T22:36:42.3150752Z ##[endgroup]
+2026-11-17T22:36:46.7464707Z Get:1 https://mirrors.edge.kernel.org/ubuntu noble InRelease [256 kB]
+2026-11-17T22:36:47.8877703Z Get:2 https://mirrors.edge.kernel.org/ubuntu noble-updates InRelease [126 kB]
+2026-11-17T22:36:48.1391081Z Get:3 https://mirrors.edge.kernel.org/ubuntu noble-security InRelease [126 kB]
+2026-11-17T22:36:48.5717434Z Get:4 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 Packages [1401 kB]
+2026-11-17T22:36:51.2203169Z Get:5 https://mirrors.edge.kernel.org/ubuntu noble/main Translation-en [513 kB]
+2026-11-17T22:36:51.2934643Z Get:6 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 c-n-f Metadata [30.5 kB]
+2026-11-17T22:36:51.3090914Z Get:7 https://mirrors.edge.kernel.org/ubuntu noble/universe amd64 Packages [15.0 MB]
+2026-11-17T22:36:55.6775594Z Get:8 https://mirrors.edge.kernel.org/ubuntu noble/universe Translation-en [5982 kB]
+2026-11-17T22:36:56.0188925Z Get:9 https://mirrors.edge.kernel.org/ubuntu noble/universe amd64 c-n-f Metadata [301 kB]
+2026-11-17T22:36:56.0338834Z Get:10 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 Packages [1450 kB]
+2026-11-17T22:36:56.1662877Z Get:11 https://mirrors.edge.kernel.org/ubuntu noble-updates/main Translation-en [316 kB]
+2026-11-17T22:36:56.2057773Z Get:12 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 c-n-f Metadata [17.7 kB]
+2026-11-17T22:36:56.2231010Z Get:13 https://mirrors.edge.kernel.org/ubuntu noble-updates/universe amd64 Packages [1712 kB]
+2026-11-17T22:36:56.6301336Z Get:14 https://mirrors.edge.kernel.org/ubuntu noble-updates/universe Translation-en [345 kB]
+2026-11-17T22:36:57.4128468Z Get:15 https://mirrors.edge.kernel.org/ubuntu noble-updates/universe amd64 c-n-f Metadata [34.9 kB]
+2026-11-17T22:36:57.7945368Z Get:16 https://mirrors.edge.kernel.org/ubuntu noble-security/main amd64 Packages [1196 kB]
+2026-11-17T22:36:59.4672576Z Get:17 https://mirrors.edge.kernel.org/ubuntu noble-security/main Translation-en [238 kB]
+2026-11-17T22:36:59.8743544Z Get:18 https://mirrors.edge.kernel.org/ubuntu noble-security/main amd64 c-n-f Metadata [11.9 kB]
+2026-11-17T22:36:59.9748287Z Get:19 https://mirrors.edge.kernel.org/ubuntu noble-security/universe amd64 Packages [1229 kB]
+2026-11-17T22:37:00.6651716Z Get:20 https://mirrors.edge.kernel.org/ubuntu noble-security/universe Translation-en [248 kB]
+2026-11-17T22:37:01.1558166Z Get:21 https://mirrors.edge.kernel.org/ubuntu noble-security/universe amd64 c-n-f Metadata [24.2 kB]
+2026-11-17T22:37:01.9440070Z Fetched 30.6 MB in 16s (1867 kB/s)
+2026-11-17T22:37:02.3577042Z Reading package lists...
+2026-11-17T22:37:02.3865445Z Reading package lists...
+2026-11-17T22:37:02.4899726Z Building dependency tree...
+2026-11-17T22:37:02.4904637Z Reading state information...
+2026-11-17T22:37:02.5910641Z libgtk-3-0t64 is already the newest version (3.24.41-4ubuntu1.3).
+2026-11-17T22:37:02.5911053Z libgtk-3-0t64 set to manually installed.
+2026-11-17T22:37:02.5911368Z libsqlite3-0 is already the newest version (3.45.1-1ubuntu2.9).
+2026-11-17T22:37:02.5911679Z libsqlite3-0 set to manually installed.
+2026-11-17T22:37:02.5911944Z libzmq5 is already the newest version (4.3.5-1build2).
+2026-11-17T22:37:02.5912218Z libzmq5 set to manually installed.
+2026-11-17T22:37:02.5912503Z libgomp1 is already the newest version (14.2.0-4ubuntu2~24.04.1).
+2026-11-17T22:37:02.5912802Z libgomp1 set to manually installed.
+2026-11-17T22:37:02.5913016Z xvfb is already the newest version (2:21.1.12-1ubuntu1.9).
+2026-11-17T22:37:02.5913258Z xauth is already the newest version (1:1.1.2-1build1).
+2026-11-17T22:37:02.5913432Z xauth set to manually installed.
+2026-11-17T22:37:02.5913602Z The following additional packages will be installed:
+2026-11-17T22:37:02.5924596Z   bubblewrap fonts-urw-base35 gir1.2-atspi-2.0 gir1.2-freedesktop
+2026-11-17T22:37:02.5924990Z   glib-networking glib-networking-common glib-networking-services
+2026-11-17T22:37:02.5925338Z   gsettings-desktop-schemas gstreamer1.0-plugins-base
+2026-11-17T22:37:02.5925589Z   gstreamer1.0-plugins-good libaa1 libadwaita-1-0 libasyncns0 libatk-adaptor
+2026-11-17T22:37:02.5925864Z   libavc1394-0 libayatana-ido3-0.4-0 libayatana-indicator3-7 libcaca0
+2026-11-17T22:37:02.5926138Z   libcairo-script-interpreter2 libcdparanoia0 libdv4t64 libegl-mesa0 libegl1
+2026-11-17T22:37:02.5926407Z   libflac12t64 libgif7 libgles2 libgraphene-1.0-0 libgs-common libgs10
+2026-11-17T22:37:02.5926661Z   libgs10-common libgstreamer-gl1.0-0 libgstreamer-plugins-base1.0-0
+2026-11-17T22:37:02.5926931Z   libgstreamer-plugins-good1.0-0 libgtk-4-1 libgtk-4-common libharfbuzz-icu0
+2026-11-17T22:37:02.5927191Z   libhwy1t64 libhyphen0 libid3tag0 libidn12 libiec61883-0 libijs-0.35
+2026-11-17T22:37:02.5927431Z   libimlib2t64 libjavascriptcoregtk-4.1-0 libjbig2dec0 libjxl0.7
+2026-11-17T22:37:02.5927675Z   libmanette-0.2-0 libmp3lame0 libmpg123-0t64 libobrender32v5 libobt2v5
+2026-11-17T22:37:02.5927936Z   libopus0 liborc-0.4-0t64 libpangoxft-1.0-0 libpaper1 libpipewire-0.3-0t64
+2026-11-17T22:37:02.5928190Z   libproxy1v5 libpulse0 libraw1394-11 librsvg2-2 libsecret-1-0
+2026-11-17T22:37:02.5928574Z   libsecret-common libshout3 libsndfile1 libsoup-3.0-0 libsoup-3.0-common
+2026-11-17T22:37:02.5928848Z   libspa-0.2-modules libspectre1 libspeex1 libstartup-notification0 libtag1v5
+2026-11-17T22:37:02.5929118Z   libtag1v5-vanilla libtheora0 libtwolame0 libv4l-0t64 libv4lconvert0t64
+2026-11-17T22:37:02.5929370Z   libvisual-0.4-0 libvorbisenc2 libvpx9 libwavpack1 libwayland-server0
+2026-11-17T22:37:02.5929983Z   libwebrtc-audio-processing1 libxcb-util1 libxcb-xkb1 libxdo3 poppler-data
+2026-11-17T22:37:02.5930269Z   session-migration xdg-dbus-proxy xfonts-encodings xfonts-utils zenity-common
+2026-11-17T22:37:02.5930490Z Suggested packages:
+2026-11-17T22:37:02.5930812Z   fonts-freefont-otf | fonts-freefont-ttf fonts-texgyre gvfs libdv-bin
+2026-11-17T22:37:02.5931064Z   oss-compat libvisual-0.4-plugins opus-tools pipewire pulseaudio
+2026-11-17T22:37:02.5931310Z   libraw1394-doc librsvg2-bin speex gstreamer1.0-libav
+2026-11-17T22:37:02.5931544Z   gstreamer1.0-plugins-bad gstreamer1.0-alsa tint2 openbox-gnome-session
+2026-11-17T22:37:02.5931809Z   openbox-kde-session poppler-utils ghostscript fonts-japanese-mincho
+2026-11-17T22:37:02.5932067Z   | fonts-ipafont-mincho fonts-japanese-gothic | fonts-ipafont-gothic
+2026-11-17T22:37:02.5932327Z   fonts-arphic-ukai fonts-arphic-uming fonts-nanum accountsservice evince
+2026-11-17T22:37:02.5932543Z   xdg-desktop-portal-gnome
+2026-11-17T22:37:02.5932681Z Recommended packages:
+2026-11-17T22:37:02.5932856Z   gstreamer1.0-x fonts-droid-fallback gstreamer1.0-gl libgtk-4-bin
+2026-11-17T22:37:02.5933086Z   librsvg2-common libgtk-4-media-gstreamer libpaper-utils
+2026-11-17T22:37:02.6190447Z   libpipewire-0.3-common obconf | obconf-qt
+2026-11-17T22:37:02.6190834Z The following NEW packages will be installed:
+2026-11-17T22:37:02.6191174Z   at-spi2-core bubblewrap dbus-x11 fonts-urw-base35 gir1.2-atspi-2.0
+2026-11-17T22:37:02.6191540Z   gir1.2-freedesktop glib-networking glib-networking-common
+2026-11-17T22:37:02.6191938Z   glib-networking-services gsettings-desktop-schemas gstreamer1.0-plugins-base
+2026-11-17T22:37:02.6192396Z   gstreamer1.0-plugins-good libaa1 libadwaita-1-0 libasyncns0 libatk-adaptor
+2026-11-17T22:37:02.6192777Z   libavc1394-0 libayatana-appindicator3-1 libayatana-ido3-0.4-0
+2026-11-17T22:37:02.6193180Z   libayatana-indicator3-7 libcaca0 libcairo-script-interpreter2 libcdparanoia0
+2026-11-17T22:37:02.6194618Z   libdv4t64 libegl-mesa0 libegl1 libflac12t64 libgif7 libgles2
+2026-11-17T22:37:02.6195018Z   libgraphene-1.0-0 libgs-common libgs10 libgs10-common libgstreamer-gl1.0-0
+2026-11-17T22:37:02.6195440Z   libgstreamer-plugins-base1.0-0 libgstreamer-plugins-good1.0-0 libgtk-4-1
+2026-11-17T22:37:02.6195771Z   libgtk-4-common libharfbuzz-icu0 libhwy1t64 libhyphen0 libid3tag0 libidn12
+2026-11-17T22:37:02.6196029Z   libiec61883-0 libijs-0.35 libimlib2t64 libjavascriptcoregtk-4.1-0
+2026-11-17T22:37:02.6196271Z   libjbig2dec0 libjxl0.7 libmanette-0.2-0 libmp3lame0 libmpg123-0t64
+2026-11-17T22:37:02.6196607Z   libobrender32v5 libobt2v5 libopengl0 libopus0 liborc-0.4-0t64
+2026-11-17T22:37:02.6196921Z   libpangoxft-1.0-0 libpaper1 libpipewire-0.3-0t64 libproxy1v5 libpulse0
+2026-11-17T22:37:02.6197197Z   libraw1394-11 librsvg2-2 libsecret-1-0 libsecret-common libshout3
+2026-11-17T22:37:02.6197456Z   libsndfile1 libsoup-3.0-0 libsoup-3.0-common libspa-0.2-modules libspectre1
+2026-11-17T22:37:02.6197737Z   libspeex1 libstartup-notification0 libtag1v5 libtag1v5-vanilla libtheora0
+2026-11-17T22:37:02.6198010Z   libtwolame0 libv4l-0t64 libv4lconvert0t64 libvisual-0.4-0 libvorbisenc2
+2026-11-17T22:37:02.6198253Z   libvpx9 libwavpack1 libwayland-server0 libwebkit2gtk-4.1-0
+2026-11-17T22:37:02.6198833Z   libwebrtc-audio-processing1 libxcb-util1 libxcb-xkb1 libxdo3
+2026-11-17T22:37:02.6199105Z   libxkbcommon-x11-0 openbox poppler-data python3-pyatspi scrot
+2026-11-17T22:37:02.6199338Z   session-migration wmctrl xdg-dbus-proxy xdg-desktop-portal
+2026-11-17T22:37:02.6199580Z   xdg-desktop-portal-gtk xdotool xfonts-encodings xfonts-utils zenity
+2026-11-17T22:37:02.6199783Z   zenity-common
+2026-11-17T22:37:14.9156828Z 0 upgraded, 105 newly installed, 0 to remove and 20 not upgraded.
+2026-11-17T22:37:14.9157193Z Need to get 73.4 MB of archives.
+2026-11-17T22:37:14.9157464Z After this operation, 265 MB of additional disk space will be used.
+2026-11-17T22:37:14.9157889Z Err:1 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 poppler-data all 0.4.12-1
+2026-11-17T22:37:14.9159192Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable) Could not connect to mirrors.edge.kernel.org:443 (142.0.200.124), connection timed out
+2026-11-17T22:37:14.9160120Z Err:2 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 session-migration amd64 0.3.9build1
+2026-11-17T22:37:14.9160700Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9161335Z Err:3 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 gsettings-desktop-schemas all 46.1-0ubuntu1
+2026-11-17T22:37:14.9161956Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9162513Z Err:4 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 at-spi2-core amd64 2.52.0-1build1
+2026-11-17T22:37:14.9163071Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9163659Z Ign:5 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 bubblewrap amd64 0.9.0-1ubuntu0.3
+2026-11-17T22:37:14.9164194Z Err:6 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 dbus-x11 amd64 1.14.10-4ubuntu4.1
+2026-11-17T22:37:14.9164773Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9165341Z Err:7 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 xfonts-encodings all 1:1.0.5-0ubuntu2
+2026-11-17T22:37:14.9165906Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9166464Z Err:8 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3
+2026-11-17T22:37:14.9167016Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9167569Z Err:9 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 fonts-urw-base35 all 20200910-8
+2026-11-17T22:37:14.9168125Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9168780Z Err:10 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 gir1.2-freedesktop amd64 1.80.1-1
+2026-11-17T22:37:14.9169337Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9169903Z Err:11 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 gir1.2-atspi-2.0 amd64 2.52.0-1build1
+2026-11-17T22:37:14.9170471Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9171023Z Err:12 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libproxy1v5 amd64 0.5.4-4build1
+2026-11-17T22:37:14.9171579Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9172167Z Err:13 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 glib-networking-common all 2.80.0-1build1
+2026-11-17T22:37:14.9172750Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9173342Z Err:14 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 glib-networking-services amd64 2.80.0-1build1
+2026-11-17T22:37:14.9173935Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9174497Z Err:15 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 glib-networking amd64 2.80.0-1build1
+2026-11-17T22:37:14.9175063Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9175780Z Err:16 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libcdparanoia0 amd64 3.10.2+debian-14build3
+2026-11-17T22:37:14.9176458Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9177066Z Ign:17 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 liborc-0.4-0t64 amd64 1:0.4.38-1ubuntu0.1
+2026-11-17T22:37:14.9177690Z Ign:18 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libgstreamer-plugins-base1.0-0 amd64 1.24.2-1ubuntu0.7
+2026-11-17T22:37:14.9178251Z Err:19 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libopus0 amd64 1.4-1build1
+2026-11-17T22:37:14.9178894Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9179471Z Err:20 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libtheora0 amd64 1.1.1+dfsg.1-16.1build3
+2026-11-17T22:37:14.9180052Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9180619Z Err:21 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libvisual-0.4-0 amd64 0.4.2-2build1
+2026-11-17T22:37:14.9181179Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9181737Z Err:22 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libvorbisenc2 amd64 1.3.7-1build3
+2026-11-17T22:37:14.9182292Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9182929Z Ign:23 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 gstreamer1.0-plugins-base amd64 1.24.2-1ubuntu0.7
+2026-11-17T22:37:14.9183464Z Err:24 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libaa1 amd64 1.4p5-51.1
+2026-11-17T22:37:14.9184006Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9184568Z Err:25 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libraw1394-11 amd64 2.1.2-2build3
+2026-11-17T22:37:14.9185123Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9185679Z Err:26 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libavc1394-0 amd64 0.5.4-5build3
+2026-11-17T22:37:14.9186235Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9186826Z Ign:27 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libcaca0 amd64 0.99.beta20-4ubuntu0.2
+2026-11-17T22:37:14.9187345Z Err:28 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libdv4t64 amd64 1.0.0-17.1build1
+2026-11-17T22:37:14.9187905Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9188568Z Err:29 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libflac12t64 amd64 1.4.3+ds-2.1ubuntu2
+2026-11-17T22:37:14.9189135Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9189782Z Ign:30 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libgstreamer-plugins-good1.0-0 amd64 1.24.2-1ubuntu1.8
+2026-11-17T22:37:14.9190359Z Err:31 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libiec61883-0 amd64 1.2.0-6build1
+2026-11-17T22:37:14.9190915Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9191269Z Err:32 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libmp3lame0 amd64 3.100-6build1
+2026-11-17T22:37:14.9191853Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9192523Z Ign:33 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libmpg123-0t64 amd64 1.32.5-1ubuntu1.1
+2026-11-17T22:37:14.9192858Z Err:34 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libasyncns0 amd64 0.8-6build4
+2026-11-17T22:37:14.9193395Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9193998Z Ign:35 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libsndfile1 amd64 1.2.2-1ubuntu5.24.04.1
+2026-11-17T22:37:14.9194571Z Err:36 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libpulse0 amd64 1:16.1+dfsg1-2ubuntu10.1
+2026-11-17T22:37:14.9195173Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9195768Z Err:37 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libspeex1 amd64 1.2.1-2ubuntu2.24.04.1
+2026-11-17T22:37:14.9196369Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9196915Z Err:38 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libshout3 amd64 2.4.6-1build2
+2026-11-17T22:37:14.9197466Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9198034Z Err:39 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libtag1v5-vanilla amd64 1.13.1-1build1
+2026-11-17T22:37:14.9198692Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9199239Z Err:40 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libtag1v5 amd64 1.13.1-1build1
+2026-11-17T22:37:14.9199793Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9200345Z Err:41 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libtwolame0 amd64 0.4.0-2build3
+2026-11-17T22:37:14.9200900Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9201470Z Err:42 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libv4lconvert0t64 amd64 1.26.1-4build3
+2026-11-17T22:37:14.9202035Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9202588Z Err:43 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libv4l-0t64 amd64 1.26.1-4build3
+2026-11-17T22:37:14.9203137Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9203711Z Ign:44 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libvpx9 amd64 1.14.0-1ubuntu2.3
+2026-11-17T22:37:14.9204217Z Err:45 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libwavpack1 amd64 5.6.0-1build1
+2026-11-17T22:37:14.9204781Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9205386Z Ign:46 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libsoup-3.0-common all 3.4.4-5ubuntu0.11
+2026-11-17T22:37:14.9205957Z Ign:47 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libsoup-3.0-0 amd64 3.4.4-5ubuntu0.11
+2026-11-17T22:37:14.9206554Z Ign:48 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 gstreamer1.0-plugins-good amd64 1.24.2-1ubuntu1.8
+2026-11-17T22:37:14.9207131Z Err:49 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libgraphene-1.0-0 amd64 1.10.8-3build2
+2026-11-17T22:37:14.9207809Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9208508Z Err:50 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libcairo-script-interpreter2 amd64 1.18.0-3build1
+2026-11-17T22:37:14.9209204Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9209553Z Err:51 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libgles2 amd64 1.7.0-1build1
+2026-11-17T22:37:14.9209903Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9210284Z Err:52 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libgtk-4-common all 4.14.5+ds-0ubuntu0.10
+2026-11-17T22:37:14.9210667Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9211046Z Err:53 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libgtk-4-1 amd64 4.14.5+ds-0ubuntu0.10
+2026-11-17T22:37:14.9211433Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9211788Z Err:54 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libadwaita-1-0 amd64 1.5.0-1ubuntu2
+2026-11-17T22:37:14.9212146Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9212505Z Err:55 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libatk-adaptor amd64 2.52.0-1build1
+2026-11-17T22:37:14.9212862Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9213233Z Err:56 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libayatana-ido3-0.4-0 amd64 0.10.1-1build2
+2026-11-17T22:37:14.9213607Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9213977Z Err:57 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libayatana-indicator3-7 amd64 0.9.4-1build1
+2026-11-17T22:37:14.9214355Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9214779Z Err:58 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libayatana-appindicator3-1 amd64 0.5.93-1build3
+2026-11-17T22:37:14.9215158Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9215542Z Err:59 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libegl-mesa0 amd64 25.2.8-0ubuntu0.24.04.4
+2026-11-17T22:37:14.9215923Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9216309Z Ign:60 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libgif7 amd64 5.2.2-1ubuntu1.2
+2026-11-17T22:37:14.9216661Z Ign:61 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libgs-common all 10.02.1~dfsg1-0ubuntu7.10
+2026-11-17T22:37:14.9217038Z Ign:62 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libgs10-common all 10.02.1~dfsg1-0ubuntu7.10
+2026-11-17T22:37:14.9217394Z Ign:63 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libidn12 amd64 1.42-1ubuntu0.1
+2026-11-17T22:37:14.9217709Z Err:64 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libijs-0.35 amd64 0.35-15.1build1
+2026-11-17T22:37:14.9218063Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9218598Z Ign:65 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libjbig2dec0 amd64 0.20-1ubuntu0.24.04.1
+2026-11-17T22:37:14.9219024Z Err:66 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libpaper1 amd64 1.1.29build1
+2026-11-17T22:37:14.9219371Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9219829Z Ign:67 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libgs10 amd64 10.02.1~dfsg1-0ubuntu7.10
+2026-11-17T22:37:14.9220158Z Err:68 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libegl1 amd64 1.7.0-1build1
+2026-11-17T22:37:14.9220506Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9220893Z Ign:69 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libgstreamer-gl1.0-0 amd64 1.24.2-1ubuntu0.7
+2026-11-17T22:37:14.9221245Z Err:70 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libharfbuzz-icu0 amd64 8.3.0-2build2
+2026-11-17T22:37:14.9221630Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9221985Z Err:71 https://mirrors.edge.kernel.org/ubuntu noble/universe amd64 libhwy1t64 amd64 1.0.7-8.1build1
+2026-11-17T22:37:14.9222350Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9222699Z Err:72 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libhyphen0 amd64 2.8.8-7build3
+2026-11-17T22:37:14.9223050Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9223408Z Err:73 https://mirrors.edge.kernel.org/ubuntu noble/universe amd64 libid3tag0 amd64 0.15.1b-14build1
+2026-11-17T22:37:14.9223795Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9224202Z Ign:74 https://mirrors.edge.kernel.org/ubuntu noble-updates/universe amd64 libjxl0.7 amd64 0.7.0-10.2ubuntu6.1
+2026-11-17T22:37:14.9224565Z Ign:75 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 librsvg2-2 amd64 2.58.0+dfsg-1ubuntu0.1
+2026-11-17T22:37:14.9224909Z Err:76 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libspectre1 amd64 0.2.12-1build2
+2026-11-17T22:37:14.9225274Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9225646Z Err:77 https://mirrors.edge.kernel.org/ubuntu noble/universe amd64 libimlib2t64 amd64 1.12.1-1.1build2
+2026-11-17T22:37:14.9226010Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9226421Z Ign:78 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libjavascriptcoregtk-4.1-0 amd64 2.52.6-0ubuntu0.24.04.1
+2026-11-17T22:37:14.9226798Z Err:79 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libmanette-0.2-0 amd64 0.2.7-1build2
+2026-11-17T22:37:14.9227152Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9227582Z Err:80 https://mirrors.edge.kernel.org/ubuntu noble/universe amd64 libobt2v5 amd64 3.6.1-12build5
+2026-11-17T22:37:14.9227957Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9228436Z Err:81 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libpangoxft-1.0-0 amd64 1.52.1+ds-1build1
+2026-11-17T22:37:14.9228825Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9229188Z Err:82 https://mirrors.edge.kernel.org/ubuntu noble/universe amd64 libobrender32v5 amd64 3.6.1-12build5
+2026-11-17T22:37:14.9229664Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9230046Z Err:83 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libwebrtc-audio-processing1 amd64 0.3.1-0ubuntu6
+2026-11-17T22:37:14.9230512Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9231142Z Ign:84 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libspa-0.2-modules amd64 1.0.5-1ubuntu3.3
+2026-11-17T22:37:14.9231733Z Ign:85 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libpipewire-0.3-0t64 amd64 1.0.5-1ubuntu3.3
+2026-11-17T22:37:14.9232273Z Err:86 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libsecret-common all 0.21.4-1build3
+2026-11-17T22:37:14.9232830Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9233388Z Err:87 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libsecret-1-0 amd64 0.21.4-1build3
+2026-11-17T22:37:14.9233944Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9234499Z Err:88 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libxcb-util1 amd64 0.4.0-1build3
+2026-11-17T22:37:14.9235046Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9235627Z Err:89 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libstartup-notification0 amd64 0.12-6build3
+2026-11-17T22:37:14.9236204Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9236772Z Err:90 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libwayland-server0 amd64 1.22.0-2.1build1
+2026-11-17T22:37:14.9237345Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9237936Z Ign:91 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 xdg-dbus-proxy amd64 0.1.5-1ubuntu0.2
+2026-11-17T22:37:14.9238613Z Ign:92 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libwebkit2gtk-4.1-0 amd64 2.52.6-0ubuntu0.24.04.1
+2026-11-17T22:37:14.9239155Z Err:93 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libxcb-xkb1 amd64 1.15-1ubuntu2
+2026-11-17T22:37:14.9239702Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9240261Z Err:94 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libxkbcommon-x11-0 amd64 1.6.0-1build1
+2026-11-17T22:37:14.9240825Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9241381Z Err:95 https://mirrors.edge.kernel.org/ubuntu noble/universe amd64 openbox amd64 3.6.1-12build5
+2026-11-17T22:37:14.9241927Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9242480Z Err:96 https://mirrors.edge.kernel.org/ubuntu noble/universe amd64 python3-pyatspi all 2.46.1-1
+2026-11-17T22:37:14.9243036Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9243573Z Err:97 https://mirrors.edge.kernel.org/ubuntu noble/universe amd64 scrot amd64 1.10-1build2
+2026-11-17T22:37:14.9244113Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9244655Z Err:98 https://mirrors.edge.kernel.org/ubuntu noble/universe amd64 wmctrl amd64 1.07-7ubuntu3
+2026-11-17T22:37:14.9245201Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9246090Z Ign:99 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 xdg-desktop-portal amd64 1.18.4-1ubuntu2.24.04.3
+2026-11-17T22:37:14.9246757Z Err:100 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 xdg-desktop-portal-gtk amd64 1.15.1-1build2
+2026-11-17T22:37:14.9247344Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9247893Z Err:101 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 zenity-common all 4.0.1-1build3
+2026-11-17T22:37:14.9248537Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9249075Z Err:102 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 zenity amd64 4.0.1-1build3
+2026-11-17T22:37:14.9249611Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9250161Z Err:103 https://mirrors.edge.kernel.org/ubuntu noble/main amd64 libopengl0 amd64 1.7.0-1build1
+2026-11-17T22:37:14.9250715Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9251282Z Err:104 https://mirrors.edge.kernel.org/ubuntu noble/universe amd64 libxdo3 amd64 1:3.20160805.1-5build1
+2026-11-17T22:37:14.9251848Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9252417Z Err:105 https://mirrors.edge.kernel.org/ubuntu noble/universe amd64 xdotool amd64 1:3.20160805.1-5build1
+2026-11-17T22:37:14.9252989Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9253561Z Err:5 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 bubblewrap amd64 0.9.0-1ubuntu0.3
+2026-11-17T22:37:14.9254135Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9254702Z Err:17 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 liborc-0.4-0t64 amd64 1:0.4.38-1ubuntu0.1
+2026-11-17T22:37:14.9255082Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9255486Z Err:18 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libgstreamer-plugins-base1.0-0 amd64 1.24.2-1ubuntu0.7
+2026-11-17T22:37:14.9255897Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9256293Z Err:23 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 gstreamer1.0-plugins-base amd64 1.24.2-1ubuntu0.7
+2026-11-17T22:37:14.9256690Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9257063Z Err:27 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libcaca0 amd64 0.99.beta20-4ubuntu0.2
+2026-11-17T22:37:14.9257438Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9257844Z Err:30 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libgstreamer-plugins-good1.0-0 amd64 1.24.2-1ubuntu1.8
+2026-11-17T22:37:14.9258255Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9258809Z Err:33 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libmpg123-0t64 amd64 1.32.5-1ubuntu1.1
+2026-11-17T22:37:14.9259188Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9259665Z Err:35 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libsndfile1 amd64 1.2.2-1ubuntu5.24.04.1
+2026-11-17T22:37:14.9260172Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9260539Z Err:44 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libvpx9 amd64 1.14.0-1ubuntu2.3
+2026-11-17T22:37:14.9260902Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9261282Z Err:46 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libsoup-3.0-common all 3.4.4-5ubuntu0.11
+2026-11-17T22:37:14.9261667Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9262038Z Err:47 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libsoup-3.0-0 amd64 3.4.4-5ubuntu0.11
+2026-11-17T22:37:14.9262418Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9262819Z Err:48 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 gstreamer1.0-plugins-good amd64 1.24.2-1ubuntu1.8
+2026-11-17T22:37:14.9263217Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9263581Z Err:60 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libgif7 amd64 5.2.2-1ubuntu1.2
+2026-11-17T22:37:14.9263938Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9264361Z Err:61 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libgs-common all 10.02.1~dfsg1-0ubuntu7.10
+2026-11-17T22:37:14.9264934Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9265558Z Err:62 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libgs10-common all 10.02.1~dfsg1-0ubuntu7.10
+2026-11-17T22:37:14.9266258Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9266870Z Err:63 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libidn12 amd64 1.42-1ubuntu0.1
+2026-11-17T22:37:14.9267442Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9268027Z Err:65 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libjbig2dec0 amd64 0.20-1ubuntu0.24.04.1
+2026-11-17T22:37:14.9268660Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9269043Z Err:67 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libgs10 amd64 10.02.1~dfsg1-0ubuntu7.10
+2026-11-17T22:37:14.9269419Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9269809Z Err:69 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libgstreamer-gl1.0-0 amd64 1.24.2-1ubuntu0.7
+2026-11-17T22:37:14.9270200Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9270600Z Err:74 https://mirrors.edge.kernel.org/ubuntu noble-updates/universe amd64 libjxl0.7 amd64 0.7.0-10.2ubuntu6.1
+2026-11-17T22:37:14.9270981Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9271355Z Err:75 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 librsvg2-2 amd64 2.58.0+dfsg-1ubuntu0.1
+2026-11-17T22:37:14.9271841Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9272328Z Err:78 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libjavascriptcoregtk-4.1-0 amd64 2.52.6-0ubuntu0.24.04.1
+2026-11-17T22:37:14.9272744Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9273126Z Err:84 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libspa-0.2-modules amd64 1.0.5-1ubuntu3.3
+2026-11-17T22:37:14.9273507Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9273892Z Err:85 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libpipewire-0.3-0t64 amd64 1.0.5-1ubuntu3.3
+2026-11-17T22:37:14.9274444Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9275040Z Err:91 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 xdg-dbus-proxy amd64 0.1.5-1ubuntu0.2
+2026-11-17T22:37:14.9275632Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9276122Z Err:92 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 libwebkit2gtk-4.1-0 amd64 2.52.6-0ubuntu0.24.04.1
+2026-11-17T22:37:14.9276519Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9276914Z Err:99 https://mirrors.edge.kernel.org/ubuntu noble-updates/main amd64 xdg-desktop-portal amd64 1.18.4-1ubuntu2.24.04.3
+2026-11-17T22:37:14.9277309Z   Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9278080Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/p/poppler-data/poppler-data_0.4.12-1_all.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable) Could not connect to mirrors.edge.kernel.org:443 (142.0.200.124), connection timed out
+2026-11-17T22:37:14.9279166Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/s/session-migration/session-migration_0.3.9build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9280038Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/g/gsettings-desktop-schemas/gsettings-desktop-schemas_46.1-0ubuntu1_all.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9280898Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/a/at-spi2-core/at-spi2-core_2.52.0-1build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9281707Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/b/bubblewrap/bubblewrap_0.9.0-1ubuntu0.3_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9282487Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/d/dbus/dbus-x11_1.14.10-4ubuntu4.1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9283289Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/x/xfonts-encodings/xfonts-encodings_1.0.5-0ubuntu2_all.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9284289Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/x/xfonts-utils/xfonts-utils_7.7%2b6build3_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9285106Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/f/fonts-urw-base35/fonts-urw-base35_20200910-8_all.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9286028Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/g/gobject-introspection/gir1.2-freedesktop_1.80.1-1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9286916Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/a/at-spi2-core/gir1.2-atspi-2.0_2.52.0-1build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9287853Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libp/libproxy/libproxy1v5_0.5.4-4build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9288818Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/g/glib-networking/glib-networking-common_2.80.0-1build1_all.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9289675Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/g/glib-networking/glib-networking-services_2.80.0-1build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9290512Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/g/glib-networking/glib-networking_2.80.0-1build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9291349Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/c/cdparanoia/libcdparanoia0_3.10.2%2bdebian-14build3_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9292170Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/o/orc/liborc-0.4-0t64_0.4.38-1ubuntu0.1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9293019Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/g/gst-plugins-base1.0/libgstreamer-plugins-base1.0-0_1.24.2-1ubuntu0.7_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9293858Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/o/opus/libopus0_1.4-1build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9294657Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libt/libtheora/libtheora0_1.1.1%2bdfsg.1-16.1build3_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9295472Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libv/libvisual/libvisual-0.4-0_0.4.2-2build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9296362Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libv/libvorbis/libvorbisenc2_1.3.7-1build3_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9297283Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/g/gst-plugins-base1.0/gstreamer1.0-plugins-base_1.24.2-1ubuntu0.7_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9298096Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/a/aalib/libaa1_1.4p5-51.1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9299017Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libr/libraw1394/libraw1394-11_2.1.2-2build3_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9299824Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/liba/libavc1394/libavc1394-0_0.5.4-5build3_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9300626Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libc/libcaca/libcaca0_0.99.beta20-4ubuntu0.2_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9301420Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libd/libdv/libdv4t64_1.0.0-17.1build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9302207Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/f/flac/libflac12t64_1.4.3%2bds-2.1ubuntu2_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9303059Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/g/gst-plugins-good1.0/libgstreamer-plugins-good1.0-0_1.24.2-1ubuntu1.8_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9303917Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libi/libiec61883/libiec61883-0_1.2.0-6build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9304710Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/l/lame/libmp3lame0_3.100-6build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9305496Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/m/mpg123/libmpg123-0t64_1.32.5-1ubuntu1.1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9306288Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/liba/libasyncns/libasyncns0_0.8-6build4_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9307105Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libs/libsndfile/libsndfile1_1.2.2-1ubuntu5.24.04.1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9307933Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/p/pulseaudio/libpulse0_16.1%2bdfsg1-2ubuntu10.1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9309048Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/s/speex/libspeex1_1.2.1-2ubuntu2.24.04.1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9309830Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libs/libshout/libshout3_2.4.6-1build2_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9310618Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/t/taglib/libtag1v5-vanilla_1.13.1-1build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9311404Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/t/taglib/libtag1v5_1.13.1-1build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9312181Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/t/twolame/libtwolame0_0.4.0-2build3_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9312977Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/v/v4l-utils/libv4lconvert0t64_1.26.1-4build3_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9313768Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/v/v4l-utils/libv4l-0t64_1.26.1-4build3_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9314554Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libv/libvpx/libvpx9_1.14.0-1ubuntu2.3_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9315335Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/w/wavpack/libwavpack1_5.6.0-1build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9316135Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libs/libsoup3/libsoup-3.0-common_3.4.4-5ubuntu0.11_all.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9316970Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libs/libsoup3/libsoup-3.0-0_3.4.4-5ubuntu0.11_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9317824Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/g/gst-plugins-good1.0/gstreamer1.0-plugins-good_1.24.2-1ubuntu1.8_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9318809Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/g/graphene/libgraphene-1.0-0_1.10.8-3build2_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9319633Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/c/cairo/libcairo-script-interpreter2_1.18.0-3build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9320597Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libg/libglvnd/libgles2_1.7.0-1build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9321386Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/g/gtk4/libgtk-4-common_4.14.5%2bds-0ubuntu0.10_all.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9322183Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/g/gtk4/libgtk-4-1_4.14.5%2bds-0ubuntu0.10_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9322984Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/liba/libadwaita-1/libadwaita-1-0_1.5.0-1ubuntu2_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9323799Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/a/at-spi2-core/libatk-adaptor_2.52.0-1build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9337690Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/a/ayatana-ido/libayatana-ido3-0.4-0_0.10.1-1build2_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9338741Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/liba/libayatana-indicator/libayatana-indicator3-7_0.9.4-1build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9339657Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/liba/libayatana-appindicator/libayatana-appindicator3-1_0.5.93-1build3_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9340519Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/m/mesa/libegl-mesa0_25.2.8-0ubuntu0.24.04.4_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9341314Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/g/giflib/libgif7_5.2.2-1ubuntu1.2_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9342124Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/g/ghostscript/libgs-common_10.02.1%7edfsg1-0ubuntu7.10_all.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9342968Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/g/ghostscript/libgs10-common_10.02.1%7edfsg1-0ubuntu7.10_all.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9343781Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libi/libidn/libidn12_1.42-1ubuntu0.1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9344561Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/i/ijs/libijs-0.35_0.35-15.1build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9345478Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/j/jbig2dec/libjbig2dec0_0.20-1ubuntu0.24.04.1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9346351Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libp/libpaper/libpaper1_1.1.29build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9347164Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/g/ghostscript/libgs10_10.02.1%7edfsg1-0ubuntu7.10_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9347963Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libg/libglvnd/libegl1_1.7.0-1build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9348866Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/g/gst-plugins-base1.0/libgstreamer-gl1.0-0_1.24.2-1ubuntu0.7_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9349694Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/h/harfbuzz/libharfbuzz-icu0_8.3.0-2build2_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9350493Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/universe/h/highway/libhwy1t64_1.0.7-8.1build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9351269Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/h/hyphen/libhyphen0_2.8.8-7build3_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9352067Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/universe/libi/libid3tag/libid3tag0_0.15.1b-14build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9352873Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/universe/j/jpeg-xl/libjxl0.7_0.7.0-10.2ubuntu6.1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9353681Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libr/librsvg/librsvg2-2_2.58.0%2bdfsg-1ubuntu0.1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9354489Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libs/libspectre/libspectre1_0.2.12-1build2_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9355294Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/universe/i/imlib2/libimlib2t64_1.12.1-1.1build2_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9356133Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/w/webkit2gtk/libjavascriptcoregtk-4.1-0_2.52.6-0ubuntu0.24.04.1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9356981Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libm/libmanette/libmanette-0.2-0_0.2.7-1build2_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9357935Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/universe/o/openbox/libobt2v5_3.6.1-12build5_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9358812Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/p/pango1.0/libpangoxft-1.0-0_1.52.1%2bds-1build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9359631Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/universe/o/openbox/libobrender32v5_3.6.1-12build5_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9360501Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/w/webrtc-audio-processing/libwebrtc-audio-processing1_0.3.1-0ubuntu6_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9361367Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/p/pipewire/libspa-0.2-modules_1.0.5-1ubuntu3.3_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9362189Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/p/pipewire/libpipewire-0.3-0t64_1.0.5-1ubuntu3.3_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9363009Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libs/libsecret/libsecret-common_0.21.4-1build3_all.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9363822Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libs/libsecret/libsecret-1-0_0.21.4-1build3_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9364617Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/x/xcb-util/libxcb-util1_0.4.0-1build3_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9365451Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/s/startup-notification/libstartup-notification0_0.12-6build3_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9366302Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/w/wayland/libwayland-server0_1.22.0-2.1build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9367128Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/x/xdg-dbus-proxy/xdg-dbus-proxy_0.1.5-1ubuntu0.2_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9367959Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/w/webkit2gtk/libwebkit2gtk-4.1-0_2.52.6-0ubuntu0.24.04.1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9368843Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libx/libxcb/libxcb-xkb1_1.15-1ubuntu2_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9369836Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libx/libxkbcommon/libxkbcommon-x11-0_1.6.0-1build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9370643Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/universe/o/openbox/openbox_3.6.1-12build5_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9371425Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/universe/p/pyatspi/python3-pyatspi_2.46.1-1_all.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9372197Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/universe/s/scrot/scrot_1.10-1build2_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9372967Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/universe/w/wmctrl/wmctrl_1.07-7ubuntu3_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9373795Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/x/xdg-desktop-portal/xdg-desktop-portal_1.18.4-1ubuntu2.24.04.3_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9374675Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/x/xdg-desktop-portal-gtk/xdg-desktop-portal-gtk_1.15.1-1build2_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9375505Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/z/zenity/zenity-common_4.0.1-1build3_all.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9376264Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/z/zenity/zenity_4.0.1-1build3_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9377033Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/main/libg/libglvnd/libopengl0_1.7.0-1build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9377823Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/universe/x/xdotool/libxdo3_3.20160805.1-5build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9378763Z E: Failed to fetch https://mirrors.edge.kernel.org/ubuntu/pool/universe/x/xdotool/xdotool_3.20160805.1-5build1_amd64.deb  Cannot initiate the connection to mirrors.edge.kernel.org:443 (2605:f480:58:1:0:1994:3:14). - connect (101: Network is unreachable)
+2026-11-17T22:37:14.9379315Z E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
+2026-11-17T22:37:14.9386493Z ##[error]Process completed with exit code 100.
+2026-11-17T22:37:14.9503507Z ##[group]Run set -euo pipefail
+2026-11-17T22:37:14.9503693Z [36;1mset -euo pipefail[0m
+2026-11-17T22:37:14.9503914Z [36;1mtest "$PREFLIGHT/$ARCHIVE/$PREREQUISITES/$DESKTOP" = success/success/success/success[0m
+2026-11-17T22:37:14.9504238Z [36;1mjq -e '.overall=="PASS" and .runtime_removed==true and .payload_unchanged==true and[0m
+2026-11-17T22:37:14.9504496Z [36;1m  .cleanup_signals==[] and .cleanup_remaining==[] and[0m
+2026-11-17T22:37:14.9505000Z [36;1m  .phases=={"artifact":"PASS","installed_tree":"PASS","gui":"PASS","lifecycle":"PASS","unchanged_payload":"PASS"}' acceptance-records/result.json[0m
+2026-11-17T22:37:14.9505376Z [36;1mjq -e '.overall=="PASS"' acceptance-records/gui/result.json[0m
+2026-11-17T22:37:14.9505608Z [36;1mjq -e '.overall=="PASS"' acceptance-records/lifecycle/result.json[0m
+2026-11-17T22:37:14.9520835Z shell: /usr/bin/bash -e {0}
+2026-11-17T22:37:14.9520961Z env:
+2026-11-17T22:37:14.9521062Z   PREFLIGHT: success
+2026-11-17T22:37:14.9521195Z   ARCHIVE: success
+2026-11-17T22:37:14.9521303Z   PREREQUISITES: failure
+2026-11-17T22:37:14.9521419Z   DESKTOP: skipped
+2026-11-17T22:37:14.9521525Z ##[endgroup]
+2026-11-17T22:37:15.0614859Z ##[error]Process completed with exit code 1.
+2026-11-17T22:37:15.1030053Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+2026-11-17T22:37:15.1030264Z with:
+2026-11-17T22:37:15.1030419Z   name: session3-installed-desktop-records-44191690985-1
+2026-11-17T22:37:15.1030630Z   path: preflight-records/
+acceptance-records/
+
+2026-11-17T22:37:15.1030796Z   if-no-files-found: error
+2026-11-17T22:37:15.1030918Z   retention-days: 14
+2026-11-17T22:37:15.1031034Z   compression-level: 6
+2026-11-17T22:37:15.1031149Z   overwrite: false
+2026-11-17T22:37:15.1031262Z   include-hidden-files: false
+2026-11-17T22:37:15.1031389Z ##[endgroup]
+2026-11-17T22:37:15.2074313Z (node:2452) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-17T22:37:15.2074931Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-17T22:37:15.2128667Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-11-17T22:37:15.2129449Z The least common ancestor is /home/runner/work/btx/btx. This will be the root directory of the artifact
+2026-11-17T22:37:15.2129752Z With the provided path, there will be 1 file uploaded
+2026-11-17T22:37:15.2130014Z Artifact name is valid!
+2026-11-17T22:37:15.2130148Z Root directory input is valid!
+2026-11-17T22:37:15.5011927Z Beginning upload of artifact content to blob storage
+2026-11-17T22:37:15.5149607Z (node:2452) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-17T22:37:15.6903820Z Uploaded bytes 638
+2026-11-17T22:37:15.7381370Z Finished uploading artifact content to blob storage!
+2026-11-17T22:37:15.7381945Z SHA256 digest of uploaded artifact zip is b3d595fdd0b08979bfdee1a24270768c90af681111d4503366e5acbea09e6d47
+2026-11-17T22:37:15.7383206Z Finalizing artifact upload
+2026-11-17T22:37:16.0906217Z Artifact session3-installed-desktop-records-44191690985-1.zip successfully finalized. Artifact ID 14376323226
+2026-11-17T22:37:16.0906817Z Artifact session3-installed-desktop-records-44191690985-1 has been successfully uploaded! Final size is 638 bytes. Artifact ID is 14376323226
+2026-11-17T22:37:16.0912103Z Artifact download URL: https://github.com/sunnyriverr/btx/actions/runs/44191690985/artifacts/14376323226
+2026-11-17T22:37:16.1084537Z Post job cleanup.
+2026-11-17T22:37:16.1650247Z [command]/usr/bin/git version
+2026-11-17T22:37:16.1683620Z git version 2.56.1
+2026-11-17T22:37:16.1707342Z Temporarily overriding HOME='/home/runner/work/_temp/b48faa3b-e973-43ac-8460-b0a899ae6c9b' before making global git config changes
+2026-11-17T22:37:16.1708068Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-17T22:37:16.1710577Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/btx/btx
+2026-11-17T22:37:16.1744774Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-17T22:37:16.1772033Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-17T22:37:16.1982037Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-17T22:37:16.2014696Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-17T22:37:16.2365775Z Cleaning up orphan processes
+2026-11-17T22:37:16.2614007Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

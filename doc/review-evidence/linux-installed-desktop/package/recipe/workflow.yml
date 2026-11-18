@@ -1,0 +1,154 @@
+name: Session3 installed desktop exact archive acceptance
+on:
+  workflow_dispatch:
+    inputs:
+      execute:
+        description: Explicitly authorize the reviewed disposable desktop run
+        type: boolean
+        required: true
+        default: false
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: session3-installed-desktop-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  acceptance:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 36
+    steps:
+      - name: Enforce explicit bounded run and isolated branch
+        env:
+          EXECUTE: ${{ inputs.execute }}
+          TASK_REF: ${{ github.ref_name }}
+        run: |
+          test "$EXECUTE" = true
+          test "$TASK_REF" = codex/ci-session3-installed-desktop-074
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Verify reviewed payload and runner
+        id: preflight
+        timeout-minutes: 2
+        run: |
+          set -euo pipefail
+          . /etc/os-release
+          test "$VERSION_ID" = 24.04
+          test "$(uname -m)" = x86_64
+          test "$(df --output=avail -B1 "$RUNNER_TEMP" | tail -1)" -gt 6442450944
+          cd contrib/devtools/session3-installed-desktop-acceptance
+          sha256sum --check payload.sha256
+          getconf GNU_LIBC_VERSION
+          /usr/bin/python3 --version
+      - name: Retrieve exact immutable artifact bytes
+        id: archive
+        timeout-minutes: 6
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p preflight-records
+          api=https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14319148652
+          curl --fail --silent --show-error --location --max-time 30 \
+            -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' \
+            "$api" -o preflight-records/artifact-metadata.json
+          jq -e '.id==14319148652 and .expired==false and .size_in_bytes==173356636 and
+            .workflow_run.id==44063898937 and
+            .workflow_run.head_sha=="3145c20fe7f3c215a06398a052f573d5d5bf47aa" and
+            .digest=="sha256:d9f58d9623a3e6d13b15b9e67ba2c2b16bb9b574985bbc9dcd69c4aed3daa664"' \
+            preflight-records/artifact-metadata.json
+          curl --fail --silent --show-error --location --max-time 240 \
+            -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' \
+            "$api/zip" -o "$RUNNER_TEMP/session3-candidate.zip"
+          echo "d9f58d9623a3e6d13b15b9e67ba2c2b16bb9b574985bbc9dcd69c4aed3daa664  $RUNNER_TEMP/session3-candidate.zip" | sha256sum --check
+      - name: Install declared desktop host prerequisites
+        id: prerequisites
+        timeout-minutes: 9
+        run: |
+          set -euo pipefail
+          mkdir -p preflight-records
+          exec > >(tee preflight-records/prerequisites.log) 2>&1
+          sources="$RUNNER_TEMP/session3-runtime.sources"
+          apt_opts=(-o "Dir::Etc::sourcelist=$sources" -o Dir::Etc::sourceparts=- -o Acquire::Retries=0 -o Acquire::https::Timeout=12)
+          packages=(libwebkit2gtk-4.1-0 libgtk-3-0t64 libsqlite3-0 libzmq5 libgomp1 libopengl0
+            libxkbcommon-x11-0 libayatana-appindicator3-1 xdg-desktop-portal
+            xdg-desktop-portal-gtk zenity xvfb xauth dbus-x11 openbox scrot wmctrl
+            xdotool python3-pyatspi at-spi2-core)
+          deadline=$((SECONDS + 420))
+          selected=
+          for mirror in https://mirrors.edge.kernel.org/ubuntu/ https://mirror.math.princeton.edu/pub/ubuntu/ https://mirrors.mit.edu/ubuntu/; do
+            remaining=$((deadline - SECONDS))
+            test "$remaining" -gt 90 || break
+            curl --fail --silent --show-error --location --max-time 12 --output /dev/null "${mirror}dists/noble/InRelease" || continue
+            curl --fail --silent --show-error --location --max-time 12 --output /dev/null "${mirror}dists/noble-security/InRelease" || continue
+            printf '%s\n' 'Types: deb' "URIs: $mirror" 'Suites: noble noble-updates noble-security' 'Components: main universe' 'Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg' > "$sources"
+            if ! sudo timeout 60s apt-get "${apt_opts[@]}" -o APT::Update::Error-Mode=any update; then
+              continue
+            fi
+            remaining=$((deadline - SECONDS))
+            test "$remaining" -gt 30 || break
+            budget=$remaining
+            if test "$budget" -gt 120; then budget=120; fi
+            # A failed download leaves only apt's cache; no package has been installed yet.
+            if sudo timeout "${budget}s" apt-get "${apt_opts[@]}" --download-only install -y --no-install-recommends "${packages[@]}"; then
+              selected=$mirror
+              break
+            fi
+          done
+          test -n "$selected"
+          printf 'Complete dependency download selected: %s\n' "$selected"
+          # Keep the existing nine-minute workflow step bound: <=420s fetch +90s install.
+          sudo timeout 90s apt-get "${apt_opts[@]}" --no-download install -y --no-install-recommends "${packages[@]}"
+          dpkg-query -W > preflight-records/host-packages.txt
+          ldconfig -p > preflight-records/host-libraries.txt
+      - name: Install once then observe desktop and ordinary lifecycle
+        id: desktop
+        timeout-minutes: 16
+        env:
+          BTX_DESKTOP_ACCEPTANCE: authorized-disposable-run
+        run: |
+          set -euo pipefail
+          umask 077
+          export XDG_CURRENT_DESKTOP=Openbox XDG_SESSION_TYPE=x11
+          export XDG_RUNTIME_DIR="$RUNNER_TEMP/session3-desktop-dbus"
+          export XDG_CONFIG_HOME="$RUNNER_TEMP/session3-desktop-config"
+          mkdir -p "$XDG_RUNTIME_DIR" "$XDG_CONFIG_HOME/xdg-desktop-portal"
+          chmod 700 "$XDG_RUNTIME_DIR"
+          printf '[preferred]\ndefault=gtk\n' > "$XDG_CONFIG_HOME/xdg-desktop-portal/portals.conf"
+          timeout --signal=TERM --kill-after=120s 780s dbus-run-session -- \
+            xvfb-run -a -s '-screen 0 1440x1000x24 -nolisten tcp' bash -ec '
+              dbus-update-activation-environment DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_RUNTIME_DIR XDG_CONFIG_HOME
+              timeout 20s gdbus call --session --dest org.freedesktop.portal.Desktop --object-path /org/freedesktop/portal/desktop --method org.freedesktop.DBus.Properties.Get org.freedesktop.portal.FileChooser version > preflight-records/portal.txt
+              openbox > preflight-records/openbox.log 2>&1 & wm=$!
+              trap '\''kill "$wm" 2>/dev/null || true; wait "$wm" 2>/dev/null || true'\'' EXIT
+              /usr/bin/python3 contrib/devtools/session3-installed-desktop-acceptance/accept.py \
+                --artifact "$RUNNER_TEMP/session3-candidate.zip" \
+                --runtime "$RUNNER_TEMP/session3-installed-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" \
+                --out "$GITHUB_WORKSPACE/acceptance-records"
+            '
+      - name: Require every phase and complete evidence
+        if: always()
+        env:
+          PREFLIGHT: ${{ steps.preflight.outcome }}
+          ARCHIVE: ${{ steps.archive.outcome }}
+          PREREQUISITES: ${{ steps.prerequisites.outcome }}
+          DESKTOP: ${{ steps.desktop.outcome }}
+        run: |
+          set -euo pipefail
+          test "$PREFLIGHT/$ARCHIVE/$PREREQUISITES/$DESKTOP" = success/success/success/success
+          jq -e '.overall=="PASS" and .runtime_removed==true and .payload_unchanged==true and
+            .cleanup_signals==[] and .cleanup_remaining==[] and
+            .phases=={"artifact":"PASS","installed_tree":"PASS","gui":"PASS","lifecycle":"PASS","unchanged_payload":"PASS"}' acceptance-records/result.json
+          jq -e '.overall=="PASS"' acceptance-records/gui/result.json
+          jq -e '.overall=="PASS"' acceptance-records/lifecycle/result.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: session3-installed-desktop-records-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            preflight-records/
+            acceptance-records/
+          if-no-files-found: error
+          retention-days: 14

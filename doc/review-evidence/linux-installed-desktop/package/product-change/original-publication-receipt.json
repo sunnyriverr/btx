@@ -1,0 +1,54 @@
+{
+  "utc": "2026-11-17T11:01:37.140Z",
+  "pr": {
+    "number": 822,
+    "url": "https://github.com/btxchain/btx/pull/822",
+    "head": "9a677c9548e60f36b1feb13b0333c97e2dd71d89",
+    "base": "release-0.34.17",
+    "base_sha": "cd3078e76398b20b7f500acd1348a5b5455f3d5e",
+    "state": "open",
+    "body": "**Problem**\n\nLinux packaging with a prefix-installed Python can fail staged imports with missing cryptography.\n\n**Cause**\n\nThe stdlib copy excludes site-packages/dist-packages, while third-party selection also excludes everything beneath stdlib.\n\n**Fix**\n\nInclude those direct nested package directories in third-party selection, preserve stdlib/dynload and prefix/import checks, and add one regression covering both layouts.\n\n**Tested on**\n\n- macOS, Python 3.9.6: identical regression fails both nested-layout subtests before the fix and passes afterward; three existing layout/copy/prefix controls pass both versions.\n- Ubuntu 22.04 container: retained binaries from 074dac16 plus the patched bundler pass actual module selection, staged imports, all 18 components and 150 ELF shipping checks, and the original final archive verifier with --no-launch. No rebuild.\n\n**Not tested**\n\nFull suite, GUI/installed-tree/service/restart, wallet, or Windows/macOS packaging. The overall CI job failed its final artifact-metadata GET with HTTP 404; later identity checks passed with an independent credential. A full client download/hash check timed out; no independent full archive checksum is claimed.\n\n**Base**\n\nrelease-0.34.17 at cd3078e7. Native packaging used binaries compiled from 074dac16; both affected baseline files are byte-identical at these revisions. This is not whole-branch or official-release qualification.\n\nBuilds on JPP's bundler and tests, with Numair's release integration. [Evidence and exact limits](https://github.com/sunnyriverr/btx/blob/bfbcb2b311eb2fadb48ad4e9a77a23d4b2615002/doc/review-evidence/linux-python-site-packages/README.md).\n",
+    "title": "release: include nested Python site packages",
+    "commits": 1,
+    "changed_files": 2
+  },
+  "files": [
+    {
+      "sha": "754daef67ea28d3dae0c1efe400c5c123ba3fb63",
+      "filename": "scripts/release/bundle_python_runtime.py",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 1,
+      "changes": 7,
+      "blob_url": "https://github.com/btxchain/btx/blob/9a677c9548e60f36b1feb13b0333c97e2dd71d89/scripts%2Frelease%2Fbundle_python_runtime.py",
+      "raw_url": "https://github.com/btxchain/btx/raw/9a677c9548e60f36b1feb13b0333c97e2dd71d89/scripts%2Frelease%2Fbundle_python_runtime.py",
+      "contents_url": "https://api.github.com/repos/btxchain/btx/contents/scripts%2Frelease%2Fbundle_python_runtime.py?ref=9a677c9548e60f36b1feb13b0333c97e2dd71d89",
+      "patch": "@@ -183,7 +183,12 @@ def _third_party_roots(info: dict) -> dict[str, Path]:\n     roots: dict[str, Path] = {}\n     for name, file in info[\"modules\"].items():\n         path = Path(file)\n-        if path == stdlib or stdlib in path.parents or dynload in path.parents:\n+        if path == stdlib or path == dynload or dynload in path.parents:\n+            continue\n+        # Prefix installs put third-party packages below stdlib, but the\n+        # stdlib copy deliberately excludes these two package directories.\n+        if (stdlib in path.parents\n+                and path.relative_to(stdlib).parts[0] not in (\"site-packages\", \"dist-packages\")):\n             continue\n         top = name.split(\".\")[0]\n         top_file = Path(info[\"modules\"].get(top, file))"
+    },
+    {
+      "sha": "6645decf7c04f356d00c9b7d02ca084c5a1bac60",
+      "filename": "test/util/package_release_archive_test.py",
+      "status": "modified",
+      "additions": 19,
+      "deletions": 0,
+      "changes": 19,
+      "blob_url": "https://github.com/btxchain/btx/blob/9a677c9548e60f36b1feb13b0333c97e2dd71d89/test%2Futil%2Fpackage_release_archive_test.py",
+      "raw_url": "https://github.com/btxchain/btx/raw/9a677c9548e60f36b1feb13b0333c97e2dd71d89/test%2Futil%2Fpackage_release_archive_test.py",
+      "contents_url": "https://api.github.com/repos/btxchain/btx/contents/test%2Futil%2Fpackage_release_archive_test.py?ref=9a677c9548e60f36b1feb13b0333c97e2dd71d89",
+      "patch": "@@ -1095,6 +1095,25 @@ def test_third_party_roots_are_top_level_packages_and_modules(self):\n             \"cryptography\": site / \"cryptography\",\n             \"_cffi_backend\": site / \"_cffi_backend.cpython-312-x86_64-linux-gnu.so\"})\n \n+    def test_third_party_roots_include_packages_nested_below_stdlib(self):\n+        stdlib = self.root / \"opt/python/lib/python3.12\"\n+        dynload = stdlib / \"lib-dynload\"\n+        for directory in (\"site-packages\", \"dist-packages\"):\n+            with self.subTest(directory=directory):\n+                site = stdlib / directory\n+                info = {\"stdlib\": str(stdlib), \"lib_dynload\": str(dynload), \"modules\": {\n+                    \"os\": str(stdlib / \"os.py\"),\n+                    \"json\": str(stdlib / \"json/__init__.py\"),\n+                    \"json.data\": str(stdlib / \"json/site-packages/data.py\"),\n+                    \"_ssl\": str(dynload / \"_ssl.cpython-312-x86_64-linux-gnu.so\"),\n+                    \"dynload_data\": str(dynload / \"site-packages/data.py\"),\n+                    \"cryptography.hazmat.primitives\": str(site / \"cryptography/hazmat/primitives/__init__.py\"),\n+                    \"cryptography\": str(site / \"cryptography/__init__.py\"),\n+                    \"_cffi_backend\": str(site / \"_cffi_backend.cpython-312-x86_64-linux-gnu.so\")}}\n+                self.assertEqual(self.module._third_party_roots(info), {\n+                    \"cryptography\": site / \"cryptography\",\n+                    \"_cffi_backend\": site / \"_cffi_backend.cpython-312-x86_64-linux-gnu.so\"})\n+\n     def test_startup_sonames_leave_out_what_only_libpython_pulls_in(self):\n         host = self.root / \"host\"\n         libs = {name: self._elf(host / name, needed=needed, executable=False) for name, needed in ("
+    }
+  ],
+  "evidence_commit": "bfbcb2b311eb2fadb48ad4e9a77a23d4b2615002",
+  "evidence_url": "https://github.com/sunnyriverr/btx/blob/bfbcb2b311eb2fadb48ad4e9a77a23d4b2615002/doc/review-evidence/linux-python-site-packages/README.md",
+  "evidence_files_verified": 35,
+  "body_readback_verified": true,
+  "noreply_identity_verified": true,
+  "merge_status": "Not merged; maintainer review/adoption unproved",
+  "new_tests_or_native_runs": 0,
+  "wallet_access": false,
+  "publication_booking": "363abd22-386d-4996-a77e-668d69b225cc",
+  "upstream_posts": 1,
+  "extra_comments": 0,
+  "overlap_checked_open_pr_count": 108,
+  "body_sha256": "2abd7ffd0e51105ce230c906095cb742279a9e350fed0bd70f99e4659ddd9466"
+}
