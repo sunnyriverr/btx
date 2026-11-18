@@ -1,0 +1,106 @@
+name: Session 3 live-module CTest regression qualification
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: session3-live-runpath-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  producer:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    steps:
+      - name: Fetch only the reviewed inert fixture
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /.github/workflows/linux-replacement-pilot.yml
+            /cmake/module/InstallBinaryComponent.cmake
+            /cmake/tests.cmake
+            /test/util/install_binary_component_runpath_test.py
+            /contrib/devtools/session3-linux-runpath/live-qualification/
+      - name: Admit the original OS and minimum CMake package
+        shell: bash
+        run: |
+          set -euo pipefail
+          records="$RUNNER_TEMP/session3-linux-runpath-records"
+          mkdir "$records"
+          cat /etc/os-release > "$records/os-release.txt"
+          uname -a > "$records/uname.txt"
+          df -k "$RUNNER_TEMP" > "$records/disk.txt"
+          python3 - <<'PY'
+          import platform, shutil
+          from pathlib import Path
+          fields = dict(line.split('=', 1) for line in Path('/etc/os-release').read_text().splitlines() if '=' in line)
+          assert fields.get('ID', '').strip('"') == 'ubuntu'
+          assert fields.get('VERSION_ID', '').strip('"') == '22.04'
+          assert platform.machine() == 'x86_64'
+          assert shutil.disk_usage('.').free >= 2 * 1024 ** 3
+          PY
+          sudo timeout --kill-after=10s 180s apt-get update > "$records/apt-update.log" 2>&1
+          apt-cache madison cmake > "$records/cmake-packages.txt"
+          version="$(python3 - "$records/cmake-packages.txt" <<'PY'
+          from pathlib import Path
+          import sys
+          versions = [line.split('|')[1].strip() for line in Path(sys.argv[1]).read_text().splitlines() if '|' in line]
+          selected = next((value for value in versions if value.startswith('3.22.')), None)
+          if not selected:
+              raise SystemExit('No CMake 3.22 package offered; stop, no alternate toolchain')
+          print(selected)
+          PY
+          )"
+          printf '%s\n' "$version" > "$records/selected-cmake-package.txt"
+          sudo timeout --kill-after=10s 180s apt-get install --allow-downgrades --no-install-recommends -y \
+            "cmake=$version" "cmake-data=$version" g++ make binutils ninja-build \
+            > "$records/apt-install.log" 2>&1
+          /usr/bin/cmake --version > "$records/cmake-version.txt"
+          /usr/bin/c++ --version > "$records/compiler-version.txt"
+          /usr/bin/make --version > "$records/make-version.txt"
+          /usr/bin/readelf --version > "$records/readelf-version.txt"
+          dpkg-query -W cmake cmake-data g++ make binutils > "$records/packages.txt"
+      - name: Admit the pinned modern tool and second driver
+        shell: bash
+        run: |
+          set -euo pipefail
+          records="$RUNNER_TEMP/session3-linux-runpath-records"
+          test -x /usr/bin/g++-11
+          test -x /usr/bin/clang++-14
+          /usr/bin/clang++-14 --version > "$records/clang-version.txt"
+          ninja --version > "$records/ninja-version.txt"
+          tools="$RUNNER_TEMP/session3-linux-runpath-tools"
+          mkdir "$tools"
+          curl --fail --location --retry 0 --connect-timeout 20 --max-time 120 \
+            'https://github.com/Kitware/CMake/releases/download/v4.3.0/cmake-4.3.0-linux-x86_64.tar.gz' \
+            --output "$tools/cmake.tar.gz" > "$records/cmake-download.log" 2>&1
+          printf '%s  %s\n' \
+            '201bdabe17a54e017f119cffa247648e9c44327e52473c2cc60a88fded94652a' \
+            "$tools/cmake.tar.gz" | sha256sum --check > "$records/cmake-archive-sha256.txt"
+          test "$(stat -c '%s' "$tools/cmake.tar.gz")" = 63971801
+          timeout --kill-after=10s 90s tar --no-same-owner -xzf "$tools/cmake.tar.gz" -C "$tools"
+          "$tools/cmake-4.3.0-linux-x86_64/bin/cmake" --version > "$records/modern-cmake-version.txt"
+      - name: Run the bounded current-versus-candidate profiles once
+        shell: bash
+        run: |
+          set -euo pipefail
+          records="$RUNNER_TEMP/session3-linux-runpath-records"
+          # Exercise the new maintained entry through actual CTest registration.
+          # Only tiny probe programs compile; no root BTX configure/build/test.
+          timeout --kill-after=10s 360s python3 contrib/devtools/session3-linux-runpath/live-qualification/qualify.py \
+            --repository "$GITHUB_WORKSPACE" \
+            --modern-cmake "$RUNNER_TEMP/session3-linux-runpath-tools/cmake-4.3.0-linux-x86_64/bin/cmake" \
+            --work "$RUNNER_TEMP/session3-linux-runpath-results" \
+            > "$records/paired-controller.log" 2>&1
+      - name: Preserve setup and observed results, including failures
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: session3-live-runpath-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/session3-linux-runpath-records
+            ${{ runner.temp }}/session3-linux-runpath-results
+          if-no-files-found: error
+          retention-days: 14

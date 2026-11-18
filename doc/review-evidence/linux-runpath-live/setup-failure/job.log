@@ -1,0 +1,239 @@
+﻿2026-11-18T07:34:09.2722428Z Current runner version: '2.338.2'
+2026-11-18T07:34:09.2755016Z ##[group]Runner Image Provisioner
+2026-11-18T07:34:09.2756174Z Hosted Compute Agent
+2026-11-18T07:34:09.2756881Z Version: 20261103.629
+2026-11-18T07:34:09.2757755Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+2026-11-18T07:34:09.2758700Z Build Date: 2026-11-03T17:26:59Z
+2026-11-18T07:34:09.2759623Z Worker ID: {43bbccf4-8d7e-453a-9873-5a3824354723}
+2026-11-18T07:34:09.2760785Z Region: eastus3
+2026-11-18T07:34:09.2761466Z Cloud: Azure
+2026-11-18T07:34:09.2762158Z ##[endgroup]
+2026-11-18T07:34:09.2764250Z ##[group]Operating System
+2026-11-18T07:34:09.2765218Z Ubuntu
+2026-11-18T07:34:09.2765907Z 22.04.5
+2026-11-18T07:34:09.2766582Z LTS
+2026-11-18T07:34:09.2767292Z ##[endgroup]
+2026-11-18T07:34:09.2768081Z ##[group]Runner Image
+2026-11-18T07:34:09.2768842Z Image: ubuntu-22.04
+2026-11-18T07:34:09.2769594Z Version: 20261111.360.2
+2026-11-18T07:34:09.2771404Z Included Software: https://github.com/actions/runner-images/blob/ubuntu22/20261111.360/images/ubuntu/Ubuntu2204-Readme.md
+2026-11-18T07:34:09.2773505Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu22%2F20261111.360
+2026-11-18T07:34:09.2774720Z ##[endgroup]
+2026-11-18T07:34:09.2776181Z ##[group]GITHUB_TOKEN Permissions
+2026-11-18T07:34:09.2779405Z Contents: read
+2026-11-18T07:34:09.2780522Z Metadata: read
+2026-11-18T07:34:09.2781262Z ##[endgroup]
+2026-11-18T07:34:09.2784388Z Secret source: Actions
+2026-11-18T07:34:09.2785604Z Cache mode: write
+2026-11-18T07:34:09.2786782Z Prepare workflow directory
+2026-11-18T07:34:09.3121961Z Prepare all required actions
+2026-11-18T07:34:09.3170423Z Getting action download info
+2026-11-18T07:34:09.5949560Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-18T07:34:09.7277134Z Download action repository 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-11-18T07:34:09.9584399Z Complete job name: producer
+2026-11-18T07:34:10.0344570Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+2026-11-18T07:34:10.0345575Z with:
+2026-11-18T07:34:10.0346074Z   persist-credentials: false
+2026-11-18T07:34:10.0346702Z   fetch-depth: 1
+2026-11-18T07:34:10.0347241Z   sparse-checkout-cone-mode: false
+2026-11-18T07:34:10.0348725Z   sparse-checkout: /cmake/module/InstallBinaryComponent.cmake
+/cmake/tests.cmake
+/test/util/install_binary_component_runpath_test.py
+/contrib/devtools/session3-linux-runpath/live-qualification/
+
+2026-11-18T07:34:10.0350998Z   repository: sunnyriverr/btx
+2026-11-18T07:34:10.0355044Z   token: ***
+2026-11-18T07:34:10.0355583Z   ssh-strict: true
+2026-11-18T07:34:10.0356079Z   ssh-user: git
+2026-11-18T07:34:10.0356565Z   clean: true
+2026-11-18T07:34:10.0357055Z   fetch-tags: false
+2026-11-18T07:34:10.0357539Z   show-progress: true
+2026-11-18T07:34:10.0358055Z   lfs: false
+2026-11-18T07:34:10.0358532Z   submodules: false
+2026-11-18T07:34:10.0359090Z   set-safe-directory: true
+2026-11-18T07:34:10.0359764Z   allow-unsafe-pr-checkout: false
+2026-11-18T07:34:10.0360811Z ##[endgroup]
+2026-11-18T07:34:10.2470252Z Syncing repository: sunnyriverr/btx
+2026-11-18T07:34:10.2473236Z ##[group]Getting Git version info
+2026-11-18T07:34:10.2474301Z Working directory is '/home/runner/work/btx/btx'
+2026-11-18T07:34:10.2475783Z [command]/usr/bin/git version
+2026-11-18T07:34:10.2556405Z git version 2.56.1
+2026-11-18T07:34:10.2594408Z ##[endgroup]
+2026-11-18T07:34:10.2604205Z Temporarily overriding HOME='/home/runner/work/_temp/890c173c-e1d2-4711-b5a4-f3bf39e46704' before making global git config changes
+2026-11-18T07:34:10.2606151Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-18T07:34:10.2607845Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/btx/btx
+2026-11-18T07:34:10.2648036Z Deleting the contents of '/home/runner/work/btx/btx'
+2026-11-18T07:34:10.2651658Z ##[group]Initializing the repository
+2026-11-18T07:34:10.2656787Z [command]/usr/bin/git init /home/runner/work/btx/btx
+2026-11-18T07:34:10.2746411Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-18T07:34:10.2748087Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-18T07:34:10.2749584Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-18T07:34:10.2751134Z hint: call:
+2026-11-18T07:34:10.2751995Z hint:
+2026-11-18T07:34:10.2752984Z hint: 	git config --global init.defaultBranch <name>
+2026-11-18T07:34:10.2754003Z hint:
+2026-11-18T07:34:10.2755810Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-18T07:34:10.2757381Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-18T07:34:10.2771082Z hint:
+2026-11-18T07:34:10.2772218Z hint: 	git branch -m <name>
+2026-11-18T07:34:10.2791281Z hint:
+2026-11-18T07:34:10.2792826Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-18T07:34:10.2794695Z Initialized empty Git repository in /home/runner/work/btx/btx/.git/
+2026-11-18T07:34:10.2797869Z [command]/usr/bin/git remote add origin https://github.com/sunnyriverr/btx
+2026-11-18T07:34:10.2818011Z ##[endgroup]
+2026-11-18T07:34:10.2819301Z ##[group]Disabling automatic garbage collection
+2026-11-18T07:34:10.2820615Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-18T07:34:10.2860705Z ##[endgroup]
+2026-11-18T07:34:10.2862040Z ##[group]Setting up auth
+2026-11-18T07:34:10.2868340Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-18T07:34:10.2914386Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-18T07:34:10.3395589Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-18T07:34:10.3433619Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-18T07:34:10.3623297Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-18T07:34:10.3654142Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-18T07:34:10.3844812Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-18T07:34:10.3884849Z ##[endgroup]
+2026-11-18T07:34:10.3885912Z ##[group]Fetching the repository
+2026-11-18T07:34:10.3893731Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --filter=blob:none --depth=1 origin +c70f95148c0ed37c4b8ea8c6d3451fbe8f2a256d:refs/remotes/origin/codex/ci-linux-runpath-producer
+2026-11-18T07:34:10.7298552Z From https://github.com/sunnyriverr/btx
+2026-11-18T07:34:10.7301069Z  * [new ref]         c70f95148c0ed37c4b8ea8c6d3451fbe8f2a256d -> origin/codex/ci-linux-runpath-producer
+2026-11-18T07:34:10.7304941Z ##[endgroup]
+2026-11-18T07:34:10.7306754Z ##[group]Determining the checkout info
+2026-11-18T07:34:10.7308494Z ##[endgroup]
+2026-11-18T07:34:10.7310099Z ##[group]Setting up sparse checkout
+2026-11-18T07:34:10.7314371Z [command]/usr/bin/git config core.sparseCheckout true
+2026-11-18T07:34:10.7352931Z [command]/usr/bin/git rev-parse --git-path info/sparse-checkout
+2026-11-18T07:34:10.7377962Z .git/info/sparse-checkout
+2026-11-18T07:34:10.7386170Z ##[endgroup]
+2026-11-18T07:34:10.7387810Z ##[group]Checking out the ref
+2026-11-18T07:34:10.7404600Z [command]/usr/bin/git checkout --progress --force -B codex/ci-linux-runpath-producer refs/remotes/origin/codex/ci-linux-runpath-producer
+2026-11-18T07:34:11.2455123Z Switched to a new branch 'codex/ci-linux-runpath-producer'
+2026-11-18T07:34:11.2456676Z branch 'codex/ci-linux-runpath-producer' set up to track 'origin/codex/ci-linux-runpath-producer'.
+2026-11-18T07:34:11.2461739Z ##[endgroup]
+2026-11-18T07:34:11.2497625Z [command]/usr/bin/git log -1 --format=%H
+2026-11-18T07:34:11.2522345Z c70f95148c0ed37c4b8ea8c6d3451fbe8f2a256d
+2026-11-18T07:34:11.2531084Z ##[group]Removing auth
+2026-11-18T07:34:11.2534327Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-18T07:34:11.2562783Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-18T07:34:11.2771461Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-18T07:34:11.2792357Z http.https://github.com/.extraheader
+2026-11-18T07:34:11.2799146Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-18T07:34:11.2830060Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-18T07:34:11.3033763Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-18T07:34:11.3063220Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-18T07:34:11.3263765Z ##[endgroup]
+2026-11-18T07:34:11.3460276Z ##[group]Run set -euo pipefail
+2026-11-18T07:34:11.3461125Z [36;1mset -euo pipefail[0m
+2026-11-18T07:34:11.3461710Z [36;1mrecords="$RUNNER_TEMP/session3-linux-runpath-records"[0m
+2026-11-18T07:34:11.3462350Z [36;1mmkdir "$records"[0m
+2026-11-18T07:34:11.3462833Z [36;1mcat /etc/os-release > "$records/os-release.txt"[0m
+2026-11-18T07:34:11.3463370Z [36;1muname -a > "$records/uname.txt"[0m
+2026-11-18T07:34:11.3463892Z [36;1mdf -k "$RUNNER_TEMP" > "$records/disk.txt"[0m
+2026-11-18T07:34:11.3464374Z [36;1mpython3 - <<'PY'[0m
+2026-11-18T07:34:11.3464839Z [36;1mimport platform, shutil[0m
+2026-11-18T07:34:11.3465314Z [36;1mfrom pathlib import Path[0m
+2026-11-18T07:34:11.3466035Z [36;1mfields = dict(line.split('=', 1) for line in Path('/etc/os-release').read_text().splitlines() if '=' in line)[0m
+2026-11-18T07:34:11.3466858Z [36;1massert fields.get('ID', '').strip('"') == 'ubuntu'[0m
+2026-11-18T07:34:11.3467488Z [36;1massert fields.get('VERSION_ID', '').strip('"') == '22.04'[0m
+2026-11-18T07:34:11.3468115Z [36;1massert platform.machine() == 'x86_64'[0m
+2026-11-18T07:34:11.3468649Z [36;1massert shutil.disk_usage('.').free >= 2 * 1024 ** 3[0m
+2026-11-18T07:34:11.3469170Z [36;1mPY[0m
+2026-11-18T07:34:11.3469722Z [36;1msudo timeout --kill-after=10s 180s apt-get update > "$records/apt-update.log" 2>&1[0m
+2026-11-18T07:34:11.3470628Z [36;1mapt-cache madison cmake > "$records/cmake-packages.txt"[0m
+2026-11-18T07:34:11.3471320Z [36;1mversion="$(python3 - "$records/cmake-packages.txt" <<'PY'[0m
+2026-11-18T07:34:11.3471857Z [36;1mfrom pathlib import Path[0m
+2026-11-18T07:34:11.3472372Z [36;1mimport sys[0m
+2026-11-18T07:34:11.3472996Z [36;1mversions = [line.split('|')[1].strip() for line in Path(sys.argv[1]).read_text().splitlines() if '|' in line][0m
+2026-11-18T07:34:11.3473796Z [36;1mselected = next((value for value in versions if value.startswith('3.22.')), None)[0m
+2026-11-18T07:34:11.3474443Z [36;1mif not selected:[0m
+2026-11-18T07:34:11.3475020Z [36;1m    raise SystemExit('No CMake 3.22 package offered; stop, no alternate toolchain')[0m
+2026-11-18T07:34:11.3475640Z [36;1mprint(selected)[0m
+2026-11-18T07:34:11.3476052Z [36;1mPY[0m
+2026-11-18T07:34:11.3476412Z [36;1m)"[0m
+2026-11-18T07:34:11.3476956Z [36;1mprintf '%s\n' "$version" > "$records/selected-cmake-package.txt"[0m
+2026-11-18T07:34:11.3477729Z [36;1msudo timeout --kill-after=10s 180s apt-get install --allow-downgrades --no-install-recommends -y \[0m
+2026-11-18T07:34:11.3478553Z [36;1m  "cmake=$version" "cmake-data=$version" g++ make binutils ninja-build \[0m
+2026-11-18T07:34:11.3479326Z [36;1m  > "$records/apt-install.log" 2>&1[0m
+2026-11-18T07:34:11.3480112Z [36;1m/usr/bin/cmake --version > "$records/cmake-version.txt"[0m
+2026-11-18T07:34:11.3480750Z [36;1m/usr/bin/c++ --version > "$records/compiler-version.txt"[0m
+2026-11-18T07:34:11.3481387Z [36;1m/usr/bin/make --version > "$records/make-version.txt"[0m
+2026-11-18T07:34:11.3481992Z [36;1m/usr/bin/readelf --version > "$records/readelf-version.txt"[0m
+2026-11-18T07:34:11.3482680Z [36;1mdpkg-query -W cmake cmake-data g++ make binutils > "$records/packages.txt"[0m
+2026-11-18T07:34:11.3534206Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-18T07:34:11.3534931Z ##[endgroup]
+2026-11-18T07:34:25.4296229Z ##[group]Run set -euo pipefail
+2026-11-18T07:34:25.4296699Z [36;1mset -euo pipefail[0m
+2026-11-18T07:34:25.4297118Z [36;1mrecords="$RUNNER_TEMP/session3-linux-runpath-records"[0m
+2026-11-18T07:34:25.4297567Z [36;1mtest -x /usr/bin/g++-11[0m
+2026-11-18T07:34:25.4297909Z [36;1mtest -x /usr/bin/clang++-14[0m
+2026-11-18T07:34:25.4298426Z [36;1m/usr/bin/clang++-14 --version > "$records/clang-version.txt"[0m
+2026-11-18T07:34:25.4298885Z [36;1mninja --version > "$records/ninja-version.txt"[0m
+2026-11-18T07:34:25.4299363Z [36;1mtools="$RUNNER_TEMP/session3-linux-runpath-tools"[0m
+2026-11-18T07:34:25.4299776Z [36;1mmkdir "$tools"[0m
+2026-11-18T07:34:25.4300530Z [36;1mcurl --fail --location --retry 0 --connect-timeout 20 --max-time 120 \[0m
+2026-11-18T07:34:25.4301222Z [36;1m  'https://github.com/Kitware/CMake/releases/download/v4.3.0/cmake-4.3.0-linux-x86_64.tar.gz' \[0m
+2026-11-18T07:34:25.4301966Z [36;1m  --output "$tools/cmake.tar.gz" > "$records/cmake-download.log" 2>&1[0m
+2026-11-18T07:34:25.4302430Z [36;1mprintf '%s  %s\n' \[0m
+2026-11-18T07:34:25.4302894Z [36;1m  '201bdabe17a54e017f119cffa247648e9c44327e52473c2cc60a88fded94652a' \[0m
+2026-11-18T07:34:25.4303497Z [36;1m  "$tools/cmake.tar.gz" | sha256sum --check > "$records/cmake-archive-sha256.txt"[0m
+2026-11-18T07:34:25.4304068Z [36;1mtest "$(stat -c '%s' "$tools/cmake.tar.gz")" = 63971801[0m
+2026-11-18T07:34:25.4304611Z [36;1mtimeout --kill-after=10s 90s tar --no-same-owner -xzf "$tools/cmake.tar.gz" -C "$tools"[0m
+2026-11-18T07:34:25.4305274Z [36;1m"$tools/cmake-4.3.0-linux-x86_64/bin/cmake" --version > "$records/modern-cmake-version.txt"[0m
+2026-11-18T07:34:25.4346417Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-18T07:34:25.4346879Z ##[endgroup]
+2026-11-18T07:34:30.3966450Z ##[group]Run set -euo pipefail
+2026-11-18T07:34:30.3966844Z [36;1mset -euo pipefail[0m
+2026-11-18T07:34:30.3967304Z [36;1mrecords="$RUNNER_TEMP/session3-linux-runpath-records"[0m
+2026-11-18T07:34:30.3967852Z [36;1m# Exercise the new maintained entry through actual CTest registration.[0m
+2026-11-18T07:34:30.3968404Z [36;1m# Only tiny probe programs compile; no root BTX configure/build/test.[0m
+2026-11-18T07:34:30.3969150Z [36;1mtimeout --kill-after=10s 360s python3 contrib/devtools/session3-linux-runpath/live-qualification/qualify.py \[0m
+2026-11-18T07:34:30.3969738Z [36;1m  --repository "$GITHUB_WORKSPACE" \[0m
+2026-11-18T07:34:30.3970546Z [36;1m  --modern-cmake "$RUNNER_TEMP/session3-linux-runpath-tools/cmake-4.3.0-linux-x86_64/bin/cmake" \[0m
+2026-11-18T07:34:30.3971145Z [36;1m  --work "$RUNNER_TEMP/session3-linux-runpath-results" \[0m
+2026-11-18T07:34:30.3971680Z [36;1m  > "$records/paired-controller.log" 2>&1[0m
+2026-11-18T07:34:30.4007855Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-18T07:34:30.4008296Z ##[endgroup]
+2026-11-18T07:34:30.4423911Z ##[error]Process completed with exit code 1.
+2026-11-18T07:34:30.4531196Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+2026-11-18T07:34:30.4532018Z with:
+2026-11-18T07:34:30.4532359Z   name: session3-live-runpath-44259884679-1
+2026-11-18T07:34:30.4532980Z   path: /home/runner/work/_temp/session3-linux-runpath-records
+/home/runner/work/_temp/session3-linux-runpath-results
+
+2026-11-18T07:34:30.4533610Z   if-no-files-found: error
+2026-11-18T07:34:30.4534132Z   retention-days: 14
+2026-11-18T07:34:30.4534451Z   compression-level: 6
+2026-11-18T07:34:30.4534768Z   overwrite: false
+2026-11-18T07:34:30.4535088Z   include-hidden-files: false
+2026-11-18T07:34:30.4535467Z ##[endgroup]
+2026-11-18T07:34:30.6243158Z (node:2836) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-18T07:34:30.6244191Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-18T07:34:30.6354608Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-11-18T07:34:30.6356490Z The least common ancestor is /home/runner/work/_temp. This will be the root directory of the artifact
+2026-11-18T07:34:30.6357562Z With the provided path, there will be 19 files uploaded
+2026-11-18T07:34:30.6363042Z Artifact name is valid!
+2026-11-18T07:34:30.6363642Z Root directory input is valid!
+2026-11-18T07:34:30.9300951Z Beginning upload of artifact content to blob storage
+2026-11-18T07:34:30.9664660Z (node:2836) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-18T07:34:31.0512871Z Uploaded bytes 7148
+2026-11-18T07:34:31.0755519Z Finished uploading artifact content to blob storage!
+2026-11-18T07:34:31.0757163Z SHA256 digest of uploaded artifact zip is be0bba9418805425147e9cd8bc8a8c8ba32db1d2addd51396dcd5ed58a4f7a00
+2026-11-18T07:34:31.0760145Z Finalizing artifact upload
+2026-11-18T07:34:31.4324222Z Artifact session3-live-runpath-44259884679-1.zip successfully finalized. Artifact ID 14406889235
+2026-11-18T07:34:31.4325259Z Artifact session3-live-runpath-44259884679-1 has been successfully uploaded! Final size is 7148 bytes. Artifact ID is 14406889235
+2026-11-18T07:34:31.4329179Z Artifact download URL: https://github.com/sunnyriverr/btx/actions/runs/44259884679/artifacts/14406889235
+2026-11-18T07:34:31.4523318Z Post job cleanup.
+2026-11-18T07:34:31.5351046Z [command]/usr/bin/git version
+2026-11-18T07:34:31.5381066Z git version 2.56.1
+2026-11-18T07:34:31.5414541Z Temporarily overriding HOME='/home/runner/work/_temp/c3b3a1cd-a55d-4cb1-8d93-1dfd6d0fc640' before making global git config changes
+2026-11-18T07:34:31.5416068Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-18T07:34:31.5419388Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/btx/btx
+2026-11-18T07:34:31.5458451Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-18T07:34:31.5490544Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-18T07:34:31.5734148Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-18T07:34:31.5769039Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-18T07:34:31.6045164Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-18T07:34:31.6077794Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-18T07:34:31.6436247Z Cleaning up orphan processes
+2026-11-18T07:34:31.6755058Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+

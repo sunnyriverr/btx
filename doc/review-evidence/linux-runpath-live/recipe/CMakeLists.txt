@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 3.22)
+project(BTXRunpathRegistrationQualification LANGUAGES CXX)
+enable_testing()
+if(NOT BTX_TEST_SOURCE_ROOT OR NOT BTX_TEST_PYTHON)
+  message(FATAL_ERROR "Supply the actual production test tree and Python")
+endif()
+set(PROJECT_SOURCE_DIR "${BTX_TEST_SOURCE_ROOT}")
+set(PYTHON_COMMAND "${BTX_TEST_PYTHON}")
+set(BUILD_TESTS "${BTX_TEST_BUILD_TESTS}")
+# Include the real registration file. Unrelated utility tests are not run.
+include("${BTX_TEST_SOURCE_ROOT}/cmake/tests.cmake")
