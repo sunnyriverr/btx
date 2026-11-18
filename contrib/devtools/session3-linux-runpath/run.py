@@ -21,7 +21,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--work", type=Path, required=True,
                         help="New, exclusively owned results/build directory")
-    parser.add_argument("--cmake", required=True, help="Exact CMake 3.22 executable")
+    parser.add_argument("--cmake", required=True, help="Exact executable for the selected CMake series")
+    parser.add_argument("--cmake-series", choices=("3.22", "4.3"), default="3.22",
+                        help="Original minimum version or explicit modern neighbor")
+    parser.add_argument("--cxx", type=Path, help="Explicit pre-existing C++ compiler")
     parser.add_argument("--ninja", action="store_true", help="Also check the neighboring generator")
     args = parser.parse_args()
     if not sys.platform.startswith("linux"):
@@ -29,6 +32,11 @@ def main():
     cmake = Path(args.cmake).resolve()
     if not cmake.is_file() or not os.access(cmake, os.X_OK):
         parser.error("--cmake must identify an executable file")
+    # Preserve clang++'s invocation name: resolving its symlink to clang
+    # would change the driver's default C++ link behavior.
+    compiler = (args.cxx.absolute() if args.cxx else Path(shutil.which("c++") or "/missing-cxx"))
+    if not compiler.is_file() or not os.access(compiler, os.X_OK):
+        parser.error("The selected C++ compiler must already exist")
     readelf = shutil.which("readelf")
     if not readelf or not shutil.which("make") or not shutil.which("c++"):
         parser.error("readelf, make and a C++ compiler must already be available")
@@ -44,6 +52,8 @@ def main():
            "HOME": str(work / "home")}
     (work / "home").mkdir()
     result = {"status": "INCOMPLETE", "scope": "inert exact-module ELF probe only",
+              "cmake_series": args.cmake_series,
+              "compiler": str(compiler),
               "cases": [], "commands": [], "inputs": {}}
     started = time.monotonic()
     stage = "admission"
@@ -94,9 +104,9 @@ def main():
             result["inputs"][name] = actual
         result["source_revisions"] = manifest["source_revisions"]
         version = successful([cmake, "--version"])
-        require(re.match(r"cmake version 3\.22\.\d+\b", version),
-                "Original minimum-toolchain case requires CMake 3.22.x")
-        successful(["c++", "--version"])
+        require(re.match(r"cmake version " + re.escape(args.cmake_series) + r"\.\d+\b", version),
+                "CMake version does not match the explicitly selected series")
+        successful([compiler, "--version"])
         successful(["make", "--version"])
         successful([readelf, "--version"])
         generators = ["Unix Makefiles"] + (["Ninja"] if args.ninja else [])
@@ -113,6 +123,7 @@ def main():
                 result["cases"].append(case)
                 successful([cmake, "-S", ROOT, "-B", build, "-G", generator,
                             "-DBTX_MODULE_FILE=" + str(module),
+                            "-DCMAKE_CXX_COMPILER=" + str(compiler),
                             "-DCMAKE_BUILD_TYPE=Release",
                             "-DCMAKE_SKIP_BUILD_RPATH=" + ("ON" if variant == "opt-out" else "OFF")])
                 successful([cmake, "--build", build, "--parallel", "1", "--verbose"])
@@ -150,6 +161,15 @@ def main():
                 elif variant == "opt-out":
                     require(not runpaths and not rpaths, "RPATH opt-out was not preserved")
                     require(code != 0 and SONAME in output, "Opt-out lookup control was masked")
+                elif args.cmake_series == "4.3":
+                    # Upstream reports the current helper working on 4.3.
+                    # That healthy neighbor must remain working; failure to
+                    # reproduce its baseline is separate from a candidate pass.
+                    if runpaths == ["$ORIGIN/../lib"] and not rpaths and code == 0 and output == EXPECTED_OUTPUT:
+                        case["baseline_disposition"] = "modern healthy baseline observed"
+                    else:
+                        case["baseline_disposition"] = "modern healthy baseline not reproduced"
+                        case["status"] = "BASELINE_UNCONFIRMED"
                 elif generator == "Unix Makefiles":
                     # Non-reproduction is useful evidence. Do not abort the
                     # corrected case or its controls just because the source

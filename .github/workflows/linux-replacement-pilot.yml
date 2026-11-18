@@ -1,15 +1,15 @@
-name: Session 3 Linux producer RUNPATH qualification
+name: Session 3 paired Linux RUNPATH repair qualification
 on:
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: session3-linux-runpath-${{ github.ref }}
+  group: session3-linux-runpath-paired-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   producer:
     runs-on: ubuntu-22.04
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - name: Fetch only the reviewed inert fixture
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -33,7 +33,7 @@ jobs:
           assert fields.get('ID', '').strip('"') == 'ubuntu'
           assert fields.get('VERSION_ID', '').strip('"') == '22.04'
           assert platform.machine() == 'x86_64'
-          assert shutil.disk_usage('.').free >= 1024 ** 3
+          assert shutil.disk_usage('.').free >= 2 * 1024 ** 3
           PY
           sudo timeout --kill-after=10s 180s apt-get update > "$records/apt-update.log" 2>&1
           apt-cache madison cmake > "$records/cmake-packages.txt"
@@ -49,28 +49,50 @@ jobs:
           )"
           printf '%s\n' "$version" > "$records/selected-cmake-package.txt"
           sudo timeout --kill-after=10s 180s apt-get install --allow-downgrades --no-install-recommends -y \
-            "cmake=$version" "cmake-data=$version" g++ make binutils \
+            "cmake=$version" "cmake-data=$version" g++ make binutils ninja-build \
             > "$records/apt-install.log" 2>&1
           /usr/bin/cmake --version > "$records/cmake-version.txt"
           /usr/bin/c++ --version > "$records/compiler-version.txt"
           /usr/bin/make --version > "$records/make-version.txt"
           /usr/bin/readelf --version > "$records/readelf-version.txt"
           dpkg-query -W cmake cmake-data g++ make binutils > "$records/packages.txt"
-      - name: Run the bounded inert producer comparison
+      - name: Admit the pinned modern tool and second driver
         shell: bash
         run: |
           set -euo pipefail
           records="$RUNNER_TEMP/session3-linux-runpath-records"
-          # The fixture clears inherited compiler/CMake/loader environment
-          # settings, checks its own exact input hashes and retains all logs.
-          timeout --kill-after=10s 330s python3 contrib/devtools/session3-linux-runpath/run.py \
-            --cmake /usr/bin/cmake --work "$RUNNER_TEMP/session3-linux-runpath-results" \
-            > "$records/controller.log" 2>&1
+          test -x /usr/bin/g++-11
+          test -x /usr/bin/clang++-14
+          /usr/bin/clang++-14 --version > "$records/clang-version.txt"
+          ninja --version > "$records/ninja-version.txt"
+          tools="$RUNNER_TEMP/session3-linux-runpath-tools"
+          mkdir "$tools"
+          curl --fail --location --retry 0 --connect-timeout 20 --max-time 120 \
+            'https://github.com/Kitware/CMake/releases/download/v4.3.0/cmake-4.3.0-linux-x86_64.tar.gz' \
+            --output "$tools/cmake.tar.gz" > "$records/cmake-download.log" 2>&1
+          printf '%s  %s\n' \
+            '201bdabe17a54e017f119cffa247648e9c44327e52473c2cc60a88fded94652a' \
+            "$tools/cmake.tar.gz" | sha256sum --check > "$records/cmake-archive-sha256.txt"
+          test "$(stat -c '%s' "$tools/cmake.tar.gz")" = 63971801
+          timeout --kill-after=10s 90s tar --no-same-owner -xzf "$tools/cmake.tar.gz" -C "$tools"
+          "$tools/cmake-4.3.0-linux-x86_64/bin/cmake" --version > "$records/modern-cmake-version.txt"
+      - name: Run the bounded current-versus-candidate profiles once
+        shell: bash
+        run: |
+          set -euo pipefail
+          records="$RUNNER_TEMP/session3-linux-runpath-records"
+          # MinimumGCC Makefiles+Ninja, minimumClang Makefiles, modernGCC
+          # Makefiles. One batch, no retries or alternate tool substitutions.
+          timeout --kill-after=10s 360s python3 contrib/devtools/session3-linux-runpath/paired.py \
+            --fixture "$GITHUB_WORKSPACE/contrib/devtools/session3-linux-runpath" \
+            --modern-cmake "$RUNNER_TEMP/session3-linux-runpath-tools/cmake-4.3.0-linux-x86_64/bin/cmake" \
+            --work "$RUNNER_TEMP/session3-linux-runpath-results" \
+            > "$records/paired-controller.log" 2>&1
       - name: Preserve setup and observed results, including failures
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: session3-linux-runpath-${{ github.run_id }}-${{ github.run_attempt }}
+          name: session3-linux-runpath-paired-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
             ${{ runner.temp }}/session3-linux-runpath-records
             ${{ runner.temp }}/session3-linux-runpath-results

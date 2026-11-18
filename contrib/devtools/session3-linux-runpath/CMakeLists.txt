@@ -16,4 +16,11 @@ set_target_properties(btx_s3_runpath_marker_a97af7b3 PROPERTIES
 add_executable(probe main.cpp)
 set_target_properties(probe PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 target_link_libraries(probe PRIVATE btx_s3_runpath_marker_a97af7b3)
+# A caller-owned flag must survive the helper's append operation.
+set_property(TARGET probe PROPERTY LINK_FLAGS " -Wl,--as-needed")
 btx_set_packaged_lib_runpath(probe)
+get_target_property(probe_link_flags probe LINK_FLAGS)
+string(FIND "${probe_link_flags}" "-Wl,--as-needed" caller_flag_index)
+if(caller_flag_index LESS 0)
+  message(FATAL_ERROR "The helper replaced caller-owned LINK_FLAGS")
+endif()
