@@ -1,0 +1,280 @@
+{
+  "status": "PASS",
+  "source": "a97af7b3f379e33e3ec65db948468d875ade2841",
+  "case": "public-btx-eth-restart",
+  "profile": "macOS ARM64, clean a97 serialCPU diagnostic regtest; Metal/ModelNetOFF; deferred MatMul activations; native Anvil31337 accelerated finality",
+  "stage": "public BTX to ETH settlement withdrawal and restarts verified",
+  "node_starts": [
+    {
+      "name": "a",
+      "stage": "setup",
+      "pid": 75121,
+      "binary_sha256": "e762f614eaf2c3fe78f4bc88d593f88dfd754527d078056a2311e671c9b366ab",
+      "regtest_genesis": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360"
+    },
+    {
+      "name": "b",
+      "stage": "setup",
+      "pid": 75127,
+      "binary_sha256": "e762f614eaf2c3fe78f4bc88d593f88dfd754527d078056a2311e671c9b366ab",
+      "regtest_genesis": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360"
+    },
+    {
+      "name": "a",
+      "stage": "market",
+      "pid": 75277,
+      "binary_sha256": "e762f614eaf2c3fe78f4bc88d593f88dfd754527d078056a2311e671c9b366ab",
+      "regtest_genesis": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360"
+    },
+    {
+      "name": "b",
+      "stage": "market",
+      "pid": 75282,
+      "binary_sha256": "e762f614eaf2c3fe78f4bc88d593f88dfd754527d078056a2311e671c9b366ab",
+      "regtest_genesis": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360"
+    },
+    {
+      "name": "a",
+      "stage": "funded-restart",
+      "pid": 75439,
+      "binary_sha256": "e762f614eaf2c3fe78f4bc88d593f88dfd754527d078056a2311e671c9b366ab",
+      "regtest_genesis": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360"
+    },
+    {
+      "name": "b",
+      "stage": "funded-restart",
+      "pid": 75444,
+      "binary_sha256": "e762f614eaf2c3fe78f4bc88d593f88dfd754527d078056a2311e671c9b366ab",
+      "regtest_genesis": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360"
+    },
+    {
+      "name": "a",
+      "stage": "terminal-restart",
+      "pid": 75838,
+      "binary_sha256": "e762f614eaf2c3fe78f4bc88d593f88dfd754527d078056a2311e671c9b366ab",
+      "regtest_genesis": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360"
+    },
+    {
+      "name": "b",
+      "stage": "terminal-restart",
+      "pid": 75891,
+      "binary_sha256": "e762f614eaf2c3fe78f4bc88d593f88dfd754527d078056a2311e671c9b366ab",
+      "regtest_genesis": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360"
+    }
+  ],
+  "shared_control_startups": [
+    {
+      "node": "a",
+      "stage": "market",
+      "status": {
+        "available": true,
+        "network": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360",
+        "wallet_authority": false
+      },
+      "sockets": [
+        "a/regtest/shared-p2p/model-control.sock"
+      ]
+    },
+    {
+      "node": "b",
+      "stage": "market",
+      "status": {
+        "available": true,
+        "network": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360",
+        "wallet_authority": false
+      },
+      "sockets": [
+        "b/regtest/shared-p2p/model-control.sock"
+      ]
+    },
+    {
+      "node": "a",
+      "stage": "funded-restart",
+      "status": {
+        "available": true,
+        "network": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360",
+        "wallet_authority": false
+      },
+      "sockets": [
+        "a/regtest/shared-p2p/model-control.sock"
+      ]
+    },
+    {
+      "node": "b",
+      "stage": "funded-restart",
+      "status": {
+        "available": true,
+        "network": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360",
+        "wallet_authority": false
+      },
+      "sockets": [
+        "b/regtest/shared-p2p/model-control.sock"
+      ]
+    },
+    {
+      "node": "a",
+      "stage": "terminal-restart",
+      "status": {
+        "available": true,
+        "network": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360",
+        "wallet_authority": false
+      },
+      "sockets": [
+        "a/regtest/shared-p2p/model-control.sock"
+      ]
+    },
+    {
+      "node": "b",
+      "stage": "terminal-restart",
+      "status": {
+        "available": true,
+        "network": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360",
+        "wallet_authority": false
+      },
+      "sockets": [
+        "b/regtest/shared-p2p/model-control.sock"
+      ]
+    }
+  ],
+  "evm": {
+    "asset": "evm:2539f36915e22456327288ab62542d3335a25b7aface5485a4052aa9fe3d32d1:31337:native",
+    "contract": "0x5fbdb2315678afecb367f032d93f642f64180aa3",
+    "runtime_hash": "a06e30bad714ff02db5a2401a898bd7194d1c475b61bdab312ae194b1509e45d",
+    "deployment": "0x09fe4073eba05f82e59e3b7e3f6ed5cf268bf8b1121face9e4875e3c23bfcf4b"
+  },
+  "before_btx_atoms": {
+    "a": 6000000000,
+    "b": 0
+  },
+  "before_eth_wei": {
+    "a": "1000000000000000000000",
+    "b": "1000000000000000000000"
+  },
+  "swap_id": "58a9a0db92ec079e9d75a36dd300fb8b6ad108fc5c9510523d3a8c42e27acab2",
+  "public_entry": {
+    "offer_id": "e75c12b8355c52f60210a538c18c2314658e3f28a497a4a071fc4c9664ea561c",
+    "quote_id": "4f9cea32db0fe5ce5f5a77df6d7625156ac4d2957ce2c52ade6b6d31757ee193",
+    "preview_id": "538ba475bad2458b2bc87658634b9bc87bbed76bdbb255d5ecb3fc868043c9da",
+    "preview_nonfunding_verified": true,
+    "confirmation_retry_same_swap": true,
+    "signed_offer_native_arrival": true,
+    "maker_slot_transferred_once": true
+  },
+  "original_btx_funding": {
+    "txid": "6c510798badd2f4146860a8de6966314689108b006eed23cddd5c5f1d2566b29",
+    "vout": 0
+  },
+  "last_states": {
+    "a": {
+      "stage": "complete",
+      "last_error": null,
+      "last_action": "complete",
+      "refs": {
+        "a": {
+          "txid": "6c510798badd2f4146860a8de6966314689108b006eed23cddd5c5f1d2566b29",
+          "vout": 0
+        },
+        "b": {
+          "lock_id": "cb3a1983f1ee1b729d307c4a41640c80311d149d3edbb8434b50e24b0bbf4b8b",
+          "salt": "0abf1632116e54dd19aebe18f52ccad5fab4b680d34991daa9d58054f468f94b",
+          "txid": "0x459c44a80f253cd7b93a868f385dc23d57937c3ae2833d483543f1e7aa51c7f9"
+        }
+      }
+    },
+    "b": {
+      "stage": "complete",
+      "last_error": null,
+      "last_action": "complete",
+      "refs": {
+        "a": {
+          "txid": "6c510798badd2f4146860a8de6966314689108b006eed23cddd5c5f1d2566b29",
+          "vout": 0
+        },
+        "b": {
+          "lock_id": "cb3a1983f1ee1b729d307c4a41640c80311d149d3edbb8434b50e24b0bbf4b8b",
+          "salt": "0abf1632116e54dd19aebe18f52ccad5fab4b680d34991daa9d58054f468f94b",
+          "txid": "0x459c44a80f253cd7b93a868f385dc23d57937c3ae2833d483543f1e7aa51c7f9"
+        }
+      }
+    }
+  },
+  "native_settlement": {
+    "funding_txid": "6c510798badd2f4146860a8de6966314689108b006eed23cddd5c5f1d2566b29",
+    "funding_vout": 0,
+    "claim_txid": "750a98abb4f7c70a3877bb3248c2c178d92102890d57a2de92ccdafeadee9e8e",
+    "locked_atoms": 10000000,
+    "paid_atoms": 9991000,
+    "funding_fee_atoms": 7834,
+    "claim_fee_atoms": 9000,
+    "payout": "btxrt1zazkqnj42y332ea2l9etk37svaajrh02xuq3e658yprc8la4sg45qrvp8j2"
+  },
+  "evm_settlement": {
+    "kind": "claim",
+    "funding_txid": "0x459c44a80f253cd7b93a868f385dc23d57937c3ae2833d483543f1e7aa51c7f9",
+    "settlement_txid": "0x3e86b8221972364e4627da9d2fb7ff0a60ed6ac685cbaa3c9fb61616ef5df0e2",
+    "withdrawal_txid": "0x0164ee8df83fd99f19013456f261f029ed3c8e82458003bbbccb7c489edb5a95",
+    "finalized_block_hash": "0x46884c63a405c7c445c51f4e03dbb5bcd87b459257bb187456f936f3b8c22a5a",
+    "runtime_hash": "a06e30bad714ff02db5a2401a898bd7194d1c475b61bdab312ae194b1509e45d",
+    "amount_wei": "9999000000000000",
+    "funding_fee_wei": "142967001000769",
+    "settlement_fee_wei": "66320000464240",
+    "withdrawal_fee_wei": "47328000331296",
+    "beneficiary_balance_before_wei": "999999933679999535760",
+    "beneficiary_balance_after_wei": "1000009885351999204464",
+    "remaining_credit_wei": "0",
+    "isolated_withdrawal_balance_verified": true
+  },
+  "actual_btx_delta_atoms": {
+    "a": -10007834,
+    "b": 9991000
+  },
+  "actual_eth_delta_wei": {
+    "a": "9885351999204464",
+    "b": "-10141967001000769"
+  },
+  "terminal_budget_rows": {
+    "a": [
+      {
+        "id": "d4b281654452c7cbc323a927f40331a618092d91b4bc66d5c60d0fb018b5de18",
+        "mandate": {
+          "asset": "btx:521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360:0:native",
+          "expires_at": 1794996583,
+          "max_fee_atoms": "500000",
+          "max_total_atoms": "10500000",
+          "max_trade_atoms": "10000000",
+          "nonce": "fa91c55ab339ec1d24f67624d1c104387006820a2644f10fdc24d6503373a007",
+          "principal": "owner:cookie"
+        },
+        "held_atoms": "0",
+        "used_atoms": "10500000",
+        "revoked": false
+      }
+    ],
+    "b": [
+      {
+        "id": "04d343cc3f5b63326fa6e4c9b7c4606c6b21f6ed4c51f1eaa377e46bc0668d6a",
+        "mandate": {
+          "asset": "evm:2539f36915e22456327288ab62542d3335a25b7aface5485a4052aa9fe3d32d1:31337:native",
+          "expires_at": 1794997422,
+          "max_fee_atoms": "6000000000000000",
+          "max_total_atoms": "50000000000000000",
+          "max_trade_atoms": "20000000000000000",
+          "nonce": "cbf84f3392ece1d4cf34dfa0d737d76b4e4793e06d714c64e0920fadbf01d70c",
+          "principal": "owner:cookie"
+        },
+        "held_atoms": "0",
+        "used_atoms": "15999000000000000",
+        "revoked": false
+      }
+    ]
+  },
+  "terminal_slot_history": [],
+  "funded_restart_preserved": true,
+  "terminal_restart_preserved": true,
+  "all_held_budgets_zero": true,
+  "original_funding_once": true,
+  "withdrawal_once": true,
+  "contract_balance_wei": "0",
+  "cleanup_errors": [],
+  "anvil_exited": true
+}
