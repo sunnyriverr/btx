@@ -352,8 +352,10 @@ def main():
     assert edges <= M['max_edges'] and len(dirty_compiles) <= M['max_compiles'], 'Plan expanded beyond admitted bound'
     cpus = int(subprocess.check_output(['sysctl', '-n', 'hw.logicalcpu'], text=True))
     memory = int(subprocess.check_output(['sysctl', '-n', 'hw.memsize'], text=True))
-    assert cpus >= 2 and memory >= 8 * 1024**3, 'Measured two-job capacity unavailable'
     STATE['resources'] = {'logical_cpus': cpus, 'memory_bytes': memory, 'free_bytes': shutil.disk_usage(W).free, 'jobs': 2}
+    save()
+    # GitHub standard macos-15 arm64 is3cores/7GB, the retained successful j2 profile.
+    assert cpus >= 2 and memory >= 7_000_000_000, 'Supported seven-GB two-job runner unavailable'
     STATE['compiled'] = False
     STATE['compilation_started'] = True
     save()
