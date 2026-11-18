@@ -1,0 +1,228 @@
+test_contradictory_and_malformed_local_terms_are_not_displayed (test_trade_preview_review.TradePreviewReviewTest.test_contradictory_and_malformed_local_terms_are_not_displayed) ... 
+  test_contradictory_and_malformed_local_terms_are_not_displayed (test_trade_preview_review.TradePreviewReviewTest.test_contradictory_and_malformed_local_terms_are_not_displayed) (field='sell_atoms') ... FAIL
+  test_contradictory_and_malformed_local_terms_are_not_displayed (test_trade_preview_review.TradePreviewReviewTest.test_contradictory_and_malformed_local_terms_are_not_displayed) (field='buy_asset') ... FAIL
+  test_contradictory_and_malformed_local_terms_are_not_displayed (test_trade_preview_review.TradePreviewReviewTest.test_contradictory_and_malformed_local_terms_are_not_displayed) (field='provider') ... FAIL
+  test_contradictory_and_malformed_local_terms_are_not_displayed (test_trade_preview_review.TradePreviewReviewTest.test_contradictory_and_malformed_local_terms_are_not_displayed) (field='maximum_send_atoms') ... FAIL
+  test_contradictory_and_malformed_local_terms_are_not_displayed (test_trade_preview_review.TradePreviewReviewTest.test_contradictory_and_malformed_local_terms_are_not_displayed) (field='net_receive_floor_atoms') ... FAIL
+  test_contradictory_and_malformed_local_terms_are_not_displayed (test_trade_preview_review.TradePreviewReviewTest.test_contradictory_and_malformed_local_terms_are_not_displayed) (field='minimum_receive_atoms') ... FAIL
+  test_contradictory_and_malformed_local_terms_are_not_displayed (test_trade_preview_review.TradePreviewReviewTest.test_contradictory_and_malformed_local_terms_are_not_displayed) (field='refund_fee_atoms') ... FAIL
+  test_contradictory_and_malformed_local_terms_are_not_displayed (test_trade_preview_review.TradePreviewReviewTest.test_contradictory_and_malformed_local_terms_are_not_displayed) (field='claim_fee_atoms') ... FAIL
+  test_contradictory_and_malformed_local_terms_are_not_displayed (test_trade_preview_review.TradePreviewReviewTest.test_contradictory_and_malformed_local_terms_are_not_displayed) (field='expires_at') ... FAIL
+test_contradictory_and_malformed_local_terms_are_not_displayed (test_trade_preview_review.TradePreviewReviewTest.test_contradictory_and_malformed_local_terms_are_not_displayed) ... FAIL
+test_exact_allowlist_and_read_only_terms (test_trade_preview_review.TradePreviewReviewTest.test_exact_allowlist_and_read_only_terms) ... ERROR
+test_expired_lookup_is_historical_but_new_confirmation_still_refuses (test_trade_preview_review.TradePreviewReviewTest.test_expired_lookup_is_historical_but_new_confirmation_still_refuses) ... ERROR
+test_other_host_method_keeps_existing_wallet_binding (test_trade_preview_review.TradePreviewReviewTest.test_other_host_method_keeps_existing_wallet_binding) ... ok
+test_owner_principal_wallet_and_request_shape_refusals (test_trade_preview_review.TradePreviewReviewTest.test_owner_principal_wallet_and_request_shape_refusals) ... ok
+test_started_trade_lost_preview_receipt_reopens_and_retries_after_expiry (test_trade_preview_review.TradePreviewReviewTest.test_started_trade_lost_preview_receipt_reopens_and_retries_after_expiry) ... ERROR
+test_unbound_and_bound_host_reads_do_not_bind_probe_or_write (test_trade_preview_review.TradePreviewReviewTest.test_unbound_and_bound_host_reads_do_not_bind_probe_or_write) ... 
+  test_unbound_and_bound_host_reads_do_not_bind_probe_or_write (test_trade_preview_review.TradePreviewReviewTest.test_unbound_and_bound_host_reads_do_not_bind_probe_or_write) (bound=None) ... FAIL
+  test_unbound_and_bound_host_reads_do_not_bind_probe_or_write (test_trade_preview_review.TradePreviewReviewTest.test_unbound_and_bound_host_reads_do_not_bind_probe_or_write) (bound='wallet') ... FAIL
+
+======================================================================
+ERROR: test_exact_allowlist_and_read_only_terms (test_trade_preview_review.TradePreviewReviewTest.test_exact_allowlist_and_read_only_terms)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/candidate/contrib/swapnet/tests/test_trade_preview_review.py", line 51, in test_exact_allowlist_and_read_only_terms
+    result=self.lookup()
+           ^^^^^^^^^^^^^
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/candidate/contrib/swapnet/tests/test_trade_preview_review.py", line 42, in lookup
+    return self.taker.rpc(ctx or self.owner,'getswaptradepreview',{'preview_id':self.pid})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/baseline/contrib/swapnet/swapnet/market_application.py", line 56, in rpc
+    require(method in MARKET_METHODS or method in BASE_METHODS,'METHOD_NOT_FOUND','Unknown SwapNet RPC')
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/baseline/contrib/swapnet/swapnet/errors.py", line 11, in require
+    raise SwapError(code, message)
+swapnet.errors.SwapError: METHOD_NOT_FOUND: Unknown SwapNet RPC
+
+======================================================================
+ERROR: test_expired_lookup_is_historical_but_new_confirmation_still_refuses (test_trade_preview_review.TradePreviewReviewTest.test_expired_lookup_is_historical_but_new_confirmation_still_refuses)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/candidate/contrib/swapnet/tests/test_trade_preview_review.py", line 86, in test_expired_lookup_is_historical_but_new_confirmation_still_refuses
+    result=self.lookup();self.assertEqual(result['expires_at'],original['expires_at'])
+           ^^^^^^^^^^^^^
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/candidate/contrib/swapnet/tests/test_trade_preview_review.py", line 42, in lookup
+    return self.taker.rpc(ctx or self.owner,'getswaptradepreview',{'preview_id':self.pid})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/baseline/contrib/swapnet/swapnet/market_application.py", line 56, in rpc
+    require(method in MARKET_METHODS or method in BASE_METHODS,'METHOD_NOT_FOUND','Unknown SwapNet RPC')
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/baseline/contrib/swapnet/swapnet/errors.py", line 11, in require
+    raise SwapError(code, message)
+swapnet.errors.SwapError: METHOD_NOT_FOUND: Unknown SwapNet RPC
+
+======================================================================
+ERROR: test_started_trade_lost_preview_receipt_reopens_and_retries_after_expiry (test_trade_preview_review.TradePreviewReviewTest.test_started_trade_lost_preview_receipt_reopens_and_retries_after_expiry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/candidate/contrib/swapnet/tests/test_trade_preview_review.py", line 136, in test_started_trade_lost_preview_receipt_reopens_and_retries_after_expiry
+    self.apps[1]=self.taker;before=self.snapshot();result=self.lookup()
+                                                          ^^^^^^^^^^^^^
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/candidate/contrib/swapnet/tests/test_trade_preview_review.py", line 42, in lookup
+    return self.taker.rpc(ctx or self.owner,'getswaptradepreview',{'preview_id':self.pid})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/baseline/contrib/swapnet/swapnet/market_application.py", line 56, in rpc
+    require(method in MARKET_METHODS or method in BASE_METHODS,'METHOD_NOT_FOUND','Unknown SwapNet RPC')
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/baseline/contrib/swapnet/swapnet/errors.py", line 11, in require
+    raise SwapError(code, message)
+swapnet.errors.SwapError: METHOD_NOT_FOUND: Unknown SwapNet RPC
+
+======================================================================
+FAIL: test_contradictory_and_malformed_local_terms_are_not_displayed (test_trade_preview_review.TradePreviewReviewTest.test_contradictory_and_malformed_local_terms_are_not_displayed) (field='sell_atoms')
+----------------------------------------------------------------------
+swapnet.errors.SwapError: METHOD_NOT_FOUND: Unknown SwapNet RPC
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/candidate/contrib/swapnet/tests/test_trade_preview_review.py", line 79, in test_contradictory_and_malformed_local_terms_are_not_displayed
+    with self.assertRaisesRegex(SwapError,'PREVIEW_STATE'):self.lookup()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "PREVIEW_STATE" does not match "METHOD_NOT_FOUND: Unknown SwapNet RPC"
+
+======================================================================
+FAIL: test_contradictory_and_malformed_local_terms_are_not_displayed (test_trade_preview_review.TradePreviewReviewTest.test_contradictory_and_malformed_local_terms_are_not_displayed) (field='buy_asset')
+----------------------------------------------------------------------
+swapnet.errors.SwapError: METHOD_NOT_FOUND: Unknown SwapNet RPC
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/candidate/contrib/swapnet/tests/test_trade_preview_review.py", line 79, in test_contradictory_and_malformed_local_terms_are_not_displayed
+    with self.assertRaisesRegex(SwapError,'PREVIEW_STATE'):self.lookup()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "PREVIEW_STATE" does not match "METHOD_NOT_FOUND: Unknown SwapNet RPC"
+
+======================================================================
+FAIL: test_contradictory_and_malformed_local_terms_are_not_displayed (test_trade_preview_review.TradePreviewReviewTest.test_contradictory_and_malformed_local_terms_are_not_displayed) (field='provider')
+----------------------------------------------------------------------
+swapnet.errors.SwapError: METHOD_NOT_FOUND: Unknown SwapNet RPC
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/candidate/contrib/swapnet/tests/test_trade_preview_review.py", line 79, in test_contradictory_and_malformed_local_terms_are_not_displayed
+    with self.assertRaisesRegex(SwapError,'PREVIEW_STATE'):self.lookup()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "PREVIEW_STATE" does not match "METHOD_NOT_FOUND: Unknown SwapNet RPC"
+
+======================================================================
+FAIL: test_contradictory_and_malformed_local_terms_are_not_displayed (test_trade_preview_review.TradePreviewReviewTest.test_contradictory_and_malformed_local_terms_are_not_displayed) (field='maximum_send_atoms')
+----------------------------------------------------------------------
+swapnet.errors.SwapError: METHOD_NOT_FOUND: Unknown SwapNet RPC
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/candidate/contrib/swapnet/tests/test_trade_preview_review.py", line 79, in test_contradictory_and_malformed_local_terms_are_not_displayed
+    with self.assertRaisesRegex(SwapError,'PREVIEW_STATE'):self.lookup()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "PREVIEW_STATE" does not match "METHOD_NOT_FOUND: Unknown SwapNet RPC"
+
+======================================================================
+FAIL: test_contradictory_and_malformed_local_terms_are_not_displayed (test_trade_preview_review.TradePreviewReviewTest.test_contradictory_and_malformed_local_terms_are_not_displayed) (field='net_receive_floor_atoms')
+----------------------------------------------------------------------
+swapnet.errors.SwapError: METHOD_NOT_FOUND: Unknown SwapNet RPC
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/candidate/contrib/swapnet/tests/test_trade_preview_review.py", line 79, in test_contradictory_and_malformed_local_terms_are_not_displayed
+    with self.assertRaisesRegex(SwapError,'PREVIEW_STATE'):self.lookup()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "PREVIEW_STATE" does not match "METHOD_NOT_FOUND: Unknown SwapNet RPC"
+
+======================================================================
+FAIL: test_contradictory_and_malformed_local_terms_are_not_displayed (test_trade_preview_review.TradePreviewReviewTest.test_contradictory_and_malformed_local_terms_are_not_displayed) (field='minimum_receive_atoms')
+----------------------------------------------------------------------
+swapnet.errors.SwapError: METHOD_NOT_FOUND: Unknown SwapNet RPC
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/candidate/contrib/swapnet/tests/test_trade_preview_review.py", line 79, in test_contradictory_and_malformed_local_terms_are_not_displayed
+    with self.assertRaisesRegex(SwapError,'PREVIEW_STATE'):self.lookup()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "PREVIEW_STATE" does not match "METHOD_NOT_FOUND: Unknown SwapNet RPC"
+
+======================================================================
+FAIL: test_contradictory_and_malformed_local_terms_are_not_displayed (test_trade_preview_review.TradePreviewReviewTest.test_contradictory_and_malformed_local_terms_are_not_displayed) (field='refund_fee_atoms')
+----------------------------------------------------------------------
+swapnet.errors.SwapError: METHOD_NOT_FOUND: Unknown SwapNet RPC
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/candidate/contrib/swapnet/tests/test_trade_preview_review.py", line 79, in test_contradictory_and_malformed_local_terms_are_not_displayed
+    with self.assertRaisesRegex(SwapError,'PREVIEW_STATE'):self.lookup()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "PREVIEW_STATE" does not match "METHOD_NOT_FOUND: Unknown SwapNet RPC"
+
+======================================================================
+FAIL: test_contradictory_and_malformed_local_terms_are_not_displayed (test_trade_preview_review.TradePreviewReviewTest.test_contradictory_and_malformed_local_terms_are_not_displayed) (field='claim_fee_atoms')
+----------------------------------------------------------------------
+swapnet.errors.SwapError: METHOD_NOT_FOUND: Unknown SwapNet RPC
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/candidate/contrib/swapnet/tests/test_trade_preview_review.py", line 79, in test_contradictory_and_malformed_local_terms_are_not_displayed
+    with self.assertRaisesRegex(SwapError,'PREVIEW_STATE'):self.lookup()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "PREVIEW_STATE" does not match "METHOD_NOT_FOUND: Unknown SwapNet RPC"
+
+======================================================================
+FAIL: test_contradictory_and_malformed_local_terms_are_not_displayed (test_trade_preview_review.TradePreviewReviewTest.test_contradictory_and_malformed_local_terms_are_not_displayed) (field='expires_at')
+----------------------------------------------------------------------
+swapnet.errors.SwapError: METHOD_NOT_FOUND: Unknown SwapNet RPC
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/candidate/contrib/swapnet/tests/test_trade_preview_review.py", line 79, in test_contradictory_and_malformed_local_terms_are_not_displayed
+    with self.assertRaisesRegex(SwapError,'PREVIEW_STATE'):self.lookup()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "PREVIEW_STATE" does not match "METHOD_NOT_FOUND: Unknown SwapNet RPC"
+
+======================================================================
+FAIL: test_contradictory_and_malformed_local_terms_are_not_displayed (test_trade_preview_review.TradePreviewReviewTest.test_contradictory_and_malformed_local_terms_are_not_displayed)
+----------------------------------------------------------------------
+swapnet.errors.SwapError: METHOD_NOT_FOUND: Unknown SwapNet RPC
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/candidate/contrib/swapnet/tests/test_trade_preview_review.py", line 82, in test_contradictory_and_malformed_local_terms_are_not_displayed
+    with self.assertRaisesRegex(SwapError,'PREVIEW_STATE'):self.lookup()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "PREVIEW_STATE" does not match "METHOD_NOT_FOUND: Unknown SwapNet RPC"
+
+======================================================================
+FAIL: test_unbound_and_bound_host_reads_do_not_bind_probe_or_write (test_trade_preview_review.TradePreviewReviewTest.test_unbound_and_bound_host_reads_do_not_bind_probe_or_write) (bound=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/candidate/contrib/swapnet/tests/test_trade_preview_review.py", line 102, in test_unbound_and_bound_host_reads_do_not_bind_probe_or_write
+    result=json.loads(host.rpc('owner',True,'wallet','getswaptradepreview',json.dumps({'preview_id':self.pid})))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/baseline/contrib/swapnet/swapnet/embedded.py", line 172, in rpc
+    require(wallet in self.native('listwallets'),'WALLET_UNLOADED','Requested wallet not loaded')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/candidate/contrib/swapnet/tests/test_trade_preview_review.py", line 94, in <lambda>
+    host.native=lambda *args: (_ for _ in ()).throw(AssertionError('Lookup must not call native RPC'))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/candidate/contrib/swapnet/tests/test_trade_preview_review.py", line 94, in <genexpr>
+    host.native=lambda *args: (_ for _ in ()).throw(AssertionError('Lookup must not call native RPC'))
+AssertionError: Lookup must not call native RPC
+
+======================================================================
+FAIL: test_unbound_and_bound_host_reads_do_not_bind_probe_or_write (test_trade_preview_review.TradePreviewReviewTest.test_unbound_and_bound_host_reads_do_not_bind_probe_or_write) (bound='wallet')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/candidate/contrib/swapnet/tests/test_trade_preview_review.py", line 103, in test_unbound_and_bound_host_reads_do_not_bind_probe_or_write
+    self.assertNotIn('error',result);self.assertEqual(result['result']['wallet'],'wallet')
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'error' unexpectedly found in {'error': {'code': 'METHOD_NOT_FOUND', 'message': 'Unknown SwapNet RPC'}}
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.466s
+
+FAILED (failures=12, errors=3)

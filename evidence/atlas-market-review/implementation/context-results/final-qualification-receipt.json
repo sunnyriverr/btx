@@ -1,0 +1,55 @@
+{
+  "utc": "2026-11-18T00:29:40.423861+00:00",
+  "files": {
+    "web/views/swapnet-workspace.js": {
+      "sha256": "ba195a6ada356f9e7b5f73dac7516ee38df116dd0e993a1906b73edb1661bc98",
+      "mtime_ns": 1794961780286663362
+    },
+    "web/views/swapnet.js": {
+      "sha256": "266b49f98df94c0f316da083c5cdc6d1166ce1155260bb2a1a9f9bbecc4525f6",
+      "mtime_ns": 1794961185146460621
+    },
+    "tests/swapnet-workflow.test.mjs": {
+      "sha256": "f731771b74606da2611a81cbda360e98beaf457430678889fccb6f1f5fef0cb6",
+      "mtime_ns": 1794961780286815109
+    }
+  },
+  "row_before": {
+    "pass": 0,
+    "fail": 2,
+    "scope": "Previous17-passcandidate, not originalbaseline"
+  },
+  "row_after": {
+    "pass": 2,
+    "fail": 0,
+    "skip": 0
+  },
+  "final_after": {
+    "pass": 19,
+    "fail": 0,
+    "skip": 0,
+    "command": [
+      "/usr/local/bin/node",
+      "--test",
+      "--test-timeout=10000",
+      "tests/swapnet-workflow.test.mjs"
+    ],
+    "elapsed_seconds": 0.11996570899999999
+  },
+  "repeat_reason": "All workspace action callbacks now bind originating context and old content is cleared synchronously on wallet change; affected healthy/cleanup/review controls rechecked once",
+  "no_financial_execution": true,
+  "source_frozen": true,
+  "final_union": {
+    "unique_pass": 20,
+    "fail": 0,
+    "skip": 0,
+    "basis": "19 final-row-after passes retained; final inspection read guard narrowed with two affected cases pass, adding one new control"
+  },
+  "last_focused_command": [
+    "/usr/local/bin/node",
+    "--test",
+    "--test-timeout=10000",
+    "--test-name-pattern=^row context control: a pending inspection|^context control: late read rejection",
+    "tests/swapnet-workflow.test.mjs"
+  ]
+}

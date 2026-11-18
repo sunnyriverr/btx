@@ -1,0 +1,407 @@
+ninja: Entering directory `/Users/runner/work/btx/btx/mac-config-build'
+[1/23] Generating swapnet-generated/swapnet/frozen_sources.h
+[2/23] Generating bitcoin-build-info.h
+[3/23] Building CXX object src/CMakeFiles/btx_swapnet_engine.dir/swapnet/embed.cpp.o
+[4/23] Building CXX object src/CMakeFiles/btx_swapnet_engine.dir/swapnet/runtime.cpp.o
+[5/23] Building CXX object src/CMakeFiles/btx_swapnet_engine.dir/swapnet/transport.cpp.o
+[6/23] Building CXX object src/CMakeFiles/bitcoin_clientversion.dir/clientversion.cpp.o
+[7/23] Building CXX object src/CMakeFiles/bitcoin_common.dir/matmul/matmul_v4_rc_production_golden_manifest.cpp.o
+[8/23] Building CXX object src/CMakeFiles/bitcoin_common.dir/matmul/matmul_v4_rc_production_canary.cpp.o
+[9/23] Building CXX object src/CMakeFiles/bitcoin_common.dir/matmul/matmul_v4_rc_fri.cpp.o
+[10/23] Building CXX object src/CMakeFiles/bitcoin_common.dir/matmul/matmul_v4_rc_fri_ext3.cpp.o
+[11/23] Building CXX object src/CMakeFiles/bitcoin_common.dir/matmul/matmul_v4_rc_gkr.cpp.o
+[12/23] Building CXX object src/CMakeFiles/bitcoin_node.dir/init.cpp.o
+In file included from /Users/runner/work/btx/btx/product/src/init.cpp:15:
+/Users/runner/work/btx/btx/product/src/chain.h:508:19: warning: reading variable 'nStatus' requires holding mutex 'cs_main' [-Wthread-safety-analysis]
+  508 |     if (candidate.nStatus & BLOCK_FAILED_MASK) return false;
+      |                   ^
+1 warning generated.
+[13/23] Building CXX object src/CMakeFiles/bitcoin_node.dir/swapnet/node.cpp.o
+[14/23] Building CXX object src/CMakeFiles/bitcoin_node.dir/rpc/swapnet.cpp.o
+[15/23] Linking CXX static library lib/libbtx_swapnet_engine.a
+[16/23] Building CXX object src/wallet/CMakeFiles/bitcoin_wallet.dir/__/swapnet/wallet_bridge.cpp.o
+[17/23] Linking CXX static library lib/libbitcoin_clientversion.a
+[18/23] Linking CXX static library lib/libbitcoin_common.a
+[19/23] Linking CXX static library lib/libbitcoin_wallet.a
+[20/23] Linking CXX executable bin/btx-cli
+ld: warning: ignoring duplicate libraries: '/Users/runner/work/btx/btx/job-deps/lib/libevent_core.a', 'lib/libbitcoin_common.a'
+[21/23] Building CXX object src/CMakeFiles/bitcoin_node.dir/net_processing.cpp.o
+In file included from /Users/runner/work/btx/btx/product/src/net_processing.cpp:18:
+In file included from /Users/runner/work/btx/btx/product/src/deploymentstatus.h:8:
+/Users/runner/work/btx/btx/product/src/chain.h:508:19: warning: reading variable 'nStatus' requires holding mutex 'cs_main' [-Wthread-safety-analysis]
+  508 |     if (candidate.nStatus & BLOCK_FAILED_MASK) return false;
+      |                   ^
+In file included from /Users/runner/work/btx/btx/product/src/net_processing.cpp:37:
+/Users/runner/work/btx/btx/product/src/node/header_sync.h:36:24: warning: calling function 'IsValid' requires holding mutex 'cs_main' exclusively [-Wthread-safety-analysis]
+   36 |     return best_known->IsValid(BLOCK_VALID_TREE) && best_known != active_tip &&
+      |                        ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:1624:13: warning: calling function 'MaybeCheckNotHeld' requires negative capability '!m_matmul_rc_admission_mutex' [-Wthread-safety-analysis]
+ 1624 |             LOCK(m_matmul_rc_admission_mutex);
+      |             ^
+/Users/runner/work/btx/btx/product/src/sync.h:257:56: note: expanded from macro 'LOCK'
+  257 | #define LOCK(cs) UniqueLock UNIQUE_NAME(criticalblock)(MaybeCheckNotHeld(cs), #cs, __FILE__, __LINE__)
+      |                                                        ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:1682:22: warning: calling function 'GetPeerRef' requires negative capability '!m_peer_mutex' [-Wthread-safety-analysis]
+ 1682 |         PeerRef peer{GetPeerRef(peer_id)};
+      |                      ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:1689:9: warning: calling function 'BlockChecked' requires negative capability '!m_peer_mutex' [-Wthread-safety-analysis]
+ 1689 |         BlockChecked(block, state);
+      |         ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:1724:9: warning: calling function 'BlockConnected' requires negative capability '!m_tx_download_mutex' [-Wthread-safety-analysis]
+ 1724 |         BlockConnected(ChainstateRole::NORMAL, block, pindex);
+      |         ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:3873:21: warning: reading variable 'nStatus' requires holding mutex 'cs_main' [-Wthread-safety-analysis]
+ 3873 |             (child->nStatus & BLOCK_FAILED_MASK) == 0 &&
+      |                     ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:3918:21: warning: reading variable 'nStatus' requires holding mutex 'cs_main' [-Wthread-safety-analysis]
+ 3918 |         if ((child->nStatus & BLOCK_FAILED_MASK) != 0) return nullptr;
+      |                     ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:3919:21: warning: reading variable 'nStatus' requires holding mutex 'cs_main' [-Wthread-safety-analysis]
+ 3919 |         if ((child->nStatus & BLOCK_HAVE_DATA) != 0) return nullptr;
+      |                     ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:3946:20: warning: reading variable 'nStatus' requires holding mutex 'cs_main' [-Wthread-safety-analysis]
+ 3946 |            (index->nStatus & BLOCK_FAILED_MASK) == 0 &&
+      |                    ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:4350:5: warning: calling function 'DrainMatMulPendingSourceUnpins' requires negative capability '!m_matmul_source_unpin_mutex' [-Wthread-safety-analysis]
+ 4350 |     DrainMatMulPendingSourceUnpins();
+      |     ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:4587:17: warning: calling function 'MaybeQueueHistoricalAttestationReverify' requires negative capability '!m_hist_attest_mutex' [-Wthread-safety-analysis]
+ 4587 |                 MaybeQueueHistoricalAttestationReverify(
+      |                 ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:5402:22: warning: reading variable 'mapBlocksInFlight' requires holding mutex 'cs_main' [-Wthread-safety-analysis]
+ 5402 |         auto range = mapBlocksInFlight.equal_range(hash);
+      |                      ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:6561:36: warning: calling function 'LookupBlockIndex' requires holding mutex 'cs_main' exclusively [-Wthread-safety-analysis]
+ 6561 |         return chainman.m_blockman.LookupBlockIndex(hash);
+      |                                    ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:6669:31: warning: calling function 'GetPeerRef' requires negative capability '!m_peer_mutex' [-Wthread-safety-analysis]
+ 6669 |         if (PeerRef fork_peer{GetPeerRef(nodeid)}) {
+      |                               ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:6780:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+ 6780 |         m_chainman.AcquisitionEscapeMayAcquireHeavierFork(state->pindexBestKnownBlock);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:8233:31: warning: calling function 'DropInboundBlockChunks' requires negative capability '!m_block_chunk_mutex' [-Wthread-safety-analysis]
+ 8233 |     if (const auto chunk_hash{DropInboundBlockChunks(node.GetId())}) {
+      |                               ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:8238:5: warning: calling function 'DropOutboundBlockChunks' requires negative capability '!m_block_chunk_mutex' [-Wthread-safety-analysis]
+ 8238 |     DropOutboundBlockChunks(node.GetId());
+      |     ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:8448:9: warning: calling function 'MaybeCheckNotHeld' requires negative capability '!m_matmul_carrier_deferred_mutex' [-Wthread-safety-analysis]
+ 8448 |         LOCK(m_matmul_carrier_deferred_mutex);
+      |         ^
+/Users/runner/work/btx/btx/product/src/sync.h:257:56: note: expanded from macro 'LOCK'
+  257 | #define LOCK(cs) UniqueLock UNIQUE_NAME(criticalblock)(MaybeCheckNotHeld(cs), #cs, __FILE__, __LINE__)
+      |                                                        ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:8536:9: warning: calling function 'MaybeCheckNotHeld' requires negative capability '!m_matmul_carrier_deferred_mutex' [-Wthread-safety-analysis]
+ 8536 |         LOCK(m_matmul_carrier_deferred_mutex);
+      |         ^
+/Users/runner/work/btx/btx/product/src/sync.h:257:56: note: expanded from macro 'LOCK'
+  257 | #define LOCK(cs) UniqueLock UNIQUE_NAME(criticalblock)(MaybeCheckNotHeld(cs), #cs, __FILE__, __LINE__)
+      |                                                        ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:8808:38: warning: reading variable 'm_dup_header_bytes' requires holding mutex 'g_msgproc_mutex' [-Wthread-safety-analysis]
+ 8808 |     stats.m_dup_header_bytes = peer->m_dup_header_bytes;
+      |                                      ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:8809:37: warning: reading variable 'm_dup_header_msgs' requires holding mutex 'g_msgproc_mutex' [-Wthread-safety-analysis]
+ 8809 |     stats.m_dup_header_msgs = peer->m_dup_header_msgs;
+      |                                     ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:8810:46: warning: reading variable 'm_dup_header_skipped_bytes' requires holding mutex 'g_msgproc_mutex' [-Wthread-safety-analysis]
+ 8810 |     stats.m_dup_header_skipped_bytes = peer->m_dup_header_skipped_bytes;
+      |                                              ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:8811:39: warning: reading variable 'm_dup_header_last_action' requires holding mutex 'g_msgproc_mutex' [-Wthread-safety-analysis]
+ 8811 |     stats.m_dup_header_action = peer->m_dup_header_last_action;
+      |                                       ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:9669:13: warning: calling function 'RunMatMulDeferredRecoveryPass' requires negative capability '!cs_main' [-Wthread-safety-analysis]
+ 9669 |             RunMatMulDeferredRecoveryPass();
+      |             ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:9743:9: warning: calling function 'AutoFetchStuckTipRoot' requires negative capability '!cs_main' [-Wthread-safety-analysis]
+ 9743 |         AutoFetchStuckTipRoot();
+      |         ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:9841:13: warning: calling function 'MaybeCheckNotHeld' requires negative capability '!m_matmul_rc_admission_mutex' [-Wthread-safety-analysis]
+ 9841 |             LOCK(m_matmul_rc_admission_mutex);
+      |             ^
+/Users/runner/work/btx/btx/product/src/sync.h:257:56: note: expanded from macro 'LOCK'
+  257 | #define LOCK(cs) UniqueLock UNIQUE_NAME(criticalblock)(MaybeCheckNotHeld(cs), #cs, __FILE__, __LINE__)
+      |                                                        ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:9847:13: warning: acquiring mutex 'cs_main' that is already held [-Wthread-safety-analysis]
+ 9847 |             LOCK(cs_main);
+      |             ^
+/Users/runner/work/btx/btx/product/src/sync.h:257:29: note: expanded from macro 'LOCK'
+  257 | #define LOCK(cs) UniqueLock UNIQUE_NAME(criticalblock)(MaybeCheckNotHeld(cs), #cs, __FILE__, __LINE__)
+      |                             ^
+/Users/runner/work/btx/btx/product/src/util/macros.h:11:27: note: expanded from macro 'UNIQUE_NAME'
+   11 | #define UNIQUE_NAME(name) PASTE2(name, __COUNTER__)
+      |                           ^
+/Users/runner/work/btx/btx/product/src/util/macros.h:9:22: note: expanded from macro 'PASTE2'
+    9 | #define PASTE2(x, y) PASTE(x, y)
+      |                      ^
+/Users/runner/work/btx/btx/product/src/util/macros.h:8:21: note: expanded from macro 'PASTE'
+    8 | #define PASTE(x, y) x ## y
+      |                     ^
+<scratch space>:68:1: note: expanded from here
+   68 | criticalblock91
+      | ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:9812:5: note: mutex acquired here
+ 9812 |     LOCK(::cs_main);
+      |     ^
+/Users/runner/work/btx/btx/product/src/sync.h:257:29: note: expanded from macro 'LOCK'
+  257 | #define LOCK(cs) UniqueLock UNIQUE_NAME(criticalblock)(MaybeCheckNotHeld(cs), #cs, __FILE__, __LINE__)
+      |                             ^
+/Users/runner/work/btx/btx/product/src/util/macros.h:11:27: note: expanded from macro 'UNIQUE_NAME'
+   11 | #define UNIQUE_NAME(name) PASTE2(name, __COUNTER__)
+      |                           ^
+/Users/runner/work/btx/btx/product/src/util/macros.h:9:22: note: expanded from macro 'PASTE2'
+    9 | #define PASTE2(x, y) PASTE(x, y)
+      |                      ^
+/Users/runner/work/btx/btx/product/src/util/macros.h:8:21: note: expanded from macro 'PASTE'
+    8 | #define PASTE(x, y) x ## y
+      |                     ^
+<scratch space>:53:1: note: expanded from here
+   53 | criticalblock88
+      | ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:9847:13: warning: cannot call function 'MaybeCheckNotHeld' while mutex 'cs_main' is held [-Wthread-safety-analysis]
+ 9847 |             LOCK(cs_main);
+      |             ^
+/Users/runner/work/btx/btx/product/src/sync.h:257:56: note: expanded from macro 'LOCK'
+  257 | #define LOCK(cs) UniqueLock UNIQUE_NAME(criticalblock)(MaybeCheckNotHeld(cs), #cs, __FILE__, __LINE__)
+      |                                                        ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:10490:9: warning: calling function 'MaybeCheckNotHeld' requires negative capability '!m_block_chunk_mutex' [-Wthread-safety-analysis]
+ 10490 |         LOCK(m_block_chunk_mutex);
+       |         ^
+/Users/runner/work/btx/btx/product/src/sync.h:257:56: note: expanded from macro 'LOCK'
+  257 | #define LOCK(cs) UniqueLock UNIQUE_NAME(criticalblock)(MaybeCheckNotHeld(cs), #cs, __FILE__, __LINE__)
+      |                                                        ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:10745:16: warning: calling function 'SendChunkedBlock' requires holding mutex 'g_msgproc_mutex' exclusively [-Wthread-safety-analysis]
+ 10745 |         return SendChunkedBlock(pfrom, peer, pindex->GetBlockHash(),
+       |                ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:10833:62: note: in instantiation of function template specialization '(anonymous namespace)::PeerManagerImpl::ProcessGetBlockData(CNode &, Peer &, const CInv &, bool, bool)::(anonymous class)::operator()<ParamsWrapper<TransactionSerParams, const CBlock>>' requested here
+ 10833 |                 if (hold_g_msgproc && send_chunked_serialized(
+       |                                                              ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:10781:15: warning: calling function 'ServeMatMulCarrier' requires holding mutex 'g_msgproc_mutex' exclusively [-Wthread-safety-analysis]
+ 10781 |         (void)ServeMatMulCarrier(pfrom, peer, pindex->GetBlockHash(), /*is_reply=*/false);
+       |               ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:10803:35: warning: calling function 'SendChunkedBlock' requires holding mutex 'g_msgproc_mutex' exclusively [-Wthread-safety-analysis]
+ 10803 |             if (hold_g_msgproc && SendChunkedBlock(pfrom, peer, pindex->GetBlockHash(),
+       |                                   ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:10892:67: warning: reading variable 'm_rng' requires holding mutex 'g_msgproc_mutex' [-Wthread-safety-analysis]
+ 10892 |                     CBlockHeaderAndShortTxIDs cmpctblock{*pblock, m_rng.rand64()};
+       |                                                                   ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:10909:67: warning: reading variable 'm_rng' requires holding mutex 'g_msgproc_mutex' [-Wthread-safety-analysis]
+ 10909 |                     CBlockHeaderAndShortTxIDs cmpctblock{*pblock, m_rng.rand64()};
+       |                                                                   ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:11313:13: warning: calling function 'SendChunkedBlock' requires holding mutex 'g_msgproc_mutex' exclusively [-Wthread-safety-analysis]
+ 11313 |         if (SendChunkedBlock(pfrom, peer, req.blockhash,
+       |             ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:12228:5: warning: calling function 'MaybeCheckNotHeld' requires negative capability '!m_matmul_rc_admission_mutex' [-Wthread-safety-analysis]
+ 12228 |     LOCK(m_matmul_rc_admission_mutex);
+       |     ^
+/Users/runner/work/btx/btx/product/src/sync.h:257:56: note: expanded from macro 'LOCK'
+  257 | #define LOCK(cs) UniqueLock UNIQUE_NAME(criticalblock)(MaybeCheckNotHeld(cs), #cs, __FILE__, __LINE__)
+      |                                                        ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:12241:5: warning: calling function 'MaybeCheckNotHeld' requires negative capability '!m_matmul_rc_admission_mutex' [-Wthread-safety-analysis]
+ 12241 |     LOCK(m_matmul_rc_admission_mutex);
+       |     ^
+/Users/runner/work/btx/btx/product/src/sync.h:257:56: note: expanded from macro 'LOCK'
+  257 | #define LOCK(cs) UniqueLock UNIQUE_NAME(criticalblock)(MaybeCheckNotHeld(cs), #cs, __FILE__, __LINE__)
+      |                                                        ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:13216:24: warning: calling function 'IsOnParkedReorgBranch' requires holding mutex 'cs_main' exclusively [-Wthread-safety-analysis]
+ 13216 |         if (m_chainman.IsOnParkedReorgBranch(target)) return;
+       |                        ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:13226:25: warning: calling function 'ActiveChain' requires holding mutex 'cs_main' exclusively [-Wthread-safety-analysis]
+ 13226 |             !m_chainman.ActiveChain().Contains(target) &&
+       |                         ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:13227:23: warning: reading variable 'nStatus' requires holding mutex 'cs_main' [-Wthread-safety-analysis]
+ 13227 |             ((target->nStatus & BLOCK_HAVE_DATA) != 0 ||
+       |                       ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:13229:47: warning: calling function 'GetSignedFrontierStatus' requires holding mutex 'cs_main' exclusively [-Wthread-safety-analysis]
+ 13229 |         const auto frontier_status{m_chainman.GetSignedFrontierStatus()};
+       |                                               ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:13235:17: warning: calling function 'TrustedMirrorShortTipReorg' requires holding mutex 'cs_main' exclusively [-Wthread-safety-analysis]
+ 13235 |                 TrustedMirrorShortTipReorg(tip, target),
+       |                 ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:13238:37: warning: calling function 'IsSignedFrontierBodyCatchUp' requires holding mutex 'cs_main' exclusively [-Wthread-safety-analysis]
+ 13238 |                 is_signed_frontier, IsSignedFrontierBodyCatchUp())) {
+       |                                     ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:13307:9: warning: calling function 'MaybeCheckNotHeld' requires negative capability '!m_hist_attest_mutex' [-Wthread-safety-analysis]
+ 13307 |         LOCK(m_hist_attest_mutex);
+       |         ^
+/Users/runner/work/btx/btx/product/src/sync.h:257:56: note: expanded from macro 'LOCK'
+  257 | #define LOCK(cs) UniqueLock UNIQUE_NAME(criticalblock)(MaybeCheckNotHeld(cs), #cs, __FILE__, __LINE__)
+      |                                                        ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:13363:17: warning: calling function 'AssertLockHeldInternal<AnnotatedMixin<std::mutex>>' requires holding mutex 'm_hist_attest_mutex' exclusively [-Wthread-safety-analysis]
+ 13363 |                 AssertLockHeld(m_hist_attest_mutex);
+       |                 ^
+/Users/runner/work/btx/btx/product/src/sync.h:142:28: note: expanded from macro 'AssertLockHeld'
+  142 | #define AssertLockHeld(cs) AssertLockHeldInternal(#cs, __FILE__, __LINE__, &cs)
+      |                            ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:13364:24: warning: reading variable 'm_hist_attest_stop' requires holding mutex 'm_hist_attest_mutex' [-Wthread-safety-analysis]
+ 13364 |                 return m_hist_attest_stop || !m_hist_attest_queue.empty();
+       |                        ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:13364:47: warning: reading variable 'm_hist_attest_queue' requires holding mutex 'm_hist_attest_mutex' [-Wthread-safety-analysis]
+ 13364 |                 return m_hist_attest_stop || !m_hist_attest_queue.empty();
+       |                                               ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:13361:13: warning: calling function 'MaybeCheckNotHeld' requires negative capability '!m_hist_attest_mutex' [-Wthread-safety-analysis]
+ 13361 |             WAIT_LOCK(m_hist_attest_mutex, lock);
+       |             ^
+/Users/runner/work/btx/btx/product/src/sync.h:262:45: note: expanded from macro 'WAIT_LOCK'
+  262 | #define WAIT_LOCK(cs, name) UniqueLock name(MaybeCheckNotHeld(cs), #cs, __FILE__, __LINE__)
+      |                                             ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:14118:21: warning: calling function 'MaybeCheckNotHeld' requires negative capability '!m_matmul_rc_admission_mutex' [-Wthread-safety-analysis]
+ 14118 |                     WITH_LOCK(
+       |                     ^
+/Users/runner/work/btx/btx/product/src/sync.h:301:30: note: expanded from macro 'WITH_LOCK'
+  301 | #define WITH_LOCK(cs, code) (MaybeCheckNotHeld(cs), [&]() -> decltype(auto) { LOCK(cs); code; }())
+      |                              ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:14139:25: warning: calling function 'MaybeCheckNotHeld' requires negative capability '!m_matmul_rc_admission_mutex' [-Wthread-safety-analysis]
+ 14139 |                         LOCK(m_matmul_rc_admission_mutex);
+       |                         ^
+/Users/runner/work/btx/btx/product/src/sync.h:257:56: note: expanded from macro 'LOCK'
+  257 | #define LOCK(cs) UniqueLock UNIQUE_NAME(criticalblock)(MaybeCheckNotHeld(cs), #cs, __FILE__, __LINE__)
+      |                                                        ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:14222:17: warning: calling function 'MaybeCheckNotHeld' requires negative capability '!m_matmul_rc_admission_mutex' [-Wthread-safety-analysis]
+ 14222 |                 LOCK(m_matmul_rc_admission_mutex);
+       |                 ^
+/Users/runner/work/btx/btx/product/src/sync.h:257:56: note: expanded from macro 'LOCK'
+  257 | #define LOCK(cs) UniqueLock UNIQUE_NAME(criticalblock)(MaybeCheckNotHeld(cs), #cs, __FILE__, __LINE__)
+      |                                                        ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:14289:13: warning: calling function 'MaybeCheckNotHeld' requires negative capability '!m_matmul_rc_admission_mutex' [-Wthread-safety-analysis]
+ 14289 |             WITH_LOCK(m_matmul_rc_admission_mutex,
+       |             ^
+/Users/runner/work/btx/btx/product/src/sync.h:301:30: note: expanded from macro 'WITH_LOCK'
+  301 | #define WITH_LOCK(cs, code) (MaybeCheckNotHeld(cs), [&]() -> decltype(auto) { LOCK(cs); code; }())
+      |                              ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:14312:9: warning: calling function 'MaybeCheckNotHeld' requires negative capability '!m_matmul_rc_admission_mutex' [-Wthread-safety-analysis]
+ 14312 |         LOCK(m_matmul_rc_admission_mutex);
+       |         ^
+/Users/runner/work/btx/btx/product/src/sync.h:257:56: note: expanded from macro 'LOCK'
+  257 | #define LOCK(cs) UniqueLock UNIQUE_NAME(criticalblock)(MaybeCheckNotHeld(cs), #cs, __FILE__, __LINE__)
+      |                                                        ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:17165:13: warning: calling function 'MaybeCheckNotHeld' requires negative capability '!m_matmul_rc_admission_mutex' [-Wthread-safety-analysis]
+ 17165 |             WITH_LOCK(m_matmul_rc_admission_mutex,
+       |             ^
+/Users/runner/work/btx/btx/product/src/sync.h:301:30: note: expanded from macro 'WITH_LOCK'
+  301 | #define WITH_LOCK(cs, code) (MaybeCheckNotHeld(cs), [&]() -> decltype(auto) { LOCK(cs); code; }())
+      |                              ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:17286:26: warning: calling function 'GetPeerRef' requires negative capability '!m_peer_mutex' [-Wthread-safety-analysis]
+ 17286 |             PeerRef peer{GetPeerRef(node.GetId())};
+       |                          ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:17658:5: warning: calling function 'DrainMatMulPendingSourceUnpins' requires negative capability '!m_matmul_source_unpin_mutex' [-Wthread-safety-analysis]
+ 17658 |     DrainMatMulPendingSourceUnpins();
+       |     ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:17658:5: warning: calling function 'DrainMatMulPendingSourceUnpins' requires negative capability '!cs_main' [-Wthread-safety-analysis]
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:21637:13: warning: calling function 'MaybeLogAttestationServe' requires holding mutex 'g_msgproc_mutex' exclusively [-Wthread-safety-analysis]
+ 21637 |             MaybeLogAttestationServe(
+       |             ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:21639:19: warning: writing variable 'm_matmul_protocol_ignored' requires holding mutex 'g_msgproc_mutex' exclusively [-Wthread-safety-analysis]
+ 21639 |             peer->m_matmul_protocol_ignored += 1;
+       |                   ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:21641:27: warning: reading variable 'm_matmul_protocol_ignored' requires holding mutex 'g_msgproc_mutex' [-Wthread-safety-analysis]
+ 21641 |                     peer->m_matmul_protocol_ignored)) {
+       |                           ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:21698:27: warning: passing variable 'm_matmul_attestation_request_tokens' by reference requires holding mutex 'g_msgproc_mutex' [-Wthread-safety-reference]
+ 21698 |                     peer->m_matmul_attestation_request_tokens,
+       |                           ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:21699:27: warning: passing variable 'm_matmul_attestation_historical_request_tokens' by reference requires holding mutex 'g_msgproc_mutex' [-Wthread-safety-reference]
+ 21699 |                     peer->m_matmul_attestation_historical_request_tokens)) {
+       |                           ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:21712:23: warning: writing variable 'm_matmul_protocol_ignored' requires holding mutex 'g_msgproc_mutex' exclusively [-Wthread-safety-analysis]
+ 21712 |                 peer->m_matmul_protocol_ignored = 0;
+       |                       ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:21724:21: warning: calling function 'MaybeLogAttestationServe' requires holding mutex 'g_msgproc_mutex' exclusively [-Wthread-safety-analysis]
+ 21724 |                     MaybeLogAttestationServe(
+       |                     ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:21732:17: warning: calling function 'MaybeLogAttestationServe' requires holding mutex 'g_msgproc_mutex' exclusively [-Wthread-safety-analysis]
+ 21732 |                 MaybeLogAttestationServe(
+       |                 ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:21748:17: warning: calling function 'MaybeLogAttestationServe' requires holding mutex 'g_msgproc_mutex' exclusively [-Wthread-safety-analysis]
+ 21748 |                 MaybeLogAttestationServe(reason, block_hash, height,
+       |                 ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:21770:23: warning: reading variable 'm_matmul_heard_serve_last_refill' requires holding mutex 'g_msgproc_mutex' [-Wthread-safety-analysis]
+ 21770 |             if (peer->m_matmul_heard_serve_last_refill != 0us) {
+       |                       ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:21771:23: warning: writing variable 'm_matmul_heard_serve_tokens' requires holding mutex 'g_msgproc_mutex' exclusively [-Wthread-safety-analysis]
+ 21771 |                 peer->m_matmul_heard_serve_tokens =
+       |                       ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:21773:31: warning: reading variable 'm_matmul_heard_serve_tokens' requires holding mutex 'g_msgproc_mutex' [-Wthread-safety-analysis]
+ 21773 |                         peer->m_matmul_heard_serve_tokens,
+       |                               ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:21774:37: warning: passing variable 'm_matmul_heard_serve_last_refill' by reference requires holding mutex 'g_msgproc_mutex' [-Wthread-safety-reference]
+ 21774 |                         now - peer->m_matmul_heard_serve_last_refill);
+       |                                     ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:21776:19: warning: writing variable 'm_matmul_heard_serve_last_refill' requires holding mutex 'g_msgproc_mutex' exclusively [-Wthread-safety-analysis]
+ 21776 |             peer->m_matmul_heard_serve_last_refill = now;
+       |                   ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:21779:27: warning: reading variable 'm_matmul_heard_serve_tokens' requires holding mutex 'g_msgproc_mutex' [-Wthread-safety-analysis]
+ 21779 |                     peer->m_matmul_heard_serve_tokens, answer_items)};
+       |                           ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:21788:23: warning: reading variable 'm_matmul_heard_serve_cursor' requires holding mutex 'g_msgproc_mutex' [-Wthread-safety-analysis]
+ 21788 |                 peer->m_matmul_heard_serve_cursor)};
+       |                       ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:21794:23: warning: writing variable 'm_matmul_heard_serve_tokens' requires holding mutex 'g_msgproc_mutex' exclusively [-Wthread-safety-analysis]
+ 21794 |                 peer->m_matmul_heard_serve_tokens -= 1.0;
+       |                       ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:21797:19: warning: writing variable 'm_matmul_heard_serve_tokens' requires holding mutex 'g_msgproc_mutex' exclusively [-Wthread-safety-analysis]
+ 21797 |             peer->m_matmul_heard_serve_tokens -=
+       |                   ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:21799:19: warning: writing variable 'm_matmul_heard_serve_cursor' requires holding mutex 'g_msgproc_mutex' exclusively [-Wthread-safety-analysis]
+ 21799 |             peer->m_matmul_heard_serve_cursor +=
+       |                   ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:21802:13: warning: calling function 'MaybeLogAttestationServe' requires holding mutex 'g_msgproc_mutex' exclusively [-Wthread-safety-analysis]
+ 21802 |             MaybeLogAttestationServe(
+       |             ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:23087:17: warning: calling function 'PushAddress' requires holding mutex 'g_msgproc_mutex' exclusively [-Wthread-safety-analysis]
+ 23087 |                 PushAddress(*peer, advertised);
+       |                 ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:18627:13: warning: calling function 'MaybeCheckNotHeld' requires negative capability '!m_block_chunk_mutex' [-Wthread-safety-analysis]
+ 18627 |             LOCK(m_block_chunk_mutex);
+       |             ^
+/Users/runner/work/btx/btx/product/src/sync.h:257:56: note: expanded from macro 'LOCK'
+  257 | #define LOCK(cs) UniqueLock UNIQUE_NAME(criticalblock)(MaybeCheckNotHeld(cs), #cs, __FILE__, __LINE__)
+      |                                                        ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:18723:32: warning: calling function 'DropInboundBlockChunks' requires negative capability '!m_block_chunk_mutex' [-Wthread-safety-analysis]
+ 18723 |             const auto dropped{DropInboundBlockChunks(pfrom.GetId())};
+       |                                ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:18735:13: warning: calling function 'MaybeCheckNotHeld' requires negative capability '!m_block_chunk_mutex' [-Wthread-safety-analysis]
+ 18735 |             LOCK(m_block_chunk_mutex);
+       |             ^
+/Users/runner/work/btx/btx/product/src/sync.h:257:56: note: expanded from macro 'LOCK'
+  257 | #define LOCK(cs) UniqueLock UNIQUE_NAME(criticalblock)(MaybeCheckNotHeld(cs), #cs, __FILE__, __LINE__)
+      |                                                        ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:20997:13: warning: calling function 'MaybeCheckNotHeld' requires negative capability '!m_matmul_rc_admission_mutex' [-Wthread-safety-analysis]
+ 20997 |             WITH_LOCK(m_matmul_rc_admission_mutex,
+       |             ^
+/Users/runner/work/btx/btx/product/src/sync.h:301:30: note: expanded from macro 'WITH_LOCK'
+  301 | #define WITH_LOCK(cs, code) (MaybeCheckNotHeld(cs), [&]() -> decltype(auto) { LOCK(cs); code; }())
+      |                              ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:21873:34: warning: calling function 'MaybeQueueHistoricalAttestationReverify' requires negative capability '!m_hist_attest_mutex' [-Wthread-safety-analysis]
+ 21873 |                 const auto admit{MaybeQueueHistoricalAttestationReverify(
+       |                                  ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:24351:25: warning: calling function 'IsValid' requires holding mutex 'cs_main' exclusively [-Wthread-safety-analysis]
+ 24351 |             if (!known->IsValid(BLOCK_VALID_TREE)) return nullptr;
+       |                         ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:24353:28: warning: calling function 'ActiveChain' requires holding mutex 'cs_main' exclusively [-Wthread-safety-analysis]
+ 24353 |             if (m_chainman.ActiveChain().Contains(known)) return nullptr;
+       |                            ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:24059:28: warning: calling function 'ExpireInboundBlockChunks' requires negative capability '!m_block_chunk_mutex' [-Wthread-safety-analysis]
+ 24059 |     if (const auto expired{ExpireInboundBlockChunks(
+       |                            ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:24074:5: warning: calling function 'PumpOutboundBlockChunks' requires negative capability '!m_block_chunk_mutex' [-Wthread-safety-analysis]
+ 24074 |     PumpOutboundBlockChunks(*pto);
+       |     ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:25118:17: warning: calling function 'MaybeCheckNotHeld' requires negative capability '!m_matmul_carrier_deferred_mutex' [-Wthread-safety-analysis]
+ 25118 |                 LOCK(m_matmul_carrier_deferred_mutex);
+       |                 ^
+/Users/runner/work/btx/btx/product/src/sync.h:257:56: note: expanded from macro 'LOCK'
+  257 | #define LOCK(cs) UniqueLock UNIQUE_NAME(criticalblock)(MaybeCheckNotHeld(cs), #cs, __FILE__, __LINE__)
+      |                                                        ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:25505:5: warning: calling function 'DrainMatMulPendingSourceUnpins' requires negative capability '!m_matmul_source_unpin_mutex' [-Wthread-safety-analysis]
+ 25505 |     DrainMatMulPendingSourceUnpins();
+       |     ^
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:4969:23: warning: unused member function 'NotePeerServedBlockBody' [-Wunused-member-function]
+ 4969 | void PeerManagerImpl::NotePeerServedBlockBody(NodeId nodeid)
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~
+/Users/runner/work/btx/btx/product/src/net_processing.cpp:12766:22: warning: unused member function 'CountCapableGpuAuthorityPeers' [-Wunused-member-function]
+ 12766 | int PeerManagerImpl::CountCapableGpuAuthorityPeers() const
+       |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+92 warnings generated.
+[22/23] Linking CXX static library lib/libbitcoin_node.a
+[23/23] Linking CXX executable bin/btxd

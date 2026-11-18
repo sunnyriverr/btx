@@ -1,0 +1,25 @@
+{
+  "baseline": {
+    "exit": 1,
+    "elapsed_seconds": 0.951004916,
+    "log_sha256": "cdd495f79272993d13a0249859863062070d7ee7939036a8c3ce4f9b4837ff52"
+  },
+  "candidate": {
+    "exit": 0,
+    "elapsed_seconds": 0.852373041,
+    "log_sha256": "541efeafaf0973fad568269647a550afb9dbb2596c5e7771d0cd29a04077e87f"
+  },
+  "command": [
+    "$WORKSPACE/work/btx-lanes/session-1/swapnet-financial-rollback-admission/review-777-native-regression/native-runtime/local/python-runtime/Python.framework/Versions/3.12/bin/python3.12",
+    "-c",
+    "import sys,runpy;sys.path.append('$EXISTING_PURE_PYTHON_FIXTURE_DEPENDENCIES');runpy.run_module('unittest',run_name='__main__')",
+    "-v",
+    "test_trade_preview_review.TradePreviewReviewTest"
+  ],
+  "test_sha256": "cc136a0403e222ae1cf7955541b128b51ee7c1834224ed2b4399be0cc3e31005",
+  "fixture_corrections": [
+    "Saved runtime lacked pytest; reused existing pure Python host pytest/pluggy appended after framework site packages, no install",
+    "Imported fixture TestCase accidentally exposed six existing tests to initial discovery; final run selects only seven new methods",
+    "Initial exact quote expiry expectation assumed 120s; original quote in real fixture expires after 60s. Final expectation records exact quote expiry."
+  ]
+}

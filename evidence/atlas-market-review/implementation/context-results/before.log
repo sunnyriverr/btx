@@ -1,0 +1,48 @@
+✔ healthy actual market workspace preserves quote identity, exact amounts and fees through final preparation (9.308ms)
+✔ changing wallet after completed preview removes the old authorization control (1.367959ms)
+✖ wallet change while preview execution is pending must not resurrect old-wallet trade authorization (1.976083ms)
+✖ wallet change while preview preparation is pending must not restore old-wallet Continue (2.03725ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 2
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 58.169209
+
+✖ failing tests:
+
+test at tests/swapnet-workflow.test.mjs:80:1
+✖ wallet change while preview execution is pending must not resurrect old-wallet trade authorization (1.976083ms)
+  AssertionError [ERR_ASSERTION]: Old wallet preview returned after wallet changed and exposed a fresh confirm action
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file://$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/context-results/before/tests/swapnet-workflow.test.mjs:85:9)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/swapnet-workflow.test.mjs:87:1
+✖ wallet change while preview preparation is pending must not restore old-wallet Continue (2.03725ms)
+  AssertionError [ERR_ASSERTION]: Old wallet prepared operation reappeared after context change
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file://$WORKSPACE/work/btx-lanes/session-1/atlas-swapnet-market-trade-review/implementation/context-results/before/tests/swapnet-workflow.test.mjs:92:9)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
