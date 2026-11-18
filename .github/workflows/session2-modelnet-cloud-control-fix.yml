@@ -1,0 +1,94 @@
+{
+  "name": "Session2 cloud control responsiveness qualification",
+  "on": {
+    "push": {
+      "branches": [
+        "codex/ci-modelnet-cloud-control-fix"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "read",
+    "actions": "read"
+  },
+  "concurrency": {
+    "group": "session2-modelnet-cloud-control-fix",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "qualify": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 50,
+      "steps": [
+        {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "persist-credentials": false
+          }
+        },
+        {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "repository": "btxchain/btx",
+            "ref": "23ee567ea8a2d9cad8ca3264f8793e8371b3eb93",
+            "path": "current-reference",
+            "fetch-depth": 0,
+            "persist-credentials": false
+          }
+        },
+        {
+          "name": "Verify preparation offline",
+          "run": "python3 -B -m unittest discover -s proposal -p test_offline.py -v"
+        },
+        {
+          "name": "Verify retained23ee checkpoint",
+          "timeout-minutes": 8,
+          "run": "python3 -B proposal/stage.py && python3 -B proposal/current_binary.py",
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          }
+        },
+        {
+          "name": "Admit baseline, bounded helper/test build, paired native and existing controls",
+          "timeout-minutes": 38,
+          "run": "docker run --cpus=2 --memory=7g --name s2-cloud-control-fix --init -v \"$GITHUB_WORKSPACE:$GITHUB_WORKSPACE\" -w \"$GITHUB_WORKSPACE\" -e GITHUB_WORKSPACE ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11 bash -c \"bash proposal/setup.sh && python3 -B proposal/qualify.py\""
+        },
+        {
+          "name": "Remove only owned test container",
+          "if": "always()",
+          "run": "docker rm -f s2-cloud-control-fix >/dev/null 2>&1; test -z \"$(docker ps -aq --filter name=^/s2-cloud-control-fix$)\""
+        },
+        {
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always()",
+          "with": {
+            "name": "cloud-control-qualified-records",
+            "path": "records/",
+            "retention-days": 14,
+            "if-no-files-found": "error"
+          }
+        },
+        {
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always()",
+          "with": {
+            "name": "cloud-control-qualified-binaries",
+            "path": "retained-binaries/",
+            "retention-days": 14,
+            "if-no-files-found": "warn"
+          }
+        },
+        {
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always()",
+          "with": {
+            "name": "cloud-control-qualified-checkpoint",
+            "path": "cloud-control-checkpoint/",
+            "retention-days": 14,
+            "if-no-files-found": "warn"
+          }
+        }
+      ]
+    }
+  }
+}
