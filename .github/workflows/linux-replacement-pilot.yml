@@ -1,0 +1,78 @@
+name: Session 3 Linux producer RUNPATH qualification
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: session3-linux-runpath-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  producer:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    steps:
+      - name: Fetch only the reviewed inert fixture
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+          sparse-checkout: contrib/devtools/session3-linux-runpath
+      - name: Admit the original OS and minimum CMake package
+        shell: bash
+        run: |
+          set -euo pipefail
+          records="$RUNNER_TEMP/session3-linux-runpath-records"
+          mkdir "$records"
+          cat /etc/os-release > "$records/os-release.txt"
+          uname -a > "$records/uname.txt"
+          df -k "$RUNNER_TEMP" > "$records/disk.txt"
+          python3 - <<'PY'
+          import platform, shutil
+          from pathlib import Path
+          fields = dict(line.split('=', 1) for line in Path('/etc/os-release').read_text().splitlines() if '=' in line)
+          assert fields.get('ID', '').strip('"') == 'ubuntu'
+          assert fields.get('VERSION_ID', '').strip('"') == '22.04'
+          assert platform.machine() == 'x86_64'
+          assert shutil.disk_usage('.').free >= 1024 ** 3
+          PY
+          sudo timeout --kill-after=10s 180s apt-get update > "$records/apt-update.log" 2>&1
+          apt-cache madison cmake > "$records/cmake-packages.txt"
+          version="$(python3 - "$records/cmake-packages.txt" <<'PY'
+          from pathlib import Path
+          import sys
+          versions = [line.split('|')[1].strip() for line in Path(sys.argv[1]).read_text().splitlines() if '|' in line]
+          selected = next((value for value in versions if value.startswith('3.22.')), None)
+          if not selected:
+              raise SystemExit('No CMake 3.22 package offered; stop, no alternate toolchain')
+          print(selected)
+          PY
+          )"
+          printf '%s\n' "$version" > "$records/selected-cmake-package.txt"
+          sudo timeout --kill-after=10s 180s apt-get install --allow-downgrades --no-install-recommends -y \
+            "cmake=$version" "cmake-data=$version" g++ make binutils \
+            > "$records/apt-install.log" 2>&1
+          /usr/bin/cmake --version > "$records/cmake-version.txt"
+          /usr/bin/c++ --version > "$records/compiler-version.txt"
+          /usr/bin/make --version > "$records/make-version.txt"
+          /usr/bin/readelf --version > "$records/readelf-version.txt"
+          dpkg-query -W cmake cmake-data g++ make binutils > "$records/packages.txt"
+      - name: Run the bounded inert producer comparison
+        shell: bash
+        run: |
+          set -euo pipefail
+          records="$RUNNER_TEMP/session3-linux-runpath-records"
+          # The fixture clears inherited compiler/CMake/loader environment
+          # settings, checks its own exact input hashes and retains all logs.
+          timeout --kill-after=10s 330s python3 contrib/devtools/session3-linux-runpath/run.py \
+            --cmake /usr/bin/cmake --work "$RUNNER_TEMP/session3-linux-runpath-results" \
+            > "$records/controller.log" 2>&1
+      - name: Preserve setup and observed results, including failures
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: session3-linux-runpath-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/session3-linux-runpath-records
+            ${{ runner.temp }}/session3-linux-runpath-results
+          if-no-files-found: error
+          retention-days: 14
