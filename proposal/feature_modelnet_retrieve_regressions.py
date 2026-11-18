@@ -354,7 +354,7 @@ class ModelNetRetrieveRegressionsTest(BitcoinTestFramework):
         if multi_file:
             source_b = Path(self.options.tmpdir) / "progress-bundle"
             source_b.mkdir()
-            for label, size in (("first", 8 << 20), ("second", 4 << 20)):
+            for label, size in (("first", 16 << 20), ("second", 4 << 20)):
                 shutil.copyfile(self._write_model(f"progress-{label}", size), source_b / f"{label}.safetensors")
         else:
             source_b = self._write_model("progress-b", PACED_BYTES)
@@ -378,7 +378,10 @@ class ModelNetRetrieveRegressionsTest(BitcoinTestFramework):
             rows = self._rpc(fetcher, "getmodeltransfers").get("transfers", [])
             row = next((x for x in rows if x.get("job_id") == jid), {})
             manifest = self._rpc(fetcher, "getmodelmanifest", [b["uri"]]) if pieces else {}
-            if (0 < actual < total and job.get("status") == "running" and not manifest.get("complete")
+            # A live stream can expose a copied piece before its progress
+            # callback runs. Sample only after completed piece bookkeeping.
+            if (0 < actual < total and job.get("status") == "running" and job.get("pieces_committed", 0) == len(pieces)
+                    and not manifest.get("complete")
                     and pieces == self._progress_piece_state(fetcher, b["artifact_id"])
                     and row.get("bytes_committed") == job.get("bytes_committed")):
                 observation.update(actual=actual, reported=job["bytes_committed"], percent=row.get("percent"),
@@ -409,7 +412,8 @@ class ModelNetRetrieveRegressionsTest(BitcoinTestFramework):
                 actual = sum(v[0] for v in current.values())
                 rows = self._rpc(fetcher, "getmodeltransfers").get("transfers", [])
                 row = next((x for x in rows if x.get("job_id") == jid), {})
-                if (0 < actual < total and current == self._progress_piece_state(fetcher, b["artifact_id"])
+                if (0 < actual < total and job.get("pieces_committed", 0) == len(current)
+                        and current == self._progress_piece_state(fetcher, b["artifact_id"])
                         and row.get("bytes_committed") == job.get("bytes_committed")):
                     observation["resumed"] = {"actual": actual, "reported": job["bytes_committed"],
                                                "percent": row.get("percent"), "inflight": job["inflight"]}
@@ -423,7 +427,7 @@ class ModelNetRetrieveRegressionsTest(BitcoinTestFramework):
         observation["b_exact"] = self._progress_contents(fetcher, b["uri"], source_b) == total
         self._progress_contents(fetcher, a["uri"], source_a)
         observation["a_unchanged"] = self._progress_piece_state(fetcher, a["artifact_id"]) == before_a
-        observation["restart_reused_pieces"] = True
+        observation["restart_preserved_pieces"] = True
         self._progress_stop(fetcher)
         self._progress_stop(host)
         assert observation["b_exact"] and observation["a_unchanged"], observation

@@ -38,10 +38,10 @@ try:
  closure=('src/modelnet/file_stream.cpp','src/modelnet/file_stream.h','src/modelnet/store.cpp','src/modelnet/store.h','src/modelnet/direct_seed.cpp','src/modelnet/direct_seed.h','src/modelnet/types.cpp','src/modelnet/types.h','src/test/modelnet_file_stream_tests.cpp','src/test/util/setup_common.cpp','src/test/util/setup_common.h','src/crypto/sha384.cpp','src/crypto/sha384.h','src/util/readwritefile.cpp','src/util/readwritefile.h')
  r['retained_stream_source_matches']={n:sha(source/n)==sha(ref/n) for n in closure};save()
  assert all(r['retained_stream_source_matches'].values()),'retained stream control source changed'
- retained_test=build/'bin/test_btx';r['retained_test_binary_sha256']=sha(retained_test);save()
- code,_=run([retained_test,'--run_test=modelnet_file_stream_tests','--log_level=test_suite','--logger=JUNIT,all,'+str(out/'retained-stream.xml')],'retained-stream-controls',180,build)
- r['retained_stream_controls']=validate_suite((out/'retained-stream.xml').read_text(),code,'modelnet_file_stream_tests')
- r['retained_stream_scope']='Unchanged source-matched stream/store unit controls from immutable checkpoint, run once. Not a newly rebuilt current test_btx, not patched-helper integration. Current helper is tested separately below.';save()
+ reuse=json.loads((out/'baseline-reuse.json').read_text());assert reuse['complete']
+ prior=json.loads((out/'reused/qualification.json').read_text())
+ r['retained_stream_controls']=prior['retained_stream_controls'];r['retained_stream_reused_from_run']=44198067492
+ r['retained_stream_scope']='Unchanged source-matched stream/store controls reused from44198067492, not rerun and not a current rebuilt test_btx.';save()
  tracked=[n for n in subprocess.check_output(['git','ls-files','-z'],cwd=ref,text=True).split('\0')if n]
  changed=[]
  for name in tracked:
@@ -78,10 +78,15 @@ try:
   dest=w/'retained-binaries'/name;dest.mkdir(parents=True,exist_ok=True)
   for x in (helper,):shutil.copy2(x,dest/x.name)
   r[name+'_binaries']={x.name:sha(x)for x in (helper,)};r[name+'_source']={n:sha(source/n)for n in changes};save()
+  native(name,helper)
+ def native(name,helper):
   assert deadline-time.monotonic()>1140,'insufficient bounded runtime plus cleanup headroom'
   run([sys.executable,p/'native.py','--helper',helper,'--sha256',sha(helper),'--expect',name,'--out',out/(name+'-native')],name+'-native',1140,allowed=(0,))
   result=json.loads((out/(name+'-native/result.json')).read_text());assert result['complete']and result['clean_cleanup'];r[name+'_native']=result;save()
- phase('baseline')
+ baseline=w/'baseline-helper/bin/btx-modeld';assert sha(baseline)==reuse['helper_sha256']
+ r['baseline_binaries']={'btx-modeld':sha(baseline)};r['baseline_build_reused_from_run']=44198067492
+ (w/'retained-binaries/baseline').mkdir(parents=True,exist_ok=True);shutil.copy2(baseline,w/'retained-binaries/baseline/btx-modeld');save()
+ native('baseline',baseline)
  # Apply only the product part after using identical tests on the baseline.
  candidate=(p/'candidate.patch').read_text();product_patch=candidate.split('--- a/test/functional/feature_modelnet_retrieve_regressions.py')[0]
  (p/'product-only.patch').write_text(product_patch)
@@ -91,4 +96,11 @@ try:
 except Exception as e:r['error']=repr(e);save();raise
 finally:
  r['retained_binaries']={str(x.relative_to(w/'retained-binaries')):sha(x)for x in (w/'retained-binaries').rglob('*')if x.is_file()}if(w/'retained-binaries').exists()else{}
- r['input_checkpoint_preserved_remote']=14307015983;save()
+ r['input_checkpoint_preserved_remote']=14307015983
+ if r.get('candidate_binaries'):
+  try:
+   from checkpoint import create
+   current=create(w,w/'helper-current-checkpoint',{'source':pin,'helper_progress_candidate':True,'qualification_complete':r['complete'],'test_btx_scope':'old retained binary and unchanged stream controls; current aggregate test target NOT rebuilt'},reserve=int(1.25*1024**3))
+   r['updated_checkpoint']={'archive_sha256':current['archive_sha256'],'identity':current['identity']}
+  except Exception as e:r['updated_checkpoint_error']=repr(e)
+ save()

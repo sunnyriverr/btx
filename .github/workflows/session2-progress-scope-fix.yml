@@ -37,15 +37,15 @@
           }
         },
         {
-          "name": "Verify exact retained checkpoint",
+          "name": "Verify original cache, retained baseline and prior controls",
           "timeout-minutes": 8,
-          "run": "python3 -B proposal/stage.py",
+          "run": "python3 -B proposal/stage.py && python3 -B proposal/reuse_baseline.py",
           "env": {
             "GH_TOKEN": "${{ github.token }}"
           }
         },
         {
-          "name": "Bounded current-helper before/after and retained stream controls",
+          "name": "Same maintained before/after cases and candidate-only build",
           "timeout-minutes": 57,
           "run": "docker run --name s2-progress-fix --init -v \"$GITHUB_WORKSPACE:$GITHUB_WORKSPACE\" -w \"$GITHUB_WORKSPACE\" -e GITHUB_WORKSPACE ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11 bash -c \"bash proposal/setup.sh && python3 -B proposal/qualify.py\""
         },
@@ -70,6 +70,16 @@
           "with": {
             "name": "progress-scope-qualified-binaries",
             "path": "retained-binaries/",
+            "retention-days": 14,
+            "if-no-files-found": "warn"
+          }
+        },
+        {
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always()",
+          "with": {
+            "name": "progress-helper-current-checkpoint",
+            "path": "helper-current-checkpoint/",
             "retention-days": 14,
             "if-no-files-found": "warn"
           }

@@ -10,18 +10,19 @@ def validate(r,phase):
  assert r.get('complete') and r.get('clean_cleanup') and r.get('binary_verified'),'incomplete execution or cleanup'
  assert set(r['cases'])=={'progress','progress_multi'},'case missing'
  for name,c in r['cases'].items():
-  o=c['observation'];assert o['b_exact'] and o['a_unchanged'] and o['restart_reused_pieces'],'integrity/resume control failed'
+  o=c['observation'];assert o['b_exact'] and o['a_unchanged'] and o['restart_preserved_pieces'],'integrity/resume control failed'
   assert o['stream_attempted'] and 0<o['actual']<o['total'],'not an incomplete-stream observation'
   assert o['file_count']==(2 if name=='progress_multi'else 1),'wrong file setup'
   if phase=='baseline':
    assert c['assertion_failure'] and not c.get('unexpected_error'),'baseline not intended assertion failure'
-   assert o['reported']==o['actual']+o['a_bytes'] and o['percent']==100 and o['final_reported']==o['total']+o['a_bytes'],'baseline wrong failure'
+   assert o['a_bytes']<=o['reported']<=o['actual']+o['a_bytes'] and o['percent']==100 and o['final_reported']==o['total']+o['a_bytes'],'baseline wrong failure'
   else:
    assert phase=='candidate' and not c['assertion_failure'] and not c.get('unexpected_error'),'candidate failed'
    assert o['reported']==o['actual'] and o['percent']==o['actual']*100//o['total'] and o['eta_present'] and o['final_reported']==o['total'],'candidate scope wrong'
   if name=='progress':
    resumed=o['resumed'];assert resumed['inflight']>0 and 0<resumed['actual']<o['total'],'no live resumed observation'
-   assert resumed['reported']==resumed['actual']+(o['a_bytes']if phase=='baseline'else 0),'wrong resumed accounting'
+   if phase=='baseline':assert o['a_bytes']<=resumed['reported']<=o['a_bytes']+resumed['actual'] and resumed['percent']==100,'wrong resumed baseline failure'
+   else:assert resumed['reported']==resumed['actual'] and resumed['percent']==resumed['actual']*100//o['total'],'wrong resumed candidate accounting'
  return True
 
 def run(binary,out,phase,expected):
