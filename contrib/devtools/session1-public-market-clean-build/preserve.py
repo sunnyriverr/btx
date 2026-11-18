@@ -26,6 +26,8 @@ if total and shutil.disk_usage(w).free>total+3*1024**3:
  archive=out/'checkpoint.tar.gz'
  with tarfile.open(archive,'w:gz',compresslevel=2,dereference=False) as t:
   for name in inv:t.add(w/name,arcname=name,recursive=False)
- receipt={'sha256':sha(archive),'bytes':archive.stat().st_size,'live_bytes':total,'files':len(inv),'scope':'Session1 clean a97 configured source/build with unchanged retained compiled objects; cached binaries stale until incremental rebuild; no compilation/runtime/release qualification'}
+ receipt={'sha256':sha(archive),'bytes':archive.stat().st_size,'live_bytes':total,'files':len(inv),'scope':'Session1 clean a97 configured source/build incremental node/CLI progress, completed or partial; see result for binary qualification; cached binaries stale until incremental rebuild; no compilation/runtime/release qualification'}
  (out/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\n');shutil.copy2(r/'checkpoint-inventory.json',out/'inventory.json');(r/'preservation-outcome.json').write_text(json.dumps({'preserved':True,**receipt},indent=2)+'\n');print(json.dumps(receipt))
 else:(r/'preservation-outcome.json').write_text(json.dumps({'live_bytes':total,'free':shutil.disk_usage(w).free,'reason':'Insufficient space for a second compressed copy or no restored state'}))
+
+assert (out/'checkpoint.tar.gz').is_file() and json.loads((r/'preservation-outcome.json').read_text()).get('preserved'), 'Checkpoint could not be saved; preserve job failure explicitly'

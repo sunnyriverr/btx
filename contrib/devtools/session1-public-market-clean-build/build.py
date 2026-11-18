@@ -1,7 +1,7 @@
-"""Clean a97 node configure-only admission, adapted from Session3 retained Mac build recipe. No compile or runtime entry point."""
+"""Clean a97 bounded incremental node/CLI build. No node invocation or tests."""
 from pathlib import Path, PurePosixPath
 import configparser, hashlib, json, os, platform, shutil, shlex, signal, subprocess, tarfile, time
-import urllib.request, urllib.error, zipfile
+import urllib.request, urllib.error, zipfile, threading, datetime, re
 
 W = Path(os.environ['GITHUB_WORKSPACE']).resolve()
 P = Path(__file__).resolve().parent
@@ -147,6 +147,71 @@ def restore():
     outer.unlink()
     inner.unlink()
 
+def bounded_build():
+    # A separate process group and hard timer protect the15-minute compilation bound.
+    # Checkpoint preservation runs after this function, even on timeout/failure.
+    limit = M['build_seconds']
+    assert limit == 900
+    floor = preservation_floor()
+    next_disk_measurement = time.monotonic()
+    started = time.monotonic()
+    proc = subprocess.Popen(['ninja', '-C', str(B), '-j2', 'btxd', 'btx-cli'],
+        stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1, start_new_session=True)
+    STATE['build_started_utc'] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    timed_out = threading.Event()
+    def stop_group():
+        timed_out.set()
+        # Kill the complete owned group at the deadline, even if Ninja exits
+        # before a compiler descendant. Incomplete outputs remain unrecorded by
+        # Ninja and will be rebuilt from the preserved checkpoint next time.
+        try: os.killpg(proc.pid, signal.SIGKILL)
+        except ProcessLookupError: pass
+    timer = threading.Timer(max(0, started + limit - time.monotonic()), stop_group)
+    timer.daemon = True
+    timer.start()
+    lines = []
+    def read_output():
+        with (R / 'build.log').open('w') as log:
+            for line in proc.stdout:
+                lines.append(line)
+                log.write(line)
+                log.flush()
+                print(line.rstrip(), flush=True)
+    reader = threading.Thread(target=read_output, daemon=True)
+    reader.start()
+    next_heartbeat = started + 30
+    error = None
+    try:
+        while proc.poll() is None:
+            if time.monotonic() >= next_disk_measurement:
+                floor = preservation_floor()
+                next_disk_measurement = time.monotonic() + 5
+            if shutil.disk_usage(W).free < floor:
+                error = 'Checkpoint preservation headroom reached'
+                stop_group()
+                break
+            if time.monotonic() >= next_heartbeat:
+                completed = sum(bool(re.match(r'^\[\d+/\d+\]', row)) for row in lines)
+                print('BUILD_PROGRESS elapsed=%.1fs completed_edges=%d' % (time.monotonic()-started, completed), flush=True)
+                next_heartbeat = time.monotonic() + 30
+            time.sleep(0.5)
+        proc.wait(timeout=10)
+    finally:
+        timer.cancel()
+        if proc.poll() is None:
+            stop_group()
+            proc.wait(timeout=10)
+        reader.join(timeout=10)
+        STATE['build_elapsed_seconds'] = round(time.monotonic() - started, 3)
+        STATE['build_returncode'] = proc.returncode
+        STATE['build_timed_out'] = timed_out.is_set() and error is None
+        STATE['completed_build_edges'] = sum(bool(re.match(r'^\[\d+/\d+\]', row)) for row in lines)
+        STATE['remaining_plan_after_attempt'] = subprocess.check_output(
+            ['ninja', '-C', str(B), '-n', 'btxd', 'btx-cli'], text=True, stderr=subprocess.STDOUT, timeout=30)
+        save()
+    assert not timed_out.is_set() and error is None, error or '15-minute build bound reached; checkpoint retained'
+    assert proc.returncode == 0, ('Build failed; compiled progress retained', proc.returncode)
+
 def main():
     assert platform.system() == 'Darwin' and platform.machine() == 'arm64'
     assert shutil.disk_usage(W).free >= 15 * 1024**3, 'Independent runner capacity prerequisite'
@@ -156,7 +221,7 @@ def main():
     assert 'Xcode 16.4' in cmd(['xcodebuild', '-version'], 'xcode-version')
     assert cmd(['git', '-C', S, 'rev-parse', 'HEAD'], 'head').strip() == M['source']
     assert not cmd(['git', '-C', S, 'status', '--porcelain'], 'initial-source-status').strip()
-    assert os.environ.get('BUILD_APPROVED') == 'false', 'Configure-only job'
+    assert os.environ.get('BUILD_APPROVED') == 'true', 'Bounded build authority absent'
     STATE['overlay_applied'] = False
     assert 'Apple clang version 17.0.0' in cmd(['xcrun', 'clang++', '--version'], 'compiler')
     assert cmd(['xcrun', '--sdk', 'macosx', '--show-sdk-version'], 'sdk').strip() == '15.5'
@@ -263,8 +328,8 @@ def main():
     STATE['python_dependency_commands_recorded'] = True
     assert shutil.disk_usage(W).free > preservation_floor()
     save()
-    assert os.environ.get('BUILD_APPROVED', 'false') == 'false', 'Configure-only job'
-    # Deliberately no BTX compilation, binary invocation, tests or runtime data.
+    assert os.environ.get('BUILD_APPROVED') == 'true', 'Bounded build authority absent'
+    # Record and validate the admitted graph before compiling any product target.
     STATE['compile_commands'] = sum('Building CXX' in row or 'Building C ' in row for row in plan.splitlines())
     STATE['plan_scope'] = 'btxd and btx-cli; no build/test execution'
     assert STATE['embedded_python_selected'], 'Embedded Python missing from link plan'
@@ -278,10 +343,32 @@ def main():
     before = STATE.pop('retained_compiled_files')
     assert before, 'No compiled checkpoint inventory'
     mismatches = [name for name, digest in before.items() if not (W/name).is_file() or sha(W/name) != digest]
-    assert not mismatches, ('Compiled progress changed during configure', mismatches)
+    probe = 'mac-config-build/src/libbitcoinpqc/shake_a64_probe/build/libshake_a64_probe.a'
+    assert set(mismatches) <= {probe}, ('Product compiled progress changed during configure', mismatches)
+    STATE['configure_probe_changes'] = mismatches
     STATE['preserved_compiled_files'] = len(before)
     STATE['compiled_bytes_unchanged'] = True
     STATE['cache_binaries_are_stale'] = True
+    assert edges <= M['max_edges'] and len(dirty_compiles) <= M['max_compiles'], 'Plan expanded beyond admitted bound'
+    cpus = int(subprocess.check_output(['sysctl', '-n', 'hw.logicalcpu'], text=True))
+    memory = int(subprocess.check_output(['sysctl', '-n', 'hw.memsize'], text=True))
+    assert cpus >= 2 and memory >= 8 * 1024**3, 'Measured two-job capacity unavailable'
+    STATE['resources'] = {'logical_cpus': cpus, 'memory_bytes': memory, 'free_bytes': shutil.disk_usage(W).free, 'jobs': 2}
+    STATE['compiled'] = False
+    STATE['compilation_started'] = True
+    save()
+    bounded_build()
+    STATE['compiled'] = True
+    STATE['cache_binaries_are_stale'] = False
+    STATE['binaries'] = {n: {'sha256': sha(B / 'bin' / n), 'bytes': (B / 'bin' / n).stat().st_size} for n in ['btxd', 'btx-cli']}
+    for name in STATE['binaries']:
+        assert 'arm64' in cmd(['file', B / 'bin' / name], name + '-format')
+        deps = cmd(['otool', '-L', B / 'bin' / name], name + '-dependencies')
+        if name == 'btxd':
+            assert 'Python.framework' in deps
+    STATE['post_build_plan'] = cmd(['ninja', '-C', B, '-n', 'btxd', 'btx-cli'], 'post-build-plan')
+    assert not cmd(['git', '-C', S, 'status', '--porcelain'], 'post-build-source-status').strip()
+    STATE['plan_scope'] = 'Clean a97 btxd and btx-cli incremental build; no runtime/tests/release qualification'
     STATE['complete'] = True
 
 if __name__ == '__main__':
