@@ -1,0 +1,174 @@
+{
+  "utc": "2026-11-18T09:43:41.681868+00:00",
+  "verdict": "QUALIFIED_RESPONSIVENESS_REPAIR_PUBLICATION_HELD",
+  "base_source": "23ee567ea8a2d9cad8ca3264f8793e8371b3eb93",
+  "current_source_applicability": "a97af7b3f379e33e3ec65db948468d875ade2841",
+  "source_scope": "Retained23ee source/build, relevant ModelNet control source unchanged at a97; one helper.cpp repair plus maintained standalone regression. Not fresh fulla97build.",
+  "product_files": [
+    "src/modelnet/helper.cpp",
+    "contrib/devtools/test_modelnet_cloud_responsiveness.py"
+  ],
+  "patch_sha256": "6cf8f4d8147c986fdcdd4d73e206de24e6d56011229e4a4dbba4631c689e68a1",
+  "candidate_source_sha256": "fd04902a617283e0514378d9bccf9b105bc1feb981bf48374a0d54d7917edf46",
+  "regression_sha256": "ae71ae5a6356f3a54b4954486136c032b163286c7c430fd310486282db2663e1",
+  "run": "https://github.com/sunnyriverr/btx/actions/runs/44275642974",
+  "recipe_commit": "888c6ff8648de226b523e8566a1169ea60ab96c1",
+  "job_conclusion": "success",
+  "baseline": {
+    "run": 44274288368,
+    "helper_sha256": "28d7ecb6c611e5676d85de7a64038bc7d07cd0b6b2fb2606390d5e6405838ad2",
+    "exit": 2,
+    "verdict": "REPRODUCED",
+    "violations": [
+      "hello waited for upload release",
+      "busy controls not reached before release"
+    ],
+    "hello_ms": 2050.9420119999504,
+    "all_healthy_controls_passed": true
+  },
+  "candidate": {
+    "helper_sha256": "1aab62ac116bbc765f065e8d7a427f661d524a1306e31ae73fa6f89e6eb25497",
+    "exit": 0,
+    "verdict": "PASS",
+    "hello_ms": 0.21021199995630013,
+    "status_ms": 0.9892870000385301,
+    "busy_refusals": [
+      "getcloudstorageinfo",
+      "setcloudstorage",
+      "setmodelstoragepolicy",
+      "removemodelstorage"
+    ]
+  },
+  "controls": {
+    "identical_final_test_source": true,
+    "exact_262144_byte_model_upload_and_retry": "0c40120eeb6a93be2f6cfffb88e3a6bd273b043b4254371413c0efff6847bd40",
+    "configuration_and_budget_bytes_unchanged_during_contention": true,
+    "same_idempotency_key_retry_and_replay": true,
+    "normal_configuration_and_counters_survive_restart": true,
+    "helper_exits": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "http_handlers_alive": 0,
+    "test_container_removed": true,
+    "budget_gets_initial_and_final": [
+      1,
+      2
+    ],
+    "budget_bytes_initial_and_final": [
+      15,
+      30
+    ],
+    "restart_preserved_final_gets": 2,
+    "restart_preserved_final_bytes": 30
+  },
+  "cloud_suite": {
+    "cloud_cases": 46,
+    "filtered_noncloud_cases": 36,
+    "cdata_framing_repairs": 1,
+    "required": [
+      "cloud_verified_reader_empty_identity",
+      "cloud_verified_reader_exact_lengths_and_corrupt_piece",
+      "cloud_verified_reader_withholds_invalid_last_piece_and_retries",
+      "cloud_verified_upload_ignores_external_source_changes"
+    ],
+    "native_exit": 0
+  },
+  "selected_first_run_cases": [
+    "doctor_host_preview_share_transfers_alias",
+    "show_export_open_unhost_empty_search",
+    "mirror_policy_and_native_file_stream_hello",
+    "setcloudstorage_rejects_link_local_flag_and_secret_shaped_ref",
+    "import_into_a_fresh_helper_keeps_the_saved_policy",
+    "rejected_policy_save_keeps_live_settings_and_allows_retry",
+    "saved_policy_quota_matches_catalog_normalization"
+  ],
+  "build": {
+    "planned_actions": 27,
+    "executed_steps": 24,
+    "seconds": 341.224511672,
+    "workers": 2,
+    "container_memory_limit": "7GiB",
+    "configuration_only_option": "CMAKE_SUPPRESS_REGENERATION=ON for explicit immutable-tree dry-run; C++/runtime flags unchanged"
+  },
+  "artifacts": [
+    {
+      "id": 14415715650,
+      "node_id": "MDg6QXJ0aWZhY3QxNDQxNTcxNTY1MA==",
+      "name": "cloud-control-qualified-records",
+      "size_in_bytes": 110139,
+      "url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14415715650",
+      "archive_download_url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14415715650/zip",
+      "expired": false,
+      "digest": "sha256:3fbbb45945d72ebca68e8615d3655ae4b51fa72e32626d37ec1c73b551710364",
+      "created_at": "2026-11-18T09:33:07Z",
+      "updated_at": "2026-11-18T09:33:07Z",
+      "expires_at": "2026-12-02T09:33:06Z",
+      "workflow_run": {
+        "id": 44275642974,
+        "repository_id": 1440653358,
+        "head_repository_id": 1440653358,
+        "head_branch": "codex/ci-modelnet-cloud-control-fix-r2",
+        "head_sha": "888c6ff8648de226b523e8566a1169ea60ab96c1"
+      }
+    },
+    {
+      "id": 14415017081,
+      "node_id": "MDg6QXJ0aWZhY3QxNDQxNTAxNzA4MQ==",
+      "name": "cloud-control-qualified-checkpoint",
+      "size_in_bytes": 554182681,
+      "url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14415017081",
+      "archive_download_url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14415017081/zip",
+      "expired": false,
+      "digest": "sha256:47252f0bef545425e5a9a6a86b99bb61398507d91233e508f4945d32066d52b7",
+      "created_at": "2026-11-18T09:33:30Z",
+      "updated_at": "2026-11-18T09:33:30Z",
+      "expires_at": "2026-12-02T09:33:12Z",
+      "workflow_run": {
+        "id": 44275642974,
+        "repository_id": 1440653358,
+        "head_repository_id": 1440653358,
+        "head_branch": "codex/ci-modelnet-cloud-control-fix-r2",
+        "head_sha": "888c6ff8648de226b523e8566a1169ea60ab96c1"
+      }
+    },
+    {
+      "id": 14414324433,
+      "node_id": "MDg6QXJ0aWZhY3QxNDQxNDMyNDQzMw==",
+      "name": "cloud-control-qualified-binaries",
+      "size_in_bytes": 40783304,
+      "url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14414324433",
+      "archive_download_url": "https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14414324433/zip",
+      "expired": false,
+      "digest": "sha256:3ee765964bc57fb77d1518b524e1ffbeebd77db76c4b5e862a1aff1fcc932977",
+      "created_at": "2026-11-18T09:33:12Z",
+      "updated_at": "2026-11-18T09:33:12Z",
+      "expires_at": "2026-12-02T09:33:07Z",
+      "workflow_run": {
+        "id": 44275642974,
+        "repository_id": 1440653358,
+        "head_repository_id": 1440653358,
+        "head_branch": "codex/ci-modelnet-cloud-control-fix-r2",
+        "head_sha": "888c6ff8648de226b523e8566a1169ea60ab96c1"
+      }
+    }
+  ],
+  "records_download_sha256": "3fbbb45945d72ebca68e8615d3655ae4b51fa72e32626d37ec1c73b551710364",
+  "retention": "Records ZIP downloaded/digest verified; compiled binaries and updated checkpoint retained remotely, metadata checked, not locally downloaded. Original input checkpoint immutable.",
+  "pilot": {
+    "run": 44274288368,
+    "job_conclusion": "failure",
+    "reason": "Valid baseline passed all healthy controls and reproduced2contractviolations. No productcompile:dry-run could only showglob/regeneration prelude. Corrected graph inspection, reused exact baseline, unchanged product/test.",
+    "evidence": "attempt1/CLASSIFICATION.md"
+  },
+  "limits": [
+    "Actual compiled helper on Ubuntu22.04 x86_64/GCC11.4/OpenSSL3.5.9, Ubuntu24host; controlled loopback HTTP origin, no FakeS3fallback in native trace; not real S3 authentication/provider qualification.",
+    "46existingcloudcases+7selected first-run cases, not aggregate test_btx or whole first-run suite.",
+    "No native Windows/Mac, fullnode/Atlas/Qt, WAN/peer, GPU, release or broader recovery qualification.",
+    "Busy detach refusal tested; no new claim of healthy detach/restart testing from this native script."
+  ],
+  "upstream_publications": 0,
+  "next": "One focused PR with exact two-file patch, paired native proof and clear platform/build limits when authorized. No routine reruns; recheck head/ownership before delivery."
+}
