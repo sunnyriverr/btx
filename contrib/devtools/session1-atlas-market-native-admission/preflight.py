@@ -1,4 +1,4 @@
-"""PR777 measured incremental daemon/CLI build, using verified configured checkpoint; no native runtime entry point."""
+"""Atlas market configure-only admission, adapted from Session3 retained Mac build recipe. No compile or runtime entry point."""
 from pathlib import Path, PurePosixPath
 import configparser, hashlib, json, os, platform, shutil, shlex, signal, subprocess, tarfile, time
 import urllib.request, urllib.error, zipfile
@@ -150,6 +150,22 @@ def main():
     assert 'Xcode 16.4' in cmd(['xcodebuild', '-version'], 'xcode-version')
     assert cmd(['git', '-C', S, 'rev-parse', 'HEAD'], 'head').strip() == M['source']
     assert not cmd(['git', '-C', S, 'status', '--porcelain'], 'initial-source-status').strip()
+    assert sha(P / 'candidate.patch') == M['candidate_patch_sha256']
+    changes = json.loads((P / 'candidate-manifest.json').read_text())
+    assert changes['base'] == M['source']
+    for row in changes['files']:
+        dest = S / row['path']
+        if row['before_sha256'] is None:
+            assert not dest.exists(), row['path']
+        else:
+            assert sha(dest) == row['before_sha256'], row['path']
+    cmd(['git', '-C', S, 'apply', '--check', P / 'candidate.patch'], 'candidate-apply-check')
+    cmd(['git', '-C', S, 'apply', P / 'candidate.patch'], 'candidate-apply')
+    for row in changes['files']:
+        assert sha(S / row['path']) == row['after_sha256'], row['path']
+    STATE['candidate_patch_sha256'] = M['candidate_patch_sha256']
+    STATE['candidate_files_verified'] = len(changes['files'])
+
     assert 'Apple clang version 17.0.0' in cmd(['xcrun', 'clang++', '--version'], 'compiler')
     assert cmd(['xcrun', '--sdk', 'macosx', '--show-sdk-version'], 'sdk').strip() == '15.5'
     restore()
@@ -255,23 +271,10 @@ def main():
     STATE['python_dependency_commands_recorded'] = True
     assert shutil.disk_usage(W).free > preservation_floor()
     save()
-    assert os.environ.get('BUILD_APPROVED') == 'true', 'Bounded incremental build authorization absent'
-    assert edges <= 20, 'Changed build plan: preserve checkpoint without expanding'
-    cmd(['ninja', '-C', B, '-j2', 'btxd', 'btx-cli'], 'build', 900)
-    STATE['compiled'] = True
-    STATE['binaries'] = {n: {'sha256': sha(B / 'bin' / n), 'bytes': (B / 'bin' / n).stat().st_size} for n in ['btxd', 'btx-cli']}
-    for name in STATE['binaries']:
-        assert 'arm64' in cmd(['file', B / 'bin' / name], name + '-format')
-        deps = cmd(['otool', '-L', B / 'bin' / name], name + '-dependencies')
-        if name == 'btxd':
-            assert 'Python.framework' in deps
-    remaining = cmd(['ninja', '-C', B, '-n', 'btxd', 'btx-cli'], 'post-build-plan')
-    STATE['post_build_plan'] = remaining
-    # Git-derived build-info generators may remain phony/dirty in a dry run.
-    # Preserve that observation instead of claiming the completed build failed.
-    # Deliberately no binary invocation, test execution, overlay application or runtime data.
+    assert os.environ.get('BUILD_APPROVED', 'false') == 'false', 'Configure-only job'
+    # Deliberately no BTX compilation, binary invocation, tests or runtime data.
     STATE['compile_commands'] = sum('Building CXX' in row or 'Building C ' in row for row in plan.splitlines())
-    STATE['plan_scope'] = 'btxd and btx-cli bounded incremental build; no binary invocation/test execution'
+    STATE['plan_scope'] = 'btxd and btx-cli; no build/test execution'
     assert STATE['embedded_python_selected'], 'Embedded Python missing from link plan'
     STATE['complete'] = True
 
