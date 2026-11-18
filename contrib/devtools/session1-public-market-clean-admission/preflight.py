@@ -1,4 +1,4 @@
-"""Atlas market measured incremental node build, adapted from Session3 retained Mac build recipe. No compile or runtime entry point."""
+"""Clean a97 node configure-only admission, adapted from Session3 retained Mac build recipe. No compile or runtime entry point."""
 from pathlib import Path, PurePosixPath
 import configparser, hashlib, json, os, platform, shutil, shlex, signal, subprocess, tarfile, time
 import urllib.request, urllib.error, zipfile
@@ -135,6 +135,12 @@ def restore():
             if sha(dest) == meta['sha256']:
                 os.utime(dest, ns=(meta['mtime_ns'], meta['mtime_ns']))
                 matched += 1
+    # Every compiled object/archive/binary must retain its exact bytes through configure.
+    STATE['retained_compiled_files'] = {
+        n: meta['sha256'] for n, meta in inv.items()
+        if n.startswith('mac-config-build/') and meta['type'] == 'file'
+        and (n.endswith(('.o', '.a')) or n.startswith('mac-config-build/bin/'))
+    }
     STATE['matched_source_files'] = matched
     STATE['checkpoint_verified'] = True
     save()
@@ -150,22 +156,8 @@ def main():
     assert 'Xcode 16.4' in cmd(['xcodebuild', '-version'], 'xcode-version')
     assert cmd(['git', '-C', S, 'rev-parse', 'HEAD'], 'head').strip() == M['source']
     assert not cmd(['git', '-C', S, 'status', '--porcelain'], 'initial-source-status').strip()
-    assert sha(P / 'candidate.patch') == M['candidate_patch_sha256']
-    changes = json.loads((P / 'candidate-manifest.json').read_text())
-    assert changes['base'] == M['source']
-    for row in changes['files']:
-        dest = S / row['path']
-        if row['before_sha256'] is None:
-            assert not dest.exists(), row['path']
-        else:
-            assert sha(dest) == row['before_sha256'], row['path']
-    cmd(['git', '-C', S, 'apply', '--check', P / 'candidate.patch'], 'candidate-apply-check')
-    cmd(['git', '-C', S, 'apply', P / 'candidate.patch'], 'candidate-apply')
-    for row in changes['files']:
-        assert sha(S / row['path']) == row['after_sha256'], row['path']
-    STATE['candidate_patch_sha256'] = M['candidate_patch_sha256']
-    STATE['candidate_files_verified'] = len(changes['files'])
-
+    assert os.environ.get('BUILD_APPROVED') == 'false', 'Configure-only job'
+    STATE['overlay_applied'] = False
     assert 'Apple clang version 17.0.0' in cmd(['xcrun', 'clang++', '--version'], 'compiler')
     assert cmd(['xcrun', '--sdk', 'macosx', '--show-sdk-version'], 'sdk').strip() == '15.5'
     restore()
@@ -239,7 +231,7 @@ def main():
     assert Path(generated['environment']['SRCDIR']).resolve() == S
     assert Path(generated['environment']['BUILDDIR']).resolve() == B
     shutil.copy2(config, R / 'config.ini')
-    plan = cmd(['ninja', '-C', B, '-n', 'btxd', 'btx-cli'], 'actual-plan')
+    plan = cmd(['ninja', '-C', B, '-n', '-d', 'explain', 'btxd', 'btx-cli'], 'actual-plan')
     assert 'Re-running CMake' not in plan
     edges = sum(line.startswith('[') for line in plan.splitlines())
     STATE['actual_edges'] = edges
@@ -271,22 +263,25 @@ def main():
     STATE['python_dependency_commands_recorded'] = True
     assert shutil.disk_usage(W).free > preservation_floor()
     save()
-    assert os.environ.get('BUILD_APPROVED') == 'true', 'Bounded build authority absent'
-    compiles = sum('Building CXX' in row or 'Building C ' in row for row in plan.splitlines())
-    assert edges <= 23 and compiles <= 14, 'Build plan expanded beyond admitted boundary'
-    STATE['compile_commands'] = compiles
-    save()
-    cmd(['ninja', '-C', B, '-j2', 'btxd', 'btx-cli'], 'build', 900)
-    STATE['compiled'] = True
-    STATE['binaries'] = {n: {'sha256': sha(B / 'bin' / n), 'bytes': (B / 'bin' / n).stat().st_size} for n in ['btxd', 'btx-cli']}
-    for name in STATE['binaries']:
-        assert 'arm64' in cmd(['file', B / 'bin' / name], name + '-format')
-        deps = cmd(['otool', '-L', B / 'bin' / name], name + '-dependencies')
-        if name == 'btxd':
-            assert 'Python.framework' in deps
-    STATE['post_build_plan'] = cmd(['ninja', '-C', B, '-n', 'btxd', 'btx-cli'], 'post-build-plan')
-    STATE['plan_scope'] = 'btxd and btx-cli measured incremental build; no runtime/tests'
-    assert STATE['embedded_python_selected']
+    assert os.environ.get('BUILD_APPROVED', 'false') == 'false', 'Configure-only job'
+    # Deliberately no BTX compilation, binary invocation, tests or runtime data.
+    STATE['compile_commands'] = sum('Building CXX' in row or 'Building C ' in row for row in plan.splitlines())
+    STATE['plan_scope'] = 'btxd and btx-cli; no build/test execution'
+    assert STATE['embedded_python_selected'], 'Embedded Python missing from link plan'
+    dirty_compiles = [row for row in plan.splitlines() if 'Building CXX' in row or 'Building C ' in row]
+    STATE['dirty_compile_edges'] = dirty_compiles
+    STATE['dirty_noncompile_edges'] = [row for row in plan.splitlines()
+        if row.startswith('[') and row not in dirty_compiles]
+    STATE['clean_source_after_configure'] = not cmd(
+        ['git', '-C', S, 'status', '--porcelain'], 'final-source-status').strip()
+    assert STATE['clean_source_after_configure'], 'Configure modified clean source'
+    before = STATE.pop('retained_compiled_files')
+    assert before, 'No compiled checkpoint inventory'
+    mismatches = [name for name, digest in before.items() if not (W/name).is_file() or sha(W/name) != digest]
+    assert not mismatches, ('Compiled progress changed during configure', mismatches)
+    STATE['preserved_compiled_files'] = len(before)
+    STATE['compiled_bytes_unchanged'] = True
+    STATE['cache_binaries_are_stale'] = True
     STATE['complete'] = True
 
 if __name__ == '__main__':
