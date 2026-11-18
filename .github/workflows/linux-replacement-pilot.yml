@@ -1,10 +1,10 @@
-name: Session 3 Ninja-only RUNPATH qualification
+name: Session 3 live-module CTest regression qualification
 on:
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: session3-linux-runpath-ninja-${{ github.ref }}
+  group: session3-live-runpath-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   producer:
@@ -16,7 +16,12 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 1
-          sparse-checkout: contrib/devtools/session3-linux-runpath
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /cmake/module/InstallBinaryComponent.cmake
+            /cmake/tests.cmake
+            /test/util/install_binary_component_runpath_test.py
+            /contrib/devtools/session3-linux-runpath/live-qualification/
       - name: Admit the original OS and minimum CMake package
         shell: bash
         run: |
@@ -81,10 +86,10 @@ jobs:
         run: |
           set -euo pipefail
           records="$RUNNER_TEMP/session3-linux-runpath-records"
-          # Four distinct Ninja profiles only. Prior Makefiles evidence
-          # is retained separately; this run does not repeat or relabel it.
-          timeout --kill-after=10s 360s python3 contrib/devtools/session3-linux-runpath/paired.py \
-            --fixture "$GITHUB_WORKSPACE/contrib/devtools/session3-linux-runpath" \
+          # Exercise the new maintained entry through actual CTest registration.
+          # Only tiny probe programs compile; no root BTX configure/build/test.
+          timeout --kill-after=10s 360s python3 contrib/devtools/session3-linux-runpath/live-qualification/qualify.py \
+            --repository "$GITHUB_WORKSPACE" \
             --modern-cmake "$RUNNER_TEMP/session3-linux-runpath-tools/cmake-4.3.0-linux-x86_64/bin/cmake" \
             --work "$RUNNER_TEMP/session3-linux-runpath-results" \
             > "$records/paired-controller.log" 2>&1
@@ -92,7 +97,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: session3-linux-runpath-ninja-${{ github.run_id }}-${{ github.run_attempt }}
+          name: session3-live-runpath-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
             ${{ runner.temp }}/session3-linux-runpath-records
             ${{ runner.temp }}/session3-linux-runpath-results
