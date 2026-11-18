@@ -1,0 +1,90 @@
+{
+  "name": "Session2 release visibility paired qualification",
+  "on": {
+    "push": {
+      "branches": [
+        "codex/ci-modelnet-visibility-fix"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "read",
+    "actions": "read"
+  },
+  "concurrency": {
+    "group": "session2-modelnet-visibility-fix",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "qualify": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 65,
+      "steps": [
+        {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "persist-credentials": false
+          }
+        },
+        {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "repository": "btxchain/btx",
+            "ref": "ea79c62407d04b6b37e55d8121c463cb13aadb7c",
+            "path": "current-reference",
+            "fetch-depth": 0,
+            "persist-credentials": false
+          }
+        },
+        {
+          "name": "Verify retained23ee checkpoint",
+          "timeout-minutes": 8,
+          "run": "python3 -B proposal/stage.py",
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          }
+        },
+        {
+          "name": "Build853 baseline and narrow fix; maintained/native paired checks",
+          "timeout-minutes": 53,
+          "run": "docker run --name s2-visibility-fix --init -v \"$GITHUB_WORKSPACE:$GITHUB_WORKSPACE\" -w \"$GITHUB_WORKSPACE\" -e GITHUB_WORKSPACE ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11 bash -c \"bash proposal/setup.sh && python3 -B proposal/qualify.py\""
+        },
+        {
+          "name": "Remove only owned test container",
+          "if": "always()",
+          "run": "docker rm -f s2-visibility-fix >/dev/null 2>&1; test -z \"$(docker ps -aq --filter name=^/s2-visibility-fix$)\""
+        },
+        {
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always()",
+          "with": {
+            "name": "visibility-qualified-records",
+            "path": "records/",
+            "retention-days": 14,
+            "if-no-files-found": "error"
+          }
+        },
+        {
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always()",
+          "with": {
+            "name": "visibility-qualified-binaries",
+            "path": "retained-binaries/",
+            "retention-days": 14,
+            "if-no-files-found": "warn"
+          }
+        },
+        {
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always()",
+          "with": {
+            "name": "visibility-qualified-checkpoint",
+            "path": "visibility-checkpoint/",
+            "retention-days": 14,
+            "if-no-files-found": "warn"
+          }
+        }
+      ]
+    }
+  }
+}
