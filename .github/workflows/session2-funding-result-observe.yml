@@ -1,0 +1,72 @@
+{
+  "name": "Session2 model funding result observation",
+  "on": {
+    "push": {
+      "branches": [
+        "codex/ci-model-funding-result-observe"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "read",
+    "actions": "read"
+  },
+  "concurrency": {
+    "group": "session2-funding-result-observe",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "observe": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 20,
+      "steps": [
+        {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "persist-credentials": false
+          }
+        },
+        {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "repository": "btxchain/btx",
+            "ref": "371013d61dc124a363521df5b94e97f64d2464f2",
+            "path": "product",
+            "persist-credentials": false
+          }
+        },
+        {
+          "name": "Offline strict result validation",
+          "run": "python3 -B -m unittest discover -s proposal -p test_offline.py -v"
+        },
+        {
+          "name": "Verify retained wallet ModelNet binary and current source identity",
+          "run": "python3 -B proposal/stage.py",
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          }
+        },
+        {
+          "name": "Real disposable funding and ordinary reader control; no build",
+          "timeout-minutes": 12,
+          "run": "docker run --name s2-funding-schema --init -v \"$GITHUB_WORKSPACE:$GITHUB_WORKSPACE\" -w \"$GITHUB_WORKSPACE\" -e GITHUB_WORKSPACE ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11 bash proposal/runtime.sh"
+        },
+        {
+          "name": "Remove only owned container",
+          "if": "always()",
+          "run": "docker rm -f s2-funding-schema >/dev/null 2>&1; test -z \"$(docker ps -aq --filter name=^/s2-funding-schema$)\""
+        },
+        {
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always()",
+          "with": {
+            "name": "funding-schema-observation",
+            "path": "records/",
+            "if-no-files-found": "error",
+            "retention-days": 14
+          }
+        }
+      ]
+    }
+  }
+}
