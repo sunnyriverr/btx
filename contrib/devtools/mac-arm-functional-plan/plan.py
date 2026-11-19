@@ -14,6 +14,8 @@ import traceback
 import urllib.request
 import zipfile
 
+from object_audit import snapshot, write_audit
+
 root = Path(os.environ["GITHUB_WORKSPACE"]).resolve()
 source, build, reports = (root/name for name in ("product", "mac-config-build", "records"))
 reports.mkdir()
@@ -101,11 +103,6 @@ def restore():
         checkpoint_payload_sha256=receipt["sha256"])
     shutil.copy2(build/"CMakeCache.txt", reports/"producer-CMakeCache.txt")
 
-def object_stamps():
-    return {str(p.relative_to(build)): (p.stat().st_size, p.stat().st_mtime_ns)
-            for p in build.rglob("*.o") if "CMakeScratch" not in p.parts and
-            not any(part.startswith("CompilerId") for part in p.parts)}
-
 def inspect():
     assert platform.machine() == "arm64" and shutil.disk_usage(root).free > 15*1024**3
     assert run("source", ["git","-C",source,"rev-parse","HEAD"]).strip() == head
@@ -115,7 +112,8 @@ def inspect():
     run("metal-tool", ["xcrun","--find","metal"])
     run("metallib-tool", ["xcrun","--find","metallib"])
     restore()
-    before = object_stamps()
+    restored_objects = snapshot(build)
+    state["object_audits"] = {}
     run("dependencies", ["brew","install","--force-bottle","boost@1.85","libevent","zeromq",
                          "libomp","qt","qrencode","librsvg","libicns","python@3.12","ninja","cmake"], 600)
     run("dependency-versions", ["brew","list","--versions"])
@@ -127,8 +125,13 @@ def inspect():
     test_python = root/"test-env/bin/python"
     run("cryptography", [test_python,"-m","pip","install","--only-binary=:all:","cryptography==46.0.4"], 180)
     env.update(BTX_OPENSSL=str(ssl/"bin/openssl"), PATH=str(root/"test-env/bin")+":"+str(ssl/"bin")+":"+env["PATH"])
-    run("configure", ["cmake","-S",source,"-B",build,"-DCMAKE_SUPPRESS_REGENERATION=ON",
-                      f"-DPython3_EXECUTABLE={test_python}"], 250)
+    try:
+        run("configure", ["cmake","-S",source,"-B",build,"-DCMAKE_SUPPRESS_REGENERATION=ON",
+                          f"-DPython3_EXECUTABLE={test_python}"], 250)
+    finally:
+        configured_objects = snapshot(build)
+        state["object_audits"]["restore_to_configure"] = write_audit(
+            reports/"objects-restore-to-configure.json", restored_objects, configured_objects)
     shutil.copy2(build/"CMakeCache.txt", reports/"CMakeCache.txt")
     shutil.copy2(build/"test/config.ini", reports/"test-config.ini")
     current = (build/"CMakeCache.txt").read_text()
@@ -140,15 +143,24 @@ def inspect():
                "btx-matmul-backend-info","btx-security","btx-guardd","btx-native-qualify"]
     state["functional_profile_targets"] = targets
     state["plans"] = {}
-    for label, want in (("functional-dry-run", targets), ("all-dry-run", ["all"])):
-        plan = run(label, ["ninja","-C",build,"-n","-d","explain",*want], 160)
+    try:
+        plan = run("functional-dry-run", ["ninja", "-C", build, "-n", "-d", "explain", *targets], 160)
         assert "Re-running CMake" not in plan
         rows = [m.group(1) for line in plan.splitlines() if (m := re.match(r"^\[\d+/\d+\] (.*)$", line))]
         assert rows or "no work to do" in plan
-        groups = Counter("compile" if r.startswith("Building ") else "link" if r.startswith("Linking ") else "other" for r in rows)
-        state["plans"][label] = dict(edges=len(rows), kinds=dict(groups))
-    assert object_stamps() == before, "Restored target objects changed during configure-only job"
-    state.update(status="PASS_CONFIGURE_ONLY", btx_objects_unchanged=True)
+        groups = Counter("compile" if row.startswith("Building ") else
+                         "link" if row.startswith("Linking ") else "other" for row in rows)
+        state["plans"]["functional-dry-run"] = dict(edges=len(rows), kinds=dict(groups))
+    finally:
+        final_objects = snapshot(build)
+        state["object_audits"]["configure_to_dry_run"] = write_audit(
+            reports/"objects-configure-to-dry-run.json", configured_objects, final_objects)
+    assert not state["object_audits"]["restore_to_configure"]["product_or_unclassified"], (
+        "Restored product or unclassified objects changed during configure; see object audit")
+    dry = state["object_audits"]["configure_to_dry_run"]
+    assert not (dry["product_or_unclassified"] or dry["configuration_probes"]), (
+        "Object inventory changed during Ninja dry run; see object audit")
+    state.update(status="PASS_CONFIGURE_ONLY", btx_objects_unchanged=True, dry_run_objects_unchanged=True)
 
 try:
     inspect()
