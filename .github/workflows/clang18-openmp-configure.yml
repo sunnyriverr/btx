@@ -1,4 +1,4 @@
-name: Clang 18 OpenMP configure only
+name: Clang 18 OpenMP three-object verification
 on:
   push:
     branches: [codex/ci-clang18-openmp-configure-a97]
@@ -11,7 +11,7 @@ jobs:
   plan:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: ubuntu-22.04
-    timeout-minutes: 20
+    timeout-minutes: 24
     defaults:
       run:
         shell: bash
@@ -155,11 +155,101 @@ jobs:
                "libomp": omp_path, "objects_built": False, "modelnet": False, "rules": report},
               indent=2) + "\n")
           PY
+      - name: Verify generated headers and run exactly three retained compile commands
+        timeout-minutes: 12
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          import shlex
+          import subprocess
+
+          source = Path.cwd()
+          build = source / "build-plan"
+          records = source / "plan-records"
+          plan = json.loads((records / "result.json").read_text())
+          expected = {"matmul_v4_rc_stage3_multirow_v11_unified_verifier_air_tests": "202ed361af963f0ba4491c5cbe22fc1ea691119c1db624dd20c9faa9c749b01f", "matmul_v4_rc_stage3_v13_terminal_fold_parent": "2da941b3e24f7b09205c9bf0f466d573f37622a6f2042b1153c327c5da03fbd7", "shielded_wallet": "bdcf472c7e1d1bea7043302a7ae934e80c7f9a402f30168f9d72e433f073adcd"}
+          assert plan["source"] == subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+          assert plan["status"] == "PASS" and len(plan["rules"]) == 3 and not plan["objects_built"]
+          jobs = []
+          generators = {}
+          script_root = source / "cmake/script"
+          cmake_scripts = {script_root / name for name in (
+              "GenerateBuildInfo.cmake", "GenerateHeaderFromRaw.cmake", "GenerateHeaderFromJson.cmake")}
+          for row in plan["rules"]:
+              name = Path(row["source"]).stem
+              command = (records / (name + ".ninja-command.txt")).read_bytes()
+              assert hashlib.sha256(command).hexdigest() == expected.pop(name)
+              args = shlex.split(command.decode())
+              obj = build / row["object"]
+              assert args[0] == "/usr/bin/clang++-18" and "-fopenmp=libomp" in args
+              assert args[-2:] == ["-c", str(source / row["source"])]
+              assert args[args.index("-o") + 1] == row["object"]
+              assert not obj.exists()
+              jobs.append((name, args, obj))
+              for line in (records / (name + ".closure.txt")).read_text().splitlines():
+                  cmd = shlex.split(line)
+                  if len(cmd) < 5 or cmd[0] != "cd" or cmd[2] != "&&":
+                      continue
+                  cwd, argv = Path(cmd[1]), cmd[3:]
+                  out = None
+                  if Path(argv[0]).name == "cmake" and "-P" in argv and Path(argv[argv.index("-P")+1]) in cmake_scripts:
+                      out = next(Path(x.split("=", 1)[1]) for x in argv
+                                 if x.startswith(("-DHEADER_PATH=", "-DBUILD_INFO_HEADER_PATH=")))
+                  elif Path(argv[0]).name == "python" and argv[1] == str(source / "contrib/swapnet/generate_embedded.py"):
+                      out = Path(argv[-1])
+                  if out is not None:
+                      assert cwd.is_relative_to(build) and out.is_relative_to(build) and out.suffix == ".h"
+                      assert out not in generators or generators[out] == (cwd, argv)
+                      generators[out] = (cwd, argv)
+          assert not expected and len(jobs) == 3
+          config = build / "src/bitcoin-build-config.h"
+          assert config.is_file() and config.stat().st_size > 0
+          generated = {str(config.relative_to(build)): hashlib.sha256(config.read_bytes()).hexdigest()}
+          with (records / "header-generation.log").open("wb") as log:
+              for out, (cwd, argv) in generators.items():
+                  assert argv[0] != "/usr/bin/clang++-18"
+                  subprocess.run(argv, cwd=cwd, stdout=log, stderr=subprocess.STDOUT, check=True, timeout=30)
+                  assert out.is_file() and out.stat().st_size > 0
+                  generated[str(out.relative_to(build))] = hashlib.sha256(out.read_bytes()).hexdigest()
+          (records / "generated-inputs.json").write_text(json.dumps(generated, indent=2) + "\n")
+
+          results = []
+          for name, args, obj in jobs:
+              obj.parent.mkdir(parents=True, exist_ok=True)
+              assert not obj.exists()
+              with (records / (name + ".compile.log")).open("wb") as log:
+                  try:
+                      proc = subprocess.run(args, cwd=build, stdout=log, stderr=subprocess.STDOUT, timeout=180)
+                      code = proc.returncode
+                  except subprocess.TimeoutExpired:
+                      code = 124
+              result = {"source": args[-1], "object": str(obj.relative_to(build)), "exit": code}
+              if code == 0:
+                  assert obj.is_file() and obj.stat().st_size > 0
+                  desc = subprocess.check_output(["file", "-b", str(obj)], text=True).strip()
+                  assert "ELF 64-bit" in desc and "relocatable" in desc and "x86-64" in desc
+                  depfile = Path(str(obj) + ".d")
+                  assert depfile.is_file()
+                  deps = depfile.read_text().replace(chr(92) + chr(10), " ")
+                  included = [name for name in generated if str(build / name) in deps or name in deps.split()]
+                  result.update(sha256=hashlib.sha256(obj.read_bytes()).hexdigest(), format=desc,
+                                generated_inputs_in_depfile=included, depfile_sha256=hashlib.sha256(depfile.read_bytes()).hexdigest())
+                  (records / (name + ".dependencies.d")).write_bytes(depfile.read_bytes())
+              results.append(result)
+              (records / "compile-result.json").write_text(json.dumps(
+                  {"source": plan["source"], "status": "PASS" if len(results) == 3 and all(r["exit"] == 0 for r in results)
+                   else "INCOMPLETE_OR_FAIL", "btX_compile_commands_run": len(results), "linked": False,
+                   "commands": results}, indent=2) + "\n")
+          assert len(results) == 3 and all(r["exit"] == 0 for r in results)
+          PY
       - name: Retain configure evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: a97-clang18-configure-plan
+          name: a97-clang18-three-objects
           path: plan-records/
           if-no-files-found: error
           retention-days: 14
