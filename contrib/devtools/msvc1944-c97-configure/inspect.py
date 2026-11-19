@@ -55,6 +55,22 @@ def prepare_cache(cache, env, selected, cl):
     assert subprocess.check_output(["git", "-C", str(repo), "rev-parse", "HEAD"], text=True).strip() == expected["vcpkg_registry"]
     dep_env = {**env, "VCPKG_VISUAL_STUDIO_PATH": str(selected), "VCPKG_BINARY_SOURCES": "clear",
                "VCPKG_DISABLE_METRICS": "1", "VCPKG_MAX_CONCURRENCY": "4", "VCPKG_ROOT": str(repo)}
+    msys = Path("C:/msys64")
+    choices = [msys / f"{prefix}/bin/{name}.exe"
+               for prefix in ("mingw64", "ucrt64") for name in ("pkg-config", "pkgconf")]
+    pkgconf = next((p for p in choices if p.is_file()), None)
+    if pkgconf is None:
+        bash = msys / "usr/bin/bash.exe"
+        with (records/"pkgconf-setup.log").open("wb") as log:
+            subprocess.run([str(bash), "-lc", "pacman --noconfirm --needed -Sy mingw-w64-x86_64-pkgconf"],
+                           stdout=log, stderr=subprocess.STDOUT, check=True, timeout=120)
+        pkgconf = next(p for p in choices if p.is_file())
+    pkg_version = subprocess.check_output([str(pkgconf), "--version"], text=True, timeout=10).strip()
+    receipt["pkgconf"] = {"path": str(pkgconf), "version": pkg_version, "sha256": sha(pkgconf)}
+    dep_env.update(PKG_CONFIG=str(pkgconf), VCPKG_KEEP_ENV_VARS="PKG_CONFIG")
+    binary_cache = Path(os.environ["RUNNER_TEMP"]) / "btx-msvc1944-dynamic-ports"
+    binary_cache.mkdir(exist_ok=True)
+    dep_env["VCPKG_BINARY_SOURCES"] = f"clear;files,{binary_cache},readwrite"
     # Use the stock dynamic triplet. The actual detected cl is checked in the install log.
     subprocess.run(["cmd.exe", "/d", "/c", "bootstrap-vcpkg.bat", "-disableMetrics"], cwd=repo,
                    env=dep_env, check=True, timeout=100)
@@ -84,6 +100,7 @@ def prepare_cache(cache, env, selected, cl):
     payload += [f for f in (repo/"scripts").rglob("*") if f.is_file()]
     payload.append(exe)
     assert list((prefix/"bin").glob("*.dll")) and (cache/"installed/vcpkg/status").is_file()
+    expected["pkgconf"] = receipt["pkgconf"]
     expected["sha256"] = {f.relative_to(cache).as_posix(): sha(f) for f in payload}
     (cache/"provenance.json").write_text(json.dumps(expected,indent=2)+"\n")
     # The cache retains the install and toolchain, separate from BTX outputs and port work directories.
