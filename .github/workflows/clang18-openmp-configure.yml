@@ -102,7 +102,9 @@ jobs:
           records = root / "plan-records"
           db = json.loads((build / "compile_commands.json").read_text())
           cache = (build / "CMakeCache.txt").read_text()
-          assert "OpenMP_CXX_FLAGS:STRING=-fopenmp" in cache
+          omp_flags = shlex.split(next(line.split("=", 1)[1] for line in cache.splitlines()
+                                       if line.startswith("OpenMP_CXX_FLAGS:STRING=")))
+          assert any(flag in {"-fopenmp", "-fopenmp=libomp"} for flag in omp_flags), omp_flags
           assert "OpenMP_CXX_LIB_NAMES:STRING=omp" in cache or "OpenMP_CXX_LIB_NAMES:STRING=omp;" in cache
           omp_path = next(line.split("=", 1)[1] for line in cache.splitlines()
                           if line.startswith("OpenMP_omp_LIBRARY:FILEPATH="))
@@ -113,7 +115,8 @@ jobs:
               assert len(matches) == 1, (source, len(matches))
               entry = matches[0]
               args = shlex.split(entry["command"])
-              assert args[0] == "/usr/bin/clang++-18" and "-fopenmp" in args, (source, args[:6])
+              (records / (Path(source).stem + ".command.json")).write_text(json.dumps(entry, indent=2) + "\n")
+              assert args[0] == "/usr/bin/clang++-18" and all(flag in args for flag in omp_flags), (source, args)
               assert args[args.index("-o") + 1] == obj and "-c" in args, source
               assert not (build / obj).exists(), obj
               plan = subprocess.check_output(["ninja", "-C", str(build), "-t", "query", obj], text=True)
