@@ -43,6 +43,28 @@ def provenance_identity(cl):
             "manifest_features": ["wallet", "tests", "zeromq"]}
 
 
+def inspect_dynamic_payload(cache):
+    installed = cache / "installed"
+    prefix = installed / "x64-windows"
+    triplet = cache / "vcpkg/triplets/x64-windows.cmake"
+    triplet_text = triplet.read_text(encoding="utf-8")
+    dlls = sorted(f.relative_to(prefix).as_posix() for f in prefix.rglob("*.dll")
+                  if f.relative_to(prefix).parts[0].casefold() != "debug")
+    metadata = installed / "vcpkg"
+    package_lists = sorted(f.name for f in (metadata / "info").glob("*_x64-windows.list"))
+    layout = {"triplet_sha256": sha(triplet), "release_dlls": dlls,
+              "status_file": (metadata / "status").is_file(),
+              "package_list_count": len(package_lists), "package_lists": package_lists,
+              "prefix_entries": sorted(p.name for p in prefix.iterdir()),
+              "metadata_entries": sorted(p.name for p in metadata.iterdir())}
+    (records / f"{mode}-dependency-layout.json").write_text(json.dumps(layout, indent=2)+"\n")
+    assert "set(VCPKG_CRT_LINKAGE dynamic)" in triplet_text, "CRT linkage differs"
+    assert "set(VCPKG_LIBRARY_LINKAGE dynamic)" in triplet_text, "Library linkage differs"
+    assert dlls, "Dynamic release DLLs missing from dependency prefix"
+    assert package_lists, "Installed package inventories missing"
+    return layout
+
+
 def prepare_cache(cache, env, selected, cl):
     expected = provenance_identity(cl)
     cache.mkdir(parents=True, exist_ok=False)
@@ -95,11 +117,11 @@ def prepare_cache(cache, env, selected, cl):
     log = (records/"vcpkg-install.log").read_text(errors="replace")
     assert "compiler found:" in log.lower(), "vcpkg compiler report missing"
     assert "14.44.35207" in log and "14.51." not in log, "vcpkg selected another compiler"
-    prefix = cache / "installed/x64-windows"
+    inspect_dynamic_payload(cache)
     payload = [f for f in (cache/"installed").rglob("*") if f.is_file()]
     payload += [f for f in (repo/"scripts").rglob("*") if f.is_file()]
     payload.append(exe)
-    assert list((prefix/"bin").glob("*.dll")) and (cache/"installed/vcpkg/status").is_file()
+    payload.append(repo/"triplets/x64-windows.cmake")
     expected["pkgconf"] = receipt["pkgconf"]
     expected["sha256"] = {f.relative_to(cache).as_posix(): sha(f) for f in payload}
     (cache/"provenance.json").write_text(json.dumps(expected,indent=2)+"\n")
@@ -150,9 +172,8 @@ def inspect():
         return
     info = json.loads(provenance.read_text())
     expected = provenance_identity(cl)
-    prefix = cache / "installed/x64-windows"
     toolchain = cache / "vcpkg/scripts/buildsystems/vcpkg.cmake"
-    if any(info.get(k) != v for k,v in expected.items()) or not toolchain.is_file() or not list((prefix/"bin").glob("*.dll")):
+    if any(info.get(k) != v for k,v in expected.items()) or not toolchain.is_file():
         receipt.update(status="BLOCKED_CACHE_MISMATCH", reason="Restored dependencies differ in provenance or dynamic payload")
         return
     files = info.get("sha256", {})
@@ -160,6 +181,7 @@ def inspect():
                         not (cache / f).is_file() or sha(cache / f)!=h for f,h in files.items()):
         receipt.update(status="BLOCKED_CACHE_MISMATCH", reason="Cache integrity inventory absent or differs")
         return
+    inspect_dynamic_payload(cache)
     receipt.update(dependency_provenance_verified=True, cache_file_count=len(files))
     if mode == "prepare":
         with Path(os.environ["GITHUB_OUTPUT"]).open("a", encoding="utf-8") as stream:
