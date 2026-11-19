@@ -87,6 +87,7 @@ jobs:
           import json
           from pathlib import Path
           import shlex
+          import re
           import subprocess
 
           targets = {
@@ -127,10 +128,28 @@ jobs:
               (records / (name + ".query.txt")).write_text(graph)
               dry = subprocess.check_output(["ninja", "-C", str(build), "-n", "-v", obj], text=True)
               (records / (name + ".dry-run.txt")).write_text(dry)
-              assert not (build / obj).exists(), obj
+              # Query the graph directly. Ninja dry runs can stop at regeneration.
+              graph_args = ["ninja", "-C", str(build), "-t"]
+              dot = subprocess.check_output(graph_args + ["graph", obj], text=True)
+              (records / (name + ".graph.dot")).write_text(dot)
+              commands = subprocess.check_output(graph_args + ["commands", obj], text=True).splitlines()
+              single = subprocess.check_output(graph_args + ["commands", "-s", obj], text=True).splitlines()
+              assert len(single) == 1 and single[0] in commands and obj in single[0], obj
+              assert "clang++-18" in single[0] and all(flag in shlex.split(single[0]) for flag in omp_flags)
+              assert re.search(r"\s-c\s", single[0]), obj
+              (records / (name + ".ninja-command.txt")).write_text(single[0] + "\n")
+              (records / (name + ".closure.txt")).write_text("\n".join(commands) + "\n")
+              compiled = sum(bool(re.search(r"\s-c\s", item) and re.search(r"\s-o\s", item))
+                             for item in commands)
+              summary = {"commands_including_target": len(commands),
+                         "compile_like_commands_including_target": compiled,
+                         "other_commands": len(commands)-compiled,
+                         "target_command_only": single[0]}
+              assert compiled >= 1 and not (build / obj).exists(), obj
               report.append({"source": source, "object": obj, "command": entry["command"],
                              "working_directory": entry["directory"], "order_only_edges": order_keys,
-                             "dry_run_steps": sum(line.startswith("[") for line in dry.splitlines())})
+                             "dry_run_steps": sum(line.startswith("[") for line in dry.splitlines()),
+                             "cold_graph": summary})
           (records / "result.json").write_text(json.dumps(
               {"status": "PASS", "source": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
                "libomp": omp_path, "objects_built": False, "modelnet": False, "rules": report},
