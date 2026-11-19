@@ -48,12 +48,13 @@ def prepare_cache(cache, env, selected, cl):
     cache.mkdir(parents=True, exist_ok=False)
     repo = cache / "vcpkg"
     subprocess.run(["git", "init", str(repo)], check=True, timeout=30)
-    subprocess.run(["git", "-C", str(repo), "fetch", "--depth=1",
-                    "https://github.com/microsoft/vcpkg.git", expected["vcpkg_registry"]], check=True, timeout=90)
+    subprocess.run(["git", "-C", str(repo), "config", "core.longpaths", "true"], check=True, timeout=15)
+    subprocess.run(["git", "-C", str(repo), "fetch", "--no-tags",
+                    "https://github.com/microsoft/vcpkg.git", expected["vcpkg_registry"]], check=True, timeout=180)
     subprocess.run(["git", "-C", str(repo), "checkout", "--detach", "FETCH_HEAD"], check=True, timeout=30)
     assert subprocess.check_output(["git", "-C", str(repo), "rev-parse", "HEAD"], text=True).strip() == expected["vcpkg_registry"]
     dep_env = {**env, "VCPKG_VISUAL_STUDIO_PATH": str(selected), "VCPKG_BINARY_SOURCES": "clear",
-               "VCPKG_DISABLE_METRICS": "1", "VCPKG_MAX_CONCURRENCY": "4"}
+               "VCPKG_DISABLE_METRICS": "1", "VCPKG_MAX_CONCURRENCY": "4", "VCPKG_ROOT": str(repo)}
     # Use the stock dynamic triplet. The actual detected cl is checked in the install log.
     subprocess.run(["cmd.exe", "/d", "/c", "bootstrap-vcpkg.bat", "-disableMetrics"], cwd=repo,
                    env=dep_env, check=True, timeout=100)
@@ -65,6 +66,7 @@ def prepare_cache(cache, env, selected, cl):
             f"--x-buildtrees-root={dirs/'buildtrees'}", f"--x-packages-root={dirs/'packages'}",
             f"--downloads-root={dirs/'downloads'}", "--x-no-default-features",
             *["--x-feature="+f for f in expected["manifest_features"]]]
+    receipt["dependency_install_attempted"] = True
     try:
         with (records/"vcpkg-install.log").open("wb") as log:
             subprocess.run(args, cwd=source, env=dep_env, stdout=log, stderr=subprocess.STDOUT,
@@ -73,6 +75,7 @@ def prepare_cache(cache, env, selected, cl):
         for f in (dirs/"buildtrees/detect_compiler").glob("stdout-*"):
             if f.is_file():
                 shutil.copy(f, records)
+    receipt["dependency_installs"] = True
     log = (records/"vcpkg-install.log").read_text(errors="replace")
     assert "compiler found:" in log.lower(), "vcpkg compiler report missing"
     assert "14.44.35207" in log and "14.51." not in log, "vcpkg selected another compiler"
