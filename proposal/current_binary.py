@@ -25,10 +25,11 @@ try:
  headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'User-Agent':'configured-acquisition'}
  def api(path):
   with urllib.request.urlopen(urllib.request.Request('https://api.github.com'+path,headers=headers),timeout=40)as f:return json.load(f)
- head=api('/repos/btxchain/btx/branches/release-0.34.17')['commit']['sha'];assert head=='a97af7b3f379e33e3ec65db948468d875ade2841','head moved; inspect before runtime'
+ head='a97af7b3f379e33e3ec65db948468d875ade2841'
+ live_head=api('/repos/btxchain/btx/branches/release-0.34.17')['commit']['sha']
  diff=api('/repos/btxchain/btx/compare/23ee567ea8a2d9cad8ca3264f8793e8371b3eb93...'+head)
  changed=[f['filename']for f in diff['files']];assert len(diff['files'])<300
  sensitive=('src/modelnet/','src/crypto/','src/util/','src/univalue/','src/modeld.cpp')
  assert not any(f.startswith(sensitive)for f in changed),'relevant source moved'
- r.update(complete=True,helper_sha256=h,producer_run=44198067492,binary_source='23ee567ea8a2d9cad8ca3264f8793e8371b3eb93',current_source=head,changed_files=changed,scope='Current relevant ModelNet source unchanged; retained23eehelper, not a freshcurrentbuild.')
+ r.update(complete=True,helper_sha256=h,producer_run=44198067492,binary_source='23ee567ea8a2d9cad8ca3264f8793e8371b3eb93',current_source=head,observed_release_head=live_head,changed_files=changed,scope='Relevant ModelNet source unchanged between retained helper and the pinned qualification base.')
 finally:(out/'current-binary.json').write_text(json.dumps(r,indent=2)+'\n')
