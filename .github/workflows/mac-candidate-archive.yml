@@ -1,18 +1,18 @@
-name: Mac candidate archive preflight
+name: Mac ARM functional build plan
 on:
   push:
-    branches: [codex/ci-mac-candidate-archive]
+    branches: [codex/ci-mac-arm-functional-preflight]
 permissions:
   contents: read
   actions: read
 concurrency:
-  group: mac-backports-697-700
+  group: mac-arm-functional-preflight
   cancel-in-progress: false
 jobs:
-  native:
+  plan:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: macos-15
-    timeout-minutes: 40
+    timeout-minutes: 24
     env:
       DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
       HOMEBREW_NO_AUTO_UPDATE: '1'
@@ -22,40 +22,22 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
-          sparse-checkout-cone-mode: false
-          sparse-checkout: /contrib/devtools/mac-backports/
+          sparse-checkout: contrib/devtools/mac-arm-functional-plan
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: btxchain/btx
-          ref: f40eb37a6fb8b665340fe92a2f248ff3f23ec7f6
+          ref: 26d5d2ddb0a27827b5b603a004177582747c294c
           path: product
           persist-credentials: false
           fetch-depth: 1
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
-        with:
-          artifact-ids: 14135314680
-          run-id: 43651249392
-          github-token: ${{ github.token }}
-          path: producer-restore
-          merge-multiple: true
-      - name: Measure current candidate package build without compilation
+      - name: Verify checkpoint, configure and dry-run Ninja
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python3 contrib/devtools/mac-backports/archive-preflight.py
-      - name: Preserve resumable build and exact evidence
-        if: always()
-        timeout-minutes: 8
-        run: python3 contrib/devtools/mac-backports/preserve.py
+        run: python3 contrib/devtools/mac-arm-functional-plan/plan.py
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: mac-backports-records
+          name: mac-arm-functional-plan-records
           path: records
+          if-no-files-found: error
           retention-days: 14
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
-        if: always()
-        with:
-          name: mac-backports-checkpoint
-          path: retained
-          retention-days: 14
-          compression-level: 0
