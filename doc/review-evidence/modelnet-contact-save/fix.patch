@@ -1,0 +1,56 @@
+--- a/src/modelnet/catalog.cpp
++++ b/src/modelnet/catalog.cpp
+@@ -1528,7 +1528,7 @@
+     return true;
+ }
+ 
+-bool ModelCatalog::AddPeer(const std::string& endpoint)
++bool ModelCatalog::AddPeer(const std::string& endpoint, std::string* save_error)
+ {
+     // There is no RPC to remove a contact, so one that cannot be dialed would
+     // hold its slot for good.
+@@ -1538,7 +1538,11 @@
+     if (m_peers.size() >= 64) return false;
+     m_peers.push_back(endpoint);
+     std::string err;
+-    PersistLocked(err);
++    if (!PersistLocked(err)) {
++        m_peers.pop_back();
++        if (save_error) *save_error = std::move(err);
++        return false;
++    }
+     return true;
+ }
+ 
+--- a/src/modelnet/catalog.h
++++ b/src/modelnet/catalog.h
+@@ -140,7 +140,7 @@
+                           Span<const unsigned char> bytes, const std::vector<Digest48>& proof,
+                           uint64_t file_size, const Digest48& pieces_root, std::string& err);
+     /** Operator / -modelpeer contacts only. Unauthenticated PEX must not call this. */
+-    bool AddPeer(const std::string& endpoint);
++    bool AddPeer(const std::string& endpoint, std::string* save_error = nullptr);
+     std::vector<std::string> Peers() const;
+     uint64_t QuotaBytes() const { return m_store.QuotaBytes(); }
+     uint64_t UsedBytes() const { return m_store.UsedBytes(); }
+--- a/src/modelnet/helper.cpp
++++ b/src/modelnet/helper.cpp
+@@ -9372,14 +9372,16 @@
+         const std::string peer = Arg(0).get_str();
+         result.setObject();
+         result.pushKV("schema_version", 2);
+-        const bool added = cat.AddPeer(peer);
++        std::string save_error;
++        const bool added = cat.AddPeer(peer, &save_error);
+         result.pushKV("ok", added);
+         if (added) result.pushKV("added", peer);
+         else {
+             result.pushKV("added", false);
+             std::string host;
+             uint16_t port{0};
+-            result.pushKV("reason", peer.empty()                       ? "empty endpoint" :
++            result.pushKV("reason", !save_error.empty()              ? save_error :
++                                    peer.empty()                     ? "empty endpoint" :
+                                     !SplitHostPort(peer, host, port) ? "endpoint must be host:port" :
+                                                                        "peer list full");
+         }
