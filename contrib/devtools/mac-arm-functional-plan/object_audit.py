@@ -11,6 +11,9 @@ COMPILER_ID_DIRECTORIES = {"CompilerIdC", "CompilerIdCXX", "CompilerIdOBJC", "Co
 
 
 def is_cmake_probe(relative_path):
+    # libbitcoinpqc uses a named try_compile directory for this assembler probe.
+    if relative_path == 'src/libbitcoinpqc/shake_a64_probe/build/CMakeFiles/shake_a64_probe.dir/shake_a64_probe.s.o':
+        return True
     parts = relative_path.split("/")
     for index, part in enumerate(parts[:-1]):
         if part != "CMakeFiles":
