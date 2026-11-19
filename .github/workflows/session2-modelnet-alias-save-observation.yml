@@ -1,0 +1,70 @@
+{
+  "name": "Session 2 ModelNet alias save observation",
+  "on": {
+    "push": {
+      "branches": [
+        "codex/ci-modelnet-alias-save-observation"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "read",
+    "actions": "read"
+  },
+  "concurrency": {
+    "group": "session2-modelnet-alias-save-observation",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "qualify": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 24,
+      "steps": [
+        {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "persist-credentials": false,
+            "fetch-depth": 2
+          }
+        },
+        {
+          "name": "Check pinned source parent",
+          "run": "test \"$(git rev-parse HEAD^)\" = c97c9a8d00ea37359b8691fd25c783725c1f4021"
+        },
+        {
+          "name": "Verify retained helper and pinned runtime checkpoint",
+          "timeout-minutes": 8,
+          "run": "python3 -B proposal/stage.py && python3 -B proposal/stage-helper.py",
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          }
+        },
+        {
+          "name": "Verify and install complete signed Ubuntu prerequisites",
+          "timeout-minutes": 13,
+          "run": "docker run -d --cpus=2 --memory=4g --name s2-alias-save-observation --init -v \"$GITHUB_WORKSPACE:$GITHUB_WORKSPACE\" -w \"$GITHUB_WORKSPACE\" -e GITHUB_WORKSPACE -v /etc/ssl/certs/ca-certificates.crt:/ubuntu-host-ca.pem:ro ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11 sleep infinity\ndocker exec s2-alias-save-observation bash proposal/ubuntu-prerequisites.sh"
+        },
+        {
+          "name": "Observe alias writes, retry and clean restarts",
+          "timeout-minutes": 7,
+          "run": "docker network disconnect bridge s2-alias-save-observation\ndocker exec s2-alias-save-observation bash proposal/runtime.sh"
+        },
+        {
+          "name": "Remove only owned test container",
+          "if": "always()",
+          "run": "docker rm -f s2-alias-save-observation >/dev/null 2>&1; test -z \"$(docker ps -aq --filter name=^/s2-alias-save-observation$)\""
+        },
+        {
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always()",
+          "with": {
+            "name": "modelnet-alias-save-observation-records",
+            "path": "records/",
+            "retention-days": 14,
+            "if-no-files-found": "error"
+          }
+        }
+      ]
+    }
+  }
+}
