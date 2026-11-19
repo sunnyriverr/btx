@@ -1,4 +1,4 @@
-name: MSVC 19.44 c97 configure-only cache gate
+name: MSVC 19.44 c97 dependency cache and configure
 on:
   push:
     branches: [codex/ci-msvc1944-c97-configure]
@@ -11,7 +11,7 @@ jobs:
   configure:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: windows-2022
-    timeout-minutes: 12
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -23,16 +23,33 @@ jobs:
           ref: c97c9a8d00ea37359b8691fd25c783725c1f4021
           path: source
           persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.11.9"
       - name: Attempt exact dynamic dependency restore
         id: deps
         uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
         with:
           path: ${{ runner.temp }}/btx-msvc1944-dynamic-deps
           key: btx-vcpkg-x64-windows-msvc14.44.35207-sdk10.0.26100.0-d5c0ecee8a42546f65e9620cf10d800c919495ea0b62f77b43916b199435a8f9
-      - name: Verify compiler and cache, configure only on match
+      - name: Prepare or validate dynamic dependencies
+        id: prepare
+        timeout-minutes: 29
         env:
           BTX_CACHE_HIT: ${{ steps.deps.outputs.cache-hit }}
-        run: python control/contrib/devtools/msvc1944-c97-configure/inspect.py
+        run: python control/contrib/devtools/msvc1944-c97-configure/inspect.py prepare
+      - name: Save verified dynamic dependency prefix
+        if: steps.prepare.outputs.admitted == 'true' && steps.deps.outputs.cache-hit != 'true'
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ${{ runner.temp }}/btx-msvc1944-dynamic-deps
+          key: btx-vcpkg-x64-windows-msvc14.44.35207-sdk10.0.26100.0-d5c0ecee8a42546f65e9620cf10d800c919495ea0b62f77b43916b199435a8f9
+      - name: Configure and inspect three MSVC rules without building
+        if: steps.prepare.outputs.admitted == 'true'
+        timeout-minutes: 8
+        env:
+          BTX_CACHE_HIT: ${{ steps.deps.outputs.cache-hit }}
+        run: python control/contrib/devtools/msvc1944-c97-configure/inspect.py configure
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
