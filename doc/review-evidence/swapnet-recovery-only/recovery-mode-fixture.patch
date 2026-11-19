@@ -1,0 +1,66 @@
+--- a/funded_public.py
++++ b/funded_public.py
+@@ -395,11 +395,12 @@
+     save("stop both SwapNet nodes after first funding confirmation")
+     a.stop()
+     b.stop()
+-    for n in ((a, b) if CASE == "restart" else (a,)):
+-        n.start("funded-restart", "-swapnet=1", "-wallet=trader", "-swapnetwallet=trader", *flags)
+-        assert n.rpc('getswapmode')['mode'] == ('taker' if n is a else 'maker')
+-        assert BTC_ID not in n.rpc("getswapwalletinfo")["startup_errors"]
+-        assert {v["asset"] for v in n.rpc("listswapassets")["assets"] if v["ready"]} == {BTX_ID, BTC_ID}
++    a.start("funded-restart", "-swapnet=1", "-swapnetmode=recovery",
++            "-wallet=trader", "-swapnetwallet=trader", *flags)
++    assert_recovery_lock(a)
++    assert BTC_ID not in a.rpc("getswapwalletinfo")["startup_errors"]
++    assert {v["asset"] for v in a.rpc("listswapassets")["assets"] if v["ready"]} == {BTX_ID, BTC_ID}
++    result["funded_recovery_mode_locked"] = True
+     assert view(a)["refs"]["a"] == ref
+     assert [op["txid"] for op in operations(a, "fund")] == [ref["txid"]]
+     assert a.rpc("gettxout", ref["txid"], ref["vout"], False)["confirmations"] == 1
+@@ -506,7 +507,12 @@
+         budget_before_terminal_restart = a.rpc('listswapmandates')['mandates']
+         assert budget_before_terminal_restart[0]['held_atoms'] == '0'
+         oldops=a.rpc('listswapoperations',{'swap_id':sid})['operations']
+-        a.stop();a.start('terminal-restart','-swapnet=1','-wallet=trader','-swapnetwallet=trader',*flags)
++        assert [op['txid'] for op in operations(a, 'fund')] == [ref['txid']]
++        a.stop()
++        a.start('terminal-restart', '-swapnet=1', '-swapnetmode=recovery',
++                '-wallet=trader', '-swapnetwallet=trader', *flags)
++        assert_recovery_lock(a)
++        result['terminal_recovery_mode_locked'] = True
+         assert view(a)['stage']=='refunded'
+         assert a.rpc('listswapoperations',{'swap_id':sid})['operations']==oldops
+         assert a.rpc('listswapmandates')['mandates'] == budget_before_terminal_restart
+@@ -587,6 +593,22 @@
+     raise TimeoutError("outer test timeout")
+ 
+ 
++def assert_recovery_lock(node):
++    mode = node.rpc("getswapmode")
++    assert mode["mode"] == "recovery" and mode["startup_recovery_lock"] is True
++    assert mode["existing_obligations_recovery_enabled"] is True
++    assert mode["new_trades_enabled"] is False and mode["making_enabled"] is False
++    assert node.rpc("getswapnetworkinfo")["automatic_spend_atoms"] == "0"
++    for desired in ("taker", "maker"):
++        try:
++            node.rpc("setswapmode", {"mode": desired})
++        except RPCError as error:
++            assert "MODE_LOCKED:" in str(error), error
++        else:
++            raise AssertionError("Recovery-only allowed a switch to " + desired)
++    assert node.rpc("getswapmode") == mode
++
++
+ def main():
+     global ROOT, OUT, TEST_HOME, CASE, FIXTURE_EPOCH, MANIFEST
+     assert os.environ.get('BTX_PUBLIC_MARKET_EXECUTE') == 'disposable-regtest-only', 'Runtime execution not authorized by this preparation'
+@@ -601,7 +623,7 @@
+     TEST_HOME = ROOT / 'home'
+     TEST_HOME.mkdir(mode=0o700)
+     CASE = sys.argv[2]
+-    assert CASE in {'restart', 'refund'}
++    assert CASE == 'refund'
+     FIXTURE_EPOCH = int(time.time()) - 1800
+     result.update(status='INCOMPLETE', stage='initialize', case=CASE, source=MANIFEST['source'])
+     signal.signal(signal.SIGTERM, terminate)
