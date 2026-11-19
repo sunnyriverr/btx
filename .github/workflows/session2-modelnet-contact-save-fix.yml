@@ -18,7 +18,7 @@
   "jobs": {
     "qualify": {
       "runs-on": "ubuntu-24.04",
-      "timeout-minutes": 50,
+      "timeout-minutes": 65,
       "steps": [
         {
           "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
@@ -39,9 +39,14 @@
           }
         },
         {
+          "name": "Verify and install complete signed Ubuntu prerequisites",
+          "timeout-minutes": 13,
+          "run": "docker run -d --cpus=2 --memory=7g --name s2-contact-save-fix --init -v \"$GITHUB_WORKSPACE:$GITHUB_WORKSPACE\" -w \"$GITHUB_WORKSPACE\" -e GITHUB_WORKSPACE -v /etc/ssl/certs/ca-certificates.crt:/ubuntu-host-ca.pem:ro ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11 sleep infinity\ndocker exec s2-contact-save-fix bash proposal/ubuntu-prerequisites.sh"
+        },
+        {
           "name": "Build only the helper and compare the identical contact test",
-          "timeout-minutes": 38,
-          "run": "docker run --cpus=2 --memory=7g --name s2-contact-save-fix --init -v \"$GITHUB_WORKSPACE:$GITHUB_WORKSPACE\" -w \"$GITHUB_WORKSPACE\" -e GITHUB_WORKSPACE ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11 bash -c \"bash proposal/setup.sh && python3 -B proposal/qualify.py\""
+          "timeout-minutes": 42,
+          "run": "docker exec s2-contact-save-fix bash -c \"bash proposal/setup.sh && python3 -B proposal/qualify.py\""
         },
         {
           "name": "Remove only owned test container",
