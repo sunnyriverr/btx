@@ -1,0 +1,225 @@
+--- a/public_eth.py
++++ b/public_eth.py
+@@ -226,93 +226,130 @@
+     g.result.update(swap_id=sid,public_entry={'offer_id':offer['offer_id'],'quote_id':q['id'],
+         'preview_id':preview['preview_id'],'preview_nonfunding_verified':True,'confirmation_retry_same_swap':True,
+         'signed_offer_native_arrival':True,'maker_slot_transferred_once':True},original_btx_funding=ref)
+-    g.save('restart both funded nodes before counterparty funding')
+-    for n in (a,b):
+-        n.stop()
+-    for n in (a,b):
+-        n.start('funded-restart','-swapnet=1','-wallet=trader','-swapnetwallet=trader',*FLAGS)
+-        assert n.rpc('getswapmode')['mode'] == ('taker' if n is a else 'maker')
+-        assert not n.rpc('getswapwalletinfo')['startup_errors']
+-        assert next(v['address'] for v in n.rpc('getswapwalletinfo')['foreign_accounts'] if v['asset'] == eid) == accounts[n.name]
+-    assert view(a,sid)['refs']['a'] == ref
+-    assert a.rpc('confirmswap', {'preview_id':preview['preview_id']})['swap_id'] == sid
+-    assert [v['id'] for v in a.rpc('listswapmandates')['mandates']] == [taker]
+-    assert [o['txid'] for o in funds(a,sid)] == [ref['txid']]
+-    slot('reserved')
+-    g.connected(a,b)
+-    g.until(lambda:all(n.rpc('getswapbootstrapinfo')['admitted_peers'] == 1 for n in (a,b)),40)
+-    a.mine(19,sink)
+-    g.synced(a,b)
+-    g.save('observe native public Ethereum settlement and actual withdrawal')
+-    deadline = time.monotonic()+180
+-    while time.monotonic() < deadline:
+-        states = {n.name:view(n,sid) for n in (a,b)}
+-        summary = {k:{f:v.get(f) for f in ['stage','last_error','last_action','refs']} for k,v in states.items()}
+-        if summary != g.result.get('last_states'):
+-            g.result['last_states'] = summary
+-            g.save('observe native public Ethereum settlement and actual withdrawal')
+-        assert all(v.get('stage') not in ('cancelled','refunded','rejected') for v in states.values())
+-        if all(v.get('stage') == 'complete' for v in states.values()):
+-            break
++
++    g.save('keep taker offline before the ETH lock can be claimed')
++    g.until(lambda: view(b,sid).get('refs',{}).get('a') == ref, 20)
++    assert not funds(b,sid)
++    a.stop()
++    assert a.process.poll() == 0
++    b.mine(19,sink)
++    assert b.rpc('gettxout',ref['txid'],ref['vout'],False)['confirmations'] == 20
++
++    g.save('wait for the original maker ETH lock to finalize')
++    def finalized_lock():
+         ethmine()
+-        if a.rpc('getrawmempool'):
+-            a.mine(20,sink)
+-            g.synced(a,b)
+-        time.sleep(.5)
++        state = view(b,sid)
++        if not state.get('funding_broadcast'):
++            return None
++        lock = state['refs']['b']
++        tx = receipt(lock['txid'])
++        h = int(tx['blockNumber'],16)
++        final = eth('eth_getBlockByNumber','finalized',False)
++        if int(final['number'],16) >= h:
++            assert eth('eth_getBlockByNumber',tx['blockNumber'],False)['hash'] == tx['blockHash']
++            return state
++    locked = g.until(finalized_lock,60)
++    lock = locked['refs']['b']
++    short = locked['agreement']['short_leg']
++    assert locked['refs']['a'] == ref and locked['recovery_ready'] and not locked['secret_exposed']
++    assert short['lock_domain'] == 'timestamp' and short['refund_payout'] == accounts['b']
++    assert [o['txid'] for o in funds(b,sid)] == [lock['txid']]
++    assert int(eth('eth_getBalance',contract,'latest'),16) == gross-maker_fee
++    maker_nonce = int(eth('eth_getTransactionCount',accounts['b'],'pending'),16)
++    funded_budget = b.rpc('listswapmandates')['mandates']
++    assert len(funded_budget) == 1 and funded_budget[0]['id'] == maker
++    assert int(funded_budget[0]['held_atoms']) > 0
++    g.result.update(original_eth_lock=lock,eth_funding_finalized=True,
++                    held_before_recovery_atoms=funded_budget[0]['held_atoms'])
++    g.save('restart maker in recovery-only mode with taker offline')
++    b.stop()
++    recovery_flags = ('-swapnet=1','-swapnetmode=recovery','-wallet=trader','-swapnetwallet=trader',*FLAGS)
++    b.start('funded-recovery',*recovery_flags)
++    assert_recovery_lock(b)
++    assert b.rpc('getconnectioncount') == 0 and a.process.poll() == 0
++    assert not b.rpc('getswapwalletinfo')['startup_errors']
++    assert view(b,sid)['refs'] == locked['refs']
++    assert b.rpc('listswapmandates')['mandates'] == funded_budget
++    assert int(eth('eth_getBlockByNumber','latest',False)['timestamp'],16) < short['lock_value']
++    try:
++        b.rpc('refundswap',{'swap_id':sid})
++    except g.RPCError as error:
++        assert 'REFUND_EARLY:' in str(error), error
+     else:
+-        raise TimeoutError('public Ethereum settlement did not finish in180s')
+-    left,right = (view(n,sid) for n in (a,b))
+-    assert left['agreement'] == right['agreement']
+-    assert left['refs']['a'] == ref
+-    allops = ops(a,sid)+ops(b,sid)
+-    native = g.check_leg(left['agreement']['long_leg'],ref,allops,a,b,local_cap)
+-    evm = verify_evm_leg(eth,left['agreement']['short_leg'],left['refs']['b'],allops)
+-    assert native['locked_atoms'] == sell
++        raise AssertionError('ETH refund accepted before maturity')
++    assert all(o['kind'] not in ('claim','refund','withdraw') for o in ops(b,sid))
++    assert int(eth('eth_getTransactionCount',accounts['b'],'pending'),16) == maker_nonce
++    g.result['early_refusal'] = 'REFUND_EARLY'
++
++    g.save('mature the Ethereum lock and observe refund and withdrawal')
++    eth('evm_setNextBlockTimestamp',short['lock_value'])
++    ethmine(1)
++    b.rpc('refundswap',{'swap_id':sid})
++    def refunded():
++        ethmine()
++        state = view(b,sid)
++        current = {k:state.get(k) for k in ('stage','last_error','last_action')}
++        if current != g.result.get('last_state'):
++            g.result['last_state'] = current
++            g.save('mature the Ethereum lock and observe refund and withdrawal')
++        return state if state.get('stage') == 'refunded' else None
++    done = g.until(refunded,90)
++    ethmine()
++    assert done['refs'] == locked['refs'] and not done['secret_exposed']
++    terminal_ops = ops(b,sid)
++    evm = verify_evm_leg(eth,short,lock,terminal_ops,kind='refund')
+     assert evm['runtime_hash'] == PIN and int(evm['amount_wei']) == gross-maker_fee
+     assert evm['remaining_credit_wei'] == '0'
+-    assert int(evm['funding_fee_wei'])+eth_recovery <= eth_cap
+-    assert native['funding_fee_atoms']+btx_recovery <= local_cap
+-    assert len(funds(a,sid)) == len(funds(b,sid)) == 1
+-    assert len([v for v in allops if v['asset'] == eid and v['kind'] == 'withdraw']) == 1
+-    after_btx = {n.name:g.balance(n) for n in (a,b)}
++    fees = sum(int(evm[k]) for k in ('funding_fee_wei','settlement_fee_wei','withdrawal_fee_wei'))
++    assert fees <= eth_cap
+     after_eth = ethbalances(accounts)
+-    actual_btx = {k:after_btx[k]-before_btx[k] for k in before_btx}
+-    actual_eth = {k:after_eth[k]-before_eth[k] for k in before_eth}
+-    assert actual_btx == {'a':-sell-native['funding_fee_atoms'],'b':native['paid_atoms']}
+-    assert actual_eth == {'a':gross-maker_fee-int(evm['settlement_fee_wei'])-int(evm['withdrawal_fee_wei']),
+-                          'b':-(gross-maker_fee)-int(evm['funding_fee_wei'])}
++    assert after_eth == {'a':before_eth['a'],'b':before_eth['b']-fees}
+     assert int(eth('eth_getBalance',contract,'latest'),16) == 0
+-    for n in (a,b):
+-        assert n.wallet('listlockunspent') == []
+-    terminal_ops = {n.name:ops(n,sid) for n in (a,b)}
+-    terminal_budgets = {n.name:n.rpc('listswapmandates')['mandates'] for n in (a,b)}
+-    assert all(row['held_atoms'] == '0' for rows in terminal_budgets.values() for row in rows)
+-    terminal_slot = capacity()
+-    assert all(v['state'] == 'reserved' for v in terminal_slot), 'Historical consumed slot must not become newly spendable capacity'
+-    g.save('verify terminal restart preserves exact operations and accounting')
+-    for n in (a,b):
+-        n.stop()
+-    for n in (a,b):
+-        n.start('terminal-restart','-swapnet=1','-wallet=trader','-swapnetwallet=trader',*FLAGS)
+-        assert view(n,sid)['stage'] == 'complete'
+-        assert ops(n,sid) == terminal_ops[n.name]
+-        assert n.rpc('listswapmandates')['mandates'] == terminal_budgets[n.name]
+-        assert n.wallet('listlockunspent') == []
+-    assert capacity() == terminal_slot
+-    assert {n.name:g.balance(n) for n in (a,b)} == after_btx
++    assert int(eth('eth_getTransactionCount',accounts['b'],'pending'),16) == maker_nonce+2
++    assert [o['txid'] for o in funds(b,sid)] == [lock['txid']]
++    assert len([o for o in terminal_ops if o['kind'] == 'refund']) == 1
++    assert len([o for o in terminal_ops if o['kind'] == 'withdraw']) == 1
++    terminal_budget = b.rpc('listswapmandates')['mandates']
++    assert len(terminal_budget) == 1 and terminal_budget[0]['id'] == maker
++    assert terminal_budget[0]['held_atoms'] == '0'
++    assert len(b.rpc('listswaps')['swaps']) == 1
++    g.result.update(evm_refund=evm,held_after_refund_atoms='0',maker_gas_total_wei=str(fees))
++
++    g.save('reopen recovery-only maker and confirm zero held budget')
++    b.stop()
++    b.start('terminal-recovery',*recovery_flags)
++    assert_recovery_lock(b)
++    assert b.rpc('getconnectioncount') == 0 and a.process.poll() == 0
++    assert view(b,sid)['stage'] == 'refunded' and view(b,sid)['refs'] == locked['refs']
++    assert ops(b,sid) == terminal_ops
++    assert b.rpc('listswapmandates')['mandates'] == terminal_budget
+     assert ethbalances(accounts) == after_eth
+-    assert int(eth('eth_getBalance',contract,'latest'),16) == 0
+-    g.result.update(native_settlement=native,evm_settlement=evm,
+-        actual_btx_delta_atoms=actual_btx,actual_eth_delta_wei={k:str(v) for k,v in actual_eth.items()},
+-        terminal_budget_rows=terminal_budgets,terminal_slot_history=terminal_slot,
+-        funded_restart_preserved=True,terminal_restart_preserved=True,all_held_budgets_zero=True,
+-        original_funding_once=True,withdrawal_once=True,contract_balance_wei='0')
++    assert int(eth('eth_getTransactionCount',accounts['b'],'pending'),16) == maker_nonce+2
++    g.result.update(original_lock_once=True,refund_once=True,withdrawal_once=True,held_after_reopen_atoms='0',
++                    contract_balance_wei='0',offline_taker=True,recovery_lock_both_restarts=True)
++
++
++def assert_recovery_lock(node):
++    mode = node.rpc("getswapmode")
++    assert mode["mode"] == "recovery" and mode["startup_recovery_lock"] is True
++    assert mode["existing_obligations_recovery_enabled"] is True
++    assert mode["new_trades_enabled"] is False and mode["making_enabled"] is False
++    assert node.rpc("getswapnetworkinfo")["automatic_spend_atoms"] == "0"
++    for desired in ("taker", "maker"):
++        try:
++            node.rpc("setswapmode", {"mode": desired})
++        except g.RPCError as error:
++            assert "MODE_LOCKED:" in str(error), error
++        else:
++            raise AssertionError("Recovery-only allowed a switch to " + desired)
++    assert node.rpc("getswapmode") == mode
+ 
+ 
+ def main():
+     global ANVIL
+     assert os.environ.get('BTX_PUBLIC_ETH_EXECUTE') == 'disposable-regtest-only'
+     assert platform.system() == 'Darwin' and platform.machine() == 'arm64'
++    assert sys.argv[2] == 'eth-lock-recovery'
+     root = Path(sys.argv[1]).resolve()
+     assert root == Path(os.environ['BTX_PUBLIC_ETH_ROOT']).resolve()
+     assert root.parent == Path('/private/tmp') and root.name.startswith('se-')
+@@ -326,7 +363,7 @@
+     os.environ['HOME'] = str(g.TEST_HOME)
+     g.FIXTURE_EPOCH = int(time.time())-1800
+     g.MANIFEST = M
+-    g.result.update(status='INCOMPLETE',source=M['source'],case='public-btx-eth-restart',profile=M['profile'])
++    g.result.update(status='INCOMPLETE',source=M['source'],case='eth-lock-recovery',profile=M['profile'])
+     for role in ['btx','anvil','contract']:
+         assert g.sha(Path(M[role]['path'])) == M[role]['sha256']
+     signal.signal(signal.SIGTERM,lambda *_:(_ for _ in ()).throw(TimeoutError('outer execution interrupted')))
+@@ -358,7 +395,7 @@
+         if errors:
+             raise RuntimeError('cleanup failed: '+str(errors))
+     g.result['status'] = 'PASS'
+-    g.save('public BTX to ETH settlement withdrawal and restarts verified')
++    g.save('ETH-lock recovery refund, withdrawal and reopen verified')
+ 
+ 
+ if __name__ == '__main__':

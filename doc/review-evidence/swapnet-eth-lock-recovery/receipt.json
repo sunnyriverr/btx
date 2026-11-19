@@ -1,0 +1,122 @@
+{
+  "test_summary": {
+    "status": "PASS",
+    "stage": "ETH-lock recovery refund, withdrawal and reopen verified",
+    "case": "eth-lock-recovery",
+    "source": "a97af7b3f379e33e3ec65db948468d875ade2841",
+    "profile": "macOS ARM64, clean a97 serialCPU diagnostic regtest; Metal/ModelNetOFF; deferred MatMul activations; native Anvil31337 accelerated finality",
+    "original_btx_funding": {
+      "txid": "6a51bf782b26d7c6ba092bc303e70946f5b0b2f08e8f66007a7b42fdd78e6707",
+      "vout": 1
+    },
+    "original_eth_lock": {
+      "lock_id": "49444ca02e0a81ca96e462221797a9d38c32c3e1c4a911078cf493d9a6e9dba6",
+      "salt": "8e750e73b4c75290cf15d22eb936da02efac62704ddc0ffc1dd605d734e73813",
+      "txid": "0x87b32ee85a220da6048d452b38bdf2df519379b6bda1ee7bae450a512b66a622"
+    },
+    "eth_funding_finalized": true,
+    "early_refusal": "REFUND_EARLY",
+    "held_before_recovery_atoms": "15999000000000000",
+    "held_after_refund_atoms": "0",
+    "held_after_reopen_atoms": "0",
+    "recovery_lock_both_restarts": true,
+    "original_lock_once": true,
+    "refund_once": true,
+    "withdrawal_once": true,
+    "contract_balance_wei": "0",
+    "offline_taker": true,
+    "evm_refund": {
+      "kind": "refund",
+      "funding_txid": "0x87b32ee85a220da6048d452b38bdf2df519379b6bda1ee7bae450a512b66a622",
+      "settlement_txid": "0x59678cc7b84ba333fafd7f9cba45891fdda6dc52c5b5760947866146833cbc31",
+      "withdrawal_txid": "0x4c123c6dec57476378a22ef5c96d8ceb847be73e9c9344e2b498841e942fdf68",
+      "finalized_block_hash": "0x8cfccd490e0d09216314b5ceb8752e9216090feafaeab9c156008d37b6587093",
+      "runtime_hash": "a06e30bad714ff02db5a2401a898bd7194d1c475b61bdab312ae194b1509e45d",
+      "amount_wei": "9999000000000000",
+      "funding_fee_wei": "142967001000769",
+      "settlement_fee_wei": "63458000444206",
+      "withdrawal_fee_wei": "47319000331233",
+      "beneficiary_balance_before_wei": "999989794574998555025",
+      "beneficiary_balance_after_wei": "999999746255998223792",
+      "remaining_credit_wei": "0",
+      "isolated_withdrawal_balance_verified": true
+    },
+    "maker_gas_total_wei": "253744001776208",
+    "anvil_exited": true,
+    "cleanup_errors": [],
+    "shared_control_startups": [
+      {
+        "node": "a",
+        "stage": "market",
+        "status": {
+          "available": true,
+          "network": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360",
+          "wallet_authority": false
+        },
+        "sockets": [
+          "a/regtest/shared-p2p/model-control.sock"
+        ]
+      },
+      {
+        "node": "b",
+        "stage": "market",
+        "status": {
+          "available": true,
+          "network": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360",
+          "wallet_authority": false
+        },
+        "sockets": [
+          "b/regtest/shared-p2p/model-control.sock"
+        ]
+      },
+      {
+        "node": "b",
+        "stage": "funded-recovery",
+        "status": {
+          "available": true,
+          "network": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360",
+          "wallet_authority": false
+        },
+        "sockets": [
+          "b/regtest/shared-p2p/model-control.sock"
+        ]
+      },
+      {
+        "node": "b",
+        "stage": "terminal-recovery",
+        "status": {
+          "available": true,
+          "network": "521ad0951ed299e9c56aeb7db8188972772067560351b8e55adf71dbed532360",
+          "wallet_authority": false
+        },
+        "sockets": [
+          "b/regtest/shared-p2p/model-control.sock"
+        ]
+      }
+    ]
+  },
+  "revision": "a97af7b3f379e33e3ec65db948468d875ade2841",
+  "seconds": 42.799,
+  "exit": 0,
+  "bound": null,
+  "process_group_absent": true,
+  "original_receipt_sha256": "6d7b79fb35e7de4b5387169cf92f194b9421cb8721a8bb3b3c0884f9a2a7263c",
+  "binary_sha256": {
+    "btx": "e762f614eaf2c3fe78f4bc88d593f88dfd754527d078056a2311e671c9b366ab",
+    "anvil": "8c4fd5befae13e12a94848673c0705a73e985387e48a10ffe73a03a1d5defbb4",
+    "contract": "4789e6b06d33de4194926b9356c26374ee5138181a1f2882e9e190da279cf62c"
+  },
+  "python_executable_sha256": "d4f152f2a753c94e0e7935c8ebbe6b2609979e1df7898422b577d0076383d08b",
+  "baseline_fixture_commit": "7d0354eff8d3b4bf4a078efee8cb85450db33be9",
+  "fixture_sha256": {
+    "public_eth.py": "5327f7aa8d8266dde6ca0a741caf7abda7a5c7bc19c5ecc8b23e6e75e65671b0",
+    "btc_helpers.py": "f0e901461a0ee677726da3905298a585065b5a738f72545c06bbacf7e197cdea",
+    "evm_verify.py": "eab2f85d4b8c5371d233b130c48b671cc77ce1e8de7aaa9711ed7c6d5969180e",
+    "run_prepared.py": "60008f46d72152cad1ab2369957e16bb955052cb4c8ba3a51025d75531b213aa"
+  },
+  "executed_command": "python3 fixture/run_prepared.py --execute eth-lock-recovery",
+  "case_seconds": 600,
+  "scratch_bytes": 1073741824,
+  "disk_reserve_bytes": 1342177280,
+  "limits": "One macOS ARM64 diagnostic serial-CPU BTX regtest and local Anvil case. Accelerated EVM block time/finality, Metal/ModelNet off, MatMul test activation overrides. ETH recovery only; the taker stayed offline and the BTX leg was left at its original funded state. No release qualification."
+}
