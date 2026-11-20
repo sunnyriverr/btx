@@ -1,4 +1,4 @@
-name: Bounded Mac ARM functional target build
+name: Mac ARM default functional suite from checkpoint
 on:
   push:
     branches: [codex/ci-mac-arm-functional-preflight]
@@ -9,10 +9,10 @@ concurrency:
   group: mac-arm-functional-preflight
   cancel-in-progress: false
 jobs:
-  plan:
+  functional:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: macos-15
-    timeout-minutes: 180
+    timeout-minutes: 205
     env:
       DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
       HOMEBREW_NO_AUTO_UPDATE: '1'
@@ -30,29 +30,18 @@ jobs:
           path: product
           persist-credentials: false
           fetch-depth: 1
-      - name: Verify checkpoint, audit configure and dry-run Ninja
-        timeout-minutes: 15
+      - name: Restore checkpoint and verify native binaries
+        timeout-minutes: 20
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python3 contrib/devtools/mac-arm-functional-plan/plan.py
-      - name: Build only the 17 audited targets
-        timeout-minutes: 151
-        run: python3 contrib/devtools/mac-arm-functional-plan/build.py
-      - name: Preserve configuration and compiled objects
-        if: always() && hashFiles('mac-config-build/CMakeCache.txt') != ''
-        timeout-minutes: 9
-        run: python3 contrib/devtools/mac-arm-functional-plan/preserve.py
+        run: python3 contrib/devtools/mac-arm-functional-plan/default_suite.py restore
+      - name: Run every default functional invocation without building
+        timeout-minutes: 181
+        run: python3 contrib/devtools/mac-arm-functional-plan/default_suite.py test
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: mac-arm-functional-build-records
+          name: mac-arm-default-functional-results
           path: records
           if-no-files-found: error
           retention-days: 14
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
-        if: always() && hashFiles('retained/receipt.json') != ''
-        with:
-          name: mac-arm-functional-build-checkpoint
-          path: retained
-          retention-days: 14
-          compression-level: 0
