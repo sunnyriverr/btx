@@ -234,6 +234,23 @@ def stop_group(process):
     process.wait()
 
 
+def retain_cache_logs(scratch):
+    selected = []
+    for candidate in scratch.glob("test_runner_*/cache_setup/test_framework.log"):
+        selected.append(candidate)
+    for candidate in scratch.glob("test_runner_*/cache/node*/**/*"):
+        if candidate.name == "debug.log" or candidate.parent.name in {"stderr", "stdout"}:
+            selected.append(candidate)
+    with (OUT / "cache-startup-diagnostics.log").open("w") as report:
+        for candidate in sorted(selected)[:25]:
+            if not candidate.is_file() or candidate.is_symlink():
+                continue
+            report.write(f"\n--- {candidate.relative_to(scratch)} ---\n")
+            with candidate.open("rb") as f:
+                f.seek(max(0, candidate.stat().st_size - 128 * 1024))
+                report.write(f.read().decode(errors="replace"))
+
+
 def test():
     admitted = json.loads((OUT/"restore-result.json").read_text())
     assert admitted["status"] == "VERIFIED" and admitted["binaries"] == verify_binaries()
@@ -282,6 +299,8 @@ def test():
             finally:
                 if p.poll() is None or reason:
                     stop_group(p)
+        if p.returncode and not results.is_file():
+            retain_cache_logs(scratch)
     found, complete = collect(log, results, cases)
     assert verify_binaries() == admitted["binaries"]
     assert sha(CONFIG) == admitted["config_sha256"]
