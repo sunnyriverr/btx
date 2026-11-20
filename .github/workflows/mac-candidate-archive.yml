@@ -1,4 +1,4 @@
-name: Mac ARM default functional suite from checkpoint
+name: Mac ARM socket fixture before and after
 on:
   push:
     branches: [codex/ci-mac-arm-functional-preflight]
@@ -12,7 +12,7 @@ jobs:
   functional:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: macos-15
-    timeout-minutes: 205
+    timeout-minutes: 50
     env:
       DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
       HOMEBREW_NO_AUTO_UPDATE: '1'
@@ -35,13 +35,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 contrib/devtools/mac-arm-functional-plan/default_suite.py restore
-      - name: Run every default functional invocation without building
-        timeout-minutes: 181
-        run: python3 contrib/devtools/mac-arm-functional-plan/default_suite.py test
+      - name: Run both socket fixtures before and after
+        timeout-minutes: 26
+        run: python3 contrib/devtools/mac-arm-functional-plan/socket_pair.py
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: mac-arm-default-functional-results
+          name: mac-arm-socket-fixture-results
           path: records
           if-no-files-found: error
           retention-days: 14
