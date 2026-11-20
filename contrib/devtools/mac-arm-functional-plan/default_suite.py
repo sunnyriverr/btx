@@ -174,6 +174,18 @@ def restore():
             "brew-dependencies", timeout=600)
     command(["brew", "list", "--versions"], "dependency-versions")
     python = "/opt/homebrew/opt/python@3.12/bin/python3.12"
+    linked = command(["otool", "-L", BUILD/"bin/btxd"], "btxd-native-dependencies")
+    assert re.search(r"(?:Python\.framework/Versions/3\.12/|libpython3\.12\.dylib)", linked), linked
+    cache = (BUILD/"CMakeCache.txt").read_text()
+    assert "_Python3_LIBRARY_RELEASE:INTERNAL=/opt/homebrew/opt/python@3.12/" in cache
+    imports = "import cryptography, sqlite3; from cryptography.hazmat.primitives.ciphers.aead import AESGCM; print(cryptography.__version__, cryptography.__file__)"
+    try:
+        command([python, "-I", "-c", imports], "framework-crypto-before")
+    except subprocess.CalledProcessError:
+        assert "No module named 'cryptography'" in (OUT/"framework-crypto-before.log").read_text()
+    command([python, "-m", "pip", "install", "--only-binary=:all:",
+             "--break-system-packages", "cryptography==46.0.4"], "framework-crypto-install")
+    assert command([python, "-I", "-c", imports], "framework-crypto-after").startswith("46.0.4 ")
     command([python, "-m", "venv", PYTHON.parent.parent], "venv")
     command([PYTHON, "-m", "pip", "install", "--only-binary=:all:",
              "cryptography==46.0.4", "pyzmq==27.1.0"], "pip-runtime")
