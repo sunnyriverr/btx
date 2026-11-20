@@ -1,4 +1,4 @@
-name: Mac ARM socket fixture before and after
+name: Mac ARM AUTO quota assertion before and after
 on:
   push:
     branches: [codex/ci-mac-arm-functional-preflight]
@@ -35,13 +35,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 contrib/devtools/mac-arm-functional-plan/default_suite.py restore
-      - name: Run both socket fixtures before and after
+      - name: Run AUTO quota fixture before and after
         timeout-minutes: 26
-        run: python3 contrib/devtools/mac-arm-functional-plan/socket_pair.py
+        run: python3 contrib/devtools/mac-arm-functional-plan/quota_pair.py
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: mac-arm-socket-fixture-results
+          name: mac-arm-auto-quota-results
           path: records
           if-no-files-found: error
           retention-days: 14
