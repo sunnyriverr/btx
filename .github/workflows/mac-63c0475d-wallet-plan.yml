@@ -1,0 +1,43 @@
+name: Mac ARM 63c0475d wallet node dry run
+on:
+  push:
+    branches: [codex/ci-mac-63c0475d-wallet-plan]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: mac-63c0475d-wallet-plan
+  cancel-in-progress: false
+jobs:
+  plan:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: macos-15
+    timeout-minutes: 24
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+      HOMEBREW_NO_AUTO_UPDATE: '1'
+      HOMEBREW_NO_INSTALL_UPGRADE: '1'
+      HOMEBREW_NO_INSTALL_CLEANUP: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout: contrib/devtools/mac-arm-functional-plan
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 63c0475d4a8b11e80f727688c5c6d203a0ab938f
+          path: product
+          persist-credentials: false
+          fetch-depth: 4
+      - name: Verify checkpoint and dry-run the two wallet binaries
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 contrib/devtools/mac-arm-functional-plan/plan.py
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: mac-63c0475d-wallet-plan-records
+          path: records
+          if-no-files-found: error
+          retention-days: 14
