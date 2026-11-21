@@ -1,0 +1,58 @@
+name: Bounded Mac ARM 2c4da891 functional build
+on:
+  push:
+    branches: [codex/ci-mac-arm-2c4da891-build]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: mac-arm-2c4da891-build
+  cancel-in-progress: false
+jobs:
+  plan:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: macos-15
+    timeout-minutes: 150
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+      HOMEBREW_NO_AUTO_UPDATE: '1'
+      HOMEBREW_NO_INSTALL_UPGRADE: '1'
+      HOMEBREW_NO_INSTALL_CLEANUP: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout: contrib/devtools/mac-arm-functional-plan
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 2c4da891f0089ebc0fb082e65d03a4efda4488a3
+          path: product
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Verify checkpoint, audit configure and dry-run Ninja
+        timeout-minutes: 15
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 contrib/devtools/mac-arm-functional-plan/plan.py
+      - name: Build only the 17 audited targets
+        timeout-minutes: 121
+        run: python3 contrib/devtools/mac-arm-functional-plan/build.py
+      - name: Preserve configuration and compiled objects
+        if: always() && hashFiles('records/build-result.json') != ''
+        timeout-minutes: 10
+        run: python3 contrib/devtools/mac-arm-functional-plan/preserve.py
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: mac-arm-2c4da891-build-records
+          path: records
+          if-no-files-found: error
+          retention-days: 14
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always() && hashFiles('retained/receipt.json') != ''
+        with:
+          name: mac-arm-2c4da891-build-checkpoint
+          path: retained
+          retention-days: 14
+          compression-level: 0
