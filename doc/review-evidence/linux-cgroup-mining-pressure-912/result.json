@@ -1,0 +1,355 @@
+{
+  "source": "2c4da891f0089ebc0fb082e65d03a4efda4488a3",
+  "verdict": "same_mismatch_fails_before_passes_after",
+  "candidate_patch_sha256": "fd5818fd629f25ed0e4b6d19bd1daf2b0abb0b17abbec0941707b2aa4f176d0c",
+  "observation_sha256": "2bb0be1f4ed0273afdf8363e74f0f1823a9815654ce3952667ee99cc57595f70",
+  "qualified_cases_per_binary": 10,
+  "runs": {
+    "before": {
+      "healthy": {
+        "host_swap_free_kib": 524288,
+        "host_ram_available_kib": 6291456,
+        "counters": {
+          "memory.max": "268435456",
+          "memory.current": "835584",
+          "memory.swap.max": "67108864",
+          "memory.swap.current": "0"
+        },
+        "cgroup": "/btx-governor-912",
+        "result": {
+          "swap_pressure": false,
+          "memory_available_bytes": 6442450944,
+          "memory_pressure": 1,
+          "mining_allowed": true,
+          "pause_reason": "NONE"
+        }
+      },
+      "mismatch": {
+        "host_swap_free_kib": 52428,
+        "host_ram_available_kib": 6291456,
+        "counters": {
+          "memory.max": "268435456",
+          "memory.current": "2564096",
+          "memory.swap.max": "67108864",
+          "memory.swap.current": "0"
+        },
+        "cgroup": "/btx-governor-912",
+        "result": {
+          "swap_pressure": true,
+          "memory_available_bytes": 6442450944,
+          "memory_pressure": 1,
+          "mining_allowed": false,
+          "pause_reason": "GPU_MEMORY_PRESSURE"
+        }
+      },
+      "container_ram": {
+        "host_swap_free_kib": 524288,
+        "host_ram_available_kib": 6291456,
+        "counters": {
+          "memory.max": "268435456",
+          "memory.current": "260046848",
+          "memory.swap.max": "67108864",
+          "memory.swap.current": "0"
+        },
+        "cgroup": "/btx-governor-912",
+        "result": {
+          "swap_pressure": false,
+          "memory_available_bytes": 6442450944,
+          "memory_pressure": 1,
+          "mining_allowed": true,
+          "pause_reason": "NONE"
+        }
+      },
+      "container_swap": {
+        "host_swap_free_kib": 524288,
+        "host_ram_available_kib": 6291456,
+        "counters": {
+          "memory.max": "268435456",
+          "memory.current": "2469888",
+          "memory.swap.max": "67108864",
+          "memory.swap.current": "66060288"
+        },
+        "cgroup": "/btx-governor-912",
+        "result": {
+          "swap_pressure": false,
+          "memory_available_bytes": 6442450944,
+          "memory_pressure": 1,
+          "mining_allowed": true,
+          "pause_reason": "NONE"
+        }
+      },
+      "zero_swap_limit": {
+        "host_swap_free_kib": 52428,
+        "host_ram_available_kib": 6291456,
+        "counters": {
+          "memory.max": "268435456",
+          "memory.current": "3358720",
+          "memory.swap.max": "0",
+          "memory.swap.current": "0"
+        },
+        "cgroup": "/btx-governor-912",
+        "result": {
+          "swap_pressure": true,
+          "memory_available_bytes": 6442450944,
+          "memory_pressure": 1,
+          "mining_allowed": false,
+          "pause_reason": "GPU_MEMORY_PRESSURE"
+        }
+      },
+      "unlimited_swap_fallback": {
+        "host_swap_free_kib": 52428,
+        "host_ram_available_kib": 6291456,
+        "counters": {
+          "memory.max": "268435456",
+          "memory.current": "3309568",
+          "memory.swap.max": "max",
+          "memory.swap.current": "0"
+        },
+        "cgroup": "/btx-governor-912",
+        "result": {
+          "swap_pressure": true,
+          "memory_available_bytes": 6442450944,
+          "memory_pressure": 1,
+          "mining_allowed": false,
+          "pause_reason": "GPU_MEMORY_PRESSURE"
+        }
+      },
+      "root_fallback_healthy": {
+        "host_swap_free_kib": 524288,
+        "host_ram_available_kib": 6291456,
+        "counters": {},
+        "cgroup": "/",
+        "result": {
+          "swap_pressure": false,
+          "memory_available_bytes": 6442450944,
+          "memory_pressure": 1,
+          "mining_allowed": true,
+          "pause_reason": "NONE"
+        }
+      },
+      "root_fallback_pressure": {
+        "host_swap_free_kib": 52428,
+        "host_ram_available_kib": 6291456,
+        "counters": {},
+        "cgroup": "/",
+        "result": {
+          "swap_pressure": true,
+          "memory_available_bytes": 6442450944,
+          "memory_pressure": 1,
+          "mining_allowed": false,
+          "pause_reason": "GPU_MEMORY_PRESSURE"
+        }
+      },
+      "host_ram_pressure": {
+        "host_swap_free_kib": 524288,
+        "host_ram_available_kib": 524288,
+        "counters": {
+          "memory.max": "268435456",
+          "memory.current": "2703360",
+          "memory.swap.max": "67108864",
+          "memory.swap.current": "0"
+        },
+        "cgroup": "/btx-governor-912",
+        "result": {
+          "swap_pressure": false,
+          "memory_available_bytes": 536870912,
+          "memory_pressure": 3,
+          "mining_allowed": false,
+          "pause_reason": "GPU_MEMORY_PRESSURE"
+        }
+      },
+      "ancestor_ram": {
+        "host_swap_free_kib": 524288,
+        "host_ram_available_kib": 6291456,
+        "counters": {
+          "memory.max": "max",
+          "memory.current": "585728",
+          "memory.swap.max": "max",
+          "memory.swap.current": "0"
+        },
+        "ancestor_memory_current": 260046848,
+        "cgroup": "/btx-governor-912/child",
+        "result": {
+          "swap_pressure": false,
+          "memory_available_bytes": 6442450944,
+          "memory_pressure": 1,
+          "mining_allowed": true,
+          "pause_reason": "NONE"
+        }
+      }
+    },
+    "after": {
+      "healthy": {
+        "host_swap_free_kib": 524288,
+        "host_ram_available_kib": 6291456,
+        "counters": {
+          "memory.max": "268435456",
+          "memory.current": "2494464",
+          "memory.swap.max": "67108864",
+          "memory.swap.current": "0"
+        },
+        "cgroup": "/btx-governor-912",
+        "result": {
+          "swap_pressure": false,
+          "memory_available_bytes": 265461760,
+          "memory_pressure": 1,
+          "mining_allowed": true,
+          "pause_reason": "NONE"
+        }
+      },
+      "mismatch": {
+        "host_swap_free_kib": 52428,
+        "host_ram_available_kib": 6291456,
+        "counters": {
+          "memory.max": "268435456",
+          "memory.current": "3133440",
+          "memory.swap.max": "67108864",
+          "memory.swap.current": "0"
+        },
+        "cgroup": "/btx-governor-912",
+        "result": {
+          "swap_pressure": false,
+          "memory_available_bytes": 264810496,
+          "memory_pressure": 1,
+          "mining_allowed": true,
+          "pause_reason": "NONE"
+        }
+      },
+      "container_ram": {
+        "host_swap_free_kib": 524288,
+        "host_ram_available_kib": 6291456,
+        "counters": {
+          "memory.max": "268435456",
+          "memory.current": "260046848",
+          "memory.swap.max": "67108864",
+          "memory.swap.current": "0"
+        },
+        "cgroup": "/btx-governor-912",
+        "result": {
+          "swap_pressure": false,
+          "memory_available_bytes": 8388608,
+          "memory_pressure": 4,
+          "mining_allowed": false,
+          "pause_reason": "GPU_MEMORY_PRESSURE"
+        }
+      },
+      "container_swap": {
+        "host_swap_free_kib": 524288,
+        "host_ram_available_kib": 6291456,
+        "counters": {
+          "memory.max": "268435456",
+          "memory.current": "3072000",
+          "memory.swap.max": "67108864",
+          "memory.swap.current": "66060288"
+        },
+        "cgroup": "/btx-governor-912",
+        "result": {
+          "swap_pressure": true,
+          "memory_available_bytes": 265428992,
+          "memory_pressure": 1,
+          "mining_allowed": false,
+          "pause_reason": "GPU_MEMORY_PRESSURE"
+        }
+      },
+      "zero_swap_limit": {
+        "host_swap_free_kib": 52428,
+        "host_ram_available_kib": 6291456,
+        "counters": {
+          "memory.max": "268435456",
+          "memory.current": "3121152",
+          "memory.swap.max": "0",
+          "memory.swap.current": "0"
+        },
+        "cgroup": "/btx-governor-912",
+        "result": {
+          "swap_pressure": false,
+          "memory_available_bytes": 265355264,
+          "memory_pressure": 1,
+          "mining_allowed": true,
+          "pause_reason": "NONE"
+        }
+      },
+      "unlimited_swap_fallback": {
+        "host_swap_free_kib": 52428,
+        "host_ram_available_kib": 6291456,
+        "counters": {
+          "memory.max": "268435456",
+          "memory.current": "3010560",
+          "memory.swap.max": "max",
+          "memory.swap.current": "0"
+        },
+        "cgroup": "/btx-governor-912",
+        "result": {
+          "swap_pressure": true,
+          "memory_available_bytes": 265355264,
+          "memory_pressure": 1,
+          "mining_allowed": false,
+          "pause_reason": "GPU_MEMORY_PRESSURE"
+        }
+      },
+      "root_fallback_healthy": {
+        "host_swap_free_kib": 524288,
+        "host_ram_available_kib": 6291456,
+        "counters": {},
+        "cgroup": "/",
+        "result": {
+          "swap_pressure": false,
+          "memory_available_bytes": 6442450944,
+          "memory_pressure": 1,
+          "mining_allowed": true,
+          "pause_reason": "NONE"
+        }
+      },
+      "root_fallback_pressure": {
+        "host_swap_free_kib": 52428,
+        "host_ram_available_kib": 6291456,
+        "counters": {},
+        "cgroup": "/",
+        "result": {
+          "swap_pressure": true,
+          "memory_available_bytes": 6442450944,
+          "memory_pressure": 1,
+          "mining_allowed": false,
+          "pause_reason": "GPU_MEMORY_PRESSURE"
+        }
+      },
+      "host_ram_pressure": {
+        "host_swap_free_kib": 524288,
+        "host_ram_available_kib": 524288,
+        "counters": {
+          "memory.max": "268435456",
+          "memory.current": "2682880",
+          "memory.swap.max": "67108864",
+          "memory.swap.current": "0"
+        },
+        "cgroup": "/btx-governor-912",
+        "result": {
+          "swap_pressure": false,
+          "memory_available_bytes": 265523200,
+          "memory_pressure": 3,
+          "mining_allowed": false,
+          "pause_reason": "GPU_MEMORY_PRESSURE"
+        }
+      },
+      "ancestor_ram": {
+        "host_swap_free_kib": 524288,
+        "host_ram_available_kib": 6291456,
+        "counters": {
+          "memory.max": "max",
+          "memory.current": "839680",
+          "memory.swap.max": "max",
+          "memory.swap.current": "0"
+        },
+        "ancestor_memory_current": 260046848,
+        "cgroup": "/btx-governor-912/child",
+        "result": {
+          "swap_pressure": false,
+          "memory_available_bytes": 8388608,
+          "memory_pressure": 4,
+          "mining_allowed": false,
+          "pause_reason": "GPU_MEMORY_PRESSURE"
+        }
+      }
+    }
+  }
+}

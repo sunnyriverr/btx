@@ -1,0 +1,129 @@
+binary=./before
+case=healthy host_swap_free_kib=524288 host_ram_available_kib=6291456
+0::/btx-governor-912
+memory.max=268435456
+memory.current=835584
+memory.swap.max=67108864
+memory.swap.current=0
+{"swap_pressure":false,"memory_available_bytes":6442450944,"memory_pressure":1,"mining_allowed":true,"pause_reason":"NONE"}
+case=mismatch host_swap_free_kib=52428 host_ram_available_kib=6291456
+0::/btx-governor-912
+memory.max=268435456
+memory.current=2564096
+memory.swap.max=67108864
+memory.swap.current=0
+{"swap_pressure":true,"memory_available_bytes":6442450944,"memory_pressure":1,"mining_allowed":false,"pause_reason":"GPU_MEMORY_PRESSURE"}
+case=container_ram host_swap_free_kib=524288 host_ram_available_kib=6291456
+0::/btx-governor-912
+memory.max=268435456
+memory.current=260046848
+memory.swap.max=67108864
+memory.swap.current=0
+{"swap_pressure":false,"memory_available_bytes":6442450944,"memory_pressure":1,"mining_allowed":true,"pause_reason":"NONE"}
+case=container_swap host_swap_free_kib=524288 host_ram_available_kib=6291456
+0::/btx-governor-912
+memory.max=268435456
+memory.current=2469888
+memory.swap.max=67108864
+memory.swap.current=66060288
+{"swap_pressure":false,"memory_available_bytes":6442450944,"memory_pressure":1,"mining_allowed":true,"pause_reason":"NONE"}
+case=zero_swap_limit host_swap_free_kib=52428 host_ram_available_kib=6291456
+0::/btx-governor-912
+memory.max=268435456
+memory.current=3358720
+memory.swap.max=0
+memory.swap.current=0
+{"swap_pressure":true,"memory_available_bytes":6442450944,"memory_pressure":1,"mining_allowed":false,"pause_reason":"GPU_MEMORY_PRESSURE"}
+case=unlimited_swap_fallback host_swap_free_kib=52428 host_ram_available_kib=6291456
+0::/btx-governor-912
+memory.max=268435456
+memory.current=3309568
+memory.swap.max=max
+memory.swap.current=0
+{"swap_pressure":true,"memory_available_bytes":6442450944,"memory_pressure":1,"mining_allowed":false,"pause_reason":"GPU_MEMORY_PRESSURE"}
+case=root_fallback_healthy host_swap_free_kib=524288 host_ram_available_kib=6291456
+0::/
+{"swap_pressure":false,"memory_available_bytes":6442450944,"memory_pressure":1,"mining_allowed":true,"pause_reason":"NONE"}
+case=root_fallback_pressure host_swap_free_kib=52428 host_ram_available_kib=6291456
+0::/
+{"swap_pressure":true,"memory_available_bytes":6442450944,"memory_pressure":1,"mining_allowed":false,"pause_reason":"GPU_MEMORY_PRESSURE"}
+case=host_ram_pressure host_swap_free_kib=524288 host_ram_available_kib=524288
+0::/btx-governor-912
+memory.max=268435456
+memory.current=2703360
+memory.swap.max=67108864
+memory.swap.current=0
+{"swap_pressure":false,"memory_available_bytes":536870912,"memory_pressure":3,"mining_allowed":false,"pause_reason":"GPU_MEMORY_PRESSURE"}
+ancestor_memory_current=260046848
+case=ancestor_ram host_swap_free_kib=524288 host_ram_available_kib=6291456
+0::/btx-governor-912/child
+memory.max=max
+memory.current=585728
+memory.swap.max=max
+memory.swap.current=0
+{"swap_pressure":false,"memory_available_bytes":6442450944,"memory_pressure":1,"mining_allowed":true,"pause_reason":"NONE"}
+binary=./after
+case=healthy host_swap_free_kib=524288 host_ram_available_kib=6291456
+0::/btx-governor-912
+memory.max=268435456
+memory.current=2494464
+memory.swap.max=67108864
+memory.swap.current=0
+{"swap_pressure":false,"memory_available_bytes":265461760,"memory_pressure":1,"mining_allowed":true,"pause_reason":"NONE"}
+case=mismatch host_swap_free_kib=52428 host_ram_available_kib=6291456
+0::/btx-governor-912
+memory.max=268435456
+memory.current=3133440
+memory.swap.max=67108864
+memory.swap.current=0
+{"swap_pressure":false,"memory_available_bytes":264810496,"memory_pressure":1,"mining_allowed":true,"pause_reason":"NONE"}
+case=container_ram host_swap_free_kib=524288 host_ram_available_kib=6291456
+0::/btx-governor-912
+memory.max=268435456
+memory.current=260046848
+memory.swap.max=67108864
+memory.swap.current=0
+{"swap_pressure":false,"memory_available_bytes":8388608,"memory_pressure":4,"mining_allowed":false,"pause_reason":"GPU_MEMORY_PRESSURE"}
+case=container_swap host_swap_free_kib=524288 host_ram_available_kib=6291456
+0::/btx-governor-912
+memory.max=268435456
+memory.current=3072000
+memory.swap.max=67108864
+memory.swap.current=66060288
+{"swap_pressure":true,"memory_available_bytes":265428992,"memory_pressure":1,"mining_allowed":false,"pause_reason":"GPU_MEMORY_PRESSURE"}
+case=zero_swap_limit host_swap_free_kib=52428 host_ram_available_kib=6291456
+0::/btx-governor-912
+memory.max=268435456
+memory.current=3121152
+memory.swap.max=0
+memory.swap.current=0
+{"swap_pressure":false,"memory_available_bytes":265355264,"memory_pressure":1,"mining_allowed":true,"pause_reason":"NONE"}
+case=unlimited_swap_fallback host_swap_free_kib=52428 host_ram_available_kib=6291456
+0::/btx-governor-912
+memory.max=268435456
+memory.current=3010560
+memory.swap.max=max
+memory.swap.current=0
+{"swap_pressure":true,"memory_available_bytes":265355264,"memory_pressure":1,"mining_allowed":false,"pause_reason":"GPU_MEMORY_PRESSURE"}
+case=root_fallback_healthy host_swap_free_kib=524288 host_ram_available_kib=6291456
+0::/
+{"swap_pressure":false,"memory_available_bytes":6442450944,"memory_pressure":1,"mining_allowed":true,"pause_reason":"NONE"}
+case=root_fallback_pressure host_swap_free_kib=52428 host_ram_available_kib=6291456
+0::/
+{"swap_pressure":true,"memory_available_bytes":6442450944,"memory_pressure":1,"mining_allowed":false,"pause_reason":"GPU_MEMORY_PRESSURE"}
+case=host_ram_pressure host_swap_free_kib=524288 host_ram_available_kib=524288
+0::/btx-governor-912
+memory.max=268435456
+memory.current=2682880
+memory.swap.max=67108864
+memory.swap.current=0
+{"swap_pressure":false,"memory_available_bytes":265523200,"memory_pressure":3,"mining_allowed":false,"pause_reason":"GPU_MEMORY_PRESSURE"}
+ancestor_memory_current=260046848
+case=ancestor_ram host_swap_free_kib=524288 host_ram_available_kib=6291456
+0::/btx-governor-912/child
+memory.max=max
+memory.current=839680
+memory.swap.max=max
+memory.swap.current=0
+{"swap_pressure":false,"memory_available_bytes":8388608,"memory_pressure":4,"mining_allowed":false,"pause_reason":"GPU_MEMORY_PRESSURE"}
+cleanup_complete
