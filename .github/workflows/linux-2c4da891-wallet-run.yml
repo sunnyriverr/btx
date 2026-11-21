@@ -61,11 +61,6 @@
           "run": "docker exec wallet-2c4da891-run bash -c \"bash proposal/setup.sh && bash proposal/configure-dry-run.sh\""
         },
         {
-          "name": "Remove only owned test container",
-          "if": "always()",
-          "run": "docker rm -f wallet-2c4da891-run >/dev/null 2>&1; test -z \"$(docker ps -aq --filter name=^/wallet-2c4da891-run$)\""
-        },
-        {
           "name": "Build only btxd and btx-cli after the exact 579-action gate",
           "timeout-minutes": 37,
           "run": "docker exec wallet-2c4da891-run bash proposal/build-and-record.sh"
@@ -101,6 +96,11 @@
             "retention-days": 14,
             "if-no-files-found": "error"
           }
+        },
+        {
+          "name": "Remove only owned test container",
+          "if": "always()",
+          "run": "docker rm -f wallet-2c4da891-run >/dev/null 2>&1; test -z \"$(docker ps -aq --filter name=^/wallet-2c4da891-run$)\""
         }
       ],
       "if": "github.repository == 'sunnyriverr/btx'"
