@@ -1,0 +1,81 @@
+{
+  "name": "Linux 2c4da891 wallet node dry run",
+  "on": {
+    "push": {
+      "branches": [
+        "codex/ci-linux-2c4da891-wallet-plan"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "read",
+    "actions": "read"
+  },
+  "concurrency": {
+    "group": "linux-2c4da891-wallet-plan",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "qualify": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 40,
+      "steps": [
+        {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "persist-credentials": false,
+            "fetch-depth": 1
+          }
+        },
+        {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "repository": "btxchain/btx",
+            "ref": "2c4da891f0089ebc0fb082e65d03a4efda4488a3",
+            "path": "current-reference",
+            "persist-credentials": false,
+            "fetch-depth": 1
+          }
+        },
+        {
+          "name": "Verify and restore retained checkpoint on Linux",
+          "timeout-minutes": 12,
+          "run": "python3 -B proposal/stage.py",
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          }
+        },
+        {
+          "name": "Synchronize and verify exact 2c4da891 source",
+          "timeout-minutes": 3,
+          "run": "python3 -B proposal/sync-source.py"
+        },
+        {
+          "name": "Verify and install complete signed Ubuntu prerequisites",
+          "timeout-minutes": 13,
+          "run": "docker run -d --cpus=2 --memory=7g --name wallet-2c4da891-plan --init -v \"$GITHUB_WORKSPACE:$GITHUB_WORKSPACE\" -w \"$GITHUB_WORKSPACE\" -e GITHUB_WORKSPACE -v /etc/ssl/certs/ca-certificates.crt:/ubuntu-host-ca.pem:ro ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11 sleep infinity\ndocker exec wallet-2c4da891-plan bash proposal/ubuntu-prerequisites.sh"
+        },
+        {
+          "name": "Configure and inspect btxd and btx-cli dry run only",
+          "timeout-minutes": 9,
+          "run": "docker exec wallet-2c4da891-plan bash -c \"bash proposal/setup.sh && bash proposal/configure-dry-run.sh\""
+        },
+        {
+          "name": "Remove only owned test container",
+          "if": "always()",
+          "run": "docker rm -f wallet-2c4da891-plan >/dev/null 2>&1; test -z \"$(docker ps -aq --filter name=^/wallet-2c4da891-plan$)\""
+        },
+        {
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always()",
+          "with": {
+            "name": "linux-2c4da891-wallet-plan-records",
+            "path": "records/",
+            "retention-days": 14,
+            "if-no-files-found": "error"
+          }
+        }
+      ]
+    }
+  }
+}
