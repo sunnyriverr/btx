@@ -1,0 +1,41 @@
+<fixture-root>/qualify.py:41: FutureWarning: GzipFile was opened for writing, but this will change in future Python releases.  Specify the mode argument for opening it for writing.
+  with gzip.GzipFile(fileobj=raw, filename="", mtime=0) as compressed:
+{
+  "initial_launcher": {
+    "present": true,
+    "exit": 0,
+    "marker": "fixture-A",
+    "sha256": "1f6eded60905a705e6e1dbdcd3d5f844500be34976e23d1b2578c358e4f247d1"
+  },
+  "bad_manifest_attempt": {
+    "raised": "ValueError",
+    "message": "SHA256 mismatch for snapshot.manifest.json: expected dca077a3d73b3ef5b19b942812fb2b5d43fa3b7c314847f4ca3f83a115db9e8a, got d6bfd6abd8858aabd8df6c1b02ee2ccb24b5592763fd6a18e7b92c1f364ad873",
+    "stderr": ""
+  },
+  "launcher_before_retry": {
+    "present": true,
+    "exit": 0,
+    "marker": "fixture-A",
+    "sha256": "1f6eded60905a705e6e1dbdcd3d5f844500be34976e23d1b2578c358e4f247d1"
+  },
+  "bootstrap_calls_before_retry": 0,
+  "launcher_after_retry": {
+    "present": true,
+    "exit": 0,
+    "marker": "fixture-B",
+    "sha256": "f46b40cfae8b89a89eb5339d20d80e8122ed86ff85f48afd7a72337ec7754afc"
+  },
+  "bootstrap_calls": [
+    {
+      "preset": "service",
+      "companion_sha256": "dca077a3d73b3ef5b19b942812fb2b5d43fa3b7c314847f4ca3f83a115db9e8a",
+      "launcher": {
+        "present": true,
+        "exit": 0,
+        "marker": "fixture-B",
+        "sha256": "f46b40cfae8b89a89eb5339d20d80e8122ed86ff85f48afd7a72337ec7754afc"
+      }
+    }
+  ],
+  "data_sentinel_intact": true
+}

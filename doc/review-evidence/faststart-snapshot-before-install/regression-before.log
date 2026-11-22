@@ -1,0 +1,20 @@
+E
+======================================================================
+ERROR: test_bad_snapshot_manifest_preserves_previous_install (installer_tests.BTXAgentSetupTest.test_bad_snapshot_manifest_preserves_previous_install)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<fixture-root>/candidate/test/util/btx_agent_setup_test.py", line 538, in test_bad_snapshot_manifest_preserves_previous_install
+    self.assertEqual(old_launcher.read_bytes(), b"previous launcher\n")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<runtime>/pathlib.py", line 1019, in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "<runtime>/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '<tmp>/tmppthaa1py/install/btxd'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.016s
+
+FAILED (errors=1)
