@@ -14,8 +14,6 @@ jobs:
     timeout-minutes: 35
     env:
       PROPOSAL: ${{ github.workspace }}/contrib/devtools/session3-wallet-active-pair
-      RECORDS: ${{ runner.temp }}/session3-wallet-active-pair-records
-      BINARIES: ${{ runner.temp }}/session3-wallet-active-pair-binaries
       PYTHONDONTWRITEBYTECODE: '1'
     steps:
       - name: Fetch only the reviewed controller and workflow
@@ -42,6 +40,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          export RECORDS="$RUNNER_TEMP/session3-wallet-active-pair-records"
+          export BINARIES="$RUNNER_TEMP/session3-wallet-active-pair-binaries"
+          printf 'RECORDS=%s\nBINARIES=%s\n' "$RECORDS" "$BINARIES" >> "$GITHUB_ENV"
           mkdir "$RECORDS"
           cat /etc/os-release > "$RECORDS/os-release.txt"
           uname -a > "$RECORDS/uname.txt"
@@ -103,7 +104,7 @@ jobs:
           import os, shutil
           from pathlib import Path
           root = Path(os.environ['RUNNER_TEMP']).resolve()
-          binaries = Path(os.environ['BINARIES']).resolve()
+          binaries = root / 'session3-wallet-active-pair-binaries'
           assert binaries.parent == root and binaries.name == 'session3-wallet-active-pair-binaries'
           shutil.rmtree(binaries, ignore_errors=True)
           PY
