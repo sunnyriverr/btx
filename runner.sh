@@ -21,9 +21,41 @@ openssl req -x509 -newkey rsa:2048 -nodes -days 1 -subj /CN=localhost \
   -addext 'subjectAltName=DNS:localhost' -keyout "$scratch/tls/private.key" \
   -out "$scratch/tls/public.crt" 2>"$scratch/openssl.log"
 chmod 600 "$scratch/tls/private.key"
-docker run -d --name "$container" -p 127.0.0.1::9000 \
-  -v "$scratch/tls:/certs:ro" "$BTX_MINIO_IMAGE" server /data --certs-dir /certs
-port=$(docker port "$container" 9000/tcp)
-curl --fail --silent --show-error --retry 8 --retry-all-errors --retry-delay 2 --retry-max-time 24 --max-time 4 \
-  --cacert "$scratch/tls/public.crt" "https://localhost:${port##*:}/minio/health/live"
-echo 'PASS: Archive entry points and trusted MinIO HTTPS health check.'
+export MODELNET_TEST_CERT="$scratch/tls/public.crt" MODELNET_TEST_KEY="$scratch/tls/private.key"
+export SSL_CERT_FILE="$MODELNET_TEST_CERT"
+export BTXMODELD="$scratch/pkg/btx-0.34.17/bin/btx-modeld"
+rev=3808e2a978ad93986276aab550b472f3ddfc7ec8
+git init -q "$scratch/product"
+git -C "$scratch/product" -c http.version=HTTP/1.1 fetch --depth=1 https://github.com/btxchain/btx.git "$rev"
+git -C "$scratch/product" checkout -q FETCH_HEAD
+git -C "$scratch/product" rev-parse HEAD > evidence/source.txt
+fixture="$scratch/product/test/functional/feature_modelnet_minio.py"
+python3 adapt_fixture.py "$fixture"
+cp https_fixture.py "$(dirname "$fixture")/"
+cat > "$scratch/config.ini" <<CFG
+[environment]
+CLIENT_NAME=BTX
+CLIENT_BUGREPORT=https://github.com/btxchain/btx/issues
+SRCDIR=$scratch/product
+BUILDDIR=$scratch/pkg/btx-0.34.17
+EXEEXT=
+RPCAUTH=$scratch/product/share/rpcauth/rpcauth.py
+[components]
+ENABLE_BITCOIND=true
+ENABLE_CLI=true
+ENABLE_MODELNET=true
+CFG
+status=0
+timeout --kill-after=10s 150s /usr/bin/python3 "$fixture" --configfile="$scratch/config.ini" \
+    --bitcoind="$scratch/pkg/btx-0.34.17/bin/btxd" \
+    --bitcoincli="$scratch/pkg/btx-0.34.17/bin/btx-cli" --tmpdir="$scratch/state" --nocleanup \
+    > evidence/functional.log 2>&1 || status=$?
+printf '%s\n' "$status" > evidence/functional-exit.txt
+if [[ -f "$scratch/state/partial-retry-result.json" ]]; then
+    cp "$scratch/state/partial-retry-result.json" evidence/
+fi
+if (( status != 0 )); then
+    tail -35 evidence/functional.log
+    exit "$status"
+fi
+python3 validate_recovery.py evidence/partial-retry-result.json
