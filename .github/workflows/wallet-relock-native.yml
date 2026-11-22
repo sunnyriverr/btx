@@ -1,9 +1,9 @@
 {
-  "name": "Wallet re-lock candidate btxd dry run",
+  "name": "Wallet re-lock bounded native qualification",
   "on": {
     "push": {
       "branches": [
-        "codex/ci-wallet-relock-dry-run"
+        "codex/ci-wallet-relock-native"
       ]
     }
   },
@@ -12,13 +12,13 @@
     "actions": "read"
   },
   "concurrency": {
-    "group": "wallet-relock-dry-run",
+    "group": "wallet-relock-native",
     "cancel-in-progress": false
   },
   "jobs": {
     "qualify": {
       "runs-on": "ubuntu-24.04",
-      "timeout-minutes": 40,
+      "timeout-minutes": 75,
       "steps": [
         {
           "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
@@ -65,10 +65,37 @@
           "run": "docker exec presync-7d65025b-build bash -c \"bash proposal/setup.sh && bash proposal/configure-dry-run.sh\""
         },
         {
+          "name": "Match measured plan and build only btxd",
+          "timeout-minutes": 14,
+          "run": "docker exec presync-7d65025b-build bash proposal/build-and-record.sh"
+        },
+        {
+          "name": "Preserve candidate checkpoint before native tests",
+          "if": "always() && hashFiles('records/build-started.txt') != ''",
+          "timeout-minutes": 12,
+          "run": "docker exec presync-7d65025b-build /opt/hostedtoolcache/Python/3.12.16/x64/bin/python3 -B proposal/preserve.py"
+        },
+        {
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always() && hashFiles('retained-presync-build/manifest.json') != ''",
+          "with": {
+            "name": "wallet-relock-native-checkpoint",
+            "path": "retained-presync-build/",
+            "retention-days": 14,
+            "compression-level": 0
+          }
+        },
+        {
+          "name": "Check wallet scope and retry using disposable native wallets",
+          "if": "success() && hashFiles('records/built-binaries.sha256') != ''",
+          "timeout-minutes": 23,
+          "run": "docker exec presync-7d65025b-build bash proposal/native-wallet-checks.sh"
+        },
+        {
           "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
           "if": "always()",
           "with": {
-            "name": "wallet-relock-dry-run-records",
+            "name": "wallet-relock-native-records",
             "path": "records/",
             "retention-days": 14,
             "if-no-files-found": "error"
