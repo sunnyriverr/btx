@@ -395,6 +395,25 @@ def run():
         if upgraded and all(view(n, sid).get('stage') == 'complete' for n in (a, b)):
             break
         if CASE=='settle' and a.rpc('getrawmempool'):
+            if not upgraded and 'matched_clock' not in result:
+                assert native_ref and funding['confirmations'] == 0
+                assert not eth_funds
+                agreement = v['agreement']
+                assert agreement['long_leg']['lock_domain'] == 'height'
+                assert agreement['short_leg']['lock_domain'] == 'timestamp'
+                height = a.rpc('getblockcount')
+                eth_before = int(eth('eth_getBlockByNumber', 'latest', False)['timestamp'], 16)
+                eth_after = eth_before + 20 * 45
+                long_after = (int(agreement['long_leg']['lock_value']) - height - 20) * 45
+                short_after = int(agreement['short_leg']['lock_value']) - eth_after
+                eth('evm_setNextBlockTimestamp', eth_after)
+                ethmine(1)
+                observed = int(eth('eth_getBlockByNumber', 'latest', False)['timestamp'], 16)
+                assert observed == eth_after and long_after >= short_after + 7200 and short_after > 3600
+                result['matched_clock'] = {'btx_height_before':height, 'eth_timestamp_before':eth_before,
+                                           'eth_timestamp_after':observed, 'long_remaining_after':long_after,
+                                           'short_remaining_after':short_after}
+                save('matched disposable chain clocks before confirming BTX funding')
             a.mine(20,sink);synced(a,b)
         if upgraded:
             ethmine(8)

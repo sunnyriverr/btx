@@ -59,7 +59,7 @@ export CONTRACT_ARTIFACT="$fixture/inputs/SwapNetHTLC.json" ANVIL_URL="http://12
 unset GH_TOKEN GITHUB_TOKEN LD_PRELOAD PYTHONPATH PYTHONHOME
 export NO_PROXY=127.0.0.1,localhost no_proxy=127.0.0.1,localhost
 mkdir "$scratch/anvil-home"
-HOME="$scratch/anvil-home" "$stage/tools/anvil" --host 127.0.0.1 --port "$port" --slots-in-an-epoch 1 --quiet >records/anvil.log 2>&1 &
+HOME="$scratch/anvil-home" "$stage/tools/anvil" --host 127.0.0.1 --port "$port" --timestamp "$(( $(date +%s) - 1100 ))" --slots-in-an-epoch 1 --quiet >records/anvil.log 2>&1 &
 anvil=$!
 cleanup() {
     if kill -0 "$anvil" 2>/dev/null; then kill "$anvil"; fi
