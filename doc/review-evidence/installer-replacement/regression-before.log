@@ -1,0 +1,35 @@
+EE
+======================================================================
+ERROR: test_failed_force_replacement_preserves_existing_install (installer_tests.BTXAgentSetupTest.test_failed_force_replacement_preserves_existing_install) (failure='extract')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<fixture-root>/candidate/test/util/btx_agent_setup_test.py", line 1198, in test_failed_force_replacement_preserves_existing_install
+    self.assertEqual(old_launcher.read_text(encoding="utf-8"), "previous launcher\n")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<runtime>/pathlib.py", line 1027, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<runtime>/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '<tmp>/tmpautqzdfc/install/btxd'
+
+======================================================================
+ERROR: test_failed_force_replacement_preserves_existing_install (installer_tests.BTXAgentSetupTest.test_failed_force_replacement_preserves_existing_install) (failure='promote')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<fixture-root>/candidate/test/util/btx_agent_setup_test.py", line 1198, in test_failed_force_replacement_preserves_existing_install
+    self.assertEqual(old_launcher.read_text(encoding="utf-8"), "previous launcher\n")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<runtime>/pathlib.py", line 1027, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<runtime>/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '<tmp>/tmperrv_8b2/install/btxd'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.015s
+
+FAILED (errors=2)

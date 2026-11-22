@@ -1,0 +1,37 @@
+<fixture-root>/qualify.py:42: FutureWarning: GzipFile was opened for writing, but this will change in future Python releases.  Specify the mode argument for opening it for writing.
+  with gzip.GzipFile(fileobj=raw, filename="", mtime=0) as compressed:
+{
+  "initial_launch": {
+    "exists": true,
+    "exit": 0,
+    "marker": "fixture-A",
+    "sha256": "1f6eded60905a705e6e1dbdcd3d5f844500be34976e23d1b2578c358e4f247d1"
+  },
+  "failure_writes": [
+    {
+      "written_member": "btx-29.2/bin/btx-cli",
+      "exists_after_write": true
+    },
+    {
+      "failed_member": "btx-29.2/bin/btxd",
+      "staging": "install.cd09jbz7",
+      "verified_archive_sha256": "bac911c6b11b2d79696fcd67f5d8a9f8a8d9ba1ae89a1b9550b22a5a4348c970"
+    }
+  ],
+  "old_launch_before_retry": {
+    "exists": false,
+    "outcome": "launcher_missing"
+  },
+  "retry_launch": {
+    "exists": true,
+    "exit": 0,
+    "marker": "fixture-B",
+    "sha256": "f46b40cfae8b89a89eb5339d20d80e8122ed86ff85f48afd7a72337ec7754afc"
+  },
+  "sentinel_preserved": true
+}
+Traceback (most recent call last):
+  File "<fixture-root>/qualify.py", line 134, in <module>
+    assert old_after_failure == before, "Original launcher must remain runnable and byte-identical before retry"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Original launcher must remain runnable and byte-identical before retry

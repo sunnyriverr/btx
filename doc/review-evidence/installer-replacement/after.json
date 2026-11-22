@@ -1,0 +1,58 @@
+{
+  "source": "7d65025bb3bff27e4f6c2fdc95f33e4b859a2df5",
+  "installer_sha256": "cf4db18b129244a9cbdfc8a78442065addb4c201d701d1993f2501dc7e5f8344",
+  "archive_b_sha256": "bac911c6b11b2d79696fcd67f5d8a9f8a8d9ba1ae89a1b9550b22a5a4348c970",
+  "failure_writes": [
+    {
+      "written_member": "btx-29.2/bin/btx-cli",
+      "exists_after_write": true
+    },
+    {
+      "failed_member": "btx-29.2/bin/btxd",
+      "staging": "install.2ayq8od4",
+      "verified_archive_sha256": "bac911c6b11b2d79696fcd67f5d8a9f8a8d9ba1ae89a1b9550b22a5a4348c970"
+    }
+  ],
+  "initial_launch": {
+    "exists": true,
+    "exit": 0,
+    "marker": "fixture-A",
+    "sha256": "1f6eded60905a705e6e1dbdcd3d5f844500be34976e23d1b2578c358e4f247d1"
+  },
+  "no_force": {
+    "raised": "FileExistsError",
+    "errno": null,
+    "message": "Install directory is not empty: <fixture-root>/installer-replacement-2fnicntp/install (pass --force to replace it)",
+    "stdout": "",
+    "stderr": ""
+  },
+  "forced_failure": {
+    "raised": "OSError",
+    "errno": 28,
+    "message": "[Errno 28] simulated staging write failure",
+    "stdout": "",
+    "stderr": ""
+  },
+  "install_directory_exists_after_failure": true,
+  "old_launch_before_retry": {
+    "exists": true,
+    "exit": 0,
+    "marker": "fixture-A",
+    "sha256": "1f6eded60905a705e6e1dbdcd3d5f844500be34976e23d1b2578c358e4f247d1"
+  },
+  "staging_after_failure": [],
+  "retry": {
+    "entry_return": 0,
+    "stdout": "{\n  \"manifest_source\": \"<fixture-root>/installer-replacement-2fnicntp/release-b/btx-release-manifest.json\",\n  \"asset_base\": \"<fixture-root>/installer-replacement-2fnicntp/release-b\",\n  \"release_tag\": \"v29.2\",\n  \"platform_id\": \"linux-x86_64\",\n  \"archive_asset\": \"btx-29.2-x86_64-linux-gnu.tar.gz\",\n  \"archive_format\": \"tar.gz\",\n  \"install_dir\": \"<fixture-root>/installer-replacement-2fnicntp/install\",\n  \"cache_dir\": \"<fixture-root>/installer-replacement-2fnicntp/install-agent-setup-cache\",\n  \"btxd\": \"<fixture-root>/installer-replacement-2fnicntp/install/btx-29.2/bin/btxd\",\n  \"btx_cli\": \"<fixture-root>/installer-replacement-2fnicntp/install/btx-29.2/bin/btx-cli\",\n  \"snapshot_manifest\": null\n}\n",
+    "stderr": "darwin: ad-hoc signed 2 extracted binaries\n"
+  },
+  "retry_launch": {
+    "exists": true,
+    "exit": 0,
+    "marker": "fixture-B",
+    "sha256": "f46b40cfae8b89a89eb5339d20d80e8122ed86ff85f48afd7a72337ec7754afc"
+  },
+  "staging_after_retry": [],
+  "sentinel_preserved": true,
+  "temporary_install_removed": true
+}
