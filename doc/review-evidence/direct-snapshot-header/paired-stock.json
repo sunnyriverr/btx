@@ -1,0 +1,146 @@
+{
+  "snapshot_sha256": "45392da4550a66ccd4ed949cc0e47cb2197dbf2fd238f79367c921adf8508890",
+  "results": [
+    {
+      "route": "manifest",
+      "header_at": 3,
+      "exit": 0,
+      "error": null,
+      "events": [
+        {
+          "method": "getblockcount",
+          "seconds": 0,
+          "base_known": false
+        },
+        {
+          "method": "getblockchaininfo",
+          "seconds": 0,
+          "base_known": false
+        },
+        {
+          "method": "getblockheader",
+          "seconds": 0,
+          "base_known": false
+        },
+        {
+          "method": "getblockchaininfo",
+          "seconds": 1,
+          "base_known": false
+        },
+        {
+          "method": "getblockheader",
+          "seconds": 1,
+          "base_known": false
+        },
+        {
+          "method": "getblockchaininfo",
+          "seconds": 2,
+          "base_known": false
+        },
+        {
+          "method": "getblockheader",
+          "seconds": 2,
+          "base_known": false
+        },
+        {
+          "method": "getblockchaininfo",
+          "seconds": 3,
+          "base_known": true
+        },
+        {
+          "method": "getblockheader",
+          "seconds": 3,
+          "base_known": true
+        },
+        {
+          "method": "getblockhash",
+          "seconds": 3,
+          "base_known": true
+        },
+        {
+          "method": "getblockcount",
+          "seconds": 3,
+          "base_known": true
+        },
+        {
+          "method": "loadtxoutset",
+          "seconds": 3,
+          "base_known": true
+        },
+        {
+          "method": "getchainstates",
+          "seconds": 3,
+          "base_known": true
+        },
+        {
+          "method": "getchainstates",
+          "seconds": 3,
+          "base_known": true
+        },
+        {
+          "method": "getchainstates",
+          "seconds": 4,
+          "base_known": true
+        }
+      ],
+      "stdout": "downloading snapshot: file://<fixture-root>/snapshot.dat\nsnapshot saved to: <scratch>/node/faststart/snapshot.dat\nwaiting for snapshot anchor header: headers=227999/228000\nloadtxoutset result:\n{\n  \"base_height\": 228000\n}\nkeeping snapshot for assumeutxo recovery: <scratch>/node/faststart/snapshot.dat\nchainstates:\n  idx=0 blocks=0 validated=unknown\n  idx=1 blocks=228000 validated=unknown snapshot_blockhash=0104909051a017c9045faf7382627e89c5b83c4bbd3c1270706d5d2ef2ab0c87\nchainstates:\n  idx=0 blocks=228000 validated=True\nchainstate bootstrap complete\n",
+      "elapsed": 4
+    },
+    {
+      "route": "direct",
+      "header_at": 3,
+      "exit": 1,
+      "error": "loadtxoutset failed:\nThe base block header (0104909051a017c9045faf7382627e89c5b83c4bbd3c1270706d5d2ef2ab0c87) must appear in the headers chain. Make sure all headers are syncing, and call loadtxoutset again",
+      "events": [
+        {
+          "method": "getblockcount",
+          "seconds": 0,
+          "base_known": false
+        },
+        {
+          "method": "loadtxoutset",
+          "seconds": 0,
+          "base_known": false
+        }
+      ],
+      "stdout": "downloading snapshot: file://<fixture-root>/snapshot.dat\nsnapshot saved to: <scratch>/node/faststart/snapshot.dat\n",
+      "elapsed": 0
+    },
+    {
+      "route": "direct",
+      "header_at": 0,
+      "exit": 0,
+      "error": null,
+      "events": [
+        {
+          "method": "getblockcount",
+          "seconds": 0,
+          "base_known": true
+        },
+        {
+          "method": "loadtxoutset",
+          "seconds": 0,
+          "base_known": true
+        },
+        {
+          "method": "getchainstates",
+          "seconds": 0,
+          "base_known": true
+        },
+        {
+          "method": "getchainstates",
+          "seconds": 0,
+          "base_known": true
+        },
+        {
+          "method": "getchainstates",
+          "seconds": 1,
+          "base_known": true
+        }
+      ],
+      "stdout": "downloading snapshot: file://<fixture-root>/snapshot.dat\nsnapshot saved to: <scratch>/node/faststart/snapshot.dat\nloadtxoutset result:\n{\n  \"base_height\": 228000\n}\nkeeping snapshot for assumeutxo recovery: <scratch>/node/faststart/snapshot.dat\nchainstates:\n  idx=0 blocks=0 validated=unknown\n  idx=1 blocks=228000 validated=unknown snapshot_blockhash=0104909051a017c9045faf7382627e89c5b83c4bbd3c1270706d5d2ef2ab0c87\nchainstates:\n  idx=0 blocks=228000 validated=True\nchainstate bootstrap complete\n",
+      "elapsed": 1
+    }
+  ],
+  "controls": {}
+}
