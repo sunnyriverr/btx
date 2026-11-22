@@ -19,7 +19,7 @@ class ActivePairRecoveryTest(BitcoinTestFramework):
     def set_test_params(self):
         self.num_nodes = 2
         self.setup_clean_chain = True
-        self.wallet_names = [None, None]
+        self.wallet_names = [False, False]
         # Reuse the transparent-wallet diagnostic regtest profile from the
         # retained producer's prior funded fixture; no mainnet/release claim.
         flags = ["-fallbackfee=0.0002", "-swapnet=0", "-autoshieldcoinbase=0",
