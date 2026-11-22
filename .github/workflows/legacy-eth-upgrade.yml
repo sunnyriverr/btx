@@ -1,0 +1,59 @@
+name: Single legacy ETH upgrade on regtest
+on:
+  push:
+    branches: [codex/ci-linux-f9ba1128-eth-run]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: linux-f9ba1128-eth-run
+  cancel-in-progress: false
+jobs:
+  upgrade:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 27
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: f9ba112822c0089ae2fc3bb5f71e1a28c7cf0302
+          path: product
+          persist-credentials: false
+      - name: Restore and verify pinned binaries and packages
+        timeout-minutes: 8
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash fixture/stage.sh
+      - name: Check runtime loader and Python
+        timeout-minutes: 5
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libpython3.12t64 python3-cryptography libzmq5 libevent-core-2.1-7t64 libevent-extra-2.1-7t64 libevent-pthreads-2.1-7t64
+          /usr/bin/python3 -c 'import sqlite3, cryptography'
+          for binary in new/btxd new/btx-cli tools/anvil; do
+            ldd "$binary" | tee "records/$(basename "$binary").ldd"
+            ! grep -q 'not found' "records/$(basename "$binary").ldd"
+          done
+          old/btx-0.34.16/bin/btxd --version > records/old-version.txt
+          new/btxd --version > records/new-version.txt
+      - name: Run only the bounded disposable settlement case
+        timeout-minutes: 12
+        run: PATH="/usr/bin:/bin:$PATH" bash fixture/run.sh --execute "$PWD" >records/controller.log 2>&1
+      - name: Record scoped result without runtime state
+        if: always()
+        run: |
+          mkdir -p result
+          cp records/*.ldd records/*version.txt result/ 2>/dev/null || true
+          if test -f records/settle/result.json; then cp records/settle/result.json result/; fi
+          if test -f records/controller.log; then tail -30 records/controller.log >result/controller-tail.txt; fi
+          printf '%s\n' f9ba112822c0089ae2fc3bb5f71e1a28c7cf0302 >result/source.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: legacy-eth-upgrade-receipt
+          path: result/
+          retention-days: 14
