@@ -1,9 +1,9 @@
 {
-  "name": "Linux 7d65025b daemon-only dry run",
+  "name": "Linux 7d65025b bounded daemon-only build",
   "on": {
     "push": {
       "branches": [
-        "codex/ci-linux-7d65025b-presync-plan"
+        "codex/ci-linux-7d65025b-presync-build"
       ]
     }
   },
@@ -12,13 +12,13 @@
     "actions": "read"
   },
   "concurrency": {
-    "group": "linux-7d65025b-presync-plan",
+    "group": "linux-7d65025b-presync-build",
     "cancel-in-progress": false
   },
   "jobs": {
     "qualify": {
       "runs-on": "ubuntu-24.04",
-      "timeout-minutes": 38,
+      "timeout-minutes": 55,
       "steps": [
         {
           "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
@@ -53,18 +53,40 @@
         {
           "name": "Verify and install complete signed Ubuntu prerequisites",
           "timeout-minutes": 13,
-          "run": "docker run -d --cpus=2 --memory=7g --name presync-7d65025b-plan --init -v \"$GITHUB_WORKSPACE:$GITHUB_WORKSPACE\" -w \"$GITHUB_WORKSPACE\" -e GITHUB_WORKSPACE -v /etc/ssl/certs/ca-certificates.crt:/ubuntu-host-ca.pem:ro ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11 sleep infinity\ndocker exec presync-7d65025b-plan bash proposal/ubuntu-prerequisites.sh"
+          "run": "docker run -d --cpus=2 --memory=7g --name presync-7d65025b-build --init -v \"$GITHUB_WORKSPACE:$GITHUB_WORKSPACE\" -w \"$GITHUB_WORKSPACE\" -e GITHUB_WORKSPACE -v /etc/ssl/certs/ca-certificates.crt:/ubuntu-host-ca.pem:ro ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11 sleep infinity\ndocker exec presync-7d65025b-build bash proposal/ubuntu-prerequisites.sh"
         },
         {
           "name": "Configure and inspect btxd dry run only",
           "timeout-minutes": 9,
-          "run": "docker exec presync-7d65025b-plan bash -c \"bash proposal/setup.sh && bash proposal/configure-dry-run.sh\""
+          "run": "docker exec presync-7d65025b-build bash -c \"bash proposal/setup.sh && bash proposal/configure-dry-run.sh\""
+        },
+        {
+          "name": "Match exact 11 actions and build only btxd",
+          "timeout-minutes": 14,
+          "run": "docker exec presync-7d65025b-build bash proposal/build-and-record.sh"
+        },
+        {
+          "name": "Preserve completed or partial checkpoint",
+          "if": "always() && hashFiles('records/build-started.txt') != ''",
+          "timeout-minutes": 12,
+          "run": "docker exec presync-7d65025b-build /opt/hostedtoolcache/Python/3.12.16/x64/bin/python3 -B proposal/preserve.py"
+        },
+        {
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always() && hashFiles('retained-presync-build/manifest.json') != '' && hashFiles('records/checkpoint-created.json') != ''",
+          "with": {
+            "name": "linux-7d65025b-presync-build-checkpoint",
+            "path": "retained-presync-build/",
+            "compression-level": 0,
+            "retention-days": 14,
+            "if-no-files-found": "error"
+          }
         },
         {
           "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
           "if": "always()",
           "with": {
-            "name": "linux-7d65025b-presync-plan-records",
+            "name": "linux-7d65025b-presync-build-records",
             "path": "records/",
             "retention-days": 14,
             "if-no-files-found": "error"
@@ -73,7 +95,7 @@
         {
           "name": "Remove only owned test container",
           "if": "always()",
-          "run": "docker rm -f presync-7d65025b-plan >/dev/null 2>&1; test -z \"$(docker ps -aq --filter name=^/presync-7d65025b-plan$)\""
+          "run": "docker rm -f presync-7d65025b-build >/dev/null 2>&1; test -z \"$(docker ps -aq --filter name=^/presync-7d65025b-build$)\""
         }
       ],
       "if": "github.repository == 'sunnyriverr/btx'"
