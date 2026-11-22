@@ -396,7 +396,8 @@ def run():
             break
         if CASE=='settle' and a.rpc('getrawmempool'):
             if not upgraded and 'matched_clock' not in result:
-                assert native_ref and funding['confirmations'] == 0
+                assert native_ref and funding.get('confirmations', 0) == 0
+                assert native_ref['txid'] in a.rpc('getrawmempool')
                 assert not eth_funds
                 agreement = v['agreement']
                 assert agreement['long_leg']['lock_domain'] == 'height'
