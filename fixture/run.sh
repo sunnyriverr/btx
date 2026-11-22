@@ -47,7 +47,16 @@ with tarfile.open('old-release.tar.gz', 'r|gz') as archive:
         else:
             raise ValueError(entry.name)
 VERIFY
-test ! -e records/settle
+# Gate loader and embedded Python dependencies before launching either chain.
+for binary in new/btxd new/btx-cli tools/anvil; do
+    dependencies=$(ldd "$binary")
+    printf '%s\n' "$dependencies"
+    if printf '%s\n' "$dependencies" | grep -q 'not found'; then
+        exit 1
+    fi
+done
+python3.12 -c 'import cryptography'
+test ! -e records/maker-refund
 mkdir -p records
 scratch=$(mktemp -d "$stage/btxeth.XXXXXXXX")
 test "$(df -Pk "$scratch" | awk 'NR==2 {print $4}')" -gt 2621440
@@ -59,6 +68,7 @@ export CONTRACT_ARTIFACT="$fixture/inputs/SwapNetHTLC.json" ANVIL_URL="http://12
 unset GH_TOKEN GITHUB_TOKEN LD_PRELOAD PYTHONPATH PYTHONHOME
 export NO_PROXY=127.0.0.1,localhost no_proxy=127.0.0.1,localhost
 mkdir "$scratch/anvil-home"
+case_deadline=$(( SECONDS + 600 ))
 HOME="$scratch/anvil-home" "$stage/tools/anvil" --host 127.0.0.1 --port "$port" --timestamp "$(( $(date +%s) - 1100 ))" --slots-in-an-epoch 1 --quiet >records/anvil.log 2>&1 &
 anvil=$!
 cleanup() {
@@ -79,5 +89,7 @@ for _ in {1..40}; do
     sleep 0.25
 done
 test "${ready:-0}" -eq 1
-timeout --kill-after=20s 600s python3 -B -u "$fixture/upgrade.py" "$scratch" settle
+remaining=$(( case_deadline - SECONDS ))
+test "$remaining" -gt 0
+timeout --kill-after=20s "${remaining}s" python3.12 -B -u "$fixture/upgrade.py" "$scratch" maker-refund
 kill -0 "$anvil"

@@ -24,7 +24,7 @@ HOME = ROOT / "home"
 HOME.mkdir(mode=0o700)
 FIXTURE_EPOCH = int(time.time()) - 1800
 CASE = sys.argv[2]
-assert CASE == "settle"
+assert CASE == "maker-refund"
 result = {"status": "INCOMPLETE", "case": CASE}
 nodes = []
 
@@ -308,10 +308,12 @@ def run():
     assert keccak256(bytes.fromhex(eth('eth_getCode',contract,'latest')[2:])).hex()==PIN
     genesis=eth('eth_getBlockByNumber','0x0',False)['hash'][2:];chain=int(eth('eth_chainId'),16);eid=f'evm:{genesis}:{chain}:native'
     result['evm']={'asset':eid,'contract':contract,'runtime_hash':PIN,'deployment':deployment['transactionHash']}
+    eth_accounts = {}
     for n in (a,b):
         n.rpc('setswapassetpolicy',{'policy':{'asset':eid,'rpc_url':ETH_URL,'contract':contract,'runtime_hash':PIN}})
         assert {x['asset'] for x in n.rpc('listswapassets')['assets'] if x['ready']}=={BTX_ID,eid}
         info=n.rpc('getswapwalletinfo');address=next(x['address'] for x in info['foreign_accounts'] if x['asset']==eid)
+        eth_accounts[n.name] = address
         eth('anvil_setBalance',address,hex(10**21))
         assert int(eth('eth_getBalance',address,'latest'),16)==10**21
     # Establish the deployment on the finalized chain before holding mining.
@@ -326,143 +328,167 @@ def run():
     eth('evm_setAutomine', False)
     before={n.name:balance(n) for n in (a,b)};result['before_btx_atoms']=before
     assert min(before.values())>=20_000_000
-    sell,buy=(BTX_ID,eid) if CASE=='settle' else (eid,BTX_ID)
-    sell_amount=10_000_000 if CASE=='settle' else 10**16
+    sell,buy=BTX_ID,eid
+    sell_amount=10_000_000
     def cap(asset):return 500_000 if asset==BTX_ID else 6*10**15
     def recovery_cap(asset):return 100_000 if asset==BTX_ID else 2*10**15
     def mandate(n,asset):
         return n.rpc('createswapmandate',{'mandate':{'principal':'owner:cookie','asset':asset,'max_total_atoms':str(50_000_000 if asset==BTX_ID else 5*10**16),'max_trade_atoms':str(25_000_000 if asset==BTX_ID else 2*10**16),'max_fee_atoms':str(2_000_000 if asset==BTX_ID else 10**16),'expires_at':int(time.time())+3600,'nonce':secrets.token_hex(32)}})['mandate_id']
     maker=mandate(b,buy);taker=mandate(a,sell)
     save('advertise native maker and request exact quote')
-    b.rpc('setswapmarket',{'market':{'sell_asset':sell,'buy_asset':buy,'numerator':str(10**9 if CASE=='settle' else 1),'denominator':str(1 if CASE=='settle' else 10**9),'maker_fee_atoms':str(10**12 if buy==eid else 1000),'max_receive_network_fee_atoms':str(recovery_cap(buy)),'max_input_atoms':str(sell_amount*2),'expires_at':int(time.time())+1200},'mandate_id':maker,'max_local_fee_atoms':str(cap(buy)),'refund_fee_atoms':str(recovery_cap(buy)),'claim_fee_atoms':str(recovery_cap(sell))})
+    b.rpc('setswapmarket',{'market':{'sell_asset':sell,'buy_asset':buy,'numerator':str(10**9),'denominator':str(1),'maker_fee_atoms':str(10**12 if buy==eid else 1000),'max_receive_network_fee_atoms':str(recovery_cap(buy)),'max_input_atoms':str(sell_amount*2),'expires_at':int(time.time())+1200},'mandate_id':maker,'max_local_fee_atoms':str(cap(buy)),'refund_fee_atoms':str(recovery_cap(buy)),'claim_fee_atoms':str(recovery_cap(sell))})
     until(lambda:a.rpc('listswapproviders')['providers'],30)
     rfq=a.rpc('requestswapquote',{'sell_asset':sell,'buy_asset':buy,'sell_atoms':str(sell_amount)})
     quotes=until(lambda:a.rpc('getswapquotes',{'request_id':rfq['request_id']})['quotes'],40);assert len(quotes)==1
     quote=quotes[0];assert int(quote['sell_atoms'])==sell_amount
     accepted=a.rpc('acceptswapquote',{'quote_id':quote['id'],'mandate_id':taker,'max_local_fee_atoms':str(cap(sell)),'refund_fee_atoms':str(recovery_cap(sell)),'claim_fee_atoms':str(recovery_cap(buy))});sid=accepted['swap_id'];result['swap_id']=sid
-    save('observe original funding on both chains under v0.34.16')
-    upgraded = False
-    original_eth_fund = None
-    deadline=time.monotonic()+180;native_ref=None;native_terms=None;native_funder=a if CASE=='settle' else b
-    while time.monotonic()<deadline:
-        states=summary(a,b,sid)
-        if states!=result.get('last_states'):result['last_states']=states;save('observe real chain funding and claims')
-        v=view(native_funder,sid);name='a' if CASE=='settle' else 'b'
-        if name in v.get('refs',{}) and any(o['asset']==BTX_ID and o['kind']=='fund' and o['state']=='broadcast' for o in ops(native_funder,sid)):
-            native_ref=v['refs'][name];native_terms=v['agreement']['long_leg' if name=='a' else 'short_leg']
-            funding=native_funder.rpc('getrawtransaction',native_ref['txid'],True)
-            assert atoms(funding['vout'][native_ref['vout']]['value'])==int(native_terms['amount_atoms'])
-            assert funding['vout'][native_ref['vout']]['scriptPubKey']['hex']==native_terms['lock_commitment']
-            result['native_initial_funding']={'role':'taker' if CASE=='settle' else 'maker','outpoint':native_ref,'present_in_real_node':True}
-            if CASE=='refund':
-                # No BTX confirmations have been mined since short funding, so
-                # taker cannot yet claim. Stop only this owned taker before mining.
-                assert funding.get('confirmations',0)==0 and not view(a,sid)['secret_exposed']
-                a.stop();save('maker native funding proved; taker stopped before confirmation')
-                result['native_refund']=native_refund(native_terms,native_ref,b,sid,sink,before[b.name]);return
-        eth_funds = []
-        if not upgraded and native_ref and states[b.name]:
-            eth_funds = [op['txid'] for op in ops(b, sid, 'fund')
-                         if op['asset'] == eid and op['state'] == 'broadcast']
-        if native_ref and eth_funds and not upgraded:
-            assert len(eth_funds) == 1
-            original_eth_fund = eth_funds[0]
-            assert eth('eth_getTransactionByHash', original_eth_fund)['hash'] == original_eth_fund
-            assert eth('eth_getTransactionReceipt', original_eth_fund) is None
-            assert all(not view(n, sid)['secret_exposed'] for n in (a, b))
-            assert all(not ops(n, sid, 'claim') for n in (a, b))
-            synced(a, b)
-            btx_anchor = a.rpc('getbestblockhash')
-            dirs = {n.name: (n.data.stat().st_dev, n.data.stat().st_ino) for n in (a, b)}
-            for n in (a, b):
-                n.stop()
-                assert n.process.poll() == 0
-            # Confirm the already-submitted lock while neither old daemon can claim.
+    save('observe original BTX and pending ETH funding on v0.34.16')
+    native_ref = None
+    deadline = time.monotonic() + 180
+    while time.monotonic() < deadline:
+        taker_state = view(a, sid)
+        maker_state = view(b, sid)
+        ref = taker_state.get('refs', {}).get('a')
+        if ref and native_ref is None and any(
+                op['asset'] == BTX_ID and op['kind'] == 'fund' and op['state'] == 'broadcast'
+                for op in ops(a, sid)):
+            funding = a.rpc('getrawtransaction', ref['txid'], True)
+            terms = taker_state['agreement']['long_leg']
+            output = funding['vout'][ref['vout']]
+            assert atoms(output['value']) == int(terms['amount_atoms'])
+            assert output['scriptPubKey']['hex'] == terms['lock_commitment']
+            assert funding.get('confirmations', 0) == 0
+            native_ref = ref
+            height = a.rpc('getblockcount')
+            eth_before = int(eth('eth_getBlockByNumber', 'latest', False)['timestamp'], 16)
+            eth_after = eth_before + 20 * 45
+            short_remaining = int(taker_state['agreement']['short_leg']['lock_value']) - eth_after
+            long_remaining = (int(terms['lock_value']) - height - 20) * 45
+            assert long_remaining >= short_remaining + 7200 and short_remaining > 3600
+            eth('evm_setNextBlockTimestamp', eth_after)
             ethmine(1)
-            original_lock = ethreceipt(original_eth_fund)
-            assert original_lock['to'].lower() == contract.lower()
-            block_number, block_hash = original_lock['blockNumber'], original_lock['blockHash']
-            for n in (a, b):
-                assert (n.data.stat().st_dev, n.data.stat().st_ino) == dirs[n.name]
-                n.binary = Path(os.environ['BTX_NEW']).resolve()
-                n.version = "NEW"
-                n.start('upgrade', '-swapnet=1', '-wallet=trader', '-swapnetwallet=trader', *FLAGS)
-                assert n.rpc('getbestblockhash') == btx_anchor
-                assert eid in {x['asset'] for x in n.rpc('listswapassets')['assets'] if x['ready']}
-                assert view(n, sid), 'original swap missing after upgrade'
-            connected(a, b)
-            assert eth('eth_getBlockByNumber', '0x0', False)['hash'][2:] == genesis
-            assert int(eth('eth_chainId'), 16) == chain
-            assert eth('eth_getBlockByNumber', block_number, False)['hash'] == block_hash
-            assert eth('eth_getTransactionReceipt', original_eth_fund)['blockHash'] == block_hash
-            result['upgrade_boundary'] = {'btx_tip': btx_anchor, 'eth_fund': original_eth_fund,
-                                          'eth_funding_block': block_hash, 'same_datadirs': True}
-            eth('evm_setAutomine', True)
-            upgraded = True
-            save('verified original funded swap on f9ba1128')
-        if upgraded and all(view(n, sid).get('stage') == 'complete' for n in (a, b)):
+            assert int(eth('eth_getBlockByNumber', 'latest', False)['timestamp'], 16) == eth_after
+            a.mine(20, sink)
+            synced(a, b)
+        eth_funds = [op['txid'] for op in ops(b, sid, 'fund')
+                     if op['asset'] == eid and op['state'] == 'broadcast']
+        lock = maker_state.get('refs', {}).get('b')
+        if native_ref and lock and eth_funds:
+            assert eth_funds == [lock['txid']]
             break
-        if CASE=='settle' and a.rpc('getrawmempool'):
-            if not upgraded and 'matched_clock' not in result:
-                assert native_ref and funding.get('confirmations', 0) == 0
-                assert native_ref['txid'] in a.rpc('getrawmempool')
-                assert not eth_funds
-                agreement = v['agreement']
-                assert agreement['long_leg']['lock_domain'] == 'height'
-                assert agreement['short_leg']['lock_domain'] == 'timestamp'
-                height = a.rpc('getblockcount')
-                eth_before = int(eth('eth_getBlockByNumber', 'latest', False)['timestamp'], 16)
-                eth_after = eth_before + 20 * 45
-                long_after = (int(agreement['long_leg']['lock_value']) - height - 20) * 45
-                short_after = int(agreement['short_leg']['lock_value']) - eth_after
-                eth('evm_setNextBlockTimestamp', eth_after)
-                ethmine(1)
-                observed = int(eth('eth_getBlockByNumber', 'latest', False)['timestamp'], 16)
-                assert observed == eth_after and long_after >= short_after + 7200 and short_after > 3600
-                result['matched_clock'] = {'btx_height_before':height, 'eth_timestamp_before':eth_before,
-                                           'eth_timestamp_after':observed, 'long_remaining_after':long_after,
-                                           'short_remaining_after':short_after}
-                save('matched disposable chain clocks before confirming BTX funding')
-            a.mine(20,sink);synced(a,b)
-        if upgraded:
-            ethmine(8)
-        time.sleep(.5)
-    else:raise TimeoutError('native funded workflow did not complete within180seconds')
-    assert upgraded and native_ref and native_terms
-    first,second=view(a,sid),view(b,sid);assert first['agreement']==second['agreement']
-    allops=ops(a,sid)+ops(b,sid)
-    result['native_settlement']=check_leg(native_terms,native_ref,allops,a,b,500_000)
-    result['evm_settlement']=verify_evm_leg(eth,first['agreement']['short_leg'],first['refs']['b'],allops)
-    assert result['evm_settlement']['runtime_hash']==PIN
-    assert result['evm_settlement']['funding_txid'].lower() == original_eth_fund.lower()
-    assert result['evm_settlement']['remaining_credit_wei'] == '0'
-    assert int(eth('eth_getBalance', contract, 'latest'), 16) == 0
-    assert int(result['evm_settlement']['funding_fee_wei'])+2*10**15<=6*10**15
-    native=result['native_settlement']
-    assert native['funding_fee_atoms']+100_000<=500_000
-    assert balance(a)-before[a.name]==-native['locked_atoms']-native['funding_fee_atoms']
-    assert balance(b)-before[b.name]==native['paid_atoms']
-    assert [o['txid'] for o in ops(a,sid,'fund') if o['asset']==BTX_ID]==[native_ref['txid']]
-    old={n.name:ops(n,sid) for n in (a,b)}
-    for n in (a,b):
-        n.stop();n.start('terminal-restart','-swapnet=1','-wallet=trader','-swapnetwallet=trader',*FLAGS)
-        assert view(n,sid)['stage']=='complete' and ops(n,sid)==old[n.name]
-    result['terminal_restart_preserved']=True
-    for n in (a, b):
-        rows = n.rpc('listswapmandates')['mandates']
-        assert len(rows) == 1 and str(rows[0]['held_atoms']) == '0'
-    b.rpc('setswapmode', {'mode': 'maker'})
-    before_refusal = (b.rpc('listswaps'), b.rpc('listswapmandates'), b.rpc('listswappublicoffers'))
-    try:
-        b.rpc('publishswapoffer', {'sell_asset': BTX_ID, 'buy_asset': eid,
-                                  'sizes': [str(sell_amount)]})
-    except RPCError as exc:
-        assert 'DEPLOYMENT_REQUIRED' in str(exc), str(exc)
+        time.sleep(0.5)
     else:
-        raise AssertionError('legacy policy admitted a fresh offer')
-    assert (b.rpc('listswaps'), b.rpc('listswapmandates'), b.rpc('listswappublicoffers')) == before_refusal
-    result['fresh_trade_refusal'] = 'DEPLOYMENT_REQUIRED'
-    result['original_budget_released'] = True
+        raise TimeoutError('original old-build funding did not reach the upgrade cut')
+
+    assert maker_state['refs']['a'] == native_ref
+    assert maker_state['recovery_ready']
+    short = maker_state['agreement']['short_leg']
+    assert short['asset'] == eid and short['lock_domain'] == 'timestamp'
+    assert eth('eth_getTransactionByHash', lock['txid'])['hash'] == lock['txid']
+    assert eth('eth_getTransactionReceipt', lock['txid']) is None
+    for node in (a, b):
+        assert not view(node, sid)['secret_exposed']
+        assert not ops(node, sid, 'claim')
+    synced(a, b)
+    btx_tip = b.rpc('getbestblockhash')
+    data_identity = (b.data.stat().st_dev, b.data.stat().st_ino)
+    budget = b.rpc('listswapmandates')['mandates']
+    assert len(budget) == 1 and budget[0]['id'] == maker and int(budget[0]['held_atoms']) > 0
+
+    a.stop()
+    assert a.process.poll() == 0
+    b.stop()
+    assert b.process.poll() == 0
+    save('both old nodes stopped before confirming the original ETH lock')
+    ethmine(8)
+    funding_receipt = ethreceipt(lock['txid'])
+    assert funding_receipt['to'].lower() == contract.lower()
+    assert int(eth('eth_getBlockByNumber', 'finalized', False)['number'], 16) >= int(funding_receipt['blockNumber'], 16)
+    eth('evm_setAutomine', True)
+
+    flags = ('-swapnet=1', '-swapnetmode=recovery', '-wallet=trader', '-swapnetwallet=trader', *FLAGS)
+    b.binary = Path(os.environ['BTX_NEW']).resolve()
+    b.version = 'NEW'
+
+    def assert_isolated_maker():
+        assert a.process.poll() == 0 and b.rpc('getconnectioncount') == 0
+        assert (b.data.stat().st_dev, b.data.stat().st_ino) == data_identity
+        assert b.rpc('getbestblockhash') == btx_tip
+        assert eth('eth_getBlockByNumber', '0x0', False)['hash'][2:] == genesis
+        assert int(eth('eth_chainId'), 16) == chain
+        assert ethreceipt(lock['txid'])['blockHash'] == funding_receipt['blockHash']
+        mode = b.rpc('getswapmode')
+        assert mode['mode'] == 'recovery' and mode['startup_recovery_lock'] is True
+        assert mode['existing_obligations_recovery_enabled'] is True
+        assert mode['new_trades_enabled'] is False
+
+    b.start('upgrade-maker', *flags)
+    assert_isolated_maker()
+    assert eid in {x['asset'] for x in b.rpc('listswapassets')['assets'] if x['ready']}
+    assert view(b, sid)['refs'] == maker_state['refs']
+    assert b.rpc('listswapmandates')['mandates'] == budget
+    result['upgrade_boundary'] = {
+        'btx_tip': btx_tip, 'btx_outpoint': native_ref, 'eth_lock': lock,
+        'eth_funding_block': funding_receipt['blockHash'], 'held_before_refund': budget[0]['held_atoms'],
+        'taker_stop_exit': a.process.poll(), 'maker_connections': b.rpc('getconnectioncount'),
+    }
+    save('verify early refund refusal after maker-only upgrade')
+    assert int(eth('eth_getBlockByNumber', 'latest', False)['timestamp'], 16) < int(short['lock_value'])
+    try:
+        b.rpc('refundswap', {'swap_id': sid})
+    except RPCError as error:
+        assert 'REFUND_EARLY:' in str(error)
+    else:
+        raise AssertionError('refund accepted before maturity')
+    assert all(o['kind'] not in ('claim', 'refund', 'withdraw') for o in ops(b, sid))
+    result['early_refusal'] = 'REFUND_EARLY'
+
+    save('mature the original ETH lock and verify refund and withdrawal')
+    eth('evm_setNextBlockTimestamp', int(short['lock_value']))
+    ethmine(1)
+    b.rpc('refundswap', {'swap_id': sid})
+
+    def refunded():
+        assert a.process.poll() == 0 and b.rpc('getconnectioncount') == 0
+        ethmine(1)
+        state = view(b, sid)
+        return state if state.get('stage') == 'refunded' else None
+
+    final = until(refunded, 90)
+    assert final['refs'] == maker_state['refs'] and not final['secret_exposed']
+    terminal_ops = ops(b, sid)
+    assert [op['txid'] for op in terminal_ops if op['kind'] == 'fund'] == [lock['txid']]
+    for kind in ('refund', 'withdraw'):
+        assert len([op for op in terminal_ops if op['kind'] == kind]) == 1
+    receipt = verify_evm_leg(eth, short, lock, terminal_ops, kind='refund')
+    assert receipt['runtime_hash'] == PIN and receipt['remaining_credit_wei'] == '0'
+    assert int(receipt['amount_wei']) == int(short['amount_atoms'])
+    fees = sum(int(receipt[k]) for k in ('funding_fee_wei', 'settlement_fee_wei', 'withdrawal_fee_wei'))
+    assert fees <= cap(eid)
+    address = short['refund_payout']
+    assert address == eth_accounts[b.name]
+    assert int(eth('eth_getBalance', eth_accounts[a.name], 'latest'), 16) == 10**21
+    assert int(eth('eth_getBalance', address, 'latest'), 16) == 10**21 - fees
+    assert int(eth('eth_getBalance', contract, 'latest'), 16) == 0
+    terminal_budget = b.rpc('listswapmandates')['mandates']
+    assert len(terminal_budget) == 1 and terminal_budget[0]['id'] == maker
+    assert int(terminal_budget[0]['held_atoms']) == 0
+    result['eth_refund'] = receipt
+    before_reopen = b.rpc('gettxout', native_ref['txid'], native_ref['vout'], True)
+
+    save('reopen only the maker and check original IDs and cleared budget')
+    b.stop()
+    b.start('terminal-recovery', *flags)
+    assert_isolated_maker()
+    reopened = view(b, sid)
+    assert reopened['stage'] == 'refunded' and reopened['refs'] == final['refs']
+    assert ops(b, sid) == terminal_ops
+    assert b.rpc('listswapmandates')['mandates'] == terminal_budget
+    assert int(eth('eth_getBalance', address, 'latest'), 16) == 10**21 - fees
+    assert b.rpc('gettxout', native_ref['txid'], native_ref['vout'], True) == before_reopen
+    result.update(held_after_restart=terminal_budget[0]['held_atoms'],
+                  original_lock_refunded_and_withdrawn_once=True, taker_offline=True,
+                  btx_outpoint_unspent=before_reopen is not None)
 
 def terminate(*_):raise TimeoutError('bounded outer controller interrupted')
 signal.signal(signal.SIGTERM,terminate)
