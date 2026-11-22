@@ -314,6 +314,14 @@ def run():
         info=n.rpc('getswapwalletinfo');address=next(x['address'] for x in info['foreign_accounts'] if x['asset']==eid)
         eth('anvil_setBalance',address,hex(10**21))
         assert int(eth('eth_getBalance',address,'latest'),16)==10**21
+    # Establish the deployment on the finalized chain before holding mining.
+    ethmine(8)
+    finalized = eth('eth_getBlockByNumber', 'finalized', False)
+    assert int(finalized['number'], 16) >= int(deployment['blockNumber'], 16)
+    historical = eth('eth_getCode', contract, finalized['number'])
+    assert keccak256(bytes.fromhex(historical[2:])).hex() == PIN
+    result['finalized_deployment'] = {'block': finalized['number'],
+                                      'hash': finalized['hash'], 'runtime_pin_matched': True}
     # Keep the short-lock transaction pending until both old processes are stopped.
     eth('evm_setAutomine', False)
     before={n.name:balance(n) for n in (a,b)};result['before_btx_atoms']=before
