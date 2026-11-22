@@ -1,17 +1,17 @@
-name: Session 3 Atlas905 restore and preflight only
+name: Session 3 bounded Atlas905 build only
 on:
   workflow_dispatch:
 permissions:
   contents: read
   actions: read
 concurrency:
-  group: session3-atlas905-preflight-${{ github.ref }}
+  group: session3-atlas905-build-${{ github.ref }}
   cancel-in-progress: false
 jobs:
-  preflight:
+  atlas-build:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: ubuntu-22.04
-    timeout-minutes: 30
+    timeout-minutes: 60
     env:
       PYTHONDONTWRITEBYTECODE: '1'
     steps:
@@ -60,18 +60,48 @@ jobs:
         run: |
           set -euo pipefail
           timeout --kill-after=10s 180s python -B contrib/devtools/session3-atlas905-preflight/preflight.py
+      - name: Compile only Atlas with the admitted Rust state
+        timeout-minutes: 19
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --kill-after=30s 1080s python -B contrib/devtools/session3-atlas905-preflight/build.py
+      - name: Retain isolated Rust progress after compiler cleanup
+        if: always()
+        timeout-minutes: 8
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --kill-after=15s 420s python -B contrib/devtools/session3-atlas905-preflight/checkpoint.py
       - name: Remove only this job's restored inputs
         if: always()
         shell: bash
         run: |
-          timeout --kill-after=10s 90s python -B contrib/devtools/session3-atlas905-preflight/cleanup.py
+          timeout --kill-after=10s 90s python -B contrib/devtools/session3-atlas905-preflight/finish.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
-          name: session3-atlas905-preflight-${{ github.run_id }}-${{ github.run_attempt }}
+          name: session3-atlas905-build-records-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
             ${{ runner.temp }}/session3-atlas905-records/*result.json
             ${{ runner.temp }}/session3-atlas905-records/*.txt
             ${{ runner.temp }}/session3-atlas905-records/*.log
           if-no-files-found: error
+          retention-days: 14
+      - name: Retain the compiled binary without launching it
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: session3-atlas905-binary-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/session3-atlas905-binary
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Retain the verified isolated Rust checkpoint
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: session3-atlas905-checkpoint-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/session3-atlas905-checkpoint
+          if-no-files-found: ignore
+          compression-level: 0
           retention-days: 14
