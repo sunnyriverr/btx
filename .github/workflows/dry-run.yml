@@ -1,4 +1,4 @@
-name: Mac ARM shielded fixture restore and dry run
+name: Mac ARM targeted shielded fixture build
 on:
   push:
     branches: [codex/ci-mac-arm-7d65025b-shielded-fixture-plan]
@@ -9,7 +9,7 @@ jobs:
   dry-run:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: macos-15
-    timeout-minutes: 22
+    timeout-minutes: 38
     env:
       DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
       HOMEBREW_NO_AUTO_UPDATE: '1'
@@ -29,10 +29,21 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 plan.py
+      - name: Build only after the exact 22-action plan matches
+        timeout-minutes: 14
+        run: bash build.sh
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: mac-arm-7d65025b-shielded-fixture-plan
+          name: mac-arm-7d65025b-shielded-fixture-build-records
           path: records/
           if-no-files-found: error
           retention-days: 7
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always() && hashFiles('retained/SHA256SUMS') != ''
+        with:
+          name: mac-arm-7d65025b-shielded-fixture-binaries
+          path: retained/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
