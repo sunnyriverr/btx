@@ -1,0 +1,86 @@
+{
+  "name": "Wallet re-lock candidate btxd dry run",
+  "on": {
+    "push": {
+      "branches": [
+        "codex/ci-wallet-relock-dry-run"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "read",
+    "actions": "read"
+  },
+  "concurrency": {
+    "group": "wallet-relock-dry-run",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "qualify": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 40,
+      "steps": [
+        {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "persist-credentials": false,
+            "fetch-depth": 1
+          }
+        },
+        {
+          "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "with": {
+            "repository": "btxchain/btx",
+            "ref": "7d65025bb3bff27e4f6c2fdc95f33e4b859a2df5",
+            "path": "current-reference",
+            "persist-credentials": false,
+            "fetch-depth": 1
+          }
+        },
+        {
+          "name": "Verify and restore retained checkpoint on Linux",
+          "timeout-minutes": 12,
+          "run": "python3 -B proposal/stage.py",
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          }
+        },
+        {
+          "name": "Verify stock 7d65025b source and preserve unchanged timestamps",
+          "timeout-minutes": 3,
+          "run": "python3 -B proposal/sync-source.py"
+        },
+        {
+          "name": "Apply and verify the three-file candidate patch",
+          "run": "git apply --check --directory=product proposal/relock-retry.patch\ngit apply --directory=product proposal/relock-retry.patch\nsha256sum proposal/relock-retry.patch > records/patch.sha256"
+        },
+        {
+          "name": "Verify and install complete signed Ubuntu prerequisites",
+          "timeout-minutes": 13,
+          "run": "docker run -d --cpus=2 --memory=7g --name presync-7d65025b-build --init -v \"$GITHUB_WORKSPACE:$GITHUB_WORKSPACE\" -w \"$GITHUB_WORKSPACE\" -e GITHUB_WORKSPACE -v /etc/ssl/certs/ca-certificates.crt:/ubuntu-host-ca.pem:ro ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11 sleep infinity\ndocker exec presync-7d65025b-build bash proposal/ubuntu-prerequisites.sh"
+        },
+        {
+          "name": "Configure and inspect btxd dry run only",
+          "timeout-minutes": 15,
+          "run": "docker exec presync-7d65025b-build bash -c \"bash proposal/setup.sh && bash proposal/configure-dry-run.sh\""
+        },
+        {
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always()",
+          "with": {
+            "name": "wallet-relock-dry-run-records",
+            "path": "records/",
+            "retention-days": 14,
+            "if-no-files-found": "error"
+          }
+        },
+        {
+          "name": "Remove only owned test container",
+          "if": "always()",
+          "run": "docker rm -f presync-7d65025b-build >/dev/null 2>&1; test -z \"$(docker ps -aq --filter name=^/presync-7d65025b-build$)\""
+        }
+      ],
+      "if": "github.repository == 'sunnyriverr/btx'"
+    }
+  }
+}
