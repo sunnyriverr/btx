@@ -370,12 +370,13 @@ def run():
             assert int(eth('eth_getBlockByNumber', 'latest', False)['timestamp'], 16) == eth_after
             a.mine(20, sink)
             synced(a, b)
-        eth_funds = [op['txid'] for op in ops(b, sid, 'fund')
-                     if op['asset'] == eid and op['state'] == 'broadcast']
         lock = maker_state.get('refs', {}).get('b')
-        if native_ref and lock and eth_funds:
-            assert eth_funds == [lock['txid']]
-            break
+        if native_ref and lock:
+            eth_funds = [op['txid'] for op in ops(b, sid, 'fund')
+                         if op['asset'] == eid and op['state'] == 'broadcast']
+            if eth_funds:
+                assert eth_funds == [lock['txid']]
+                break
         time.sleep(0.5)
     else:
         raise TimeoutError('original old-build funding did not reach the upgrade cut')
