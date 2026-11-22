@@ -1,0 +1,41 @@
+name: Normal fresh-node header sync at 7d65025b
+on:
+  push:
+    branches: [codex/ci-linux-7d65025b-presync-sync]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: linux-7d65025b-presync-sync
+  cancel-in-progress: false
+jobs:
+  observe:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Verify full checkpoint and daemon bytes
+        timeout-minutes: 8
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: /usr/bin/python3 -B stage.py
+      - name: Verify Linux loader
+        timeout-minutes: 5
+        run: |
+          test "$(uname -m)" = x86_64
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libpython3.12t64 libzmq5 libevent-core-2.1-7t64 libevent-extra-2.1-7t64 libevent-pthreads-2.1-7t64
+          ldd ./btxd | tee receipt/btxd.ldd
+          ! grep -q 'not found' receipt/btxd.ldd
+      - name: Observe one bounded ordinary sync
+        timeout-minutes: 22
+        run: /usr/bin/python3 -B observe.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: fresh-node-header-sync-receipt
+          path: receipt/
+          retention-days: 14
