@@ -1,0 +1,81 @@
+--- a/contrib/faststart/btx-agent-setup.py
++++ b/contrib/faststart/btx-agent-setup.py
+@@ -426,7 +426,7 @@
+         print(f"warning: codesign failed for {failure}", file=sys.stderr)
+ 
+ 
+-def install_archive(archive_path: Path, install_dir: Path, *, force: bool) -> None:
++def install_archive(archive_path: Path, install_dir: Path, *, force: bool) -> tuple[Path, Path]:
+     parent_dir = install_dir.parent
+     parent_dir.mkdir(parents=True, exist_ok=True)
+     def check_destination() -> bool:
+@@ -448,6 +448,8 @@
+     previous = workspace / "previous"
+     try:
+         extract_archive(archive_path, staged)
++        daemon = find_binary(staged, ("btxd", "btxd.exe")).relative_to(staged)
++        cli = find_binary(staged, ("btx-cli", "btx-cli.exe")).relative_to(staged)
+         if check_destination():
+             install_dir.replace(previous)
+         staged.replace(install_dir)
+@@ -458,6 +460,7 @@
+         shutil.rmtree(workspace, ignore_errors=True)
+         raise
+     shutil.rmtree(workspace)
++    return install_dir / daemon, install_dir / cli
+ 
+ 
+ def find_binary(install_dir: Path, names: tuple[str, ...]) -> Path:
+@@ -807,11 +810,8 @@
+             headers=github_asset_headers,
+         )
+ 
+-    install_archive(archive_path, install_dir, force=args.force)
++    btxd_path, btx_cli_path = install_archive(archive_path, install_dir, force=args.force)
+     adhoc_codesign_macos_binaries(install_dir)
+-
+-    btxd_path = find_binary(install_dir, ("btxd", "btxd.exe"))
+-    btx_cli_path = find_binary(install_dir, ("btx-cli", "btx-cli.exe"))
+ 
+     summary: dict[str, Any] = {
+         "manifest_source": manifest_source,
+--- a/test/util/btx_agent_setup_test.py
++++ b/test/util/btx_agent_setup_test.py
+@@ -1240,5 +1240,37 @@
+                 self.assertEqual(list(root.glob("install.*")), [])
+ 
+ 
++    def test_missing_required_launcher_preserves_existing_install(self):
++        for missing in ("btxd", "btx-cli"):
++            with self.subTest(missing=missing), tempfile.TemporaryDirectory() as tmpdir:
++                root = pathlib.Path(tmpdir)
++                complete = self._build_fake_archive(root)
++                install_dir = root / "install"
++                self.module.install_archive(complete, install_dir, force=False)
++                old_bin = install_dir / "btx-29.2" / "bin"
++                for launcher in ("btxd", "btx-cli"):
++                    (old_bin / launcher).write_text(f"previous-{launcher}\n", encoding="utf-8")
++
++                incomplete = root / "incomplete.tar.gz"
++                package = root / "package" / "btx-29.2"
++                (package / "bin" / missing).unlink()
++                with tarfile.open(incomplete, "w:gz") as archive:
++                    archive.add(package, arcname=package.name)
++
++                with self.assertRaisesRegex(FileNotFoundError, f"could not find any of {missing},"):
++                    self.module.install_archive(incomplete, install_dir, force=True)
++                for launcher in ("btxd", "btx-cli"):
++                    self.assertEqual(
++                        (old_bin / launcher).read_text(encoding="utf-8"),
++                        f"previous-{launcher}\n",
++                    )
++                self.assertEqual(list(root.glob("install.*")), [])
++
++                daemon, cli = self.module.install_archive(complete, install_dir, force=True)
++                self.assertEqual((daemon, cli), (old_bin / "btxd", old_bin / "btx-cli"))
++                self.assertTrue(daemon.is_file())
++                self.assertTrue(cli.is_file())
++
++
+ if __name__ == "__main__":
+     unittest.main()
