@@ -47,8 +47,7 @@ ENABLE_MODELNET=true
 CFG
 status=0
 timeout --kill-after=10s 150s /usr/bin/python3 "$fixture" --configfile="$scratch/config.ini" \
-    --bitcoind="$scratch/pkg/btx-0.34.17/bin/btxd" \
-    --bitcoincli="$scratch/pkg/btx-0.34.17/bin/btx-cli" --tmpdir="$scratch/state" --nocleanup \
+    --tmpdir="$scratch/state" --nocleanup \
     > evidence/functional.log 2>&1 || status=$?
 printf '%s\n' "$status" > evidence/functional-exit.txt
 if [[ -f "$scratch/state/partial-retry-result.json" ]]; then
