@@ -4,6 +4,7 @@ import json
 import os
 from pathlib import Path, PurePosixPath
 import shutil
+import signal
 import tarfile
 import tempfile
 import sys
@@ -59,7 +60,24 @@ def main():
     workspace = Path(os.environ['GITHUB_WORKSPACE']).resolve()
     records = Path(os.environ['RECORDS']).resolve()
     result = {'status': 'FAIL_RESTORE', 'phase': 'admission', 'executed_cache': False}
+    def save():
+        temporary = records / 'restore-result.tmp'
+        temporary.write_text(json.dumps(result, indent=2) + '\n')
+        temporary.replace(records / 'restore-result.json')
+        print(json.dumps({'restore_phase': result['phase'],
+                          'verified_files': result.get('files_verified', 0)}), flush=True)
+    def phase(label):
+        result['phase'] = label
+        save()
+    def interrupted(signum, frame):
+        for sig in (signal.SIGINT, signal.SIGTERM):
+            signal.signal(sig, signal.SIG_IGN)
+        result['interrupt_signal'] = signum
+        raise InterruptedError('restore interrupted')
+    for sig in (signal.SIGINT, signal.SIGTERM):
+        signal.signal(sig, interrupted)
     try:
+        save()
         require(str(workspace) == PIN['producer_workspace'], 'workspace prefix differs')
         require(all(not (workspace / root).exists() and not (workspace / root).is_symlink()
                     for root in ROOTS), 'restore roots already exist')
@@ -70,7 +88,7 @@ def main():
                 and meta['digest'] == 'sha256:' + PIN['outer_sha256'], 'artifact metadata mismatch')
         with tempfile.TemporaryDirectory(prefix='atlas905-download-', dir=os.environ['RUNNER_TEMP']) as temp:
             archive = Path(temp) / 'artifact.zip'
-            result['phase'] = 'download'
+            phase('download')
             count = 0
             with request('actions/artifacts/' + str(PIN['artifact']) + '/zip') as response, archive.open('xb') as output:
                 for block in iter(lambda: response.read(1024 * 1024), b''):
@@ -100,7 +118,7 @@ def main():
                 require(row['mode'] in {'0o600', '0o640', '0o644', '0o755'}
                         and type(row['mtime_ns']) is int and 0 <= row['mtime_ns'] <= 2**63 - 1
                         and len(row['sha256']) == 64, 'manifest fields')
-            result['phase'] = 'tar admission'
+            phase('tar admission')
             entries = {}
             with tarfile.open(inner, 'r:gz') as tar:
                 for member in tar:
@@ -128,43 +146,76 @@ def main():
                         raise ValueError('legacy unmanifested symlink requires review')
                     require(total <= PIN['limits']['max_restored_bytes'], 'restored byte bound')
                 require(shutil.disk_usage(workspace).free >= total + PIN['limits']['reserve_bytes'], 'restore capacity')
-                result['phase'] = 'restore'
-                owned = {'workspace': str(workspace), 'artifact': PIN['artifact'], 'roots': []}
-                marker = records / 'owned-roots.json'
-                marker.write_text(json.dumps(owned) + '\n')
-                for root in sorted(ROOTS):
-                    (workspace / root).mkdir(exist_ok=False)
-                    owned['roots'].append(root)
-                    temporary = marker.with_suffix('.tmp')
-                    try:
-                        temporary.write_text(json.dumps(owned) + '\n')
-                        temporary.replace(marker)
-                    except Exception:
-                        # This root was just created and is still empty.
-                        (workspace / root).rmdir()
-                        raise
-                for name in sorted(regular, key=lambda k: entries[k].islnk()):
-                    member = entries[name]
-                    target = workspace / name
-                    target.parent.mkdir(parents=True, exist_ok=True)
+            # Close the complete admission scan before reading data. A second
+            # forward-only stream keeps decompression linear in archive size.
+            phase('restore regular files')
+            owned = {'workspace': str(workspace), 'artifact': PIN['artifact'], 'roots': []}
+            marker = records / 'owned-roots.json'
+            marker.write_text(json.dumps(owned) + '\n')
+            for root in sorted(ROOTS):
+                (workspace / root).mkdir(exist_ok=False)
+                owned['roots'].append(root)
+                temporary = marker.with_suffix('.tmp')
+                try:
+                    temporary.write_text(json.dumps(owned) + '\n')
+                    temporary.replace(marker)
+                except Exception:
+                    # This root was just created and is still empty.
+                    (workspace / root).rmdir()
+                    raise
+            restored = set()
+            deferred_links = []
+            seen = set()
+            result['files_verified'] = 0
+            def finish_file(name, target):
+                require(digest(target) == rows[name]['sha256'], 'restored member integrity')
+                target.chmod(int(rows[name]['mode'], 8))
+                os.utime(target, ns=(rows[name]['mtime_ns'], rows[name]['mtime_ns']))
+                restored.add(name)
+                result['files_verified'] = len(restored)
+                if len(restored) % 500 == 0:
+                    save()
+            with tarfile.open(inner, 'r|gz') as tar:
+                for member in tar:
+                    require(member.name in entries and member.name not in seen,
+                            'stream member set differs')
+                    seen.add(member.name)
+                    admitted = entries[member.name]
+                    require((member.type, member.size, member.linkname) ==
+                            (admitted.type, admitted.size, admitted.linkname),
+                            'stream member identity differs')
+                    if member.isdir():
+                        continue
                     if member.islnk():
-                        with (workspace / member.linkname).open('rb') as source, target.open('xb') as output:
-                            shutil.copyfileobj(source, output, 1024 * 1024)
-                    else:
-                        with tar.extractfile(member) as source, target.open('xb') as output:
-                            shutil.copyfileobj(source, output, 1024 * 1024)
-                    require(digest(target) == rows[name]['sha256'], 'restored member integrity')
-                    target.chmod(int(rows[name]['mode'], 8))
-                    os.utime(target, ns=(rows[name]['mtime_ns'], rows[name]['mtime_ns']))
+                        deferred_links.append(member.name)
+                        continue
+                    require(member.isfile(), 'stream member type')
+                    target = workspace / member.name
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    with tar.extractfile(member) as source, target.open('xb') as output:
+                        shutil.copyfileobj(source, output, 1024 * 1024)
+                    finish_file(member.name, target)
+            require(seen == set(entries), 'stream missing admitted member')
+            phase('restore hardlink copies')
+            for name in deferred_links:
+                member = entries[name]
+                require(member.linkname in restored, 'hardlink target not restored')
+                target = workspace / name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                with (workspace / member.linkname).open('rb') as source, target.open('xb') as output:
+                    shutil.copyfileobj(source, output, 1024 * 1024)
+                finish_file(name, target)
+            require(restored == set(rows), 'restored member set differs')
             # Receipt needed for the next step; no credentials or URLs retained.
             (records / 'restore-manifest.json').write_bytes(manifest_bytes)
             result.update(status='PASS_RESTORE_ONLY', phase='complete', files_verified=len(rows),
                           plain_bytes=total, outer_sha256=PIN['outer_sha256'], inner_sha256=PIN['inner_sha256'])
     except Exception as error:
+        result['status'] = 'FAIL_RESTORE'
         result['error_class'] = type(error).__name__
         return 1
     finally:
-        (records / 'restore-result.json').write_text(json.dumps(result, indent=2) + '\n')
+        save()
     return 0
 
 
