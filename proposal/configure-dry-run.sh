@@ -40,7 +40,7 @@ timeout 240 /usr/local/bin/cmake -S "$GITHUB_WORKSPACE/product" -B "$build" \
     > "$records/configure.log" 2>&1 || { tail -65 "$records/configure.log"; exit 1; }
 test ! -s "$records/compiler-refusals.log"
 cd "$build"
-timeout 120 /usr/local/bin/ninja -n -d explain btxd btx-cli > "$records/ninja-dry-run.log" 2>&1 \
+timeout 120 /usr/local/bin/ninja -n -d explain btxd > "$records/ninja-dry-run.log" 2>&1 \
     || { tail -65 "$records/ninja-dry-run.log"; exit 1; }
 test ! -s "$records/compiler-refusals.log"
 grep -q 'Linking CXX executable bin/btxd' "$records/ninja-dry-run.log"

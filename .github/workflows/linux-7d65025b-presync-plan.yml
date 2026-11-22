@@ -1,9 +1,9 @@
 {
-  "name": "Linux f9ba1128 daemon and CLI dry run only",
+  "name": "Linux 7d65025b daemon-only dry run",
   "on": {
     "push": {
       "branches": [
-        "codex/ci-linux-f9ba1128-eth-plan"
+        "codex/ci-linux-7d65025b-presync-plan"
       ]
     }
   },
@@ -12,7 +12,7 @@
     "actions": "read"
   },
   "concurrency": {
-    "group": "linux-f9ba1128-eth-plan",
+    "group": "linux-7d65025b-presync-plan",
     "cancel-in-progress": false
   },
   "jobs": {
@@ -31,7 +31,7 @@
           "uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
           "with": {
             "repository": "btxchain/btx",
-            "ref": "f9ba112822c0089ae2fc3bb5f71e1a28c7cf0302",
+            "ref": "7d65025bb3bff27e4f6c2fdc95f33e4b859a2df5",
             "path": "current-reference",
             "persist-credentials": false,
             "fetch-depth": 1
@@ -46,25 +46,25 @@
           }
         },
         {
-          "name": "Verify stock f9ba1128 source and preserve unchanged timestamps",
+          "name": "Verify stock 7d65025b source and preserve unchanged timestamps",
           "timeout-minutes": 3,
           "run": "python3 -B proposal/sync-source.py"
         },
         {
           "name": "Verify and install complete signed Ubuntu prerequisites",
           "timeout-minutes": 13,
-          "run": "docker run -d --cpus=2 --memory=7g --name eth-f9ba1128-plan --init -v \"$GITHUB_WORKSPACE:$GITHUB_WORKSPACE\" -w \"$GITHUB_WORKSPACE\" -e GITHUB_WORKSPACE -v /etc/ssl/certs/ca-certificates.crt:/ubuntu-host-ca.pem:ro ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11 sleep infinity\ndocker exec eth-f9ba1128-plan bash proposal/ubuntu-prerequisites.sh"
+          "run": "docker run -d --cpus=2 --memory=7g --name presync-7d65025b-plan --init -v \"$GITHUB_WORKSPACE:$GITHUB_WORKSPACE\" -w \"$GITHUB_WORKSPACE\" -e GITHUB_WORKSPACE -v /etc/ssl/certs/ca-certificates.crt:/ubuntu-host-ca.pem:ro ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11 sleep infinity\ndocker exec presync-7d65025b-plan bash proposal/ubuntu-prerequisites.sh"
         },
         {
-          "name": "Configure and inspect btxd and btx-cli dry run only",
+          "name": "Configure and inspect btxd dry run only",
           "timeout-minutes": 9,
-          "run": "docker exec eth-f9ba1128-plan bash -c \"bash proposal/setup.sh && bash proposal/configure-dry-run.sh\""
+          "run": "docker exec presync-7d65025b-plan bash -c \"bash proposal/setup.sh && bash proposal/configure-dry-run.sh\""
         },
         {
           "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
           "if": "always()",
           "with": {
-            "name": "linux-f9ba1128-eth-plan-records",
+            "name": "linux-7d65025b-presync-plan-records",
             "path": "records/",
             "retention-days": 14,
             "if-no-files-found": "error"
@@ -73,7 +73,7 @@
         {
           "name": "Remove only owned test container",
           "if": "always()",
-          "run": "docker rm -f eth-f9ba1128-plan >/dev/null 2>&1; test -z \"$(docker ps -aq --filter name=^/eth-f9ba1128-plan$)\""
+          "run": "docker rm -f presync-7d65025b-plan >/dev/null 2>&1; test -z \"$(docker ps -aq --filter name=^/presync-7d65025b-plan$)\""
         }
       ],
       "if": "github.repository == 'sunnyriverr/btx'"

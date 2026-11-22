@@ -13,7 +13,7 @@ from checkpoint import sha
 workspace = Path(os.environ["GITHUB_WORKSPACE"])
 root = workspace / "product"
 records = workspace / "records"
-head = "f9ba112822c0089ae2fc3bb5f71e1a28c7cf0302"
+head = "7d65025bb3bff27e4f6c2fdc95f33e4b859a2df5"
 assert workspace == Path("/home/runner/work/btx/btx")
 assert json.loads((records / "staging.json").read_text())["complete"]
 git = ["git", "-C", str(workspace / "current-reference")]
@@ -41,7 +41,7 @@ for name, (mode, expected) in tree.items():
         data = None
     if data is None or blob_id(data) != expected:
         changes[name] = {"target_blob": expected}
-assert len(changes) == 24, sorted(changes)
+assert set(changes) == {"src/headerssync.cpp", "doc/release-notes-0.34.17.md", "test/functional/wallet_btxwallet.py"}, sorted(changes)
 (records / "source-delta.json").write_text(json.dumps(changes, sort_keys=True, indent=2) + "\n")
 for name, row in changes.items():
     target = root / name

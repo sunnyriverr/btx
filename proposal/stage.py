@@ -3,7 +3,7 @@ import hashlib,json,os,subprocess,tarfile,urllib.request,urllib.parse,zipfile
 from pathlib import Path
 from checkpoint import restore_timestamps,verify_restored,sha
 w=Path(os.environ['GITHUB_WORKSPACE']);out=w/'records';out.mkdir(exist_ok=True)
-r={'complete':False,'native_execution':False,'artifact':14707154639}
+r={'complete':False,'native_execution':False,'artifact':14730598159}
 def save():(out/'staging.json').write_text(json.dumps(r,indent=2)+'\n')
 class SafeRedirect(urllib.request.HTTPRedirectHandler):
  def redirect_request(self,req,fp,code,msg,headers,url):
@@ -11,13 +11,13 @@ class SafeRedirect(urllib.request.HTTPRedirectHandler):
   if urllib.parse.urlsplit(req.full_url).netloc!=urllib.parse.urlsplit(url).netloc:x.remove_header('Authorization')
   return x
 try:
- req=urllib.request.Request('https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14707154639/zip',headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'User-Agent':'btx-upload-staging'})
+ req=urllib.request.Request('https://api.github.com/repos/sunnyriverr/btx/actions/artifacts/14730598159/zip',headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'User-Agent':'btx-upload-staging'})
  assert not any((w/name).exists() for name in ('product','gui-pilot-runtime','saved','checkpoint.zip'))
  archive=w/'checkpoint.zip';size=0;h=hashlib.sha256()
  with urllib.request.build_opener(SafeRedirect()).open(req,timeout=90) as src,archive.open('wb') as dest:
   while chunk:=src.read(1024*1024):
    size+=len(chunk);assert size<=600*1024**2;h.update(chunk);dest.write(chunk)
- assert size==563352653 and h.hexdigest()=='f33df5cbed3f630d3cc331ad1f00446ec6a4a26a13dbb2deec2ac4f6a9076130'
+ assert size==563328307 and h.hexdigest()=='2e87d1c890a04058c7f0dd0b12e7b5e27cbb34173e1b6db1c564f000678a3633'
  r['zip_sha256']=h.hexdigest();r['zip_bytes']=size;save()
  saved=w/'saved';saved.mkdir()
  with zipfile.ZipFile(archive) as z:
@@ -27,11 +27,11 @@ try:
   z.extractall(saved)
  archive.unlink()
  m=json.loads((saved/'manifest.json').read_text());tar=saved/'build-state.tar.gz'
- assert m['identity']['source']=='2c4da891f0089ebc0fb082e65d03a4efda4488a3'
+ assert m['identity']['source']=='f9ba112822c0089ae2fc3bb5f71e1a28c7cf0302'
  assert m['identity']['target_build_complete'] is True
  assert m['identity']['ninja_exit']==0 and m['identity']['targets']==['btxd','btx-cli']
- assert len(m['rows'])==23890
- assert sha(tar)==m['archive_sha256']=='9c982b364a708389c9edc503475feeae16ba9d93d83e1937b3e4efb554309df4'
+ assert len(m['rows'])==23893
+ assert sha(tar)==m['archive_sha256']=='64e9cd620d4567fe291f3f4e65497798358d975798348aec9c364f2c5596cbb7'
  assert m['workspace']==str(w)
  with tarfile.open(tar) as t:t.extractall(w,filter='data')
  restore_timestamps(w,m);verify_restored(w,m)
