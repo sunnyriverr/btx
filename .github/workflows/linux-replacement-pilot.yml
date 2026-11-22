@@ -1,0 +1,117 @@
+name: Session 3 active P2MR pair recovery qualification
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: session3-wallet-active-pair-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  qualification:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      PROPOSAL: ${{ github.workspace }}/contrib/devtools/session3-wallet-active-pair
+      RECORDS: ${{ runner.temp }}/session3-wallet-active-pair-records
+      BINARIES: ${{ runner.temp }}/session3-wallet-active-pair-binaries
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Fetch only the reviewed controller and workflow
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /.github/workflows/linux-replacement-pilot.yml
+            /contrib/devtools/session3-wallet-active-pair/
+      - name: Fetch immutable matching framework sources
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: f9ba112822c0089ae2fc3bb5f71e1a28c7cf0302
+          path: product
+          persist-credentials: false
+          sparse-checkout: |
+            test/functional/test_framework
+            test/config.ini.in
+            share/rpcauth
+      - name: Admit the Linux runtime without building BTX
+        timeout-minutes: 5
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir "$RECORDS"
+          cat /etc/os-release > "$RECORDS/os-release.txt"
+          uname -a > "$RECORDS/uname.txt"
+          df -k "$RUNNER_TEMP" > "$RECORDS/disk.txt"
+          python3 - <<'PY'
+          import platform, shutil, sys
+          from pathlib import Path
+          data = dict(line.split('=', 1) for line in Path('/etc/os-release').read_text().splitlines() if '=' in line)
+          assert data['ID'].strip('"') == 'ubuntu' and data['VERSION_ID'].strip('"') == '24.04'
+          assert platform.machine() == 'x86_64'
+          assert sys.version_info[:2] == (3, 12)
+          assert shutil.disk_usage('.').free >= 3 * 1024 ** 3
+          PY
+          sudo timeout --kill-after=10s 120s apt-get update > "$RECORDS/apt-update.log" 2>&1
+          sudo timeout --kill-after=10s 120s apt-get install --no-install-recommends -y \
+            python3.12 libpython3.12t64 libsqlite3-0 libzmq5 libgomp1 \
+            libevent-core-2.1-7t64 libevent-extra-2.1-7t64 libevent-pthreads-2.1-7t64 \
+            > "$RECORDS/apt-install.log" 2>&1
+          python3 --version > "$RECORDS/python-version.txt"
+          dpkg-query -W libpython3.12t64 libsqlite3-0 libzmq5 libgomp1 \
+            libevent-core-2.1-7t64 libevent-extra-2.1-7t64 libevent-pthreads-2.1-7t64 \
+            > "$RECORDS/runtime-packages.txt"
+      - name: Restore only the retained digest-pinned executables
+        timeout-minutes: 7
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --kill-after=10s 360s python3 -B "$PROPOSAL/restore_binaries.py" \
+            --output "$BINARIES" --records "$RECORDS"
+          file "$BINARIES/btxd" "$BINARIES/btx-cli" > "$RECORDS/binary-types.txt"
+          ldd "$BINARIES/btxd" > "$RECORDS/btxd-ldd.txt"
+          ldd "$BINARIES/btx-cli" > "$RECORDS/btx-cli-ldd.txt"
+          if grep -q 'not found' "$RECORDS/btxd-ldd.txt" "$RECORDS/btx-cli-ldd.txt"; then
+            exit 1
+          fi
+      - name: Qualify the actual framework entry without starting nodes
+        timeout-minutes: 1
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --kill-after=5s 30s python3 -B "$PROPOSAL/framework-preflight.py" \
+            --source "$GITHUB_WORKSPACE/product" --fixture "$PROPOSAL/wallet_active_pair_recovery.py" \
+            --build-root "$BINARIES/.." --output "$RECORDS/framework-construction.json"
+      - name: Run the single bounded disposable regtest case
+        timeout-minutes: 17
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --kill-after=30s 960s python3 -B "$PROPOSAL/run_qualification.py" \
+            --source "$GITHUB_WORKSPACE/product" --binaries "$BINARIES" \
+            --records "$RECORDS" --packet-repository "$GITHUB_WORKSPACE"
+      - name: Remove only this job's restored binaries
+        if: always()
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os, shutil
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']).resolve()
+          binaries = Path(os.environ['BINARIES']).resolve()
+          assert binaries.parent == root and binaries.name == 'session3-wallet-active-pair-binaries'
+          shutil.rmtree(binaries, ignore_errors=True)
+          PY
+      - name: Preserve sanitized admission and result records
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: session3-wallet-active-pair-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/session3-wallet-active-pair-records
+          if-no-files-found: error
+          retention-days: 14
