@@ -352,8 +352,10 @@ def run():
                 assert funding.get('confirmations',0)==0 and not view(a,sid)['secret_exposed']
                 a.stop();save('maker native funding proved; taker stopped before confirmation')
                 result['native_refund']=native_refund(native_terms,native_ref,b,sid,sink,before[b.name]);return
-        eth_funds = [op['txid'] for op in ops(b, sid, 'fund')
-                     if op['asset'] == eid and op['state'] == 'broadcast']
+        eth_funds = []
+        if not upgraded and native_ref and states[b.name]:
+            eth_funds = [op['txid'] for op in ops(b, sid, 'fund')
+                         if op['asset'] == eid and op['state'] == 'broadcast']
         if native_ref and eth_funds and not upgraded:
             assert len(eth_funds) == 1
             original_eth_fund = eth_funds[0]
