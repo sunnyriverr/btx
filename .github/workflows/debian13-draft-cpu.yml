@@ -1,0 +1,55 @@
+name: Debian 13 amd64 draft CPU archive smoke
+on:
+  push:
+    branches: [codex/ci-debian13-draft-cpu]
+permissions:
+  contents: read
+concurrency:
+  group: debian13-draft-cpu
+  cancel-in-progress: false
+jobs:
+  smoke:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Verify published CPU archive
+        timeout-minutes: 4
+        run: |
+          mkdir -p receipt inputs
+          asset=btx-0.34.17-x86_64-linux-gnu.tar.gz
+          curl --fail --silent --show-error --location --max-time 150 \
+            "https://github.com/btxchain/btx/releases/download/v0.34.17/$asset" \
+            --output "inputs/$asset"
+          test "$(stat -c %s "inputs/$asset")" = 99485740
+          (
+            cd inputs
+            printf '%s  %s\n' 1e60e4be26cc1ae14045e5299e891f8b30d8b7db0e24cf881bd2eb68811aaa4e "$asset" | sha256sum --check
+            sha256sum "$asset" > ../receipt/archive.sha256
+          )
+      - name: Start once, check RPC and stop on clean Debian
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          test "$(uname -m)" = x86_64
+          docker pull --platform linux/amd64 debian:13-slim
+          image=$(docker image inspect --format '{{.Id}}' debian:13-slim)
+          docker image inspect --format '{{.Os}}/{{.Architecture}} {{.Id}} {{json .RepoDigests}}' "$image" | tee receipt/image.txt
+          name="btx-debian13-cpu-${GITHUB_RUN_ID}"
+          trap 'docker rm -f "$name" >/dev/null 2>&1 || true' EXIT
+          docker run --rm --name "$name" --platform linux/amd64 --network none \
+            --cap-drop ALL --security-opt no-new-privileges --user "$(id -u):$(id -g)" \
+            -v "$PWD/inputs:/input:ro" -v "$PWD/receipt:/receipt" \
+            -v "$PWD/smoke.sh:/smoke.sh:ro" "$image" bash /smoke.sh \
+            2>&1 | tee receipt/container.log
+          jq -e '.chain == "regtest" and .blocks == 0' receipt/getblockchaininfo.json >/dev/null
+          grep -Fx 'PASS: regtest RPC and clean shutdown' receipt/verdict.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: debian13-draft-cpu-receipt
+          path: receipt/
+          retention-days: 14
