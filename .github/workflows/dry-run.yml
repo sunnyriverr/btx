@@ -1,0 +1,38 @@
+name: Mac ARM shielded fixture restore and dry run
+on:
+  push:
+    branches: [codex/ci-mac-arm-7d65025b-shielded-fixture-plan]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  dry-run:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: macos-15
+    timeout-minutes: 22
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+      HOMEBREW_NO_AUTO_UPDATE: '1'
+      HOMEBREW_NO_INSTALL_UPGRADE: '1'
+      HOMEBREW_NO_INSTALL_CLEANUP: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 7d65025bb3bff27e4f6c2fdc95f33e4b859a2df5
+          path: product
+          persist-credentials: false
+      - name: Restore and inspect the three targets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 plan.py
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: mac-arm-7d65025b-shielded-fixture-plan
+          path: records/
+          if-no-files-found: error
+          retention-days: 7
