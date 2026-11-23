@@ -1,0 +1,138 @@
+--- a/src/modelnet/catalog.cpp
++++ b/src/modelnet/catalog.cpp
+@@ -948,6 +948,33 @@
+         }
+         if (found) {
+             CatalogEntry& m = *found;
++            if (!m.incomplete && !m_active_artifacts.count(artifact_id)) {
++                for (uint32_t i = 0; i < cores.size(); ++i) {
++                    PieceIndex staged_index, existing_index;
++                    // Recovery here applies only to the existing, matching piece layout.
++                    std::string index_error;
++                    try {
++                        if (!m_store.LoadPieceIndex(staging, i, staged_index, index_error) ||
++                            !m_store.LoadPieceIndex(artifact_id, i, existing_index, index_error) ||
++                            staged_index.file_size != existing_index.file_size ||
++                            staged_index.pieces_root != existing_index.pieces_root ||
++                            staged_index.leaves != existing_index.leaves) continue;
++                    } catch (const std::runtime_error&) {
++                        continue;
++                    }
++
++                    std::vector<unsigned char> existing;
++                    std::vector<unsigned char> verified;
++                    for (uint32_t piece = 0; piece < staged_index.leaves.size(); ++piece) {
++                        std::string read_error;
++                        if (!m_store.GetPiece(artifact_id, i, piece, existing, read_error) ||
++                            ChunkLeaf(piece, existing) == staged_index.leaves[piece]) continue;
++                        if (!m_store.GetPiece(staging, i, piece, verified, err) ||
++                            !m_store.RepairLocalImportPiece(artifact_id, i, piece, verified,
++                                                           staged_index.leaves[piece], err)) return false;
++                    }
++                }
++            }
+             const bool promote_pin = pin && !m.pinned;
+             if (m.source_path != path || promote_pin || !dropped.empty()) {
+                 const auto previous_source_path = m.source_path;
+--- a/src/modelnet/store.cpp
++++ b/src/modelnet/store.cpp
+@@ -312,6 +312,31 @@
+         return false;
+     }
+     m_quota.used_bytes += bytes.size();
++    return true;
++}
++
++bool ModelStore::RepairLocalImportPiece(const Digest48& artifact, uint32_t file_index, uint32_t piece_index,
++                                      Span<const unsigned char> bytes, const Digest48& expected_leaf,
++                                      std::string& err)
++{
++    if (ChunkLeaf(piece_index, bytes) != expected_leaf) {
++        err = "local repair piece does not match its index";
++        return false;
++    }
++    const fs::path path = ArtifactDir(m_root, artifact) / std::to_string(file_index).c_str() /
++                          (std::to_string(piece_index) + ".piece").c_str();
++    std::error_code ec;
++    if (!std::filesystem::is_regular_file(std::filesystem::symlink_status(path, ec)) || ec ||
++        std::filesystem::file_size(path, ec) != bytes.size() || ec) {
++        err = "local repair requires an existing piece of the expected size";
++        return false;
++    }
++    const std::string_view contents{reinterpret_cast<const char*>(bytes.data()), bytes.size()};
++    fs::create_directories(m_root / "tmp");
++    if (!WriteBinaryFileAtomically(path, contents, m_root / "tmp")) {
++        err = "local repair piece write failed";
++        return false;
++    }
+     return true;
+ }
+ 
+--- a/src/modelnet/store.h
++++ b/src/modelnet/store.h
+@@ -66,6 +66,10 @@
+     uint64_t QuotaBytes() const { return m_quota.max_bytes; }
+     bool PutVerifiedPiece(const Digest48& artifact, uint32_t file_index, uint32_t piece_index,
+                            Span<const unsigned char> bytes, const Digest48& expected_leaf, std::string& err);
++    /** Replace a same-sized damaged piece using bytes from a verified local import. */
++    bool RepairLocalImportPiece(const Digest48& artifact, uint32_t file_index, uint32_t piece_index,
++                                Span<const unsigned char> bytes, const Digest48& expected_leaf,
++                                std::string& err);
+     bool GetPiece(const Digest48& artifact, uint32_t file_index, uint32_t piece_index,
+                   std::vector<unsigned char>& out, std::string& err) const;
+     bool HasPiece(const Digest48& artifact, uint32_t file_index, uint32_t piece_index) const;
+--- a/src/test/modelnet_hosting_tests.cpp
++++ b/src/test/modelnet_hosting_tests.cpp
+@@ -1014,6 +1014,52 @@
+             BOOST_REQUIRE_MESSAGE(cat.MaterializeCheckout(original.model_id, checkout, err), err);
+             BOOST_CHECK(ReadFileBytes(checkout / "model.safetensors") == TinySafeTensors(0x91));
+         }
++    }
++}
++
++BOOST_AUTO_TEST_CASE(import_path_repairs_damaged_local_piece)
++{
++    const fs::path tmp = m_path_root / "local-copy-recovery";
++    const fs::path catalog_dir = tmp / "catalog";
++    const auto source = WriteTinyModel(tmp / "original", 0x95);
++    modelnet::ModelCatalog cat{catalog_dir, 8 << 20};
++    modelnet::CatalogEntry original;
++    std::string err;
++    BOOST_REQUIRE_MESSAGE(cat.ImportPath(fs::PathToString(source), true, original, err), err);
++    const auto control = ImportTiny(cat, tmp / "control", 0x96, false);
++    const uint64_t used = cat.Store().UsedBytes();
++    const auto expected = TinySafeTensors(0x95);
++    const auto replacement = WriteTinyModel(tmp / "recovery-copy", 0x95);
++    fs::rename(source, tmp / "offline-source");
++    // Simulate ordinary local disk damage without modifying the index or catalog.
++    const fs::path piece_path = cat.Store().Root() / "artifacts" /
++        original.artifact_id.Hex().c_str() / "0" / "0.piece";
++    BOOST_REQUIRE(ReadFileBytes(piece_path) == expected);
++    {
++        std::fstream piece(piece_path, std::ios::in | std::ios::out | std::ios::binary);
++        BOOST_REQUIRE(piece.good());
++        piece.put(static_cast<char>(expected.front() ^ 1));
++        piece.close();
++        BOOST_REQUIRE(piece.good());
++    }
++    BOOST_CHECK(!cat.VerifyFileDigest(original.artifact_id, 0, original.core.files[0].sha384, err));
++
++    modelnet::CatalogEntry recovered;
++    BOOST_REQUIRE_MESSAGE(cat.ImportPath(fs::PathToString(replacement), false, recovered, err), err);
++    BOOST_CHECK(recovered.model_id == original.model_id);
++    BOOST_CHECK(recovered.artifact_id == original.artifact_id);
++    BOOST_CHECK(recovered.pinned == original.pinned);
++    BOOST_CHECK_EQUAL(cat.Store().UsedBytes(), used);
++    BOOST_CHECK(ReadFileBytes(piece_path) == expected);
++
++    fs::rename(replacement, tmp / "offline-recovery-copy");
++    modelnet::ModelCatalog reopened{catalog_dir, 8 << 20};
++    BOOST_REQUIRE(reopened.Find(original.model_id, recovered));
++    BOOST_CHECK(recovered.pinned);
++    BOOST_CHECK(reopened.Find(control.model_id, recovered));
++    BOOST_CHECK_MESSAGE(reopened.MaterializeCheckout(original.model_id, tmp / "checkout", err), err);
++    if (fs::exists(tmp / "checkout/model.safetensors")) {
++        BOOST_CHECK(ReadFileBytes(tmp / "checkout/model.safetensors") == expected);
+     }
+ }
+ 
