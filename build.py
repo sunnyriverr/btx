@@ -1,7 +1,7 @@
 from pathlib import Path
 import os,sys,json,subprocess,tarfile,shutil,time,selectors,signal,hashlib
 from checkpoint import sha,restore_timestamps,verify_restored,create
-HEAD='d9a9480484cea303649f3eab1e82f8e3d7572c21';OLD='1e2f8b5f12295002334d3390c12cac0bb4ae2aff';ARCHIVE='4e808f8daa32bba48561d5d87b05a7743d1f0cba12d75333794f0acebdcb3013'
+HEAD='d9a9480484cea303649f3eab1e82f8e3d7572c21';OLD='7d65025bb3bff27e4f6c2fdc95f33e4b859a2df5';ARCHIVE='2fae3dc0b4b51c4c5acd08a30ec5070d4aaa2705ab7a237854158edb58db5170'
 w=Path(os.environ['GITHUB_WORKSPACE']);out=w/'records';out.mkdir(exist_ok=True);r={'source':HEAD,'checkpoint_source':OLD,'complete':False,'commands':[]};restored=False
 
 def save():(out/'build-result.json').write_text(json.dumps(r,indent=2)+'\n')
@@ -47,7 +47,9 @@ try:
    changed.append(name)
   if not a.is_symlink():os.chmod(b,a.stat().st_mode & 0o777)
   assert (b.is_symlink() and a.is_symlink() and os.readlink(a)==os.readlink(b)) or (not a.is_symlink() and sha(a)==sha(b) and (a.stat().st_mode&0o777)==(b.stat().st_mode&0o777)),name
+ assert set(changed) == {row['filename'] for row in json.loads((w/'source-delta.json').read_text())}
  r['changed_source_files']=changed;r['source_verified']=True
+ r['patch_sha256']=sha(w/'candidate.patch')
  if (source/'.git').exists():shutil.rmtree(source/'.git')
  shutil.copytree(accepted/'.git',source/'.git')
  assert 'OpenSSL 3.5.9' in run([w/'gui-pilot-runtime/openssl/bin/openssl','version'],'openssl')
