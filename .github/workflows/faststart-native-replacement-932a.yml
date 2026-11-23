@@ -1,0 +1,23 @@
+name: FastStart native CPU replacement
+on:
+  push:
+    branches: [codex/ci-faststart-native-replacement-932a]
+permissions:
+  contents: read
+jobs:
+  qualify:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Verify package and run the replacement check
+        run: timeout --kill-after=20s 12m bash smoke.sh
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: faststart-native-replacement-receipt
+          path: records/
+          retention-days: 14
