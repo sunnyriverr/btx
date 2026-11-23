@@ -71,9 +71,9 @@ stop() {
     pid=
 }
 start install
-"${cli[@]}" createwallet fixture > "$records/wallet.json"
-addr=$("${cli[@]}" -rpcwallet=fixture getnewaddress)
-"${cli[@]}" generatetoaddress 1 "$addr" > "$records/minted.json"
+"${cli[@]}" -rpcclienttimeout=45 createwallet fixture > "$records/wallet.json"
+addr=$("${cli[@]}" -rpcclienttimeout=30 -rpcwallet=fixture getnewaddress)
+"${cli[@]}" -rpcclienttimeout=90 generatetoaddress 1 "$addr" > "$records/minted.json"
 "${cli[@]}" getblockchaininfo > "$records/before.json"
 jq -e '.blocks == 1 and (.bestblockhash | length == 64)' "$records/before.json" >/dev/null
 stop
