@@ -1,0 +1,82 @@
+{
+  "btx-hcpd -version": {
+    "exit": 0,
+    "stdout": "btx-hcpd 0.34.8-dev HCP/1+CR11+CR12\n",
+    "stderr": ""
+  },
+  "btx-hcpd --help": {
+    "exit": 0,
+    "stdout": "",
+    "stderr": "btx-hcpd \u2014 Hosted Control Plane gateway (0.34.8-dev)\nLoopback HTTP only. Not consensus. Not a wallet proxy.\n  -bind=127.0.0.1:port\n  -walletless (default)\n  -finance=0|1  (FUNDING profile; lab only)\n  -cr12=0|1     (Cognitive Reserve Layer v1.2; walletless analytics OK)\n  -datadir=<dir>\n  -instance=<id>\nautomatic_spend_atoms stays 0.\n"
+  },
+  "btx-hcpd -help": {
+    "exit": 0,
+    "stdout": "",
+    "stderr": "btx-hcpd \u2014 Hosted Control Plane gateway (0.34.8-dev)\nLoopback HTTP only. Not consensus. Not a wallet proxy.\n  -bind=127.0.0.1:port\n  -walletless (default)\n  -finance=0|1  (FUNDING profile; lab only)\n  -cr12=0|1     (Cognitive Reserve Layer v1.2; walletless analytics OK)\n  -datadir=<dir>\n  -instance=<id>\nautomatic_spend_atoms stays 0.\n"
+  },
+  "btx-capabilityd -version": {
+    "exit": 0,
+    "stdout": "btx-capabilityd 0.34.8-dev\n",
+    "stderr": ""
+  },
+  "btx-capabilityd --version": {
+    "exit": 0,
+    "stdout": "btx-capabilityd 0.34.8-dev\n",
+    "stderr": ""
+  },
+  "btx-capabilityd --help": {
+    "exit": 0,
+    "stdout": "",
+    "stderr": "btx-capabilityd \u2014 owner-local BTX capability service (0.34.8-dev)\n\nLocal resolve/plan/ensure/load lifecycle only. Not public HTTP.\nNot a remote inference marketplace. automatic_spend_atoms stays 0.\nIf this process exits, monetary BTX and btx-modeld continue independently.\n\n  -modeldir=<dir>              catalog directory (never wallet/chainstate)\n  -capabilitysocket=<path>    unix JSON-RPC socket\n  -version                    print version and exit\n  -help                       print this message\n"
+  },
+  "btx-capabilityd -help": {
+    "exit": 0,
+    "stdout": "",
+    "stderr": "btx-capabilityd \u2014 owner-local BTX capability service (0.34.8-dev)\n\nLocal resolve/plan/ensure/load lifecycle only. Not public HTTP.\nNot a remote inference marketplace. automatic_spend_atoms stays 0.\nIf this process exits, monetary BTX and btx-modeld continue independently.\n\n  -modeldir=<dir>              catalog directory (never wallet/chainstate)\n  -capabilitysocket=<path>    unix JSON-RPC socket\n  -version                    print version and exit\n  -help                       print this message\n"
+  },
+  "btx-capabilityd -h": {
+    "exit": 0,
+    "stdout": "",
+    "stderr": "btx-capabilityd \u2014 owner-local BTX capability service (0.34.8-dev)\n\nLocal resolve/plan/ensure/load lifecycle only. Not public HTTP.\nNot a remote inference marketplace. automatic_spend_atoms stays 0.\nIf this process exits, monetary BTX and btx-modeld continue independently.\n\n  -modeldir=<dir>              catalog directory (never wallet/chainstate)\n  -capabilitysocket=<path>    unix JSON-RPC socket\n  -version                    print version and exit\n  -help                       print this message\n"
+  },
+  "btx-capabilityd --unknown-version-test": {
+    "exit": 1,
+    "stdout": "",
+    "stderr": "unknown argument: --unknown-version-test\nbtx-capabilityd \u2014 owner-local BTX capability service (0.34.8-dev)\n\nLocal resolve/plan/ensure/load lifecycle only. Not public HTTP.\nNot a remote inference marketplace. automatic_spend_atoms stays 0.\nIf this process exits, monetary BTX and btx-modeld continue independently.\n\n  -modeldir=<dir>              catalog directory (never wallet/chainstate)\n  -capabilitysocket=<path>    unix JSON-RPC socket\n  -version                    print version and exit\n  -help                       print this message\n"
+  },
+  "btx-capability -version": {
+    "exit": 0,
+    "stdout": "btx-capability 0.34.8-dev\n",
+    "stderr": ""
+  },
+  "btx-capability --version": {
+    "exit": 0,
+    "stdout": "btx-capability 0.34.8-dev\n",
+    "stderr": ""
+  },
+  "btx-capability --help": {
+    "exit": 0,
+    "stdout": "btx-capability \u2014 owner-local BTX capability CLI (0.34.8-dev)\nLocal resolve/plan/ensure/load only. Never public HTTP.\nNot a remote inference marketplace. automatic_spend_atoms stays 0.\nbtx-open remains inspect-only; this binary does not install, spend, or run inference.\nReadiness is lease_id + generation, never a naked filesystem path.\n\nFlags:\n  -capabilitysocket=<path>  unix JSON-RPC (default: <modeldir>/capabilityd.sock)\n  -modeldir=<dir>            catalog directory (never wallet/chainstate)\n  --json                    machine JSON for status/get\n  --spend                   rejected\n\nPrimary commands (spec 21.2; mapped only when registered):\n  btx-capability ensure <path.btx|--recipe json|--plan-id ID> [--policy personal] [--ready first-useful-result]    # ensurebtxcapability\n  btx-capability prefetch [--lock <lock>] [--recipe <json>] [--deadline <duration>]    # prefetchbtxcapability\n  btx-capability status JOB|LEASE [--json]    # getbtxcapability\n  btx-capability get JOB|LEASE [--json]    # getbtxcapability\n  btx-capability sleep LEASE    # sleepbtxcapability\n  btx-capability wake LEASE    # wakebtxcapability\n  btx-capability update --preview    # planbtxcapabilityupdate\n  btx-capability release LEASE    # releasebtxcapability\n  btx-capability cancel JOB    # cancelbtxcapability\n  btx-capability resolve ...    # resolvebtxcapability\n  btx-capability plan ...    # planbtxcapability\n  btx-capability switch OLD NEW    # switchbtxcapability\n  btx-capability events     # getbtxcapabilityevents\n  btx-capability ttc JOB    # getbtxttctrace\n  btx-capability residency     # getbtxresidency\n  btx-capability inspect-map <hex|{json}>    # inspectbtxtensormap\n  btx-capability export-lock <recipe_id|{json}>    # exportbtxlock\n  btx-capability import-lock <recipe_id|{json}>    # importbtxlock\n  btx-capability capabilities     # getbtxruntimecapabilities\n  btx-capability help \n\nRegistered owner-local methods (IsCapabilityHelperMethod; not invented):\n  resolvebtxcapability\n  planbtxcapability\n  ensurebtxcapability\n  getbtxcapability\n  cancelbtxcapability\n  releasebtxcapability\n  prefetchbtxcapability\n  sleepbtxcapability\n  wakebtxcapability\n  getbtxresidency\n  inspectbtxtensormap\n  exportbtxlock\n  importbtxlock\n  planbtxcapabilityupdate\n  switchbtxcapability\n  getbtxcapabilityevents\n  getbtxruntimecapabilities\n  getbtxttctrace\n\nA registered method name may be invoked directly:\n  btx-capability <registered-method> [json-object]\n",
+    "stderr": ""
+  },
+  "btx-capability -help": {
+    "exit": 0,
+    "stdout": "btx-capability \u2014 owner-local BTX capability CLI (0.34.8-dev)\nLocal resolve/plan/ensure/load only. Never public HTTP.\nNot a remote inference marketplace. automatic_spend_atoms stays 0.\nbtx-open remains inspect-only; this binary does not install, spend, or run inference.\nReadiness is lease_id + generation, never a naked filesystem path.\n\nFlags:\n  -capabilitysocket=<path>  unix JSON-RPC (default: <modeldir>/capabilityd.sock)\n  -modeldir=<dir>            catalog directory (never wallet/chainstate)\n  --json                    machine JSON for status/get\n  --spend                   rejected\n\nPrimary commands (spec 21.2; mapped only when registered):\n  btx-capability ensure <path.btx|--recipe json|--plan-id ID> [--policy personal] [--ready first-useful-result]    # ensurebtxcapability\n  btx-capability prefetch [--lock <lock>] [--recipe <json>] [--deadline <duration>]    # prefetchbtxcapability\n  btx-capability status JOB|LEASE [--json]    # getbtxcapability\n  btx-capability get JOB|LEASE [--json]    # getbtxcapability\n  btx-capability sleep LEASE    # sleepbtxcapability\n  btx-capability wake LEASE    # wakebtxcapability\n  btx-capability update --preview    # planbtxcapabilityupdate\n  btx-capability release LEASE    # releasebtxcapability\n  btx-capability cancel JOB    # cancelbtxcapability\n  btx-capability resolve ...    # resolvebtxcapability\n  btx-capability plan ...    # planbtxcapability\n  btx-capability switch OLD NEW    # switchbtxcapability\n  btx-capability events     # getbtxcapabilityevents\n  btx-capability ttc JOB    # getbtxttctrace\n  btx-capability residency     # getbtxresidency\n  btx-capability inspect-map <hex|{json}>    # inspectbtxtensormap\n  btx-capability export-lock <recipe_id|{json}>    # exportbtxlock\n  btx-capability import-lock <recipe_id|{json}>    # importbtxlock\n  btx-capability capabilities     # getbtxruntimecapabilities\n  btx-capability help \n\nRegistered owner-local methods (IsCapabilityHelperMethod; not invented):\n  resolvebtxcapability\n  planbtxcapability\n  ensurebtxcapability\n  getbtxcapability\n  cancelbtxcapability\n  releasebtxcapability\n  prefetchbtxcapability\n  sleepbtxcapability\n  wakebtxcapability\n  getbtxresidency\n  inspectbtxtensormap\n  exportbtxlock\n  importbtxlock\n  planbtxcapabilityupdate\n  switchbtxcapability\n  getbtxcapabilityevents\n  getbtxruntimecapabilities\n  getbtxttctrace\n\nA registered method name may be invoked directly:\n  btx-capability <registered-method> [json-object]\n",
+    "stderr": ""
+  },
+  "btx-capability -h": {
+    "exit": 0,
+    "stdout": "btx-capability \u2014 owner-local BTX capability CLI (0.34.8-dev)\nLocal resolve/plan/ensure/load only. Never public HTTP.\nNot a remote inference marketplace. automatic_spend_atoms stays 0.\nbtx-open remains inspect-only; this binary does not install, spend, or run inference.\nReadiness is lease_id + generation, never a naked filesystem path.\n\nFlags:\n  -capabilitysocket=<path>  unix JSON-RPC (default: <modeldir>/capabilityd.sock)\n  -modeldir=<dir>            catalog directory (never wallet/chainstate)\n  --json                    machine JSON for status/get\n  --spend                   rejected\n\nPrimary commands (spec 21.2; mapped only when registered):\n  btx-capability ensure <path.btx|--recipe json|--plan-id ID> [--policy personal] [--ready first-useful-result]    # ensurebtxcapability\n  btx-capability prefetch [--lock <lock>] [--recipe <json>] [--deadline <duration>]    # prefetchbtxcapability\n  btx-capability status JOB|LEASE [--json]    # getbtxcapability\n  btx-capability get JOB|LEASE [--json]    # getbtxcapability\n  btx-capability sleep LEASE    # sleepbtxcapability\n  btx-capability wake LEASE    # wakebtxcapability\n  btx-capability update --preview    # planbtxcapabilityupdate\n  btx-capability release LEASE    # releasebtxcapability\n  btx-capability cancel JOB    # cancelbtxcapability\n  btx-capability resolve ...    # resolvebtxcapability\n  btx-capability plan ...    # planbtxcapability\n  btx-capability switch OLD NEW    # switchbtxcapability\n  btx-capability events     # getbtxcapabilityevents\n  btx-capability ttc JOB    # getbtxttctrace\n  btx-capability residency     # getbtxresidency\n  btx-capability inspect-map <hex|{json}>    # inspectbtxtensormap\n  btx-capability export-lock <recipe_id|{json}>    # exportbtxlock\n  btx-capability import-lock <recipe_id|{json}>    # importbtxlock\n  btx-capability capabilities     # getbtxruntimecapabilities\n  btx-capability help \n\nRegistered owner-local methods (IsCapabilityHelperMethod; not invented):\n  resolvebtxcapability\n  planbtxcapability\n  ensurebtxcapability\n  getbtxcapability\n  cancelbtxcapability\n  releasebtxcapability\n  prefetchbtxcapability\n  sleepbtxcapability\n  wakebtxcapability\n  getbtxresidency\n  inspectbtxtensormap\n  exportbtxlock\n  importbtxlock\n  planbtxcapabilityupdate\n  switchbtxcapability\n  getbtxcapabilityevents\n  getbtxruntimecapabilities\n  getbtxttctrace\n\nA registered method name may be invoked directly:\n  btx-capability <registered-method> [json-object]\n",
+    "stderr": ""
+  },
+  "btx-capability help": {
+    "exit": 0,
+    "stdout": "btx-capability \u2014 owner-local BTX capability CLI (0.34.8-dev)\nLocal resolve/plan/ensure/load only. Never public HTTP.\nNot a remote inference marketplace. automatic_spend_atoms stays 0.\nbtx-open remains inspect-only; this binary does not install, spend, or run inference.\nReadiness is lease_id + generation, never a naked filesystem path.\n\nFlags:\n  -capabilitysocket=<path>  unix JSON-RPC (default: <modeldir>/capabilityd.sock)\n  -modeldir=<dir>            catalog directory (never wallet/chainstate)\n  --json                    machine JSON for status/get\n  --spend                   rejected\n\nPrimary commands (spec 21.2; mapped only when registered):\n  btx-capability ensure <path.btx|--recipe json|--plan-id ID> [--policy personal] [--ready first-useful-result]    # ensurebtxcapability\n  btx-capability prefetch [--lock <lock>] [--recipe <json>] [--deadline <duration>]    # prefetchbtxcapability\n  btx-capability status JOB|LEASE [--json]    # getbtxcapability\n  btx-capability get JOB|LEASE [--json]    # getbtxcapability\n  btx-capability sleep LEASE    # sleepbtxcapability\n  btx-capability wake LEASE    # wakebtxcapability\n  btx-capability update --preview    # planbtxcapabilityupdate\n  btx-capability release LEASE    # releasebtxcapability\n  btx-capability cancel JOB    # cancelbtxcapability\n  btx-capability resolve ...    # resolvebtxcapability\n  btx-capability plan ...    # planbtxcapability\n  btx-capability switch OLD NEW    # switchbtxcapability\n  btx-capability events     # getbtxcapabilityevents\n  btx-capability ttc JOB    # getbtxttctrace\n  btx-capability residency     # getbtxresidency\n  btx-capability inspect-map <hex|{json}>    # inspectbtxtensormap\n  btx-capability export-lock <recipe_id|{json}>    # exportbtxlock\n  btx-capability import-lock <recipe_id|{json}>    # importbtxlock\n  btx-capability capabilities     # getbtxruntimecapabilities\n  btx-capability help \n\nRegistered owner-local methods (IsCapabilityHelperMethod; not invented):\n  resolvebtxcapability\n  planbtxcapability\n  ensurebtxcapability\n  getbtxcapability\n  cancelbtxcapability\n  releasebtxcapability\n  prefetchbtxcapability\n  sleepbtxcapability\n  wakebtxcapability\n  getbtxresidency\n  inspectbtxtensormap\n  exportbtxlock\n  importbtxlock\n  planbtxcapabilityupdate\n  switchbtxcapability\n  getbtxcapabilityevents\n  getbtxruntimecapabilities\n  getbtxttctrace\n\nA registered method name may be invoked directly:\n  btx-capability <registered-method> [json-object]\n",
+    "stderr": ""
+  },
+  "btx-modeld -version": {
+    "exit": 0,
+    "stdout": "btx-modeld v0.34.17\nOpenSSL 3.5.5 27 Jan 2026\n",
+    "stderr": ""
+  }
+}

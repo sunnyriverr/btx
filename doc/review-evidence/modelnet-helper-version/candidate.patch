@@ -1,0 +1,84 @@
+--- a/src/hcpd.cpp
++++ b/src/hcpd.cpp
+@@ -2,6 +2,7 @@
+ // Distributed under the MIT software license, see the accompanying
+ // file COPYING or https://opensource.org/license/mit/.
+ 
++#include <clientversion.h>
+ #include <modelnet/hcp.h>
+ #include <util/fs.h>
+ #include <util/translation.h>
+@@ -33,7 +34,7 @@
+         const std::string a = argv[i];
+         if (a == "-help" || a == "--help") {
+             std::cerr <<
+-                "btx-hcpd — Hosted Control Plane gateway (0.34.8-dev)\n"
++                "btx-hcpd — Hosted Control Plane gateway (" << FormatFullVersion() << ")\n"
+                 "Loopback HTTP only. Not consensus. Not a wallet proxy.\n"
+                 "  -bind=127.0.0.1:port\n"
+                 "  -walletless (default)\n"
+@@ -45,7 +46,7 @@
+             return 0;
+         }
+         if (a == "-version") {
+-            std::cout << "btx-hcpd 0.34.8-dev HCP/1+CR11+CR12\n";
++            std::cout << "btx-hcpd " << FormatFullVersion() << " HCP/1+CR11+CR12\n";
+             return 0;
+         }
+         if (a.rfind("-bind=", 0) == 0) bind = a.substr(6);
+--- a/src/capabilityd.cpp
++++ b/src/capabilityd.cpp
+@@ -2,6 +2,7 @@
+ // Distributed under the MIT software license, see the accompanying
+ // file COPYING or https://opensource.org/license/mit/.
+ 
++#include <clientversion.h>
+ #include <modelnet/capability.h>
+ #include <util/fs.h>
+ #include <util/translation.h>
+@@ -28,7 +29,7 @@
+ static void Usage()
+ {
+     std::cerr <<
+-        "btx-capabilityd — owner-local BTX capability service (0.34.8-dev)\n"
++        "btx-capabilityd — owner-local BTX capability service (" << FormatFullVersion() << ")\n"
+         "\n"
+         "Local resolve/plan/ensure/load lifecycle only. Not public HTTP.\n"
+         "Not a remote inference marketplace. automatic_spend_atoms stays 0.\n"
+@@ -57,7 +58,7 @@
+             return 0;
+         }
+         if (a == "-version" || a == "--version") {
+-            std::cout << "btx-capabilityd 0.34.8-dev\n";
++            std::cout << "btx-capabilityd " << FormatFullVersion() << "\n";
+             return 0;
+         }
+         if (a.rfind("-modeldir=", 0) == 0) modeldir = fs::PathFromString(a.substr(std::string("-modeldir=").size()));
+--- a/src/modelnet/capability_sdk.cpp
++++ b/src/modelnet/capability_sdk.cpp
+@@ -2,6 +2,7 @@
+ // Distributed under the MIT software license, see the accompanying
+ // file COPYING or https://opensource.org/license/mit/.
+ 
++#include <clientversion.h>
+ #include <modelnet/capability_sdk.h>
+ 
+ #include <util/fs.h>
+@@ -301,7 +302,7 @@
+ std::string CapabilityCliUsage()
+ {
+     std::string u;
+-    u += "btx-capability — owner-local BTX capability CLI (0.34.8-dev)\n";
++    u += "btx-capability — owner-local BTX capability CLI (" + FormatFullVersion() + ")\n";
+     u += "Local resolve/plan/ensure/load only. Never public HTTP.\n";
+     u += "Not a remote inference marketplace. automatic_spend_atoms stays 0.\n";
+     u += "btx-open remains inspect-only; this binary does not install, spend, or run inference.\n";
+@@ -589,7 +590,7 @@
+             return 0;
+         }
+         if (a == "-version" || a == "--version") {
+-            out = "btx-capability 0.34.8-dev\n";
++            out = "btx-capability " + FormatFullVersion() + "\n";
+             return 0;
+         }
+         if (a == "--spend" || a == "-spend" || StartsWith(a, "--spend=") || StartsWith(a, "-spend=")) {
