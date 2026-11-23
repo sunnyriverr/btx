@@ -29,8 +29,14 @@ python3 -B installer.py --release-manifest "$root/assets/btx-release-manifest.js
     --asset-base-url "$root/assets" --install-dir "$root/installed" --cache-dir "$root/cache" \
     --platform linux-x86_64 --allow-unsigned-release --no-start-daemon --json \
     | tee "$records/installation.json"
+# The installer preserves the archive's top-level directory.
+daemon=$(jq -er '.btxd' "$records/installation.json")
+cli=$(jq -er '.btx_cli' "$records/installation.json")
+installed_tree=$(dirname "$(dirname "$daemon")")
+[[ "$installed_tree" == "$root/installed/btx-0.34.17" ]]
+[[ "$daemon" == "$installed_tree/bin/btxd" && "$cli" == "$installed_tree/bin/btx-cli" ]]
 (
-    cd "$root/installed"
+    cd "$installed_tree"
     sha256sum bin/{btxd,btx-cli,btx-modeld} libexec/{btxd.real,btx-cli.real,btx-modeld.real}
 ) | tee "$records/binaries.sha256"
-timeout --kill-after=40s 11m python3 -B observe.py "$root/installed" "$records/native"
+timeout --kill-after=40s 11m python3 -B observe.py "$installed_tree" "$records/native"
