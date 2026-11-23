@@ -1,0 +1,48 @@
+name: ModelNet helper version qualification
+on:
+  push:
+    branches: [codex/ci-modelnet-helper-version]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: modelnet-helper-version-qualification
+  cancel-in-progress: false
+jobs:
+  compare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 32
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Verify the published CPU archive and capture stock help and version
+        timeout-minutes: 5
+        run: bash stock.sh
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: 932a0238c70705b28ea344a7929cee09ada314c8
+          path: accepted-source
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: 14734210789
+          run-id: 44971729511
+          github-token: ${{ github.token }}
+          path: saved-checkpoint
+          merge-multiple: true
+      - name: Restore, inspect target build, and compare candidate output
+        timeout-minutes: 24
+        run: |
+          set -euo pipefail
+          image=ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11
+          docker pull "$image"
+          docker run --name helper-version-check --init -v "$GITHUB_WORKSPACE:$GITHUB_WORKSPACE" -v /etc/ssl/certs/ca-certificates.crt:/ubuntu-host-ca.pem:ro -w "$GITHUB_WORKSPACE" -e GITHUB_WORKSPACE "$image" bash -e -c 'timeout --kill-after=20s 9m bash setup.sh && /opt/hostedtoolcache/Python/3.12.16/x64/bin/python3 build.py' 2>&1 | tee records/build-console.log
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: modelnet-helper-version-records
+          path: records/
+          retention-days: 14
+          if-no-files-found: error
