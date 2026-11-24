@@ -25,7 +25,13 @@ test -x "$target/btxd"
 test -x "$target/btx-cli"
 "$target/btxd" -version > records/btxd-version.txt
 "$target/btx-cli" -version > records/btx-cli-version.txt
-grep -F 18d0b7ff5337 records/btxd-version.txt
+grep -F 'v0.34.17' records/btxd-version.txt
+python3 - "$scratch/btx-0.34.17/libexec/btxd.real" <<'PYTHON'
+import sys
+from pathlib import Path
+assert b'18d0b7ff5337' in Path(sys.argv[1]).read_bytes()
+print('Published daemon contains 18d0b7ff5337')
+PYTHON
 "$scratch/anvil" --version > records/anvil-version.txt
 python3 -m venv "$scratch/py"
 py="$scratch/py/bin/python"
