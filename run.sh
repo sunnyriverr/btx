@@ -32,7 +32,15 @@ curl -fsSL --max-time 45 "https://raw.githubusercontent.com/btxchain/btx/$commit
 snapshot=assumeutxo-228000.dat
 curl -fsSL --max-time 75 "https://github.com/btxchain/btx/releases/download/assumeutxo-228000/$snapshot" -o "$root/$snapshot"
 printf '%s  %s\n' 45392da4550a66ccd4ed949cc0e47cb2197dbf2fd238f79367c921adf8508890 "$root/$snapshot" | sha256sum -c | tee "$records/snapshot-hash.txt"
-python3 -B "$root/installer.py" --release-manifest "$root/assets/btx-release-manifest.json" \
-    --asset-base-url "$root/assets" --install-dir "$root/installed" --cache-dir "$root/cache" \
-    --platform linux-x86_64 --allow-unsigned-release --no-start-daemon --json > "$records/install.json"
+python3 -B - "$root" "$archive" > "$records/install.json" <<'PY'
+import json
+import runpy
+import sys
+from pathlib import Path
+root = Path(sys.argv[1])
+archive = root / 'assets' / sys.argv[2]
+installer = runpy.run_path(str(root / 'installer.py'))
+daemon, cli = installer['install_archive'](archive, root / 'installed', force=False)
+print(json.dumps({'btxd': str(daemon), 'btx_cli': str(cli), 'route': 'verified archive, direct install_archive'}))
+PY
 python3 -B observe.py "$root" "$records"
