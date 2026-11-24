@@ -1,0 +1,26 @@
+{
+  "platform_selection": {
+    "linux-x86_64": "btx-0.34.17-x86_64-linux-gnu.tar.gz",
+    "linux-x86_64-cuda13": "btx-0.34.17-x86_64-linux-gnu-cuda13.tar.gz"
+  },
+  "cpu_install": {
+    "exit": 0,
+    "expected_error": null
+  },
+  "missing_platform": {
+    "exit": 1,
+    "expected_error": "does not contain a platform asset"
+  },
+  "bad_manifest_checksum": {
+    "exit": 1,
+    "expected_error": "SHA256 mismatch for btx-release-manifest.json"
+  },
+  "conflicting_archive_digest": {
+    "exit": 1,
+    "expected_error": "Checksum mismatch between release manifest and SHA256SUMS"
+  },
+  "remote_unsigned": {
+    "exit": 1,
+    "expected_error": "refusing unsigned remote release"
+  }
+}
