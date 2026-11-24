@@ -1,0 +1,26 @@
+name: Packaged ModelNet restart and checkout on 18d0b7ff
+on:
+  push:
+    branches: [codex/ci-modelnet-resume-18d0]
+permissions:
+  contents: read
+concurrency:
+  group: session2-modelnet-resume-18d0
+  cancel-in-progress: false
+jobs:
+  observe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Verify archive, extract privately, and observe the bounded restart
+        run: bash run.sh
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: modelnet-resume-18d0-records
+          path: records/
+          retention-days: 14
+          if-no-files-found: error
