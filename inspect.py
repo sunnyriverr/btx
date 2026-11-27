@@ -1,4 +1,4 @@
-"""Prepare static vcpkg dependencies and inspect two MSVC rules without building BTX."""
+"""Verify the static dependency cache and compile two pinned MatMul objects."""
 import hashlib
 import json
 import os
@@ -7,19 +7,28 @@ import re
 import shutil
 import subprocess
 import sys
+import time
 
 root = Path.cwd()
 source = root / "source"
 records = root / "plan-records"
 records.mkdir(exist_ok=True)
 mode = sys.argv[1]
-assert mode in {"prepare", "configure"}
+assert mode == "compile"
 rev = "c2e71aafc48a41593277e335c8bc370e45599f01"
 manifest_hash = "d5c0ecee8a42546f65e9620cf10d800c919495ea0b62f77b43916b199435a8f9"
 target_names = (
     "matmul_v4_rc_stage3_bounded_semantic_codec.cpp",
     "matmul_v4_rc_stage3_relation_local_sharding.cpp",
 )
+expected_commands = dict(zip(target_names, (
+    "0bc73afea95796c074a84ef221fc68288d239912d88fd31edeedb09fef7cac1b",
+    "f19e05f42d81d9535b185c70c2ee72c61f667f77f0de970f74f72ed6220b341b",
+)))
+expected_diagnostics = dict(zip(target_names, (
+    r"\(107\):\s*fatal error C1202:",
+    r"\(224\):\s*error C2065:.*__uint128_t",
+)))
 receipt = {"source": rev, "status": "INCOMPLETE", "configured": False,
            "object_builds": False, "dependency_installs": False,
            "cache_hit": os.environ.get("BTX_CACHE_HIT") == "true",
@@ -68,67 +77,69 @@ def inspect_static_payload(cache):
     return layout
 
 
-def prepare_cache(cache, env, selected, cl):
-    expected = provenance_identity(cl)
-    cache.mkdir(parents=True, exist_ok=False)
-    repo = cache / "vcpkg"
-    subprocess.run(["git", "init", str(repo)], check=True, timeout=30)
-    subprocess.run(["git", "-C", str(repo), "config", "core.longpaths", "true"], check=True, timeout=15)
-    subprocess.run(["git", "-C", str(repo), "fetch", "--no-tags",
-                    "https://github.com/microsoft/vcpkg.git", expected["vcpkg_registry"]], check=True, timeout=180)
-    subprocess.run(["git", "-C", str(repo), "checkout", "--detach", "FETCH_HEAD"], check=True, timeout=30)
-    assert subprocess.check_output(["git", "-C", str(repo), "rev-parse", "HEAD"], text=True).strip() == expected["vcpkg_registry"]
-    dep_env = {**env, "VCPKG_VISUAL_STUDIO_PATH": str(selected), "VCPKG_BINARY_SOURCES": "clear",
-               "VCPKG_DISABLE_METRICS": "1", "VCPKG_MAX_CONCURRENCY": "4", "VCPKG_ROOT": str(repo)}
-    msys = Path("C:/msys64")
-    choices = [msys / f"{prefix}/bin/{name}.exe"
-               for prefix in ("mingw64", "ucrt64") for name in ("pkg-config", "pkgconf")]
-    pkgconf = next((p for p in choices if p.is_file()), None)
-    if pkgconf is None:
-        bash = msys / "usr/bin/bash.exe"
-        with (records/"pkgconf-setup.log").open("wb") as log:
-            subprocess.run([str(bash), "-lc", "pacman --noconfirm --needed -Sy mingw-w64-x86_64-pkgconf"],
-                           stdout=log, stderr=subprocess.STDOUT, check=True, timeout=120)
-        pkgconf = next(p for p in choices if p.is_file())
-    pkg_version = subprocess.check_output([str(pkgconf), "--version"], text=True, timeout=10).strip()
-    receipt["pkgconf"] = {"path": str(pkgconf), "version": pkg_version, "sha256": sha(pkgconf)}
-    dep_env.update(PKG_CONFIG=str(pkgconf), VCPKG_KEEP_ENV_VARS="PKG_CONFIG")
-    binary_cache = Path(os.environ["RUNNER_TEMP"]) / "btx-msvc1944-static-ports"
-    binary_cache.mkdir(exist_ok=True)
-    dep_env["VCPKG_BINARY_SOURCES"] = f"clear;files,{binary_cache},readwrite"
-    # Use the stock static triplet. The actual detected cl is checked in the install log.
-    subprocess.run(["cmd.exe", "/d", "/c", "bootstrap-vcpkg.bat", "-disableMetrics"], cwd=repo,
-                   env=dep_env, check=True, timeout=100)
-    exe = repo / "vcpkg.exe"
-    dirs = Path(os.environ["RUNNER_TEMP"]) / "btx-msvc1944-port-work"
-    dirs.mkdir()
-    args = [str(exe), "install", "--triplet=x64-windows-static", "--host-triplet=x64-windows",
-            f"--x-manifest-root={source}", f"--x-install-root={cache/'installed'}",
-            f"--x-buildtrees-root={dirs/'buildtrees'}", f"--x-packages-root={dirs/'packages'}",
-            f"--downloads-root={dirs/'downloads'}", "--x-no-default-features",
-            *["--x-feature="+f for f in expected["manifest_features"]]]
-    receipt["dependency_install_attempted"] = True
-    try:
-        with (records/"vcpkg-install.log").open("wb") as log:
-            subprocess.run(args, cwd=source, env=dep_env, stdout=log, stderr=subprocess.STDOUT,
-                           check=True, timeout=1500)
-    finally:
-        for f in (dirs/"buildtrees/detect_compiler").glob("stdout-*"):
-            if f.is_file():
-                shutil.copy(f, records)
-    receipt["dependency_installs"] = True
-    log = (records/"vcpkg-install.log").read_text(errors="replace")
-    assert "compiler found:" in log.lower(), "vcpkg compiler report missing"
-    assert "14.44.35207" in log and "14.51." not in log, "vcpkg selected another compiler"
-    inspect_static_payload(cache)
-    payload = [f for f in (cache/"installed").rglob("*") if f.is_file()]
-    payload += [f for f in (repo/"scripts").rglob("*") if f.is_file()]
-    payload.append(exe)
-    payload.append(repo/"triplets/x64-windows-static.cmake")
-    expected["pkgconf"] = receipt["pkgconf"]
-    expected["sha256"] = {f.relative_to(cache).as_posix(): sha(f) for f in payload}
-    (cache/"provenance.json").write_text(json.dumps(expected,indent=2)+"\n")
-    # The cache retains the install and toolchain, separate from BTX outputs and port work directories.
+def compile_plan(build, env, cl, rows):
+    header = build / "src/bitcoin-build-info.h"
+    config_header = build / "src/bitcoin-build-config.h"
+    generator = source / "cmake/script/GenerateBuildInfo.cmake"
+    assert config_header.is_file()
+    for row in rows:
+        name = row["source"]
+        command = row["command"]
+        row["command_sha256"] = hashlib.sha256(command.encode()).hexdigest()
+        assert row["command_sha256"] == expected_commands[name], f"Configured flags drifted for {name}"
+        assert Path(command.split(maxsplit=1)[0].strip('"')).samefile(cl)
+        closure = (records / f"{name}.closure.txt").read_text().splitlines()
+        assert len(closure) == 2, f"Unexpected rule closure for {name}"
+        assert all(term in closure[0] for term in (
+            f"-DBUILD_INFO_HEADER_PATH={header.as_posix()}",
+            f"-DSOURCE_DIR={source.as_posix()}", f"-P {generator.as_posix()}",
+        )), f"Unexpected prerequisite for {name}"
+        assert [arg for arg in closure[1].split() if arg.lower() != "/showincludes"] == command.split()
+
+    with (records / "build-info.log").open("wb") as log:
+        subprocess.run(["cmake", f"-DBUILD_INFO_HEADER_PATH={header.as_posix()}",
+                        f"-DSOURCE_DIR={source.as_posix()}", "-P", str(generator)],
+                       cwd=build / "src", env=env, stdout=log, stderr=subprocess.STDOUT,
+                       check=True, timeout=30)
+    receipt.update(status="RUNNING_TWO_COMMANDS", source_files_unmodified=True,
+                   prerequisite_sha256={path.name: sha(path) for path in (header, config_header)},
+                   objects=[], linked=False, unit_tests=False)
+    before = {path.relative_to(build).as_posix() for path in build.rglob("*.obj")}
+    for row in rows:
+        name = row["source"]
+        obj = build / row["object"]
+        obj.parent.mkdir(parents=True, exist_ok=True)
+        started = time.monotonic()
+        logfile = records / f"{name}.compile.log"
+        with logfile.open("wb") as log:
+            receipt["object_builds"] = True
+            try:
+                result = subprocess.run(row["command"], cwd=build, env=env, stdout=log,
+                                        stderr=subprocess.STDOUT, timeout=120)
+                code = result.returncode
+            except subprocess.TimeoutExpired:
+                code = "timeout"
+        diagnostics = [line for line in logfile.read_text(errors="replace").splitlines()
+                       if re.search(r"(?:fatal )?error [A-Z]+\d+:", line)]
+        matched = (isinstance(code, int) and code != 0 and not obj.exists()
+                   and bool(diagnostics) and bool(re.search(expected_diagnostics[name], diagnostics[0])))
+        receipt["objects"].append(dict(
+            source=name, object=row["object"], command_sha256=row["command_sha256"],
+            source_sha256=sha(source / "src/matmul" / name), exit_code=code,
+            diagnostics=diagnostics, expected_failure=matched,
+            object_created=obj.exists(), seconds=round(time.monotonic() - started, 2),
+        ))
+        save()
+        print(f"{name}: exit {code}, expected failure {matched}", flush=True)
+        for line in diagnostics:
+            print(line, flush=True)
+
+    after = {path.relative_to(build).as_posix() for path in build.rglob("*.obj")}
+    receipt["new_objects"] = sorted(after - before)
+    assert after - before <= {row["object"] for row in rows}, "Unexpected product object output"
+    assert not subprocess.check_output(["git", "-C", str(source), "status", "--porcelain", "--untracked-files=no"], text=True).strip()
+    receipt["status"] = ("REPRODUCED_BOTH_ERRORS" if all(row["expected_failure"] for row in receipt["objects"])
+                         else "DIAGNOSTICS_DIFFER")
 
 
 def inspect():
@@ -167,10 +178,11 @@ def inspect():
         receipt.update(status="BLOCKED_TOOLSET", reason="Selected cl or SDK differs")
         return
     cache = Path(os.environ["RUNNER_TEMP"]) / "btx-msvc1944-static-deps"
-    if mode == "prepare" and not receipt["cache_hit"]:
-        prepare_cache(cache, env, selected, cl)
+    if not receipt["cache_hit"]:
+        receipt.update(status="BLOCKED_CACHE_MISMATCH", reason="Exact static cache did not restore")
+        return
     provenance = cache / "provenance.json"
-    if not provenance.is_file():
+    if not provenance.is_file() or sha(provenance) != "81a55c747feb4a090a55aa56c2a0c665c40ebd824268c2704fd34d5b7c489d6c":
         receipt.update(status="BLOCKED_CACHE_MISMATCH", reason="Missing dependency provenance in restored cache")
         return
     info = json.loads(provenance.read_text())
@@ -186,12 +198,7 @@ def inspect():
         return
     inspect_static_payload(cache)
     receipt.update(dependency_provenance_verified=True, cache_file_count=len(files))
-    if mode == "prepare":
-        with Path(os.environ["GITHUB_OUTPUT"]).open("a", encoding="utf-8") as stream:
-            stream.write("admitted=true\n")
-        shutil.copy(provenance, records/"dependency-provenance.json")
-        receipt.update(status="PASS_DEPENDENCY_CACHE", provenance=expected)
-        return
+    shutil.copy(provenance, records / "dependency-provenance.json")
     subprocess.run([sys.executable, "-m", "pip", "install", "--only-binary=:all:", "cryptography==46.0.4"],
                    check=True, timeout=75)
     build = root / "build-plan"
@@ -230,16 +237,14 @@ def inspect():
             (records/f"{name}.{suffix}").write_bytes(output)
         rows.append({"source":name,"object":obj,"command":command})
     (records/"two-commands.json").write_text(json.dumps(rows,indent=2)+"\n",encoding="utf-8")
-    dry = subprocess.check_output(["ninja", "-C", str(build), "-n", *(r["object"] for r in rows)], env=env)
-    (records/"dry-run.txt").write_bytes(dry)
-    assert not list((build/"src").rglob("*.obj")), "BTX object exists after dry run"
     assert not subprocess.check_output(["git","-C",str(source),"status","--porcelain","--untracked-files=no"],text=True).strip()
-    receipt.update(status="PASS_CONFIGURE_ONLY", rules=len(rows), generator="Ninja", triplet="x64-windows-static")
+    receipt.update(rules=len(rows), generator="Ninja", triplet="x64-windows-static")
+    compile_plan(build, env, cl, rows)
 
 
 try:
     inspect()
-    if receipt["status"].startswith("BLOCKED_"):
+    if receipt["status"] != "REPRODUCED_BOTH_ERRORS":
         raise SystemExit(1)
 except Exception as error:
     receipt.update(status="FAILED", error=repr(error))
