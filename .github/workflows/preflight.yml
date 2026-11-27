@@ -1,0 +1,59 @@
+name: MSVC c2e71aaf static configure only
+on:
+  push:
+    branches: [codex/ci-msvc-c2e71aaf-configure]
+permissions:
+  contents: read
+concurrency:
+  group: btx-msvc-c2e71aaf-configure
+  cancel-in-progress: false
+jobs:
+  configure:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: windows-2022
+    timeout-minutes: 42
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          path: control
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: c2e71aafc48a41593277e335c8bc370e45599f01
+          path: source
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.9'
+      - name: Restore exact static dependency inventory
+        id: deps
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ${{ runner.temp }}/btx-msvc1944-static-deps
+          key: btx-msvc-c2e71aaf-static-14.44-sdk26100-v1
+      - name: Verify MSVC and prepare static dependencies only
+        id: prepare
+        timeout-minutes: 31
+        env:
+          BTX_CACHE_HIT: ${{ steps.deps.outputs.cache-hit }}
+        run: python control/inspect.py prepare
+      - name: Configure and inspect both MatMul targets without building
+        if: steps.prepare.outputs.admitted == 'true'
+        timeout-minutes: 8
+        env:
+          BTX_CACHE_HIT: ${{ steps.deps.outputs.cache-hit }}
+        run: python control/inspect.py configure
+      - name: Retain verified static dependency inventory
+        if: always() && steps.prepare.outputs.admitted == 'true' && steps.deps.outputs.cache-hit != 'true'
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ${{ runner.temp }}/btx-msvc1944-static-deps
+          key: btx-msvc-c2e71aaf-static-14.44-sdk26100-v1
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: msvc-c2e71aaf-static-configure-receipt
+          path: plan-records/
+          if-no-files-found: error
+          retention-days: 14
