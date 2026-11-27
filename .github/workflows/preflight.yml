@@ -1,4 +1,4 @@
-name: MSVC c2e71aaf two unmodified MatMul objects
+name: MSVC c2e71aaf two candidate MatMul objects
 on:
   push:
     branches: [codex/ci-msvc-c2e71aaf-configure]
@@ -36,11 +36,11 @@ jobs:
         timeout-minutes: 10
         env:
           BTX_CACHE_HIT: ${{ steps.deps.outputs.cache-hit }}
-        run: python control/inspect.py compile
+        run: python control/inspect.py candidate
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
-          name: msvc-c2e71aaf-two-object-baseline
+          name: msvc-c2e71aaf-two-object-candidate
           path: plan-records/
           if-no-files-found: error
           retention-days: 14

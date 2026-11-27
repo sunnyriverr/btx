@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import re
 import shutil
+import struct
 import subprocess
 import sys
 import time
@@ -14,7 +15,7 @@ source = root / "source"
 records = root / "plan-records"
 records.mkdir(exist_ok=True)
 mode = sys.argv[1]
-assert mode == "compile"
+assert mode == "candidate"
 rev = "c2e71aafc48a41593277e335c8bc370e45599f01"
 manifest_hash = "d5c0ecee8a42546f65e9620cf10d800c919495ea0b62f77b43916b199435a8f9"
 target_names = (
@@ -25,10 +26,7 @@ expected_commands = dict(zip(target_names, (
     "0bc73afea95796c074a84ef221fc68288d239912d88fd31edeedb09fef7cac1b",
     "f19e05f42d81d9535b185c70c2ee72c61f667f77f0de970f74f72ed6220b341b",
 )))
-expected_diagnostics = dict(zip(target_names, (
-    r"\(107\):\s*fatal error C1202:",
-    r"\(224\):\s*error C2065:.*__uint128_t",
-)))
+changed_paths = {f"src/matmul/{name}" for name in target_names}
 receipt = {"source": rev, "status": "INCOMPLETE", "configured": False,
            "object_builds": False, "dependency_installs": False,
            "cache_hit": os.environ.get("BTX_CACHE_HIT") == "true",
@@ -42,6 +40,28 @@ def save():
 def sha(path):
     with path.open("rb") as stream:
         return hashlib.file_digest(stream, "sha256").hexdigest()
+
+
+def git_source(*args, **kwargs):
+    return subprocess.check_output(["git", "-C", str(source), *args], **kwargs)
+
+
+def verify_candidate():
+    assert set(git_source("diff", "--cached", "--name-only", text=True).splitlines()) == changed_paths
+    assert not git_source("diff", "--name-only")
+
+
+def apply_candidate():
+    assert not git_source("status", "--porcelain", "--untracked-files=no")
+    patch = subprocess.check_output(
+        ["git", "-C", str(root / "control"), "show", "HEAD:candidate/matmul-msvc.patch"])
+    git = ["git", "-C", str(source)]
+    subprocess.run([*git, "apply", "--cached", "--check", "-"], input=patch, check=True)
+    subprocess.run([*git, "apply", "--cached", "-"], input=patch, check=True)
+    subprocess.run([*git, "checkout-index", "-f", "--", *sorted(changed_paths)], check=True)
+    verify_candidate()
+    receipt["patch_sha256"] = hashlib.sha256(patch).hexdigest()
+    receipt["candidate_paths"] = sorted(changed_paths)
 
 
 def provenance_identity(cl):
@@ -101,7 +121,7 @@ def compile_plan(build, env, cl, rows):
                         f"-DSOURCE_DIR={source.as_posix()}", "-P", str(generator)],
                        cwd=build / "src", env=env, stdout=log, stderr=subprocess.STDOUT,
                        check=True, timeout=30)
-    receipt.update(status="RUNNING_TWO_COMMANDS", source_files_unmodified=True,
+    receipt.update(status="RUNNING_TWO_COMMANDS",
                    prerequisite_sha256={path.name: sha(path) for path in (header, config_header)},
                    objects=[], linked=False, unit_tests=False)
     before = {path.relative_to(build).as_posix() for path in build.rglob("*.obj")}
@@ -121,25 +141,33 @@ def compile_plan(build, env, cl, rows):
                 code = "timeout"
         diagnostics = [line for line in logfile.read_text(errors="replace").splitlines()
                        if re.search(r"(?:fatal )?error [A-Z]+\d+:", line)]
-        matched = (isinstance(code, int) and code != 0 and not obj.exists()
-                   and bool(diagnostics) and bool(re.search(expected_diagnostics[name], diagnostics[0])))
+        coff_x64 = False
+        if obj.is_file():
+            with obj.open("rb") as stream:
+                machine, sections = struct.unpack("<HH", stream.read(4))
+                coff_x64 = machine == 0x8664 and sections > 0
+                if (machine, sections) == (0, 0xFFFF):
+                    version, machine = struct.unpack("<HH", stream.read(4))
+                    coff_x64 = version >= 2 and machine == 0x8664
+        passed = code == 0 and coff_x64
         receipt["objects"].append(dict(
             source=name, object=row["object"], command_sha256=row["command_sha256"],
             source_sha256=sha(source / "src/matmul" / name), exit_code=code,
-            diagnostics=diagnostics, expected_failure=matched,
-            object_created=obj.exists(), seconds=round(time.monotonic() - started, 2),
+            diagnostics=diagnostics, passed=passed, coff_x64=coff_x64,
+            object_created=obj.exists(), object_sha256=sha(obj) if obj.is_file() else None,
+            object_bytes=obj.stat().st_size if obj.is_file() else None,
+            seconds=round(time.monotonic() - started, 2),
         ))
         save()
-        print(f"{name}: exit {code}, expected failure {matched}", flush=True)
+        print(f"{name}: exit {code}, valid x64 COFF {passed}", flush=True)
         for line in diagnostics:
             print(line, flush=True)
 
     after = {path.relative_to(build).as_posix() for path in build.rglob("*.obj")}
     receipt["new_objects"] = sorted(after - before)
     assert after - before <= {row["object"] for row in rows}, "Unexpected product object output"
-    assert not subprocess.check_output(["git", "-C", str(source), "status", "--porcelain", "--untracked-files=no"], text=True).strip()
-    receipt["status"] = ("REPRODUCED_BOTH_ERRORS" if all(row["expected_failure"] for row in receipt["objects"])
-                         else "DIAGNOSTICS_DIFFER")
+    verify_candidate()
+    receipt["status"] = "PASS_BOTH_OBJECTS" if all(row["passed"] for row in receipt["objects"]) else "COMPILE_FAILED"
 
 
 def inspect():
@@ -199,6 +227,7 @@ def inspect():
     inspect_static_payload(cache)
     receipt.update(dependency_provenance_verified=True, cache_file_count=len(files))
     shutil.copy(provenance, records / "dependency-provenance.json")
+    apply_candidate()
     subprocess.run([sys.executable, "-m", "pip", "install", "--only-binary=:all:", "cryptography==46.0.4"],
                    check=True, timeout=75)
     build = root / "build-plan"
@@ -237,14 +266,14 @@ def inspect():
             (records/f"{name}.{suffix}").write_bytes(output)
         rows.append({"source":name,"object":obj,"command":command})
     (records/"two-commands.json").write_text(json.dumps(rows,indent=2)+"\n",encoding="utf-8")
-    assert not subprocess.check_output(["git","-C",str(source),"status","--porcelain","--untracked-files=no"],text=True).strip()
+    verify_candidate()
     receipt.update(rules=len(rows), generator="Ninja", triplet="x64-windows-static")
     compile_plan(build, env, cl, rows)
 
 
 try:
     inspect()
-    if receipt["status"] != "REPRODUCED_BOTH_ERRORS":
+    if receipt["status"] != "PASS_BOTH_OBJECTS":
         raise SystemExit(1)
 except Exception as error:
     receipt.update(status="FAILED", error=repr(error))
