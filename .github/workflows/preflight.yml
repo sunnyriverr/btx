@@ -1,4 +1,4 @@
-name: MSVC 19.44 btxd configure-only plan for PR 959
+name: MSVC 19.44 daemon-only link for PR 959
 on:
   push:
     branches: [codex/ci-msvc-c2e71aaf-configure]
@@ -11,7 +11,7 @@ jobs:
   configure:
     if: github.repository == 'sunnyriverr/btx'
     runs-on: windows-2022
-    timeout-minutes: 15
+    timeout-minutes: 82
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -34,14 +34,27 @@ jobs:
           path: ${{ runner.temp }}/btx-msvc1944-static-deps
           key: btx-msvc-c2e71aaf-static-14.44-sdk26100-v1
           fail-on-cache-miss: true
-      - name: Configure and inspect only the daemon graph
+      - name: Gate on the 741-action plan and build only btxd
         env:
           BTX_CACHE_HIT: ${{ steps.deps.outputs.cache-hit }}
-        run: python control/daemon-plan.py
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        run: python control/link-btxd.py
+      - name: Inventory the stopped or linked checkpoint
+        id: retain
+        if: always()
+        run: python control/retain-btxd.py
+      - name: Save compiled state with its original Ninja graph
+        if: always() && steps.retain.outputs.has_objects == 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
+        with:
+          path: |
+            build-plan
+            source
+          key: msvc-959-btxd-checkpoint-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Retain the evidence and exact linked executable if present
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
-          name: msvc-959-btxd-configure-only-evidence
+          name: msvc-959-btxd-link-evidence
           path: plan-records/
           if-no-files-found: error
           retention-days: 14
