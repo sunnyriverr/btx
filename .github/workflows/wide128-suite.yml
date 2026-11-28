@@ -1,0 +1,36 @@
+name: Native MSVC wide128 Boost.Test regression
+on:
+  push:
+    branches: [codex/ci-msvc-wide128-suite-regression]
+permissions:
+  contents: read
+jobs:
+  arithmetic:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: windows-2022
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          path: control
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: btxchain/btx
+          ref: c2e71aafc48a41593277e335c8bc370e45599f01
+          path: source
+          sparse-checkout: |
+            /src/compat/wide128.h
+            /src/test/wide128_tests.cpp
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+      - name: Run the original Boost suite and the maintained candidate
+        shell: pwsh
+        run: ./control/run.ps1
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: msvc-wide128-suite-evidence
+          path: records/
+          if-no-files-found: error
+          retention-days: 14
