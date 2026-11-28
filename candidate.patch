@@ -1,0 +1,36 @@
+--- a/src/swapnet/node.cpp
++++ b/src/swapnet/node.cpp
+@@ -210,7 +210,7 @@
+         config.pushKV("client_version",FormatFullVersion());
+         config.pushKV("datadir",fs::PathToString(args.GetDataDirNet()));config.pushKV("wallet",args.GetArg("-swapnetwallet",""));
+         try {
+-            btx::p2p::StartRuntime(genesis, fs::PathToString(args.GetDataDirNet() / "shared-p2p"), GetRandHash().GetHex());
++            btx::p2p::StartRuntime(genesis, args.GetDataDirNet() / "shared-p2p", GetRandHash().GetHex());
+         } catch (const std::exception& e) {
+             LogPrintf("SwapNet: shared control plane did not start (%s). Peer discovery continues. No funds were authorized by startup.\n", e.what());
+         }
+--- a/src/shared_p2p/runtime.h
++++ b/src/shared_p2p/runtime.h
+@@ -42,11 +42,11 @@
+ inline std::unique_ptr<Broker>& RuntimeBroker(){static std::unique_ptr<Broker> b;return b;}
+ inline std::string& RuntimeEndpoint(){static std::string s;return s;}
+ inline std::string Endpoint(){std::lock_guard<std::mutex> l(RuntimeMutex());return RuntimeEndpoint();}
+-inline void StartRuntimeUnleased(const std::string& network,const std::string& directory,const std::string& random_token) {
++inline void StartRuntimeUnleased(const std::string& network,const std::filesystem::path& directory,const std::string& random_token) {
+     std::lock_guard<std::mutex> l(RuntimeMutex());if(RuntimeBroker())return;
+     AuthoritativeCore().Start(network,directory);
+ #ifndef _WIN32
+-    const auto endpoint=(std::filesystem::path(directory)/"model-control.sock").string();
++    const auto endpoint=(directory/"model-control.sock").string();
+     const auto token_path=endpoint+".token";
+     // Parent directory is owner-private. Never follow a pre-existing key link.
+     if(std::filesystem::is_symlink(token_path))throw std::runtime_error("unsafe broker token path");
+@@ -71,7 +71,7 @@
+     (void)random_token; // ModelNet helper spawning is unavailable in upstream Windows profile.
+ #endif
+ }
+-inline void StartRuntime(const std::string& network,const std::string& directory,const std::string& random_token) {
++inline void StartRuntime(const std::string& network,const std::filesystem::path& directory,const std::string& random_token) {
+ #ifndef _WIN32
+     const bool acquired=AcquireRuntimeLease(directory);
+     try { StartRuntimeUnleased(network,directory,random_token); }
