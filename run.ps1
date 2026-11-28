@@ -59,8 +59,8 @@ $case = 'wide128_tests/portable_full_width_known_answers'
 Build-Suite $source stock
 $stock = Invoke-Suite ./records/stock.exe records/stock-list.txt @('--list_content')
 if ($suiteExit -ne 0 -or $stock -notmatch 'overflow_helpers_match_wrapping_add' -or $stock -match 'portable_full_width_known_answers') { throw 'Unexpected stock suite inventory' }
-[IO.File]::WriteAllText((Resolve-Path $source), [IO.File]::ReadAllText((Resolve-Path $source)).Replace("`r`n", "`n"))
-Run-Checked git @('-C', 'source', '-c', 'core.autocrlf=false', 'apply', '../control/wide128-tests.patch')
+Assert-SourceHash control/candidate/wide128_tests.cpp c3e7ab00191e99455b96d176fd4113435aee12ae8b334ede705763c44e90aef6
+Copy-Item control/candidate/wide128_tests.cpp $source -Force
 Build-Suite $source candidate
 $candidate = Invoke-Suite ./records/candidate.exe records/candidate.log @("--run_test=$case", '--report_level=detailed')
 if ($suiteExit -ne 0 -or $candidate -notmatch '9 assertions out of 9 passed') { throw 'Candidate did not execute all nine assertions' }
