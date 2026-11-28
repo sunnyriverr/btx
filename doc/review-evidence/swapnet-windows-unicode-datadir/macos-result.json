@@ -1,0 +1,52 @@
+{
+  "base": "c2e71aafc48a41593277e335c8bc370e45599f01",
+  "platform": "darwin",
+  "cases": {
+    "stock-ascii": {
+      "configured_path": "data-ascii/regtest/shared-p2p",
+      "created_paths": [
+        "data-ascii/regtest/shared-p2p"
+      ],
+      "path_matches": true,
+      "catalog_sha256": "ad3b1ac5145cccaae122fc11c28acba90c3e56929d17798fdb73c0af739430b7",
+      "catalog_reopened_unchanged": true
+    },
+    "stock-unicode": {
+      "configured_path": "data-\u00fc-\ud83c\udfc3/regtest/shared-p2p",
+      "created_paths": [
+        "data-\u00fc-\ud83c\udfc3/regtest/shared-p2p"
+      ],
+      "path_matches": true,
+      "catalog_sha256": "ad3b1ac5145cccaae122fc11c28acba90c3e56929d17798fdb73c0af739430b7",
+      "catalog_reopened_unchanged": true
+    },
+    "candidate-ascii": {
+      "configured_path": "data-ascii/regtest/shared-p2p",
+      "created_paths": [
+        "data-ascii/regtest/shared-p2p"
+      ],
+      "path_matches": true,
+      "catalog_sha256": "ad3b1ac5145cccaae122fc11c28acba90c3e56929d17798fdb73c0af739430b7",
+      "catalog_reopened_unchanged": true
+    },
+    "candidate-unicode": {
+      "configured_path": "data-\u00fc-\ud83c\udfc3/regtest/shared-p2p",
+      "created_paths": [
+        "data-\u00fc-\ud83c\udfc3/regtest/shared-p2p"
+      ],
+      "path_matches": true,
+      "catalog_sha256": "ad3b1ac5145cccaae122fc11c28acba90c3e56929d17798fdb73c0af739430b7",
+      "catalog_reopened_unchanged": true
+    }
+  },
+  "status": "PASS_POSIX_CONTROLS",
+  "patch_sha256": "7eec00dd927b30aabdc66ad813d7523c0fd607d5bf5329f2cc5ddee1e6ddeb91",
+  "node_calls": {
+    "stock": "btx::p2p::StartRuntime(genesis, fs::PathToString(args.GetDataDirNet() / \"shared-p2p\"), GetRandHash().GetHex());",
+    "candidate": "btx::p2p::StartRuntime(genesis, args.GetDataDirNet() / \"shared-p2p\", GetRandHash().GetHex());"
+  },
+  "candidate_file_sha256": {
+    "src/swapnet/node.cpp": "e2f59919300b058bdd7672c6c129ecc88569bf942a2066a43cb247fc3614a1ec",
+    "src/shared_p2p/runtime.h": "b1ba740479f7cde49a017bac43e685336a28acbe22ea0f56deb807f5ca2c6449"
+  }
+}
