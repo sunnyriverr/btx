@@ -95,7 +95,7 @@ def run_case(root, records, name, fail, utf8, env):
     if csv_path.is_file():
         shutil.copyfile(csv_path, records / f"{name}.csv")
         with csv_path.open(encoding="utf-8", newline="") as handle:
-            summary = [row[:2] for row in csv.reader(handle)]
+            summary = [row[:2] for row in csv.reader(handle) if row]
     fixture_logs = list(temp.glob("test_runner_*/*/test_framework.log"))
     if fixture_logs:
         assert len(fixture_logs) == 1
