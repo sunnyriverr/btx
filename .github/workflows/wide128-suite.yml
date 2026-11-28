@@ -24,7 +24,22 @@ jobs:
             /src/test/wide128_tests.cpp
           sparse-checkout-cone-mode: false
           persist-credentials: false
+      - name: Fetch and verify the pinned Boost headers
+        shell: pwsh
+        timeout-minutes: 4
+        run: |
+          $ErrorActionPreference = 'Stop'
+          New-Item -Force -ItemType Directory records | Out-Null
+          $archive = Join-Path $env:RUNNER_TEMP 'boost-1.87.0-b2-nodocs.tar.gz'
+          curl.exe --fail --silent --show-error --location --retry 1 --max-time 95 --output $archive https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-b2-nodocs.tar.gz
+          if ($LASTEXITCODE -ne 0) { throw 'Boost download failed' }
+          $digest = (Get-FileHash $archive).Hash
+          $digest | Out-File records/boost-hash.txt
+          if ($digest -ne 'D6C69E4459EB5D6EC208250291221E7FF4A2AFFDE9AF6E49C9303B89C687461F') { throw 'Boost archive SHA-256 mismatch' }
+          tar.exe -xf $archive -C $env:RUNNER_TEMP boost-1.87.0/boost
+          if ($LASTEXITCODE -ne 0) { throw 'Boost extraction failed' }
       - name: Run the original Boost suite and the maintained candidate
+        timeout-minutes: 6
         shell: pwsh
         run: ./control/run.ps1
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

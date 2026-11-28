@@ -22,10 +22,10 @@ function Assert-SourceHash {
     if ($hash -ne $Expected) { throw "Unexpected source hash in $Path" }
 }
 
-New-Item -ItemType Directory -Path records | Out-Null
+New-Item -Force -ItemType Directory -Path records | Out-Null
 Assert-SourceHash source/src/compat/wide128.h b9fae42faea352f2d813e76b38bc528d02f3c473460b53f894b5a2566eae1bd5
 Assert-SourceHash source/src/test/wide128_tests.cpp e30e7a92913839edacaa3eaae87f6f76d4ffce945011e59e4d54e87139ea9709
-Get-FileHash control/wide128-tests.patch | Out-File records/patch-hash.txt
+(Get-FileHash control/wide128-tests.patch).Hash | Out-File records/patch-hash.txt
 
 $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio/Installer/vswhere.exe'
 $install = & $vswhere -latest -products '*' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
@@ -40,11 +40,8 @@ $guard = @'
 Set-Content -Path records/compiler.h -Value $guard
 (Get-Command cl.exe).Source | Out-File records/compiler-path.txt
 
-$archive = Join-Path $env:RUNNER_TEMP 'boost_1_87_0.tar.bz2'
-Invoke-WebRequest https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.bz2 -OutFile $archive
-if ((Get-FileHash $archive).Hash -ne 'AF57BE25CB4C4F4B413ED692FE378AFFB4352EA50FBE294A11EF548F4D527D89') { throw 'Boost archive SHA-256 mismatch' }
-Run-Checked tar.exe @('-xf', $archive, '-C', $env:RUNNER_TEMP, 'boost_1_87_0/boost')
-$boost = Join-Path $env:RUNNER_TEMP 'boost_1_87_0'
+$boost = Join-Path $env:RUNNER_TEMP 'boost-1.87.0'
+if (!(Test-Path (Join-Path $boost 'boost/test/unit_test.hpp'))) { throw 'Verified Boost headers are missing' }
 $flags = @('/nologo', '/std:c++20', '/EHsc', '/bigobj', '/MT', '/DBOOST_TEST_NO_LIB', '/Icontrol/include', '/Isource/src', "/I$boost", '/FIrecords/compiler.h')
 Run-Checked cl.exe ($flags + @('/c', '/Forecords/runner.obj', 'control/runner.cpp'))
 
