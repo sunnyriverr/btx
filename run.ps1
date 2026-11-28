@@ -77,3 +77,4 @@ if ($suiteExit -ne 201 -or $negative -notmatch 'numerator % divisor' -or $negati
 Get-FileHash records/stock.exe,records/candidate.exe,records/negative.exe | Out-File records/binary-hashes.txt
 Remove-Item records/*.obj,records/*.exe
 'PASS: stock inventory, candidate case, existing case, deliberate wrong-answer rejection' | Tee-Object -FilePath records/verdict.txt
+exit 0
