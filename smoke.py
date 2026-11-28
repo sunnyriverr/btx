@@ -88,7 +88,7 @@ class Node:
         env = dict(os.environ)
         for name in ("PYTHONHOME", "PYTHONPATH", "GH_TOKEN", "GITHUB_TOKEN"):
             env.pop(name, None)
-        system = Path(env["SystemRoot"])
+        system = Path(os.environ["SystemRoot"])
         env["PATH"] = os.pathsep.join((str(Path(sys.executable).parent), str(system / "System32"), str(system)))
         self.flags = [
             "-regtest", f"-datadir={root}", "-server=1", f"-rpcport={self.port}", "-rpcbind=127.0.0.1",
