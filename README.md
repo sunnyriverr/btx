@@ -1,0 +1,8 @@
+# Portable 128-bit fixed-answer regression
+
+Test-only candidate [978482c1](https://github.com/sunnyriverr/btx/commit/978482c1b04f52d5fd9bdd1d9e5a02beaa539b1b) on release commit [c2e71aaf](https://github.com/btxchain/btx/commit/c2e71aafc48a41593277e335c8bc370e45599f01). The candidate exercises the portable types with fixed answers regardless of compiler support for native 128-bit integers. It complements JPP's native-reference comparison in [#884](https://github.com/btxchain/btx/pull/884).
+
+- **Windows Server 2022 x64, MSVC 19.44.35230, Boost 1.87.** The full test translation unit ran in a focused Boost.Test executable with a minimal setup fixture. Stock listed only the existing overflow case. The candidate passed nine fixed-answer assertions and the existing case passed 20. Changing the expected unsigned remainder from two to three made the intended assertion fail and returned 201. The workflow verified this exit and finished green. [Run](https://github.com/sunnyriverr/btx/actions/runs/46142405403) · [Verified receipt](records/VERIFIED.json).
+- **Mac ARM64, Apple Clang 17.0.0.** The selected case passed all nine assertions with the native compiler guard available. The complete test translation unit passed both cases and all 29 assertions when compiled with the guard disabled. The wrong expected remainder failed the same assertion. [Focused result](records/clang-pass.log) · [Both portable cases](records/clang-no-native.log) · [Wrong-value result](records/clang-negative.log).
+
+The full BTX test binary, PoW, MatMul and SMILE2 suites and release packaging remain outside this result.
