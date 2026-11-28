@@ -169,18 +169,21 @@ def qualify(args):
                 encoding="utf-8",
             )
             controls = report["controls"]
-            failing = controls["stock-legacy-fail"] = run_case(root, args.records, "stock-legacy-fail", True, False, env)
-            passing = controls["stock-legacy-pass"] = run_case(root, args.records, "stock-legacy-pass", False, False, env)
-            assert failing["exit"] == 1 and failing["runner_encoding_traceback"] and failing["traceback_at_combined_heading"], failing
-            assert failing["unicode_fixture_path"] and failing["failed_child_stdout"] and failing["failed_child_stderr"], failing
-            assert not failing["summary_csv"] and not failing["summary_visible"] and not failing["combined_framework"], failing
-            if passing["runner_encoding_traceback"]:
-                assert passing["traceback_at_summary"] and not passing["summary_csv"], passing
-            else:
-                prove_passing_intact(passing)
+            if not args.candidate_only:
+                failing = controls["stock-legacy-fail"] = run_case(root, args.records, "stock-legacy-fail", True, False, env)
+                passing = controls["stock-legacy-pass"] = run_case(root, args.records, "stock-legacy-pass", False, False, env)
+                assert failing["exit"] == 1 and failing["runner_encoding_traceback"] and failing["traceback_at_combined_heading"], failing
+                assert failing["unicode_fixture_path"] and failing["failed_child_stdout"] and failing["failed_child_stderr"], failing
+                assert not failing["summary_csv"] and not failing["summary_visible"] and not failing["combined_framework"], failing
+                if passing["runner_encoding_traceback"]:
+                    assert passing["traceback_at_summary"] and not passing["summary_csv"], passing
+                else:
+                    prove_passing_intact(passing)
             if args.patch:
+                lf_patch = root / "candidate.patch"
+                lf_patch.write_bytes(args.patch.read_bytes().replace(b"\r\n", b"\n"))
                 subprocess.run(
-                    ["git", "apply", str(args.patch.resolve())],
+                    ["git", "-c", "core.autocrlf=false", "apply", str(lf_patch)],
                     cwd=root, check=True, timeout=15,
                 )
                 report["runner_sha256"]["candidate"] = sha256(fixture / "test_runner.py")
@@ -204,4 +207,8 @@ if __name__ == "__main__":
     parser.add_argument("--source", required=True, type=Path)
     parser.add_argument("--records", required=True, type=Path)
     parser.add_argument("--patch", type=Path)
-    qualify(parser.parse_args())
+    parser.add_argument("--candidate-only", action="store_true")
+    args = parser.parse_args()
+    if args.candidate_only and not args.patch:
+        parser.error("--candidate-only requires --patch")
+    qualify(args)
