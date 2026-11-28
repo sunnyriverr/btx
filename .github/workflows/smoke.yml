@@ -1,0 +1,35 @@
+name: Offline Windows regtest smoke for the saved MSVC 959 daemon
+on:
+  push:
+    branches: [codex/ci-msvc-959-regtest-smoke]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: msvc-959-regtest-smoke
+  cancel-in-progress: false
+jobs:
+  smoke:
+    if: github.repository == 'sunnyriverr/btx'
+    runs-on: windows-2022
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.9'
+      - name: Fetch and hash the saved daemon before execution
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python smoke.py fetch
+      - name: Check offline startup, loopback RPC and clean stop
+        run: python smoke.py smoke
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: msvc-959-offline-regtest-smoke-evidence
+          path: records/
+          if-no-files-found: error
+          retention-days: 14
