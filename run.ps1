@@ -42,7 +42,11 @@ Set-Content -Path records/compiler.h -Value $guard
 
 $boost = Join-Path $env:RUNNER_TEMP 'boost-1.87.0'
 if (!(Test-Path (Join-Path $boost 'boost/test/unit_test.hpp'))) { throw 'Verified Boost headers are missing' }
-$flags = @('/nologo', '/std:c++20', '/EHsc', '/bigobj', '/MT', '/DBOOST_TEST_NO_LIB', '/Icontrol/include', '/Isource/src', "/I$boost", '/FIrecords/compiler.h')
+$flags = @(
+    '/nologo', '/std:c++20', '/EHsc', '/bigobj', '/MT', '/DBOOST_TEST_NO_LIB',
+    "/I$(Resolve-Path control/include)", "/I$(Resolve-Path source/src)", "/I$boost",
+    "/FI$(Resolve-Path records/compiler.h)"
+)
 Run-Checked cl.exe ($flags + @('/c', '/Forecords/runner.obj', 'control/runner.cpp'))
 
 function Build-Suite {
